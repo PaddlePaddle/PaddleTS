@@ -1,7 +1,7 @@
 Homepage
 =========
 
-Welcome to PaddleTS.
+Welcome to PaddleTS, added from kehuo doc1.
 
 .. toctree::
     :maxdepth: 1
