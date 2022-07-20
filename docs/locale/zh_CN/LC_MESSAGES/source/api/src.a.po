@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, test rtd
+# This file is distributed under the same license as the test rtd package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: test rtd \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-20 23:12+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/src.a.rst:2 9cc4c67b255d405e8591be0c8e65e1ef
+msgid "src.a"
+msgstr ""
+
+#: a8c319b4dcd84c03b07100264a9940c1 of src.a.A:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 2793fb7724924388b852a42e90e96149 of src.a.A:1
+msgid "The first class for read the docs."
+msgstr "测试文档的第一个类。"
+
+#: d837617563b445779107d2095b093aed of src.a.A.func:1
+msgid "The func method for A class."
+msgstr "A类的func接口。"
+
+#: c32027d2df954e49aa388e2dd369fb03 of src.a.A.func
+msgid "Parameters"
+msgstr ""
+
+#: e80eb48cff8f4e66b246c11b75e2e424 of src.a.A.func:3
+msgid "the parameter of this method."
+msgstr "该方法的参数。"
+
+#: 029671f66d2045459c28df1b328cd37b of src.a.A.func
+msgid "Returns"
+msgstr ""
+
+#: ae2fff39a095481e85b7f03511a4f18f of src.a.A.func:6
+msgid "The returned string."
+msgstr "返回的字符串。"
+
+#: 1f4c23692f8c4e11ac1f298ffdf84665 of src.a.A.func
+msgid "Return type"
+msgstr ""
+
