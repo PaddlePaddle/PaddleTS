@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, test rtd
+# This file is distributed under the same license as the test rtd package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: test rtd \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-20 23:12+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../index.rst:6
+msgid "Hello"
+msgstr "你好"
+
+#: ../../index.rst:6 ff7e49e4442e4f75840dc081549a8208
+msgid "User Guide"
+msgstr "用户指南"
+
+#: ../../index.rst:12
+msgid "a"
+msgstr "a中文"
+
+#: ../../index.rst:12
+msgid "b"
+msgstr "b中文"
+
+#: ../../index.rst:12 37f454da853a49318821cbace67ea9f2
+msgid "API Reference"
+msgstr "API参考"
+
+#: ../../index.rst:2 03cc242e8c434fd39adcc93b319eb020
+msgid "Homepage"
+msgstr "首页"
+
+#: ../../index.rst:4 36699cd7b23d4bb38f915de71ec49c5f
+msgid "Welcome to PaddleTS."
+msgstr "欢迎来到paddlets"
+

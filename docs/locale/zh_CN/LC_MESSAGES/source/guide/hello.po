@@ -1,0 +1,27 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, test rtd
+# This file is distributed under the same license as the test rtd package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: test rtd \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-20 23:12+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/guide/hello.rst:3 4b22c66e4c834084b30ea921c3de116a
+msgid "Hello Page"
+msgstr "Hello页面"
+
+#: ../../source/guide/hello.rst:5 b395a1e6120d4ca9a23da38c9c1f9e0b
+msgid "This is content body for home page."
+msgstr "这是内容。"
+
