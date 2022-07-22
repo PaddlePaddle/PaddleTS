@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 10:26+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.base.rst:2 ab36de302e7a428689a23f9662bc1cc6
+msgid "paddlets.models.base"
+msgstr ""
+
+#: b7b051a7db9f461797a104d991bf3896 paddlets.models.base.Trainable:1 of
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 46667535ff55410cb19869b2c5e5b716 paddlets.models.base.Trainable:1 of
+msgid "Base class for all trainable classes."
+msgstr "所有 trainable classes 的基类。"
+
+#: 8cb2cebddcb14e75b5c8523c9ca70b9c paddlets.models.base.Trainable:3 of
+msgid ""
+"Any classes need to be fitted (e.g. :class:`~paddlets.models.base.BaseModel`, "
+":class:`~paddlets.pipeline.Pipeline`, etc.) may inherit from this base class "
+"and optionally implement :func:`fit` method."
+msgstr ""
+"任何需要完成训练（如：:class:`~paddlets.models.base.BaseModel` 和 "
+":class:`~paddlets.pipeline.Pipeline` 等） 均可继承自当前基类。如果需要的话，也可实现基类定义的 :func:`fit`"
+" 方法。"
+
+#: 0f4c356680b54b5b87e7543d80010fdd paddlets.models.base.Trainable.fit:1 of
+msgid "Fit a trainable instance."
+msgstr "训练一个 trainable 实例。"
+
+#: 3470e5072595482eaaa2757b8cbaf0bc a0de312b05604b53bf9d1b229277979f
+#: paddlets.models.base.BaseModel.fit:3 paddlets.models.base.BaseModel.load:3
+#: paddlets.models.base.BaseModel.predict:3 paddlets.models.base.BaseModel.save:3
+#: paddlets.models.base.Trainable.fit:3 paddlets.models.base.Trainable.predict:3
+#: e05d1286c15448fdbf1bd25528c3e6da e6691cc9bdcb43eda1c7e9d7340c522f
+#: e8c2fae2bc344678894725a1f5787d06 ee3409220b9744eeb9261bdfa7cc839b of
+msgid ""
+"Any non-abstract classes inherited from this class should implement this "
+"method."
+msgstr "任何继承自此类的非抽象子类均需实现此方法。"
+
+#: 471d5e4f766845078fdec51206832a6b 5fa192efb38546a0bc0d2042b08f8ac1
+#: 604a787db9524f9db948799d3d82f392 6b7c988607cb43b08254056bffd43c75
+#: 77d10d161e5243df8d0a81d77f642823 8ec0f50749834bbfae4775b2db8bd0fb
+#: b6cf56def4744b8d9901ebec3f0f940a paddlets.models.base.BaseModel
+#: paddlets.models.base.BaseModel.fit paddlets.models.base.BaseModel.load
+#: paddlets.models.base.BaseModel.predict
+#: paddlets.models.base.BaseModel.recursive_predict paddlets.models.base.BaseModel.save
+#: paddlets.models.base.Trainable.fit paddlets.models.base.Trainable.predict
+#: eaa9d8c5b2794df699236d8b679f862b of
+msgid "Parameters"
+msgstr "参数"
+
+#: 7b2b3bdfc6ce4ffaab79ee61707919cb 987b345230754d6aa31bf0c46ccbeeeb
+#: paddlets.models.base.BaseModel.fit:5 paddlets.models.base.Trainable.fit:5 of
+msgid "Training dataset."
+msgstr "训练集。"
+
+#: 5068ecf3582545f4a1a2d9087e39b754 7368180ff66546a38a551788e3feabde
+#: paddlets.models.base.BaseModel.fit:7 paddlets.models.base.Trainable.fit:7 of
+msgid "Validation dataset, optional."
+msgstr "验证集，可选参数。"
+
+#: 946f02dbdbb148d6ab0645eae340779e af854218e1154f9a8b04d35db779bf5a
+#: paddlets.models.base.BaseModel.predict:1 paddlets.models.base.Trainable.predict:1 of
+msgid "Make prediction."
+msgstr "完成预测。"
+
+#: 0fa0652b31414e7f90d782dc4da6a077 4d4e6a743bfd4bd28202bd0b5b2e1174
+#: paddlets.models.base.BaseModel.predict:5 paddlets.models.base.Trainable.predict:5 of
+msgid "A TSDataset for time series forecasting."
+msgstr "一个用于时序预测的数据集。"
+
+#: 009384556dce450a83303f06ad0b2d03 5e28264095fa42899052c7871a8874a2
+#: 8aecb0513ad94ba3887112f89791ef21 paddlets.models.base.BaseModel.load
+#: paddlets.models.base.BaseModel.predict
+#: paddlets.models.base.BaseModel.recursive_predict
+#: paddlets.models.base.Trainable.predict c0822dc37fdc48b88d4b05c0abbbb7cb of
+msgid "Returns"
+msgstr "返回"
+
+#: 05c146d428a54448ac340cab3c61956f 0f73d3dae1f34f92bbe0c90da22b175e
+#: paddlets.models.base.BaseModel.predict:8 paddlets.models.base.Trainable.predict:8 of
+msgid "Predicted result, in type of TSDataset."
+msgstr "TSDataset数据类型的预测结果。"
+
+#: 19480e63d4a046fea79798ddc6e460f6 41126015ab114142a292a3f307833536
+#: 471462862be745f2bd631ef0c1a57713 5f6c968c367c4dfe925aa68490b16d52
+#: paddlets.models.base.BaseModel.load paddlets.models.base.BaseModel.predict
+#: paddlets.models.base.BaseModel.recursive_predict
+#: paddlets.models.base.Trainable.predict of
+msgid "Return type"
+msgstr "返回类型"
+
+#: 50d4db028e62459da817e0b7ff2ca856 paddlets.models.base.BaseModel:1 of
+msgid "Bases: :py:class:`~paddlets.models.base.Trainable`"
+msgstr "基类：:py:class:`~paddlets.models.base.Trainable`"
+
+#: ad91c7c5d100429fb8c23b20fd92cb70 paddlets.models.base.BaseModel:1 of
+msgid "Base class for all machine learning and deep learning models."
+msgstr "所有机器学习和深度学习模型的基类。"
+
+#: 4b437209036d439392d5879e9e4c5608 6c3888fe41af4761b5ef1b73c98f8b55
+#: paddlets.models.base.BaseModel:3 paddlets.models.base.BaseModel:14 of
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 97e412aad56945d3a9658a52840589dc paddlets.models.base.BaseModel:5
+#: paddlets.models.base.BaseModel:20 dc3fb8679a6a4f09bbde1ce74f8e79c3 of
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: 7f87a8cea38b4cf68ea12366aa329fda paddlets.models.base.BaseModel:7 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr ""
+"可选变量，输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 08db3cd94ad9481b880a78b039ee0ccc 3c743ba7c87a42c584af6d7649f3422b
+#: paddlets.models.base.BaseModel d1553e40beb24679be6d5467e2fa929f of
+msgid "type"
+msgstr ""
+
+#: 2abed0795b5e46a1a6b49d7c276af07a be3af7a3fee34a41a0b635b37dcaa21e
+#: paddlets.models.base.BaseModel:16 paddlets.models.base.BaseModel:22
+#: paddlets.models.base.BaseModel:29 c82cbd54d5c44ddb8b8b7887d63a3c60 of
+msgid "int"
+msgstr ""
+
+#: paddlets.models.base.BaseModel:26 c295665299ed45f9a0d05af60c45931b of
+msgid ""
+"The length of time series chunk between past target and future target for"
+" a single sample. The skip chunk are neither used as feature (i.e. X) nor"
+" label (i.e. Y) for a single sample."
+msgstr ""
+"输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 110483d9677e4118811aa13ed5be02bf paddlets.models.base.BaseModel.fit:1 of
+msgid "Fit a BaseModel instance."
+msgstr "训练一个BaseModel类型的实例。"
+
+#: 787ca23839764fa99eac6f957279783b paddlets.models.base.BaseModel.save:1 of
+msgid "Saves a BaseModel instance to a disk file."
+msgstr "将一个BaseModel模型实例保存在磁盘文件中。"
+
+#: 09543046039b4e37be21dd1549c269f0 57e5684b38344b439aa15c68711675a6
+#: paddlets.models.base.BaseModel.load:5 paddlets.models.base.BaseModel.save:5 of
+msgid "A path string containing a model file name."
+msgstr "一个包含模型文件名的字符串格式的路径。"
+
+#: a1547c4fbe0e400fa37432049c986a50 paddlets.models.base.BaseModel.load:1 of
+msgid "Loads a :class:`~/paddlets.models.base.BaseModel` instance from a file."
+msgstr "从给定的文件中加载 :class:`~/paddlets.models.base.BaseModel` 模型实例。"
+
+#: 8df0da0821a8405d90db536175e01b0f paddlets.models.base.BaseModel.load:8 of
+msgid "A loaded model."
+msgstr "加载完成的模型。"
+
+#: paddlets.models.base.BaseModel.recursive_predict:1
+#: dcd6d49bc44c4309bbae32b50fc8d2c8 of
+msgid ""
+"Apply `self.predict` method iteratively for multi-step time series "
+"forecasting, the predicted results from the current call will be appended"
+" to the `TSDataset` object and will appear in the loopback window for "
+"next call. Note that each call of `self.predict` will return a result of "
+"length `out_chunk_len`, so it will be called "
+"ceiling(`predict_length`/`out_chunk_len`) times to meet the required "
+"length."
+msgstr ""
+"递归预测：一步步利用 `self.predict` 方法实现多步时序预测。当前时刻的预测结果会被添加至 `TSDataset` "
+"的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。注意：每次调用 `self.predict` 的输出长度为 "
+"`out_chunk_len` , 所以 `self.predict` 会被调用 "
+"ceiling(`predict_length`/`out_chunk_len`) 次，以满足多步时序的输出长度需求。"
+
+#: 2da2dfd3b72a461c9f2e65070a1f85c7
+#: paddlets.models.base.BaseModel.recursive_predict:6 of
+msgid "Data to be predicted."
+msgstr "被预测数据。"
+
+#: paddlets.models.base.BaseModel.recursive_predict:8
+#: ed88705846134ef09051c684310dee21 of
+msgid "Length of predicted results."
+msgstr "预测输出长度。"
+
+#: paddlets.models.base.BaseModel.recursive_predict:11
+#: ea83b7d1ea50466e9ecb74dacb563368 of
+msgid "Predicted results."
+msgstr "预测结果。"
