@@ -10,8 +10,8 @@ import time
 import unittest
 from unittest import TestCase
 
-from bts.transform.time_feature import TimeFeatureGenerator
-from bts.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.transform.time_feature import TimeFeatureGenerator
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 class TestTimeFeature(TestCase):
     def setUp(self):
