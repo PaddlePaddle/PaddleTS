@@ -23,5 +23,6 @@ python:
   install:
     - requirements: requirements/core.txt
     - requirements: requirements/docs.txt
+    - requirements: requirements/paddle.txt
 
   system_packages: true
