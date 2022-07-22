@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 10:50+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.dl.paddlepaddle.rnn.rst:2
+#: 807a88c5ef0640c08fd9dab08840daad
+msgid "paddlets.models.dl.paddlepaddle.rnn"
+msgstr "paddlets.models.dl.paddlepaddle.rnn"
+
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:1
+#: dff1184ed9de4621bc83e2a07d7c96f1 of
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.dl.paddlepaddle.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:1
+#: dc523dad6d824f59884005e4feedc2b8 of
+msgid "Implementation of RNN Block model."
+msgstr "RNN模型实现。"
+
+#: 8dd22d7c55214aae8199e30267f43387
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor of
+msgid "Parameters"
+msgstr "模型参数。"
+
+#: 6103fd36b814497da9b05185f326fc6e
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:3 of
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 58e5f40b20e94060bc5b83b83c459c51
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:5 of
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:7
+#: d6cfb34bba444ad9ab9d06eb5ccc05e2 of
+msgid ""
+"The type of the specific paddle RNN module (\"SimpleRNN\", \"GRU\" or "
+"\"LSTM\")."
+msgstr "指定具体的RNN模型（\"SimpleRNN\", \"GRU\" 或 \"LSTM\"）。"
+
+#: 2d3c6a9206054624bd60a50d9da1faf3
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:9 of
+msgid ""
+"A list containing the dimensions of the hidden layers of the fully "
+"connected NN."
+msgstr "全连接层的各层神经元数量列表。"
+
+#: 262ab7671f0f44ffaf32b9ed396b3940
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:11 of
+msgid "The number of features in the hidden state `h` of the RNN module."
+msgstr "RNN模型隐藏状态h大小。"
+
+#: b9ae14a788fa4925a514291f86a7cdcb
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:13 of
+msgid "The number of recurrent layers."
+msgstr "循环网络的层数。"
+
+#: 944a02bd07474a6cba5255981d86008e
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:15 of
+msgid "The fraction of neurons that are dropped in all-but-last RNN layers."
+msgstr "dropout概率，除第一层外每层输入时的dropout概率。"
+
+#: 5832136066d74d44a9a6c9e270b6c4dc
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:17 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 3f6f3f8007de4968b413552a5ccfc441
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:19 of
+msgid "sampling intervals between two adjacent samples."
+msgstr "相邻两个样本的采样间隔。"
+
+#: 623ed2ea5f544a0a8be0fa2c3745f4ac
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:21 of
+msgid "loss function."
+msgstr "损失函数。"
+
+#: bbd43e38d92240519333d255963a57d8
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:23 of
+msgid "optimizer algorithm."
+msgstr "优化器算法。"
+
+#: 4ff8d799136d48b391f2b0c1e11cc1a1
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:25 of
+msgid "optimizer parameters."
+msgstr "优化器参数。"
+
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:27
+#: e419f3b678284307b559737c10c52633 of
+msgid "evaluation metrics of model."
+msgstr "模型评估指标。"
+
+#: 9e8ec83c67d84758a71b4f091005a756
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:29 of
+msgid "customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: aa1a15fe274f420ca3994192000f6bb0
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:31 of
+msgid "number of samples per batch."
+msgstr "每个batch中的样本数量。"
+
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:33
+#: d462bcc4de6441af9a21b3e81efd9081 of
+msgid "max epochs during training."
+msgstr "训练过程中最大迭代轮数。"
+
+#: 73529b7c379f4653af9fe1cd0710805f
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:35 of
+msgid "verbosity mode."
+msgstr "模型日志模式。"
+
+#: 277e2d2464ea4cbca035650f2462db5f
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:37 of
+msgid ""
+"number of epochs with no improvement after which learning rate wil be "
+"reduced."
+msgstr "训练过程中学习率降低所需的效果不再提升的轮数。"
+
+#: 02fef1fc029846a0ae15efc21f40f51b
+#: paddlets.models.dl.paddlepaddle.rnn.RNNBlockRegressor:39 of
+msgid "global random seed."
+msgstr "全局随机种子。"
+
+

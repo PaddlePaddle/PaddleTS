@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-15 18:08+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/modules/backtest/overview.rst:3
+#: 08f43531e81c4eb0a63d78e1777d21be
+msgid "Backtesting"
+msgstr "回测"
+
+#: ../../source/modules/backtest/overview.rst:5
+#: 709dffc4679e451ca11ed2c49e58094d
+msgid ""
+"Backtesting simulates predictions that would have been obtained "
+"historically with a given model. Backtesting is used to predict the "
+"future accuracy of a forecasting method, and is therefore useful in "
+"determining which model can be considered the most accurate ."
+msgstr "回测用给定模型获得的历史上的模拟预测,"
+"是用来评测模型预测准曲率的重要工具。"
+
+#: ../../source/modules/backtest/overview.rst:11
+#: d024f9eb61ef451182befdbb68745e71
+msgid "|fig_1|"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:144
+#: 69a46bbb901d47a1ad25201af7a0e7e0 bc4b4cec24504c6e9a7b71cf43b931a2
+msgid "fig_1"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:13
+#: 709dffc4679e451ca11ed2c49e58094d
+msgid ""
+"Backtest is an iterative procedure,backtest repeatly predict on dataset "
+"with a fixed predict window, and then moves to the end of the training "
+"set forward by fixed steps.  As in above figure, the orange part is a "
+"predict window with length 3. In each new iteration, the window will move"
+" forward by 3 points, and the train set length will forward 3 points "
+"either. This procedure repeats util moves to the end of the training set."
+msgstr "回测是一个迭代过程，回测用固定预测窗口在数据集上进行重复预测，然后通过固定步长向前移动到训练集的末尾。"
+"如上图所示，桔色部分是长度为3的预测窗口。"
+"在每次迭代中，预测窗口会向前移动3个长度，同样训练集也会向后扩张三个长度。"
+"这个过程会持续到窗口移动到数据末尾。"
+
+#: ../../source/modules/backtest/overview.rst:18
+#: 101ef03f07ab4e3ba64115eb9a88b15a
+msgid "Example"
+msgstr "示例"
+
+#: ../../source/modules/backtest/overview.rst:20
+#: 704a04184bff4e0e98f7f18a13f97479
+msgid "1）Prepare Dataset"
+msgstr "1）数据准备"
+
+#: ../../source/modules/backtest/overview.rst:31
+#: 221f2d1157e0465cae869f8c752f2011
+msgid "|fig_2|"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:145
+#: 2aa484369ded4c22a589d75acca47368
+msgid "fig_2"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:33
+#: 016525707bcb4f2dbb4bf11d26c40711
+msgid "2）Fit model"
+msgstr "2）模型拟合"
+
+#: ../../source/modules/backtest/overview.rst:45
+#: 2b33720a401645dbac1a2745b3865af0
+msgid "3）Backtesting"
+msgstr "3）回测"
+
+#: ../../source/modules/backtest/overview.rst:47
+#: d3b8130c50a440a78481ef2d54632629
+msgid ""
+"Five examples are given below. For more bascktest features please read "
+"`Backtesting API doc <../../api/paddlets.utils.backtest.html>`_ ."
+msgstr ""
+"下面举了5个关于回测的例子,如果需要更多关于回测的信息请阅读 "
+"`Backtesting API doc <../../api/paddlets.utils.backtest.html>`_ 。"
+
+#: ../../source/modules/backtest/overview.rst:50
+#: d04338008b6f460a8ec2ce86e64cb8df
+msgid "Backtesting Example 1"
+msgstr "回测示例1"
+
+#: ../../source/modules/backtest/overview.rst:52
+#: 9bfaf157e2be41a8ab9a2fa927825aba
+msgid ""
+"Backtest will start at model input_chunk_length and return a MSE score by"
+" Default."
+msgstr "默认情况下回测在模型input_chunk_length的位置开始并返回一个MSE评估指标。"
+
+#: ../../source/modules/backtest/overview.rst:66
+#: 2b34db675f4144cb82d243a2e914a42c
+msgid "Backtesting Example 2"
+msgstr "回测示例2"
+
+#: ../../source/modules/backtest/overview.rst:68
+#: e66d62544ac446d98abc683bf1371251
+msgid "If set ``return_score`` to False, Backtest will return a ``TSDataset``."
+msgstr "如果设置 ``return_score`` 为 False，回测函数会返回 ``TSDataset`` 。"
+
+#: ../../source/modules/backtest/overview.rst:82
+#: 8272e1a7d1884f14bf4dbd2853716499
+msgid "|fig_3|"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:146
+#: b9a41778675549a1859a547a87255524 e34d26dac84440da811e17612e456772
+msgid "fig_3"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:84
+#: b31dc0a215ff47fd851738030e8fb1b5
+msgid "Backtesting Example 3"
+msgstr "回测示例3"
+
+#: ../../source/modules/backtest/overview.rst:86
+#: 013a733cec32445a961d5ebec493f6e3
+msgid ""
+"``start`` can control the start point of backtest, If set ``start`` to "
+"0.5, Backtest will start at the middle of dataset."
+msgstr "``start`` 可以控制回测的起始点如果设置 ``start`` 为0.5,那么回测将会在数据的中间位置开始。"
+
+#: ../../source/modules/backtest/overview.rst:100
+#: ecc0f93085634124afaba5f2da15c94e
+msgid "|fig_4|"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:147
+#: 216a5214e6654c0084a6d296b350fdfb 95f6da0c05ef4d45a2b3590b843264d1
+msgid "fig_4"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:102
+#: 5f48df176d6d47959b5a829bc3470a87
+msgid "Backtesting Example 4"
+msgstr "回测示例4"
+
+#: ../../source/modules/backtest/overview.rst:104
+#: 2079d451ce3a4c8a88d364f0dd385800
+msgid ""
+"``predict_window`` is the window for the prediction. ``stride`` is the "
+"number of time steps between two consecutive predict window. In most "
+"situations, ``predict_window`` and ``stride``  should be set to simulate "
+"the realy prediction."
+msgstr "``predict_window`` 是每次预测的窗口长度。``stride`` 是两次连续预测之间的移动步长。在大多数情况下我们需要自定义这两个参数来模拟真是的预测场景。"
+
+#: ../../source/modules/backtest/overview.rst:122
+#: 164b136410174970be55f456aa74f747
+msgid "|fig_5|"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:148
+#: 1ddcda35f5544593b53d27b53d483ebb 681cdc4f13404127b6062d56b30a9079
+msgid "fig_5"
+msgstr ""
+
+#: ../../source/modules/backtest/overview.rst:124
+#: a9736ac9891940cab589b7309f5fd89f
+msgid "Backtesting Example 5"
+msgstr "回测示例5"
+
+#: ../../source/modules/backtest/overview.rst:127
+#: bc29d57e49424f1eb8d77ce06fe7709b
+msgid ""
+"If set ``predict_window`` != ``stride`` and ``return_score`` = False, "
+"backtest will generate a List of TSdataset as output. Because the predict"
+" results are overlaped in this situation."
+msgstr ""
+"如果设置 ``predict_window`` != ``stride`` 并且 ``predict_window`` != "
+"``stride`` ，回测函数会返回一个TSdataset 的list。 因为预测结果相互重叠或相互间隔无法组成完整TSDataset。"
+

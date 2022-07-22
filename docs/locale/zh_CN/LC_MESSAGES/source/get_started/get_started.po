@@ -1,0 +1,529 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 13:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/get_started/get_started.rst:3 3e80aa6be97b46beb0362d7309259dfe
+msgid "Get Started"
+msgstr "开始使用PaddleTS"
+
+#: ../../source/get_started/get_started.rst:9 4deab11177894a4f8ad4711d1483680a
+msgid "1. Install PaddleTS"
+msgstr "1. 安装PaddleTS"
+
+#: ../../source/get_started/get_started.rst:14 6bd6ff540c4f463d8dd39eeeb9670ed3
+msgid ""
+"PaddleTS is built upon `PaddlePaddle "
+"<https://www.paddlepaddle.org.cn/>`__ and the minimum version required is"
+" 2.3. Please refer to `the official guide "
+"<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/compile"
+"/linux-compile.html>`__ for installing ``PaddlePaddle``. If you have "
+"``PaddlePaddle`` installed already, please skip this step."
+msgstr ""
+"PaddleTS的安装依赖 `PaddlePaddle <https://www.paddlepaddle.org.cn/>`__ "
+"，其最小版本要求>=2.3 。PaddlePaddle的安装可以参考 `PaddlePaddle官方安装文档 "
+"<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/compile"
+"/linux-compile.html>`__ ，如果你已经安装过 ``PaddlePaddle`` ，可跳过此步骤。"
+
+#: ../../source/get_started/get_started.rst:15 f5217e9fa8004471a742901623a5559a
+msgid "Next, install ``PaddleTS`` with pip command:"
+msgstr "接下来，我们可以使用pip命令安装 ``PaddleTS`` 。"
+
+#: ../../source/get_started/get_started.rst:21 5bf76407384d474aa253363efe5e1ee3
+msgid ""
+"Besides, we can install ``PaddlePaddle`` and ``PaddleTS`` at the same "
+"time with pip command:"
+msgstr "除此之外，我们也可以通过以下pip命令同时安装 ``PaddlePaddle`` 和 ``PaddleTS`` 。"
+
+#: ../../source/get_started/get_started.rst:28 7c52511f52bc43058962059dba1a048f
+msgid "Once installed successfully, you can import PaddleTS in your code:"
+msgstr "安装成功后，就可以import PaddleTS并且使用了。"
+
+#: ../../source/get_started/get_started.rst:43 23dd077318de434ebe42b76a9c57ce7a
+msgid "2. Build TSDataset"
+msgstr "2. 构建TSDataset"
+
+#: ../../source/get_started/get_started.rst:45 8c3ef14b9d0849459c6cc3f4f2548053
+msgid ""
+"``TSDataset`` is one of the fundamental classes in ``PaddleTS``, which is"
+" designed as the first-class citizen in the library to represent the time"
+" series data and is widely used by other modules. Currently, it supports "
+"the representation of :"
+msgstr "``TSDataset`` 是 ``PaddleTS`` 中最主要的类之一，其被设计用来表示绝大多数时序样本数据。通常，时序数据可以分为以下几种："
+
+#: ../../source/get_started/get_started.rst:50 c9f214da69fa4e9d9de3c9aee4751084
+msgid "Univariate time series w/wo covariates"
+msgstr "单变量数据，只包含单列的预测目标，同时可以包涵单列或者多列协变量"
+
+#: ../../source/get_started/get_started.rst:51 a18226af9f534afda5a7b71addc58ad4
+msgid "Multivariate time series w/wo covariates"
+msgstr "多变量数据，包涵多列预测目标，同时可以包涵单列或者多列协变量"
+
+#: ../../source/get_started/get_started.rst:55 59723b7194b249ffbf9da60d47d6196b
+msgid ""
+"``TSDataset`` needs a proper time index which can either be of type "
+"``pandas.DatetimeIndex`` or of type ``pandas.RangeIndex`` (representing "
+"sequential data without specific timestamps)."
+msgstr ""
+"``TSDataset`` 需要包含time_index属性，time_index支持 ``pandas.DatetimeIndex`` 和 "
+"``pandas.RangeIndex`` 两种类型。"
+
+#: ../../source/get_started/get_started.rst:58 6022035e99424bb48a32269082ffe314
+msgid "2.1. Built-in TSDataset"
+msgstr "2.1. 内置TSDataset数据集"
+
+#: ../../source/get_started/get_started.rst:60 ab33ce8c037d461da259edf95a4a9f9f
+msgid ""
+"PaddleTS comes with a set of publicly available time series datasets, "
+"which can be easily accessed as TSDataset objects."
+msgstr "PaddleTS内集成了部分公开数据集，便于用户使用；基于内置数据集，我们可以轻松的完成TSDataset的构建。"
+
+#: ../../source/get_started/get_started.rst:72 5a4705cab5e84f5bb4a49fea417ed6bf
+msgid ""
+"Simply call ``get_dataset`` to access a built-in dataset, which will "
+"return a TSDataset object built from the dataset. The ``UNI_WTH`` dataset"
+" is a univariate dataset containing weather from 2010 to 2014, where "
+"``WetBulbCelsuis`` represents the wet bulb temperature."
+msgstr ""
+"通过调用 ``get_dataset`` 函数可以导入指定的内置数据集，并返回TSDataset对象。示例数据集是一份包含了2010年--"
+"2014年的关于天气的单变量数据，其中 ``WetBulbCelsuis`` 代表湿球温度。"
+
+#: ../../source/get_started/get_started.rst:90 3c38bcf49d014b5f891b2c6e0b1219fe
+msgid "|UNI_WTH|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:481
+#: 0a68e22cc78a4ad394a4b2f0297110bb 2d22494058d6411aa4e85e4bbe21bbe8
+msgid "UNI_WTH"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:93 d7f260df44074a5080be516f7aa670d1
+msgid "2.2. Customized TSDataset"
+msgstr "2.2. 构建自定义数据集"
+
+#: ../../source/get_started/get_started.rst:95 049cd9922c3b4ac8ae3cbad2cf81adc9
+msgid "One can also build a TSDataset from a ``pandas.DataFrame`` or a CSV file."
+msgstr "用户可以基于 ``pandas.DataFrame`` 或者CSV文件去构建TSDataset。"
+
+#: ../../source/get_started/get_started.rst:122
+#: cf2c293898db447a90fc5594e960987d
+msgid "|CUS_DATASET_2|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:482
+#: 7213ce69c5d24046a6f3ccb7ee56bcfa ac8e7a742da94c5e87e1d739fe9fcfa1
+msgid "CUS_DATASET_2"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:124
+#: 2be0f6b662994f73976336662fb09c55
+msgid ""
+"To learn more about the ``TSDataset``, refer to `Dataset "
+"<../modules/datasets/overview.html>`_"
+msgstr ""
+"了解更多 ``TSDataset`` 模块功能，可参考 `数据集定义、加载以及操作 "
+"<../modules/datasets/overview.html>`_"
+
+#: ../../source/get_started/get_started.rst:130
+#: 7235c984d77943e0ac8993f07f185b7f
+msgid "3. Explore Data"
+msgstr "3. 数据查看与分析"
+
+#: ../../source/get_started/get_started.rst:132
+#: de3b723905b04f9f84dbfc27cb8923cd
+msgid "To get a brief overview, simply call ``TSDataset.summary``."
+msgstr "通过调用 ``TSDataset.summary`` 方法即可实现对数据统计信息的查看。"
+
+#: ../../source/get_started/get_started.rst:140
+#: 34ff86a987074811b64a63a103df7226
+msgid "|SUMMARY|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:483
+#: 05bc8f718aae4295a9a9c8e4d6844e6e 4eb759aeb4274dad9bc9ba777fbe30af
+msgid "SUMMARY"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:142
+#: b82658286fa3498396042f58e00cf180
+msgid ""
+"From the above output, we can have a broad picture about the dataset. "
+"Particularly, when the ``missing`` is not zero, it's usually necessary to"
+" fill the missing values before feeding the dataset to a model."
+msgstr ""
+"基于上述的信息，用户可以的数据有信息有大致的了解，其中很多信息可以帮助我们更好的理解数据，例如上述中 ``missing``  "
+"变量用于表示数据的缺失值比例，我们多数深度模型要求数据不能有缺失值，因此如果不为零，数据在入模前需要进行缺失值填充以及处理。"
+
+#: ../../source/get_started/get_started.rst:143
+#: a49ec43e05a8491382c8417f3aed5415
+msgid ""
+"We can also do some advanced analysis about the dataset with the "
+"functionalities from the analysis module. For example, we can perform "
+"``FFT`` on a column of the dataset as shown below."
+msgstr "我们也可以使用一些PaddleTS中的高级的分析组件对数据进行进一步的分析。例如我们可以使用 ``FFT`` 算子进行数据频域属性分析。"
+
+#: ../../source/get_started/get_started.rst:155
+#: 414f74a6a19f410487074e2a61c38364
+msgid "|FFT|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:484
+#: 7ad7a5aa54c24fe1a14677ba38e1196e 9b5f717e408b4528ae0c5f02684a8875
+msgid "FFT"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:157
+#: 2da6f787b9f449bab9527efb57b5a5e7
+msgid ""
+"To learn more about the ``FFT``, refer to `Analysis "
+"<../modules/analysis/overview.html>`_"
+msgstr "了解更多 ``FFT`` 模块功能，可参考 `Analysis <../modules/analysis/overview.html>`_"
+
+#: ../../source/get_started/get_started.rst:163
+#: 60209073136545f98d0cc0278e0b68d3
+msgid "4. Train Model and Make Forecasting"
+msgstr "4. 模型训练及预测"
+
+#: ../../source/get_started/get_started.rst:165
+#: 6acb166a41314947860e6ac7db86c4f8
+msgid ""
+"This section shows how to train a deep neural network model for time "
+"series forecasting and how to make forecasting using the trained model."
+msgstr "这里提供了一个如何基于时序数据去构建深度神经网络模型的例子，包括模型的训练以及预测。"
+
+#: ../../source/get_started/get_started.rst:168
+#: adbbc798212b4cb9b71822f1d48ca847
+msgid "4.1. Create the training, validation, and testing datasets"
+msgstr "4.1. 构建训练、验证以及测试数据集"
+
+#: ../../source/get_started/get_started.rst:178
+#: ce3fd130166e4d8cb3f7e312751e0e41
+msgid "|T_V_T|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:485
+#: 1e7df2258cb84cf6b7a07bb7ebb07d3a 51f001c0c9984a65a1c442ba0ac5ef15
+msgid "T_V_T"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:181
+#: c42ea52ad30248229c30045dfd7f9c6e
+msgid "4.2. Train the model"
+msgstr "4.2. 模型训练"
+
+#: ../../source/get_started/get_started.rst:183
+#: 96227dd064e74b4cad9e5e75e5940278
+msgid ""
+"We will use the built-in ``MLPRegressor`` model as an example to show how"
+" to train model."
+msgstr "我们将基于内置的MLPRegressor模型作为示例，用于展示如何进行模型的训练及预测。"
+
+#: ../../source/get_started/get_started.rst:184
+#: cce02251c9fd4954a4fd8790bc64a649
+msgid "Initialize a MLPRegressor instance with two required parameters:"
+msgstr "初始化MLPRegressor模型，其中包含两个必传的参数："
+
+#: ../../source/get_started/get_started.rst:186
+#: db720a993aef4af79b097ddb6dce54c9
+msgid ""
+"``in_chunk_len``: the size of loopback window, i.e. the number of time "
+"steps feed to the model"
+msgstr "``in_chunk_len``: 输入时序窗口的大小，代表每次训练以及预测时候输入到模型中的前序的时间步长。"
+
+#: ../../source/get_started/get_started.rst:187
+#: 038b64fd29774a92871f0baad21b5a69
+msgid ""
+"``out_chunk_len``: the size of forecasting horizon, i..e. the number of "
+"time steps output by the model"
+msgstr "``out_chunk_len``: 输出时序窗口的大小，代表每次训练以及预测时候输出的后续的时间步长。"
+
+#: ../../source/get_started/get_started.rst:189
+#: ec259392c3c244f3a377986b5b97ce91
+msgid ""
+"There are also optional parameters when initializing the ``MLPRegressor``"
+" instance., such as ``max_epochs``, ``optimizer_params``, etc."
+msgstr ""
+"同时也有很多其他的可选参数用于控制 ``MLPRegressor`` 模型的初始化，如 ``max_epochs`` ,  "
+"``optimizer_params`` 等。"
+
+#: ../../source/get_started/get_started.rst:200
+#: 03bbad9892304e2ab70d7ce96292c971
+msgid ""
+"Now, we can train the model with ``train_dataset`` and optional "
+"``val_dataset``."
+msgstr ""
+"现在，我们可以使用 ``train_dataset`` 和 ``val_dataset`` 对初始化好的模型进行训练，其中 "
+"``val_dataset`` 是可选的。"
+
+#: ../../source/get_started/get_started.rst:206
+#: cb82a575c5e54669a3fa32fd15919586
+msgid ""
+"To learn more about the ``MLPRegressor``, refer to `Models "
+"<../modules/models/overview.html>`_"
+msgstr "了解更多 ``MLPRegressor`` 模块功能，可参考 `Models <../modules/models/overview.html>`_"
+
+#: ../../source/get_started/get_started.rst:209
+#: b57218101d5143d8b33f2b838c20d4a2
+msgid "4.3. Make Forecasting"
+msgstr "4.3. 模型预测"
+
+#: ../../source/get_started/get_started.rst:211
+#: 28e9d80239a9400d83d5dd3acbd8b2ca
+msgid ""
+"Next we can make forecasting using the trained model, and the length of "
+"predicted results is equal to ``out_chunk_len``."
+msgstr "接下来，我们用已经训练好的模型进行预测，输出的预测结果类型是TSDataset, 同时其长度等于 ``out_chunk_len`` 。"
+
+#: ../../source/get_started/get_started.rst:220
+#: 09919d7ab89644479366ad9b39f65b14
+msgid "|PRED_SUBSET|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:486
+#: 54a6b1e4cd26436c900f6368778d24bf cafe90b7de6c486fb1c4bf2f422de2e2
+msgid "PRED_SUBSET"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:222
+#: f373dd1fc39c465d8fdba3913cf42a0a
+msgid "Plot the predicted results and ground-truth values for comparison."
+msgstr "我们截取测试集中对应的真实数据，和我们的预测结果进行对比，结果如下："
+
+#: ../../source/get_started/get_started.rst:231
+#: ab0b9a7cca984477afab2ccc24b8f760
+msgid "|PRED_TRUE_SUBSET|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:487
+#: 1dfb31239cc3408589575d257075f986 dcb493590f214dfbab458c2bae1b79e5
+msgid "PRED_TRUE_SUBSET"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:233
+#: 510dab001504430b93938a6805122ea9
+msgid ""
+"Consider the case where the expected prediction length is longer than the"
+" forecasting horizong of the fitted model (i.e. out_chunk_len), we can "
+"call ``recursive_predict`` to fulfill this task. As an example, given the"
+" previously loaded ``UNI_WTH`` dataset, suppose we want to forecast the "
+"``WetBulbCelsuis`` of the future 96 hours, while the forecasting horizong"
+" of the fitted model is set to 24 hours. The following code example "
+"illustrates the usage of ``recurive_predict`` regarding this case:"
+msgstr ""
+"如果我们想要预测的长度大于模型初始化时候指定的 ``out_chunk_len`` 长度，我们可以通过调用 "
+"``recursive_predict`` 接口来实现。其支持指定想要输出的预测长度；如上述的 ``UNI_WTH`` "
+"数据集，我们想要预测未来96个小时的 ``WetBulbCelsuis`` , 我们可以通过调用 ``recursive_predict`` "
+"通过如下方法实现："
+
+#: ../../source/get_started/get_started.rst:245
+#: 128486467a984eedb606ab4be7024a78
+msgid "|LONG_PRED_TRUE_SUBSET|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:488
+#: 0cce36c34d2642128754a1d43a0077b3 6aac00703919486599b6cbac407181f1
+msgid "LONG_PRED_TRUE_SUBSET"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:251
+#: 513fa46cd9e84e2b8572c33f2cf759b8
+msgid "5. Evaluation and Backtest"
+msgstr "5. 评估和回测"
+
+#: ../../source/get_started/get_started.rst:253
+#: 2daf0b0b696f41db9471fccfb0e4423e
+msgid ""
+"In addition to visually compare the predicted results and the ground-"
+"truth values, we can also evaluate the performance of the model by "
+"computing some built-in metrics."
+msgstr "现在，我们有了预测数据和真实数据，可以计算相应的metrics指标。"
+
+#: ../../source/get_started/get_started.rst:265
+#: b2700e95de7b43dcab19495d83d29159
+msgid ""
+"We can also evaluate the performance of the model on the whole test "
+"dataset by calling ``backtest``."
+msgstr "上面，我们只计算了测试集中部分数据的metrics指标，我们可以通过 ``backtest`` 实现对整个测试集的metrics指标计算。"
+
+#: ../../source/get_started/get_started.rst:284
+#: d7b2dc3434ad4f349f544ae1d79f3e76
+msgid ""
+"To learn more about the ``backtest``, refer to `backtest "
+"<../modules/backtest/overview.html>`_"
+msgstr "了解更多 ``backtest`` 模块功能，可参考 `回测 <../modules/backtest/overview.html>`_"
+
+#: ../../source/get_started/get_started.rst:290
+#: 3254151f782a464fb263d98502d245b9
+msgid "6. Covariates"
+msgstr "6. 协变量"
+
+#: ../../source/get_started/get_started.rst:292
+#: 5944bb79ea954b20bc7bc676acceb581
+msgid ""
+"In addition to the univariate or multivariate target time series, "
+"``PaddleTS`` also allows user to supply more contextual information in "
+"the form of covariates."
+msgstr "``PaddleTS`` 同样支持协变量数据的构建以及入模训练，用于提供除target外的额外信息，帮助我们提高时序模型效果。"
+
+#: ../../source/get_started/get_started.rst:293
+#: 37090af808fd4ea5a351c15f54236d85
+msgid "Covariates can be one of the following 3 types:"
+msgstr "时序数据中的协变量可以分为以下三种："
+
+#: ../../source/get_started/get_started.rst:295
+#: 6f99721f444c4c3baf531fae72165111
+msgid ""
+"``known_covariate`` Variables which can be forecasted for future time "
+"steps, e.g. weather forecasts"
+msgstr "``known_covariate(已知协变量)`` ，指可在预测未来时间已知的变量，例如天气预报"
+
+#: ../../source/get_started/get_started.rst:297
+#: 95623d5d8ee945d78dcf161cf81d5997
+msgid ""
+"``observed_covariate`` Variable which can only be observed in historical "
+"data, e.g. measured temperatures"
+msgstr "``observed_covariate(观测协变量)`` ，指只能在历史中观察到的变量数据，例如测量的温度"
+
+#: ../../source/get_started/get_started.rst:299
+#: aa72835afbd746aea321233516c6f6ae
+msgid "``static_covariate`` Constant variables"
+msgstr "``static_covariate(静态协变量)`` ，指整个时间范围内保持不变的变量，在多数序组合预测中会使用"
+
+#: ../../source/get_started/get_started.rst:303
+#: 4409276eed2c44539f777b67b677b083
+msgid "6.1. Generate Date-Related Covariates"
+msgstr "6.1. 自动构建日期相关协变量"
+
+#: ../../source/get_started/get_started.rst:305
+#: 1f60fb62406d44d89e44a9dd2cebbf6a
+msgid ""
+"We use ``TimeFeatureGenerator`` in ``paddlets.transform`` to generate "
+"``known covariates`` about date and time:"
+msgstr ""
+"我们可以使用 ``paddlets.transform`` 中的 ``TimeFeatureGenerator`` "
+"去自动生成日期与时间相关的协变量。如是否节假日，当前是每年的第几周等信息，因为这些信息在预测未来数据的时候也是已知的，因此其属于 "
+"``known_covariate(已知协变量)。`` 在以下示例中，我们会生成三个时间相关的协变量，分别代表 ``一年中的第几天`` "
+"、``一周中的第几天``、 ``是否是工作日`` 。"
+
+#: ../../source/get_started/get_started.rst:318
+#: 40bf5903ade548daa6496f2a940a0b61
+msgid "|COV_PD|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:489
+#: c9d826dad9a84ac1ab763901f9279f94 d263f1e263b94e7895619c5a3f7e5aff
+msgid "COV_PD"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:321
+#: 5fd3450959ea4853b73c1611db7f73a4
+msgid "6.2. Customized Covariates"
+msgstr "6.2. 自定义协变量"
+
+#: ../../source/get_started/get_started.rst:323
+#: 7d7f045d47794aaea11c83340aee2f4a
+msgid ""
+"We can also build a ``TSDataset`` with only covariates from a "
+"``pandas.DataFrame`` or a CSV file."
+msgstr "我们也可以基于 ``pandas.DataFrame`` 或者CSV文件去构建一个只包含协变量的 ``TSDataset`` 。"
+
+#: ../../source/get_started/get_started.rst:349
+#: 6be0354569db42068ef3bbaab1207869
+msgid "|COV|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:490
+#: 2ebd52395cad4ecf8cc86bc1ca6c4bd1 3ca6e98344004ca7907324950b20b165
+msgid "COV"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:351
+#: 5eeacb354de2467cb1bbfe2ec7c28618
+msgid ""
+"Then we can concatenate this TSDataset with an existing ``TSDataset`` to "
+"produce a new ``TSDataset`` with both the target and covariate time "
+"series."
+msgstr "接下来，我们可以将新构建只包含协变量的TSDataset和原有只包含target信息的TSDataset进行聚合。"
+
+#: ../../source/get_started/get_started.rst:360
+#: 68b24cef2b8647539d4e057f16dd10cc
+msgid "|COVTARGET|"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:491
+#: 7599431cd1264c06bf553a83daeb11d5 8300272882f148d199030498aa982847
+msgid "COVTARGET"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:366
+#: 43332fd338cc415993612cb43c8fc630
+msgid "7. Train Model with Covariates"
+msgstr "7. 基于包含协变量数据的模型训练"
+
+#: ../../source/get_started/get_started.rst:368
+#: 1f4c364e79ab4b90b8234ac3f7757faa
+msgid ""
+"Take ``RNNBlockRegressor`` as an example to show how to build a model "
+"using ``TSDataset`` with covariates."
+msgstr "基于前面构建好的包含协变量的数据，接下来，我们去训练一个 ``RNNBlockRegressor`` 模型作为一个例子。"
+
+#: ../../source/get_started/get_started.rst:382
+#: 42468c6f583145cca81365c6cdc3a4a8
+msgid "Create the training, validation and testing dataset:"
+msgstr "构建训练、验证以及测试数据集"
+
+#: ../../source/get_started/get_started.rst:389
+#: af98bf60f9c04862a805e0aee574174d
+msgid "Normalize the dataset by ``StandardScaler`` from ``paddlets.transform``:"
+msgstr "通过 ``paddlets.transform`` 的 ``StandardScaler`` 对数据进行归一化。"
+
+#: ../../source/get_started/get_started.rst:401
+#: 32ab109f6e69488faf867cd7c04a6a55
+msgid "Now, we can fit the model and evaluate the performance:"
+msgstr "现在我们可以训练模型并对模型效果进行评估。"
+
+#: ../../source/get_started/get_started.rst:427
+#: 69ed6f754a15471eac55fb6aa677e431
+msgid "8. Pipeline"
+msgstr ""
+
+#: ../../source/get_started/get_started.rst:429
+#: 2d5728e791984ffe9d8153a97d6a078e
+msgid ""
+"Let’s wrap up everything from the previous sections into a pipeline to "
+"create an end-to-end solution."
+msgstr "现在，我们可以通过Pipeline的方法，将上述提到的数据处理流程整合到一起，提供一个端到端的数据建模解决方案："
+
+#: ../../source/get_started/get_started.rst:440
+#: 6c6c3e4da832487a964e58e79dee9c3d
+msgid ""
+"Here we initialize a Pipeline instance to accommodate the date-related "
+"covariate generation, data normalization, and model training."
+msgstr "我们通过添加时间相关的特征生成模块、数据归一化模块以及模型训练模块去初始化一个Pipeline对象。"
+
+#: ../../source/get_started/get_started.rst:456
+#: 21b9b7ea448041ca8138fdc7e08e26df
+msgid "Next, we can fit the pipeline and evaluate the performance:"
+msgstr "接下来，我们可以对Pipeline整体进行训练以及效果评估，Pipeline会自动按序调用内部的模块进行数据的处理以及模型训练。"
+
+#: ../../source/get_started/get_started.rst:479
+#: ba7e643911464401bcc572425699073c
+msgid ""
+"To learn more about the ``Pipeline``, refer to `Pipeline "
+"<../modules/pipeline/overview.html>`__"
+msgstr "了解更多 ``Pipeline`` 模块功能，可参考 `Pipeline <../modules/pipeline/overview.html>`_"
+

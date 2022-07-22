@@ -1,0 +1,231 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-21 19:24+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.dl.paddlepaddle.tcn.rst:2
+#: 26610ae901b64ce2ae0f236f513c00b8
+msgid "paddlets.models.dl.paddlepaddle.tcn"
+msgstr ""
+
+#: 64535abffbf842f29acd4dba27472696
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:1 of
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.dl.paddlepaddle.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 16c1b4cd5b1a43409fbb6a644d3bae61
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:1 of
+msgid "Temporal Convolution Net."
+msgstr "时序卷积网络."
+
+#: 832d30a032c0466fbfa73fa094a17642 paddlets.models.dl.paddlepaddle.tcn.TCNRegressor
+#: of
+msgid "Parameters"
+msgstr "参数"
+
+#: 8bb7ea567e3f426ba613a392ce0c58d2
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:3
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:42
+#: ed857b7b4d7e462fad80ab3756b5967b of
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 52b866e7077f456fa824f0a433a0ed5a
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:5
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:48
+#: ddc724d3dcee44e594a2d4acd8c0f7a6 of
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 3126bbd936a542d1b6ec0649683d8593 877a9ae84f474d2aa686c4a8dba15083
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:7
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:54 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 54880237be544e44b6c404a80137a1cb 55e35bf21db442608d809caf824822e6
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:11
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:62 of
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 9b0739a153a6455c80a1f34dd66d6932
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:13
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:68
+#: e531c17d3b7e4903b41ff28cf7717272 of
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 2022bf19d96e40eda59e660816fe72cf
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:15
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:74
+#: d661f355876e4c2fa42c853c0c901e54 of
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 492be3e5f5b648c9adb2c3d86a48325c 8b1185b94de34adf9a99d684995e3a21
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:17
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:80 of
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 16bfe8540d4f43f4a4d21874b35a81bd 516ac4a6413c47749b74d596db729f3c
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:19
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:86 of
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: 2dad1f6ec6e14ee3bf726b73e41b4ce4 b29e7ef7756c4c27a6160b2c3dae20d8
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:21
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:92 of
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 422844bde0cb4f04a6cdbdd292b6b729
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:23
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:98
+#: fe4d7625d81746359a922089fc0d4620 of
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 28e9c64f7ce5424b9b9d58d76a9f896b 9ff9083a1fd24fd8a5fb816dbac8a34d
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:25
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:104 of
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 28787bcbe0f04ef4b51eb2593d19b15b 31c96cd01cbc4bcb841465064eb9074f
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:27
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:110 of
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 4372049344dc4828b0da0f766e34a4b9
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:29
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:116
+#: c0461649f04f4904a03fb8417b090920 of
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: 88cbec1b50894288b6e2e24bf1e30bad 98869778d65e4161bdbc8bb37b2801f2
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:31
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:122 of
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 7be6d21b3581413883ba33554fff69f6 abcffcec58c94d59bcce943069c14dd9
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:33
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:134 of
+msgid "Hidden layer configuration."
+msgstr "多层TemporalBlock结构, 列表第i个元素标识第i层通道的维度."
+
+#: 03a93d83d2064493adbf71306790fbd5
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:35
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:140
+#: cf790e80774d47d299a571ce52abe2ce of
+msgid "The filter size."
+msgstr "卷积核大小."
+
+#: 5c73674c8ba94e1d9af6df87735b2f7a 6dba5f1605114a4f83192ff3708de07b
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:37
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:146 of
+msgid "Probability of setting units to zero."
+msgstr "神经元丢弃概率."
+
+#: 031ada4fb483442a9fb0ab45b955bb7e 08c99c71c7d941feb15b0287693c84d2
+#: 0ac9f5bba2b4439094cfbbf0175a5e46 27506bd5ca1f4496a76d76658c246780
+#: 29d3fc90daa54a43b37dc2f8da373d9f 3db395fa696449a6921cc0cbf26d4c80
+#: 48261e3842494ded8b38db0a8e5eda1a 492f0d72fa8e4e188e1819138d4cb5d3
+#: 538b5651bf184d759b744848a0cf8989 5431b5ed38fd4b959004449f0f38cdc2
+#: 63e073a65ea344a4b8b0963032b76a6c 667a7c8e6b404d5a85d240ae9f110293
+#: 703b7a0b417248558bf25f215bd8ce6b 70bc9254e0ee44a6a7635222762c30e4
+#: 790528c963ab419393278229f7a5a79e 85eee4e0ecab47faa28ec5343c01b62a
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor c5ba36cab06d4e2d8ba0e8d39681f245
+#: fd97635cd00a433da689a0a2f74f51f8 of
+msgid "type"
+msgstr ""
+
+#: 09e0b8aeca984f5e9a473b53c2e35426 211896587cb146bc97738691ecc1a44f
+#: 52387db7f72f4ae6b03f7805e4f80807 a667419ec9bf4e718ba5340bf351bfd6
+#: b45c2e1a08eb4bc3bdd160fc1642cc03
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:44
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:50
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:58
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:64
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:100
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:106
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:112
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:118
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:142
+#: d185f087d1f24753978f0c5a207a7f27 dd5e646903d242d3922ab02be04b4fb5
+#: deda7dbd0852440ea2bc6869e3b242e4 f9cffb47387f418b94541721fb0a037d of
+msgid "int"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:70
+#: d92b9bd117e2459ea9c802091c910c2c of
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 9383a01408b14652ab1d261f409028cf
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:76 of
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 444af1ad51a048f890710daa00739cc3
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:82 of
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 3b34cbd376164c76ab65db86a35e0e9c
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:88 of
+msgid "List[str]"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:94
+#: ee35f2d8cc7a474b9ee37100a94fa64a of
+msgid "List[Callback]"
+msgstr ""
+
+#: 713b86307e774fd3a86ce585ddd98b49
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:124 of
+msgid "int|None"
+msgstr ""
+
+#: 6ac97b2c6afa47338c147d7ae9a01715
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:130 of
+msgid "bool"
+msgstr ""
+
+#: b9ef4edc0b6c4559a31330120ee6c4fc
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:136 of
+msgid "List[int]|None"
+msgstr ""
+
+#: 4fe6d6a2465c435abdf329ff0fd323ad
+#: paddlets.models.dl.paddlepaddle.tcn.TCNRegressor:148 of
+msgid "float"
+msgstr ""

@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-11 17:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.metrics.utils.rst:2
+#: 987084737b24428087db7001c9e5acab
+msgid "paddlets.metrics.utils"
+msgstr ""
+
+#: 60a5e91deb5644b3b83be62993fa0a93 paddlets.metrics.utils.ensure_2d:1 of
+msgid ""
+"A decorator, used for ensuring that the parameter of the wrapped function"
+" is a 2-dimentional tensor so that it fits sklearn.metrics."
+msgstr "装饰器, 用于保证被装饰函数的参数为2维tensor, 可以适配sklearn.metrics"
+
+#: paddlets.metrics.utils.ensure_2d eff4aa89dddd4f1f9d1fd1d995db14de of
+msgid "Parameters"
+msgstr "参数"
+
+#: a47707b628a348009fecdbe6397237c0 paddlets.metrics.utils.ensure_2d:4 of
+msgid "Core function."
+msgstr "需要被包装的函数."
+
+#: 5352d473226145189a9622bd962582a4 paddlets.metrics.utils.ensure_2d of
+msgid "Returns"
+msgstr "返回"
+
+#: 8123b21dcae6443fabd10aadb9df1cfc paddlets.metrics.utils.ensure_2d:7 of
+msgid "Wrapped core function."
+msgstr "被装饰过的函数"
+
+#: paddlets.metrics.utils.ensure_2d ede316e6a59b44e28d8ecafd429e1181 of
+msgid "Return type"
+msgstr "返回类型"
+

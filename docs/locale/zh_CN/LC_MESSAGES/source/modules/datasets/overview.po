@@ -1,0 +1,297 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-21 21:12+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/datasets/overview.rst:2
+#: 5110cf1af9cd4c018bb12982de67ac09
+msgid "Overview"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:5
+#: 3685891952af490d8f92ba91cb582d4c
+msgid "TSDataset"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:7
+#: c455f867c4c34cdd8f1afaa733fd9160
+msgid ""
+"`TSDataset` is the fundamental data class in `PaddleTS`, which is designed as "
+"the first-class citizen to represent the time series data. It is widely "
+"used in `PaddleTS`. In many cases, a function consumes a TSDataset and "
+"produces another TSDataset. A TSDataset object is comprised of two kinds "
+"of time series data:"
+msgstr ""
+"``TSDataset`` 是 `PaddleTS` "
+"中一个主要的类结构，用于表示绝大多数的时序样本数据，并作为PaddleTS其他算子的输入以及输出对象。TSDataset 包涵两类时序数据："
+
+#: ../../source/modules/datasets/overview.rst:11
+#: d9e4c3e8b2184125898d920f25202e97
+msgid ""
+"`Target`:  the key time series data in the time series modeling tasks "
+"(e.g. those needs to be forecasted in the time series forecasting tasks)."
+msgstr "待预测目标：表示希望被预测的时序序列"
+
+#: ../../source/modules/datasets/overview.rst:12
+#: a86687446ff94a22951da9528ea73bff
+msgid ""
+"`Covariate`: the relevant time series data which are usually helpful for "
+"the time series modeling tasks."
+msgstr "协变量：无需被预测的时间序列，协变量的加入通常用于辅助提高模型预测的效果"
+
+#: ../../source/modules/datasets/overview.rst:14
+#: 5b35a699a1fc4c7f85fdba308576eb58
+msgid "Currently, it supports the representation of:"
+msgstr "TSDataset支持的时序样本数据可以分为："
+
+#: ../../source/modules/datasets/overview.rst:16
+#: d7e64c170fee41b4b6ddf46733bd4079
+msgid "Time series of single target w/wo covariates."
+msgstr "单变量数据，只包含单列的预测目标，同时可以包涵单列或者多列协变量"
+
+#: ../../source/modules/datasets/overview.rst:17
+#: 7755c299e1b1479d830157da41304039
+msgid "Time series of multiple targets w/wo covariates."
+msgstr "多变量数据，包涵多列预测目标，同时可以包涵单列或者多列协变量"
+
+#: ../../source/modules/datasets/overview.rst:19
+#: cfc8ae89950c4daab859ad4733fed9d0
+msgid "And the covariates can be categorized into one of the following 3 types:"
+msgstr "我们将非预测目标变量定义为协变量，在时序数据中，协变量可分为以下三种："
+
+#: ../../source/modules/datasets/overview.rst:22
+#: 09fa28bdc995461083f2741642a3c71e
+msgid "Observed covariates (`observed_cov`):"
+msgstr "观测协变量 (`observed_cov`):"
+
+#: ../../source/modules/datasets/overview.rst:22
+#: 6e5473777be34f8b8a49fa428f7407b4
+msgid ""
+"referring to those variables which can only be observed in the historical"
+" data, e.g. measured temperatures"
+msgstr "指只能在历史中观察到的变量数据，例如测量的温度"
+
+#: ../../source/modules/datasets/overview.rst:25
+#: 644c515bc5064b17a777514e59b1360e
+msgid "Known covariates (`known_cov`):"
+msgstr "可预知协变量 (`known_cov`):"
+
+#: ../../source/modules/datasets/overview.rst:25
+#: 1292de6374444a3eb3e4c97c636cfc21
+msgid ""
+"referring to those variables which can be determined at present for "
+"future time steps, e.g. weather forecasts"
+msgstr "指可在预测未来时间已知的变量，例如天气预报"
+
+#: ../../source/modules/datasets/overview.rst:28
+#: 9429adaee8ee4e2eaa9d593fd0edf2a5
+msgid "Static covariates (`static_cov`):"
+msgstr "静态协变量 (`static_cov`):"
+
+#: ../../source/modules/datasets/overview.rst:28
+#: 24e8b7821e154252a619e19a59080268
+msgid "referring to those variables which keep constant over time"
+msgstr "指整个时间范围内保持不变的变量"
+
+#: ../../source/modules/datasets/overview.rst:30
+#: 5629b33537f84d948fe8697dd455eadc
+msgid ""
+"A `TSDataset` object includes one or more `TimeSeries` objects, "
+"representing targets, known covariates (known_cov), observed covariates "
+"(observed_cov), and static covariates (static_cov), respectively."
+msgstr ""
+"一个 ``TSDataset`` 对象由一个或者多个 ``TimeSeries`` "
+"对象构成，每个 ``TimeSeries`` 可分别代表target（待预测目标）， "
+"observed_covariate（观测协变量）以及known_covariate（可预知协变量）。"
+
+#: ../../source/modules/datasets/overview.rst:35
+#: cb681ba710024e6ebc9a43007434c2cf
+msgid "TimeSeries"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:37
+#: 7f47f5453a2041f182d02fa007986f65
+msgid ""
+"``TimeSeries`` is the atomic data structure for representing target(s), "
+"observed covariates (observed_cov), and known covariates (known_cov). "
+"Each could be comprised of a single or multiple time series data."
+msgstr ""
+"TimeSeries 是用于表示时序数据的最小粒度；可以分别代表target, observed_covariate"
+" 或者known_covariate 其中一种类型。TimeSeries本身可以是单变量或者多变量。"
+
+#: ../../source/modules/datasets/overview.rst:40
+#: a3cc98cc23194bd794196be840549223
+msgid ""
+"``TimeSeries`` needs to be converted to ``TSDataset`` before used in "
+"``PaddleTS``."
+msgstr "``TimeSeries`` 需要转换成 ``TSDataset`` 对象才能在 ``PaddleTS`` 中使用"
+
+#: ../../source/modules/datasets/overview.rst:43
+#: a217151c028e4016b970b39be9f0de6d
+msgid "Examples"
+msgstr "使用示例"
+
+#: ../../source/modules/datasets/overview.rst:46
+#: 8ed40135b86f40bfb504f66e3a252de4
+msgid "Build TSDataset"
+msgstr "构建TSDataset"
+
+#: ../../source/modules/datasets/overview.rst:48
+#: 60633bc1c0f94ba193b23e1652f32f6d
+msgid ""
+"Building TSDataset which contains only ``Target`` from ``DataFrame`` or "
+"CSV file"
+msgstr "基于 ``pandas.DataFrame`` 或者CSV文件构建一个只包含 ``tareget`` 序列的TSDataset："
+
+#: ../../source/modules/datasets/overview.rst:75
+#: ../../source/modules/datasets/overview.rst:240
+#: 7ccd561f592d45f2ac93d0635b8625da 96563a47d6394c0488e75ccb9c86ffc9
+msgid "|CUS_DATASET_2|"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:374
+#: 2c7b944af2b14bf08f0bdf0257b205be 63588b858a5046b0918865d00aa6c647
+#: 66aae73bb21b45eb9bebe8cdc18f8035
+msgid "CUS_DATASET_2"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:77
+#: e0c384881b0242678b40662652b76b53
+msgid "Building TSDataset which contains ``Target`` and ``Covariates``:"
+msgstr "构建一个既包含target序列，也包含协变量序列的TSDataset："
+
+#: ../../source/modules/datasets/overview.rst:79
+#: 5f9315eeb0ef48448ec0035aeeb3bcb1
+msgid "Option 1:"
+msgstr "方法1："
+
+#: ../../source/modules/datasets/overview.rst:108
+#: f1df4e9edf60442ebf94dc42683c91f6
+msgid "|V_K2_O|"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:375
+#: 3071068ad3ef4af7a11b89c32fa0f8ed 894b9841734d4e4ba7e5c5b8a0da7207
+msgid "V_K2_O"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:110
+#: 33d2734242534f41913928dbf3e9f9d0
+msgid "Option 2:"
+msgstr "方法2："
+
+#: ../../source/modules/datasets/overview.rst:149
+#: ../../source/modules/datasets/overview.rst:190
+#: 3ae9852759be422e9d567d0ae63c97c0 7687b2c42869423598040ef25e9afe76
+msgid "|T_K2L_O|"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:376
+#: 3fc0919889d643b1b16bbc515c5d3e73 c1b385d10d8a42449ef90cebe0d8ab7e
+#: db79da67394e4ffa8d1fb444fcd01248
+msgid "T_K2L_O"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:151
+#: 5b4d56eab4c541aeb89f5686d9ddba81
+msgid "Option 3:"
+msgstr "方法3："
+
+#: ../../source/modules/datasets/overview.rst:192
+#: f571f0f76e9f46508566c354e06a884a
+msgid ""
+"If the original dataset has missing data, we can fill missing data during"
+" the loading process by using ``load_from_dataframe``. We provide 7 fill "
+"methods listed below."
+msgstr "如果提供的原始样本数据存在缺失值，我们可以通过TSDataset构建时的自动填充功能实现缺失值的填充，目前支持7种填充方式。"
+
+#: ../../source/modules/datasets/overview.rst:230
+#: 46e46ac8a59c49ed8a9d1820705ff856
+msgid "Data Exploration"
+msgstr "数据查看与分析"
+
+#: ../../source/modules/datasets/overview.rst:232
+#: 216dcc941bd44f87a2a42c6f3972ad31
+msgid "Plot TSDataset."
+msgstr "数据画图展示"
+
+#: ../../source/modules/datasets/overview.rst:243
+#: 129a473f61884d04ad6870e35452b21b
+msgid ""
+"To get the summary statistics of TSDataset, simply call "
+"``TSDataset.summary``."
+msgstr "通过调用 ``TSDataset.summary`` 方法即可实现对数据统计信息的查看。"
+
+#: ../../source/modules/datasets/overview.rst:251
+#: 79ed3e68097443b39a081892ef629b93
+msgid "|ALL_SUMMARY|"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:377
+#: 1a7bd618be994c5a9a16d22551508a89 520f75c61cc9478582f12861ed1de040
+msgid "ALL_SUMMARY"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:255
+#: b5e60358551340af99ef4fb9b2d38778
+msgid "Creating the training, validation, and testing datasets"
+msgstr "构建训练、验证以及测试数据集"
+
+#: ../../source/modules/datasets/overview.rst:265
+#: 34a1ec48c2bc4ed9b86f9252db20a001
+msgid "|T_V_T_2|"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:378
+#: 626e52a78b3b4401adea8f3ce9a5e654 d66a68692d13430d907615ab46fa574a
+msgid "T_V_T_2"
+msgstr ""
+
+#: ../../source/modules/datasets/overview.rst:268
+#: ee671f3d7cc64f32b7fc4ed1bf833924
+msgid "Add columns"
+msgstr "增加列"
+
+#: ../../source/modules/datasets/overview.rst:294
+#: 8653ef95843747d19fe5900918593f9e
+msgid "Update columns"
+msgstr "更新列"
+
+#: ../../source/modules/datasets/overview.rst:312
+#: d816abab7285404d8258eedabc1dc3f5
+msgid "Delete columns"
+msgstr "删除列"
+
+#: ../../source/modules/datasets/overview.rst:322
+#: 3bad4a30f45045b8abe391390a3d4a9c
+msgid "Get columns"
+msgstr "获取列"
+
+#: ../../source/modules/datasets/overview.rst:332
+#: e007a27177d24dfba987b3fbf6b1585e
+msgid "Get data type"
+msgstr "获取数据类型"
+
+#: ../../source/modules/datasets/overview.rst:347
+#: c7c41e6fb6b74ca3b28de7f45714b881
+msgid "Modify dtype"
+msgstr "修改数据类型"
+
+#: ../../source/modules/datasets/overview.rst:364
+#: 53f33a53076348789124e07aadfc1306
+msgid "Get column names"
+msgstr "获取包含的列名信息"

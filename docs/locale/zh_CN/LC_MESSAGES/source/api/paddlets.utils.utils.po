@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-07 21:21+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.utils.utils.rst:2 bf095d6508af4f8988b8f1fe2a035476
+msgid "paddlets.utils.utils"
+msgstr ""
+
+#: 9a8d5d4e9f1545be8430538a48c533bb paddlets.utils.utils.check_model_fitted:1 of
+msgid "check if model has fitted, Raise Exception if not fitted"
+msgstr "检查模型是否已拟合，如果未拟合则抛出异常"
+
+#: 3608be96e14b4d739fdfbb8f3e646803 paddlets.utils.utils.check_model_fitted
+#: paddlets.utils.utils.get_uuid e8c69aa4d0f440128774dcf1b0f3e784 of
+msgid "Parameters"
+msgstr ""
+
+#: 079ba9c2f8d041afba7687027ad0e62f paddlets.utils.utils.check_model_fitted:3 of
+msgid "model instance."
+msgstr "模型实例"
+
+#: paddlets.utils.utils.check_model_fitted:5 c7de9a67f41342f3b8fb26ceb62d214b of
+#, python-format
+msgid ""
+"str, default=None The default error message is, \"This %(name)s instance "
+"is not fitted yet. Call 'fit' with appropriate arguments before using "
+"this estimator.\" For custom messages if \"%(name)s\" is present in the "
+"message string, it is substituted for the estimator name. Eg. : "
+"\"Estimator, %(name)s, must be fitted before sparsifying\"."
+msgstr "报错消息，不设置即为默认值"
+
+#: 24e94bad965742ddb9ed2800e6995e37 78222e1d5d6a4e2a83f65275c2a818bc
+#: paddlets.utils.utils.check_model_fitted paddlets.utils.utils.get_uuid of
+msgid "Returns"
+msgstr ""
+
+#: 7ac1a20e214d48179c59ebe2f5fbc209 paddlets.utils.utils.check_model_fitted:14 of
+msgid "None"
+msgstr ""
+
+#: 756d5bc3c1f847aabdaaf6a9a7061220 paddlets.utils.utils.check_model_fitted of
+msgid "Raises"
+msgstr ""
+
+#: 8880b98c9c424b48a32d226c248a0138 paddlets.utils.utils.get_uuid:1 of
+msgid "get short UUID"
+msgstr ""
+
+#: 5cada75474484ae7a149261d6e60d60a paddlets.utils.utils.get_uuid:3 of
+msgid "data to be predicted"
+msgstr ""
+
+#: 9b2b197d051a4ca1af224cd044f797ba paddlets.utils.utils.get_uuid:5 of
+msgid "prefix & 16 random letters"
+msgstr "prefix + 16位随机符号"
+
+#~ msgid "get short UUID :param prefix: data to be predicted"
+#~ msgstr "获取UUID"
+

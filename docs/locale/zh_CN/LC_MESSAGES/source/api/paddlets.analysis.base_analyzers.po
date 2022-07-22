@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-07 20:16+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.analysis.base_analyzers.rst:2
+#: 749f6b9b5d0f46c5ba8a8a8953136828
+msgid "paddlets.analysis.base_analyzers"
+msgstr ""
+
+#: paddlets.analysis.base_analyzers.Max:1 paddlets.analysis.base_analyzers.Summary:1
+#: e2cd54765489479b8a14b728020e9ebb fae1cada0476452485811d4455757fca of
+msgid "Bases: :py:class:`~paddlets.analysis.base.Analyzer`"
+msgstr ""
+
+#: paddlets.analysis.base_analyzers.Summary:1 ccdc7499381248c7b6799e63745fe8f0 of
+msgid ""
+"Statistical indicators, currently support: numbers, mean, variance, "
+"minimum, 25% median, 50% median, 75% median, maximum value, missing "
+"percentage, stationarity p value"
+msgstr "统计指标计算，目前包括：数量、均值、方差、最小、25%中位值、50%中位值、75%中位值、最大值、缺失占比、平稳性p值"
+
+#: 31edc49e18c347e5988bbaa4473cf897 4a90532cb4be4b5fb059b9b99de59bc9
+#: paddlets.analysis.base_analyzers.Max paddlets.analysis.base_analyzers.Max.analyze
+#: paddlets.analysis.base_analyzers.Summary
+#: paddlets.analysis.base_analyzers.Summary.analyze d4205134d01f4da89784db2333c721c0
+#: eeeb41d85c32457db628688c51d1148b of
+msgid "Parameters"
+msgstr ""
+
+#: paddlets.analysis.base_analyzers.Max:3 paddlets.analysis.base_analyzers.Summary:3
+#: dfd12dfc8250423985af946fc7ab9c5b e8b6f9f7819a494587274cec7b74390b of
+msgid "Argument positions left for sub-classes."
+msgstr "各分析算子子类的参数, 基类中利用可变参数实现灵活拓展"
+
+#: paddlets.analysis.base_analyzers.Summary.analyze:1
+#: e00678e3e2a74a68a0c8c25429b6bf9b of
+msgid "Calculate Statistical indicators."
+msgstr "计算统计指标"
+
+#: 274e192c1f96477da04d4d84b517cef6
+#: paddlets.analysis.base_analyzers.Summary.analyze:3 of
+msgid "Pd.Series or pd.DataFrame to be analyzed."
+msgstr "待分析的pd.Series|pd.DataFrame"
+
+#: 6ec39fa751954b70a98ac2dec71fbbbe 732cf096d6af4adfa6cc91b02abb2ea0
+#: 7e209757fcc8498f838d3080c0cedb7f 9b07b48e61904d48b41e324b91429c73
+#: paddlets.analysis.base_analyzers.Max.analyze
+#: paddlets.analysis.base_analyzers.Max.get_properties
+#: paddlets.analysis.base_analyzers.Summary.analyze
+#: paddlets.analysis.base_analyzers.Summary.get_properties of
+msgid "Returns"
+msgstr ""
+
+#: af73f2d71ac6457c9bce188481f34f70
+#: paddlets.analysis.base_analyzers.Summary.analyze:6 of
+msgid "Analysis results."
+msgstr "分析结果"
+
+#: paddlets.analysis.base_analyzers.Max.analyze
+#: paddlets.analysis.base_analyzers.Summary.analyze d1672134586d4b48864386ccfb1b97a5
+#: e15e77774a124f59800d54fb41098a59 of
+msgid "Return type"
+msgstr ""
+
+#: 70f410051534467a903d813a505ff8bd paddlets.analysis.base_analyzers.Max.analyze
+#: paddlets.analysis.base_analyzers.Summary.analyze d91134986cd945a8b279666c63637b25
+#: of
+msgid "Raises"
+msgstr ""
+
+#: 48319d5bd1214c56af74bb9edb945777
+#: paddlets.analysis.base_analyzers.Max.get_properties:1
+#: paddlets.analysis.base_analyzers.Summary.get_properties:1
+#: e21cc005977742b8a915e8373c4c90f8 of
+msgid "Get the properties of the analyzer."
+msgstr "获取analyzer的属性"
+
+#: 614ad57ac05b400dbd85555e124f5de6
+#: paddlets.analysis.base_analyzers.Max.get_properties:3
+#: paddlets.analysis.base_analyzers.Summary.get_properties:3
+#: f32a6b68b4fb433cb194a2fd66330861 of
+msgid "Dict"
+msgstr ""
+
+#: a0f1347130d148158ad9aed43f00d81e paddlets.analysis.base_analyzers.Max:1 of
+msgid "Compute maximum values of given columns"
+msgstr "计算指定列的最大值"
+
+#: 86cce78facd64ee191934da422af62ad paddlets.analysis.base_analyzers.Max.analyze:1
+#: of
+msgid "Compute the maximum values of given columns"
+msgstr "计算指定列的最大值"
+
+#: 537bf34c25964053bc0a80840349cc1f paddlets.analysis.base_analyzers.Max.analyze:3
+#: of
+msgid "columns to be analyzed"
+msgstr "待分析的列，默认为全部列"
+
+#: 4f789af9dc044fb8be80030ef84b58c6 paddlets.analysis.base_analyzers.Max.analyze:6
+#: of
+msgid "The maximum value or the maximum values indexed by column names"
+msgstr "列最大值或者最大值的index"
+
+#~ msgid "不同analysis方法的具体实现"
+#~ msgstr ""
+
+#~ msgid "统计指标计算，目前包括：数量、均值、方差、最小、25%中位值、50%中位值、75%中位值、最大值、缺失占比、平稳性p值"
+#~ msgstr ""
+
+#~ msgid "各分析算子子类的参数, 基类中利用可变参数实现灵活拓展"
+#~ msgstr ""
+
+#~ msgid "计算统计指标"
+#~ msgstr ""
+
+#~ msgid "待分析的元素"
+#~ msgstr ""
+
+#~ msgid "analysis产出结果，index是统计指标类型，name或者columns是列名"
+#~ msgstr ""
+
+#~ msgid "Additional keyword arguments to be passed to the analyzer"
+#~ msgstr ""
+

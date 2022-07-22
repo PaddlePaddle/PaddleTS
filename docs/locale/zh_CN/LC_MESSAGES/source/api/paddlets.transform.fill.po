@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-23 00:08+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.fill.rst:2
+#: 965e091297a74aed9cb1e04446b9c8e1
+msgid "paddlets.transform.fill"
+msgstr ""
+
+#: 2beb925d3f4d4bf3ac4945a12d00806c of paddlets.transform.fill.Fill:1
+#, fuzzy
+msgid "Bases: :py:class:`~paddlets.transform.base.BaseTransform`"
+msgstr "基类: :py:class:`~bts.transform.base.BaseTransform`"
+
+#: 0bf4bdd5a7d948288a50736cf6e96fc8 of paddlets.transform.fill.Fill:1
+msgid ""
+"This class is designed to fill missing values in columns. There are three"
+" kinds of ways to fulfill this task, including"
+msgstr "该类被设计为用来补全数据列中的缺失值。有三类补全数据的方法，包括"
+
+#: e9689b95eebf41d180491648295c139b of paddlets.transform.fill.Fill:3
+msgid ""
+"Replace the missing values with a statistic computed from a sliding "
+"window, e.g. MAX, MIN, MEAN, or MEDIAN;"
+msgstr "从滑动窗口中计算的统计数据替换缺失值，例如 最大值、最小值、平均值或中值；"
+
+#: e17098f29bd146fa98aa7b9211384e46 of paddlets.transform.fill.Fill:5
+msgid ""
+"Replace the missing values with adjacent values, which could be values "
+"previous or next to the missing values;"
+msgstr "相邻值替换缺失值，这些值可以是缺失值之前或之后的数值。"
+
+#: 3e17e4efa4274682bb616cf48ab93e47 of paddlets.transform.fill.Fill:7
+msgid "Replace the missing values with the value specified by the user."
+msgstr "或使用用户指定的值替换缺失值。"
+
+#: 386793a7ac6d4048866aa868ca3e4d8f 4c847988d63e4e2a82b6df2bf4bb03da
+#: ac2cff27d470486f82f3a2ed30d029b1 d142f877b9a2425586a61d4345b51260 of
+#: paddlets.transform.fill.Fill paddlets.transform.fill.Fill.fit
+#: paddlets.transform.fill.Fill.fit_transform
+#: paddlets.transform.fill.Fill.transform
+msgid "Parameters"
+msgstr "参数"
+
+#: ede898d523a243a0b4912cb8d169244f of paddlets.transform.fill.Fill:9
+msgid "Column name(s) to be processed."
+msgstr "选择被补全的数据列。"
+
+#: 0f475fc9468c4a1f96a0dd7517cf4549 of paddlets.transform.fill.Fill:11
+msgid ""
+"Method of filling missing values. Totally 8 methods are supported "
+"currently: max: Use the max value in the sliding window. min: Use the min"
+" value in the sliding window. avg: Use the mean value in the sliding "
+"window. median: Use the median value in the sliding window. pre: Use the "
+"previous value. next: Use the next value. zero: Use 0s. default: Use the "
+"value specified by the user."
+msgstr ""
+"填充缺失值的方法。目前共支持8种方法： max：使用滑动窗口中的最大值； min：使用滑动窗口中的最小值； avg：使用滑动窗口中的平均值； "
+"median：使用中值； pre：使用上一个值； next：使用下一个值； zero：使用0值； miss_value：使用用户指定的值"
+
+#: bcd61284bade4c7eb25d4453591f033f of paddlets.transform.fill.Fill:21
+msgid ""
+"Only effective when the method is default, value specified by the user to"
+" replace the missing values."
+msgstr "仅在方法为默认值时有效，由用户指定的值替换缺失值。"
+
+#: 1aaf5e4af15444d38d3bed24404b9270 of paddlets.transform.fill.Fill:23
+msgid "Size of the sliding window."
+msgstr "滑动窗口大小"
+
+#: 96cf46cc544c4ff3b3e63014a82a7374 of paddlets.transform.fill.Fill:25
+msgid ""
+"Minimum number of non-missing values in the sliding window, if less than "
+"the min_num_non_missing_values, the statistic will be set to np.nan."
+msgstr "滑动窗口中非缺失值的最小数量，如果小于参数min_num_non_missing_values，则统计为np.nan"
+
+#: a0c4bfacbece42869727f6acca605c0a a60ec9e7c0154ec1bfc42dc0cfcf3200
+#: c0bb4980e4c34dc39b70e4e3320c6b3f e0ee69516ff44f76acc6d0bed662f0ce of
+#: paddlets.transform.fill.Fill paddlets.transform.fill.Fill.fit
+#: paddlets.transform.fill.Fill.fit_transform
+#: paddlets.transform.fill.Fill.transform
+msgid "Returns"
+msgstr "返回"
+
+#: e1c85850e4b84f7e8bf1f1ce5bad1ece of paddlets.transform.fill.Fill:29
+msgid "None"
+msgstr "None"
+
+#: 6f119c18fb9f42c48107ed03562899a5 of paddlets.transform.fill.Fill.fit:1
+msgid "dataset to process"
+msgstr "进行拟合的数据"
+
+#: 4b0432931bed4d819490d7c4a65167ce of paddlets.transform.fill.Fill.fit:4
+msgid "self"
+msgstr "算子自身"
+
+#: 077e01fd1c0847ffb8ed66c6621b1da8 of paddlets.transform.fill.Fill.transform:1
+msgid "Fill missing values."
+msgstr "补全缺失值。"
+
+#: 76689fb9f0db4d53a8fc8c7dcac026e8 d436c6d27f3e4eca97ee25bdd88072e2 of
+#: paddlets.transform.fill.Fill.fit_transform:3
+#: paddlets.transform.fill.Fill.transform:3
+msgid "TSDataset or List[TSDataset]"
+msgstr "时序数据TSDataset"
+
+#: 04f10b4e2e684a7e8f4779c62227b7e4 51f6d3c4c46b4ab0b0693c646a6da876 of
+#: paddlets.transform.fill.Fill.fit_transform:5
+#: paddlets.transform.fill.Fill.transform:5
+msgid "Set to True to perform inplace row normalization and avoid a copy."
+msgstr "设置为True时，数据会在源输入数据上修改，避免复制新数据。"
+
+#: 54de33e86b394c8ab66ccb87eb80a75f e20b81f4b12b456785f7d16acd9062d1 of
+#: paddlets.transform.fill.Fill.fit_transform:8
+#: paddlets.transform.fill.Fill.transform:8
+msgid "Transformed TSDataset."
+msgstr "转换后的时序数据集TSDataset."
+
+#: a3282edbcb034fdbafb7afe27d9cc660 c2bdb78f1a0c44599c4fd78b3a2aa0ff of
+#: paddlets.transform.fill.Fill.fit_transform
+#: paddlets.transform.fill.Fill.transform
+msgid "Return type"
+msgstr "返回 类型"
+
+#: 58ae2f39b46841b1a70b0df1868ebe12 of
+#: paddlets.transform.fill.Fill.fit_transform:1
+msgid "First fit the scaler, and then do transformation."
+msgstr "首先执行拟合方法，然后执行转换方法。"
+
