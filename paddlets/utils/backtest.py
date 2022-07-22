@@ -145,3 +145,4 @@ def backtest(
         return reduction(scores) if return_score else results
     else:
         return scores if return_score else results
+

@@ -75,3 +75,4 @@ def get_uuid(prefix: str = "", suffix: str = ""):
         prefix = prefix + digits[x]
     res = prefix + suffix if suffix is not None else prefix
     return res
+
