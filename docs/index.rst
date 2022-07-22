@@ -27,8 +27,6 @@ In future, more advanced features will be coming, including:
 
 Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
-Project Gitee: TODO
-
 
 .. toctree::
     :maxdepth: 1
