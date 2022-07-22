@@ -1,0 +1,279 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 14:46+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/api/paddlets.pipeline.pipeline.rst:2
+#: 7a94ba3fcc2c4a83a737c0af6b9adb47
+msgid "paddlets.pipeline.pipeline"
+msgstr ""
+
+#: 34e4d9a184fa4c7384e4f6c39549dfc7 of paddlets.pipeline.pipeline.Pipeline:1
+msgid "Bases: :py:class:`~paddlets.models.base.Trainable`"
+msgstr ""
+
+#: 0dc0d32e71314e31ab9e4d0006d3bf02 of paddlets.pipeline.pipeline.Pipeline:1
+msgid ""
+"The pipeline is designed to build a workflow for time series modeling "
+"which may be comprised of a set of transformers and an model."
+msgstr "`Pipeline` 被用于构建一个时序建模机器学习工作流，它可以包含若干个特征工程方法与一个学习器。"
+
+#: b92bdb362af14304855909ec61667c66 of paddlets.pipeline.pipeline.Pipeline:4
+msgid "**Note**: The model is optional."
+msgstr "**注意**: 学习器是可选的，可构建仅存在特征工程方法的 Pipeline 。"
+
+#: 00880ac3447640a5b8bcb8af758969e5 1129cecfe6f444d0b1f6dde84bfbf9cf
+#: 12a45ca2834c47b19ed573911b529b6c 380602b7eacd4482b50e8c24c6591c19
+#: 45b87a5ce79a482d86b87cbf4fac0878 4d11438092bb492b910bdb73c73bde5d
+#: 934e70243a1248c48f62fc0522ee7745 95b1d765d61d43bb817c36fad52ae8c9
+#: a17448a8bfaf4efb9cb4366002f6dc07 de649601e8154218a248356ee3eda51e of
+#: paddlets.pipeline.pipeline.Pipeline paddlets.pipeline.pipeline.Pipeline.fit
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform
+#: paddlets.pipeline.pipeline.Pipeline.load
+#: paddlets.pipeline.pipeline.Pipeline.predict
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.save
+#: paddlets.pipeline.pipeline.Pipeline.transform
+msgid "Parameters"
+msgstr ""
+
+#: 1fa8a56a2e094c209b915d5ddccd01d8 of paddlets.pipeline.pipeline.Pipeline:6
+msgid "A list of transformers and a final model."
+msgstr "包含若干个特征工程方法与一个学习器的列表。构建方法参考下方案例："
+
+#: df66ccec9c3c44da9b22cbdfc0d5889a of paddlets.pipeline.pipeline.Pipeline:10
+msgid "Examples"
+msgstr ""
+
+#: eb457dcfb9ac4c68a11679eba15d0806 of
+#: paddlets.pipeline.pipeline.Pipeline.fit:1
+msgid "Fit transformers and transform the data then fit the model."
+msgstr "逐一拟合 `Pipeline` 中的特征工程方法，并对数据进行 transform，然后拟合学习器。"
+
+#: 517468f7891a460c9680cfe84dfcd229 of
+#: paddlets.pipeline.pipeline.Pipeline.fit:3
+msgid "Train dataset."
+msgstr "TSDataset训练集。"
+
+#: a73d51a89fd7480f88903c1d701f7979 of
+#: paddlets.pipeline.pipeline.Pipeline.fit:5
+msgid "Valid dataset."
+msgstr "TSDataset验证集。"
+
+#: 09dd1d5ebe2e4f68b229886249deefac 218d7a1948324b8b97e72f3b1b50dd57
+#: 6159c93a1ca443349c3bdd99ad86bcc1 7af5b9e078f34cefb49158a82575bbb1
+#: 83746213248c48818d553ba77b4e9255 a93418025a794294bd8d4ade53edc625
+#: d1e926343ab44fb29c696fd891f51d00 d4d9341b2f8b433ca53f0c1213f1515e of
+#: paddlets.pipeline.pipeline.Pipeline.fit
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform
+#: paddlets.pipeline.pipeline.Pipeline.load
+#: paddlets.pipeline.pipeline.Pipeline.predict
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.transform
+msgid "Returns"
+msgstr ""
+
+#: 753b39fe18c34f7da073200698e180ec of
+#: paddlets.pipeline.pipeline.Pipeline.fit:8
+msgid "Pipeline with fitted transformers and fitted model."
+msgstr "对于各个特征工程方法与学习器都完成了拟合的 Pipeline 。"
+
+#: 13afa2a3f8b244ee9a33ee0f25e7fe3a 1aae64e9227d4917895be8be17a08369
+#: 3c31215191914368ac9944a5ccc699cf 551b8fa4645744ed8385b6e7bee81129
+#: 6d31896b58ab404abbab12f61267fced 9e70d78acc804602828912057a797602
+#: ea6679c3966a4042bc6bbdc455ebbcb7 f6e7ce4073154e7f9ab7639fb1c32047 of
+#: paddlets.pipeline.pipeline.Pipeline.fit
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform
+#: paddlets.pipeline.pipeline.Pipeline.load
+#: paddlets.pipeline.pipeline.Pipeline.predict
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba
+#: paddlets.pipeline.pipeline.Pipeline.transform
+msgid "Return type"
+msgstr ""
+
+#: 312e039f582a425f94ff2335040142ab of
+#: paddlets.pipeline.pipeline.Pipeline.transform:1
+msgid "Transform the `TSDataset` using the fitted transformers in the pipeline."
+msgstr "利用 `Pipeline` 中已拟合过的特征工程方法 transform 输入的 `TSDataset` 时序数据集。"
+
+#: 8a4f9c8d233b4ed59e7d594c13bc4388 of
+#: paddlets.pipeline.pipeline.Pipeline.transform:3
+msgid "Data to be transformed."
+msgstr "被处理的数据集。"
+
+#: 373e0d7c0f3b467d86748b5f5774b37f ed0cc866c105485794df0132a77f5f30 of
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform:8
+#: paddlets.pipeline.pipeline.Pipeline.transform:5
+msgid ""
+"Set to True to perform inplace transform and avoid a data copy. Default "
+"is False."
+msgstr "若设置为True，则会执行一个就地转换，并避免一次数据拷贝。默认值为False。"
+
+#: da216a51959e46d19ea668e4c6f893c0 of
+#: paddlets.pipeline.pipeline.Pipeline.transform:8
+msgid "Transformed results."
+msgstr "处理完成的数据集。"
+
+#: 5b2ce6e58ae24142a4a85571debc872b of
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform:1
+msgid ""
+"The inverse transformation of `self.transform`. Apply `inverse_transform`"
+" using the fitted transformers in the pipeline. Note that not all "
+"transformers implement `inverse_transform` method. If a transformer do "
+"not implement `inverse_transform`, it would not inversely transform the "
+"input data."
+msgstr ""
+"此方法是 `self.transform` 的逆向转换方法。利用 `Pipeline` 中已拟合过的特征工程方法 "
+"`inverse_transform` 输入的 `TSDataset`。注意：并非所有的特征工程方法都实现了 "
+"`inverse_transform`， 若某个没有实现 `inverse_transform`，则不会对数据进行逆处理。"
+
+#: 5958e0b345b74ee3a68c3638d7ea8622 of
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform:6
+msgid "Data to apply `inverse_transform`."
+msgstr "被逆向转换的数据集。"
+
+#: 441eeabd93f64ea2a90a1029a9a7030f of
+#: paddlets.pipeline.pipeline.Pipeline.inverse_transform:11
+msgid "Inversely transformed TSDataset."
+msgstr "完成逆向转换的数据集"
+
+#: 2c4a73dcf1b841ec8dcb07c39861759c of
+#: paddlets.pipeline.pipeline.Pipeline.predict:1
+msgid ""
+"Transform the `TSDataset` using the fitted transformers and perform "
+"prediction with the fitted model in the pipeline, only effective when the"
+" model exists in the pipeline."
+msgstr ""
+"利用 `Pipeline` 中已拟合过的特征工程方法 transform 输入的 "
+" `TSDataset` 时序数据集，并利用已拟合过的学习器执行预测。注意：此方法仅在模型存在时可用。"
+
+#: 14c21470abe7411ab023e95436750c9b 1ab2289d4ae34047a5cae78792c03594
+#: 5631e2bf698c4866a425bffa653a6f4e af0168fb1c244af994c681ed83de483e of
+#: paddlets.pipeline.pipeline.Pipeline.predict:4
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba:4
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict:6
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba:6
+msgid "Data to be predicted."
+msgstr "被预测的数据集。"
+
+#: 9a43c53540c54c7490b5c7a23a8ac308 of
+#: paddlets.pipeline.pipeline.Pipeline.predict:7
+msgid "Predicted results of calling `self.predict` on the final model."
+msgstr "预测结果。"
+
+#: 2f3c7a56deee4b87ad0a3a3be0ac2f5f of
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba:1
+msgid ""
+"Transform the `TSDataset` using the fitted transformers and perform "
+"probability prediction with the fitted model in the pipeline, only "
+"effective when the model exists in the pipeline."
+msgstr ""
+"利用 `Pipeline` 中已拟合过的特征工程方法 transform 输入的 "
+"`TSDataset` 时序数据集，并利用已拟合过的学习器执行概率预测。注意：此方法仅在模型存在时可用。"
+
+#: 7657de4c82764793878576119b589825 of
+#: paddlets.pipeline.pipeline.Pipeline.predict_proba:7
+msgid "Predicted results of calling `self.predict_proba` on the final model."
+msgstr "概率预测结果。"
+
+#: cecc979ab1e14cf4b6b5d0b39420dd7f of
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict:1
+msgid ""
+"Apply `self.predict` method iteratively for multi-step time series "
+"forecasting, the predicted results from the current call will be appended"
+" to the `TSDataset` object and will appear in the loopback window for "
+"next call. Note that each call of `self.predict` will return a result of "
+"length `out_chunk_len`, so it will be called "
+"ceiling(`predict_length`/`out_chunk_len`) times to meet the required "
+"length."
+msgstr ""
+"递归预测：一步步利用 `self.predict` 方法实现多步时序预测。当前时刻的预测结果会被添加至 `TSDataset` 时序数据集"
+"的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。注意：每次调用 `self.predict` 的输出长度为 "
+"`out_chunk_len`， 所以 `self.predict` 会被调用 "
+"ceiling(`predict_length`/`out_chunk_len`) 次，以满足多步时序的输出长度需求。"
+
+#: b1d4992ff1e841db86fa2f0f2e48d4e2 f4c7ced0887f489092b7ec1074a38e33 of
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict:8
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba:8
+msgid "Length of predicted results."
+msgstr "递归多步预测的长度。"
+
+#: 289d5d184a5a4e44816340a1ee57cef3 5e9c3a80f1274a368a4c590ed6a05c1b of
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict:11
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba:11
+msgid "Predicted results."
+msgstr "预测结果。"
+
+#: a777206e77ba4f6db9e475fda48f6716 of
+#: paddlets.pipeline.pipeline.Pipeline.recursive_predict_proba:1
+msgid ""
+"Apply `self.predict_proba` method iteratively for multi-step time series "
+"forecasting, the predicted results from the current call will be appended"
+" to the `TSDataset` object and will appear in the loopback window for "
+"next call. Note that each call of `self.predict_proba` will return a "
+"result of length `out_chunk_len`, so it will be called "
+"ceiling(`predict_length`/`out_chunk_len`) times to meet the required "
+"length."
+msgstr ""
+"递归预测：一步步利用 `self.predict_proba` 方法实现多步时序预测。当前时刻的预测结果会被添加至 `TSDataset` 时序数据集"
+"的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。注意：每次调用 `self.predict_proba` 的输出长度为"
+" `out_chunk_len`， 所以 `self.predict_proba` 会被调用 "
+"ceiling(`predict_length`/`out_chunk_len`) 次，以满足多步时序的输出长度需求。"
+
+#: 80453caa8e7a4edfa420f012c6a6e829 of
+#: paddlets.pipeline.pipeline.Pipeline.save:1
+msgid "Save the pipeline to a directory."
+msgstr "将 Pipeline 保存至指定目录中。"
+
+#: 27ac99d1a03147c389c681e6fb5daabc of
+#: paddlets.pipeline.pipeline.Pipeline.save:3
+msgid "Output directory path."
+msgstr "输出目录"
+
+#: 1fdcea274d0548d89017864ac252e389 d317aca6165447e3b5d919917a02610a of
+#: paddlets.pipeline.pipeline.Pipeline.load:5
+#: paddlets.pipeline.pipeline.Pipeline.save:5
+msgid ""
+"Name of pipeline object. This file contains transformers and meta "
+"information of pipeline."
+msgstr "PipeLine 对象的名称。此文件包含若干特征工程方法和 Pipeline 的元信息。"
+
+#: 240003c384854067b127cc4112b1b91e 4b823cdcdc7d4c738d7bd30a0e580ed8 of
+#: paddlets.pipeline.pipeline.Pipeline.load:8
+#: paddlets.pipeline.pipeline.Pipeline.save:8
+msgid "Name of model object. See `BaseModel.save` for more information."
+msgstr "Model 对象的名称。详细信息请参考 BaseModel 的 save() 方法。"
+
+#: 6ab81a8be8b8400d837237012fb3ade5 of
+#: paddlets.pipeline.pipeline.Pipeline.load:1
+msgid "Load the pipeline from a directory."
+msgstr "从目录中加载一个 Pipeline 。"
+
+#: 2ec28b9b1d954cea817a9ae94fbf7497 of
+#: paddlets.pipeline.pipeline.Pipeline.load:3
+msgid "Input directory path."
+msgstr "输入目录"
+
+#: fca013c9aec84167bc21e3dcf330f469 of
+#: paddlets.pipeline.pipeline.Pipeline.load:11
+msgid "The loaded pipeline."
+msgstr "被加载的 Pipeline 对象。"

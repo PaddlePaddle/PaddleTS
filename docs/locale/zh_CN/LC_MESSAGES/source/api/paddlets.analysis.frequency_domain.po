@@ -1,0 +1,665 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-11 16:43+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.analysis.frequency_domain.rst:2
+#: e689401941304e3ab706c42fc397a2ea
+msgid "paddlets.analysis.frequency_domain"
+msgstr ""
+
+#: a7961de89cd14d05b40b45de8592c65a paddlets.analysis.frequency_domain:1 of
+msgid ""
+"Implementation of different frequency domain and time-frequency domain "
+"analysis operators, including FFT, STFT, CWT."
+msgstr "不同频域和时频域分析算子的实现，包括快速傅里叶变换（FFT）/短时傅里叶变换（STFT）/连续小波变换（CWT）"
+
+#: 6f7d74467bef4773aaeadd6c7fc47c8e 9269843d2a6948c2850a77d1691a02ee
+#: b2115665f66648edb73774b0b6d152b0 paddlets.analysis.frequency_domain.CWT:1
+#: paddlets.analysis.frequency_domain.FFT:1 paddlets.analysis.frequency_domain.STFT:1 of
+msgid "Bases: :py:class:`~paddlets.analysis.base.Analyzer`"
+msgstr ""
+
+#: af99b238585645bf950f78b7451b266b paddlets.analysis.frequency_domain.FFT:1 of
+msgid ""
+"Fast Fourier transform (FFT) analysis operator performs FFT on a "
+"signal(1-D) to obtain the amplitude spectrum and phase spectrum of the "
+"signal at different frequencies."
+msgstr "对一维信号数据进行快速傅里叶变换得到该信号在不同频率下的振幅谱和相位谱"
+
+#: 0da6f1ec60e64b4ea104f7ebfcd43268 paddlets.analysis.frequency_domain.FFT:4 of
+msgid ""
+"This operator returns both X and Y coordinates for visual display. Where "
+"X represents frequency and Y represents amplitude spectrum or phase "
+"spectrum."
+msgstr "本算子同时返回X坐标和Y坐标，方便做可视化展示，其中X代表频率，Y代表振幅或者相位"
+
+#: 117d291bba7c4a4d88b6f5126c30c747 23b91a09cf6840bb9a69b085c302db12
+#: 3f3b3f5cec374392ac4840d62404ef8b 5564ad371f4246cfbf07b582c0f6a7bb
+#: 99c5cdc5b5df41c2b0860e1e9c1bbc5b a47e5d302e90499eb89828af5a806c3e
+#: paddlets.analysis.frequency_domain.CWT paddlets.analysis.frequency_domain.CWT.analyze
+#: paddlets.analysis.frequency_domain.FFT paddlets.analysis.frequency_domain.FFT.analyze
+#: paddlets.analysis.frequency_domain.STFT
+#: paddlets.analysis.frequency_domain.STFT.analyze of
+msgid "Parameters"
+msgstr ""
+
+#: 1be068bfcb204571992813a71be603b6 paddlets.analysis.frequency_domain.FFT:7 of
+msgid ""
+"The sampling frequency of the signal(default=0), when the fs is not "
+"specified, the range of x coordinate defaults to the length of the data. "
+"If the data to be analyzed is multiple columns, the default frequency of "
+"all columns is the same. If the fs of different columns is different, it "
+"is recommended to call this operator separately for each column."
+msgstr ""
+"信号的采样频率，默认为0，如果不指定采样频率，横坐标的范围默认为数据的长度，"
+"另外如果传入待分析的数据是多列，默认所有的列采样频率是一样的，如果不同列采样频率不一样，建议每列分开调用本算子"
+
+#: 8c5bbc26a857414f943e70b4922338e4 paddlets.analysis.frequency_domain.FFT:12 of
+msgid ""
+"Whether to normalize the amplitude or phase after FFT transformation, "
+"default=True."
+msgstr "是否对快速傅里叶变换后的振幅谱和相位谱进行归一化，默认做归一化（True）"
+
+#: 947276e487db4b7098211b3033565cd0 paddlets.analysis.frequency_domain.FFT:14 of
+msgid ""
+"Whether to take half of the amplitude or phase after FFT transform(when "
+"the signal is a real signal, its frequency domain signal after Fourier "
+"transform is symmetrical about the 0-frequency axis), default=True."
+msgstr "是否对快速傅里叶变换后的振幅谱和相位谱取一半结果（当时域信号是一个实数信号，傅里叶变换后的频域信号是关于0轴对称的），"
+"默认返回一半结果（True）"
+
+#: 1508eaf0cd124b13bed08899521b8288 263bf84147b44c36b9dd89b3e65b0460
+#: 4b961a233f854ff4bc02a20454632610 paddlets.analysis.frequency_domain.CWT:28
+#: paddlets.analysis.frequency_domain.FFT:17 paddlets.analysis.frequency_domain.STFT:41
+#: of
+msgid "Other parameters."
+msgstr "其他相关参数"
+
+#: 2380952b15134ce6a3029e48c73f4ba5 358d0fef30b543ea93ec1754f4825b4f
+#: 5d29f51c1c454b5cb91ac9487f781088 6685e38543e647689c4c63fa9266d975
+#: 7aaf6ab7d0cd4c7e9fabc5e233bb13bf paddlets.analysis.frequency_domain.CWT
+#: paddlets.analysis.frequency_domain.CWT.analyze paddlets.analysis.frequency_domain.FFT
+#: paddlets.analysis.frequency_domain.FFT.analyze paddlets.analysis.frequency_domain.STFT
+#: paddlets.analysis.frequency_domain.STFT.analyze d9ba8dc7327c4b07adcbdcac6ffdcff7
+#: of
+msgid "Returns"
+msgstr ""
+
+#: 3dc70901591541119df1c3151fb6eb79 3f607ce175164364b534eb3f73c72c19
+#: 641cccae813947259ee524a5058cc425 paddlets.analysis.frequency_domain.CWT:32
+#: paddlets.analysis.frequency_domain.FFT:19 paddlets.analysis.frequency_domain.STFT:46
+#: of
+msgid "None"
+msgstr ""
+
+#: 61dd22e897744b26a17101171f97d9f3 paddlets.analysis.frequency_domain.FFT.analyze:1
+#: of
+msgid "Implementation logic of fast Fourier transform analysis operator"
+msgstr "快速傅里叶变换分析算子实现逻辑"
+
+#: 0820a9f7869f4c5ea6cedefad51ae419 a5ee26ee1a084fe884d780aa91bae6b2
+#: paddlets.analysis.frequency_domain.CWT.analyze:3
+#: paddlets.analysis.frequency_domain.FFT.analyze:3
+#: paddlets.analysis.frequency_domain.STFT.analyze:3
+#: cc812e9adcbd4a1b9f16493b07268f6a of
+msgid "X to be analyzed"
+msgstr "待分析的数据"
+
+#: 1dc6c5e19ea74ec89add6062dc76f9f5 paddlets.analysis.frequency_domain.FFT.analyze:6
+#: of
+msgid "The result of fft, each column to be analyzed returns 3 keys"
+msgstr "快速傅里叶变换后的结果，对于每列数据算子返回三列结果"
+
+#: 49e55dbc417745f3909b02d9dc07530d a908c756d41243bdaced7b6301f71aba
+#: paddlets.analysis.frequency_domain.CWT.analyze
+#: paddlets.analysis.frequency_domain.FFT.analyze
+#: paddlets.analysis.frequency_domain.STFT.analyze f699d4ea9315442bbc7d44f2d4f56279
+#: of
+msgid "Return type"
+msgstr ""
+
+#: 76e2d3cdfdb5424db6d4b7cc9f2ee1e0 b7179a7c8127435381e4060ce36c8d3c
+#: paddlets.analysis.frequency_domain.CWT.analyze:10
+#: paddlets.analysis.frequency_domain.FFT.analyze:10
+#: paddlets.analysis.frequency_domain.STFT.analyze:10
+#: ef6dc3cb21734c08bc64477500f9d57c of
+msgid "Examples"
+msgstr ""
+
+#: 137b27e8cec7400ebd8f7e0faa007c49 2a2aaa2cc6be418885858cea2453fdf2
+#: 6d118820f46545699a45e8bafbe70af9 paddlets.analysis.frequency_domain.CWT.analyze
+#: paddlets.analysis.frequency_domain.FFT.analyze
+#: paddlets.analysis.frequency_domain.STFT.analyze of
+msgid "Raises"
+msgstr ""
+
+#: 31a127e4ce76462097656e17de8be5fd 71bd7290e5d747cf8b8e8ce3c9f53277
+#: paddlets.analysis.frequency_domain.CWT.get_properties:1
+#: paddlets.analysis.frequency_domain.FFT.get_properties:1
+#: paddlets.analysis.frequency_domain.STFT.get_properties:1
+#: cc63cc288cfb4b69b6822cef7647d5a8 of
+msgid "Get the properties of the analyzer."
+msgstr "返回分析算子的属性"
+
+#: 3f1c2b0cf6124619a5d3000b6e1c32d5 paddlets.analysis.frequency_domain.STFT:1 of
+msgid ""
+"Short time Fourier transform (STFT) is used to analyze non-stationary "
+"signals because the waveform of non-stationary signal changes irregularly"
+" and there is no concept of instantaneous frequency. In this case, the "
+"effect of using fast Fourier transform analysis is poor."
+msgstr "短时傅里叶变换(STFT)主要用于分析非平稳信号，非平稳信号由于波形的变化没有规律，也没有瞬间频率的概念，"
+"直接使用快速傅里叶变换(FFT)效果不佳"
+
+#: 6bcac9b13c8b46d9b471f417db5e128f paddlets.analysis.frequency_domain.STFT:5 of
+msgid ""
+"In STFT, the windowing mechanism is used to stabilize the "
+"signal(truncated in time, so that the waveform does not change "
+"significantly in a short time), and then FFT can be used for windowed "
+"signal segmentation. STFT obtains the spectrum of n-segment signals "
+"arranged in time sequence."
+msgstr "在STFT中，采用加窗机制使信号平稳化(从时间上截断，使得短时间内波形没有显著变化)，"
+"之后就可以对加窗的信号分段使用FFT。也可以说，STFT得到的是按时间顺序排列的n段信号的频谱"
+
+#: paddlets.analysis.frequency_domain.STFT:9 d2179446a39a49cbb212e9a95a76e378 of
+msgid ""
+"The length of the window determines the time resolution and frequency "
+"resolution of the spectrum. The longer the window is, the higher the "
+"frequency resolution is, the lower the time resolution is. Conversely, "
+"the lower the frequency resolution is, the higher the time resolution is."
+" For time-varying unsteady signals, high frequency is suitable for small "
+"windows, and low frequency is suitable for large windows."
+msgstr "在STFT中，窗的长度决定频谱图的时间分辨率和频率分辨率，窗口越长，频率分辨率越高，时间分辨率越低，"
+"反之频率分辨率越低，时间分辨率越高，两者不可兼得，对于时变的非稳态信号，高频适合小窗口，低频适合大窗口"
+
+#: 0c88a73161674967af444baa6b80e73c paddlets.analysis.frequency_domain.STFT:14 of
+msgid ""
+"In order to improve the time-domain characteristics on the basis of "
+"ensuring the frequency-domain characteristics, Often choose to overlap "
+"between segments to improve the time-domain analysis ability. However, "
+"the more overlapping points will greatly increase the amount of "
+"calculation, resulting in low efficiency."
+msgstr "在STFT中，为了保证频域特性的基础上提高时域特性，经常选择前后窗函数重叠一部分，这样两个窗确定的时刻就比较接近，"
+"就提高了时域分析能力。但不是重叠越多越好，重叠点数过多会大幅增加计算量，导致效率低下"
+
+#: paddlets.analysis.frequency_domain.STFT:18 e2ddadced949465db2b23ef9190a45da of
+msgid ""
+"The sampling frequency of the signal(default=1.0). If the data to be "
+"analyzed is multiple columns, the default frequency of all columns is the"
+" same. If the fs of different columns is different, it is recommended to "
+"call this operator separately for each column."
+msgstr "信号的采样频率，默认为1.0，如果传入待分析的数据是多列，默认所有列的采用频率是一样的，"
+"如果不同的列采样频率不一样，建议每列分开调用本算子"
+
+#: 93c3c14d77624402a863f97eb19700e9 paddlets.analysis.frequency_domain.STFT:22 of
+msgid "Desired window to use, default=\"hann\"."
+msgstr "需要使用的窗口类型，默认值为``hann``"
+
+#: 591d04629e8647ce94b52a9d6a95ef28 paddlets.analysis.frequency_domain.STFT:24 of
+msgid "Length of each segment, default=256."
+msgstr "窗口的大小，默认值为256"
+
+#: 3f979dfebcee49c287886aefe8bd94a1 paddlets.analysis.frequency_domain.STFT:26 of
+msgid ""
+"Number of points to overlap between segments. If None, noverlap = nperseg"
+" // 2, default=None"
+msgstr "窗口之间重叠的点数，默认为None（此时noverlap取值为nperseg的一半）"
+
+#: 805a83c1847a443290656ba126e34cc6 paddlets.analysis.frequency_domain.STFT:28 of
+msgid ""
+"Length of the FFT used, if a zero padded FFT is desired. If None, the FFT"
+" length is nperseg, default=None."
+msgstr "FFT的长度，默认为None(等于nperseg).如大于nperseg会自动进行零填充"
+
+#: paddlets.analysis.frequency_domain.STFT:30 d219d0e60cd64d61a7b75a567d92a7c9 of
+msgid "Specifies how to detrend each segment, default=False."
+msgstr "指定如何去除每个段的趋势，默认为False"
+
+#: 111cb1e04551407fb6a0e55baa314844 paddlets.analysis.frequency_domain.STFT:32 of
+msgid ""
+"If True, return a one-sided spectrum for real data. If False return a "
+"two-sided spectrum. default=True."
+msgstr "如果为True，则返回实际数据的单侧频谱。如果False返回双侧频谱，默认为True"
+
+#: paddlets.analysis.frequency_domain.STFT:34 ebdfa27dca444c6193d4abd0899574fb of
+msgid ""
+"Specifies whether the input signal is extended at both ends, and how to "
+"generate the new values, default='zeros'."
+msgstr "指定输入信号是否在两端扩展，以及如何生成新值，默认为zeros"
+
+#: paddlets.analysis.frequency_domain.STFT:36 ef117ce76df74397b6eb8f7dea3ee8b8 of
+msgid ""
+"Specifies whether the input signal is zero-padded at the end to make the "
+"signal fit exactly into an integer number of window segments, "
+"default=True."
+msgstr "指定输入信号在末尾是否填充零以使信号精确地拟合为整数个窗口段，以便所有信号都包含在输出中，默认为True"
+
+#: 868702ba25d94dbaaabf713c927cdce1 paddlets.analysis.frequency_domain.CWT:26
+#: paddlets.analysis.frequency_domain.STFT:39 c42691d8c1554e1a9f3b2334c4f32152 of
+msgid "Axis along which the STFT is computed, default=-1."
+msgstr "计算STFT的轴，默认为最后一个轴(即axis=-1)"
+
+#: 5135053eb1c64fb7834de1c3b21d1865 paddlets.analysis.frequency_domain.STFT:43 of
+msgid ""
+"For more details about parameters, please refer to: "
+"https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html?highlight=stft#scipy.signal.stft"
+msgstr "关于参数的更多细节，可以参考："
+"https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.stft.html?highlight=stft#scipy.signal.stft"
+
+#: 6d339682c8ee4d04a917e900c1d0d6e5
+#: paddlets.analysis.frequency_domain.STFT.analyze:1 of
+msgid "Implementation logic of short-time Fourier transform analysis operator"
+msgstr "短时傅里叶变换分析算子实现逻辑"
+
+#: paddlets.analysis.frequency_domain.STFT.analyze:6
+#: e473ad135d7d4f0aa56e2cfab6707a88 of
+msgid "The result of stft, each column to be analyzed returns 3 keys"
+msgstr "短时傅里叶变换后的结果，对于每列数据算子返回三列结果"
+
+#: a1a17ce21ec34c718e2b33e8be5aa3c8 paddlets.analysis.frequency_domain.CWT:1 of
+msgid ""
+"Fast Fourier transform (FFT) can only get the frequency domain "
+"information of a signal, and it is impossible to know the frequency "
+"information of the signal at different times. Short time Fourier "
+"transform (STFT) solves this problem to a certain extent by introducing "
+"the windowing mechanism, but the effect of STFT is affected by the size "
+"of the window. The window is too small, the frequency resolution is low, "
+"the window is too large, and the time resolution is low."
+msgstr "快速傅里叶变换(FFT)只能得到一个信号包含哪些频率成分，但无法从频域上得知信号在不同时间的频率信息。"
+"短时傅里叶变换(STFT)通过引入加窗机制在一定程度上解决了这个问题，但STFT的效果受窗口大小影响，窗口过小，频率分辨率低，窗口过大，时间分辨率低"
+
+#: paddlets.analysis.frequency_domain.CWT:7 c4e30b589b7e4b1b8fd46f57e541c10e of
+msgid ""
+"Continuous wavelet transform(CWT) can solve the above problems. It "
+"inherits and develops the idea of localization of short-time Fourier "
+"transform, and overcomes the shortcomings that the window size does not "
+"change with frequency. It can provide a \"time-frequency\" window that "
+"changes with frequency. It is an ideal tool for signal time-frequency "
+"analysis and processing."
+msgstr "连续小波变换可以解决以上问题，它继承和发展了短时傅立叶变换局部化的思想，同时又克服了窗口大小不随频率变化等缺点，"
+"能够提供一个随频率改变的'时间-频率'窗口，是进行信号时频分析和处理的理想工具"
+
+#: a237bebab30640c7b3cbbb902edb9605 paddlets.analysis.frequency_domain.CWT:12 of
+msgid ""
+"The wavelet scales to use, It can be set to half the length of the data. "
+"It should be noted that when the half of the data is relatively large "
+"(such as greater than 1000), the larger wavelet scale will cause the "
+"calculation to be more time-consuming and you can change the wavelet "
+"scale into a value of 100, 200 or other small number."
+msgstr "小波尺度，可以设置为数据长度的一半，同时也要注意当数据的一半比较大(比如大于1000)，"
+"较大的小波尺度会造成计算比较耗时，这个时候将小波尺度换成100，200等小点的数值"
+
+#: 4cd901fb692642e89799dcc748f90434 paddlets.analysis.frequency_domain.CWT:17 of
+msgid ""
+"Wavelet to use, options include ['cgau1', 'cgau2', 'cgau3', 'cgau4', "
+"'cgau5', 'cgau6', 'cgau7', 'cgau8', 'cmor', 'fbsp', 'gaus1', 'gaus2', "
+"'gaus3', 'gaus4', 'gaus5', 'gaus6', 'gaus7', 'gaus8', 'mexh', 'morl', "
+"'shan'], default='cgau8'."
+msgstr ""
+"小波名称，可选的包括['cgau1', 'cgau2', 'cgau3', 'cgau4', 'cgau5', 'cgau6', 'cgau7',"
+" 'cgau8', 'cmor', 'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4', 'gaus5', "
+"'gaus6', 'gaus7', 'gaus8', 'mexh', 'morl', 'shan']，默认为'cgau8'"
+
+#: 5c9c631d96b74b7c9d999dc7fa1b2775 paddlets.analysis.frequency_domain.CWT:20 of
+msgid ""
+"The sampling frequency of the signal(default=1.0). If the data to be "
+"analyzed is multiple columns, the default frequency of all columns are "
+"considered  the same. If the fs of different columns is different, it is "
+"recommended to call this operator separately for each column."
+msgstr "采样频率，默认为1.0，如果传入待分析的数据是多列，默认所有列的采样频率是一样的，"
+"如果不同的列采样频率不一样，建议每列分开调用本算子"
+
+#: 65c2377310b04ff584ba18f1dde1f271 paddlets.analysis.frequency_domain.CWT:24 of
+msgid ""
+"The method used to compute the CWT, options include ['conv', 'fft', "
+"'auto'], default='conv'."
+msgstr "来计算cwt的方法，可选的包括['conv', 'fft', 'auto']，默认为conv"
+
+#: 9ce7212f977e47b39edcbfd6a156aece paddlets.analysis.frequency_domain.CWT:30 of
+msgid ""
+"For more details about parameters, please refer to: "
+"https://pywavelets.readthedocs.io/en/latest/ref/cwt.html?highlight=cwt"
+msgstr "关于参数的更多细节，可以参考：https://pywavelets.readthedocs.io/en/latest/ref/cwt.html?highlight=cwt"
+
+#: aeb1010e2f3a4b549c498b6fe2a6ac90 paddlets.analysis.frequency_domain.CWT.analyze:1
+#: of
+msgid "Implementation logic of continuous wavelet transform"
+msgstr "连续小波变换分析算子实现逻辑"
+
+#: 7d59df3a01f44427bad7874526052ac0 paddlets.analysis.frequency_domain.CWT.analyze:6
+#: of
+msgid "The result of cwt, each column to be analyzed returns 3 keys"
+msgstr "短时傅里叶变换后的结果，对于每列数据算子返回三列结果"
+
+#~ msgid "不同频域分析算子的具体实现,包括FFT/STFT/CWT等"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "快速傅里叶变换(FFT)分析算子,通常来说对一组信号做FFT变换,得到的是该信号在不同频率下的振幅谱和相位谱(不常用) "
+#~ "考虑分析算子和特征算子的差异性,分析算子一般需要对结果做可视化展示,所以需要同时返回x坐标(频率)和y坐标(振幅或者相位),而特征算子一般只需要y坐标(振幅或者相位)"
+#~ " 本算子同时返回x坐标和y坐标,方便做可视化展示"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "信号的采样频率,默认为0,允许不指定(不指定采样频率时,横坐标的范围默认为数据的长度); "
+#~ "另外如果传入待分析的数据是多列,默认所有列的采用频率是一样的,如果不同的列采样频率不一样,建议每列分开调用本算子"
+#~ msgstr ""
+
+#~ msgid "是否对fft变换后的振幅或者相位做归一化,默认为True"
+#~ msgstr ""
+
+#~ msgid "是否对fft变换后的振幅或者相位取一半操作(当时域信号是一个实数信号,它的傅里叶变换后的频域信号是关于0频轴对称的),默认为True"
+#~ msgstr ""
+
+#~ msgid "其他相关参数"
+#~ msgstr ""
+
+#~ msgid "快速傅里叶变换分析算子实现逻辑"
+#~ msgstr ""
+
+#~ msgid "待分析的元素"
+#~ msgstr ""
+
+#~ msgid "快速傅里叶变换后的结果,由于傅里叶变换之后的结果包含多种元素,每列数据做完FFT之后返回三列结果,命名分别为col_name_x(频率),col_name__amplitude(振幅谱),col_name_phase(相位谱),整体结果封装成DataFrame返回"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "短时傅里叶变换(STFT)主要用于分析非平稳信号.非平稳信号由于波形的变化没有规律,也没有瞬间频率的概念,直接使用快速傅里叶变换(FFT)效果不好."
+#~ " "
+#~ "在STFT中,采用加窗机制使信号平稳化(从时间上截断,使得短时间内波形没有显著变化),之后就可以对加窗的信号分段使用FFT.也可以说,STFT得到的是按时间顺序排列的n段信号的频谱."
+#~ " "
+#~ "在STFT中,窗的长度决定频谱图的时间分辨率和频率分辨率,窗口越长,频率分辨率越高,时间分辨率越低,反之频率分辨率越低,时间分辨率越高,两者不可兼得.对于时变的非稳态信号,高频适合小窗口,低频适合大窗口."
+#~ " "
+#~ "在STFT中,为了保证频域特性的基础上提高时域特性,经常选择前后窗函数重叠一部分,这样两个窗确定的时刻就比较接近,就提高了时域分析能力.但不是重叠越多越好,重叠点数过多会大幅增加计算量,导致效率低下."
+#~ msgstr ""
+
+#~ msgid "信号的采样频率,默认为1.0,如果传入待分析的数据是多列,默认所有列的采用频率是一样的,如果不同的列采样频率不一样,建议每列分开调用本算子"
+#~ msgstr ""
+
+#~ msgid "需要使用的窗口类型,如果window是一个字符串或元组,则传递给它get_window以生成窗口值,默认情况下使用DFT.如果window是数组类型,直接以其为窗,其长度必须是nperseg.默认为hann(汉明窗口)"
+#~ msgstr ""
+
+#~ msgid "窗口的大小,默认256"
+#~ msgstr ""
+
+#~ msgid "窗口之间重叠的点数,默认为None(取窗口长度的一半)"
+#~ msgstr ""
+
+#~ msgid "FFT的长度，默认为None(等于nperseg).如大于nperseg会自动进行零填充"
+#~ msgstr ""
+
+#~ msgid "指定如何去除每个段的趋势,如果detrend是字符串,则将其作为类型参数传递给detrend函数,如果它是一个函数,它需要一个段并返回一个去趋势段.如果detrend为False,则不进行去除趋势.默认为False."
+#~ msgstr ""
+
+#~ msgid "如果为True,则返回实际数据的单侧频谱.如果False返回双侧频谱.默认为True.请注意,对于复数,始终返回双侧频谱."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "指定输入信号是否在两端扩展,以及如何生成新值,以使第一个窗口段在第一个输入点上居中.可选项包括['even', 'odd',"
+#~ " 'constant', 'zeros', None].默认为zeros."
+#~ msgstr ""
+
+#~ msgid "指定输入信号在末尾是否填充零以使信号精确地拟合为整数个窗口段,以便所有信号都包含在输出中.默认为True.填充发生在边界扩展之后,如果边界不是None,则填充也为True."
+#~ msgstr ""
+
+#~ msgid "计算STFT的轴,默认为最后一个轴(即axis=-1)."
+#~ msgstr ""
+
+#~ msgid "短时傅里叶变换分析算子实现逻辑"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "短时傅里叶变换后的结果,注意,由于短时傅里叶变换后的结果包含多个指标,而这些指标的长度和形状各不相同,所以返回的结果无法表示成pd.DataFrame,采用Dict封装返回的结果"
+#~ " 字典结构:每个待分析的列对应到3个key,分别是时间,频率,stft的值,样例: {  "
+#~ "\"colname_f\": array([0. , 0.5]),  "
+#~ "\"colname_t\": array([0., 1., 2.]),  "
+#~ "\"colname_Zxx\": array([[ 1.+0.j,  2.+0.j,  "
+#~ "0.+0.j], [-1.+0.j, -2.+0.j,  0.+0.j]])) }"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "短时傅里叶变换后的结果,注意,由于短时傅里叶变换后的结果包含多个指标,而这些指标的长度和形状各不相同,所以返回的结果无法表示成pd.DataFrame,采用Dict封装返回的结果"
+#~ " 字典结构:每个待分析的列对应到3个key,分别是时间,频率,stft的值,样例: {"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"colname_f\": array([0. , 0.5]), "
+#~ "\"colname_t\": array([0., 1., 2.]), "
+#~ "\"colname_Zxx\": array([[ 1.+0.j,  2.+0.j,  "
+#~ "0.+0.j], [-1.+0.j, -2.+0.j,  0.+0.j]]))"
+#~ msgstr ""
+
+#~ msgid "}"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "快速傅里叶变换(FFT)只能得到一个信号包含哪些频率成分,但无法从频域上得知信号在不同时间的频率信息.短时傅里叶变换(STFT)通过引入加窗机制在一定程度上解决了这个问题,但STFT的效果受窗口大小影响,窗口过小,频率分辨率低,窗口过大,时间分辨率低."
+#~ " "
+#~ "小波变换可以解决以上问题,它继承和发展了短时傅立叶变换局部化的思想,同时又克服了窗口大小不随频率变化等缺点,能够提供一个随频率改变的\"时间-频率\"窗口,是进行信号时频分析和处理的理想工具."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "小波尺度,可以设置为数据长度的一半,同时也要注意当数据的一半比较大(比如大于1000),较大的小波尺度会造成计算比较耗时,这个时候将小波尺度换成100,"
+#~ " 200等小点的数值(对结果影响不大)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "小波名称.默认为'cgau8',其它可选包括['cgau1', 'cgau2', 'cgau3', "
+#~ "'cgau4', 'cgau5', 'cgau6', 'cgau7', 'cgau8',"
+#~ " 'cmor', 'fbsp', 'gaus1', 'gaus2', 'gaus3',"
+#~ " 'gaus4', 'gaus5', 'gaus6', 'gaus7', "
+#~ "'gaus8', 'mexh', 'morl', 'shan']"
+#~ msgstr ""
+
+#~ msgid "采样频率,默认为1.0,如果传入待分析的数据是多列,默认所有列的采样频率是一样的,如果不同的列采样频率不一样,建议每列分开调用本算子."
+#~ msgstr ""
+
+#~ msgid "用来计算cwt的方法,取值为conv或者fft,默认为conv."
+#~ msgstr ""
+
+#~ msgid "计算cwt的轴,默认为最后一个轴(即axis=-1)."
+#~ msgstr ""
+
+#~ msgid "连续小波变换分析算子实现逻辑"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "连续小波变换后的结果,注意,由于连续小波变换后的结果包含多个指标,而这些指标的长度和形状各不相同,所以返回的结果无法表示成pd.DataFrame,采用Dict封装返回的结果"
+#~ " 字典结构:每个待分析的列对应到3个key,分别是时间,频率,cwt的值,样例: {  "
+#~ "\"colname_t\": array([0. , 0.2, 0.4, "
+#~ "0.6, 0.8]),  \"colname_coefs\": array([[ "
+#~ "5.60195702e-09+0.17123691j, -9.48406530e-02-0.0348408j, "
+#~ "1.54005592e-02-0.0123756j, 1.54005592e-02+0.0123756j, "
+#~ "-9.48406530e-02+0.0348408j ]]),  "
+#~ "\"colname_frequencies\":array( [0.35]) }"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "连续小波变换后的结果,注意,由于连续小波变换后的结果包含多个指标,而这些指标的长度和形状各不相同,所以返回的结果无法表示成pd.DataFrame,采用Dict封装返回的结果"
+#~ " 字典结构:每个待分析的列对应到3个key,分别是时间,频率,cwt的值,样例: {"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"colname_t\": array([0. , 0.2, 0.4, "
+#~ "0.6, 0.8]), \"colname_coefs\": array([[ "
+#~ "5.60195702e-09+0.17123691j, -9.48406530e-02-0.0348408j, "
+#~ "1.54005592e-02-0.0123756j, 1.54005592e-02+0.0123756j, "
+#~ "-9.48406530e-02+0.0348408j ]]), "
+#~ "\"colname_frequencies\":array( [0.35])"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The result after the fast Fourier "
+#~ "transform, each column of data returns"
+#~ " three columns of results after FFT,"
+#~ " including:"
+#~ msgstr "快速傅里叶变换后返回的结果，每列返回三列结果，包括："
+
+#~ msgid ""
+#~ "The result of short-time Fourier "
+#~ "transform, encapsulating the returned results"
+#~ " with Dict. Each column to be "
+#~ "analyzed returns 3 keys, including:      "
+#~ "col_name_ + 'f': np.ndarray, Representative"
+#~ " frequency      col_name_ + 't': "
+#~ "np.ndarray, Representative time      col_nmae_ "
+#~ "+ 'Zxx': np.ndarray, Representative STFT "
+#~ "of x"
+#~ msgstr ""
+#~ "短时傅里叶变换后的结果，结果封装成一个字典。每列待分析的列返回3个结果，包括：col_name_ + 'f':"
+#~ " np.ndarray, 代表频率，col_name_ + 't': "
+#~ "np.ndarray, 代表时间，col_nmae_ + 'Zxx': "
+#~ "np.ndarray, 代表STFT结果"
+
+#~ msgid ""
+#~ "The result of continuous wavelet "
+#~ "transform, encapsulating the returned results"
+#~ " with dict. Each column to be "
+#~ "analyzed returns 3 keys, including:      "
+#~ "col_name_ + 't': np.ndarray, Representative"
+#~ " time      col_nmae_ + 'coefs': np.ndarray,"
+#~ " Representative the result of Continuous"
+#~ " wavelet transform      col_nmae_ + "
+#~ "'frequencies': np.ndarray, Representative frequency"
+#~ msgstr ""
+#~ "连续小波变换后的结果，结果封装成一个字典。每列待分析的列返回3个结果，包括：col_name_ + 't': "
+#~ "np.ndarray, 代表时间，col_name_ + 'coefs': "
+#~ "np.ndarray, 代表CWT结果，col_nmae_ + 'frequencies': "
+#~ "np.ndarray, 代表频率"
+
+#~ msgid ""
+#~ "col_nmae_ + 'coefs': np.ndarray, "
+#~ "Representative the result of Continuous "
+#~ "wavelet transform"
+#~ msgstr "col_nmae_ + 'coefs': np.ndarray, 代表小波变换的结果"
+
+#~ msgid ""
+#~ "The result of fft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:      col_name_ + 'x': "
+#~ "Representative frequency      col_name_ + "
+#~ "'amplitude': Representative amplitude spectrum"
+#~ "      col_name_ + 'phase': Representative "
+#~ "phase spectrum"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The result of fft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:"
+#~ msgstr "短时傅里叶变换后的结果，每列待分析的列返回3个结果，包括："
+
+#~ msgid "col_name_ + 'x': Representative frequency"
+#~ msgstr "col_name_ + 'x': 表示频率"
+
+#~ msgid "col_name_ + 'amplitude': Representative amplitude spectrum"
+#~ msgstr "col_name_ + 'amplitude'： 表示振幅谱"
+
+#~ msgid "col_name_ + 'phase': Representative phase spectrum"
+#~ msgstr "col_name_ + 'phase': 表示相位谱"
+
+#~ msgid ""
+#~ "The result of stft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:      col_name_ + 'f': np.ndarray,"
+#~ " Representative frequency      col_name_ + "
+#~ "'t': np.ndarray, Representative time      "
+#~ "col_nmae_ + 'Zxx': np.ndarray, Representative"
+#~ " STFT of x"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The result of stft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:"
+#~ msgstr "短时傅里叶变换后的结果，每列待分析的列返回3个结果，包括："
+
+#~ msgid "col_name_ + 'f': np.ndarray, Representative frequency"
+#~ msgstr "col_name_ + 'f': np.ndarray, 表示频率"
+
+#~ msgid "col_name_ + 't': np.ndarray, Representative time"
+#~ msgstr "col_name_ + 't': np.ndarray, 表示时间"
+
+#~ msgid "col_nmae_ + 'Zxx': np.ndarray, Representative STFT of x"
+#~ msgstr "col_nmae_ + 'Zxx': np.ndarray, 表示STFT的结果"
+
+#~ msgid ""
+#~ "The result of cwt, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:      col_name_ + 't': np.ndarray,"
+#~ " Representative time      col_nmae_ + "
+#~ "'coefs': np.ndarray, Representative the cwt"
+#~ " of x      col_nmae_ + 'frequencies': "
+#~ "np.ndarray, Representative frequency"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The result of cwt, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including:"
+#~ msgstr "连续小波变换后的结果，每列待分析的列返回3个结果，包括："
+
+#~ msgid "col_nmae_ + 'coefs': np.ndarray, Representative the cwt of x"
+#~ msgstr "col_nmae_ + 'Zxx': np.ndarray, 表示STFT的结果"
+
+#~ msgid "col_nmae_ + 'frequencies': np.ndarray, Representative frequency"
+#~ msgstr "col_nmae_ + 'frequencies': np.ndarray, 表示频率"
+
+#~ msgid ""
+#~ "The result of fft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including: (1. col_name + '_x': "
+#~ "np.ndarray(1-D), Representative frequency), (2. "
+#~ "col_name + '_amplitude': np.ndarray(1-D), "
+#~ "Representative cwt of amplitude spectrum), "
+#~ "(3. col_name + '_phase': np.ndarray(1-D), "
+#~ "Representative phase spectrum)"
+#~ msgstr ""
+#~ "快速傅里叶变换后的结果，对于每列数据算子返回三列结果，包括：(1. col_name + '_x':"
+#~ " np.ndarray(1-D), 表示频率)，(2. col_name + "
+#~ "'_amplitude': np.ndarray(1-D), 表示振幅谱)，(3. col_name"
+#~ " + '_phase': np.ndarray(1-D), 表示相位谱)"
+
+#~ msgid ""
+#~ "The result of stft, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including: (1. col_name + '_f': "
+#~ "np.ndarray(1-D), Representative frequency), (2. "
+#~ "col_name_ + '_t': np.ndarray(1-D), "
+#~ "Representative time), (3. col_name_ + "
+#~ "'_Zxx': np.ndarray(2-D), Representative stft "
+#~ "of x):"
+#~ msgstr ""
+#~ "短时傅里叶变换后的结果，对于每列数据算子返回三列结果，包括：(1. col_name + '_f':"
+#~ " np.ndarray(1-D), 表示频率)，(2. col_name + "
+#~ "'_t': np.ndarray(1-D), 表示时间)，(3. col_name +"
+#~ " '_Zxx': np.ndarray(2-D), 表示stft值)"
+
+#~ msgid ""
+#~ "The result of cwt, each column to"
+#~ " be analyzed returns 3 keys, "
+#~ "including: (1. col_name + '_t': "
+#~ "np.ndarray(1-D), Representative time), (2. "
+#~ "col_name + '_coefs': np.ndarray(2-D), "
+#~ "Representative cwt of x), (3. col_name"
+#~ " + '_frequencies': np.ndarray(1-D), "
+#~ "Representative frequency):"
+#~ msgstr ""
+#~ "连续小波变换后的结果，对于每列数据算子返回三列结果，包括：(1. col_name + '_t':"
+#~ " np.ndarray(1-D), 表示时间)，(2. col_name + "
+#~ "'_coefs': np.ndarray(2-D), 表示cwt值)，(3. col_name "
+#~ "+ '_frequencies': np.ndarray(1-D), 表示频率)"
+

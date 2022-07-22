@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-11 17:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.utils.rst:2
+#: 5efabc037c84419ca31cd72e826538e7
+msgid "paddlets.models.utils"
+msgstr ""
+
+#: 7bf4aeb974e6475cbd1bc218ed00035c paddlets.models.utils.check_tsdataset:1 of
+msgid ""
+"Ensure the robustness of input data (consistent feature order), at the "
+"same time, check whether the data types are compatible. If not, the "
+"processing logic is as follows."
+msgstr ""
+"保证入模数据的鲁棒性(特征顺序的一致性), 同时, 检查数据类型的兼容性, 如果不兼容, 处理逻辑如下."
+
+#: 4ceb61d182d946fea22ffd6cc323a668 paddlets.models.utils.check_tsdataset:4 of
+msgid "1> Integer: Convert to np.int64."
+msgstr "整形: 统一转换为np.int64."
+
+#: 791a36bc54f44d94926966777386a686 paddlets.models.utils.check_tsdataset:6 of
+msgid "2> Floating: Convert to np.float32."
+msgstr "浮点型: 统一转换为np.float32."
+
+#: 0fa7954bba9249ea92b4b81703b1744d paddlets.models.utils.check_tsdataset:8 of
+msgid "3> Missing value: Warning."
+msgstr "缺失值: 警告."
+
+#: 68290859a76048e7a4dd4c3ddcc47d7f paddlets.models.utils.check_tsdataset:10 of
+msgid "4> Other: Illegal."
+msgstr "其他: 非法."
+
+#: 97412ede766b438a816c5b8e5fc13ba0 paddlets.models.utils.check_tsdataset
+#: paddlets.models.utils.to_tsdataset e3679a398b2748928cf728879d700d77 of
+msgid "Parameters"
+msgstr "参数"
+
+#: paddlets.models.utils.check_tsdataset:12 e75e01700e764af0825bd2b745c8588d of
+msgid "Data to be checked."
+msgstr "待检查的数据."
+
+#: 62c8c6b272314143b2d75ffd10084341 paddlets.models.utils.to_tsdataset:1 of
+msgid ""
+"A decorator, used for converting ndarray to tsdataset (compatible with "
+"both DL and ML)."
+msgstr "装饰器, 基于np.ndarray类型数据生成TSDataset类型数据(兼容ML模型和DL模型)."
+
+#: 9537d3e3c50844f5acf87291111f0864 paddlets.models.utils.to_tsdataset:3 of
+msgid "Core function."
+msgstr "核心函数."
+
+#: 550b9e24fc7d44cc85a1d570417c53cf paddlets.models.utils.to_tsdataset of
+msgid "Returns"
+msgstr "返回"
+
+#: 063288da83a1450b92479db7c2c4cf40 paddlets.models.utils.to_tsdataset:6 of
+msgid "Wrapped core function."
+msgstr "被装饰的函数."
+
+#: 55b2f7be386a46a8b860b9c04a2b0996 paddlets.models.utils.to_tsdataset of
+msgid "Return type"
+msgstr ""
+

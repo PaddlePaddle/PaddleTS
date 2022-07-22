@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-23 00:08+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.normalization.rst:2
+#: 6357eae5304b4b8689a34d75c9c5e1e7
+msgid "paddlets.transform.normalization"
+msgstr "paddlets.transform.normalization"
+
+#: 12709d3e1a2c4a3682564480124aa336 9c1e45a7777446ad94cfdb28a4044903 of
+#: paddlets.transform.normalization.MinMaxScaler:1
+#: paddlets.transform.normalization.StandardScaler:1
+#, fuzzy
+msgid "Bases: :py:class:`~paddlets.transform.base.BaseTransform`"
+msgstr "基类: :py:class:`~bts.transform.base.BaseTransform`"
+
+#: 11c016296a6047d9aa0ef526847024d5 of
+#: paddlets.transform.normalization.MinMaxScaler:1
+msgid ""
+"Transform a dataset by scaling the values of sepcified column(s) to the "
+"expected range: [min, max]."
+msgstr "将需要归一化的列的值缩放到预期范围来转换数据集：[min, max]。"
+
+#: 1b7ccc30b1f842b5a5199d38f2cd3c15 of
+#: paddlets.transform.normalization.MinMaxScaler:3
+msgid "The transformation is done by:"
+msgstr "通过以下方式转换"
+
+#: d55a6760a2d74384925e9133fc0d9746 of
+#: paddlets.transform.normalization.MinMaxScaler:5
+msgid "X_std = (X - X.min) / (X.max - X.min)"
+msgstr "X_std = (X - X.min) / (X.max - X.min)"
+
+#: fe7a32e6acfe44f4a960fa864d43cf7c of
+#: paddlets.transform.normalization.MinMaxScaler:7
+msgid "X_scaled = X_std * (max - min) + min"
+msgstr "X_scaled = X_std * (max - min) + min"
+
+#: 1449da0a0bec403c8ebdaab14173b8b1 6e6f780faf19491a8bfbe702f6c52216
+#: 79827e4b8a5f4418a6b4ead981870d8e 883fb628ef7c4c70ba8d20322e66f380
+#: bbc70a9372024252a5f1aab065f8266f ce5603dcdf43451f9b127cdb0515209c
+#: d24ebd1d9f94406d87099452c37bc9c1 ed384974464447f29b9b787599db5997
+#: f47ef8515b9747c8a26d5688cfecb1a9 fb334b18ef7047568379f34e49d418bd of
+#: paddlets.transform.normalization.MinMaxScaler
+#: paddlets.transform.normalization.MinMaxScaler.fit
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform
+#: paddlets.transform.normalization.MinMaxScaler.transform
+#: paddlets.transform.normalization.StandardScaler
+#: paddlets.transform.normalization.StandardScaler.fit
+#: paddlets.transform.normalization.StandardScaler.fit_transform
+#: paddlets.transform.normalization.StandardScaler.inverse_transform
+#: paddlets.transform.normalization.StandardScaler.transform
+msgid "Parameters"
+msgstr "参数"
+
+#: 7ec38e1b756441a4a8022a2245b4c8ce of
+#: paddlets.transform.normalization.MinMaxScaler:10
+msgid "Column name(s) to be scaled."
+msgstr "归一化的数据列。"
+
+#: 92fc338e59134bd69a5cd162da2134a9 of
+#: paddlets.transform.normalization.MinMaxScaler:12
+msgid "tuple (min, max), default=(0, 1), Desired range of transformed values."
+msgstr "tuple (min, max), default=(0, 1), 所需的转换数据范围。"
+
+#: f7bbf83ce1374df081debb51e59ad54e of
+#: paddlets.transform.normalization.MinMaxScaler:14
+msgid ""
+"Set to True to clip transformed values of held-out data to provided "
+"feature range."
+msgstr "该值为True时，保留数据的转换值裁剪到提供的特征范围。"
+
+#: 067add0a49e74c418750941c2022beda 1b7e83bce1ca46a09a1e92e08cff4411
+#: 264aa10f1a2f44cdbc0f19db5e56e142 4aa1082d6da049e5a01070a71c39acf0
+#: 512351e105e942a6911bd28edf1d0503 76e88d8b701c4ac1a1f17459b3248790
+#: 9731f5d214cb4011b1061c149dbc1b5d b6c807546ead4ea4894e8a3540abff90
+#: bf760bfe55c84ab0b8c272a0f1eff1a3 c590c6f2b30f42efb70323e8c11d0d23 of
+#: paddlets.transform.normalization.MinMaxScaler
+#: paddlets.transform.normalization.MinMaxScaler.fit
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform
+#: paddlets.transform.normalization.MinMaxScaler.transform
+#: paddlets.transform.normalization.StandardScaler
+#: paddlets.transform.normalization.StandardScaler.fit
+#: paddlets.transform.normalization.StandardScaler.fit_transform
+#: paddlets.transform.normalization.StandardScaler.inverse_transform
+#: paddlets.transform.normalization.StandardScaler.transform
+msgid "Returns"
+msgstr "返回"
+
+#: 655a55fb3c214431ba242369fe33656f c7d8dce5ce5b439986fffdd3d1c16dea of
+#: paddlets.transform.normalization.MinMaxScaler:17
+#: paddlets.transform.normalization.StandardScaler:15
+msgid "None"
+msgstr "None"
+
+#: 694133a96d2c45f49dd2d801385aa34d of
+#: paddlets.transform.normalization.MinMaxScaler.fit:1
+msgid "Compute the MIN and MAX parameters needed by the scaler."
+msgstr "计算归一化方法需要的MIN和MAX参数。"
+
+#: d9ec7060d689470c85c09fb2c55ec2cb of
+#: paddlets.transform.normalization.MinMaxScaler.fit:3
+msgid "dataset from which to compute the parameters."
+msgstr "用于计算参数的数据集"
+
+#: 006bfc212c4c46528826a91a0bfcef8f db29ac1b0b7249d18145f9c016d8a41c of
+#: paddlets.transform.normalization.MinMaxScaler.fit:6
+#: paddlets.transform.normalization.StandardScaler.fit:6
+msgid "self"
+msgstr "算子自身"
+
+#: cbedce573fd148db8c6c3c29e9291db5 d307074faa504b4cb1f98eb123f8e11d of
+#: paddlets.transform.normalization.MinMaxScaler.transform:1
+#: paddlets.transform.normalization.StandardScaler.transform:1
+msgid "Transform the dataset based on the computed parameters."
+msgstr "根据参数转换数据集。"
+
+#: bbf16bbdf34d47abb309a6baf14c7488 of
+#: paddlets.transform.normalization.MinMaxScaler.transform:3
+msgid "Dataset to be transformed."
+msgstr "要被转换的数据集。"
+
+#: f9ce78186e61490fb8e3426ead5b757c of
+#: paddlets.transform.normalization.MinMaxScaler.transform:5
+msgid "Set to True to perform inplace row normalization and avoid a copy."
+msgstr "设置为True时，数据会在源输入数据上修改，避免复制新数据。"
+
+#: 03299626f5214ef9b061a26ba4405004 104956d6fe374ab8abe88a6e4e8bdaa3
+#: be4ff9b8f3d847d2b3f0ba8a9a4d1f3b f1f197035e7a4ec2bc93ac53bee7ba3f of
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform:8
+#: paddlets.transform.normalization.MinMaxScaler.transform:8
+#: paddlets.transform.normalization.StandardScaler.fit_transform:8
+#: paddlets.transform.normalization.StandardScaler.transform:8
+msgid "Transformed TSDataset."
+msgstr "转换后的数据"
+
+#: 17ba616fc223427199bf41ef84aab0e8 1bb25b62088f441b97131224235dae44
+#: 6a7f8110d1c0434ea532b161c5a2bb9f b837a09154024caaa052cf0769660f3f
+#: ca2b2971ed4e413db5c0f0e8afa41f00 fa5255f9b4504ceea4b5a56beddbb9c4 of
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform
+#: paddlets.transform.normalization.MinMaxScaler.transform
+#: paddlets.transform.normalization.StandardScaler.fit_transform
+#: paddlets.transform.normalization.StandardScaler.inverse_transform
+#: paddlets.transform.normalization.StandardScaler.transform
+msgid "Return type"
+msgstr "返回 类型"
+
+#: 22b67fecd1aa40acbf1b311b5cee312c b558aae206dc453d854fec1edb4f8c4c of
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform:1
+#: paddlets.transform.normalization.StandardScaler.inverse_transform:1
+msgid "Inversely transform the scaled dataset."
+msgstr "反归一化的数据集"
+
+#: 9363e51599004c40a80e7a94f20abdb1 ee345a7e09564fad9b2edd8e64d40b56 of
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform:3
+#: paddlets.transform.normalization.StandardScaler.inverse_transform:3
+msgid "dataset to be inversely transformed."
+msgstr "被反归一化的数据集"
+
+#: 45ec22f391aa4fa4afbd2465799bf51e 48f5e7d014e943fd92ff0edb88b40f7f
+#: 74803349eea5408c8522c4a9f851ab06 75b9913aeb8a41209fb05a17e81f2725
+#: 8deb410e12b4440d9110002e900107f4 of
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform:5
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform:5
+#: paddlets.transform.normalization.StandardScaler.fit_transform:5
+#: paddlets.transform.normalization.StandardScaler.inverse_transform:5
+#: paddlets.transform.normalization.StandardScaler.transform:5
+msgid "Set to True to perform inplace operation and avoid data copy."
+msgstr "设置为True时，数据会在源输入数据上修改，避免复制新数据。"
+
+#: 4bd3f490b2d343428d36d43746a5e3a1 dd86ff2e63594f0f9ce93620522206f1 of
+#: paddlets.transform.normalization.MinMaxScaler.inverse_transform:8
+#: paddlets.transform.normalization.StandardScaler.inverse_transform:8
+msgid "Inversely transformed TSDataset."
+msgstr "反归一化后的时序数据。"
+
+#: 9b31924e9a8b4f4ba570b68942226f4f b2217a17e7754233b3e0939d1061bd7a of
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform:1
+#: paddlets.transform.normalization.StandardScaler.fit_transform:1
+msgid "First fit the scaler, and then do transformation."
+msgstr "依次执行数据缩放和数据归一化转换。"
+
+#: 39e08288beda436ca3b27cc81c60b425 9e133c953f404e4aa7bc4f08723d373a of
+#: paddlets.transform.normalization.MinMaxScaler.fit_transform:3
+#: paddlets.transform.normalization.StandardScaler.fit_transform:3
+msgid "dataset to be processed."
+msgstr "被处理的数据集"
+
+#: 55db5ada5b9b4fd598911e7764f2f954 of
+#: paddlets.transform.normalization.StandardScaler:1
+msgid ""
+"Transform a dataset by scaling the values of sepcified column(s) to zero "
+"mean and unit variance."
+msgstr "将数据集转换到方差为1，均值为0的数据分布"
+
+#: 72f25db75743463f9749a80a9c6876f5 of
+#: paddlets.transform.normalization.StandardScaler:3
+msgid "The transformation is done by: z = (x - u) / s."
+msgstr "转换公式为：z = (x - u) / s."
+
+#: 7e44d42877ec4eb896209d02aaedbf8c of
+#: paddlets.transform.normalization.StandardScaler:6
+msgid ""
+"where u is the MEAN or zero if with_mean=False, and s is the standard "
+"deviation or one if with_std=False."
+msgstr "其中 u 是训练样本的平均值，如果 with_mean=False，则为 0，s 是训练样本的标准差，如果 with_std=False，则为 1。"
+
+#: c2a1c0ac16f946ccbaf44f1b704e5125 of
+#: paddlets.transform.normalization.StandardScaler:8
+msgid "Column name or names to be scaled."
+msgstr "需要归一化的列名"
+
+#: b94f59b7eaad4e79bf2d8f091d436472 of
+#: paddlets.transform.normalization.StandardScaler:10
+msgid "If True, center the data before scaling."
+msgstr "如果为 True，则在缩放之前将数据居中处理"
+
+#: d8a3f66bdf8345ac86314a8de6af27a2 of
+#: paddlets.transform.normalization.StandardScaler:12
+msgid "If True, scale the data to unit variance."
+msgstr "如果为 True，将数据归一化到单位方差。"
+
+#: 2ac59ecd6c5a46b2b8365cff9d0c34a8 of
+#: paddlets.transform.normalization.StandardScaler.fit:1
+msgid "Compute the mean and std parameters needed by the scaler."
+msgstr "计算归一化所需要的均值，方差参数。"
+
+#: 4746f661e9fa4eaeb3a61e3cfea9a3d0 of
+#: paddlets.transform.normalization.StandardScaler.fit:3
+msgid "dataset from which to compute parameters."
+msgstr "用于计算参数的数据集"
+
+#: d2ddf295c1ea4a27801688bde0181679 of
+#: paddlets.transform.normalization.StandardScaler.transform:3
+msgid "dataset to be transformed."
+msgstr "要被转换的数据集。"
+

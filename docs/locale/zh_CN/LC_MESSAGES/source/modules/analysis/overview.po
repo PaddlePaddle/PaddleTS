@@ -1,0 +1,145 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-20 18:03+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/modules/analysis/overview.rst:3
+#: db3d57d3de32458b9f30ba6a2696e1d6
+msgid "Analysis"
+msgstr ""
+
+#: ../../source/modules/analysis/overview.rst:5
+#: 2438b611b603415f905720e5771bdbed
+msgid ""
+"The purpose of the Analysis module is to make it easy for users to "
+"analyze time series data. We provide a variety of `analyzers "
+"<../../api/paddlets.analysis.html>`_ to inspect data properties. "
+"Moreover, we provide `report "
+"<../../api/paddlets.analysis.analysis_report.html>`_  API to show "
+"aggregated results of `analyzers <../../api/paddlets.analysis.html>`_ ."
+msgstr ""
+"Analsis模块的目标是让用户能够更简便的理解数据，我们提供多种多样的Anayzer去帮助用户洞察数据。并且我们提供了Report "
+"API去给用户展示多种Analyzer组合分析的数据"
+
+#: ../../source/modules/analysis/overview.rst:9
+#: 43d5c27a29894e2bb9e0bc740e4cc257
+msgid "1. Analyzer"
+msgstr ""
+
+#: ../../source/modules/analysis/overview.rst:10
+#: 9cbef2ac023946f0800b3eeaa67c6144
+msgid "Currently support analyzers:"
+msgstr "目前支持的分析器:"
+
+#: ../../source/modules/analysis/overview.rst:12
+#: 7b88c6bff49144b68f0a72f5dfeae31c
+msgid ""
+"`Summary <../../api/paddlets.analysis.base_analyzers.html>`_ : "
+"Statistical indicators, currently support numbers, mean, variance, "
+"minimum, 25% median, 50% median, 75% median, maximum value, missing "
+"percentage, stationarity p value."
+msgstr "`Summary <../../api/paddlets.analysis.base_analyzers.html>`_ : "
+"总结指标，目前支持均值、方差、最小值、25%中位数、50%中位数、75%中位数、最大值、缺失百分比、平稳性p值。"
+
+#: ../../source/modules/analysis/overview.rst:13
+#: 31e76d8f15bc4422b71bdef2daa0d4da
+msgid ""
+"`Max <../../api/paddlets.analysis.base_analyzers.html>`_ : Compute "
+"maximum values of given columns."
+msgstr "`Max <../../api/paddlets.analysis.base_analyzers.html>`_ : "
+"计算给定列的最大值。"
+
+#: ../../source/modules/analysis/overview.rst:14
+#: 998f8493978945febefd7c9bae7f1eeb
+msgid ""
+"`FFT <../../api/paddlets.analysis.frequency_domain.html>`_ : Frequency "
+"domain analysis of signal based on fast Fourier transform."
+msgstr "`FFT <../../api/paddlets.analysis.frequency_domain.html>`_ : "
+"基于快速傅里叶变换的信号频域分析。"
+
+#: ../../source/modules/analysis/overview.rst:15
+#: 7c6cc9b4afe84ce0a645e45ae8bdff3e
+msgid ""
+"`STFT <../../api/paddlets.analysis.frequency_domain.html>`_ : Time-"
+"frequency analysis of signal based on short-time Fourier transform."
+msgstr "`STFT <../../api/paddlets.analysis.frequency_domain.html>`_ : "
+"基于短时傅里叶变换的信号时频分析。"
+
+#: ../../source/modules/analysis/overview.rst:16
+#: 7aca9570bbcd4053ac2ea28633b10bd1
+msgid ""
+"`CWT <../../api/paddlets.analysis.frequency_domain.html>`_ : Time-"
+"frequency analysis of signal based on continuous wavelet transform."
+msgstr "`CWT <../../api/paddlets.analysis.frequency_domain.html>`_ : "
+"基于连续小波变换的信号时频分析。"
+
+#: ../../source/modules/analysis/overview.rst:18
+#: 954e73e2453f49cb9dec903de476ac6e
+msgid ""
+"The following code snippet shows how to apply `analyzers "
+"<../../api/paddlets.analysis.html>`_ on a TSDataset object. We use the "
+"``UNI_WTH`` dataset as a sample, which is a univariate dataset containing"
+" weather from 2010 to 2014, where ``WetBulbCelsuis`` represents the wet "
+"bulb temperature."
+msgstr "下面的代码展示了如何用Analyzer分析数据。我们用 ``UNI_WTH`` 数据作为样例,"
+" ``UNI_WTH`` 是一份包含了2010年--2014年的关于天气的单变量数据，其中 ``WetBulbCelsuis`` 代表湿球温度。"
+
+#: ../../source/modules/analysis/overview.rst:42
+#: 935bf16bffd54fce99b924bc029bd881
+msgid ""
+"Note that `base analyzers "
+"<../../api/paddlets.analysis.base_analyzers.html>`_ can be invoked by "
+"``TSdataset`` directly:"
+msgstr "注意Base Analyzers可以用更简便的方式去调用:"
+
+#: ../../source/modules/analysis/overview.rst:44
+#: 5926b20bf9bf4712b16c2044f6f12ab1
+msgid ""
+"Currently support base analyzers: `Summary "
+"<../../api/paddlets.analysis.base_analyzers.html>`_ , `Max "
+"<../../api/paddlets.analysis.base_analyzers.html>`_ ."
+msgstr "目前支持的base analyzers有: Summary, Max。"
+
+#: ../../source/modules/analysis/overview.rst:57
+#: 89cd49c3b47f4d2b85ed4fea3f17b87b
+msgid "1. Analysis Report"
+msgstr ""
+
+#: ../../source/modules/analysis/overview.rst:58
+#: a609ed1772054345ad75c38575f591f7
+msgid ""
+"`Analysis Report <../../api/paddlets.analysis.analysis_report.html>`_ is "
+"designed to show aggragated analysis results in the form of a report. "
+"Three examples to get a analysis report are demonstrated below :"
+msgstr "Report支持多种Analyzer自动组合分析。 下面演示了获取分析报告的三个示例:"
+
+#: ../../source/modules/analysis/overview.rst:62
+#: 9ec8c610fe0345649a2e05051791201f
+msgid "2.1 Default Analysis Report"
+msgstr "2.1 获取默认的分析报告"
+
+#: ../../source/modules/analysis/overview.rst:73
+#: 1744f7dff1494f32ba187e0caf685dc4
+msgid "2.2 Customized Analyzers Report with Default Config"
+msgstr "2.2 获取自定义Analyzer的分析报告"
+
+#: ../../source/modules/analysis/overview.rst:84
+#: f2367af3f1284095b9bb3afe43fe6740
+msgid "2.3 Customized Analyzers Report with Customized Config"
+msgstr "2.3 获取自定义Analyzer与配置的分析报告"
+
+

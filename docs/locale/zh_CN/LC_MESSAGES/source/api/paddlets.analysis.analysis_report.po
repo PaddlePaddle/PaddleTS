@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-07 20:16+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.analysis.analysis_report.rst:2
+#: 63fddc2419594093b53f2ddbb9a03e51
+msgid "paddlets.analysis.analysis_report"
+msgstr ""
+
+#: paddlets.analysis.analysis_report.AnalysisReport:1
+#: d0ffc5ab0d514ed2961fd12fbe3507aa of
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 4506c603fcf54142b705b2651cc832e4
+#: paddlets.analysis.analysis_report.AnalysisReport:1 of
+msgid ""
+"Aggregate the results of analyzers, show them in format of tables and "
+"charts in reports. Currently supprt docx and json Analysis report."
+msgstr "AnalysisReport模块可以自动整合指定的Analyzer并自动化的产出图表化的分析结果，方便用户更直接更方便的分析数据。目前支持docx和json两种输出模式。"
+
+#: 0a1018a4eac14b8dbb07fa572bd6ac8d 42e68391fa2244509dd5306b855f5be6
+#: 55f19acb140c4de4b51e6c97cff69bef 5a950039cfa54c9788b412bb18b9e721
+#: paddlets.analysis.analysis_report.AnalysisReport
+#: paddlets.analysis.analysis_report.AnalysisReport.export_json_report
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report
+#: paddlets.analysis.analysis_report.AnalysisReport.get_all_analyzers_names of
+msgid "Parameters"
+msgstr ""
+
+#: 94f2c1f87a924143b0054e98f556aefd
+#: paddlets.analysis.analysis_report.AnalysisReport:4 of
+msgid "TSDataset to be analyzed"
+msgstr "需要分析的数据, 格式TSDataset"
+
+#: paddlets.analysis.analysis_report.AnalysisReport:5
+#: e96ec78c28564e94982989810306e80b of
+msgid "Analyzer names, set to DEFAULT_ANALYZERS by default"
+msgstr "需要分析的算子名称，默认为["summary", "max"]"
+
+#: 7dd50a77868143b59df36071e59533b1
+#: paddlets.analysis.analysis_report.AnalysisReport:6 of
+msgid "analyzers params"
+msgstr "需要分析的算子的参数Dict"
+
+#: 2ee05bfa7e184c639659e0c9c6126652
+#: paddlets.analysis.analysis_report.AnalysisReport:7 of
+msgid "columns to be analyzed"
+msgstr "指定分析的列"
+
+#: a740518de850415b97997d0de97823de
+#: paddlets.analysis.analysis_report.AnalysisReport:10 of
+msgid "Examples"
+msgstr ""
+
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report:1
+#: db2670d99bde4a818668a8c3451cc238 of
+msgid "Export a report in the docx format"
+msgstr "导出一个docx格式的report文件"
+
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report:3
+#: e27969482e4a48e9baa7bec01228a93f of
+msgid "path to save the exported report, set to the current path by default"
+msgstr "report导出路径，默认路径为当前路径"
+
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report:4
+#: e711472ea2a34591be55658eb3c993f9 of
+msgid "file name ,default set to \"analysis_report.pdf\""
+msgstr "导出报告的文件名，默认为analysis_report.socx"
+
+#: paddlets.analysis.analysis_report.AnalysisReport.export_json_report
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report
+#: paddlets.analysis.analysis_report.AnalysisReport.get_all_analyzers_names
+#: d792aeb5ca1e4b6b9924e437765814e7 d9bcff00db0b4500bb6c9f1501363aad
+#: f2fc8743556140f892f86232f52a7c66 of
+msgid "Returns"
+msgstr ""
+
+#: 9b70fa1d7742408e8ed1ff3b215ff623
+#: paddlets.analysis.analysis_report.AnalysisReport.export_report:6 of
+msgid "None"
+msgstr ""
+
+#: 60bb873a817447eca6abb70f78c698a6
+#: paddlets.analysis.analysis_report.AnalysisReport.export_json_report:1 of
+msgid "Export a report in the Json format"
+msgstr "导出一个json格式的report"
+
+#: 7d7fbad666584173b92be3a0571a6851
+#: paddlets.analysis.analysis_report.AnalysisReport.export_json_report:3 of
+msgid "print log or not, default set to True"
+msgstr "是否打印，默认为True"
+
+#: paddlets.analysis.analysis_report.AnalysisReport.export_json_report:5
+#: cf22f6772da74aaea41589dfca08984f of
+msgid "Dict"
+msgstr ""
+
+#: 8f3075c4b77c45fe8a2826e3dc4ed082
+#: paddlets.analysis.analysis_report.AnalysisReport.get_all_analyzers_names:1 of
+msgid ""
+"Get the names of analyzers This method can be called internally or "
+"externally, and the parameter log is set to False or True accordingly."
+msgstr "获得所有analyzer的名字，既可以内部调用也可以外部使用,注意内部调用时屏蔽日志,即log=Fasle"
+
+#: 82ebcafb6f104ea68d5ce9bb42cfee72
+#: paddlets.analysis.analysis_report.AnalysisReport.get_all_analyzers_names:4 of
+msgid ""
+"Whether to print the log, the default is True when used externally, and "
+"set to False when called internally"
+msgstr "是否打印日志, 外部使用时默认为True, 内部调用时设置为False"
+
+#: 6e7f9872d6bd48278681f2e2d5d2a0be
+#: paddlets.analysis.analysis_report.AnalysisReport.get_all_analyzers_names:8 of
+msgid "List[str]"
+msgstr ""
+
+#~ msgid ""
+#~ "report  module Aggregate the results of"
+#~ " analyzers and export a pdf report"
+#~ msgstr ""
+
+#~ msgid "需要分析的数据, 格式TSDataset"
+#~ msgstr ""
+
+#~ msgid "需要分析的算子名称，默认为DEFAULT_ANALYZERS 样例:[\"max\",\"outlier\"]"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "需要分析的算子的参数Dict 样例:    {     \"max\":{     \""
+#~ "    param1\":1         },     \"outlier\":{         "
+#~ "\"param1\":1,         \"param2\":2     }}"
+#~ msgstr ""
+
+#~ msgid "需要分析的算子的参数Dict 样例:"
+#~ msgstr ""
+
+#~ msgid "{"
+#~ msgstr ""
+
+#~ msgid "\"max\":{ \"    param1\":1"
+#~ msgstr ""
+
+#~ msgid "},"
+#~ msgstr ""
+
+#~ msgid "\"outlier\":{"
+#~ msgstr ""
+
+#~ msgid "\"param1\":1, \"param2\":2"
+#~ msgstr ""
+
+#~ msgid "}}"
+#~ msgstr ""
+
+#~ msgid "指定列分析"
+#~ msgstr ""
+
+#~ msgid "导出一个pdf格式的report文件"
+#~ msgstr ""
+
+#~ msgid "pdf导出路径，默认路径为当前路径"
+#~ msgstr ""
+
+#~ msgid "导出报告的文件名"
+#~ msgstr ""
+
+#~ msgid "产出一个json格式的report"
+#~ msgstr ""
+
+#~ msgid "是否打印，默认为True"
+#~ msgstr ""
+
+#~ msgid "Json"
+#~ msgstr ""
+
+#~ msgid "获得所有analyzer的名字 即可以内部调用也可以外部使用,注意内部调用时屏蔽日志,即log=Fasle"
+#~ msgstr ""
+
+#~ msgid "是否打印日志, 外部使用时默认为True, 内部调用时设置为False"
+#~ msgstr ""
+

@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-21 19:24+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.dl.paddlepaddle.mlp.rst:2
+#: 92be2f08143f4eecb5fb84be8db8797e
+msgid "paddlets.models.dl.paddlepaddle.mlp"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:1
+#: cd07728d60314052983384259ffe2e45 of
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.dl.paddlepaddle.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: a54d0aaef72d4e31a6492453b7cb506b
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:1 of
+msgid "Multilayer Perceptron."
+msgstr "多层感知机."
+
+#: 6f03634671644c8c9cf531872f03ddaa paddlets.models.dl.paddlepaddle.mlp.MLPRegressor
+#: of
+msgid "Parameters"
+msgstr "参数"
+
+#: a58994a70601462e919926f1a43b3a90 b94137515e654cfbbeafb69aa91eb684
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:3
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:40 of
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 2e5d0c64854043db931c9da8a4c898e0 b0b20f5f6f6c431a9fe3f0ef82875b90
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:5
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:46 of
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: ac73460abe4945588cc0aea33232c091
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:7
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:52
+#: d17761cd26bd46129730776c46045d09 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 33fb063eefae467e997634d790f44b5d
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:11
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:60
+#: f63f11b7d6cf43bc803cd5b7a11d0189 of
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: aacabb0883874914b6d4b6ccc32dd3cf
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:13
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:66
+#: f10cce45d6de45beb3c6a11b28357994 of
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 3426553bd05a44758b55a4d0317b6714 582208f8bec7468f88949ac67aa33fa3
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:15
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:72 of
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 8ecf6db0c7164f20a492e041a40c7a11
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:17
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:78
+#: eb3c8ab349fc444f9ba906168441c3c7 of
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 946d6afc970847e3a16d808f5b16b6e9 ba7c66601516494eb3b18a4ce75f1c73
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:19
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:84 of
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:21
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:90
+#: d5d756a0ffff460882c3d9ab62632856 d8a6726e274e4539af592237defbe7d5 of
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 3f059527cad04b1cb911e4cede1e44a2
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:23
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:96
+#: e530d7fd35904085990158f38278b62d of
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 2f5c54aae0244c8ea3712ad2606b97b8
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:25
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:102
+#: d003fc5a8f854d47873964767df10146 of
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 2aa0c20e238c4bea85799e3882cd643b 7c44f9294d0d48a9a54367174daee9cc
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:27
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:108 of
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 25cb3d4a2c8b41eda2db33ec3d9dc89d
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:29
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:114
+#: ec1abb9bd35e4d6886827595caf45fdf of
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: 1067d06a73634a3dad658b5d3a8ec800 7f2364c5296840b79198683a95f8933d
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:31
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:120 of
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 0678a0fe5f034897938985a0a294b022 94c73cfbb1b344d682fd7b1d8db1045d
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:33
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:132 of
+msgid "The ith element represents the number of neurons in the ith hidden layer."
+msgstr "感知机网络结构, 列表第i个元素标识第i层神经元的个数."
+
+#: 2bd8a0ffdcd44c4bbfcde391ef4a44ca
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:35
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:138
+#: cd954b5d442346969d7abc138a82b74f of
+msgid "Whether to use batch normalization."
+msgstr "是否开启batch normalization."
+
+#: 166a87aa7c744bedbf03af73c0512786 16b21cf04e004ec4a3fa3c5762462145
+#: 180fb248d7e6484ca9f36eda88b4b2d5 5043ad503a6c480fb65e8c8831e8838e
+#: 5e9bfe32458843cabe93532e2e3cc92d 70761240ba52448aa4568777d8536b48
+#: 7a7135d79f1e4da2a52ae0e0deb256f7 833fdc6cfeb1482da81bbcd2b53c774e
+#: 8604cc6554ab452bb8c264c67340ae4e 99537bc8cf4a4f3bb9d35bcaea1df125
+#: a25fa0f4a64e48f9a2fdeec329d843da a780eb72ba89497ba9aca9951cb29a4c
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor c971e28a831341d9a26f425a0652bbd7
+#: cb057d8a0a6146d4aa34225f94cacce0 cf65721f468c48d484205cf4ec754404
+#: e1b858be555544d2a66e8351a1eddf7e e7148bf7d18f4c36abd727e48df089ff of
+msgid "type"
+msgstr ""
+
+#: 32ac39334e444df0a867d40da8af2364 6a5e80473ab149c3865d5a5de91158cd
+#: 9d085e3693404627beaf2d4d49732a0a aa21a011173843b6b84a331b840646aa
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:42
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:48
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:56
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:62
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:98
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:104
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:110
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:116
+#: c0ee2461f042410b93fcdc9717cefaf1 cd99e6ba3e4e4c9ba6405e1e206b4fd8
+#: dd6137d6188f4da8b8995bb70aa49f31 f0dced0fcf5b4bcfb6b89748704740bd of
+msgid "int"
+msgstr ""
+
+#: 27b0ef2b6c14494088dd647f79c270f5
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:68 of
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 8e9419ad26844e25ad0225d713651472
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:74 of
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 3fb3b31e966948cb82edcb87d8824373
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:80 of
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 7ffcdccf046a49a0880d20399765ed94
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:86 of
+msgid "List[str]"
+msgstr ""
+
+#: 85c2dc5334044f1d8b9f802472a2bf7a
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:92 of
+msgid "List[Callback]"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:122
+#: d0d7cc00f71b406689830c599a37d8ce of
+msgid "int|None"
+msgstr ""
+
+#: 92c1e0b758454ea0a272954f43710fad
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:128
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:140
+#: ed2143ccf04946c68752d83899d492d0 of
+msgid "bool"
+msgstr ""
+
+#: 2869f3a304084bd59ef446c99f226c64
+#: paddlets.models.dl.paddlepaddle.mlp.MLPRegressor:134 of
+msgid "List[int]|None"
+msgstr ""

@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-15 20:14+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.utils.backtest.rst:2
+#: e78aded850ef4e30befb212be43b47ae
+msgid "paddlets.utils.backtest"
+msgstr ""
+
+#: 7c7f328f13064af3aade6b9d8dcb7602 paddlets.utils.backtest.backtest:1 of
+msgid ""
+"Backtest A repeated forecasting and validating process. It first use data"
+" with the length of predict_window, and then moves the end of the "
+"training set forward by `stride` time steps. By default, Backtest will "
+"generate a TSdataset with length (data_length - model.skip_chunk_len) as "
+"output. If set predict_window != stride Backtest will generate a List of "
+"TSdataset as output If set return_score=True, A metric (given by the "
+"`metric` function) is then evaluated on the forecast and the actual "
+"values. It will returns a mean-of all these metric scores by default."
+msgstr "回测"
+ "在长度等于predict_window的数据集上重复预测，通过“stride”时间步长进行训练，直到移动至末尾。"
+ "默认情况下，Backtest 将生成一个长度为 (data_length - model.skip_chunk_len) 的 TSdataset 作为输出。"
+ "如果设置 predict_window != stride，Backtest 将生成一个 TSdataset List作为输出。"
+ "如果设置 return_score=True，将输出评估一个指标（由 `metric` 函数给出）关于预测值和实际值。最后，该方法返回所有这些指标的统计值。"
+ 
+#: 33bf7b52162e49428a96683866591b75 paddlets.utils.backtest.backtest of
+msgid "Parameters"
+msgstr ""
+
+#: 568c15dce4a6425b874024a92baee682 paddlets.utils.backtest.backtest:9 of
+msgid "The  TSdataset to use to successively evaluate the historical forecasts"
+msgstr "用于回测的 TSdataset"
+
+#: paddlets.utils.backtest.backtest:11 c51a634dd6ed49a4b0cca7190f255d77 of
+msgid ""
+"The  fitted model to use to successively evaluate the historical "
+"forecasts start(pd.Timestamp|int|None): The first prediction time, at "
+"which a prediction is computed for a future time."
+msgstr "用于回测的模型，需要提前拟合"
+
+#: 319033e348874f0fbf4ff8138963055a paddlets.utils.backtest.backtest:14 of
+msgid "The predict window for the  prediction."
+msgstr "预测窗口"
+
+#: 01507e3bbc424ce7be0a653b92d4db8b paddlets.utils.backtest.backtest:16 of
+msgid "The number of time steps between two consecutive predict window."
+msgstr "两个连续预测值之间的步长"
+
+#: 661b1aa58ef9472aabccb98a3c356eba paddlets.utils.backtest.backtest:18 of
+msgid ""
+"A function that takes two ``TSdataset`` instances as inputs and returns "
+"an error value."
+msgstr "指标计算公式"
+
+#: paddlets.utils.backtest.backtest:20 f41f29e61c5d49caad6c89098799764c of
+msgid ""
+"If set return_score=True, A metric (given by the `metric` function) is "
+"then evaluated on the forecast and the actual values. It will returns a "
+"mean-of all these metric scores by default."
+msgstr ""
+ "默认为True，如果设置 return_score=True，将输出评估一个指标。"
+ "如果设置 return_score=False，将输出TSDataset形式的回测结果。"
+ "如果predict_window != stride，将生成一个 TSdataset List作为输出"
+
+#: paddlets.utils.backtest.backtest:23 c5a1beabf73245018b3e2469a1eb7539 of
+msgid ""
+"A function used to combine the individual error scores obtained when "
+"predict_window ！= stride. If explicitely set to `None`, the method will "
+"return a list of the individual error scores instead. Set to ``np.mean`` "
+"by default."
+msgstr "最终结果的统计方法，默认为np.mean"
+
+#: 8b24c9a7c4c249fab9779b8dee8d625b paddlets.utils.backtest.backtest of
+msgid "Returns"
+msgstr ""
+
+#: 02dbdf9eb0f749149c059711f09009f7 paddlets.utils.backtest.backtest:28 of
+msgid "Union[TSDataset,List[TSdataset],float]"
+msgstr ""
+
+#: 1b8464d4bef246aea0f48ef445ef5e5c paddlets.utils.backtest.backtest of
+msgid "Raises"
+msgstr ""
+

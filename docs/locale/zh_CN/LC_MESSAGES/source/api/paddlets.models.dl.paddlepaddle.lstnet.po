@@ -1,0 +1,288 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-21 19:24+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.dl.paddlepaddle.lstnet.rst:2
+#: aaa0fcfbdf6344a0bd03cc670abec9e4
+msgid "paddlets.models.dl.paddlepaddle.lstnet"
+msgstr ""
+
+#: 97ed353ad6df4d49801cd8cd64f68573
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:1 of
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.dl.paddlepaddle.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:1
+#: ce69f677afd14e5e8f8e1b5de87dcfb3 of
+msgid "Long Short-term Time-series network."
+msgstr "长短期时间序列网络."
+
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor
+#: ea65303d00404c36940e355690812610 of
+msgid "Parameters"
+msgstr "参数"
+
+#: 4282b64f7e5a4fb28b7c3ae41f95047d
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:3
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:55
+#: cd9fcfade5544006a4b2c151cb9135f5 of
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 95d48b8e605f4c019139c763f58b2550 97ea841792754c13b9026d3b740c104c
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:5
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:61 of
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 3500aa1254d14620a251f655ffe02aee b92514fe75b24115ba8f44ff5a969239
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:7
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:67 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 33ce118d06d14ca99958346259929f7c bcfdd43a00064df4aa05a1bfae701ba7
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:11
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:75 of
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 0efa76dccc764eff9716b5a95f08384b
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:13
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:81
+#: eb41954001a142ebbae5728591c71c51 of
+msgid "Loss function."
+msgstr "损失函数."
+
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:15
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:87
+#: df55e06323fa43c28fb9ec0cc996c28c f6edfdabc0d84e11a1eb4d590cf4d617 of
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 9ba5555be8d04354aa8c88c970324ed2
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:17
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:93
+#: f252cd5369934cf6a0ba8403f7b8da88 of
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 4211b673933341c9a660261e46a8caaa 6c6dee84292746d6aba992efda8f097d
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:19
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:99 of
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: 94b47c328efb4bc29a776516dec85a78
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:21
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:105
+#: e13fe68590d94723b6e0601c5e6744fc of
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 258cd52ad0024da68243c8068248d881 4aae0e9eb5634cbdaf25ab7bf79a7a4f
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:23
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:111 of
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 8c755e9c8d4443e897dff2c8dd84841c
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:25
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:117
+#: dc528874d5894e9eb6686743dc432593 of
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 12c5d623f36542ba8e208563e7089c64
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:27
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:123
+#: cdfa03e7b2d844d2ac6dc64a20948877 of
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 3f428b6ca4494c49ad9a5393b7f2201c a7128809798d49788189fa59d8bcf4f4
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:29
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:129 of
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: b8ffb25f817e4c98be33671ccd7fbba6
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:31
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:135
+#: e3bab1103b41434a9ed58ea96764625c of
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: b22b3f75007c40b6949d21f2c99276b8
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:33
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:147
+#: d6736f7b2d08423394ba02674f03b659 of
+msgid "Skip size for the skip RNN layer."
+msgstr "递归跳跃组件(Skip RNN)用来捕获时间序列中的周期性所需的周期长度."
+
+#: 141af47d347b4d258300cfbb809ebdac
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:35
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:153
+#: d311964123554f8e854eed5929ee8fa5 of
+msgid "Number of channels for first layer Conv1D."
+msgstr "第一层Conv1D的通道数量."
+
+#: 44c6b289583642ee9cf5764845b2476f b5b09e162e714ad6b741b4206588a55b
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:37
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:159 of
+msgid "Kernel size for first layer Conv1D."
+msgstr "第一层Conv1D的卷积核大小."
+
+#: 4889bb89900046879125bd49afc57829 90bc9d1151bd4d77ad85ee4e3c48a6ad
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:39
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:165 of
+msgid "Type of the RNN cell, Either GRU or LSTM."
+msgstr "RNN cell的类型, 支持GRU或LSTM."
+
+#: 86b3c6c6f8e5444593dee33eca79a7f4 94c10302353a4fc5b73f2d3e743b2ff0
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:41
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:171 of
+msgid "Number of RNN cells for each layer."
+msgstr "RNN层中神经元的数量."
+
+#: 6768822c8c274e3f8e0135525cfca9ea 7442b11c2e4c4ffe9f00fba1e33cc6ba
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:43
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:177 of
+msgid "Type of the RNN cell for the skip layer, Either GRU or LSTM."
+msgstr "Skip RNN cell的类型, 支持GRU或LSTM."
+
+#: 24056a39c2da40cb830833b5697e935e
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:45
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:183
+#: f0e8b79072054a6390f9dabb8fcd44ea of
+msgid "Number of RNN cells for each layer for skip part."
+msgstr "Skip RNN层中神经元的数量."
+
+#: 39a6f9fa4d764222bd0e903b37866402 8fe6f36079224aea8919914438af598d
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:47
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:189 of
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃概率."
+
+#: 216db87c03984908a2e4fb8e74663f89 74ec89517e254babac664bec186953ed
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:49
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:195 of
+msgid ""
+"The last activation to be used for output. Accepts either None (default "
+"no activation), sigmoid or tanh."
+msgstr "输出层的激活函数类型, 可以是None(无激活函数), sigmoid, tanh."
+
+#: 1465d563f0064e9db5ff53eebdd57724 19746f3918704c41bfe2c771338bf4d7
+#: 1d8a3e2ae2ac4172bd74d9bfa35b1b52 1ecace70db804209903d2fb8d550f678
+#: 2379ca9dbe6842009e05e98e623a7fab 24b9ccf4350f478280916694defcd28c
+#: 252364059348447eb4693a147847b752 2fe6b9c42d4d413ba825fdf0bf17f57b
+#: 463ed8d29e4d470ab41b5ef28f00a146 50c8269d59524d0488592fe5890ec128
+#: 560862bad74c44adb3bd149f061b57d9 59de8365efdf4ee6958e10b5439434da
+#: 6099bf32d31c4718920a11a39e74eeab 7013eff891444633b814da76fb773ce4
+#: 71d144752f5846af92d63814e2502cec a2a17f641ce34ecfbfc6185f589d01e2
+#: bde2dcbe7c004d88927a1b7f0dab5e81
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor
+#: c472cf7a15314a2e96975d2c260115dc c49846891d6d4c2db83f42a4e363f169
+#: ca43a7fd6ab54c02b64b8565c38e57cc d9cc6735e7e14fc6987dd876602525d0
+#: e36ce8ca4a1642e6b977ec611ce03d04 f35e47b1396b41d89b33ee0bf72ef0cf
+#: fe1a82a3cf3746c09d0ab404fe97abed of
+msgid "type"
+msgstr ""
+
+#: 085e1936ba0e4c62b196bf3b59bdf40a 10c9c0b56a49494d9055a38169613512
+#: 20274ee013eb4edda700e37aa4044936 9432eb3b87874299add35455855013ed
+#: a11427c691fc426fbca9983322f77fde a7df6dcac5ac46248f78bfd0c8b63a3f
+#: b5d7af011293426195c2eb0c77068f78 b7906ee5b9f743b09730aca35aebbaad
+#: bbcb234a317145a599a6cc67dba69cbc bf1b1508bc3b45ec8bbbfb4bf59097a3
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:57
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:63
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:71
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:77
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:113
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:119
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:125
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:131
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:149
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:155
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:161
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:173
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:185
+#: c180f1aacc0441d7bf35ad92f8249149 cce593a4e7504a44a5e4c2ed5e5e22b7
+#: ef97f199298d41198baf459210b542c9 of
+msgid "int"
+msgstr ""
+
+#: 4fd36afa8799486095a82ebd8d3de0fd
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:83 of
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 85af88b7acfa4ccb88be47986bab7bcd
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:89 of
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 93427361afe34b258655def21f971fb1
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:95 of
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 93d58a199fd94fb4b6e076218052bdd1
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:101 of
+msgid "List[str]"
+msgstr ""
+
+#: 295551b94b284e70beb653e5651251d9
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:107 of
+msgid "List[Callback]"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:137
+#: c5956fe74a6d4e89a677cd428667b994 of
+msgid "int|None"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:143
+#: c17f6c87f9574557af6e91f3a9d271ca of
+msgid "bool"
+msgstr ""
+
+#: 47feae0d73b241fdbf13b67590b258aa b6db00f68ee94e4f9f873ceb6a168876
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:167
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:179 of
+msgid "str"
+msgstr ""
+
+#: 753401ae102d49e6b675799489d2b00e
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:191 of
+msgid "float"
+msgstr ""
+
+#: 077c87a11e694eae8a79b5ba36c71382
+#: paddlets.models.dl.paddlepaddle.lstnet.LSTNetRegressor:198 of
+msgid "str|None"
+msgstr ""

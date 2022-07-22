@@ -1,0 +1,159 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-15 21:00+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.analysis.base.rst:2
+#: 39809d8eb8bf46008909d67530bddb0f
+msgid "paddlets.analysis.base"
+msgstr ""
+
+#: paddlets.analysis.base.Analyzer:1 d90b5a12a9434a839284d9af5934c83d of
+msgid "Bases: :py:class:`~abc.ABC`"
+msgstr ""
+
+#: 65b1d013383047799646fa58a27ed23c paddlets.analysis.base.Analyzer:1 of
+msgid ""
+"``Analyzer`` is the base class for all analyzers. Analyzer module is "
+"designed to perform specific mathematical analysis on time series data. "
+"All analyzer need to override analyze method."
+msgstr "Analyzer 是所有分析器的基类。分析器模块旨在对时间序列数据执行特定的数学分析。包括最大值，频域特征分析，异常值检测等等"
+
+#: 3448d546f9ec424dac1f13b570159529 55edc16ddb2e4187b093f4afde6d0058
+#: 5e1d35ef0c7c44839416eee74774068e paddlets.analysis.base.Analyzer
+#: paddlets.analysis.base.Analyzer.analyze paddlets.analysis.base.Analyzer.get_properties
+#: paddlets.analysis.base.Analyzer.plot e92377f762ae41f4a2970a8aaf6e586c of
+msgid "Parameters"
+msgstr ""
+
+#: 801ce777230044fbb50d278b099134df paddlets.analysis.base.Analyzer:5 of
+msgid "Argument positions left for sub-classes."
+msgstr "各分析算子子类的参数, 基类中利用可变参数实现灵活拓展"
+
+#: 93ff60a7aa104421b98854151086bd4d paddlets.analysis.base.Analyzer.analyze:1 of
+msgid "Analyze data, need to be implemented by sub-classes."
+msgstr "数据分析方法, 具体子类需要分别实现"
+
+#: a5d3acfeb288474c83d4f40a562e7dfa paddlets.analysis.base.Analyzer.analyze:3 of
+msgid "Pd.Series or pd.DataFrame to be analyzed."
+msgstr "需要分析的Pd.Series|pd.DataFrame "
+
+#: 386f17d2d26d4a2d9886113a9f3b530f paddlets.analysis.base.Analyzer.analyze:5 of
+msgid "Argument positions left for override methods."
+msgstr "各分析算子子类的参数, 基类中利用可变参数实现灵活拓展"
+
+#: 8aee8b66cbb841dbb4473138b69b6e05 b8bece5f17ae40b0b1cb2e5a0561b0f1
+#: paddlets.analysis.base.Analyzer.analyze paddlets.analysis.base.Analyzer.get_properties
+#: paddlets.analysis.base.Analyzer.plot e11ceb940cc349bb86c0cfb9f11e6120 of
+msgid "Returns"
+msgstr ""
+
+#: 4caec0f1dd674aa5b95c0f5dbc04978e paddlets.analysis.base.Analyzer.analyze:7 of
+msgid "Analysis results."
+msgstr "分析结果"
+
+#: paddlets.analysis.base.Analyzer.analyze c04a0e0bcb514d36b43f24e6d7b70d77 of
+msgid "Return type"
+msgstr ""
+
+#: 4da9a7ac4afa40f9bf2975a16eb6f683 ae0d2b1640d64038a64a410749516da1
+#: paddlets.analysis.base.Analyzer.analyze paddlets.analysis.base.Analyzer.get_properties
+#: paddlets.analysis.base.Analyzer.plot fb5f883fb68a4635b90e14d6064f8f5a of
+msgid "Raises"
+msgstr ""
+
+#: 3d3d3b7e9ab945c48f926d07a72e180a paddlets.analysis.base.Analyzer.get_properties:1
+#: of
+msgid "Get the properties of the analyzer. All sub-classses should implements."
+msgstr "获取analyzer的属性"
+
+#: 6f020fa152c44db99b08d857518933fd paddlets.analysis.base.Analyzer.get_properties:6
+#: of
+msgid "Dict"
+msgstr ""
+
+#: 067f0229c175426d9a43a926cf9b85b0 paddlets.analysis.base.Analyzer.plot:1 of
+msgid ""
+"The plot method of the Analyzer to show figures of Analysis results, "
+"optionally override this method. If analyzers need to  displays figures "
+"in the analysis report, this method needs to be overrided."
+msgstr "算子的画图方法，非必须实现。若要算子在analysis报告中展现图片，则需要实现此功能"
+
+#: 6cc393fa115e40779404ff4b87850dc0 paddlets.analysis.base.Analyzer.plot:6 of
+msgid "matplotlib.pyplot object"
+msgstr ""
+
+#: 4033c7272930469d88034a65408362b6 paddlets.analysis.base.Analyzer.plot:11 of
+msgid "Examples"
+msgstr ""
+
+#~ msgid "``Analyzer`` class 是所有analysis算子的基类"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "实现了从TSDataset数据到标准类型数据的转换(pd.Series, np.ndarray, "
+#~ "pd.DataFrame)，用于适配标准分析方法 通常子类只需重写analysis_fn即可"
+#~ msgstr ""
+
+#~ msgid "各分析算子子类的参数, 基类中利用可变参数实现灵活拓展"
+#~ msgstr ""
+
+#~ msgid "Compute analysis's value from df, 具体子类需要分别实现"
+#~ msgstr ""
+
+#~ msgid "待分析的元素"
+#~ msgstr ""
+
+#~ msgid "当子类重写该函数的时候，拓展方法中可能用到的参数"
+#~ msgstr ""
+
+#~ msgid "analysis产出结果，可以是标量，也可以是多维数据"
+#~ msgstr ""
+
+#~ msgid "Get the properties of the analyzer. All sub-classs should implements."
+#~ msgstr ""
+
+#~ msgid "算子的画图方法，非必须实现。 若要算子在analysis报告中展现图片，则需要实现此功能"
+#~ msgstr ""
+
+#~ msgid "①产出为df:"
+#~ msgstr ""
+
+#~ msgid "若只需要实现最简单的画图，则只需要在分析算子实现以下方法，需要复杂画图可以自行添加功能。"
+#~ msgstr ""
+
+#~ msgid "def plot(self):"
+#~ msgstr ""
+
+#~ msgid "fig = self.res.plot().get_figure()"
+#~ msgstr ""
+
+#~ msgid "return fig"
+#~ msgstr ""
+
+#~ msgid "②产出为标量："
+#~ msgstr ""
+
+#~ msgid "自行实现plot方法，产出结果为 matplotlib.figure.Figure"
+#~ msgstr ""
+
+#~ msgid "Figure对象"
+#~ msgstr ""
+
+#~ msgid "算子的画图方法，非必须实现。若要算子在analysis报告中展现图片，则需要实现此功能"
+#~ msgstr ""
+

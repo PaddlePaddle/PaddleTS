@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 10:26+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.dl.paddlepaddle.paddle_base.rst:2
+#: 264bd7456b4d4a6b8a31eb2689f783f8
+msgid "paddlets.models.dl.paddlepaddle.paddle_base"
+msgstr "paddlets.models.dl.paddlepaddle.paddle_base"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:1
+#: dd73b10548a543869764d35db4eb794b of
+msgid "Bases: :py:class:`~paddlets.models.base.BaseModel`"
+msgstr "基类：:py:class:`~paddlets.models.base.BaseModel`"
+
+#: 6d1a6964538443e68b01233f956d3a6e
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:1 of
+msgid "Base class for all paddle deep learning models."
+msgstr "所有paddle深度学习模型的基类。"
+
+#: 0e7691c392884105b4253b1b19e89899 4d1425585d4b4663aea845e05f83e351
+#: 644db28277f044b3be9768503bb36d6b aca00ecda21a4b8ca4d4d1c105bd0433
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.fit
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save
+#: f04943f1bcd1475eb2e150314e495ab1 of
+msgid "Parameters"
+msgstr "参数"
+
+#: 49f7a10d24e94f84a56fd1049a90fd9f
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:3 of
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 46c2554945694d798248057c4318aeb7
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:5 of
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:7
+#: f45749c5fcaa4f66b71348493b11e612 of
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+
+#: 9312f0bbef8b464b9d1f2d99020e114e
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:14 of
+msgid "A paddle.nn.Layer instance."
+msgstr "一个paddle.nn.Layer实例。"
+
+#: 3f9db990d41d4782bf5ae71c9b6ee637 6179b4db20eb4fa29aa13f67cd86b1f3
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel
+#: e8ef5d5254214ec4aec3b00d93870b82 of
+msgid "type"
+msgstr ""
+
+#: 27f39021ce5748e2a48fa9a94fe5ba6d
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:16 of
+msgid "paddle.nn.Layer"
+msgstr ""
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:22
+#: ca1f56c2b0614eaf99204fa154b50d37 of
+msgid "paddle.optimizer.Optimizer"
+msgstr "paddle.optimizer.Optimizer"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:26
+#: f8e1709cdec84f97be29a0222ab70c00 of
+msgid "a container containing one or more callback instance(s)."
+msgstr "一个包含回调实例的容器。"
+
+#: 96d9cf2ceece43d2abeeea2598d261c3
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel:29 of
+msgid "paddlets.models.dl.paddlepaddle.callbacks.CallbackContainer"
+msgstr "paddlets.models.dl.paddlepaddle.callbacks.CallbackContainer"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.fit:1
+#: cbc6273ef9a1429997d3ef35b64b1a4b of
+msgid "Fit a paddle deep learning model instance."
+msgstr "训练一个paddle深度学习模型实例。"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.fit:3
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict:3
+#: d21020a2b1364a5083024aa5c50cdcf8 ead02e9af51e4e409d6b316dbc11cbdf of
+msgid ""
+"Any non-abstract classes inherited from this class should implement this "
+"method."
+msgstr "任何继承自此类的非抽象子类均需实现此方法。"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.fit:5
+#: d195782707154c85b5002a93d419a9fe of
+msgid "training dataset."
+msgstr "训练集。"
+
+#: 5fd150b272b644ffae4dbc506efd4f55
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.fit:7 of
+msgid "validation dataset, optional."
+msgstr "验证集，可选参数。"
+
+#: b6335089033b4d96be10c457c7be745c
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict:1 of
+msgid "Make prediction."
+msgstr "完成预测。"
+
+#: 76d4750e2d2043a390f47a8ed611569f
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict:5 of
+msgid "TSDataset to predict."
+msgstr "待预测的数据集。"
+
+#: 217bddf04e1545f49dda851d3332e1f2 3ba8bb74194b4bdeacd53ea619a64383
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict of
+msgid "Returns"
+msgstr "返回"
+
+#: b005b59c78d3480cad95af66af1dbded
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict:8 of
+msgid "Predicted result, in type of TSDataset."
+msgstr ""
+
+#: 7bdee21a05dc4f02949d663a4e354356 a1b528263475404c8bf7c8cd7c725252
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.predict of
+msgid "Return type"
+msgstr "返回类型"
+
+#: 7f101c70a26d4671914fc1df54b524ae
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save:1 of
+msgid "Saves a PaddleBaseModel instance to a disk file."
+msgstr "将一个PaddleBaseModel模型实例保存在磁盘文件中。"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save:3
+#: e17e4b0ce4774634a66f9bc6491a7a3d of
+msgid ""
+"1> A PaddleBaseModel (or any child classes inherited from "
+"PaddleBaseModel) instance have a set of member variables, they can be "
+"divided into 3 categories: `pickle-serializable members` (e.g. python "
+"built-in type such as int, str, dict, etc.), `paddle-related pickle-not-"
+"serializable members` (e.g. paddle.nn.Layer, paddle.optimizer.Optimizer),"
+" `paddle-not-related pickle-not-serializable members`."
+msgstr ""
+"1> 任何一个 PaddleBaseModel 或者继承自 PaddleBaseModel 的实例均拥有一组成员变量，它们一般可以被分为3种类型："
+" 可以被pickle序列化的成员（例如：int，str，dict等python内置的数据类型）， "
+"paddle相关的，并且无法被pickle序列化的成员（例如：paddle.nn.Layer, "
+"paddle.optimizer.Optimizer）， 以及与paddle不相关的，并且无法被pickle序列化的成员。"
+
+#: 3248fb514e7943b9a5b834a9b870072d
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save:9 of
+msgid ""
+"2> To call this method, self._network and self._optimizer must not be "
+"None."
+msgstr "2> 调用此方法前需保证self._network 和 self._optimizer成员不为None。"
+
+#: 120697d73f0d4f70ba1eb1b12b8df9fb 28b27727d8984a80bafad916a583245f
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load:5
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save:11 of
+msgid "A path string containing a model file name."
+msgstr "一个包含模型文件名的字符串格式的路径。"
+
+#: 95bcec8547f44672be53b39a305fd6eb
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.save of
+msgid "Raises"
+msgstr "抛出异常"
+
+#: a84821dafefb4edf89149fc3d179c8c1
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load:1 of
+msgid "Loads a PaddleBaseModel from a file."
+msgstr "从给定的文件路径加载一个PaddleBaseModel模型。"
+
+#: 2aad12ae54a44c39a0c7f090eafa5713
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load:3 of
+msgid ""
+"As optimizer does not affect the model prediction results, currently "
+"optimizer will NOT be loaded."
+msgstr "由于预测期间optimizer并不影响模型的预测效果，因此当前暂不加载optimizer。"
+
+#: paddlets.models.dl.paddlepaddle.paddle_base.PaddleBaseModel.load:8
+#: d72613d0c8c640a79d9b53c005709858 of
+msgid "the loaded PaddleBaseModel instance."
+msgstr "加载得到的PaddleBaseModel模型实例。"

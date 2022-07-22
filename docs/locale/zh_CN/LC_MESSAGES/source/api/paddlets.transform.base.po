@@ -1,0 +1,184 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-21 18:06+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.base.rst:2
+#: ea0375164d2a4f5494964cd9571b4ac2
+msgid "paddlets.transform.base"
+msgstr "paddlets.transform.base"
+
+#: 72acf7bff2804213ad1e4d69ea58a02e paddlets.transform.base.BaseTransform:1 of
+msgid "Bases: :py:class:`object`"
+msgstr "基类：:py:class:`object`"
+
+#: 32d5926be9ba424393b2447bac979e61 paddlets.transform.base.BaseTransform:1 of
+msgid ""
+"Base class for all data transformation classes (named `transformers` in "
+"this module)"
+msgstr "所有数据转换类的基础类（在该模块中命名为 `transformers`）。"
+
+#: be7ab5d9bcfe4e9c9fc1ad30c0bbcaeb paddlets.transform.base.BaseTransform:3 of
+msgid ""
+"Any subclass or transformer needs to inherit from this base class and "
+"implement :func:`fit`, :func:`transform` and :func:`fit_transform` "
+"methods."
+msgstr ""
+"任何用于时序数据转换（如：:class:`transform.MinMaxScaler`）的类均可以继承自此基类， 并实现 "
+":func:`fit`, :func:`transform` 和 :func:`fit_transform` 方法。"
+
+#: 190b53620c21468a8532b6c24e963528 paddlets.transform.base.BaseTransform.fit:1 of
+msgid "Learn the parameters from the dataset needed by the transformer."
+msgstr "从给定数据集中学习transformer所需的参数。"
+
+#: 3f292a520e9c494bb1db376c43ba4b57 76e59140cfc3452885bc063e70adf3a1
+#: paddlets.transform.base.BaseTransform.fit:3
+#: paddlets.transform.base.BaseTransform.fit_transform:4
+#: paddlets.transform.base.BaseTransform.transform:3
+#: c3f756c90ff4436092dbfc942cfb814e of
+msgid ""
+"Any non-abstract class inherited from this class should implement this "
+"method."
+msgstr "任何继承自此类的非抽象子类均需实现此方法。"
+
+#: aaf4db824e5644e3a09410ccf4c70118 paddlets.transform.base.BaseTransform.fit:5 of
+msgid ""
+"The parameters fitted by this method is transformer-specific. For "
+"example, the `MinMaxScaler` needs to compute the MIN and MAX, and the "
+"`StandardScaler` needs to compute the MEAN and STD (standard deviation) "
+"from the dataset."
+msgstr ""
+"该方法训练的参数和具体的transformer有关。举例来说，`MinMaxScaler` 需要计算 最大值（MAX）和最小值（MIN），同时 "
+"`StandardScaler` 需要计算均值（MEAN）和标准偏差（standard deviation）。"
+
+#: 698af31083df4a89936a6aceece38ab4 ac9ee48354ca4667802655e036a183b0
+#: paddlets.transform.base.BaseTransform.fit
+#: paddlets.transform.base.BaseTransform.fit_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.transform e4a144ced2654c76b53427a76c91ffd9
+#: e7b9cc62801a4e74a5cb0b0fcfc96f15 of
+msgid "Parameters"
+msgstr "参数"
+
+#: b0e1b90389c24de2b94002cbf6be7d98 paddlets.transform.base.BaseTransform.fit:9 of
+msgid "dataset from which to fit the transformer."
+msgstr "用于训练transformer的数据集。"
+
+#: 3ba47dfb7dec414b96242fce7c6afab1
+#: paddlets.transform.base.BaseTransform.transform:1 of
+msgid "Apply the fitted transformer on the dataset"
+msgstr "将训练完成的transformer应用于给定数据集。"
+
+#: 96b81d4c93084be2ac83b7de54122011
+#: paddlets.transform.base.BaseTransform.transform:5 of
+msgid "dataset to be transformed."
+msgstr "待转换的输入数据。"
+
+#: 09b452b015d34da3a97baf3931f48bbb 561284c55169406f92fcdd9e40af5395
+#: 89b23588e3044ff3b5f219742056dadb
+#: paddlets.transform.base.BaseTransform.fit_transform:8
+#: paddlets.transform.base.BaseTransform.inverse_transform:15
+#: paddlets.transform.base.BaseTransform.transform:7 of
+msgid "Set to True to perform inplace transformation. Default is False."
+msgstr "若设置为True，则会执行一个就地转换。默认值为False。"
+
+#: 00051a38d3504a43ab96aebd17956ef1 3d10d7bd39a8447fafc882e2ac19ed27
+#: 491d50478c4b4bdba3f2cca46255bbe8
+#: paddlets.transform.base.BaseTransform.fit_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.transform of
+msgid "Returns"
+msgstr "返回"
+
+#: 878b12fad1184531b335dee54e20fb2e
+#: paddlets.transform.base.BaseTransform.transform:10 of
+msgid "transformed dataset."
+msgstr "完成数据转换的数据集。"
+
+#: 5e3314d5bd304eb4af51fc7319de18d6 713a8ad8f0734f418c5c8a2cd34ed1d0
+#: paddlets.transform.base.BaseTransform.fit_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.transform d01b091c09fc407899fca3f7d39c4978
+#: of
+msgid "Return type"
+msgstr "返回类型"
+
+#: 146645216b2245b989aa5b69d96e72ae
+#: paddlets.transform.base.BaseTransform.fit_transform:1 of
+msgid ""
+"Combine the above fit and transform into one method, firstly fitting the "
+"transformer from the dataset and then applying the fitted transformer on "
+"the dataset."
+msgstr "将训练和转换合并在一个方法中。该方法首先训练transformer，然后将训练完成的transformer应用到给定数据集上。"
+
+#: paddlets.transform.base.BaseTransform.fit_transform:6
+#: faae3b74924c4c05a20e7634fe391b9a of
+msgid "dataset to process."
+msgstr "将要被处理的数据集。"
+
+#: ae5b3a4b2ebf49a897568ca927d82484
+#: paddlets.transform.base.BaseTransform.fit_transform:11 of
+msgid "transformed data."
+msgstr "完成数据转换的数据集。"
+
+#: 7aaf2c4f15b14162a46452e1ac7b5474
+#: paddlets.transform.base.BaseTransform.inverse_transform:1 of
+msgid "Inversely transform the dataset output by the `transform` method."
+msgstr "`transform` 方法的逆向转换方法。"
+
+#: 337f83108dc44ca58b884c0f06d90e95
+#: paddlets.transform.base.BaseTransform.inverse_transform:3 of
+msgid ""
+"Differ from other abstract methods, this method is not decorated by "
+"abc.abstractmethod. The reason is that not all the transformations can be"
+" transformed back inversely, thus, it is neither possible nor mandatory "
+"for all sub classes inherited from this base class to implement this "
+"method."
+msgstr ""
+"与其他抽象方法不同的是，该方法并没有被 abc.abstractmethod "
+"装饰器装饰。这样做的原因是并非所有的时序数据转换都可以被逆向转换回原来的形式，因此，我们认为不可能、也无法强制要求所有继承自此基类的子类都实现该方法。"
+
+#: paddlets.transform.base.BaseTransform.inverse_transform:7
+#: ea2af05d25aa46348e97d7c96c32c650 of
+msgid ""
+"In general, other modules such as Pipeline will possibly call this method"
+" WITHOUT knowing if the called transform instance has implemented this "
+"method. To work around this, instead of simply using `pass` expression as"
+" the default placeholder, this method raises a NotImplementedError to "
+"enable the callers (e.g. Pipeline) to use try-except mechanism to "
+"identify those data transformation operators that do NOT implement this "
+"method."
+msgstr ""
+"通常来说，一些诸如 Pipeline "
+"在内的其他模块可能在不知道被调用的transform实例是否已经实现该方法的前提下调用此方法。为了解决此问题，我们没有使用 `pass` "
+"表达式作为该基类方法的默认占位符，而是抛出了一个 NotImplementedError 错误。这个抛出的错误使得调用者可以使用 try-"
+"except 机制去识别那些没有实现该方法的 transform 实例。"
+
+#: a69e70e193c54e27a44b116a8ffdf957
+#: paddlets.transform.base.BaseTransform.inverse_transform:13 of
+msgid "dataset to be inversely transformed."
+msgstr "完成逆向转换的数据集。"
+
+#: paddlets.transform.base.BaseTransform.inverse_transform:18
+#: fabbf77e32054f78b817cadf583e1e86 of
+msgid "inverserly transformed dataset."
+msgstr "完成逆向转换的数据集。"
+
+#: 8580cd4615e44643ab3a3f50ecbec5a9
+#: paddlets.transform.base.BaseTransform.inverse_transform of
+msgid "Raises"
+msgstr "抛出异常"
