@@ -13,7 +13,6 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
     Any subclass or transformer needs to inherit from this base class and
     implement :func:`fit`, :func:`transform` and :func:`fit_transform` methods.
     """
-
     def __init__(self):
         pass
 
@@ -24,9 +23,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
 
         Any non-abstract class inherited from this class should implement this method.
 
-        The parameters fitted by this method is transformer-specific. For example, the `MinMaxScaler` needs to
+        The parameters fitted by this method is transformer-specific. For example, the `MinMaxScaler` needs to 
         compute the MIN and MAX, and the `StandardScaler` needs to compute the MEAN and STD (standard deviation)
-        from the dataset.
+        from the dataset. 
 
         Args:
             dataset(TSDataset): dataset from which to fit the transformer.
@@ -35,9 +34,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def transform(
-            self,
-            dataset: TSDataset,
-            inplace: bool = False
+        self,
+        dataset: TSDataset,
+        inplace: bool = False
     ) -> TSDataset:
         """
         Apply the fitted transformer on the dataset
@@ -47,7 +46,7 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         Args:
             dataset(TSDataset): dataset to be transformed.
             inplace(bool, optional): Set to True to perform inplace transformation. Default is False.
-
+            
         Returns:
             TSDataset: transformed dataset.
         """
@@ -55,12 +54,12 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def fit_transform(
-            self,
-            dataset: TSDataset,
-            inplace: bool = False
+        self,
+        dataset: TSDataset,
+        inplace: bool = False
     ) -> TSDataset:
         """
-        Combine the above fit and transform into one method, firstly fitting the transformer from the dataset
+        Combine the above fit and transform into one method, firstly fitting the transformer from the dataset 
         and then applying the fitted transformer on the dataset.
 
         Any non-abstract class inherited from this class should implement this method.
@@ -75,9 +74,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         pass
 
     def inverse_transform(
-            self,
-            dataset: TSDataset,
-            inplace: bool = False
+        self,
+        dataset: TSDataset,
+        inplace: bool = False
     ) -> TSDataset:
         """
         Inversely transform the dataset output by the `transform` method.
@@ -89,7 +88,7 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         In general, other modules such as Pipeline will possibly call this method WITHOUT knowing if the called
         transform instance has implemented this method. To work around this, instead of simply using `pass`
         expression as the default placeholder, this method raises a NotImplementedError to enable the callers
-        (e.g. Pipeline) to use try-except mechanism to identify those data transformation operators that do NOT
+        (e.g. Pipeline) to use try-except mechanism to identify those data transformation operators that do NOT 
         implement this method.
 
         Args:
