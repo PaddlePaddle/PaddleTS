@@ -1,5 +1,4 @@
 """
 pipeline
 """
-from bts.pipeline.pipeline import Pipeline
-
+from paddlets.pipeline.pipeline import Pipeline
