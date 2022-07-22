@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 Sphinx==5.0.2
+=======
+>>>>>>> Stashed changes
 sphinx-intl==2.0.1
 Markdown < 3.4
 sphinx-markdown-tables==0.0.15

@@ -1,2 +1,6 @@
 protobuf == 3.19.0
 paddlepaddle==2.3.0
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
