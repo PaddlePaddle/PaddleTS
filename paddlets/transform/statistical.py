@@ -6,10 +6,10 @@ from typing import Union, List
 import pandas as pd
 import numpy as np
 
-from bts.transform.base import BaseTransform
-from bts.datasets.tsdataset import TimeSeries, TSDataset
-from bts.logger import Logger, raise_if_not, raise_if, raise_log
-from bts.logger.logger import log_decorator
+from paddlets.transform.base import BaseTransform
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
+from paddlets.logger.logger import log_decorator
 
 logger = Logger(__name__)
 

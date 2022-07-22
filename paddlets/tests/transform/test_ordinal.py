@@ -10,8 +10,8 @@ import time
 import unittest
 from unittest import TestCase
 
-from bts.transform.ordinal import Ordinal
-from bts.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.transform.ordinal import Ordinal
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 class TestOrdinal(TestCase):
     def setUp(self):

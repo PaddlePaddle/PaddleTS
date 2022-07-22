@@ -10,8 +10,8 @@ import time
 import unittest
 from unittest import TestCase
 
-from bts.transform.onehot import OneHot
-from bts.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.transform.onehot import OneHot
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 class TestOneHot(TestCase):
     def setUp(self):
