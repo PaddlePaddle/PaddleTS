@@ -85,7 +85,7 @@ To get more detailed information, please refer to [Installation](https://paddlet
 
 We appreciate all kinds of contributions. Please let us know if you encounter any bug by [filing an issue](https://github.com/PaddlePaddle/PaddleTS/issues).
 
-If you are willing to contribute back bug-fixes, please go ahead without any hesitation.
+If you are willing to contribute back bug-fixes, please go ahead without any further discission.
 
 If you plan to contribute new features, utility functions, or extensions to the core, please first open an issue and discuss with us.
 Sending a PR without discussion might end up with rejection because we might be taking the core in a different direction than you might be aware of.
