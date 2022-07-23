@@ -63,8 +63,9 @@ pip install paddlets
 
 ## 文档
 
-[开始使用](https://paddlets.readthedocs.io/zh_CN/latest/source/get_started/get_started.html)
-[API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
+* [开始使用](https://paddlets.readthedocs.io/zh_CN/latest/source/get_started/get_started.html)
+
+* [API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
 
 
 ## 代码发布与贡献
