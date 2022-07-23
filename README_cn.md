@@ -40,9 +40,9 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 | [**paddlets.datasets**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/datasets/overview.html)   | 时序数据模块，统一的时序数据结构和预定义的数据处理方法           |
 | [**paddlets.transform**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/transform/overview.html) | 数据转换模块，提供数据预处理和特征工程相关能力 |
 | [**paddlets.models**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models/overview.html)       | 时序模型模块，基于飞桨深度学习框架PaddlePaddle的时序模型     |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/pipeline/overview.html)   | 建模任务流模块，支持特征工程与建模、评估的组合任务    |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/metrics/overview.html)     | 时序效果评估模块，提供多维度模型评估能力                         |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/analysis/overview.html)   | 时序数据分析模块，提供高效的时序特色数据分析能力                      |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/pipeline/overview.html)   | 建模任务流模块，支持特征工程、模型训练、模型评估的任务流实现    |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/metrics/overview.html)     | 效果评估模块，提供多维度模型评估能力                         |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/analysis/overview.html)   | 数据分析模块，提供高效的时序特色数据分析能力                      |
 | [**paddlets.utils**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/backtest/overview.html)      | 工具集模块，提供回测等基础功能                           |
 
 
