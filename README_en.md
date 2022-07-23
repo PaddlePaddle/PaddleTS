@@ -49,15 +49,15 @@ In future, more advanced features will be coming, including:
 
 Specifically, PaddleTS consists of the following modules:
 
-| Module                                                                                            | Description                                                                                                                     |
-|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets.html)   | A uniform time series data object provides data representation and manipulation capabilities throughout the modeling lifecycle. |
-| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform.html) | A data processing module containing a set of time series specific data transformations to meet a wide variety of needs.         |
-| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models.html)       | A time series modeling module deeply integrated with paddlepaddle framework for maximum flexibility.                            |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline.html)   | A module designed to build a workflow for time series modeling which may be comprised of a set of transformations and a model.  |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics.html)     | A module for measuring the performance of a model.                                                                              |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis.html)   | A module provides a variety of analyzers for time series data inspection.                                                       |
-| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/utils.html)         | A module contains utility functions such as backtest.                                                                           |
+| Module                                                                                                     | Description                                                                                                                     |
+|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | A uniform time series data object provides data representation and manipulation capabilities throughout the modeling lifecycle. |
+| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html) | A data processing module containing a set of time series specific data transformations to meet a wide variety of needs.         |
+| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)       | A time series modeling module deeply integrated with paddlepaddle framework for maximum flexibility.                            |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)   | A module designed to build a workflow for time series modeling which may be comprised of a set of transformations and a model.  |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | A module for measuring the performance of a model.                                                                              |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | A module provides a variety of analyzers for time series data inspection.                                                       |
+| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)             | A module contains utility functions such as backtest.                                                                           |
 
 
 ## Installation
@@ -81,7 +81,7 @@ Please refer to the following documents to get more in depth information.
 
 * [Get Started](https://paddlets.readthedocs.io/en/latest/source/get_started/get_started.html)
 
-* [API Reference](https://paddlets.readthedocs.io/en/latest/source/api)
+* [API Reference](https://paddlets.readthedocs.io/en/latest/source/api/paddlets.analysis.html)
 
 
 ## Releases and Contributing
