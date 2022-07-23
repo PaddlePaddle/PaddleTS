@@ -35,15 +35,15 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 具体来说，PaddleTS 时序库包含以下子模块：
 
-| 模块                                                                                                   | 简述                                              |
-|------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| [**paddlets.datasets**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/datasets.html)   | 一个标准的时序数据对象，在整个建模生命周期内提供时序数据的表示和操作能力。           |
-| [**paddlets.transform**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/transform.html) | 一个时序数据转换模块，提供数据预处理和特征工程相关的处理能力，满足多种多样的时序数据处理需求。 |
-| [**paddlets.models**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models.html)       | 一个与PaddlePaddle框架深度集成的时序模型组件，提供业界领先的时序建模能力      |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/pipeline.html)   | 一个用于为时序建模任务构建工作流的模块。其通常可以由一组数据转换模块和一个时序模型组成。    |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/metrics.html)     | 一个用于计算模型性能指标的模块。                                |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/analysis.html)   | 一个提供多种分析组件，帮助完成时序数据分析的模块。                       |
-| [**paddlets.utils**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/utils.html)         | 一个工具集模块，提供诸如回测等功能。                              |
+| 模块                                                                                                            | 简述                                              |
+|---------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| [**paddlets.datasets**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/datasets/overview.html)   | 一个标准的时序数据对象，在整个建模生命周期内提供时序数据的表示和操作能力。           |
+| [**paddlets.transform**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/transform/overview.html) | 一个时序数据转换模块，提供数据预处理和特征工程相关的处理能力，满足多种多样的时序数据处理需求。 |
+| [**paddlets.models**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models/overview.html)       | 一个与PaddlePaddle框架深度集成的时序模型组件，提供业界领先的时序建模能力      |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/pipeline/overview.html)   | 一个用于为时序建模任务构建工作流的模块。其通常可以由一组数据转换模块和一个时序模型组成。    |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/metrics/overview.html)     | 一个用于计算模型性能指标的模块。                                |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/analysis/overview.html)   | 一个提供多种分析组件，帮助完成时序数据分析的模块。                       |
+| [**paddlets.utils**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/backtest/overview.html)      | 一个工具集模块，提供诸如回测等功能。                              |
 
 
 ## 安装
@@ -58,13 +58,14 @@ pip 安装 paddlets 命令如下：
 pip install paddlets
 ```
 
-更多安装方式请参考：[环境安装](https://paddlets.readthedocs.io/zh_CN/latest/source/installation/installation.html)
+更多安装方式请参考：[环境安装](https://paddlets.readthedocs.io/zh_CN/latest/source/installation/overview.html)
 
 
 ## 文档
 
-[开始使用](https://paddlets.readthedocs.io/zh_CN/latest/source/tutorials)
-[API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api)
+* [开始使用](https://paddlets.readthedocs.io/zh_CN/latest/source/get_started/get_started.html)
+
+* [API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
 
 
 ## 代码发布与贡献
