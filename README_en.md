@@ -17,7 +17,7 @@
 --------------------------------------------------------------------------------
 
 
-PaddleTS - PaddlePaddle-based Time Series Modeling in Python
+PaddleTS - PaddlePaddle-based Time Series Modeling in Python.
 
 PaddleTS is an easy to use Python library for deep time series modeling,
     focusing on the state-of-the-art deep neural network models based on 
