@@ -14,6 +14,7 @@ from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
 logger = Logger(__name__)
 
 
+
 class Analyzer(ABC):
     """
     ``Analyzer`` is the base class for all analyzers.
