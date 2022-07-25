@@ -49,16 +49,15 @@ In future, more advanced features will be coming, including:
 
 Specifically, PaddleTS consists of the following modules:
 
-| Module                                                                                            | Description                                                                                                                     |
-|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets.html)   | A uniform time series data object provides data representation and manipulation capabilities throughout the modeling lifecycle. |
-| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform.html) | A data processing module containing a set of time series specific data transformations to meet a wide variety of needs.         |
-| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models.html)       | A time series modeling module deeply integrated with paddlepaddle framework for maximum flexibility.                            |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline.html)   | A module designed to build a workflow for time series modeling which may be comprised of a set of transformations and a model.  |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics.html)     | A module for measuring the performance of a model.                                                                              |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis.html)   | A module provides a variety of analyzers for time series data inspection.                                                       |
-| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/utils.html)         | A module contains utility functions such as backtest.                                                                           |
-
+| Module                                                                                                     | Description                                                                                                                     |
+|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets.                                   |
+| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html) | Data preprocessing and data transformations.                                                                                    |
+| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)       | PaddlePaddle-based deep nueral network models for time series modeling.                                                         |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)   | Pipeline for building time sereis analysis and modeling workflows.                                                             |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | Metrics for measuring the performance of a model.                                                                               |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | Quick data exploration and advanced data analysis.                                                                              |
+| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)      | Utility functions.                                                                                                              |
 
 ## Installation
 
@@ -67,31 +66,29 @@ Specifically, PaddleTS consists of the following modules:
 * python >= 3.7
 * paddlepaddle >= 2.3
 
-Commands to install paddlets via pip wheels:
+Install paddlets via pip:
 ```bash
 pip install paddlets
 ```
 
-To get more details, please see at [Installation](https://paddlets.readthedocs.io/en/latest/source/installation/overview.html)
+To get more detailed information, please refer to [Installation](https://paddlets.readthedocs.io/en/latest/source/installation/overview.html).
 
 
 ## Documentation
 
-Please refer to the following documents to get more in depth information.
-
 * [Get Started](https://paddlets.readthedocs.io/en/latest/source/get_started/get_started.html)
 
-* [API Reference](https://paddlets.readthedocs.io/en/latest/source/api)
+* [API Reference](https://paddlets.readthedocs.io/en/latest/source/api/paddlets.analysis.html)
 
 
-## Releases and Contributing
+## Contributions
 
-We appreciate all contributions, please let us know if you encounter a bug by [filing an issue](https://github.com/PaddlePaddle/PaddleTS/issues).
+We appreciate all kinds of contributions. Please let us know if you encounter any bug by [filing an issue](https://github.com/PaddlePaddle/PaddleTS/issues).
 
-If you are planning to contribute back bug-fixes, please do so without any further discussion.
+If you are willing to contribute back bug-fixes, please go ahead without any further discussion.
 
-If you plan to contribute new features, utility functions, or extensions to the core, please first open an issue and discuss the feature with us.
-Sending a PR without discussion might end up resulting in a rejected PR because we might be taking the core in a different direction than you might be aware of.
+If you plan to contribute new features, utility functions, or extensions to the core, please first open an issue and discuss with us.
+Sending a PR without discussion might end up with rejection because we might be taking the core in a different direction than you might be aware of.
 
 
 ## License

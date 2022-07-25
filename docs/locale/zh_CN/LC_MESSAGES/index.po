@@ -120,7 +120,7 @@ msgstr "封装基础模型功能，如数据加载、回调设置、损失函数
 msgid ""
 "A set of state-of-the-art deep learning models (e.g. NBEATS, NHiTS, "
 "LSTNet, TCN, Transformer, etc);"
-msgstr "内置业界领先的深度学习模型，例如NBEATS， NHiTS, LSTNet, TCN, Transformer 等"
+msgstr "内置业界领先的深度学习模型，例如NBEATS、NHiTS、LSTNet、TCN、Transformer 等"
 
 #: ../../index.rst:15 f9286ef4601643c992a0ef70990b5388
 msgid ""
@@ -137,7 +137,7 @@ msgstr "内置时序数据分析算子，帮助开发者便捷实现数据探索
 
 #: ../../index.rst:19 643d9f5806e745c1bc0b9dfd7a2434e0
 msgid "In future, more advanced features will be coming, including:"
-msgstr "未来，更多的高级特性会进一步发布，包括但不限于："
+msgstr "未来，更多的高级特性会进一步发布，包括："
 
 #: ../../index.rst:21 967cfb2a515d41d2a73241dd9081ccad
 msgid "Automatic hyper-parameter tuning;"
