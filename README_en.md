@@ -49,6 +49,7 @@ In future, more advanced features will be coming, including:
 
 Specifically, PaddleTS consists of the following modules:
 
+
 | Module                                                                                                     | Description                                                                                   |
 |------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets. |
@@ -58,6 +59,7 @@ Specifically, PaddleTS consists of the following modules:
 | [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | Metrics for measuring the performance of a model.                                             |
 | [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | Quick data exploration and advanced data analysis.                                            |
 | [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)      | Utility functions.                                                                            |
+
 
 ## Installation
 
