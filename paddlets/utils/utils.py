@@ -58,13 +58,14 @@ def check_model_fitted(model: Trainable, msg: str = None):
 
 def get_uuid(prefix: str = "", suffix: str = ""):
     """
-    get short UUID
+    Get a random string of 16 characters.
 
     Args:
-        prefix: data to be predicted
+        prefix(str): The prefix of the returned string.
+        suffix(str): The suffix of the returned string.
         
     Returns:
-        prefix & 16 random letters
+        str: String of 16 characters.
     """
     digits = "01234abcdefghijklmnopqrstuvwxyz56789"
     new_uuid = uuid.uuid1()
