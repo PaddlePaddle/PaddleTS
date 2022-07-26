@@ -11,6 +11,7 @@ from paddlets.pipeline import Pipeline
 from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
 from paddlets.logger import Logger, raise_if, raise_if_not
 from paddlets.models.base import BaseModel
+from typing import Optional
 
 def check_model_fitted(model: Trainable, msg: str = None):
     """
@@ -56,13 +57,13 @@ def check_model_fitted(model: Trainable, msg: str = None):
 
     raise_if_not(fitted, msg % {"name": type(model).__name__})
 
-def get_uuid(prefix: str = "", suffix: str = ""):
+def get_uuid(prefix: Optional[str] = "", suffix: Optional[str] = ""):
     """
     Get a random string of 16 characters.
 
     Args:
-        prefix(str): The prefix of the returned string.
-        suffix(str): The suffix of the returned string.
+        prefix(str, optional): The prefix of the returned string.
+        suffix(str, optional): The suffix of the returned string.
         
     Returns:
         str: String of 16 characters.
