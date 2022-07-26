@@ -40,7 +40,7 @@ msgstr "参数"
 
 #: 80c5ecb5158c467cab3fbdea3ac9c514 of paddlets.transform.onehot.OneHot:3
 msgid "Column(s) to be encoded."
-msgstr ""
+msgstr "需要进行编码的列名"
 
 #: 7b79a3def7f449b69e4c7df6b6a2f33b of paddlets.transform.onehot.OneHot:5
 msgid "{'error', 'ignore'}, default='error'"
@@ -74,11 +74,11 @@ msgstr ""
 
 #: f637b86b53f64acc964963c1d2a2a7f1 of paddlets.transform.onehot.OneHot.fit:1
 msgid "Fit the ecnoder with the dataset."
-msgstr ""
+msgstr "对dataset进行onehot拟合"
 
 #: ec9e1a62747940598aab5fdefbada4ef of paddlets.transform.onehot.OneHot.fit:3
 msgid "dataset from which to fit the encoder"
-msgstr ""
+msgstr ""需要进行拟合的数据"
 
 #: 8456aad3d82c4db4a9c80f09230d803a of paddlets.transform.onehot.OneHot.fit:6
 msgid "self"
@@ -92,7 +92,7 @@ msgstr "使用one-hot编码转换dataset"
 #: 86b1ab7bc04f44e1ad66fdfb57f24963 of
 #: paddlets.transform.onehot.OneHot.transform:3
 msgid "dataset to be transformed."
-msgstr ""
+msgstr "需要进行转换的数据"
 
 #: c2456134ea5042a6ab1992f09d911d4b f5d176a2073b481a91baf90e7620488c of
 #: paddlets.transform.onehot.OneHot.fit_transform:5
@@ -114,5 +114,5 @@ msgstr "先对dataset进行拟合，再进行转换"
 #: acc8e776b09043c08bdd49cf662065b6 of
 #: paddlets.transform.onehot.OneHot.fit_transform:3
 msgid "dataset to be processed."
-msgstr ""
+msgstr "需要进行转换的数据"
 
