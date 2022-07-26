@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-This implementation is based on the article `N-BEATS: Neural basis expansion analysis for interpretable time series forecasting<https://arxiv.org/pdf/1905.10437.pdf>`.
+This implementation is based on the article `N-BEATS: Neural basis expansion analysis for interpretable time series forecasting <https://arxiv.org/pdf/1905.10437.pdf>`_ .
 
 Base model features
     Basic architecture: A network with hierarchical stacking, bi-directional residual connection and interpretable generator.

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-This implementation is based on the article `N-HiTS: Neural Hierarchical Interpolation for Time Series Forecasting<https://arxiv.org/abs/2201.12886>`.
+This implementation is based on the article `N-HiTS: Neural Hierarchical Interpolation for Time Series Forecasting <https://arxiv.org/abs/2201.12886>`_ .
 """
 
 from enum import Enum
