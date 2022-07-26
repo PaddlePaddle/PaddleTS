@@ -8,39 +8,40 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 18:08+0800\n"
+"POT-Creation-Date: 2022-07-26 10:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: ../../source/modules/models/overview.rst:3 eaf3eeb3665d4aa08812e25ab03fb644
+#: ../../source/modules/models/overview.rst:3 b40c430a0ad04feca0b4a404d0adbd8d
 msgid "Models"
 msgstr "模型"
 
-#: ../../source/modules/models/overview.rst:5 cde3b2e46c3744d596e2fd068003aa5a
+#: ../../source/modules/models/overview.rst:5 3ee92fc0c89a4c349ab863e0df5bb58b
 msgid ""
 "Before reading this document, it is recommended to first read the "
-"`TSDataset Document <../datasets/overview>`_ to understand the design of "
-"`TSDataset`. Simply speaking, `TSDataset` is a unified time series data "
-"structure throughout the whole modeling lifecycle. It introduces several "
-"fundamental but important time series related concepts such as ``target``"
-" (including ``past_target`` and ``future_target``) and ``covariates`` "
-"(including ``known_covariates`` and ``observed_covariates``). A good "
-"understanding of those concepts would be helpful for deep diving into "
-"this documentation and building well-performed models."
+"`TSDataset Document <../datasets/overview.html>`_ to understand the "
+"design of `TSDataset`. Simply speaking, `TSDataset` is a unified time "
+"series data structure throughout the whole modeling lifecycle. It "
+"introduces several fundamental but important time series related concepts"
+" such as ``target`` (including ``past_target`` and ``future_target``) and"
+" ``covariates`` (including ``known_covariates`` and "
+"``observed_covariates``). A good understanding of those concepts would be"
+" helpful for deep diving into this documentation and building well-"
+"performed models."
 msgstr ""
-"在阅读本文档之前，建议先阅读 `TSDataset 文档 <../datasets/overview>`_ ，以了解TSDataset的设计。 "
+"在阅读本文档之前，建议先阅读 `TSDataset 文档 <../datasets/overview.html>`_ ，以了解TSDataset的设计。 "
 "简单来说，TSDataset是PaddleTS中贯穿整个建模生命周期的、统一的时间序列数据结构。它引出了几个基本但重要的时间序列相关概念，例如待预测目标（过去目标、未来目标）以及协变量（观测协变量和未来已知协变量）。对这些概念的理解将有助于深入探究该文档并构建性能良好的模型。"
 
-#: ../../source/modules/models/overview.rst:11 b3be9f02d0b74897a3cb06cc06c80443
+#: ../../source/modules/models/overview.rst:11 41137ec29b0a4a98b48b7465fe98e0a8
 msgid "PaddleTS provides three high-level features for deep time series modeling:"
 msgstr "从一个较高的视角来看，PaddleTS 提供了以下三个时序建模相关的特性："
 
-#: ../../source/modules/models/overview.rst:13 3aa56c958af64a638bc8b6ea30b98765
+#: ../../source/modules/models/overview.rst:13 e9022cdfcf7a4a8bbd0887b639537b55
 msgid ""
 "Standard interfaces. The interfaces (`fit`, `predict`) declared in "
 "`PaddleBaseModel` are designed to accept and return the unified "
@@ -51,7 +52,7 @@ msgstr ""
 "标准化的接口。 这些在 `PaddleBaseModel` 中声明的 `fit`、`predict` 标准化接口接收、返回统一的 "
 "`TSDataset` 数据集，作为其输入输出，以便将一些数据集处理和样本构建的复杂细节封装起来，简化API的使用，降低学习成本。"
 
-#: ../../source/modules/models/overview.rst:16 66a262ac5d9e436091130c6c2adab58d
+#: ../../source/modules/models/overview.rst:16 07517590e77f49a18d4734dd55a13691
 msgid ""
 "PaddleTS introduces the `PaddleBaseModelImpl` class, which consists of a "
 "set of common functions and components throughout the modeling lifecycle "
@@ -63,103 +64,103 @@ msgstr ""
 "准备样本，初始化模型性能指标, "
 "计算损失等）。这使得用户可以更关注深度网络架构本身，同时也为广大开发者基于PaddleTS构建新的时序模型提供了最大程度的便利。"
 
-#: ../../source/modules/models/overview.rst:19 dacdb43b9c864a04975342e512a5b1ec
+#: ../../source/modules/models/overview.rst:19 0ea6a751beed443fb2edec4e19bb36ea
 msgid ""
 "Out-of-box models. PaddleTS provides off-the-shelf deep time series "
 "models:"
 msgstr "开箱即用的模型。PaddleTS提供一组预定义的，开箱即用的时序深度学习模型："
 
-#: ../../source/modules/models/overview.rst:21 722c99fe739042b4b1908145b5579cf0
+#: ../../source/modules/models/overview.rst:21 8bfaad42b9ac4758b43e8f3681eb2580
 msgid ""
 "`Long Short-term Time-series Network "
 "<../../api/paddlets.models.dl.paddlepaddle.lstnet.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:22 957636a1641c4e1e8afc5d9e31c1a78f
+#: ../../source/modules/models/overview.rst:22 0f5b7141a30c4df4b0e50c387c1104c6
 msgid ""
 "`Multilayer Perceptron "
 "<../../api/paddlets.models.dl.paddlepaddle.mlp.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:23 efd441508d2f4f39b33bd792a0090474
+#: ../../source/modules/models/overview.rst:23 697c3b6dc1b643fd8402b1854a7baa26
 msgid "`NBEATSModel <../../api/paddlets.models.dl.paddlepaddle.nbeats.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:24 efd441508d2f4f39b33bd792a0090474
+#: ../../source/modules/models/overview.rst:24 98023ec14b824ca9b878a3c9e47f17f1
 msgid "`NHiTSModel <../../api/paddlets.models.dl.paddlepaddle.nhits.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:25 f0ac262e7d874d32accc05f0d853f42f
+#: ../../source/modules/models/overview.rst:25 9c74adf53ea74db89242726d1070a784
 msgid "`RnnBlockRegressor <../../api/paddlets.models.dl.paddlepaddle.rnn.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:26 f0ac262e7d874d32accc05f0d853f42f
+#: ../../source/modules/models/overview.rst:26 49aefa649533437ca7a53c7b16832af1
 msgid ""
 "`Temporal Convolution Net Regressor "
 "<../../api/paddlets.models.dl.paddlepaddle.tcn.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:27 efd441508d2f4f39b33bd792a0090474
+#: ../../source/modules/models/overview.rst:27 9681f8ee807f411f8e47f8872c232a75
 msgid ""
 "`Transformer "
 "<../../api/paddlets.models.dl.paddlepaddle.transformer.html>`_"
 msgstr ""
 
-#: ../../source/modules/models/overview.rst:31 3619878cd7914115a21581205a027d6a
+#: ../../source/modules/models/overview.rst:31 6a1ebec7cabb4cbd8f56d0db45f033c5
 msgid "1. A minimal example"
 msgstr "1. 一个最小化的示例"
 
-#: ../../source/modules/models/overview.rst:33 5f6ec2d2d3484c71a3caba22f62eff76
+#: ../../source/modules/models/overview.rst:33 b534183ca1cf4d55bae0b2518d372b66
 msgid ""
 "Below minimal example uses a built-in `RNNBlockRegressor` model to "
 "illustrate the basic usage."
 msgstr "下方的最小化示例使用了PaddleTS内置的 RNNBlockRegressor 模型来阐述基本的使用方法。"
 
-#: ../../source/modules/models/overview.rst:70 402402b557634bd99da5694328b79fd0
+#: ../../source/modules/models/overview.rst:70 e925fbe653a24b8f8d0d5d992e33cda7
 msgid "2. PaddleBaseModel"
 msgstr "2. PaddleBaseModel"
 
-#: ../../source/modules/models/overview.rst:72 4f0a16e403aa413c841186a457146d8c
+#: ../../source/modules/models/overview.rst:72 382f76ca14ae46529534804865332db4
 msgid ""
 "PaddleBaseModel is the base class for all PaddlePaddle-based time series "
 "models. Below is a simplified version of the **PaddleBaseModel** class "
 "declaration, the lengthy implementation details are skipped, you may "
 "refer to the `PaddleBaseModel API "
-"<../../api/paddlets.models.dl.paddlepaddle.paddle_base>`_ to get a full "
-"view."
+"<../../api/paddlets.models.dl.paddlepaddle.paddle_base.html>`_ to get a "
+"full view."
 msgstr ""
 "`PaddleBaseModel` 是所有基于PaddlePaddle框架构建的时序模型的基类。 下方展示了一个简化版的 "
 "`PaddleBaseModel` 类声明， 此处略去了源代码中冗长的实现细节， 旨在于展示最重要的接口定义部分。 您可以参考文档 "
 "`PaddleBaseModel API "
 "<../../api/paddlets.models.dl.paddlepaddle.paddle_base>`_ 获取完整的代码。"
 
-#: ../../source/modules/models/overview.rst:79 0983cc7119de48dca95fe0069176bcb4
+#: ../../source/modules/models/overview.rst:79 7ade0a1110c44b019f3d4e1ab88dcb0e
 msgid "2.1. Construct method"
 msgstr "2.1. 构造方法"
 
 #: ../../source/modules/models/overview.rst:102
-#: f1319e7c5e9045ecb57961f30d13ac28
+#: ad850dba4fb5480b80df6965052c9c4b
 msgid ""
 "As shown above, the constructor takes 2 required arguments and an "
 "optional argument:"
-msgstr "如下所示，构造方法接收2个必需参数和一个可选参数："
+msgstr "构造方法接收2个必需参数和1个可选参数："
 
 #: ../../source/modules/models/overview.rst:104
-#: 2766cde8c51847a195ae9cd84cb700bc
+#: a456d0181a114f619f817945e16ada28
 msgid ""
 "in_chunk_len: The size of the loopback window, i.e. the number of time "
 "steps feed to the model."
-msgstr "历史窗口的大小。即：提供给模型用于训练的时间步数。"
+msgstr "in_chunk_len：历史窗口的大小。即：提供给模型用于训练的时间步数。"
 
 #: ../../source/modules/models/overview.rst:105
-#: 4f682586200d48feafbe3b69ebf3f8be
+#: f0e21c10fa6f4a3c979cb56546f5f1df
 msgid ""
 "out_chunk_len: The size of the forecasting horizon, i.e. the number of "
 "time steps output by the model."
-msgstr "预测范围的大小。即：模型输出的时间步数。"
+msgstr "out_chunk_len：预测范围的大小。即：模型输出的时间步数。"
 
 #: ../../source/modules/models/overview.rst:106
-#: cf6929cba43641a0b789399a7918cde1
+#: 5a2f048d9a024943af5f67005bb1a6a4
 msgid ""
 "skip_chunk_len: Optional, the number of time steps between in_chunk and "
 "out_chunk for a single sample. The skip chunk is neither used as a "
@@ -171,18 +172,18 @@ msgstr ""
 "Y)。默认情况下不会跳过任何一个时间点。默认情况下不会跳过任何一个时间步。"
 
 #: ../../source/modules/models/overview.rst:110
-#: 7a43cb035f104065802a4e57fa56dbd2
+#: eccd2732e1214c6caa4914655b72b33b
 msgid ""
 "Below Figure 1 shows a concrete example to further explain the above "
 "concepts."
 msgstr "下方的图1通过一个具体的例子，进一步解释了上面提到的概念。"
 
-#: ../../source/modules/models/overview.rst:-1 89f5407aba504e2399d9229f60321d24
+#: ../../source/modules/models/overview.rst:-1 7506e043bdaa480685535ead9a3f0d49
 msgid "TSDataset of wind speed with difference skip_chunk_len specified"
 msgstr "一个设置了不同的 skip_chunk_len 值的，包含风速的TSDataset数据集"
 
 #: ../../source/modules/models/overview.rst:115
-#: bff62bb0d11f4526a2b448505c23d2bd
+#: 0ab85fe2d74940a493c29b455d6c9d89
 msgid ""
 "Figure 1(a) defines a TSDataset of wind speed with an HOURLY level "
 "frequency. It totally contains 7 hours of wind speed data starts at 7:00 "
@@ -194,7 +195,7 @@ msgstr ""
 " 14:00 - 15:00 这段时间的风速数据。"
 
 #: ../../source/modules/models/overview.rst:119
-#: 3b5b1c3f9ba44046a8529cfdc9f0ed73
+#: bfdd0465a7764f24bda45c60ecc20296
 msgid ""
 "Figure 1(b) sets the `in_chunk_len` = 4, `skip_chunk_len` = 0, "
 "`out_chunk_len` = 2, which indicates the following:"
@@ -204,28 +205,28 @@ msgstr ""
 
 #: ../../source/modules/models/overview.rst:121
 #: ../../source/modules/models/overview.rst:128
-#: 9602e60b273545ee95a9d4235a8ed773 b099fa82e28044519ff09aa7e985973c
+#: ac5c451d24cb41a8a873146baf5c00db e022e87c1846423c84d09d015c8de2ab
 msgid ""
 "A 4-hour contiguous chunk of wind speed start at 7:00, i.e., [70, 80, 90,"
 " 100], will be treated as in_chunk."
 msgstr "一个长度为4小时的，开始于7:00的连续数据块，即 [70, 80, 90, 100]，将被视为 in_chunk。"
 
 #: ../../source/modules/models/overview.rst:122
-#: 820d00ff887b4347a1141ec573051a85
+#: d12bd9592da74a0b9bfc3e0a064a9724
 msgid ""
 "A 2-hour contiguous chunk of wind speed start at 11:00, which follows "
 "behind the in_chunk, i.e., [110, 120], will be treated as out_chunk."
 msgstr "一个长度为2小时的，紧跟在 in_chunk 后面，开始于11:00的连续数据块，即 [110, 120]，将被视为 out_chunk。"
 
 #: ../../source/modules/models/overview.rst:123
-#: f9abcf094c3e4901b5c5acfeb930bb07
+#: cbd2971b52e94db19a3d4d651f3edf71
 msgid ""
 "As the `skip_chunk_len` is set to 0, no time units between in_chunk and "
 "out_chunk are skipped."
 msgstr "由于 `skip_chunk_len` 等于 0，所以在in_chunk和out_chunk之间没有任何时间点被跳过。"
 
 #: ../../source/modules/models/overview.rst:125
-#: b67a8f3ff92f48fbb6aca10f327363de
+#: 968f1944d85b4a60bc15497ead102f5e
 msgid ""
 "The value of `in_chunk_len` and `out_chunk_len` shown in Figure 1(c) are "
 "identical to that of Figure 1(b), except that the `skip_chunk_len` is "
@@ -237,21 +238,21 @@ msgstr ""
 " 3, `out_chunk_len` = 2, 则说明有以下描述成立："
 
 #: ../../source/modules/models/overview.rst:129
-#: d3b09615b1304a2f967158a17bfb3ba5
+#: a80edc6d36d043669270faefcf969a66
 msgid ""
 "A 3-hour contiguous chunk of wind speed start at 11:00, which follows "
 "behind the in_chunk, i.e., [110, 120, 130], will be skipped."
 msgstr "一个长度为2小时的，紧跟在in_chunk后面的，开始于11:00的连续数据块，即 [110, 120, 130]，将被跳过。"
 
 #: ../../source/modules/models/overview.rst:130
-#: 6b0d7142c97f4328854370f3918731fc
+#: 82081ee5f41246e9b98a42213b4efa52
 msgid ""
 "A 2-hour contiguous chunk of wind speed start at 14:00, which follows "
 "behind the skip_chunk, i.e., [140, 150], will be treated as out_chunk."
 msgstr "一个长度为2小时的，紧跟在 skip_chunk 后面，开始于14:00的连续数据块，即 [140, 150]，将被视为 out_chunk。"
 
 #: ../../source/modules/models/overview.rst:132
-#: a9212dba24074018af23368835e86829
+#: 634eda83774c4028b3d27ff0672d2cf2
 msgid ""
 "In conclusion, the current model will use the wind speed of the past 4 "
 "hours to predict the wind speed of the future 2 hours. Meanwhile, it can "
@@ -262,17 +263,17 @@ msgstr ""
 " `skip_chunk_len` 设置为一个正整数来实现。"
 
 #: ../../source/modules/models/overview.rst:137
-#: 96fb90ae1dfb4e86ac37d4ec8ffe8d93
+#: d0d2a19a92c1477399b5c744498179d1
 msgid "2.2. Fit"
 msgstr "2.2. 训练"
 
 #: ../../source/modules/models/overview.rst:139
-#: 21473ba028584f5d85f09a687bed479a
+#: a2fc302614bb4c24acb89dba6d42c1c9
 msgid "All the time series models in PaddleTS have the same fit interface."
 msgstr "在PaddleTS中，所有的时序模型具有相同的训练接口。"
 
 #: ../../source/modules/models/overview.rst:141
-#: cb4a56455ad04eb5a07b747c259e9b81
+#: 598e3cc383634c35bfb5cb9483ceca37
 msgid ""
 "To allow users to focus more on the higher level view, the fit method "
 "accepts TSDatasets as the training data argument rather than an array-"
@@ -283,22 +284,22 @@ msgstr ""
 "从而完成了对基于数据集拆分样本集合的细节的封装。"
 
 #: ../../source/modules/models/overview.rst:145
-#: 9adec75528eb44a4a59f890ce46b2af9
+#: 1cd97e0d4d4b48af8cfd9c529479ab2f
 msgid "The simplified fit method is as follows:"
 msgstr "下面展示了简化版的fit方法："
 
 #: ../../source/modules/models/overview.rst:164
-#: 94ad9a23852541e4aae44119d42a8e89
+#: ae165659453740d5997df15b111a3eb8
 msgid "See below Figure 2 for further explanation:"
 msgstr "参考以下图2作为进一步解释说明："
 
-#: ../../source/modules/models/overview.rst:-1 31af08ee01d84011bebb9f5429a40e9d
-#: 455ca7169e2f4603a8399be755e4c333
+#: ../../source/modules/models/overview.rst:-1 26d1de0c84ad4ada9ab881d7ae51dd9d
+#: 83baf2ee53c64f97b7374aff81df9b75
 msgid "TSDataset Example"
 msgstr "TSDataset 示例"
 
 #: ../../source/modules/models/overview.rst:169
-#: dd92e80dfcbd471d952938b567b9b4e5
+#: 661e91faa3064fb3a4b26e75e458f4b3
 msgid ""
 "In this case, the fit method takes the above grey-highlighted TSDataset "
 "as the train_data argument and internally split the TSDataset into a set "
@@ -308,12 +309,12 @@ msgstr ""
 "并且在内部完成了数据集的拆分和样本集的构建（如上图中红色高亮部分所示）。"
 
 #: ../../source/modules/models/overview.rst:174
-#: 0247e18f28a74c2cbb5b5479f9639850
+#: 5546ea56643e4f8787c96eca6404aea9
 msgid "2.3. Predict"
 msgstr "2.3. 预测"
 
 #: ../../source/modules/models/overview.rst:176
-#: 01aba9ffdc4e4e6d87d06dd14015faba
+#: 748318a2d952416e8d7488ab2d407118
 msgid ""
 "All models have the same predict interface. It accepts a TSDataset "
 "argument contains both `past target` and corresponding covariates, then "
@@ -326,55 +327,55 @@ msgstr ""
 "target` 时序数据块，其长度等于 `out_chunk_len`。"
 
 #: ../../source/modules/models/overview.rst:180
-#: 701abe83b6654842936a33fa924dfbad
+#: ba7c5341a2664418a18b8b19d267efdc
 msgid "The following points are worthwhile to be aware of:"
 msgstr "对于该接口，有以下几点值得注意："
 
 #: ../../source/modules/models/overview.rst:182
-#: 8ffcff0ec88c47be88eb3bd5be7519b3
+#: e7f242d1eb494a20a58a9aba725c7132
 msgid ""
 "The TSDataset argument of this method only contains the past target and "
 "corresponding covariates, but not contain the future target."
 msgstr "当前方法的TSDataset入参中仅包含过去的观测target和一些相关的协变量，并不包括未来的target。"
 
 #: ../../source/modules/models/overview.rst:183
-#: 3e4a8779d7c04580bef184c1776849db
+#: affa94f05abd4025b23c5a0f6403e792
 msgid "The predict method only constructs one sample from the TSDataset argument."
 msgstr "预测方法仅会从给定的数据集参数中构建一条样本。"
 
 #: ../../source/modules/models/overview.rst:184
-#: 66ad99af1acb475aa4b598bcb32cae34
+#: a0ba4f122e3e4b999cc7349cc12a909a
 msgid ""
 "The length of the predicted result for a single `predict` call is equal "
 "to out_chunk_len."
 msgstr "对于单次 `predict` 方法的调用，预测得到的结果的长度等于out_chunk_len的值。"
 
 #: ../../source/modules/models/overview.rst:186
-#: ea575203448340dab9d9a10d4ccdc136
+#: fe6370e6784246ea878b2a1f10bb5943
 msgid "Below is the simplified `predict` method:"
 msgstr "下方展示了简化版的 `predict` 方法："
 
 #: ../../source/modules/models/overview.rst:201
-#: 7a43cb035f104065802a4e57fa56dbd2
+#: 1ca13b1a9864415f91c3dd570ac14788
 msgid ""
 "We will further explain it through a concrete example. Suppose we have a "
 "TSDataset shown in the below Figure 3:"
 msgstr "我们用一个具体示例进一步对其说明。假设我们有一个如下图3所示的TSDataset数据集："
 
 #: ../../source/modules/models/overview.rst:206
-#: 3b5b1c3f9ba44046a8529cfdc9f0ed73
+#: 917ce842367a4ea0aaccab268b2b8c82
 msgid ""
 "given in_chunk_len = 2, out_chunk_len = 2, skip_chunk_len = 1, the "
 "following statements hold:"
 msgstr "给定 in_chunk_len = 2, out_chunk_len = 2, skip_chunk_len = 1, 则以下叙述成立："
 
 #: ../../source/modules/models/overview.rst:208
-#: d3d88954b6fd4e8792e3a1e3a5c64935
+#: d7f1fc6099c043aba64565f837d61ed7
 msgid "The data between 7:00 and 13:00 will all be treated as the `past target`."
 msgstr "在 7:00 到 13:00 之间的数据都将被视为过去的target数据。"
 
 #: ../../source/modules/models/overview.rst:209
-#: 02c1e1fe405a4026b9fecc1d799edfc4
+#: 93f0e538253048138985bda0d4321ffc
 msgid ""
 "As only one sample will be constructed per each call, while known that "
 "in_chunk_len = 2, skip_chunk_len = 1, out_chunk_len = 2, thus the data "
@@ -386,12 +387,12 @@ msgstr ""
 "16:00 之间的未来数据， 其中14:00点的数据会被跳过。"
 
 #: ../../source/modules/models/overview.rst:214
-#: dc74e7164f164b9b858a6972db8e0bb5
+#: 15060dced9ac49bb827a09ff9688318a
 msgid "2.4. Recursive predict"
 msgstr "2.4. 递归多步预测"
 
 #: ../../source/modules/models/overview.rst:215
-#: 0c1dd7c5ed344256a7ccb86ab8d285b8
+#: 9a142b0e55c94ed486c373bb2a3771a3
 msgid ""
 "All models have the same `model.recursive_predict` interface. The "
 "recursive strategy involves applying `model.predict` method iteratively "
@@ -400,11 +401,11 @@ msgid ""
 "appear in the loopback window for the next call."
 msgstr ""
 "所有模型均拥有一致的递归多步预测接口。递归多步预测的策略是：一步步利用 `model.predict` "
-"方法实现多步时序预测。当前时刻的预测结果会被添加至 `TSDataset` 时序数据集"
-"的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。"
+"方法实现多步时序预测。当前时刻的预测结果会被添加至 `TSDataset` "
+"时序数据集的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。"
 
 #: ../../source/modules/models/overview.rst:220
-#: 79ea786b928e4de190b8889b6dffd9b1
+#: a8a63f652147481a8a3a702631c9c0c6
 msgid ""
 "Note that each call of `model.predict` will return a result of length "
 "`out_chunk_len`, so `model.recursive_predict` will be called "
@@ -415,24 +416,24 @@ msgstr ""
 "ceiling(`predict_length`/`out_chunk_len`) 次，以满足多步时序的输出长度需求。"
 
 #: ../../source/modules/models/overview.rst:223
-#: cd619de7ec824a43869e36529988658b
+#: 54cb4479efa94989942256e80b414937
 msgid ""
 "For example, the `out_chunk_length` of the model mentioned before is 96, "
 "but `model.recursive_predict` allows you to set `predict_length` as 3 * "
 "96 or more, then you get a predicted result of length 3 * 96."
 msgstr ""
-"例如，上述例子中的 `Model` 的 `out_chunk_length` 是 96 ，而 `model.recursive_predict` 允许你将 "
-"`predict_length` 设置为 3 * 96 或者更多。"
+"例如，上述例子中的 `Model` 的 `out_chunk_length` 是 96 ，而 `model.recursive_predict` "
+"允许你将 `predict_length` 设置为 3 * 96 或者更多。"
 
 #: ../../source/modules/models/overview.rst:231
-#: c1624f85a4704bee8497066ff2cc8cbe
+#: 1f6a389c39cc4aef89bcc1395d2d139e
 msgid ""
 "Note that `model.recursive_predict` is not supported when "
 "`model.skip_chunk` != 0."
 msgstr "注意： `model.recursive_predict` 函数在 `model.skip_chunk` != 0 时，无法使用。"
 
 #: ../../source/modules/models/overview.rst:233
-#: a69e9d38281a40249e10c17c099a5be0
+#: fbbc93b4256a444591549b8b77551850
 msgid ""
 "For detailed usage, please refer to `API: BaseModel.recursive_predict "
 "<../../api/paddlets.models.base.html#paddlets.models.base.BaseModel.recursive_predict>`_"
@@ -442,21 +443,21 @@ msgstr ""
 "<../../api/paddlets.models.base.html#paddlets.models.base.BaseModel.recursive_predict>`_"
 
 #: ../../source/modules/models/overview.rst:235
-#: 425407dfaef64389bcf745491f98e00f
+#: 8bd3ceae41fd4d979189cf32a0a7dd4c
 msgid ""
 "For advanced predict-related capability `Backtest`, please refer to `API:"
-" Backtest <../../api/paddlets.models.utils.backtest.html>`_ ."
+" Backtest <../../api/paddlets.utils.backtest.html>`_ ."
 msgstr ""
 "对于PaddleTS提供的与预测相关的 `Backtest` 回测能力，请参考：`API: Backtest "
 "<../../api/paddlets.utils.backtest.html>`_"
 
 #: ../../source/modules/models/overview.rst:238
-#: 5b0fae6be36c43b499382437463330bc
+#: eb6299901afe4036b832ac8a7d184569
 msgid "2.5. Model persistence"
 msgstr "2.5. 模型持久化"
 
 #: ../../source/modules/models/overview.rst:240
-#: 6c38cce10c004fe0a783294bdfd9ef83
+#: 386d4a7b5bee4bc4be31355cf8d40d31
 msgid ""
 "After fitting a PaddleBaseModel, it is necessary to have a way to persist"
 " the model for future use without retraining the model. We also provide a"
@@ -464,14 +465,13 @@ msgid ""
 msgstr "模型训练完成后，我们仍需提供一种将训练完成的模型持久化的方法，以便在未来希望使用该模型时无需对其重复训练。同时，我们也提供一个统一的方法，用于加载一个已经被保存在硬盘上的PaddleBaseModel模型。"
 
 #: ../../source/modules/models/overview.rst:243
-#: 258a6180bb7441a696785efd127e63d2
+#: 676eca994785406dbec681173cefeff7
 msgid ""
 "The following sections show you how to persist a PaddleBaseModel. Note "
 "that a model can be saved multiple times."
 msgstr "以下的代码示例展示了如何持久化保存一个 PaddleBaseModel 模型。请注意，同一个模型可以被保存多次。"
 
 #: ../../source/modules/models/overview.rst:262
-#: bfafd52fc1bf43948ecbe34e9bd81866
+#: 672bc390289a471da376615c052e9c12
 msgid "Later you can load back the persisted model with:"
 msgstr "在模型保存完成的一段时间之后，您可以通过以下方式加载模型："
-

@@ -2,7 +2,7 @@
 Transform
 ==========
 
-Before reading this document, it is recommended to first read the `TSDataset Document <../datasets/overview>`_ to understand the design of `TSDataset`.
+Before reading this document, it is recommended to first read the `TSDataset Document <../datasets/overview.html>`_ to understand the design of `TSDataset`.
 Simply speaking, `TSDataset` is a unified time series data structure throughout the modeling lifecycle.
 It introduces several fundamental but important time series related concepts such as
 ``target`` (including ``past_target`` and ``future_target``) and ``covariates`` (including ``known_covariates`` and ``observed_covariates``).
@@ -44,7 +44,7 @@ The below demo takes `OneHot <../../api/paddlets.transform.onehot.html>`_ as an 
     # 3 fit the encoder
     encoder.fit(dataset=data)
     
-    # 4 do transforamtion with the learnt encoder
+    # 4 do transformation with the learnt encoder
     transformed_data = encoder.transform(data, inplace=False)
 
 
