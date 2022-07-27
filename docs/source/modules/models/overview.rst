@@ -2,7 +2,7 @@
 Models
 =========
 
-Before reading this document, it is recommended to first read the `TSDataset Document <../datasets/overview>`_ to understand the design of `TSDataset`.
+Before reading this document, it is recommended to first read the `TSDataset Document <../datasets/overview.html>`_ to understand the design of `TSDataset`.
 Simply speaking, `TSDataset` is a unified time series data structure throughout the whole modeling lifecycle.
 It introduces several fundamental but important time series related concepts such as
 ``target`` (including ``past_target`` and ``future_target``) and ``covariates`` (including ``known_covariates`` and ``observed_covariates``).
@@ -72,7 +72,7 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
 PaddleBaseModel is the base class for all PaddlePaddle-based time series models.
 Below is a simplified version of the **PaddleBaseModel** class declaration,
 the lengthy implementation details are skipped,
-you may refer to the `PaddleBaseModel API <../../api/paddlets.models.dl.paddlepaddle.paddle_base>`_ to get a full view.
+you may refer to the `PaddleBaseModel API <../../api/paddlets.models.dl.paddlepaddle.paddle_base.html>`_ to get a full view.
 
 
 2.1. Construct method
@@ -232,7 +232,7 @@ Note that `model.recursive_predict` is not supported when `model.skip_chunk` != 
 
 For detailed usage, please refer to `API: BaseModel.recursive_predict <../../api/paddlets.models.base.html#paddlets.models.base.BaseModel.recursive_predict>`_ .
 
-For advanced predict-related capability `Backtest`, please refer to `API: Backtest <../../api/paddlets.models.utils.backtest.html>`_ .
+For advanced predict-related capability `Backtest`, please refer to `API: Backtest <../../api/paddlets.utils.backtest.html>`_ .
 
 2.5. Model persistence
 --------------------------

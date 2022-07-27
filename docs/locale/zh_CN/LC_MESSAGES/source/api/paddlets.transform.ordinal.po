@@ -44,7 +44,7 @@ msgstr "需要进行编码的列名"
 
 #: paddlets.transform.ordinal.Ordinal:5 eacfaf4eb7884a73ba759500fff91183 of
 msgid "{‘error’, ‘use_encoded_value’}, default=’error’"
-msgstr "可选值为{‘error’, ‘use_encoded_value’}， 默认为erro"
+msgstr "可选值为{‘error’, ‘use_encoded_value’}， 默认为error"
 
 #: paddlets.transform.ordinal.Ordinal:7 ca77376a4a5d4cd895a7f4cd3e584c33 of
 msgid "Whether to delete the original column, default=False."

@@ -58,13 +58,6 @@ Install PaddleTS with pip
 
     python -m pip install paddlets
 
-Install PaddleTS with conda
-----------------------------------
-
-::
-
-    conda install paddlets
-
 Install PaddleTS with docker
 ====================================
 `Docker <https://docs.docker.com/engine/install/>`_ needs to be installed locally.
@@ -74,11 +67,12 @@ Install PaddleTS with docker
 
 ::
 
-    docker pull registry.baidubce.com/paddlets:latest
+    docker pull registry.baidubce.com/paddlets/paddlets:0.1.0
 
 2）Start container
 -----------------------
 
 ::
 
-    docker run --name paddle_docker -it -v $PWD:/paddle registry.baidubce.com/paddlets:latest  /bin/bash
+    docker run --name paddle_docker -it -v $PWD:/paddle registry.baidubce.com/paddlets/paddlets:0.1.0  /bin/bash
+

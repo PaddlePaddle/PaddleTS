@@ -8,33 +8,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 21:21+0800\n"
+"POT-Creation-Date: 2022-07-26 11:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
-#: ../../source/api/paddlets.utils.utils.rst:2 bf095d6508af4f8988b8f1fe2a035476
+#: ../../source/api/paddlets.utils.utils.rst:2 6e8ffdc051714bccb1c1dfa1bf2f184d
 msgid "paddlets.utils.utils"
 msgstr ""
 
-#: 9a8d5d4e9f1545be8430538a48c533bb paddlets.utils.utils.check_model_fitted:1 of
+#: 3f7c98094c604ce890bab1658c4ac31a of
+#: paddlets.utils.utils.check_model_fitted:1
 msgid "check if model has fitted, Raise Exception if not fitted"
 msgstr "检查模型是否已拟合，如果未拟合则抛出异常"
 
-#: 3608be96e14b4d739fdfbb8f3e646803 paddlets.utils.utils.check_model_fitted
-#: paddlets.utils.utils.get_uuid e8c69aa4d0f440128774dcf1b0f3e784 of
+#: 0e1472dfe7e54cc3bb15a7f5cbe855a5 4982ab5f6b6643929defa18decf021c1 of
+#: paddlets.utils.utils.check_model_fitted paddlets.utils.utils.get_uuid
 msgid "Parameters"
 msgstr ""
 
-#: 079ba9c2f8d041afba7687027ad0e62f paddlets.utils.utils.check_model_fitted:3 of
+#: c5dba20c1d8d40fa9c401f7ce2bb91b8 of
+#: paddlets.utils.utils.check_model_fitted:3
 msgid "model instance."
 msgstr "模型实例"
 
-#: paddlets.utils.utils.check_model_fitted:5 c7de9a67f41342f3b8fb26ceb62d214b of
+#: 55110f3dc7934748887572330e4a4b65 of
+#: paddlets.utils.utils.check_model_fitted:5
 #, python-format
 msgid ""
 "str, default=None The default error message is, \"This %(name)s instance "
@@ -44,31 +47,36 @@ msgid ""
 "\"Estimator, %(name)s, must be fitted before sparsifying\"."
 msgstr "报错消息，不设置即为默认值"
 
-#: 24e94bad965742ddb9ed2800e6995e37 78222e1d5d6a4e2a83f65275c2a818bc
-#: paddlets.utils.utils.check_model_fitted paddlets.utils.utils.get_uuid of
+#: 26e332f349f94af5959c1ed4d816a6b5 727f7433a96a4da095c5cb0c47b457f2 of
+#: paddlets.utils.utils.check_model_fitted paddlets.utils.utils.get_uuid
 msgid "Returns"
 msgstr ""
 
-#: 7ac1a20e214d48179c59ebe2f5fbc209 paddlets.utils.utils.check_model_fitted:14 of
+#: 0914e9de214b4a7d9f419a4a256c2cf0 of
+#: paddlets.utils.utils.check_model_fitted:14
 msgid "None"
 msgstr ""
 
-#: 756d5bc3c1f847aabdaaf6a9a7061220 paddlets.utils.utils.check_model_fitted of
+#: 58cd4855cfac4aec97364f00816dfa4e of paddlets.utils.utils.check_model_fitted
 msgid "Raises"
 msgstr ""
 
-#: 8880b98c9c424b48a32d226c248a0138 paddlets.utils.utils.get_uuid:1 of
-msgid "get short UUID"
+#: 5caf8e8f221a4ff3814fdf63459aeb7c of paddlets.utils.utils.get_uuid:1
+msgid "Get a random string of 16 characters."
+msgstr "获取一个16个字符的随机字符串。"
+
+#: 45ca62b1d2eb4c6abec2245e8c1b283f of paddlets.utils.utils.get_uuid:3
+msgid "The prefix of the returned string."
+msgstr "返回字符串的前缀。"
+
+#: c320b5f1870544a58a77d5ea249d645a of paddlets.utils.utils.get_uuid:5
+msgid "The suffix of the returned string."
+msgstr "返回字符串的后缀。"
+
+#: e69cb5ace5844ea6b131fd7fd6183848 of paddlets.utils.utils.get_uuid:8
+msgid "String of 16 characters."
+msgstr "16个字符的字符串。"
+
+#: affba1ff965042328f357dd6f09d1f41 of paddlets.utils.utils.get_uuid
+msgid "Return type"
 msgstr ""
-
-#: 5cada75474484ae7a149261d6e60d60a paddlets.utils.utils.get_uuid:3 of
-msgid "data to be predicted"
-msgstr ""
-
-#: 9b2b197d051a4ca1af224cd044f797ba paddlets.utils.utils.get_uuid:5 of
-msgid "prefix & 16 random letters"
-msgstr "prefix + 16位随机符号"
-
-#~ msgid "get short UUID :param prefix: data to be predicted"
-#~ msgstr "获取UUID"
-

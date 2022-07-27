@@ -519,7 +519,7 @@ class TSDataset(object):
         known_cov(TimeSeries|None): Known covariates
         static_cov(dict|None): Static covariates
         fill_missing_dates(bool): Fill missing dates or not
-        fillna_method(str): Method of filling missing values. Totally 8 methods are supported currently:
+        fillna_method(str): Method of filling missing values. Totally 7 methods are supported currently:
             max: Use the max value in the sliding window
             min: Use the min value in the sliding window
             avg: Use the mean value in the sliding window
@@ -651,7 +651,7 @@ class TSDataset(object):
             static_cov_cols(list|str|None): The names of columns for static covariates
             freq(str|int|None): A str or int representing the DateTimeIndex's frequency or RangeIndex's step size
             fill_missing_dates(bool): Fill missing dates or not
-            fillna_method(str): Method of filling missing values. Totally 8 methods are supported currently:
+            fillna_method(str): Method of filling missing values. Totally 7 methods are supported currently:
                 max: Use the max value in the sliding window
                 min: Use the min value in the sliding window
                 avg: Use the mean value in the sliding window
@@ -1481,7 +1481,7 @@ class TSDataset(object):
     
     @property
     def freq(self):
-        """the _freq"""
+        """Frequency of TSDataset"""
         return self._freq
 
     @classmethod

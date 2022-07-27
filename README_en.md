@@ -49,15 +49,17 @@ In future, more advanced features will be coming, including:
 
 Specifically, PaddleTS consists of the following modules:
 
-| Module                                                                                                     | Description                                                                                                                     |
-|------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets.                                   |
-| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html) | Data preprocessing and data transformations.                                                                                    |
-| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)       | PaddlePaddle-based deep nueral network models for time series modeling.                                                         |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)   | Pipeline for building time sereis analysis and modeling workflows.                                                             |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | Metrics for measuring the performance of a model.                                                                               |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | Quick data exploration and advanced data analysis.                                                                              |
-| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)      | Utility functions.                                                                                                              |
+
+| Module                                                                                                     | Description                                                                                   |
+|------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets. |
+| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html) | Data preprocessing and data transformations.                                                  |
+| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)       | PaddlePaddle-based deep neural network models for time series modeling.                       |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)   | Pipeline for building time series analysis and modeling workflows.                            |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | Metrics for measuring the performance of a model.                                             |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | Quick data exploration and advanced data analysis.                                            |
+| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)      | Utility functions.                                                                            |
+
 
 ## Installation
 
