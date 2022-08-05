@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot 
 
-from paddlets import TimeSeries, TSDataset
-from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
+from bts import TimeSeries, TSDataset
+from bts.logger import Logger, raise_if_not, raise_if, raise_log
 
 logger = Logger(__name__)
 
@@ -25,6 +25,7 @@ class Analyzer(ABC):
 
     """
     def __init__(self, **kwargs):
+        self._res = None
         self._kwargs = kwargs
 
     def _build_analysis_data(
@@ -151,5 +152,5 @@ class Analyzer(ABC):
 
         """
         array = self._build_analysis_data(tsdataset, columns, **self._kwargs)
-        self.res = self.analyze(array, **self._kwargs)
-        return self.res
+        self._res = self.analyze(array, **self._kwargs)
+        return self._res

@@ -10,10 +10,10 @@ import time
 import unittest
 from unittest import TestCase
 
-from paddlets.datasets.tsdataset import TimeSeries, TSDataset
-from paddlets.analysis import FFT
-from paddlets.analysis import STFT
-from paddlets.analysis import CWT
+from bts.datasets.tsdataset import TimeSeries, TSDataset
+from bts.analysis import FFT
+from bts.analysis import STFT
+from bts.analysis import CWT
 
 
 class TestFrequencyDomain(TestCase):
@@ -82,9 +82,16 @@ class TestFrequencyDomain(TestCase):
         for i in range(len(expect_target_amplitude)):
             self.assertAlmostEqual(expect_target_amplitude[i], real_target_amplitude[i], 4)
 
-        #test_get_properties()
+        #case9, test_get_properties()
         res = FFT().get_properties().get("name")
         self.assertEqual(res, "fft")
+        
+        #case10, test plot
+        fft = FFT()
+        res = fft(ts, ['target', 'c0', 'c3'])
+        plot = fft.plot()
+        plot.savefig('/tmp/fft.png')
+
     
     def test_STFT(self):
         """
@@ -169,10 +176,16 @@ class TestFrequencyDomain(TestCase):
         self.assertEqual(res['target_f'].shape, (11, ))
         self.assertEqual(res['target_Zxx'].shape, (11, 3))
 
-        #test_get_properties()
+        #case11, test_get_properties()
         res = STFT().get_properties().get("name")
         self.assertEqual(res, "stft")
-    
+        
+        #case12, test plot
+        stft = STFT()
+        res = stft(ts, 'target')
+        plot = stft.plot()
+        plot.savefig('/tmp/stft.png')
+        
     def test_CWT(self):
         """
         unittest function
@@ -231,8 +244,13 @@ class TestFrequencyDomain(TestCase):
         #case7 test_get_properties()
         res = CWT().get_properties().get("name")
         self.assertEqual(res, "cwt")
+        
+        #case8, test plot
+        cwt = CWT(scales=100)
+        res = cwt(ts, ['target', 'c0', 'c3'])
+        plot = cwt.plot()
+        plot.savefig('/tmp/cwt.png')
 
 
 if __name__ == "__main__":
     unittest.main()
-

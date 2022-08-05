@@ -12,10 +12,11 @@ import pandas as pd
 from scipy.fftpack import fft, fftfreq
 from scipy.signal import stft
 from pywt import cwt
+import matplotlib.pyplot as plt
 
-from paddlets import TimeSeries, TSDataset
-from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
-from paddlets.analysis.base import Analyzer
+from bts import TimeSeries, TSDataset
+from bts.logger import Logger, raise_if_not, raise_if, raise_log
+from bts.analysis.base import Analyzer
 
 logger = Logger(__name__)
 
@@ -49,6 +50,8 @@ class FFT(Analyzer):
         self._half = half
         if self._fs == 0:
             logger.warning("It's suggested to assign a positive number to the fs parameter.")
+        self._columns = []
+
 
     def analyze(
         self,
@@ -120,6 +123,7 @@ class FFT(Analyzer):
         if isinstance(X, pd.DataFrame):
             fft_dict = {}
             for col_name in X:
+                self._columns.append(col_name)
                 col = X[col_name]
                 #Skip columns that are not numerical
                 if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
@@ -133,7 +137,7 @@ class FFT(Analyzer):
 
             if len(fft_dict) == 0:
                 raise_log(ValueError("All the values in the columns are invalid, please check the data."))
-
+            
             return pd.DataFrame(fft_dict)
         else:
             raise_log(ValueError("The data format must be pd.Series or pd.DataFrame."))
@@ -148,6 +152,34 @@ class FFT(Analyzer):
             "report_heading": "FFT",
             "report_description": "Frequency domain analysis of signal based on fast Fourier transform."
         }
+
+    def plot(self) -> "pyplot":
+        """
+        display fft result.
+
+        Args:
+            None
+
+        Returns:
+            plt(matplotlib.pyplot object): The fft figure
+
+        Raise:
+            None
+        """
+        columns_num = len(self._columns)
+        fig, ax = plt.subplots(columns_num, 1, squeeze=False)
+        for i in range(0, columns_num):
+            col_name = self._columns[i]
+            x = self._res[col_name + '_x'].tolist()
+            y = self._res[col_name + '_amplitude'].tolist()
+            ax[i, 0].plot(x, y)
+            ax[i, 0].set_title(col_name + ' FFT Magnitude')
+            ax[i, 0].set_xlabel('Frequency')
+            ax[i, 0].set_ylabel('Amplitude')
+        
+        plt.tight_layout()
+        
+        return plt
 
 
 class STFT(Analyzer):
@@ -220,6 +252,7 @@ class STFT(Analyzer):
             raise_log(ValueError("nperseg must be a positive integer."))
         if self._fs == 0:
             raise_log(ValueError("fs parameter can't be 0."))
+        self._columns = []
 
     def analyze(
         self,
@@ -278,6 +311,7 @@ class STFT(Analyzer):
             stft_dict = {}
             for col_name in X:
                 col = X[col_name]
+                self._columns.append(col_name)
                 #Skip columns that are not numerical
                 if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
                     logger.warning("The values in the column %s should be numerical." % (col_name))
@@ -305,6 +339,35 @@ class STFT(Analyzer):
             "report_heading": "STFT",
             "report_description": "Time-frequency analysis of signal based on short-time Fourier transform."
         }
+    
+    def plot(self) -> "pyplot":
+        """
+        display stft result.
+
+        Args:
+            None
+
+        Returns:
+            plt(matplotlib.pyplot object): The stft figure
+
+        Raise:
+            None
+        """
+        columns_num = len(self._columns)
+        fig, ax = plt.subplots(columns_num, 1, squeeze=False)
+        for i in range(0, columns_num):
+            col_name = self._columns[i]
+            f = self._res[col_name + '_f'].tolist()
+            t = self._res[col_name + '_t'].tolist()
+            Zxx = self._res[col_name + '_Zxx'].tolist()
+            ax[i, 0].pcolormesh(t, f, np.abs(Zxx), shading='auto')
+            ax[i, 0].set_title(col_name + ' STFT Magnitude')
+            ax[i, 0].set_xlabel('Time')
+            ax[i, 0].set_ylabel('Frequency')
+        
+        plt.tight_layout()
+        
+        return plt
 
 
 class CWT(Analyzer):
@@ -359,6 +422,7 @@ class CWT(Analyzer):
             raise_log(ValueError("scales must be greater than 1."))
         if self._fs == 0:
             raise_log(ValueError("fs parameter can't be 0."))
+        self._columns = []
 
     def analyze(
         self,
@@ -414,6 +478,7 @@ class CWT(Analyzer):
         if isinstance(X, pd.DataFrame):
             cwt_dict = {}
             for col_name in X:
+                self._columns.append(col_name)
                 col = X[col_name]
                 #Skip columns that are not numerical
                 if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
@@ -442,4 +507,32 @@ class CWT(Analyzer):
             "report_heading": "CWT",
             "report_description": "Time-frequency analysis of signal based on continuous wavelet transform."
         }
+    
+    def plot(self) -> "pyplot":
+        """
+        display cwt result.
 
+        Args:
+            None
+
+        Returns:
+            plt(matplotlib.pyplot object): The cwt figure
+
+        Raise:
+            None
+        """
+        columns_num = len(self._columns)
+        fig, ax = plt.subplots(columns_num, 1, squeeze=False)
+        for i in range(0, columns_num):
+            col_name = self._columns[i]
+            f = self._res[col_name + '_frequencies'].tolist()
+            t = self._res[col_name + '_t'].tolist()
+            coefs = self._res[col_name + '_coefs'].tolist()
+            ax[i, 0].contourf(t, f, np.abs(coefs))
+            ax[i, 0].set_title(col_name + ' CWT Magnitude')
+            ax[i, 0].set_xlabel('Time')
+            ax[i, 0].set_ylabel('Frequency')
+        
+        plt.tight_layout()
+        
+        return plt
