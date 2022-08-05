@@ -14,9 +14,9 @@ from scipy.signal import stft
 from pywt import cwt
 import matplotlib.pyplot as plt
 
-from bts import TimeSeries, TSDataset
-from bts.logger import Logger, raise_if_not, raise_if, raise_log
-from bts.analysis.base import Analyzer
+from paddlets import TimeSeries, TSDataset
+from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
+from paddlets.analysis.base import Analyzer
 
 logger = Logger(__name__)
 

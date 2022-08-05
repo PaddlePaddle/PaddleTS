@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot 
 
-from bts import TimeSeries, TSDataset
-from bts.logger import Logger, raise_if_not, raise_if, raise_log
+from paddlets import TimeSeries, TSDataset
+from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
 
 logger = Logger(__name__)
 

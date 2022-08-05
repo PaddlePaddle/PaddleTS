@@ -10,10 +10,10 @@ import time
 import unittest
 from unittest import TestCase
 
-from bts.datasets.tsdataset import TimeSeries, TSDataset
-from bts.analysis import FFT
-from bts.analysis import STFT
-from bts.analysis import CWT
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.analysis import FFT
+from paddlets.analysis import STFT
+from paddlets.analysis import CWT
 
 
 class TestFrequencyDomain(TestCase):
