@@ -25,6 +25,7 @@ class Analyzer(ABC):
 
     """
     def __init__(self, **kwargs):
+        self._res = None
         self._kwargs = kwargs
 
     def _build_analysis_data(
@@ -151,5 +152,5 @@ class Analyzer(ABC):
 
         """
         array = self._build_analysis_data(tsdataset, columns, **self._kwargs)
-        self.res = self.analyze(array, **self._kwargs)
-        return self.res
+        self._res = self.analyze(array, **self._kwargs)
+        return self._res
