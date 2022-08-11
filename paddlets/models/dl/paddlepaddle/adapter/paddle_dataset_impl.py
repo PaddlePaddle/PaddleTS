@@ -258,7 +258,7 @@ class PaddleDatasetImpl(PaddleDataset):
     ):
         super(PaddleDatasetImpl, self).__init__()
 
-        self._supported_paddle_versions = {"2.2.0", "2.3.0"}
+        self._supported_paddle_versions = {"2.2.0", "2.3.0", "2.3.1"}
         self._curr_paddle_version = paddle.__version__
         self._rawdataset = rawdataset
         self._target_in_chunk_len = in_chunk_len
