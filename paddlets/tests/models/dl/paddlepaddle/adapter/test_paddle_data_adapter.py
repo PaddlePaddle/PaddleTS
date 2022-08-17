@@ -20,7 +20,7 @@ class TestDataAdapter(unittest.TestCase):
         unittest setup
         """
         self._curr_paddle_version = paddle.__version__
-        self._supported_paddle_versions = {"2.2.0", "2.3.0"}
+        self._supported_paddle_versions = {"2.2.0", "2.3.0", "2.3.1"}
         print("paddle version = %s, test date: %s" % (self._curr_paddle_version, datetime.datetime.now()))
         super().setUp()
 
