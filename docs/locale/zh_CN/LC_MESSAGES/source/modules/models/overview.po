@@ -132,7 +132,7 @@ msgstr ""
 "`PaddleBaseModel` 是所有基于PaddlePaddle框架构建的时序模型的基类。 下方展示了一个简化版的 "
 "`PaddleBaseModel` 类声明， 此处略去了源代码中冗长的实现细节， 旨在于展示最重要的接口定义部分。 您可以参考文档 "
 "`PaddleBaseModel API "
-"<../../api/paddlets.models.dl.paddlepaddle.paddle_base>`_ 获取完整的代码。"
+"<../../api/paddlets.models.dl.paddlepaddle.paddle_base.html>`_ 获取完整代码。"
 
 #: ../../source/modules/models/overview.rst:79 7ade0a1110c44b019f3d4e1ab88dcb0e
 msgid "2.1. Construct method"
