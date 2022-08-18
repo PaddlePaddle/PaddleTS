@@ -269,11 +269,8 @@ class PaddleDatasetImpl(PaddleDataset):
         self._sampling_stride = sampling_stride
         self._time_window = time_window
 
-        raise_if(
-            self._curr_paddle_version not in self._supported_paddle_versions,
-            "only the following paddle versions are supported: %s, current paddle version: %s" %
-            (self._supported_paddle_versions, self._curr_paddle_version)
-        )
+        if self._curr_paddle_version not in self._supported_paddle_versions:
+            logger.logger.info("recommended to use paddlepaddle >= 2.3.0")
         raise_if(rawdataset is None, "TSDataset must be specified.")
         raise_if(rawdataset.get_target() is None, "dataset target Timeseries must not be None.")
         raise_if(len(rawdataset.get_target().time_index) < 1, "TSDataset target Timeseries length must >= 1.")
