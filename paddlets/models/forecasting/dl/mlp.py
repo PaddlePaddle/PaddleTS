@@ -13,6 +13,8 @@ from paddlets.models.common.callbacks import Callback
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
 
+PAST_TARGET = "past_target"
+
 
 class _MLPBlock(paddle.nn.Layer):
     """Network structure.
@@ -62,8 +64,11 @@ class _MLPBlock(paddle.nn.Layer):
         Returns:
             paddle.Tensor: Output of model.
         """
-        X = paddle.transpose(X["past_target"], perm=[0, 2, 1])
-        return paddle.transpose(self._nn(X), perm=[0, 2, 1])
+        out = X[PAST_TARGET]
+        out = paddle.transpose(out, perm=[0, 2, 1])
+        out = self._nn(out)
+        out = paddle.transpose(out, perm=[0, 2, 1])
+        return out
 
 
 class MLPRegressor(PaddleBaseModelImpl):
@@ -157,9 +162,7 @@ class MLPRegressor(PaddleBaseModelImpl):
         tsdataset: TSDataset
     ):
         """Ensure the robustness of input data (consistent feature order), at the same time,
-            check whether the data types are compatible. If not, the processing logic is as follows.
-
-        Processing logic:
+            check whether the data types are compatible. If not, the processing logic is as follows:
 
             1> Integer: Convert to np.int64.
 
@@ -194,8 +197,9 @@ class MLPRegressor(PaddleBaseModelImpl):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        target_dim = train_tsdataset.get_target().data.shape[1]
         fit_params = {
-            "target_dim": train_tsdataset.get_target().data.shape[1]
+            "target_dim": target_dim
         }
         return fit_params
         
@@ -206,10 +210,9 @@ class MLPRegressor(PaddleBaseModelImpl):
             paddle.nn.Layer.
         """
         return _MLPBlock(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params["target_dim"],
-            self._hidden_config,
-            self._use_bn
+            in_chunk_dim=self._in_chunk_len,
+            out_chunk_dim=self._out_chunk_len,
+            target_dim=self._fit_params["target_dim"],
+            hidden_config=self._hidden_config,
+            use_bn=self._use_bn
         )
-

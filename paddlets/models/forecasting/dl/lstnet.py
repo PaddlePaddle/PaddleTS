@@ -10,8 +10,10 @@ import paddle
 
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.common.callbacks import Callback
-from paddlets.logger import raise_if_not
+from paddlets.logger import raise_if_not, Logger
 from paddlets.datasets import TSDataset
+
+PAST_TARGET = "past_target"
 
 
 class _LSTNetBlock(paddle.nn.Layer):
@@ -113,7 +115,7 @@ class _LSTNetBlock(paddle.nn.Layer):
             paddle.Tensor: Output of model.
         """
         # CNN
-        cnn_out = self._cnn(X["past_target"]) # [B, T, C]
+        cnn_out = self._cnn(X[PAST_TARGET]) # [B, T, C]
         cnn_out = F.relu(cnn_out) 
         cnn_out = self._dropout(cnn_out)
 
@@ -145,7 +147,7 @@ class _LSTNetBlock(paddle.nn.Layer):
         res = paddle.unsqueeze(res, axis=1)
 
         # Highway
-        ar_in = X["past_target"][:, -self._in_chunk_len:, :]
+        ar_in = X[PAST_TARGET][:, -self._in_chunk_len:, :]
         ar_in = paddle.transpose(ar_in, perm=[0, 2, 1])
         ar_out = self._ar_fc(ar_in)                       # [B, C, T]
         ar_out = paddle.transpose(ar_out, perm=[0, 2, 1]) # [B, T, C]
@@ -158,7 +160,11 @@ class _LSTNetBlock(paddle.nn.Layer):
 
 
 class LSTNetRegressor(PaddleBaseModelImpl):
-    """Long Short-term Time-series network.
+    """LSTNet\[1\] is a time series forecasting model introduced in 2018. LSTNet uses the 
+    Convolution Neural Network (CNN) and the Recurrent Neural Network (RNN) to extract short-term local 
+    dependency patterns among variables and to discover long-term patterns for time series trends.
+
+    \[1\] Lai G, et al. "Modeling Long- and Short-Term Temporal Patterns with Deep Neural Networks", `<https://arxiv.org/abs/1703.07015>`_
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -276,9 +282,7 @@ class LSTNetRegressor(PaddleBaseModelImpl):
         tsdataset: TSDataset
     ):
         """Ensure the robustness of input data (consistent feature order), at the same time,
-            check whether the data types are compatible. If not, the processing logic is as follows.
-
-        Processing logic:
+            check whether the data types are compatible. If not, the processing logic is as follows:
 
             1> Integer: Convert to np.int64.
 
@@ -313,8 +317,9 @@ class LSTNetRegressor(PaddleBaseModelImpl):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        target_dim = train_tsdataset.get_target().data.shape[1]
         fit_params = {
-            "target_dim": train_tsdataset.get_target().data.shape[1]
+            "target_dim": target_dim
         }
         return fit_params
         
@@ -325,17 +330,16 @@ class LSTNetRegressor(PaddleBaseModelImpl):
             paddle.nn.Layer.
         """
         return _LSTNetBlock(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params["target_dim"],
-            self._skip_size,
-            self._channels,
-            self._kernel_size,
-            self._rnn_cell_type,
-            self._rnn_num_cells,
-            self._skip_rnn_cell_type,
-            self._skip_rnn_num_cells,
-            self._dropout_rate,
-            self._output_activation
+            in_chunk_len=self._in_chunk_len,
+            out_chunk_len=self._out_chunk_len,
+            target_dim=self._fit_params["target_dim"],
+            skip_size=self._skip_size,
+            channels=self._channels,
+            kernel_size=self._kernel_size,
+            rnn_cell_type=self._rnn_cell_type,
+            rnn_num_cells=self._rnn_num_cells,
+            skip_rnn_cell_type=self._skip_rnn_cell_type,
+            skip_rnn_num_cells=self._skip_rnn_num_cells,
+            dropout_rate=self._dropout_rate,
+            output_activation=self._output_activation
         )
-

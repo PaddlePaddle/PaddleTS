@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-bts models forecasting dl.
+paddlets paddle dl model
 """

@@ -16,13 +16,16 @@ from paddlets.datasets import TSDataset
 
 logger = Logger(__name__)
 
+PAST_TARGET = "past_target"
+
 
 class _Chomp1d(paddle.nn.Layer):
-    """Auxiliary Causal convolution layer.
+    """Auxiliary causal convolution layer.
 
     TCN is based on two principles: 
         1> The convolution network produces an output of the same length as the input (by padding the input).
         2> No future information leakage. 
+
     The Chomp1d layer is used to slice the padding data to ensure that future information is not used.
 
     Args:
@@ -30,7 +33,6 @@ class _Chomp1d(paddle.nn.Layer):
 
     Attributes:
         _chomp_size(int): Slice length.
-
     """
     def __init__(self, chomp_size: int):
         super(_Chomp1d, self).__init__()
@@ -48,22 +50,24 @@ class _Chomp1d(paddle.nn.Layer):
         Returns:
             paddle.Tensor:  Output of Layer.
         """
-        return X[:, :-self._chomp_size, :]
+        if self._chomp_size > 0:
+            return X[:, :-self._chomp_size, :]
+        return X
 
 
 class _TemporalBlock(paddle.nn.Layer):
     """Paddle layer implementing a residual block.
 
     Args:
-        in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
-        out_chunk_len(int): The size of the forecasting horizon, i.e. the number of time steps output by the model.
+        in_channels(int): The number of channels in the input.
+        out_channels(int): The number of filter. It is as same as the output feature map.
         kernel_size(int): The filter size.
         padding(int): The size of zeros to be padded.
         dilation(int): The dilation size.
         dropout_rate(float): Probability of setting units to zero.
 
     Attributes:
-        _nn(paddle.nn.LayerList): Dynamic graph LayerList.
+        _network(paddle.nn.LayerList): Dynamic graph LayerList.
         _downsample(paddle.nn.Layer): Dynamic graph Layer.
     """
     def __init__(
@@ -76,31 +80,35 @@ class _TemporalBlock(paddle.nn.Layer):
         dropout_rate: float,
     ):
         super(_TemporalBlock, self).__init__()
-        Conv1D = partial(paddle.nn.Conv1D, data_format="NLC")
+        self._downsample = (
+            paddle.nn.Conv1D(
+                in_channels=in_channels, 
+                out_channels=out_channels, 
+                kernel_size=1, 
+                data_format="NLC"
+            ) if in_channels != out_channels else None
+        )
         conv1 = paddle.nn.utils.weight_norm(
-            Conv1D(
-                in_channels, 
-                out_channels, 
+            paddle.nn.Conv1D(
+                in_channels=in_channels, 
+                out_channels=out_channels, 
                 kernel_size=kernel_size,
                 padding=padding,
                 dilation=dilation,
-            )
-        )
+                data_format="NLC"
+            ))
         conv2 = paddle.nn.utils.weight_norm(
-            Conv1D(
-                out_channels, 
-                out_channels, 
+            paddle.nn.Conv1D(
+                in_channels=out_channels, 
+                out_channels=out_channels, 
                 kernel_size=kernel_size,
                 padding=padding,
                 dilation=dilation,
-            )
-        )
-        self._nn = paddle.nn.Sequential(
+                data_format="NLC"
+            ))
+        self._network = paddle.nn.Sequential(
             conv1, _Chomp1d(padding), paddle.nn.ReLU(), paddle.nn.Dropout(dropout_rate),
             conv2, _Chomp1d(padding), paddle.nn.ReLU(), paddle.nn.Dropout(dropout_rate),
-        )
-        self._downsample = (
-            Conv1D(in_channels, out_channels, 1) if in_channels != out_channels else None
         )
 
     def forward(
@@ -117,10 +125,10 @@ class _TemporalBlock(paddle.nn.Layer):
         """
         # In order to deal with the dimension mismatch during residual addition, 
         # use upsampling or downsampling to ensure that the input channel and output channel dimensions match.
-        res = (
+        residual = (
             self._downsample(X) if self._downsample else X
         )
-        return self._nn(X) + res
+        return self._network(X) + residual
 
 
 class _TCNBlock(paddle.nn.Layer):
@@ -135,7 +143,7 @@ class _TCNBlock(paddle.nn.Layer):
         dropout_rate(float): Probability of setting units to zero.
 
     Attrubutes:
-        _nn(paddle.nn.LayerList): Dynamic graph LayerList.
+        _temporal_layers(paddle.nn.LayerList): Dynamic graph LayerList.
     """
     def __init__(
         self,
@@ -176,20 +184,19 @@ class _TCNBlock(paddle.nn.Layer):
             f"The `out_chunk_len` must be <= `in_chunk_len`, "
             f"got out_chunk_len:{out_chunk_len} > in_chunk_len:{in_chunk_len}."
         )
-        channels, layers = [target_dim] + hidden_config + [target_dim], []
-        for k, (in_channel, out_channel) in enumerate(zip(channels[:-1], channels[1:])):
-            dilation = 2 ** k
-            layers.append(
-                _TemporalBlock(
-                    in_channel, 
-                    out_channel, 
-                    kernel_size=kernel_size,
-                    padding=(kernel_size - 1) * dilation,
-                    dilation=dilation,
-                    dropout_rate=dropout_rate
-                )
+        channels, temporal_layers = [target_dim] + hidden_config + [target_dim], []
+        for k, (in_channel, out_channel) in \
+            enumerate(zip(channels[:-1], channels[1:])):
+            temporal_layer = _TemporalBlock(
+                in_channels=in_channel, 
+                out_channels=out_channel, 
+                kernel_size=kernel_size,
+                padding=(kernel_size - 1) * (2 ** k),
+                dilation=(2 ** k),
+                dropout_rate=dropout_rate
             )
-        self._nn = paddle.nn.Sequential(*layers)
+            temporal_layers.append(temporal_layer)
+        self._temporal_layers = paddle.nn.Sequential(*temporal_layers)
 
     def forward(
         self,
@@ -203,12 +210,16 @@ class _TCNBlock(paddle.nn.Layer):
         Returns:
             paddle.Tensor: Output of model
         """
-        out = self._nn(X["past_target"])
+        out = X[PAST_TARGET]
+        out = self._temporal_layers(out)
         return out[:, -self._out_chunk_len:, :]
 
 
 class TCNRegressor(PaddleBaseModelImpl):
-    """Temporal Convolution Net.
+    """Temporal Convolution Net\[1\].
+
+    \[1\] Bai S, et al. "An empirical evaluation of generic convolutional and recurrent networks for sequence modeling", 
+    `<https://arxiv.org/pdf/1803.01271>`_
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -301,9 +312,7 @@ class TCNRegressor(PaddleBaseModelImpl):
         tsdataset: TSDataset
     ):
         """Ensure the robustness of input data (consistent feature order), at the same time,
-            check whether the data types are compatible. If not, the processing logic is as follows.
-
-        Processing logic:
+            check whether the data types are compatible. If not, the processing logic is as follows:
 
             1> Integer: Convert to np.int64.
 
@@ -338,8 +347,9 @@ class TCNRegressor(PaddleBaseModelImpl):
         Returns:
             Dict[str, Any]: model parameters
         """
+        target_dim = train_tsdataset.get_target().data.shape[1]
         fit_params = {
-            "target_dim": train_tsdataset.get_target().data.shape[1]
+            "target_dim": target_dim
         }
         return fit_params
         
@@ -350,11 +360,10 @@ class TCNRegressor(PaddleBaseModelImpl):
             paddle.nn.Layer.
         """
         return _TCNBlock(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params["target_dim"],
-            self._hidden_config,
-            self._kernel_size,
-            self._dropout_rate,
+            in_chunk_len=self._in_chunk_len,
+            out_chunk_len=self._out_chunk_len,
+            target_dim=self._fit_params["target_dim"],
+            hidden_config=self._hidden_config,
+            kernel_size=self._kernel_size,
+            dropout_rate=self._dropout_rate,
         )
-
