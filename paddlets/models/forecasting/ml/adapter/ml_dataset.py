@@ -1,53 +1,48 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from paddlets.datasets import TSDataset, TimeSeries
-from paddlets.logger.logger import Logger, raise_if
+from paddlets import TSDataset
+from paddlets.logger import raise_if
 
-import paddle
-from paddle.io import Dataset as PaddleDataset
 import numpy as np
 from typing import List, Dict, Tuple, Optional
 
-logger = Logger(__name__)
 
-
-class PaddleDatasetImpl(PaddleDataset):
+class MLDataset(object):
     """
-    An implementation of :class:`paddle.io.Dataset`.
+    Machine learning Dataset.
 
-    1> Any unused (known / observed) columns should be removed from the TSDataset before handled by this class.
+    1> The in_chunk_len can be divided into several case: in_chunk_len = 0 indicates that the ML model has been
+        processed by lag transform; in_chunk_len > 0 indicates that the ML model has NOT been processed by lag
+        transform; in_chunk_len < 0 is NOT allowed.
 
-    2> The default time_window assumes each sample contains X (i.e. in_chunk), skip_chunk, and
+    2> The unused (known / observed) columns should be deleted before the dataset passed in.
+
+    3> The default time_window assumes each sample contains X (i.e. in_chunk), skip_chunk, and
     Y (i.e. out_chunk).
 
-    3> If caller explicitly passes time_window parameter in, and time_window upper bound is larger than
+    4> If caller explicitly passes time_window parameter in, and time_window upper bound is larger than
     len(TSDataset._target) - 1, it means that each built sample will only contain X (i.e. in_chunk), but
-    will not contain skip_chunk or Y (i.e. out_chunk).
+    will not contain skip_chunk or Y (i.e. out_chunk). This occurs only if caller wants to build a sample
+    used for prediction, as only in this scenario the Y (i.e. out_chunk) is not required.
 
     Args:
-        rawdataset(TSDataset): Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.Dataset`.
-        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
-            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
-            default, it will NOT skip any time steps.
-        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
-            let `t` be the time index of target time series, `t[i]` be the start time of the i-th sample,
-            `t[i+1]` be the start time of the (i+1)-th sample, then `sampling_stride` represents the result of
-            `t[i+1] - t[i]`.
+        rawdataset(TSDataset): TSDataset to build.
+        in_chunk_len(int): The length of past target time series chunk for a single sample.
+        out_chunk_len(int): The length of future target time series chunk for a single sample.
+        skip_chunk_len(int): The length of time series chunk between past target and future target for a single sample.
+             The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
+        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample.
         time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
                 time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
                 Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
 
     Attributes:
-        _rawdataset(TSDataset) Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.Dataset`.
-        _target_in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-        _target_out_chunk_len(int): The size of the forecasting horizon, i.e. the number of time steps output by
-            the model.
-        _target_skip_chunk_len(int): The number of time steps between in_chunk and out_chunk for a single sample.
-            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
-            default, it will NOT skip any time steps.
+        _rawdataset(TSDataset) Tsdataset to build.
+        _target_in_chunk_len(int): The length of past target time series chunk for a single sample.
+        _target_out_chunk_len(int): The length of future target time series chunk for a single sample.
+        _target_skip_chunk_len(int): The length of time series chunk between past target and future target for a single
+            sample. The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
         _known_cov_chunk_len(int): The length of known covariates time series chunk for a single sample.
         _observed_cov_chunk_len(int): The length of observed covariates time series chunk for a single sample.
         _sampling_stride(int): Time steps to stride over the i-th sample and (i+1)-th sample.
@@ -244,7 +239,6 @@ class PaddleDatasetImpl(PaddleDataset):
             # Thus, the in_chunk should be [8, 9, 10, 11]
             # However, the tail index of the calculated in_chunk 11 is beyond the max target time series
             # (i.e. tsdataset.target[-1] = 10), so current target time series cannot provide 11 to build this sample.
-
     """
     def __init__(
         self,
@@ -255,23 +249,21 @@ class PaddleDatasetImpl(PaddleDataset):
         sampling_stride: int,
         time_window: Optional[Tuple] = None
     ):
-        super(PaddleDatasetImpl, self).__init__()
-
         self._rawdataset = rawdataset
         self._target_in_chunk_len = in_chunk_len
         self._target_out_chunk_len = out_chunk_len
         self._target_skip_chunk_len = skip_chunk_len
         self._known_cov_chunk_len = self._target_in_chunk_len + self._target_out_chunk_len
-        self._observed_cov_chunk_len = self._target_in_chunk_len
+        self._observed_cov_chunk_len = 1 if self._target_in_chunk_len == 0 else self._target_in_chunk_len
         self._sampling_stride = sampling_stride
         self._time_window = time_window
 
-        raise_if(rawdataset is None, "TSDataset must be specified.")
-        raise_if(rawdataset.get_target() is None, "dataset target Timeseries must not be None.")
+        raise_if(rawdataset is None, "TSDataset must not be None.")
+        raise_if(rawdataset.get_target() is None, "TSDataset target Timeseries must not be None.")
         raise_if(len(rawdataset.get_target().time_index) < 1, "TSDataset target Timeseries length must >= 1.")
         raise_if(
-            in_chunk_len <= 0,
-            "in_chunk_len must be positive integer, but %s is actually provided." % in_chunk_len
+            in_chunk_len < 0,
+            "in_chunk_len must be non-negative integer, but %s is actually provided." % in_chunk_len
         )
         raise_if(
             skip_chunk_len < 0,
@@ -291,9 +283,9 @@ class PaddleDatasetImpl(PaddleDataset):
             # The default time_window assumes each sample contains both X, skip_chunk and Y, thus requires the length
             # of the target timeseries must be greater than or equal to the sum of X, skip_chunk and Y.
             raise_if(
-                len(rawdataset.get_target().time_index) < in_chunk_len + skip_chunk_len + out_chunk_len,
+                len(rawdataset.get_target().time_index) < max(1, in_chunk_len) + skip_chunk_len + out_chunk_len,
                 """If time_window is not specified, TSDataset target timeseries length must be equal or larger than 
-                the sum of in_chunk_len, skip_chunk_len and out_chunk_len. 
+                the sum of max(1, in_chunk_len), skip_chunk_len and out_chunk_len. 
                 Current in_chunk_len = %s, skip_chunk_len = %s, out_chunk_len = %s.""" %
                 (in_chunk_len, skip_chunk_len, out_chunk_len)
             )
@@ -313,25 +305,25 @@ class PaddleDatasetImpl(PaddleDataset):
             "time window upper bound must be equal or smaller than %s" % max_allowed_window
         )
 
-        # Validates input TSDataset, raises if input rawdataset invalid.
-        # Firstly, validates target timeseries.
+        # Validates input TSDataset, raises if the passed data is invalid.
+        # Firstly, valid target timeseries.
         max_target_idx = len(rawdataset.get_target().time_index) - 1
         max_target_timestamp = rawdataset.get_target().time_index[max_target_idx]
         if self._time_window[1] > max_target_idx:
             # This `if` statement indicates that caller is building a sample only containing feature (i.e. X),
             # but NOT containing skip_chunk or label (i.e. Y).
             # Thus, as long as the target is long enough to build the X of a sample, it can be treated as valid.
-            min_allowed_target_len = in_chunk_len
+            min_allowed_target_len = max(1, in_chunk_len)
         else:
             # This `else` statement indicates that caller is building a sample both containing feature (i.e. X),
             # skip_chunk and label (i.e. Y).
             # Thus, as long as the target is long enough to build a (X + skip + Y) sample, it can be treated as valid.
-            min_allowed_target_len = in_chunk_len + skip_chunk_len + out_chunk_len
+            min_allowed_target_len = max(1, in_chunk_len) + skip_chunk_len + out_chunk_len
         raise_if(
             len(rawdataset.get_target().time_index) < min_allowed_target_len,
             """Given TSDataset target timeseries length is too short to build even one sample, 
             actual time_window: (%s, %s), actual target timeseries length: %s, min allowed sample length: %s. 
-            If time_window[1] > max target index, sample length includes X but not includes Y or skip chunk, 
+            If time_window[1] > max target index, sample length includes Y but not includes X or skip chunk, 
             else if time_window[1] <= max target index, sample length includes both X and skip chunk and Y.""" %
             (
                 self._time_window[0],
@@ -378,7 +370,6 @@ class PaddleDatasetImpl(PaddleDataset):
                 # thus causes the current known cov timeseries failed to build known_cov_chunk features for the sample.
                 # END.
                 raise_if(
-                    # `pd.Timestamp` data type can be compared using `<` operator directly.
                     known_timeindex[-1] < max_target_timestamp,
                     """If time_window upper bound is larger than len(target timeseries) - 1, 
                     known_cov max timestamp must be equal or larger than target max timestamp. 
@@ -393,17 +384,17 @@ class PaddleDatasetImpl(PaddleDataset):
                     )
                 )
                 # Compute the index position of the max_target_timestamp in known_timeindex.
-                max_target_timestamp_idx_in_known = known_timeindex.get_loc(max_target_timestamp)
+                idx = known_timeindex.get_loc(max_target_timestamp)
                 # Compute the extra time steps to build known_cov features of the current sample.
                 exceeded_time_steps = self._time_window[1] - max_target_idx
                 raise_if(
                     # Tips: the expression `len(a[x:] ) > b` and `len(a[x+1:]) >= b` have the same effect, however
                     # `a[x+1:]` requires extra `out of upper bound` check for `a`, which causes more code and less
                     # robustness, thus use `a[x:]` approach here.
-                    len(known_timeindex[max_target_timestamp_idx_in_known:]) <= exceeded_time_steps,
+                    len(known_timeindex[idx:]) <= exceeded_time_steps,
                     """known_cov length is too short to build known_cov chunk feature. 
                     It needs at least %s extra Timestamps after known_timeseries.time_index[%s:]""" %
-                    (exceeded_time_steps, max_target_timestamp_idx_in_known)
+                    (exceeded_time_steps, idx)
                 )
             else:
                 # This `else` indicates that the built samples contain both X, skip_chunk and Y.
@@ -415,9 +406,8 @@ class PaddleDatasetImpl(PaddleDataset):
                 upper_window_timestamp = target_timeindex[self._time_window[1]]
                 raise_if(
                     known_timeindex[-1] < upper_window_timestamp,
-                    """If time_window[1] <= len(target_timeindex) - 1, 
-                    known_timeindex[-1] must >= target_timeindex[window[1]]. 
-                    Actual known_timeindex[-1]: %s, actual target_timeindex[window[1]]: %s.""" %
+                    """max known_cov timestamp must be equal or larger than time_window upper bound timestamp, 
+                    actual max known_cov timestamp: %s, actual time_window upper bound timestamp: %s.""" %
                     (known_timeindex[-1], upper_window_timestamp)
                 )
 
@@ -487,238 +477,276 @@ class PaddleDatasetImpl(PaddleDataset):
             List[Dict[str, np.ndarray]]: A list of samples.
 
         Examples:
-            .. code-block:: python
+            1) lag scenario (TSDataset has been processed by lag transform):
+            Given:
+            in_chunk_len = 0 (in_chunk_len = 0 indicates that this is lag scenario.)
+            skip_chunk_len = 1
+            out_chunk_len = 2
+            sampling_stride = 1
+            time_window = (2, 5)
+            rawdataset = {
+                target: [
+                    [0, 0],
+                    [1, 10],
+                    [2, 20],
+                    [3, 30],
+                    [4, 40],
+                    [5, 50],
+                    [6, 60],
+                    [7, 70]
+                ],
+                known_cov: [
+                    [0, 0, 0],
+                    [10, 100, 1000],
+                    [20, 200, 2000],
+                    [30, 300, 3000],
+                    [40, 400, 4000],
+                    [50, 500, 5000],
+                    [60, 600, 6000],
+                    [70, 700, 7000],
+                    [80, 800, 8000]
+                ],
+                # Note that features originally in target timeseries will be processed and added to observed_cov.
+                # For example, the following 2nd and 3rd columns are originally lying in target time series, and then
+                # being processed by lag-transform and added to observed_cov.
+                observed_cov: [
+                    [0, NaN, NaN],
+                    [-1, 0, 0],
+                    [-2, 1, 10],
+                    [-3, 2, 20],
+                    [-4, 3, 30],
+                    [-5, 4, 40],
+                    [-6, 5, 50],
+                    [-7, 6, 60]
+                ],
+                static_cov: {"f": 1, "g": 2}
+            }
 
-                # Given:
-                in_chunk_len = 2
-                skip_chunk_len = 1
-                out_chunk_len = 2
-                sampling_stride = 1
-                time_window = (4, 7)
-                rawdataset = {
-                    "target": [
-                        [0, 0],
-                        [1, 10],
+            The built samples:
+            np.ndarray = [
+                # sample[0]
+                {
+                    # past_target will always be empty matrix, which is what `in_chunk_len = 0` means.
+                    "past_target": np.array(shape=(0, 0)),
+
+                    # future target time series chunk (i.e. Y), totally contains _target_out_chunk_len time steps.
+                    # Note that skip_chunk_len = 1 time steps are skipped, so [1, 10] are not showing up here.
+                    "future_target": [
                         [2, 20],
+                        [3, 30]
+                    ],
+                    known covariates time series chunk, totally contains _known_cov_chunk_len time steps.
+                    "known_cov": [
+                        [20, 200, 2000]，
+                        [30, 300, 3000]
+                    ],
+                    # observed covariates time series chunk, totally contains _observed_cov_chunk_len time steps.
+                    "observed_cov": [
+                        [0, NaN, NaN]
+                    ]
+                },
+
+                # sample[1]
+                {
+                    "past_target": np.array(shape=(0, 0)),
+                    "future_target": [
                         [3, 30],
+                        [4, 40]
+                    ],
+                    "known_cov": [
+                        [30, 300, 3000],
+                        [40, 400, 4000]
+                    ],
+                    "observed_cov": [
+                        [-1, 0, 0]
+                    ]
+                },
+
+                # sample[2]
+                {
+                    "past_target": np.array(shape=(0, 0)),
+                    "future_target": [
                         [4, 40],
+                        [5, 50]
+                    ],
+                    "known_cov": [
+                        [40, 400, 4000],
+                        [50, 500, 5000]
+                    ],
+                    "observed_cov": [
+                        [-2, 1, 10]
+                    ]
+                },
+
+                # sample[3]
+                {
+                    "past_target": np.array(shape=(0, 0)),
+                    "future_target": [
                         [5, 50],
+                        [6, 60]
+                    ],
+                    "known_cov": [
+                        [50, 500, 5000],
+                        [60, 600, 6000]
+                    ],
+                    "observed_cov": [
+                        [-3, 2, 20]
+                    ]
+                },
+
+                sample[4] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
+                {
+                    "past_target": np.array(shape=(0, 0)),
+                    "future_target": [
                         [6, 60],
                         [7, 70]
                     ],
                     "known_cov": [
-                        [0, 0, 0],
-                        [10, 100, 1000],
-                        [20, 200, 2000],
-                        [30, 300, 3000],
-                        [40, 400, 4000],
-                        [50, 500, 5000],
                         [60, 600, 6000],
-                        [70, 700, 7000],
-                        [80, 800, 8000]
+                        [70, 700, 7000]
                     ],
                     "observed_cov": [
-                        [0],
-                        [-1],
-                        [-2],
-                        [-3],
-                        [-4],
-                        [-5],
-                        [-6],
-                        [-7]
-                    ],
-                    "static_cov": {"f": 1, "g": 2}
+                        [-4, 3, 30]
+                    ]
                 }
+            ]
 
-            .. code-block:: python
+            2) non-lag scenario (TSDataset has NOT been processed by lag transform):
+            Given:
+            in_chunk_len = 2 (in_chunk_len > 0 indicates that this is NOT lag scenario.)
+            skip_chunk_len = 1
+            out_chunk_len = 2
+            sampling_stride = 1
+            time_window = (4, 7)
+            rawdataset = {
+                target: [
+                    [0, 0],
+                    [1, 10],
+                    [2, 20],
+                    [3, 30],
+                    [4, 40],
+                    [5, 50],
+                    [6, 60],
+                    [7, 70]
+                ],
+                known_cov: [
+                    [0, 0, 0],
+                    [10, 100, 1000],
+                    [20, 200, 2000],
+                    [30, 300, 3000],
+                    [40, 400, 4000],
+                    [50, 500, 5000],
+                    [60, 600, 6000],
+                    [70, 700, 7000],
+                    [80, 800, 8000]
+                ],
+                observed_cov: [
+                    [0],
+                    [-1],
+                    [-2],
+                    [-3],
+                    [-4],
+                    [-5],
+                    [-6],
+                    [-7]
+                ],
+                static_cov: {"f": 1, "g": 2}
+            }
 
-                # Built samples:
-                samples = [
-                    # sample[0]
-                    {
-                        # past target time series chunk, totally contains _target_in_chunk_len time steps.
-                        "past_target": [
-                            [0, 0],
-                            [1, 10]
-                        ],
-                        # future target time series chunk (i.e. Y), contains _target_out_chunk_len time steps.
-                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
-                        "future_target": [
-                            [3, 30],
-                            [4, 40]
-                        ],
-                        # known covariates time series chunk, totally contains _known_cov_chunk_len time steps.
-                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
-                        "known_cov": [
-                            [0, 0, 0],
-                            [10, 100, 1000],
-                            # Note: skip_chunk [20, 200, 2000] is skipped between [10, 100, 1000] and [30, 300, 3000].
-                            [30, 300, 3000],
-                            [40, 400, 4000]
-                        ],
-                        # observed covariates time series chunk, totally contains _observed_cov_chunk_len time steps.
-                        "observed_cov": [
-                            [0],
-                            [-1]
-                        ]
-                    },
-                    # sample[1]
-                    {
-                        "past_target": [
-                            [1, 10]
-                            [2, 20]
-                        ],
-                        "future_target": [
-                            [4, 40],
-                            [5, 50]
-                        ],
-                        "known_cov": [
-                            [10, 100, 1000],
-                            [20, 200, 2000],
-                            [40, 400, 4000],
-                            [50, 500, 5000]
-                        ],
-                        "observed_cov": [
-                            [-1],
-                            [-2]
-                        ]
-                    },
-                    # sample[2]
-                    {
-                        "past_target": [
-                            [2, 30]
-                            [3, 30]
-                        ],
-                        "future_target": [
-                            [5, 50],
-                            [6, 60],
-                        ],
-                        "known_cov": [
-                            [20, 200, 2000],
-                            [30, 300, 3000],
-                            [50, 500, 5000],
-                            [60, 600, 6000]
-                        ],
-                        "observed_cov": [
-                            [-2],
-                            [-3]
-                        ]
-                    },
-                    # sample[3] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
-                    {
-                        "past_target": [
-                            [3, 30]
-                            [4, 40]
-                        ],
-                        "future_target": [
-                            [6, 60],
-                            [7, 70]
-                        ],
-                        "known_cov": [
-                            [30, 300, 3000],
-                            [40, 400, 4000],
-                            [60, 600, 6000],
-                            [70, 700, 7000]
-                        ],
-                        "observed_cov": [
-                            [-3],
-                            [-4]
-                        ]
-                    }
-                ]
-
-            .. code-block:: python
-
-                # Case 1 - in_chunk_len examples
-                # Given:
-                tsdataset.target = [0, 1, 2, 3, 4]
-                skip_chunk_len = 0
-                out_chunk_len = 1
-
-                # If in_chunk_len = 1, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-
-                # If in_chunk_len = 2, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0, 1) -> () -> (2)
-
-                # If in_chunk_len = 3, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0, 1, 2) -> () -> (3)
-
-            .. code-block:: python
-
-                # Case 2 - out_chunk_len examples
-                # Given:
-                tsdataset.target = [0, 1, 2, 3, 4]
-                in_chunk_len = 1
-                skip_chunk_len = 0
-
-                # If out_chunk_len = 1, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-
-                # If out_chunk_len = 2, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1, 2)
-
-                # If out_chunk_len = 3, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1, 2, 3)
-
-            .. code-block:: python
-
-                # Case 3 - skip_chunk_len examples
-                # Given:
-                tsdataset.target = [0, 1, 2, 3, 4]
-                in_chunk_len = 1
-                out_chunk_len = 1
-
-                # If skip_chunk_len = 0, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-
-                # If skip_chunk_len = 1, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> (1) -> (2)
-
-                # If skip_chunk_len = 2, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> (1, 2) -> (3)
-
-                # If skip_chunk_len = 3, sample[0]:
-                # X -> skip_chunk -> Y
-                # (0) -> (1, 2, 3) -> (4)
-
-            .. code-block:: python
-
-                # Case 4 - sampling_stride examples
-                # Given:
-                tsdataset.target = [0, 1, 2, 3, 4]
-                in_chunk_len = 1
-                skip_chunk_len = 0
-                out_chunk_len = 1
-
-                # If sampling_stride = 1:
-                # samples:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-                # (1) -> () -> (2)
-                # (2) -> () -> (3)
-                # (3) -> () -> (4)
-
-                # If sampling_stride = 2, sample[0]:
-                # samples:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-                # (2) -> () -> (3)
-
-                # If sampling_stride = 3, sample[0]:
-                # samples:
-                # X -> skip_chunk -> Y
-                # (0) -> () -> (1)
-                # (3) -> () -> (4)
+            Built samples:
+            np.ndarray = [
+                # sample[0]
+                {
+                    # past target time series chunk, totally contains _target_in_chunk_len time steps.
+                    "past_target": [
+                        [0, 0],
+                        [1, 10]
+                    ],
+                    # future target time series chunk (i.e. Y), totally contains _target_out_chunk_len time steps.
+                    # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                    "future_target": [
+                        [3, 30],
+                        [4, 40]
+                    ],
+                    # known covariates time series chunk, totally contains _known_cov_chunk_len time steps.
+                    # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                    "known_cov": [
+                        [0, 0, 0],
+                        [10, 100, 1000],
+                        # Note that skip_chunk [20, 200, 2000] is skipped between [10, 100, 1000] and [30, 300, 3000].
+                        [30, 300, 3000],
+                        [40, 400, 4000]
+                    ],
+                    # observed covariates time series chunk, totally contains _observed_cov_chunk_len time steps.
+                    "observed_cov": [
+                        [0],
+                        [-1]
+                    ]
+                },
+                # sample[1]
+                {
+                    "past_target": [
+                        [1, 10]
+                        [2, 20]
+                    ],
+                    "future_target": [
+                        [4, 40],
+                        [5, 50]
+                    ],
+                    "known_cov": [
+                        [10, 100, 1000],
+                        [20, 200, 2000],
+                        [40, 400, 4000],
+                        [50, 500, 5000]
+                    ],
+                    "observed_cov": [
+                        [-1],
+                        [-2]
+                    ]
+                },
+                # sample[2]
+                {
+                    "past_target": [
+                        [2, 30]
+                        [3, 30]
+                    ],
+                    "future_target": [
+                        [5, 50],
+                        [6, 60],
+                    ],
+                    "known_cov": [
+                        [20, 200, 2000],
+                        [30, 300, 3000],
+                        [50, 500, 5000],
+                        [60, 600, 6000]
+                    ],
+                    "observed_cov": [
+                        [-2],
+                        [-3]
+                    ]
+                },
+                # sample[3] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
+                {
+                    "past_target": [
+                        [3, 30]
+                        [4, 40]
+                    ],
+                    "future_target": [
+                        [6, 60],
+                        [7, 70]
+                    ],
+                    "known_cov": [
+                        [30, 300, 3000],
+                        [40, 400, 4000],
+                        [60, 600, 6000],
+                        [70, 700, 7000]
+                    ],
+                    "observed_cov": [
+                        [-3],
+                        [-4]
+                    ]
+                }
+            ]
         """
         target_ts = self._rawdataset.get_target()
         target_ndarray = target_ts.to_numpy(copy=False)
@@ -729,7 +757,6 @@ class PaddleDatasetImpl(PaddleDataset):
         known_cov_ndarray = None
         if known_cov_ts is not None:
             known_cov_ndarray = known_cov_ts.to_numpy(copy=False)
-
         observed_cov_ts = self._rawdataset.get_observed_cov()
         observed_cov_ndarray = None
         if observed_cov_ts is not None:
@@ -740,27 +767,67 @@ class PaddleDatasetImpl(PaddleDataset):
         future_target_tail = self._time_window[0]
         # Because _time_window is left-closed-right-closed, thus using `<=` operator rather than `<`.
         while future_target_tail <= self._time_window[1]:
+            sample = {"past_target": None, "future_target": None, "known_cov": None, "observed_cov": None}
+
+            # Build future_target
+            if future_target_tail > len(target_ts.time_index) - 1:
+                # In this case, the built sample only contains  X, but not contains skip_chunk and Y, thus filled with
+                # all zeros ndarray.
+                sample["future_target"] = np.zeros(shape=(0, 0))
+            else:
+                # In this case, the built samples contain both X, skip_chunk and Y.
+                sample["future_target"] = \
+                    target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
+
+            # Build past_target
             past_target_tail = future_target_tail - self._target_out_chunk_len - self._target_skip_chunk_len
-            sample = {
-                "future_target": self._build_future_target_for_single_sample(
-                    future_target_tail=future_target_tail,
-                    target_ts=target_ts,
-                    target_ndarray=target_ndarray
-                    ),
-                "past_target": self._build_past_target_for_single_sample(
-                    past_target_tail=past_target_tail,
-                    target_ndarray=target_ndarray
-                )}
+            if self._target_in_chunk_len == 0:
+                # lag case.
+                sample["past_target"] = np.zeros(shape=(0, 0))
+            else:
+                # not-lag case.
+                sample["past_target"] = \
+                    target_ndarray[past_target_tail - self._target_in_chunk_len + 1:past_target_tail + 1]
+
+            # Build known_cov.
+            # known_cov = left + right, where left = (in, skip), right = (skip, out).
             if known_cov_ts is not None:
-                sample["known_cov"] = self._build_known_cov_for_single_sample(
-                    future_target_tail=future_target_tail,
-                    known_cov_ndarray=known_cov_ndarray
-                )
+                if future_target_tail > len(target_ts.time_index) - 1:
+                    max_target_timestamp = target_ts.time_index[-1]
+                    # compute the index position of max_target_timestamp in known_cov.
+                    max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
+                    known_cov_right_tail = max_target_timestamp_idx_in_known + \
+                        self._target_skip_chunk_len + \
+                        self._target_out_chunk_len
+                else:
+                    future_target_tail_timestamp = target_ts.time_index[future_target_tail]
+                    known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
+                # right
+                known_cov_right = \
+                    known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
+                # left
+                known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
+                known_cov_left = \
+                    known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
+                # known = right + left
+                sample["known_cov"] = np.vstack((known_cov_left, known_cov_right))
+            else:
+                # If known_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
+                # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be
+                # converted from a python built-in None object, but can be converted from a np.ndarray filled with NaN.
+                sample["known_cov"] = np.zeros(shape=(0, 0))
+
+            # Build observed_cov
             if observed_cov_ts is not None:
-                sample["observed_cov"] = self._build_observed_cov_for_single_sample(
-                    past_target_tail=past_target_tail,
-                    observed_cov_ndarray=observed_cov_ndarray
-                )
+                past_target_tail_timestamp = target_ts.time_index[past_target_tail]
+                observed_cov_tail = observed_cov_ts.time_index.get_loc(past_target_tail_timestamp)
+                sample["observed_cov"] = \
+                    observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
+            else:
+                # If observed_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
+                # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be
+                # converted from a python built-in None object, but can be converted from a np.ndarray filled with NaN.
+                sample["observed_cov"] = np.zeros(shape=(0, 0))
 
             samples.append(sample)
 
@@ -771,118 +838,15 @@ class PaddleDatasetImpl(PaddleDataset):
 
     def _compute_min_allowed_window(self) -> int:
         """
-        Internal method, computes min allowed window.
+        Internal method, used for computing min allowed window lower bound based on given in/skip/out chunk len.
+
+        Consider lag-transform case which will cause _target_in_chunk_len equal to zero, thus use
+        max(1, self._target_in_chunk_len) to ensure that in_chunk will hold at least 1 time unit.
 
         Returns:
-            int: computed min allowed window.
+            int: Computed min allowed window lower bound.
         """
-        return self._target_in_chunk_len + self._target_skip_chunk_len + self._target_out_chunk_len - 1
-
-    def _build_future_target_for_single_sample(
-        self,
-        future_target_tail: int,
-        target_ts: TimeSeries,
-        target_ndarray: np.ndarray
-    ) -> np.ndarray:
-        """
-        Internal method, builds a future_target chunk for a single sample.
-
-        Args:
-            future_target_tail(int): the tail idx of future_target chunk of the same sample.
-            target_ts(TimeSeries): a target TimeSeries.
-            target_ndarray(np.ndarray): an np.ndarray matrix.
-
-        Returns:
-            np.ndarray: built future_target chunk (Y) for the current single sample.
-        """
-        # do NOT contain Y
-        # Note: Instead of calling _build_tensor_convertible_empty_ndarray, we directly construct an all-nan-ndarray
-        # here because of 2 reasons:
-        # 1) all-nan-ndarray does not affect model predict result.
-        # 2) Some models needs to know the length of future_target, while _build_tensor_convertible_empty_ndarray
-        # cannot provide such info.
-        if future_target_tail > len(target_ts.time_index) - 1:
-            future_target = np.zeros(shape=(self._target_out_chunk_len, target_ndarray.shape[1]))
-            future_target.fill(np.nan)
-        # contain Y
-        else:
-            future_target = target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
-        return future_target
-
-    def _build_past_target_for_single_sample(
-        self,
-        past_target_tail: int,
-        target_ndarray: np.ndarray
-    ):
-        """
-        Internal method, builds a past_target chunk for a single sample.
-
-        Args:
-            past_target_tail(int): the tail idx of past_target chunk of the same sample.
-            target_ndarray(np.ndarray): an np.ndarray matrix.
-
-        Returns:
-            np.ndarray: built past_target chunk for the current single sample.
-        """
-        return target_ndarray[past_target_tail - self._target_in_chunk_len + 1:past_target_tail + 1]
-
-    def _build_known_cov_for_single_sample(
-        self,
-        future_target_tail: int,
-        known_cov_ndarray: np.ndarray
-    ) -> np.ndarray:
-        """
-        Internal method, builds a known_cov chunk for a single sample.
-
-        Args:
-            future_target_tail(int): the tail idx of future_target chunk of the same sample.
-            known_cov_ndarray(np.ndarray): an np.ndarray matrix comes from known_cov_ts.to_numpy().
-
-        Returns:
-            np.ndarray: built known cov chunk for the current single sample.
-        """
-        target_ts = self._rawdataset.get_target()
-        known_cov_ts = self._rawdataset.get_known_cov()
-        if future_target_tail > len(target_ts.time_index) - 1:
-            max_target_timestamp = target_ts.time_index[-1]
-            # compute the index position of max_target_timestamp in known_cov.
-            max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
-            known_cov_right_tail = \
-                max_target_timestamp_idx_in_known + self._target_skip_chunk_len + self._target_out_chunk_len
-        else:
-            future_target_tail_timestamp = target_ts.time_index[future_target_tail]
-            known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
-
-        # right
-        known_cov_right = \
-            known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
-
-        # left
-        known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
-        known_cov_left = \
-            known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
-        # known_cov = right + left
-        return np.vstack((known_cov_left, known_cov_right))
-
-    def _build_observed_cov_for_single_sample(
-        self,
-        past_target_tail: int,
-        observed_cov_ndarray: np.ndarray
-    ) -> np.ndarray:
-        """
-        Internal method, builds an observed_cov chunk for a single sample.
-
-        Args:
-            past_target_tail(int): the tail idx of past_target chunk of the same sample.
-            observed_cov_ndarray(np.ndarray, optional): an np.ndarray matrix, as it comes from
-                observed_cov_ts.to_numpy(), its value will be None if the passed known_cov_ts is None.
-
-        Returns:
-            np.ndarray: built observed cov chunk for the current single sample.
-        """
-        past_target_tail_timestamp = self._rawdataset.get_target().time_index[past_target_tail]
-        observed_cov_tail = self._rawdataset.get_observed_cov().time_index.get_loc(past_target_tail_timestamp)
-        return observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
+        return max(1, self._target_in_chunk_len) + self._target_skip_chunk_len + self._target_out_chunk_len - 1
 
     @property
     def samples(self):
