@@ -35,8 +35,8 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
 .. code-block:: python
 
    from paddlets import TSDataset
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
-   from paddlets.models.dl.paddlepaddle import RNNBlockRegressor
+   from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
+   from paddlets.models.forecasting import RNNBlockRegressor
 
    # 1 prepare the data
    data = TSDataset.load_from_csv("/path/to/data.csv")
@@ -245,8 +245,8 @@ The following sections show you how to persist a PaddleBaseModel. Note that a mo
 .. code-block:: python
 
    from paddlets import TSDataset
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
-   from paddlets.models.dl.paddlepaddle import RNNBlockRegressor
+   from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
+   from paddlets.models.forecasting import RNNBlockRegressor
 
    # Prepare a fitted model
    training_data = TSDataset.load_from_csv("/path/to/csv")
@@ -263,7 +263,7 @@ Later you can load back the persisted model with:
 
 .. code-block:: python
 
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
+   from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
 
    loaded_rnn_reg_1 = PaddleBaseModel.load("/path/to/save/modelname_1")
    loaded_rnn_reg_2 = PaddleBaseModel.load("/path/to/save/modelname_2")

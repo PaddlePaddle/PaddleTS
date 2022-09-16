@@ -14,7 +14,7 @@ import json
 
 import paddlets
 from paddlets import TSDataset, TimeSeries
-from paddlets.models.dl.paddlepaddle.rnn import RNNBlockRegressor
+from paddlets.models.forecasting import RNNBlockRegressor
 
 
 class _MockNotMLModel(object):

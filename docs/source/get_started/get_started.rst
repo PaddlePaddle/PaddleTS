@@ -190,7 +190,7 @@ This section shows how to train a deep neural network model for time series fore
 
 .. code:: python
 
-   from paddlets.models.dl.paddlepaddle import MLPRegressor
+   from paddlets.models.forecasting import MLPRegressor
    mlp = MLPRegressor(
        in_chunk_len = 7 * 24,
        out_chunk_len = 24,
@@ -370,7 +370,7 @@ model using ``TSDataset`` with covariates.
 
 .. code:: python
 
-   from paddlets.models.dl.paddlepaddle import RNNBlockRegressor
+   from paddlets.models.forecasting import RNNBlockRegressor
    rnn_reg = RNNBlockRegressor(
        in_chunk_len = 7 * 24,
        out_chunk_len = 24,

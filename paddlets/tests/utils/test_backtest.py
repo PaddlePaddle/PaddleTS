@@ -6,15 +6,14 @@ sys.path.append(".")
 from typing import List
 from unittest import TestCase
 import unittest
-import random
 
 import pandas as pd
 import numpy as np
 
-from paddlets.models.dl.paddlepaddle import LSTNetRegressor
+from paddlets.models.forecasting import LSTNetRegressor
 from paddlets.datasets import TimeSeries, TSDataset
 from paddlets.utils.backtest import backtest
-from paddlets.metrics import Metric, MAE
+from paddlets.metrics import MAE
 
 
 class TestBacktest(TestCase):

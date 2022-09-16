@@ -2,14 +2,12 @@
 # -*- coding:utf-8 -*-
 import os
 import unittest
-import shutil
 
 import pandas as pd
 import numpy as np
 from unittest import TestCase
 
-from paddlets.models.dl.paddlepaddle.callbacks import Callback
-from paddlets.models.dl.paddlepaddle import MLPRegressor
+from paddlets.models.forecasting import MLPRegressor
 from paddlets.transform import KSigma, TimeFeatureGenerator, StandardScaler
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 from paddlets.pipeline.pipeline import Pipeline
