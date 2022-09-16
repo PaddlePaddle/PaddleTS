@@ -41,7 +41,6 @@ class PaddleDatasetImpl(PaddleDataset):
                 Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
 
     Attributes:
-        _supported_paddle_versions(Set[str]): A set of paddle module versions to support.
         _rawdataset(TSDataset) Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.Dataset`.
         _target_in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         _target_out_chunk_len(int): The size of the forecasting horizon, i.e. the number of time steps output by
@@ -258,8 +257,6 @@ class PaddleDatasetImpl(PaddleDataset):
     ):
         super(PaddleDatasetImpl, self).__init__()
 
-        self._supported_paddle_versions = {"2.2.0", "2.3.0", "2.3.1"}
-        self._curr_paddle_version = paddle.__version__
         self._rawdataset = rawdataset
         self._target_in_chunk_len = in_chunk_len
         self._target_out_chunk_len = out_chunk_len
@@ -269,11 +266,6 @@ class PaddleDatasetImpl(PaddleDataset):
         self._sampling_stride = sampling_stride
         self._time_window = time_window
 
-        raise_if(
-            self._curr_paddle_version not in self._supported_paddle_versions,
-            "only the following paddle versions are supported: %s, current paddle version: %s" %
-            (self._supported_paddle_versions, self._curr_paddle_version)
-        )
         raise_if(rawdataset is None, "TSDataset must be specified.")
         raise_if(rawdataset.get_target() is None, "dataset target Timeseries must not be None.")
         raise_if(len(rawdataset.get_target().time_index) < 1, "TSDataset target Timeseries length must >= 1.")
@@ -758,20 +750,18 @@ class PaddleDatasetImpl(PaddleDataset):
                 "past_target": self._build_past_target_for_single_sample(
                     past_target_tail=past_target_tail,
                     target_ndarray=target_ndarray
-                ),
-                "known_cov": self._build_known_cov_for_single_sample(
+                )}
+            if known_cov_ts is not None:
+                sample["known_cov"] = self._build_known_cov_for_single_sample(
                     future_target_tail=future_target_tail,
-                    target_ts=target_ts,
-                    known_cov_ts=known_cov_ts,
                     known_cov_ndarray=known_cov_ndarray
-                ),
-                "observed_cov": self._build_observed_cov_for_single_sample(
+                )
+            if observed_cov_ts is not None:
+                sample["observed_cov"] = self._build_observed_cov_for_single_sample(
                     past_target_tail=past_target_tail,
-                    target_ts=target_ts,
-                    observed_cov_ts=observed_cov_ts,
                     observed_cov_ndarray=observed_cov_ndarray
                 )
-            }
+
             samples.append(sample)
 
             # The predefined `sampling_stride >= 1 assertion` in the construct method ensures that `infinite while loop`
@@ -805,11 +795,18 @@ class PaddleDatasetImpl(PaddleDataset):
         Returns:
             np.ndarray: built future_target chunk (Y) for the current single sample.
         """
-        # Assumes the built samples contains Y by default.
-        future_target = target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
+        # do NOT contain Y
+        # Note: Instead of calling _build_tensor_convertible_empty_ndarray, we directly construct an all-nan-ndarray
+        # here because of 2 reasons:
+        # 1) all-nan-ndarray does not affect model predict result.
+        # 2) Some models needs to know the length of future_target, while _build_tensor_convertible_empty_ndarray
+        # cannot provide such info.
         if future_target_tail > len(target_ts.time_index) - 1:
-            # `tail index > max target time index` indicates that no need to contain Y, thus returns empty ndarray.
-            future_target = self._build_tensor_convertible_empty_ndarray(compatible=True)
+            future_target = np.zeros(shape=(self._target_out_chunk_len, target_ndarray.shape[1]))
+            future_target.fill(np.nan)
+        # contain Y
+        else:
+            future_target = target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
         return future_target
 
     def _build_past_target_for_single_sample(
@@ -832,110 +829,60 @@ class PaddleDatasetImpl(PaddleDataset):
     def _build_known_cov_for_single_sample(
         self,
         future_target_tail: int,
-        target_ts: TimeSeries,
-        known_cov_ts: Optional[TimeSeries] = None,
-        known_cov_ndarray: Optional[np.ndarray] = None
+        known_cov_ndarray: np.ndarray
     ) -> np.ndarray:
         """
         Internal method, builds a known_cov chunk for a single sample.
 
         Args:
             future_target_tail(int): the tail idx of future_target chunk of the same sample.
-            target_ts(TimeSeries): a target TimeSeries.
-            known_cov_ts(TimeSeries, optional): a known_cov TimeSeries, it can be None.
-            known_cov_ndarray(np.ndarray, optional): an np.ndarray matrix, as it comes from
-                known_cov_ts.to_numpy(), its value will be None if the passed known_cov_ts is None.
+            known_cov_ndarray(np.ndarray): an np.ndarray matrix comes from known_cov_ts.to_numpy().
 
         Returns:
             np.ndarray: built known cov chunk for the current single sample.
         """
-        # If known_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
-        # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be converted
-        # from a python built-in None object, but can be converted from a np.ndarray filled with np.NaN.
-        known_cov = self._build_tensor_convertible_empty_ndarray(True)
-        # Build known_cov.
-        # known_cov = left + right, where left = (in, skip), right = (skip, out).
-        if known_cov_ts is not None:
-            if future_target_tail > len(target_ts.time_index) - 1:
-                max_target_timestamp = target_ts.time_index[-1]
-                # compute the index position of max_target_timestamp in known_cov.
-                max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
-                known_cov_right_tail = max_target_timestamp_idx_in_known + \
-                    self._target_skip_chunk_len + \
-                    self._target_out_chunk_len
-            else:
-                future_target_tail_timestamp = target_ts.time_index[future_target_tail]
-                known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
-            # right
-            known_cov_right = \
-                known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
+        target_ts = self._rawdataset.get_target()
+        known_cov_ts = self._rawdataset.get_known_cov()
+        if future_target_tail > len(target_ts.time_index) - 1:
+            max_target_timestamp = target_ts.time_index[-1]
+            # compute the index position of max_target_timestamp in known_cov.
+            max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
+            known_cov_right_tail = \
+                max_target_timestamp_idx_in_known + self._target_skip_chunk_len + self._target_out_chunk_len
+        else:
+            future_target_tail_timestamp = target_ts.time_index[future_target_tail]
+            known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
 
-            # left
-            known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
-            known_cov_left = \
-                known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
-            # known_cov = right + left
-            known_cov = np.vstack((known_cov_left, known_cov_right))
-        return known_cov
+        # right
+        known_cov_right = \
+            known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
+
+        # left
+        known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
+        known_cov_left = \
+            known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
+        # known_cov = right + left
+        return np.vstack((known_cov_left, known_cov_right))
 
     def _build_observed_cov_for_single_sample(
         self,
         past_target_tail: int,
-        target_ts: TimeSeries,
-        observed_cov_ts: Optional[TimeSeries] = None,
-        observed_cov_ndarray: Optional[np.ndarray] = None
+        observed_cov_ndarray: np.ndarray
     ) -> np.ndarray:
         """
         Internal method, builds an observed_cov chunk for a single sample.
 
         Args:
             past_target_tail(int): the tail idx of past_target chunk of the same sample.
-            target_ts(TimeSeries): a target TimeSeries.
-            observed_cov_ts(TimeSeries, optional): a observed_cov TimeSeries, it can be None.
             observed_cov_ndarray(np.ndarray, optional): an np.ndarray matrix, as it comes from
                 observed_cov_ts.to_numpy(), its value will be None if the passed known_cov_ts is None.
 
         Returns:
             np.ndarray: built observed cov chunk for the current single sample.
         """
-        # If known_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
-        # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be converted
-        # from a python built-in None object, but can be converted from a np.ndarray filled with np.NaN.
-        observed_cov = self._build_tensor_convertible_empty_ndarray(True)
-        # Build observed_cov.
-        if observed_cov_ts is not None:
-            past_target_tail_timestamp = target_ts.time_index[past_target_tail]
-            observed_cov_tail = observed_cov_ts.time_index.get_loc(past_target_tail_timestamp)
-            observed_cov = \
-                observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
-        return observed_cov
-
-    def _build_tensor_convertible_empty_ndarray(self, compatible: bool = False):
-        """
-        Internal method, build a default empty ndarray that supports convert to a paddle.Tensor.
-
-        For paddle==2.3.0, an empty np.ndarray refers to a ndarray with (0, 0) shape. For paddle==2.2.0, an empty
-        np.ndarray refers to a ndarray with (1, 1) shape and filled with np.nan. The reason is that for paddle 2.2.0,
-        a np.ndarray with (0, 0) shape cannot be converted to a paddle.Tensor.
-
-        Args:
-            compatible(bool, optional): A flag to decide whether to support old paddle version. if set to True, will
-                support all paddle versions included in self._supported_paddle_versions.
-
-        Returns:
-            np.ndarray: An empty np.ndarray.
-        """
-        # np.zeros() is the original workaround as it works for paddle=2.3.0. However, this workaround is not working
-        # for paddle=2.2.0.
-        # The root cause is that paddle.Tensor cannot be converted from a ndarray of shape(0, 0) for version 2.0.0.
-        # To support both 2.2.0 and 2.3.0, we use a ndarray of shape(1, 1) as a workaround for paddle 2.2.0.
-        # From a long-term perspective, only 2.3.0 will be supported, the code for 2.2.0 will be deprecated later.
-        ndarray = np.zeros(shape=(0, 0))
-        if compatible is True:
-            if self._curr_paddle_version == "2.2.0":
-                ndarray = np.zeros(shape=(1, 1))
-                ndarray.fill(np.nan)
-        return ndarray
+        past_target_tail_timestamp = self._rawdataset.get_target().time_index[past_target_tail]
+        observed_cov_tail = self._rawdataset.get_observed_cov().time_index.get_loc(past_target_tail_timestamp)
+        return observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
 
     @property
     def samples(self):
