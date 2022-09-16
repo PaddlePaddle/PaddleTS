@@ -110,7 +110,7 @@ class _Block(nn.Layer):
             layers.append(self._activation)
 
             if batch_norm:
-                layers.append(nn.BatchNorm1d(num_features=layer_widths[i + 1]))
+                layers.append(nn.BatchNorm1D(num_features=layer_widths[i + 1]))
             if dropout > 0:
                 layers.append(nn.Dropout(p=dropout))
         self.layers = nn.Sequential(*layers)
