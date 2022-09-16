@@ -14,8 +14,9 @@ def read_requirements(path):
 
 base_reqs = read_requirements("requirements/core.txt")
 paddle_reqs = read_requirements("requirements/paddle.txt")
+autots_reqs = read_requirements("requirements/autots.txt")
 
-all_reqs = base_reqs + paddle_reqs
+all_reqs = base_reqs + paddle_reqs + autots_reqs
 
 setup(
     name='paddlets',
@@ -33,6 +34,7 @@ setup(
     install_requires=base_reqs,
     extras_require={
         "paddle": paddle_reqs,
+        "autots": autots_reqs,
         "all": all_reqs
     },
     classifiers=[
@@ -44,4 +46,3 @@ setup(
         'Operating System :: OS Independent',
     ]
 )
-
