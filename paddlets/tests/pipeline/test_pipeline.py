@@ -1,14 +1,15 @@
-# !/usr/bin/env python3
+i# !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import os
 import unittest
+import shutil
 
 import pandas as pd
 import numpy as np
 from unittest import TestCase
 
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.transform import KSigma, TimeFeatureGenerator, StandardScaler
+from paddlets.transform import KSigma, TimeFeatureGenerator, StandardScaler, StatsTransform, Fill
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 from paddlets.pipeline.pipeline import Pipeline
 from paddlets.utils import get_uuid
@@ -205,14 +206,16 @@ class TestPipeline(TestCase):
         static_cov = {"f": 1, "g": 2}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
-        transform_params_1 = {"cols": ['c1'], "k": 0.7}
+        transform_params_1 = {"cols": ['c1']}
         nn_params = {
             'in_chunk_len': 7 * 96 + 20 * 4,
             'out_chunk_len': 96,
             'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
-        pipe = Pipeline([(KSigma, transform_params), (TimeFeatureGenerator, {}), (KSigma, transform_params_1), \
+
+        #case1
+        pipe = Pipeline([(KSigma, transform_params), (TimeFeatureGenerator, {}), (StatsTransform, transform_params_1), \
                          (MLPRegressor, nn_params)])
         pipe.fit(tsdataset, tsdataset)
         res = pipe.recursive_predict(tsdataset, 201)
@@ -230,6 +233,143 @@ class TestPipeline(TestCase):
         with self.assertRaises(Exception):
             res = pipe.recursive_predict(tsdataset, 201)
 
+        #case2
+        np.random.seed(2022)
+
+        target = TimeSeries.load_from_dataframe(
+            pd.Series(np.random.randn(2000).astype(np.float32),
+                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                      name="a"
+                      ))
+
+        observed_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2000, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]
+            ))
+        known_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2500, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]
+            ))
+        static_cov = {"f": 1, "g": 2}
+        tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
+        transform_params = {"cols": ['b1'], "k": 0.5}
+        nn_params = {
+            'in_chunk_len': 7 * 96 + 20 * 4,
+            'out_chunk_len': 96,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"]
+        }
+
+        transform_params_1 = {"cols": ['c1'], "end":10}
+        pipe = Pipeline([(StatsTransform, transform_params_1),(KSigma, transform_params), (TimeFeatureGenerator, {}), (StatsTransform, transform_params_1), \
+                         (MLPRegressor, nn_params)])
+        pipe.fit(tsdataset, tsdataset)
+        res = pipe.recursive_predict(tsdataset, 201)
+        self.assertIsInstance(res, TSDataset)
+        self.assertEqual(res.get_target().to_dataframe().shape, (201, 1))
+
+
+        #case3
+        np.random.seed(2022)
+
+        target = TimeSeries.load_from_dataframe(
+            pd.Series(np.random.randn(2000).astype(np.float32),
+                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                      name="a"
+                      ))
+
+        observed_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2000, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]
+            ))
+        known_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2500, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]
+            ))
+        static_cov = {"f": 1, "g": 2}
+        tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
+        transform_params = {"cols": ['b1'], "k": 0.5}
+        transform_params_1 = {"cols": ['c1']}
+        nn_params = {
+            'in_chunk_len': 7 * 96 + 20 * 4,
+            'out_chunk_len': 96,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"]
+        }
+        pipe = Pipeline([(StatsTransform, transform_params_1),\
+                         (MLPRegressor, nn_params)])
+        pipe.fit(tsdataset, tsdataset)
+        res = pipe.recursive_predict(tsdataset, 201)
+        self.assertIsInstance(res, TSDataset)
+        self.assertEqual(res.get_target().to_dataframe().shape, (201, 1))
+        # test recursive predict proba bad case
+        with self.assertRaises(ValueError):
+            res = pipe.recursive_predict_proba(tsdataset, 202)
+        # recursive predict bad case
+        # unsupported index type
+        tsdataset.get_target().reindex(
+            pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
+            fill_value=np.nan
+        )
+        with self.assertRaises(Exception):
+            res = pipe.recursive_predict(tsdataset, 201)
+
+        #case4
+        np.random.seed(2022)
+
+        target = TimeSeries.load_from_dataframe(
+            pd.Series(np.random.randn(2000).astype(np.float32),
+                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                      name="a"
+                      ))
+
+        observed_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2000, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]
+            ))
+        known_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(2500, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]
+            ))
+        static_cov = {"f": 1, "g": 2}
+        tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
+        transform_params = {"cols": ['b1'], "k": 0.5}
+        transform_params_1 = {"cols": ['c1']}
+        nn_params = {
+            'in_chunk_len': 7 * 96 + 20 * 4,
+            'out_chunk_len': 96,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"]
+        }
+        pipe = Pipeline([(StatsTransform, transform_params_1),(KSigma, transform_params), (TimeFeatureGenerator, {}), (Fill, {"cols": ['c1']}), \
+                         (MLPRegressor, nn_params)])
+        pipe.fit(tsdataset, tsdataset)
+        res = pipe.recursive_predict(tsdataset, 201)
+        self.assertIsInstance(res, TSDataset)
+        self.assertEqual(res.get_target().to_dataframe().shape, (201, 1))
+        # test recursive predict proba bad case
+        with self.assertRaises(ValueError):
+            res = pipe.recursive_predict_proba(tsdataset, 202)
+        # recursive predict bad case
+        # unsupported index type
+        tsdataset.get_target().reindex(
+            pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
+            fill_value=np.nan
+        )
+        with self.assertRaises(Exception):
+            res = pipe.recursive_predict(tsdataset, 201)
     def test_predict_proba(self):
         """
         unittest function
@@ -334,3 +474,4 @@ class TestPipeline(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
