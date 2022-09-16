@@ -1,6 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import pandas as pd
+from paddlets.datasets import tsdataset
 import numpy as np
 
 import os
@@ -263,8 +264,14 @@ class TestTimeSeries(TestCase):
         ts2 = TimeSeries.load_from_dataframe(data=sample2)
         ts3 = TimeSeries.concat([ts1, ts2], axis=1)
         self.assertEqual(ts3.data.shape, (200, 4))
-        with self.assertRaises(ValueError):
-            ts3 = TimeSeries.concat([ts1, ts2], axis=0)
+            
+        #drop duplicated
+        ts3 = TimeSeries.load_from_dataframe(data=sample2)
+        ts4 = TimeSeries.concat([ts2, ts3], axis=1, drop_duplicates=True)  
+        self.assertEqual(ts3.data.shape, (200, 2))
+        ts4 = TimeSeries.concat([ts2, ts3], axis=1, drop_duplicates=True,keep='last')
+        self.assertEqual(ts3.data.shape, (200, 2))
+
         #case2 test axis=0
         sample2 = pd.DataFrame(
             np.random.randn(200, 2), 
@@ -282,14 +289,15 @@ class TestTimeSeries(TestCase):
         ts2 = TimeSeries.load_from_dataframe(data=sample2)  
         ts3 = TimeSeries.concat([ts1, ts2]) #default axis=0
         self.assertEqual(ts3.data.shape, (410, 2))
-        sample2 = pd.DataFrame(
-            np.random.randn(200, 2), 
-            index=pd.date_range('2022-06-30', periods=200, freq='1D'),
-            columns=['a', 'b']
-        )
-        ts2 = TimeSeries.load_from_dataframe(data=sample2) 
-        with self.assertRaises(ValueError):
-            ts3 = TimeSeries.concat([ts1, ts2])
+
+        #drop duplicated
+        ts2, ts3 = ts1.split(100)
+        ts4 = TimeSeries.concat([ts2, ts3], drop_duplicates=True) 
+        self.assertEqual(ts4.data.shape, (200, 2))
+
+        ts2, ts3 = ts1.split(100)
+        ts4 = TimeSeries.concat([ts2, ts3], drop_duplicates=True,keep='last')   
+        self.assertEqual(ts4.data.shape, (200, 2))
 
     def test_astype(self):
         """
@@ -311,6 +319,38 @@ class TestTimeSeries(TestCase):
         self.assertEqual(ts2.data.dtypes['a'], 'float32')
         self.assertEqual(ts2.data.dtypes['b'], 'float64')
         self.assertEqual(ts2.data.dtypes['c'], 'float64')
+
+    def test_drop_tail_nan(self):
+        """
+        unittest function
+        """
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            index=pd.date_range('2022-01-01', periods=200, freq='1D'),
+            columns=['a', 'b', 'c']
+        )
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        ts1.data.iloc[100:] = np.nan
+        self.assertEqual(ts1._find_end_index(), 99)
+        ts1.drop_tail_nan()
+        self.assertEqual(ts1.data.shape, (100, 3))
+
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            index=pd.date_range('2022-01-01', periods=200, freq='1D'),
+            columns=['a', 'b', 'c']
+        )
+        sample1.iloc[100:] = np.nan
+        ts1 = TimeSeries.load_from_dataframe(data=sample1, drop_tail_nan=True)
+        self.assertEqual(ts1.data.shape, (100, 3))
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        self.assertEqual(ts1.data.shape, (200, 3))
+        #All nan test
+        sample1.iloc[:] = np.nan
+        ts1 = TimeSeries.load_from_dataframe(data=sample1, drop_tail_nan=True)
+        self.assertEqual(ts1.data.shape, (0, 3))
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        self.assertEqual(ts1.data.shape, (200, 3))
 
 
 class TestTSDataset(TestCase): 
@@ -529,7 +569,7 @@ class TestTSDataset(TestCase):
         self.assertEqual(train.get_static_cov(), {'f': 1, 'g': 2})
         self.assertEqual(test.get_target().data.shape, (192, 1))
         self.assertEqual(test.get_observed_cov().data.shape, (192, 2))
-        self.assertEqual(test.get_known_cov().data.shape, (200, 2))
+        self.assertEqual(test.get_known_cov().data.shape, (192, 2))
         self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
     
         start_num = 120
@@ -540,7 +580,7 @@ class TestTSDataset(TestCase):
         self.assertEqual(train.get_static_cov(), {'f': 1, 'g': 2})
         self.assertEqual(test.get_target().data.shape, (200 - start_num, 1))
         self.assertEqual(test.get_observed_cov().data.shape, (200 - start_num, 2))
-        self.assertEqual(test.get_known_cov().data.shape, (200, 2))
+        self.assertEqual(test.get_known_cov().data.shape, (200 - start_num, 2))
         self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
 
         start_ratio = 0.8
@@ -551,8 +591,22 @@ class TestTSDataset(TestCase):
         self.assertEqual(train.get_static_cov(), {'f': 1, 'g': 2})
         self.assertEqual(test.get_target().data.shape, (40, 1))
         self.assertEqual(test.get_observed_cov().data.shape, (40, 2))
-        self.assertEqual(test.get_known_cov().data.shape, (200, 2))
+        self.assertEqual(test.get_known_cov().data.shape, (40, 2))
         self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
+    
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            columns=['a', 'b', 'c']
+        )
+        tsdataset = TSDataset.load_from_dataframe(sample1, target_cols='a', observed_cov_cols='b', known_cov_cols='c')
+        start_num = 120
+        train, test = tsdataset.split(start_num)
+        self.assertEqual(train.get_target().data.shape, (start_num, 1))
+        self.assertEqual(train.get_observed_cov().data.shape, (start_num, 1))
+        self.assertEqual(train.get_known_cov().data.shape, (200, 1))
+        self.assertEqual(test.get_target().data.shape, (200 - start_num, 1))
+        self.assertEqual(test.get_observed_cov().data.shape, (200 - start_num, 1))
+        self.assertEqual(test.get_known_cov().data.shape, (200 - start_num, 1))
 
     def test_copy(self):
         """
@@ -736,8 +790,9 @@ class TestTSDataset(TestCase):
             known_cov_cols='e', 
             static_cov_cols='s'
         )
-        with self.assertRaises(ValueError):
-            tsdataset3 = TSDataset.concat([tsdataset1, tsdataset2])
+        tsdataset3 = TSDataset.concat([tsdataset1, tsdataset2])
+        #2022-01-01~2022-06-20 + 200days = 370days
+        self.assertEqual(tsdataset3.get_all_cov().data.shape, (370, 4))
 
         #case1 test axis=1
         sample1 = pd.DataFrame(
@@ -768,6 +823,7 @@ class TestTSDataset(TestCase):
         )
         tsdataset3 = TSDataset.concat([tsdataset1, tsdataset2], axis=1)
         self.assertEqual(tsdataset3.get_all_cov().data.shape, (200, 8))
+
         sample2 = pd.DataFrame(
             np.random.randn(200, 5), 
             index=pd.date_range('2022-01-01', periods=200, freq='1D'),
@@ -780,9 +836,9 @@ class TestTSDataset(TestCase):
             observed_cov_cols=['b', 'c', 'd'], 
             known_cov_cols='e', 
             static_cov_cols='s'
-        )
-        with self.assertRaises(ValueError):
-            tsdataset3 = TSDataset.concat([tsdataset1, tsdataset2])
+        )   
+        tsdataset3 = TSDataset.concat([tsdataset1, tsdataset2], axis=1)
+        self.assertEqual(tsdataset3.get_all_cov().data.shape, (200, 4))
 
     def test_plot(self):
         """
@@ -817,6 +873,48 @@ class TestTSDataset(TestCase):
         with self.assertRaises(ValueError):
             ts.plot(columns="h")
 
+        ###quantile plot
+        target = TimeSeries.load_from_dataframe(
+            pd.DataFrame(np.random.randn(400,2).astype(np.float32),
+                    index=pd.date_range("2022-01-01", periods=400, freq="15T"),
+                        columns=["a1", "a2"]
+                    ))
+
+        observed_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(400, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=400, freq="15T"),
+                columns=["index", "c"]
+            ))
+        known_cov = TimeSeries.load_from_dataframe(
+            pd.DataFrame(
+                np.random.randn(500, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=500, freq="15T"),
+                columns=["b1", "c1"]
+            ))
+        static_cov = {"f": 1, "g": 2}
+        ts = TSDataset(target, observed_cov, known_cov, static_cov)
+        from paddlets.models.forecasting import DeepARModel
+        reg = DeepARModel(
+            in_chunk_len=10,
+            out_chunk_len=5,
+            skip_chunk_len=4 * 4,
+            eval_metrics=["mse", "mae"],
+            batch_size=512,
+            num_samples = 101,
+            regression_mode="sampling",
+            output_mode="quantiles",
+            max_epochs=5
+        )
+
+        reg.fit(ts, ts)
+        res = reg.predict(ts)
+
+        res.plot()
+        res.plot(["a1"])
+        res.plot(["a1"],add_data = [res], labels = ["pred1"])
+        res.plot(["a1","a2"],add_data = [res], labels = ["pred1"])
+        res.plot(["a1","a2"],add_data = [res,res], labels = ["pred1","pred2"])
 
     def test_astype(self):
         """
@@ -898,6 +996,37 @@ class TestTSDataset(TestCase):
         self.assertEqual(list(tsdataset1.columns.keys()), ['a', 'e', 'b', 'c', 'd'])
         tsdataset1.sort_columns(ascending=False)
         self.assertEqual(list(tsdataset1.columns.keys()), ['a', 'e', 'd', 'c', 'b'])
+    
+    def test_drop_tail_nan(self):
+        """
+        unittest function
+        """
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 5), 
+            index=pd.date_range('2022-01-01', periods=200, freq='1D'),
+            columns=['a', 'b', 'c', 'd', 'e']
+        )
+        sample1['s'] = pd.Series([1 for i in range(200)], index=pd.date_range('2022-01-01', periods=200, freq='1D'))
+        sample1.iloc[100:, 0] = np.nan
+        tsdataset1 = TSDataset.load_from_dataframe(
+            df=sample1, 
+            target_cols='a', 
+            observed_cov_cols=['d', 'c', 'b'], 
+            known_cov_cols='e', 
+            static_cov_cols='s'
+        )
+        self.assertEqual(tsdataset1.target.data.shape, (200, 1))
+        self.assertEqual(tsdataset1.observed_cov.data.shape, (200, 3))
+        tsdataset1 = TSDataset.load_from_dataframe(
+            df=sample1, 
+            target_cols='a', 
+            observed_cov_cols=['d', 'c', 'b'], 
+            known_cov_cols='e', 
+            static_cov_cols='s',
+            drop_tail_nan=True
+        )
+        self.assertEqual(tsdataset1.target.data.shape, (100, 1))
+        self.assertEqual(tsdataset1.observed_cov.data.shape, (200, 3))
 
 if __name__ == "__main__":
     unittest.main()
