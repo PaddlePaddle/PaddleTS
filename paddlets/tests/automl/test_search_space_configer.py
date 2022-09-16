@@ -7,7 +7,6 @@ from ray.tune import quniform, randint
 
 from paddlets.automl.autots import SearchSpaceConfiger
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.models.forecasting.ml.lgbm import LGBM
 from paddlets.transform import Fill
 
 
@@ -28,12 +27,6 @@ class TestSearchSpaceConfiger(TestCase):
         sp = configer.get_default_search_space("MLPRegressor")
         sp_str = configer.search_space_to_str(sp)
         sp = configer.recommend(MLPRegressor)
-
-        # ML
-        sp = configer.get_default_search_space(LGBM)
-        sp = configer.get_default_search_space("LGBM")
-        sp_str = configer.search_space_to_str(sp)
-        sp = configer.recommend(LGBM)
 
         # Pipeline
         sp = configer.get_default_search_space([Fill, MLPRegressor])
