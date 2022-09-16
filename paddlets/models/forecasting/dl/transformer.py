@@ -13,6 +13,9 @@ from paddlets.models.common.callbacks import Callback
 from paddlets.logger import raise_if_not
 from paddlets.datasets import TSDataset
 
+COVS = ["observed_cov", "known_cov"]
+PAST_TARGET = "past_target"
+
 
 class _PositionalEncoding(paddle.nn.Layer):
     """Paddle layer implementing positional encoding.
@@ -47,7 +50,7 @@ class _PositionalEncoding(paddle.nn.Layer):
             paddle.arange(0, max_len, dtype="float32"), axis=1
         )
         div_term = paddle.exp(
-            paddle.arange(0, d_model, 2, dtype="float32") * (np.log2(1e4) / d_model)
+            paddle.arange(0, d_model, 2, dtype="float32") * (-1. * np.log2(1e4) / d_model)
         )
         pe[:, 0::2] = paddle.sin(position * div_term)
         pe[:, 1::2] = paddle.cos(position * div_term)
@@ -80,20 +83,22 @@ class _TransformerBlock(paddle.nn.Layer):
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
         out_chunk_len(int): The size of the forecasting horizon, i.e. the number of time steps output by the model.
         target_dim(int): The numer of targets.
+        input_dim(int): The number of channels in the input series.
         d_model(int): The expected feature size for the input/output of transformer's encoder/decoder.
         nhead(int): The number of heads in the multi-head attention mechanism.
         num_encoder_layers(int): The number of encoder layers in the encoder.
         num_decoder_layers(int): The number of decoder layers in the decoder.
         dim_feedforward(int): The dimension of the feedforward network model.
-        activation(str): The activation function of encoder/decoder intermediate layer.
-            ["glu", "bilinear", "relu", "gelu"] is optional.
+        activation(str): The activation function of encoder/decoder intermediate layer. ["relu", "gelu"] is optional.
         dropout_rate(float): Fraction of neurons affected by Dropout.
         custom_encoder(paddle.nn.Layer|None): A custom user-provided encoder module for the transformer.
         custom_decoder(paddle.nn.Layer|None): A custom user-provided decoder module for the transformer.
 
     Attributes:
+        _in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
         _out_chunk_len(int): The size of the forecasting horizon, i.e. the number of time steps output by the model.
         _target_dim(int): The numer of targets.
+        _input_dim(int): The number of channels in the input series.
         _encoder(paddle.nn.Layer): The encoder.
         _positional_encoding(paddle.nn.Layer): The positional encoding.
         _activation(str): The activation function of encoder/decoder intermediate layer.
@@ -105,6 +110,7 @@ class _TransformerBlock(paddle.nn.Layer):
         in_chunk_len: int,
         out_chunk_len: int,
         target_dim: int,
+        input_dim: int,
         d_model: int,
         nhead: int,
         num_encoder_layers: int,
@@ -116,13 +122,15 @@ class _TransformerBlock(paddle.nn.Layer):
         custom_decoder: Optional[paddle.nn.Layer] = None,
     ):
         super(_TransformerBlock, self).__init__()
+        self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._target_dim = target_dim 
+        self._input_dim = input_dim
 
         # Encoding step.
         #   1> Mapping the target_dim to d_model with a linear layer.
         #   2> Adding relative position information to the input sequence using PositionalEncoding.
-        self._encoder = paddle.nn.Linear(target_dim, d_model)
+        self._encoder = paddle.nn.Linear(input_dim, d_model)
         self._positional_encoding = _PositionalEncoding(
             d_model, in_chunk_len, dropout_rate
         )
@@ -165,7 +173,11 @@ class _TransformerBlock(paddle.nn.Layer):
         Returns:
             Tuple[paddle.Tensor, paddle.Tensor]: The inputs for the encoder and decoder
         """
-        src = X["past_target"]
+        covs = [
+            X[cov][:, :self._in_chunk_len, :] for cov in COVS if cov in X
+        ]
+        feats = [X[PAST_TARGET]] + covs
+        src = paddle.concat(feats, axis=-1)
         tgt = src[:, -1:, :]
         return src, tgt
 
@@ -185,12 +197,12 @@ class _TransformerBlock(paddle.nn.Layer):
         # side of the Transformer architecture
         src, tgt = self._create_transformer_inputs(X)
 
-        # "np.sqrt(target_dim)" is a normalization factor
+        # "np.sqrt(input_dim)" is a normalization factor
         # see section 3.2.1 in 'Attention is All you Need' by Vaswani et al. (2017)
-        src = self._encoder(src) * np.sqrt(self._target_dim)
+        src = self._encoder(src) * np.sqrt(self._input_dim)
         src = self._positional_encoding(src)
         
-        tgt = self._encoder(tgt) * np.sqrt(self._target_dim)
+        tgt = self._encoder(tgt) * np.sqrt(self._input_dim)
         tgt = self._positional_encoding(tgt)
 
         out = self._transformer(src, tgt)
@@ -203,10 +215,12 @@ class _TransformerBlock(paddle.nn.Layer):
 
 
 class TransformerModel(PaddleBaseModelImpl):
-    """Transformer is a state-of-the-art deep learning model introduced in 2017. 
+    """Transformer\[1\] is a state-of-the-art deep learning model introduced in 2017. 
     It is an encoder-decoder architecture whose core feature is the `multi-head attention` mechanism, 
     which is able to draw intra-dependencies within the input vector and within the output vector (`self-attention`)
     as well as inter-dependencies between input and output vectors (`encoder-decoder attention`).
+
+    \[1\] Vaswani A, et al. "Attention Is All You Need", `<https://arxiv.org/abs/1706.03762>`_
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -231,8 +245,7 @@ class TransformerModel(PaddleBaseModelImpl):
         num_encoder_layers(int): The number of encoder layers in the encoder.
         num_decoder_layers(int): The number of decoder layers in the decoder.
         dim_feedforward(int): The dimension of the feedforward network model.
-        activation(str): The activation function of encoder/decoder intermediate layer, 
-            ["glu", "bilinear", "relu", "gelu"] is optional.
+        activation(str): The activation function of encoder/decoder intermediate layer, ["relu", "gelu"] is optional.
         dropout_rate(float): Fraction of neurons affected by Dropout.
         custom_encoder(paddle.nn.Layer|None): A custom user-provided encoder module for the transformer.
         custom_decoder(paddle.nn.Layer|None): A custom user-provided decoder module for the transformer.
@@ -261,8 +274,7 @@ class TransformerModel(PaddleBaseModelImpl):
         _num_encoder_layers(int): The number of encoder layers in the encoder.
         _num_decoder_layers(int): The number of decoder layers in the decoder.
         _dim_feedforward(int): The dimension of the feedforward network model.
-        _activation(str): The activation function of encoder/decoder intermediate layer.
-            ["glu", "bilinear", "relu", "gelu"] is optional.
+        _activation(str): The activation function of encoder/decoder intermediate layer. ["relu", "gelu"] is optional.
         _dropout_rate(float): Fraction of neurons affected by Dropout.
         _custom_encoder(paddle.nn.Layer|None): A custom user-provided encoder module for the transformer.
         _custom_decoder(paddle.nn.Layer|None): A custom user-provided decoder module for the transformer.
@@ -325,9 +337,7 @@ class TransformerModel(PaddleBaseModelImpl):
         tsdataset: TSDataset
     ):
         """Ensure the robustness of input data (consistent feature order), at the same time,
-            check whether the data types are compatible. If not, the processing logic is as follows.
-
-        Processing logic:
+            check whether the data types are compatible. If not, the processing logic is as follows:
 
             1> Integer: Convert to np.int64.
 
@@ -362,8 +372,14 @@ class TransformerModel(PaddleBaseModelImpl):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        input_dim = target_dim = train_tsdataset.get_target().data.shape[1]
+        if train_tsdataset.get_observed_cov():
+            input_dim += train_tsdataset.get_observed_cov().data.shape[1]
+        if train_tsdataset.get_known_cov():
+            input_dim += train_tsdataset.get_known_cov().data.shape[1]
         fit_params = {
-            "target_dim": train_tsdataset.get_target().data.shape[1]
+            "target_dim": target_dim,
+            "input_dim": input_dim
         }
         return fit_params
         
@@ -374,17 +390,17 @@ class TransformerModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _TransformerBlock(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params["target_dim"],
-            self._d_model,
-            self._nhead,
-            self._num_encoder_layers,
-            self._num_decoder_layers,
-            self._dim_feedforward,
-            self._activation,
-            self._dropout_rate,
-            self._custom_encoder,
-            self._custom_decoder
+            in_chunk_len=self._in_chunk_len,
+            out_chunk_len=self._out_chunk_len,
+            target_dim=self._fit_params["target_dim"],
+            input_dim=self._fit_params["input_dim"],
+            d_model=self._d_model,
+            nhead=self._nhead,
+            num_encoder_layers=self._num_encoder_layers,
+            num_decoder_layers=self._num_decoder_layers,
+            dim_feedforward=self._dim_feedforward,
+            activation=self._activation,
+            dropout_rate=self._dropout_rate,
+            custom_encoder=self._custom_encoder,
+            custom_decoder=self._custom_decoder
         )
-
