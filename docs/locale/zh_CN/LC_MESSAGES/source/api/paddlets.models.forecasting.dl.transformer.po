@@ -1,0 +1,302 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 18:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.transformer.rst:2
+#: 319dd6ed57654ba8acdcbea3c64dfe10
+msgid "paddlets.models.forecasting.dl.transformer"
+msgstr ""
+
+#: 7cfdaa667c494050b4ac9efc74a5f528 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 39ce2bb498d24ed990ac7212947971d4 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:1
+msgid ""
+"Transformer\\[1\\] is a state-of-the-art deep learning model introduced "
+"in 2017. It is an encoder-decoder architecture whose core feature is the "
+"`multi-head attention` mechanism, which is able to draw intra-"
+"dependencies within the input vector and within the output vector (`self-"
+"attention`) as well as inter-dependencies between input and output "
+"vectors (`encoder-decoder attention`)."
+msgstr ""
+"Transformer\\[1\\] 是2017年提出的一种编码器-解码器架构的深度学习模型. 核心特征是\"多头注意力\"机制, "
+"能够捕获输入和输出的内部依赖关系(自注意力机制) 以及输入和输出之间的依赖关系(编码器-解码器注意力机制)."
+
+#: 8bdb6a5b8335425fa7be96a2b3b1b2a9 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:6
+msgid ""
+"\\[1\\] Vaswani A, et al. \"Attention Is All You Need\", "
+"`<https://arxiv.org/abs/1706.03762>`_"
+msgstr ""
+
+#: 2227502ac0404a3ba4d2783a96e03695 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel
+msgid "Parameters"
+msgstr ""
+
+#: 8a94eb731f294bbfbfed30ab44746a53 edd06e08129744d9893a28fd9df8b411 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:8
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:59
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 635a2a3cb9ca4d038120c1b57b4cc576 6ecc1f66cc3a461294d45afaee91d15a of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:10
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:65
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 105b10caa4e14d08828b3e1bb09d279e 79aaa9f5b94d47d08a21150d1a34c1a7 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:12
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:71
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 2a89cd1159f9448bb73f2ec35254f9a6 ca2f4e02b4e244c89001ae9ab093bbe9 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:16
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:79
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 721210fcd758456bb1707b81e81461ac bf2e43f23de94c8dbf84d972ef2e4d35 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:18
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:85
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 4f4b434a9517441e8a7cb6103883e08c 8db60f272c1c45b68fca2d1674d22869 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:20
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:91
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 61c97f7775de4d4ba0781d98b14d9372 f96875f5face4edaad0619cadcbfa702 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:22
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:97
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 601545fddb9d4bcaaa9ade153fa57bac cc439fa998284d9697fc92d4046237ad of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:24
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:103
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: acfc6864fc504f18b1ab07944f329c30 f684e96c6b994444b9c44dd2da4f3cbc of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:26
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:109
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 7d07131c414044099cd5414a4aff259c b529701fe1154211b731c034daba4106 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:28
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:115
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 02cf59b6efdf4776929749023bf6a602 6d2d0baf9060445698fb7943c1d1acde of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:30
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:121
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: c74d2a2f49b042b5afa0ed05f6bb57f9 d9604bec9bec4c89850b94777ea0055f of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:32
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:127
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: a873fd6c381f4f5d87821e7c4646ee34 ed418059b9e54c4890182be8b490af24 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:34
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:133
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: f1706901afb6412b9fca7ce2d2c85027 ff3add28d99f460997041cd36f06e9df of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:36
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:139
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 656a25275ac84dffa0ea1e4515a39652 c8f2427558ed458abb236a348e2e7df4 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:38
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:151
+msgid ""
+"The expected feature size for the input/output of the transformer's "
+"encoder/decoder."
+msgstr "编码器/解码器的输入特征维度."
+
+#: 298fbd83f4a74f989be644a6da1bc02d d2dacc9d2a5244cbb7c1632df17fdd71 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:40
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:157
+msgid "The number of heads in the multi-head attention mechanism."
+msgstr "多头注意力机制中的头数."
+
+#: 0fbf750512ee4f728dd326ecda4a3a23 9776d8ab2c934d1cadd4da79070b265c of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:42
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:163
+msgid "The number of encoder layers in the encoder."
+msgstr "编码器中的编码层数."
+
+#: 4a2908c7a7234ea9b588141e7ca56a4d f45dad86686c4097ba034fc70486f55a of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:44
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:169
+msgid "The number of decoder layers in the decoder."
+msgstr "解码器中的解码层数."
+
+#: cdc5cac7b84d427493b6dea3e1629399 f30d6a8c9b18490ab570329996a4c146 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:46
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:175
+msgid "The dimension of the feedforward network model."
+msgstr "前馈网络模型的维度."
+
+#: 2a714b497d2b48ffafc01f3ab25bb8aa of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:48
+msgid ""
+"The activation function of encoder/decoder intermediate layer, [\"relu\","
+" \"gelu\"] is optional."
+msgstr "编码器/解码器中间层的激活函数, 可选[\"relu\", \"gelu\"]."
+
+#: a66b9afa7b6b4c9a9512c41d98cf0134 d1e2b182189b4fc8b35cf6d7652bd8a1 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:50
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:187
+msgid "Fraction of neurons affected by Dropout."
+msgstr "神经元丢弃概率."
+
+#: bd9b85b9634e4a71b701f4bdac57e231 f1dce780653644f4a9a5fc106810a9ad of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:52
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:193
+msgid "A custom user-provided encoder module for the transformer."
+msgstr "用户自定义的transformer中编码器模块."
+
+#: e6a503ad22294dde9e41a82bc49aa727 f65b1a7934a7433dac943c61bb68e178 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:54
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:199
+msgid "A custom user-provided decoder module for the transformer."
+msgstr "用户自定义的transformer中解码器模块."
+
+#: 11467dae0d95452fa639e720e855e9ca 15c723227a75450abf81586e48d6997d
+#: 1c4205545b9042a7975851f9a6125eb5 29874c20d3ed489f9086c2ae5071f7b6
+#: 2995dcecd3554995a44ec5c3613dc4f9 2a91b45f48bd4480b2c53e454b7b14ef
+#: 4785cf39a85f451b97519eaefda51f49 47c5460568554eef80c89aa922269638
+#: 4ff350452aee47c8abd42b1e1651dc9b 642f430f1ddf4ec2829c6adbff4d13bb
+#: 6454a45c693b49f49fd91d3d09661ac0 6652475cc5024880910f3d811ae87ec6
+#: 730ed5fdce4c4b7894998ae639638741 7657cb27ef4c4073ae128113821a83fe
+#: 9117163ba73447c5a56111a96b080840 94d4dd79180041e4997cf7f696221d81
+#: 9840ea09eabd415486c1f8a4cb1a2d98 9e00b85388fb49babfe210f497ad8211
+#: a2e954ac618e49eebf41331cbb3ea868 b31c5ecd1e5b402e800af023b457abba
+#: c503640767f64aa7b6602c05e1e2ae4f d699bf70fec9475594fc545202516620
+#: da03c2dd761e4e5e8e3320bde757f5d2 ee8f1a31bc6e493083a05f2bdbd76fd5 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel
+msgid "type"
+msgstr ""
+
+#: 03f40eb509ef4247a89c1bf924aa466e 07ad8ba3f7414583ac07c079581d126f
+#: 199e3050b6b04ffea6875fac14ef14ee 4853b5bfe0dc4bd8a36c2b62a0662ffd
+#: 54910303bf7d468298e0da501b4361a6 598e5579b5264d789e06ea34a5c1b491
+#: 633cc172ff004577ae5db87933a2c759 6583da9b74184d27aa9856f12bb3a3a1
+#: 791f91dea427477d932e11872f411836 7e7bcc1a308c45cdac40ed973d16bd2d
+#: 9bc6ed0f1550465eb53d53e90c5c4175 c1359b3d7b8d4044988a61bfdfb8dbe6
+#: d29e315028994a82b8754d23352b8512 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:61
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:67
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:75
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:81
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:117
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:123
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:129
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:135
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:153
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:159
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:165
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:171
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:177
+msgid "int"
+msgstr ""
+
+#: 4a3e7100f8594dcb8c2dd9700f7a484e of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:87
+msgid "Callable[..., paddle.Tensor]|None"
+msgstr ""
+
+#: 8aee05b3ba3842e9b6dd0b72b378d1e8 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:93
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: ca5aaf3133814a97bbe61a02ceea8e33 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:99
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: d175689b0cd74936b53a389a3a8bc4df of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:105
+msgid "List[str]"
+msgstr ""
+
+#: f6f5cd87e2ac4e41a7a5d39d66f047a6 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:111
+msgid "List[Callback]"
+msgstr ""
+
+#: ca574b6e20df49b88be648809fc84f39 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:141
+msgid "int|None"
+msgstr ""
+
+#: d7bc349a0cf441f0834563bdeb90201c of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:147
+msgid "bool"
+msgstr ""
+
+#: a4a46029ffe74a6b93c6136cb7c173b5 of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:181
+msgid ""
+"The activation function of encoder/decoder intermediate layer. [\"relu\","
+" \"gelu\"] is optional."
+msgstr "编码器/解码器中间层的激活函数, 可选[\"relu\", \"gelu\"]."
+
+#: a493658016b2426f9b773064cab7164f of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:183
+msgid "str"
+msgstr ""
+
+#: 57ee8dc9e54e4af5a20a25828450014b of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:189
+msgid "float"
+msgstr ""
+
+#: 5a6d21c9889348779c395de7f29def25 e5e6fc4da87f4beab88205dbaad6a6cf of
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:195
+#: paddlets.models.forecasting.dl.transformer.TransformerModel:201
+msgid "paddle.nn.Layer|None"
+msgstr ""
+

@@ -40,9 +40,9 @@ source_suffix = [".rst", ".md"]
 
 # Localization of Documentation.
 # https://docs.readthedocs.io/en/stable/localization.html
-locale_dirs = ['locale/']
+locale_dirs = ["locale/"]
 gettext_compact = False
-language = 'en'
+language = "en"
 add_module_names = False
 gettext_uuid = True
 
@@ -55,6 +55,14 @@ html_theme = "sphinx_rtd_theme"
 
 # -- Options for EPUB output
 # epub_show_urls = "footnote"
+
+html_theme_options = {
+    # "collapse_navigation": True,
+    "display_version": True,
+    # "navigation_depth": 5,
+    # "navigation_with_keys": True,
+    "body_max_width": "80%"
+}
 
 # Html logo in drawer.
 html_logo = "static/images/logo/paddlets-rtd-logo.png"

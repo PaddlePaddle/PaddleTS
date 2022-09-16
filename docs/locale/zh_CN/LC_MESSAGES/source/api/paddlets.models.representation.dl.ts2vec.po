@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:39+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.dl.ts2vec.rst:2
+#: 2fe0125a3d4445e78de8ef8f82acbf8f
+msgid "paddlets.models.representation.dl.ts2vec"
+msgstr ""
+
+#: c5e7180237224e44ac9b12e6f3c6d7c7 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.representation.dl.repr_base.ReprBaseModel`"
+msgstr ""
+
+#: 90ec7102fd6542cb8dd037120d4ab0d6 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:1
+msgid ""
+"TS2Vec\\[1\\] is a time series representation model introduced in 2021, "
+"It is a universal framework for learning representations of time series "
+"in an arbitrary semantic level. TS2Vec performs contrastive learning in a"
+" hierarchical way over augmented context views, which enables a robust "
+"contextual representation for each timestamp."
+msgstr ""
+"TS2Vec\\[1\\] 是2021年提出的一种时序表征模型(一种在任意语义级别学习时序表征的通用框架), "
+"它以层级的方式在不同的下文视角进行对比学习, 为每个时间戳得学习鲁棒的上下文表征."
+
+#: 0ecd118c31d14fff96fa4571c24f2317 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:6
+msgid ""
+"\\[1\\] Yue Z, et al. \"TS2Vec: Towards universal representation of time "
+"series\", `<https://arxiv.org/abs/2106.10466>`_"
+msgstr ""
+
+#: 76919c191c9c4151aba63329472e8d39 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec
+msgid "Parameters"
+msgstr ""
+
+#: 06c4d4a90e3d488ea94f231867948533 44988a68c72347fb9a707805512c4182 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:8
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:29
+msgid "The size of time series segment."
+msgstr "时序片段的长度."
+
+#: 8fedeaf5f3e24b379b54460c70f6fb0f c97c5cbe71c54eb2a31af77a8502b75a of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:10
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:35
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 4a3bef8be84d433c908660eb828828e3 a897f636abf84bdfb7fe51da43086870 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:12
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:41
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 44edfdabe99c4c04ab73a928feec8062 dc996f2c911d41a19e88d49a7699050e of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:14
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:47
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 7684068b4fd94cf8856e048c0bdc3fa6 887a15984734436b9c3ebc5217411175 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:16
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:53
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 5dec1e99635241bfa2fc4960400b29f2 e0d9ed229bb54a709baf0ab3286b8cfc of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:18
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:59
+msgid "Number of samples per batch."
+msgstr "训练数据的批大小"
+
+#: 4cb2a66457224028a53089bed9f8b826 cf91d21c64d14d2aae05094bbca09b48 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:20
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:65
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 03751d7f8b00464a9b77bc2cd7ece808 8cbc52a6aa3d440c82672870e5942183 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:22
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:71
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 2c458788efe24903b51f98afd9f936e4 5c88b762f3a844188c92840131e541cf of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:24
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:77
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 251bb380325c4367979fee4fc3db2f78 2626ef5e63a34958ab30ffc0d04b3294
+#: 3d056e919707485db3f8a5e84178686c 559d70f15e86470ba4b909ce1d5295bf
+#: bc01dd14112f4d948245450a8091231c d68f866fc53c4cff8611c12bd76d760d
+#: d84e58be8fea4d90bea81a31397ce360 dd5c2c0600a84b8b9ab846d43c92dd06
+#: f62ea568f3a44b798d6c77fd03161fb6 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec
+msgid "type"
+msgstr ""
+
+#: 03f91ec3893a430fa48b6c04660f8e12 0424d91cf2a44d0e980bccb117b567b6
+#: 20666ade818545ad9acefb97a4a569ff d1d7391d56f34afbbb79cde593db8c47
+#: dce2ccea9aea407787b8e3a340518943 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:31
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:37
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:61
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:67
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:73
+msgid "int"
+msgstr ""
+
+#: f4577823172e46f28b97d9cd757988b5 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:43
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 0aac09fd653d46bb84efe847cbc9c5e3 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:49
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: f8fabdd1d02e49b9b2da913a42634834 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:55
+msgid "List[Callback]"
+msgstr ""
+
+#: bbc9a222fd1e435baeb7e7e04617d403 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:79
+msgid "int|None"
+msgstr ""
+

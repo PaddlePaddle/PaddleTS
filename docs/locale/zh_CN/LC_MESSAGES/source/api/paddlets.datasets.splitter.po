@@ -1,0 +1,318 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.datasets.splitter.rst:2
+#: 5b25e81555e848778b4ccb39644a73c9
+msgid "paddlets.datasets.splitter"
+msgstr ""
+
+#: 76a5ff95e5cb4127b694acefd09e2040 of
+#: paddlets.datasets.splitter.SplitterBase:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: e457beb07d0944e9bdf065ed29a2bc0b of
+#: paddlets.datasets.splitter.SplitterBase:1
+msgid "Base class for all splitter."
+msgstr "所有Splitter的基类"
+
+#: 4a48456e20e947198a0717118cc43412 7eeeb8675daa490bbb73404b62c69956
+#: b2fdc4cbac1b44e5ba189878f3449a39 cb2535d0dd99453496b41be5ec38d2a4
+#: fe226b09911049d2975c5a46136ab2f5 ff2e574207ef427ebb52c69271ce093e of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits
+#: paddlets.datasets.splitter.HoldoutSplitter
+#: paddlets.datasets.splitter.SlideWindowSplitter
+#: paddlets.datasets.splitter.SplitterBase
+#: paddlets.datasets.splitter.SplitterBase.split
+msgid "Parameters"
+msgstr ""
+
+#: 851d9a6ba7294a5eb661b0afc2c4aab5 of
+#: paddlets.datasets.splitter.SplitterBase:3
+msgid ""
+"Series to be skipped between train data and test data, equal to 0 by "
+"default."
+msgstr "在训练集和测试集之间需要跳过的数据，默认为0,如果使用backtest进行数据效果验证的话这里不用设置"
+
+#: 30b1c885733f4a94b07899b79dcd5ff0 4e6e699eff414950a55862876aa3d8a6
+#: cfa7c27e5cc24f97879524487d0c7620 d588f9ee13114c29b027032cb55f330f of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:12
+#: paddlets.datasets.splitter.HoldoutSplitter:9
+#: paddlets.datasets.splitter.SlideWindowSplitter:12
+#: paddlets.datasets.splitter.SplitterBase:5
+msgid "Whehter trun on the verbose mode, set to True by default."
+msgstr "是否开启日志打印，默认开启"
+
+#: 070aa0773d854e80a99f31906b3b33a0 2ec04e00e6f94202919884cfd56d4575
+#: 45ae0bec044a4190ac3258abb9f43ba3 67427ef5360546e8bd2d0193204b1b33
+#: 6ba1328bcab84a22a231a7a24529f8d9 a8454412b6ad4450aaa076ff92d85879 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits
+#: paddlets.datasets.splitter.HoldoutSplitter
+#: paddlets.datasets.splitter.SlideWindowSplitter
+#: paddlets.datasets.splitter.SplitterBase
+#: paddlets.datasets.splitter.SplitterBase.split
+msgid "Returns"
+msgstr ""
+
+#: 2416b8af6e2f465690c675dfac2bdbc8 abf455bf5cb14bb4ac243bc827b2f606
+#: b29ac6e5c4734376a46c9219605003e3 fe35450e962145cda37d18e17b254aa6 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:15
+#: paddlets.datasets.splitter.HoldoutSplitter:12
+#: paddlets.datasets.splitter.SlideWindowSplitter:15
+#: paddlets.datasets.splitter.SplitterBase:8
+msgid "None"
+msgstr ""
+
+#: 36e1a0f3732c4aeb94a509c205f10cab 3a1d73bb5d974e80b6710e38029c7dbc
+#: 3fe2470a023c4151af41f46d4e8be939 80751767d39a4718bd7dad688ede3631
+#: cf49d07b032747dabb52e60ff0ee4379 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits
+#: paddlets.datasets.splitter.SlideWindowSplitter
+#: paddlets.datasets.splitter.SplitterBase
+#: paddlets.datasets.splitter.SplitterBase.split
+msgid "Raises"
+msgstr ""
+
+#: 737dc0e0fedb45bd8d89d6b75971cd37 of
+#: paddlets.datasets.splitter.SplitterBase.split:1
+msgid "Split TSdataset."
+msgstr "切割TSdataset"
+
+#: 9a0bb2dbdd8946b4938b8f3654e91568 of
+#: paddlets.datasets.splitter.SplitterBase.split:3
+msgid "Dataset to be splitted."
+msgstr "待切割的数据"
+
+#: 3f4278f1966a4e2f99c1e07281fceca2 of
+#: paddlets.datasets.splitter.SplitterBase.split:5
+msgid "Return index or return TSDataset, set to False by default"
+msgstr "返回index或者返回TSDataset，默认返回TSdataset"
+
+#: 2b65d063aed84bcf95c7ad76f3dac68d of
+#: paddlets.datasets.splitter.SplitterBase.split:8
+msgid "TSDataset|pd.DatetimeIndex|pd.RangeIndex"
+msgstr ""
+
+#: 275a8356c3a440f2ab3fc636dc71fc09 458a7fda41a74ba09de86489f1c84a11
+#: af296e12244445a5a256e07e2893b2e7 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:1
+#: paddlets.datasets.splitter.HoldoutSplitter:1
+#: paddlets.datasets.splitter.SlideWindowSplitter:1
+msgid "Bases: :py:class:`~paddlets.datasets.splitter.SplitterBase`"
+msgstr ""
+
+#: 0ff1f7d0fe8c4bffbde01b50f964b236 of
+#: paddlets.datasets.splitter.HoldoutSplitter:1
+msgid "Holdout splitter"
+msgstr "Holdout切割"
+
+#: 70f1e044255c438aa8e65de1c8016793 of
+#: paddlets.datasets.splitter.HoldoutSplitter:3
+msgid "Split TSDataset  into an training set and a  test set."
+msgstr "TSDataset切分成一个特定的训练集和测试集"
+
+#: 5634760b747d437eaf66f7d1698a489a of
+#: paddlets.datasets.splitter.HoldoutSplitter:5
+msgid ""
+"Test_size, can be int or float, int represent data length, type float "
+"represent data ratio."
+msgstr "测试集大小，可以是int或者float，作为int时代表测试集的长度，作为float时代表切分比例"
+
+#: 09204034b8ee427abe94abe58fe821c3 25936d91b68d40e59e000fb6f56140b4
+#: d99228dd52124a8e8909e3d2b9c239d6 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:8
+#: paddlets.datasets.splitter.HoldoutSplitter:7
+#: paddlets.datasets.splitter.SlideWindowSplitter:10
+msgid "Series to be skipped between train data and test data."
+msgstr "在训练集和测试集之间需要跳过的数据，默认为0"
+
+#: 0b02f4689ec24d0badc8e9925111143e 5b8c3ae382d845cab77b9b1eee9fc718
+#: aed18808ca79437f88ebc3571717e534 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:20
+#: paddlets.datasets.splitter.HoldoutSplitter:15
+#: paddlets.datasets.splitter.SlideWindowSplitter:20
+msgid "Example"
+msgstr ""
+
+#: 2ea7f16b717348349cb437d5bc9b1444 of
+#: paddlets.datasets.splitter.HoldoutSplitter:16
+msgid ""
+"1) For example for ``test_size = 5`` , other param set to default. here "
+"is a representation of the folds:"
+msgstr "1）举例，如果 ``test_size = 5``, 其他参数设置为默认值，下面展示了这种情况下的切割例子:"
+
+#: 0b676a3bce2848d6a2f12ce2da178d62 47b1a993f7684644a5dac76a140559ec
+#: 4b0cea6908834f24a2987d0b4faa1a45 596b0912edd54a90adabf62f235fea35
+#: 660918cb1bcc497e8032ab29e2b91da8 9fbcbbfbdd9a474a86ed871ad5a9f4af
+#: b181d28f79b34f63b1e28692e2af8018 b4b0a4a80c564e62835317a7839aa140
+#: ebd8f3ba5e18411aacfb71e200efd273 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:33
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:47
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:61
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:75
+#: paddlets.datasets.splitter.HoldoutSplitter:23
+#: paddlets.datasets.splitter.HoldoutSplitter:33
+#: paddlets.datasets.splitter.SlideWindowSplitter:30
+#: paddlets.datasets.splitter.SlideWindowSplitter:45
+#: paddlets.datasets.splitter.SlideWindowSplitter:57
+msgid "``*`` = training fold. ``x`` = test fold."
+msgstr "``*`` = 训练集， ``x`` = 测试集"
+
+#: 4c235902121040e08a95b4229488ff17 of
+#: paddlets.datasets.splitter.HoldoutSplitter:26
+msgid ""
+"2) For example for ``test_size = 0.5``, other param set to default. here "
+"is a representation of the folds:"
+msgstr "2）举例，如果 ``test_size = 0.5``, 其他参数设置为默认值，下面展示了这种情况下的切割例子:"
+
+#: c31fd1f2423440d1ba1f4b6677c24a4f of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:1
+msgid "Expanding Window Splitter"
+msgstr "扩大窗口切分"
+
+#: d1c58d80b4734ba398d63efd14c373ab of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:3
+msgid ""
+"Split time series repeatedly into an growing training set and a fixed-"
+"size test set."
+msgstr "以固定测试集，不断扩张训练集长度的方式切割数据"
+
+#: 0db7115c01c046c0a8f5b3774dd91703 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:5
+msgid "Number of folds, not None."
+msgstr "folds的数量，默认为5，不能为None"
+
+#: 356d1093108b4ab4b32f882030a88ead of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:6
+msgid ""
+"Test data size, test_size = n_samples // (n_splits+1) when test_size = "
+"None."
+msgstr "测试集长度，如果不设置默认为n_samples // (n_splits+1)"
+
+#: 5b5a6b78da8a4f83aa1f20c986164d11 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:10
+msgid "Max train size."
+msgstr "训练集的最大长度"
+
+#: 217260c03c3b4ce097cff6b564292bd6 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:21
+msgid ""
+"1) For example for ``n_splits = 5``, other params set to default. By "
+"default, test_size = n_samples // (n_splits+1) = 12//(5+1) = 2 here is a "
+"representation of the folds:"
+msgstr ""
+"1）举例，如果 ``n_splits = 5``, 其他参数设置为默认值，训练集长度= n_samples // (n_splits+1) = "
+"12//(5+1) = 2，下面展示了这种情况下的切割例子:"
+
+#: 84409f18cfa345f082a5e5dfbf27c68d of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:36
+msgid ""
+"2) For example for ``n_splits = 5``, ``test_size = 1`` other params set "
+"to default. here is a representation of the folds:"
+msgstr "2）举例，如果 ``n_splits = 5``, ``test_size = 1``, 其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#: 6df4751d9114420e9b65b3ed7260f0e0 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:50
+msgid ""
+"3) For example for ``n_splits = 5``, ``test_size = 1``, ``skip_size = "
+"1``, other params set to default. here is a representation of the folds:"
+msgstr ""
+"3）举例，如果 ``n_splits = 5``, ``test_size = 1``, ``skip_size = 1``, "
+"其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#: c5a807dfc82a4d759d5c1363bf90d7b9 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter:64
+msgid ""
+"4) For example for ``n_splits = 5``, ``test_size = 1``, ``max_train_size "
+"= 5``,other params set to default. here is a representation of the folds:"
+msgstr ""
+"4）举例，如果 ``n_splits = 5``, ``test_size = 1``, ``skip_size = 1``, "
+"``max_train_size = 5``, 其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#: d2c323e919944fb9b33d700dac141bfe of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits:1
+msgid "Get n_splits"
+msgstr ""
+
+#: a4ca3d519e7d45099f0a5c217523fd39 of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits:5
+msgid "n_splits"
+msgstr ""
+
+#: f7afa0f102564ad7b827545d37e09c5f of
+#: paddlets.datasets.splitter.ExpandingWindowSplitter.get_n_splits
+msgid "Return type"
+msgstr ""
+
+#: ddd41a260d5940f781622542d4bd84f7 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:1
+msgid "Slide Window Splitter"
+msgstr "滑动窗口切割"
+
+#: ff48d09b4228450089d9af05e9faefc0 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:3
+msgid "Split time series repeatedly into a fixed-length training and test set."
+msgstr "固定训练集和测试集长度，以窗口滑动的方式去切割数据"
+
+#: bd3d85ddb17a4e28a7382ebfc0480018 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:5
+msgid "Train data size, not None."
+msgstr "训练集长度，不能为None"
+
+#: 2d1653eb3b0a4d0e881a11bae44f057e of
+#: paddlets.datasets.splitter.SlideWindowSplitter:7
+msgid "Test data size, not None."
+msgstr "测试集的长度，不能为None"
+
+#: 6795b60050044210a1d8470212e1be3c of
+#: paddlets.datasets.splitter.SlideWindowSplitter:9
+msgid "Step size between two folds, equal to test_size if None."
+msgstr "两个切割之间的窗口滑动步长，默认等于测试集长度"
+
+#: 48dd8a8677704c8994396af142941529 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:21
+msgid ""
+"1) For example for ``train_size = 5``, ``test_size = 2``, other params "
+"set to default. here is a representation of the folds:"
+msgstr "1）举例，如果 ``train_size = 5``, ``test_size = 2``, 其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#: b504c019ef524c2abab71b5661af91b9 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:33
+msgid ""
+"2) For example for ``train_size = 5``, ``test_size = 2``, ``step_size = "
+"1``, other params set to default. here is a representation of the folds:"
+msgstr ""
+"2）举例，如果 ``train_size = 5``, ``test_size = 2``, ``step_size = 1``, "
+"其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#: 15f7c3faee2d474a94cba58090b7af07 of
+#: paddlets.datasets.splitter.SlideWindowSplitter:48
+msgid ""
+"3) For example for ``n_splits = 5``, ``test_size = 2``, ``skip_size = "
+"1``, other param set to default. here is a representation of the folds:"
+msgstr ""
+"3）举例，如果 ``train_size = 5``, ``test_size = 2``, ``skip_size = 1``, "
+"其他参数设置为默认值,下面展示了这种情况下的切割例子:"
+
+#~ msgid "Bases: :py:class:`bts.datasets.splitter.SplitterBase`"
+#~ msgstr ""
+

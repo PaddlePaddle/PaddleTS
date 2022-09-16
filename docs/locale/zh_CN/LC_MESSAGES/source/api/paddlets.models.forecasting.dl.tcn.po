@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 18:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.tcn.rst:2
+#: bf6ca1af2958462aad27f730a38f1110
+msgid "paddlets.models.forecasting.dl.tcn"
+msgstr ""
+
+#: 0bd66452d63b4b879ffd74a2ced6ab7f of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 1f617062c4e94779ad89daedc813e984 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:1
+msgid "Temporal Convolution Net\\[1\\]."
+msgstr ""
+
+#: da0ff4e3a9d0465bafc19d74b1a093ca of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:3
+msgid ""
+"\\[1\\] Bai S, et al. \"An empirical evaluation of generic convolutional "
+"and recurrent networks for sequence modeling\", "
+"`<https://arxiv.org/pdf/1803.01271>`_"
+msgstr ""
+
+#: 23a851b1d93a470f8dcc93a751eed4e5 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor
+msgid "Parameters"
+msgstr ""
+
+#: 7215a1d3a2564704bdec6ff723acb412 bf59ba6c9b184c26ae4adbdfbc01508f of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:6
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:45
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 486a41a64d9341beaf70c63116490a36 9989f40a85b24f609ba04af8f68c703a of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:8
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:51
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 4e852ff180814017a461c791470dde29 798c38184d5641378fbb2393b9145b8d of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:10
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:57
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 34f6b24253e84d71b8479c3326d67046 521cf22deff448a0aeea540c5e4ed3f4 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:14
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:65
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 5aa8bd28af664c6486ce153637f542fe e15802c84ec34e288779a33e57f286ae of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:16
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:71
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 28d35d7856aa4f7a94917e0b278ad072 c26379d2664e4006b83cc19ab9dc0ef5 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:18
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:77
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 36d1dc6b5956453eb168eac2de40257b 589cdc0329c54c288c4ab819b57acda1 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:20
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:83
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: a2031bcc4a1f455f9bbb04f638a89656 a69e4c78a3be498795c1eeb353a90120 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:22
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:89
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: 7f6e130d3b254702a6281ff62bf3f426 eb102044159247b48cc504afee35449b of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:24
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:95
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 767dcb7f3b924dcea93fc8e9a9e1f885 92b7de69caec44fc9bcc3cec168d3a0a of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:26
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:101
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 7d199889fc6e47fcacf9e29125683e72 e11a9156bbd9415e9ee7d7e40542d74f of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:28
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:107
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: d317b5def4ae4a158cdeb26d80b93f17 e0c5a1b473b74b249185ac8a962e15b9 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:30
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:113
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 29464ae571094463accdd6f544df500d 690d8b2bcd9c47a2890eb3263ebe8590 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:32
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:119
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: 101fad94d305435aa5596b8c14bc13bb 5567dc19110f4c32bcc63fc1c4ba7628 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:34
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:125
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 4ee86fe6d6c64139a8c2416a0c5188b0 a31e9cd7d7f740498857987d6b7a8675 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:36
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:137
+msgid "Hidden layer configuration."
+msgstr "多层TemporalBlock结构, 列表第i个元素标识第i层通道的维度."
+
+#: 06692495645d456e8553bd6d5031d0bd f589a9ea201841bea05d439f9ff01e54 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:38
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:143
+msgid "The filter size."
+msgstr "卷积核大小."
+
+#: e41a08600c8a46918e475b7ebe5383cc e6939e60d7db4bff9750518312f495e9 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:40
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:149
+msgid "Probability of setting units to zero."
+msgstr "神经元丢弃概率."
+
+#: 041a565edf31462f998219bb838898b7 17b5ddf7064f45aaadc058f1fcb53fa4
+#: 293f5b0fca5f4357982f6288660d52fd 3a62d7dbe5844914a5a9d37c41b20e40
+#: 622fb62b7e3b42aca8e0b88bd73fcea5 78331de0f9ec48109947e50e124ed88f
+#: 7a3ede419400400ab13b0f185c60566e 89bd8c18ce95487cab9de9e43cb6348a
+#: 8eabb47bf8ff4157bf240f67701d25b8 9dd2474becd74f1797efb0adda652970
+#: 9fd092981f934628b9b3c4813beaa8e8 c093be0ac2384497bb75a731d0e59251
+#: d0a0aaf79da94f76870910529c83e4b4 e0f5e4156ac4468eb6ae562b3c6dbfdd
+#: e12e1f4347cc4b1b9d38213ade90fabf efebaf52cf824d78995802ad82e818ab
+#: fe1bd13a47584b8ab1f283708ec76a7f ff93816319804caea299499ea75c641c of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor
+msgid "type"
+msgstr ""
+
+#: 05774bee178b4575b886953c40fa7f73 208b5405ecd7410e8bf82b8d12d1f81b
+#: 25050549a45047ef8ba4a19414a03675 6b526737294e4c2da5383b2eec666de4
+#: 6d6b32424b11400ba547fcd9926036b9 72bcbc903e71497ca66fa0c58d172820
+#: 97da1b8008b7463a86704e3fd1a0bf22 bb21aba444d74e599d90a98137a1c83f
+#: d2a0c2623557453ea50fb2d3a97925ed of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:47
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:53
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:61
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:67
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:103
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:109
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:115
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:121
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:145
+msgid "int"
+msgstr ""
+
+#: 97a45d2657574048bcb46f858da6029a of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:73
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 3aaf7c8c724946ec90e60a09001cdb3e of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:79
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 72f09293b69f49679a53a701f390f3f8 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:85
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: d0ad18b794ce45be9707d145743b3e60 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:91
+msgid "List[str]"
+msgstr ""
+
+#: 5b6d6b60ec414fd6b4a60937ed977eb5 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:97
+msgid "List[Callback]"
+msgstr ""
+
+#: 380c7a021224440593b59b88d8467257 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:127
+msgid "int|None"
+msgstr ""
+
+#: 0e48b43516694b30b78ca49117fafea5 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:133
+msgid "bool"
+msgstr ""
+
+#: 25eb18c44d1649bc9c61d402470dd807 of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:139
+msgid "List[int]|None"
+msgstr ""
+
+#: 05d64ecde4124ed683b769f5011492ec of
+#: paddlets.models.forecasting.dl.tcn.TCNRegressor:151
+msgid "float"
+msgstr ""
+

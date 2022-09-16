@@ -33,6 +33,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :caption: Get Started
 
     Get Started <source/get_started/get_started.rst>
+    Run On GPU <source/get_started/run_on_gpu.rst>
 
 .. toctree::
     :maxdepth: 1
@@ -52,12 +53,14 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :caption: Transform
 
     Transform <source/modules/transform/overview.md>
+    Third-Party And User-Define Transform <source/modules/transform/thirdparty_userdefine.rst>
 
 .. toctree::
     :maxdepth: 1
     :caption: Models
 
-    Models <source/modules/models/overview.md>
+    Overview <source/modules/models/overview.rst>
+    Third-party Model <source/modules/models/thirdparty.rst>
 
 
 .. toctree::
