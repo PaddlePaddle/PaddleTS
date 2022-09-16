@@ -90,12 +90,20 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
 .. toctree::
     :maxdepth: 1
+    :caption: AutoTS
+
+    AutoTS <source/modules/autots/overview.rst>
+
+.. toctree::
+    :maxdepth: 1
     :caption: API
 
     paddlets.analysis <source/api/paddlets.analysis.rst>
+    paddlets.automl <source/api/paddlets.automl.rst>
     paddlets.datasets <source/api/paddlets.datasets.rst>
     paddlets.metrics <source/api/paddlets.metrics.rst>
     paddlets.models <source/api/paddlets.models.rst>
     paddlets.pipeline <source/api/paddlets.pipeline.rst>
     paddlets.transform <source/api/paddlets.transform.rst>
     paddlets.utils <source/api/paddlets.utils.rst>
+
