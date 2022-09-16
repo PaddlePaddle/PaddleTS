@@ -11,7 +11,7 @@ import numpy as np
 from paddlets.datasets import TimeSeries, TSDataset
 from paddlets.models.forecasting import NHiTSModel
 from paddlets.datasets.repository import get_dataset
-from paddlets.transform.normalization import StandardScaler
+from paddlets.transform import StandardScaler
 
 
 np.random.seed(2023)

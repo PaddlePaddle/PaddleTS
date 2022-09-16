@@ -3,6 +3,7 @@
 
 from unittest import TestCase
 import unittest
+import random
 
 import pandas as pd
 import numpy as np
@@ -11,7 +12,7 @@ from paddlets.models.forecasting import TransformerModel
 from paddlets.datasets import TimeSeries, TSDataset
 
 
-class TestLSTNetRegressor(TestCase):
+class TestTransformer(TestCase):
     def setUp(self):
         """unittest function
         """
@@ -214,4 +215,3 @@ class TestLSTNetRegressor(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
