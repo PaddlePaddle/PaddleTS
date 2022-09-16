@@ -12,6 +12,10 @@ from paddlets.models.base import Trainable
 from paddlets.logger import raise_if_not, raise_if, raise_log
 from paddlets.datasets.tsdataset import TSDataset
 
+try:
+    from paddlets.automl import AutoTS
+except Exception as e:
+    AutoTS = None
 
 def check_model_fitted(model: Trainable, msg: str = None):
     """
@@ -33,6 +37,7 @@ def check_model_fitted(model: Trainable, msg: str = None):
         ValueError
     """
     from paddlets.pipeline import Pipeline
+    from paddlets.models.forecasting.ml.ml_base import MLBaseModel
     from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
     #不需要fit的模型列表  
     MODEL_NEED_NO_FIT = ["ArimaModel"]    
@@ -55,6 +60,12 @@ def check_model_fitted(model: Trainable, msg: str = None):
     # Paddle 模型
     if isinstance(model, PaddleBaseModel):
         fitted = True if model._network else False
+    # ML 模型
+    if isinstance(model, MLBaseModel):
+        #TODO:后续如果将 self._models 提到 MLBaseModel后，这里需要同步修改为判断 self._models ，而不是 "_models" 字符串。
+        fitted = True if "model" in vars(model) or "_model" in vars(model) else False
+    if AutoTS is not None and isinstance(model, AutoTS):
+        fitted = model.is_refitted()
 
     raise_if_not(fitted, msg % {"name": type(model).__name__})
 
@@ -221,4 +232,3 @@ def get_tsdataset_max_len(dataset:TSDataset) -> int:
     all_index = pd.concat([x.to_series() for x in index_list]).index.drop_duplicates()
 
     return len(all_index)
-

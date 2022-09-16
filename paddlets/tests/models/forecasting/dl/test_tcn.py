@@ -3,6 +3,7 @@
 
 from unittest import TestCase
 import unittest
+import random
 
 import pandas as pd
 import numpy as np
@@ -11,7 +12,7 @@ from paddlets.models.forecasting import TCNRegressor
 from paddlets.datasets import TimeSeries, TSDataset
 
 
-class TestLSTNetRegressor(TestCase):
+class TestTCNRegressor(TestCase):
     def setUp(self):
         """unittest function
         """
@@ -123,7 +124,7 @@ class TestLSTNetRegressor(TestCase):
             **param4
         )
         tcn.fit(self.tsdataset1)
-        self.assertEqual(len(tcn._network._nn), 6)
+        self.assertEqual(len(tcn._network._temporal_layers), 6)
 
         # case5 (hidden_config 为不为None, 但是导致感受野超过in_chunk_len)
         param5 = {
@@ -267,4 +268,3 @@ class TestLSTNetRegressor(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
