@@ -12,3 +12,5 @@ from paddlets.models.forecasting.dl.nbeats import NBEATSModel
 from paddlets.models.forecasting.dl.tcn import TCNRegressor
 from paddlets.models.forecasting.dl.nhits import NHiTSModel
 from paddlets.models.forecasting.dl.transformer import TransformerModel
+from paddlets.models.forecasting.dl.informer import InformerModel
+from paddlets.models.forecasting.dl.deepar import DeepARModel
