@@ -18,11 +18,12 @@ class Metric(ABC):
     Args:
         mode(str): Supported metric modes, only normal and prob are valid values. 
             Set to normal for non-probability use cases, set to prob for probability use cases.
-            Note that mode = prob is currently not supported.
         kwargs: Keyword parameters of specific metric functions.
     """
     def __init__(self, mode: str="normal", **kwargs):
         self._kwargs = kwargs
+        raise_if_not(mode in {"normal", "prob"}, 
+                     f"Metric mode should be one of {{`normal`, `prob`}}, got `{mode}`.")
         self._mode = mode
 
     def _build_metrics_data(
@@ -43,11 +44,15 @@ class Metric(ABC):
         Raises:
             ValueError.
         """
-        target_true = tsdataset_true.get_target()
-        target_pred = tsdataset_pred.get_target()
+        target_true = tsdataset_true.get_target().sort_columns()
+        target_pred = tsdataset_pred.get_target().sort_columns()
         raise_if(
             target_true is None or target_pred is None,
-            "tsdataset target is None!"
+            "TSDataset target is None!"
+        )
+        raise_if_not(
+            len(target_true.columns) == len(target_pred.columns),
+            "In `normal` mode, only point forecasting data is supported!"
         )
         raise_if_not(
             (target_true.columns == target_pred.columns).all(),
@@ -71,6 +76,7 @@ class Metric(ABC):
         self,
         tsdataset_true: "TSDataset",
         tsdataset_pred: "TSDataset",
+        data_type: str,
     ) -> Dict[str, Tuple[np.ndarray, np.ndarray]]:
         """Convert TSDataset of prob mode to ndarray.
         
@@ -85,14 +91,43 @@ class Metric(ABC):
         Raises:
             ValueError.
         """
-        pass
+        target_true = tsdataset_true.get_target().sort_columns()
+        target_pred = tsdataset_pred.get_target().sort_columns()
+        # check validation
+        raise_if(
+            target_true is None or target_pred is None,
+            "TSDataset target is None!")
+        # check columns
+        target_set = set(target_true.columns)
+        pred_target_set = set([col.rsplit("@", 1)[0] for col in target_pred.columns])
+        raise_if_not(target_set == pred_target_set, 
+                     "Prediction is not coherent with ground truth.")
+        target_pred.reindex(target_true.time_index)
+        for column in target_pred.columns:
+            raise_if(
+                target_pred.data[column].isna().all(),
+                "tsdataset true's and pred's time_index do not match!")
+
+        target_true = target_true.to_dataframe()
+        target_pred = target_pred.to_dataframe()
+        res = {}
+        target_pred_names = target_pred.columns
+
+        for target_name in target_true.columns:
+            cur_pred_target_names = [x for x in target_pred_names if x.rsplit("@", 1)[0] == target_name]
+            target_pred_cur = target_pred[cur_pred_target_names]            
+            if data_type == "quantile":
+                res[target_name] = (target_true[target_name].to_numpy(), target_pred_cur.to_numpy())
+            else: # data_type: "point"
+                target_pred_cur_median = np.median(target_pred_cur.to_numpy(), axis = -1)
+                res[target_name] = (target_true[target_name].to_numpy(), target_pred_cur_median)
+        return res
 
     @abstractmethod
     def metric_fn(
         self, 
         y_true: np.ndarray, 
         y_pred: np.ndarray, 
-        **kwargs
     ) -> float:
         """
         Compute metric's value from ndarray.
@@ -129,11 +164,11 @@ class Metric(ABC):
         """
         if self._mode == "normal":
             res_array = self._build_metrics_data(tsdataset_true, tsdataset_pred)
-        # else:
-        #     res_array = self._build_prob_metrics_data(tsdataset_true, tsdataset_pred)
+        else: # "prob"
+             res_array = self._build_prob_metrics_data(tsdataset_true, tsdataset_pred, self._TYPE)
         res = {}
         for target, value in res_array.items():
-            res[target] = self.metric_fn(value[0], value[1], **self._kwargs)
+            res[target] = self.metric_fn(value[0], value[1])
         return res
 
     @classmethod
@@ -155,5 +190,5 @@ class Metric(ABC):
             idx = available_names.index(name)
             metric = available_metrics[idx]()
             metrics.append(metric)
-        return metrics 
+        return metrics
 
