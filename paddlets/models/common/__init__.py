@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-paddlets models common.
+paddlets models common
 """

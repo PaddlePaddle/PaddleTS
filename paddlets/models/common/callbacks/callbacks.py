@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
+################################################################################
+#
+# Copyright (c) 2022 Baidu.com, Inc. All Rights Reserved
+#
+################################################################################
 
 from typing import List, Dict, Any, Optional
 import datetime
@@ -8,7 +13,6 @@ import copy
 
 import numpy as np
 
-# from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
 from paddlets.logger import Logger
 
 logger = Logger(__name__)
@@ -18,7 +22,7 @@ class Callback(object):
     """Abstract base class used to build new callbacks.
 
     Attributes:
-        _trainer("PaddleBaseModel"): A model instance.
+        _trainer(PaddleBaseModel): A model instance.
     """
     def __init__(self):
         pass
@@ -30,7 +34,7 @@ class Callback(object):
         """Set model instance.
 
         Args:
-            model("PaddleBaseModel"): A model instance.
+            model(PaddleBaseModel): A model instance.
         """
         self._trainer = model
 
@@ -144,7 +148,7 @@ class CallbackContainer(object):
         """Set model instance.
 
         Args:
-            model("PaddleBaseModel"): A model instance.
+            model(PaddleBaseModel): A model instance.
         """
         self._trainer = model
         for callback in self._callbacks:
@@ -373,7 +377,6 @@ class History(Callback):
             logs(Dict[str, Any]|None): The logs is a dict or None.
         """
         self._history = {"loss": [], "lr": []}
-        self._history.update({name: [] for name in self._trainer._metrics_names})
         self._start_time = logs["start_time"]
         self._epoch_loss = 0. # nqa
 
@@ -405,6 +408,8 @@ class History(Callback):
         """
         self._epoch_metrics["loss"] = self._epoch_loss
         for metric_name, metric_value in self._epoch_metrics.items():
+            if metric_name not in self._history:
+                self._history.update({metric_name: []})
             self._history[metric_name].append(metric_value)
 
         if self._verbose == 0 or epoch % self._verbose != 0:
@@ -435,4 +440,3 @@ class History(Callback):
             self._samples_seen * self._epoch_loss + batch_size * logs["loss"]
         ) / (self._samples_seen + batch_size)
         self._samples_seen += batch_size
-
