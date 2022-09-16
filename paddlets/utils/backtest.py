@@ -57,9 +57,6 @@ def backtest(
 
     """
     from paddlets.pipeline import Pipeline
-    from paddlets.pipeline.solution_pipeline import SolutionPipelineModelBase
-    if isinstance(model, SolutionPipelineModelBase):
-        model = model._pipeline
     if isinstance(model, Pipeline):
         #如果是None, 后续的check会报错，这里就不做重复处理了
         if model._model_exist:

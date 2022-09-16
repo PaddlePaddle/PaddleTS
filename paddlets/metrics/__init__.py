@@ -10,5 +10,5 @@ from paddlets.metrics.metrics import (
     LogLoss,
     MSE, 
     MAE,
+    QuantileLoss
 )
-
