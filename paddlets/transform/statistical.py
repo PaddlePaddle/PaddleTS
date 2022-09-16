@@ -63,7 +63,6 @@ class StatsTransform(BaseTransform):
                  end: int = 1,
                  statistics: List = STATISTICS):
         super(StatsTransform, self).__init__()
-        
         self._cols = cols
         if isinstance(cols, str):
             self._cols=[cols]
@@ -87,6 +86,9 @@ class StatsTransform(BaseTransform):
         for e in STATISTICS:
             self._map[e] = []
         
+        self.need_previous_data = True
+        self.n_rows_pre_data_need = self._end
+
     @log_decorator
     def fit(self, tsdata: TSDataset):
         """
