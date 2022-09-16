@@ -8,11 +8,11 @@ import random
 import pandas as pd
 import numpy as np
 
-from paddlets.models.forecasting import TransformerModel
+from paddlets.models.forecasting import InformerModel
 from paddlets.datasets import TimeSeries, TSDataset
 
 
-class TestTransformer(TestCase):
+class TestInformer(TestCase):
     def setUp(self):
         """unittest function
         """
@@ -64,91 +64,103 @@ class TestTransformer(TestCase):
         """unittest function
         """
         # case1 (训练集的target为非float类型. 视具体模型而定, 目前transformer模型不支持target为除float之外的类型)
-        transformer = TransformerModel(
-            in_chunk_len=1 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
-            skip_chunk_len=16,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             batch_size=512,
             max_epochs=1
         )
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"a": "int32"})
         with self.assertRaises(ValueError):
-            transformer.fit(tsdataset, tsdataset)
+            informer.fit(tsdataset, tsdataset)
+
+        # case2 (in_chunk_len 小于 start_token_len)
+        informer = InformerModel(
+            in_chunk_len=96,
+            out_chunk_len=96,
+            start_token_len=100,
+            d_model=8,
+            nhead=1,
+            num_encoder_layers=1,
+            num_decoder_layers=1,
+            ffn_channels=64,
+            batch_size=512,
+            max_epochs=1
+        )
+        with self.assertRaises(ValueError):
+            informer.fit(self.tsdataset1, self.tsdataset1)
 
     def test_fit(self):
         """unittest function
         """
         # case1 (用户只传入训练集, log不显示评估指标, 达到最大epochs训练结束)
-        transformer = TransformerModel(
-            in_chunk_len=1 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
-            skip_chunk_len=4 * 4,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             optimizer_params=dict(learning_rate=1e-1),
             batch_size=512,
             max_epochs=5,
             patience=1,
         )
-        transformer.fit(self.tsdataset1)
+        informer.fit(self.tsdataset1)
 
         # case2 (用户同时传入训练/评估集和, log显示评估指标, 同时early_stopping生效)
-        transformer = TransformerModel(
-            in_chunk_len=1 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
-            skip_chunk_len=4 * 4,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             optimizer_params=dict(learning_rate=1e-1),
             batch_size=512,
             max_epochs=5,
             patience=1,
         )
-        transformer.fit(self.tsdataset1, self.tsdataset1)
+        informer.fit(self.tsdataset1, self.tsdataset1)
 
     def test_predict(self):
         """unittest function
         """
         # case1 (index为DatetimeIndex的单变量预测)
-        transformer = TransformerModel(
-            in_chunk_len=1 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
-            skip_chunk_len=4 * 4,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             batch_size=512,
             max_epochs=1,
         )
-        transformer.fit(self.tsdataset1, self.tsdataset1)
-        res = transformer.predict(self.tsdataset1)
+        informer.fit(self.tsdataset1, self.tsdataset1)
+        res = informer.predict(self.tsdataset1)
 
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (96, 1))
 
         # case2 (index为DatetimeIndex的多变量预测)
-        transformer.fit(self.tsdataset2, self.tsdataset2)
-        res = transformer.predict(self.tsdataset2)
+        informer.fit(self.tsdataset2, self.tsdataset2)
+        res = informer.predict(self.tsdataset2)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (96, 2))
 
         # case3 (index为RangeIndex的多变量预测)
-        transformer.fit(self.tsdataset3, self.tsdataset3)
-        res = transformer.predict(self.tsdataset3)
+        informer.fit(self.tsdataset3, self.tsdataset3)
+        res = informer.predict(self.tsdataset3)
         self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (96, 2))
@@ -157,61 +169,62 @@ class TestTransformer(TestCase):
         """unittest function
         """
         # case1 (单变量预测)
-        transformer = TransformerModel(
-            in_chunk_len=1 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
             skip_chunk_len=16,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             eval_metrics=["mse", "mae"],
             batch_size=512,
             max_epochs=1
         )
-        transformer.fit(self.tsdataset1, self.tsdataset1)
-        #not supported when skip_chunk_len > 0
+        informer.fit(self.tsdataset1, self.tsdataset1)
+        # not supported when skip_chunk_len > 0
         with self.assertRaises(ValueError):
-            res = transformer.recursive_predict(self.tsdataset1, 96)
+            res = informer.recursive_predict(self.tsdataset1, 96)
 
-        transformer = TransformerModel(
-            in_chunk_len=7 * 96 + 20 * 4,
+        informer = InformerModel(
+            in_chunk_len=96,
             out_chunk_len=96,
             skip_chunk_len=0,
             d_model=8,
             nhead=1,
             num_encoder_layers=1,
             num_decoder_layers=1,
-            dim_feedforward=64,
+            ffn_channels=64,
             eval_metrics=["mse", "mae"],
             batch_size=512,
             max_epochs=1
         )
-        transformer.fit(self.tsdataset1, self.tsdataset1)
-        #not supported when predict_lenth < 0
+        informer.fit(self.tsdataset1, self.tsdataset1)
+        # not supported when predict_lenth < 0
         with self.assertRaises(ValueError):
-            res = transformer.recursive_predict(self.tsdataset1, 0)
-        res = transformer.recursive_predict(self.tsdataset1, 1100)
+            res = informer.recursive_predict(self.tsdataset1, 0)
+        res = informer.recursive_predict(self.tsdataset1, 1100)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (1100, 1))
 
-        res = transformer.recursive_predict(self.tsdataset1, 10)
+        res = informer.recursive_predict(self.tsdataset1, 10)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (10, 1))
 
         # case2 (多变量预测)
-        transformer.fit(self.tsdataset2, self.tsdataset2)
-        res = transformer.recursive_predict(self.tsdataset2, 200)
+        informer.fit(self.tsdataset2, self.tsdataset2)
+        res = informer.recursive_predict(self.tsdataset2, 200)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (200, 2))
 
         # case3 (range Index)
-        transformer.fit(self.tsdataset3, self.tsdataset3)
-        res = transformer.recursive_predict(self.tsdataset3, 2500)
+        informer.fit(self.tsdataset3, self.tsdataset3)
+        res = informer.recursive_predict(self.tsdataset3, 2500)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (2500, 2))
  
 
 if __name__ == "__main__":
     unittest.main()
+

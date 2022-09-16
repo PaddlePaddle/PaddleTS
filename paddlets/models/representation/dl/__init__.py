@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-dl models forecasting dl tests.
+paddlets dl representation.
 """
