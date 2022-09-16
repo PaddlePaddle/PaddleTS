@@ -4,6 +4,7 @@ import uuid
 import hashlib
 
 from inspect import isclass
+import pandas as pd
 
 from paddlets.logger.logger import raise_log
 from paddlets.models.base import Trainable
@@ -77,3 +78,29 @@ def get_uuid(prefix: str = "", suffix: str = ""):
     res = prefix + suffix if suffix is not None else prefix
     return res
 
+def check_train_valid_continuity(train_data: TSDataset, valid_data: TSDataset)-> bool:
+    """
+    Check if train and test TSDataset are continous
+
+    Args:
+        train_data(TSDataset): Train dataset.
+        test_data(TSDataset): Test dataset.
+
+    Return:
+        bool: if train and test TSDataset are continous
+
+    """
+    train_index = train_data.target.data.index
+    valid_index = valid_data.target.data.index
+
+    continuious = False
+    if isinstance(train_index, pd.DatetimeIndex):
+        if isinstance(valid_index, pd.DatetimeIndex):
+            continuious = (valid_index[0] - train_index[-1] == pd.to_timedelta(train_index.freq))
+    elif isinstance(train_index, pd.RangeIndex):
+        if isinstance(valid_index, pd.RangeIndex):
+            continuious = (valid_index[0] - train_index[-1] == train_index.step)
+    else:
+        raise_log("Unsupport data index format")
+
+    return continuious
