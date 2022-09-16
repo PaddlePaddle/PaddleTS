@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-Bts representation.
+paddlets representation.
 """
 
 from paddlets.models.representation.dl.ts2vec import TS2Vec
