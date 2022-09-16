@@ -8,7 +8,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from paddlets.models.dl.paddlepaddle import LSTNetRegressor
+from paddlets.models.forecasting import LSTNetRegressor
 from paddlets.datasets import TimeSeries, TSDataset
 from paddlets.utils.utils import check_model_fitted
 from paddlets.pipeline.pipeline import Pipeline

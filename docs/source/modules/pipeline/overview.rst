@@ -140,7 +140,7 @@ This pipeline is comprised of the following:
 
 .. code:: python
 
-    >>> from paddlets.models.dl.paddlepaddle import MLPRegressor
+    >>> from paddlets.models.forecasting import MLPRegressor
     >>> mlp_params = {
     >>>     'in_chunk_len': 3,
     >>>     'out_chunk_len': 2,

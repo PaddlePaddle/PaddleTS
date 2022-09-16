@@ -35,7 +35,7 @@ Example
 
 .. code:: python
 
-    from paddlets.models.dl.paddlepaddle import MLPRegressor
+    from paddlets.models.forecasting import MLPRegressor
     mlp = MLPRegressor(
         in_chunk_len = 7 * 96,
         out_chunk_len = 96,

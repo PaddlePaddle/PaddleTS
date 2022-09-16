@@ -45,7 +45,7 @@ def load(path: str) -> BaseModel:
     # (currently deprecated) if PaddleBaseModel.__name__ in model_meta_map["ancestor_classname_set"]
     if "PaddleBaseModel" in model_meta_map[modelmeta_key_ancestor_classname_set]:
         # lazy import
-        from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
+        from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
         return PaddleBaseModel.load(abs_model_path)
     raise_log(ValueError(
         "The given model class is not supported: %s.%s" %

@@ -8,9 +8,9 @@ from inspect import isclass
 from paddlets.logger.logger import raise_log
 from paddlets.models.base import Trainable
 from paddlets.pipeline import Pipeline
-from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
-from paddlets.logger import Logger, raise_if, raise_if_not
-from paddlets.models.base import BaseModel
+from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
+from paddlets.logger import raise_if_not
+
 
 def check_model_fitted(model: Trainable, msg: str = None):
     """
