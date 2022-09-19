@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:39+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.sklearn_transforms.rst:2
+#: 72aaa62904a64cd99d420846dc464931
+msgid "paddlets.transform.sklearn_transforms"
+msgstr ""
+
+#: 2b9f453214d04884b0c17bdb70453274 310cf4aa321f460892c707a2e190d133
+#: 73e8ebe59c3747808e3b3d651e7925e4 e34cc43c0b284a1683b0dbc4c077e317 of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:1
+#: paddlets.transform.sklearn_transforms.OneHot:1
+#: paddlets.transform.sklearn_transforms.Ordinal:1
+#: paddlets.transform.sklearn_transforms.StandardScaler:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper`"
+msgstr ""
+
+#: ede75e9e281a4ced8c3ed718728ecd8b of
+#: paddlets.transform.sklearn_transforms.OneHot:1
+msgid "Transform categorical columns with OneHot encoder."
+msgstr "使用one-hot编码转换dataset"
+
+#: 108b6ba136e54967b00b1b92961d587c 736ae1dab5834e9caef3306c6eb6e10d
+#: 90c25ad728034afbac83f195bffa1676 e5183a194b4a4f7591a9cb9eddd884ea of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler
+#: paddlets.transform.sklearn_transforms.OneHot
+#: paddlets.transform.sklearn_transforms.Ordinal
+#: paddlets.transform.sklearn_transforms.StandardScaler
+msgid "Parameters"
+msgstr ""
+
+#: 349772f6ba70425587d93312626d94d8 of
+#: paddlets.transform.sklearn_transforms.OneHot:3
+msgid "Column(s) to be encoded."
+msgstr "编码的数据列。"
+
+#: 10015808366f419a884b549ab9aea567 of
+#: paddlets.transform.sklearn_transforms.OneHot:5
+msgid "{'error', 'ignore'}, default='error'"
+msgstr "可选值为{'error', 'ignore'}， 默认为error"
+
+#: 617516576dc74341b019b326046febb1 of
+#: paddlets.transform.sklearn_transforms.OneHot:7
+msgid "Whether to delete the original column, default=False"
+msgstr "是否要删除原来列, 默认为不删除"
+
+#: 11f261e73d994fa1899ed0a89e2830d3 of
+#: paddlets.transform.sklearn_transforms.OneHot:9
+msgid "Data type, default=float"
+msgstr "数据类型，默认为float"
+
+#: c5f39d13ce61447cbc11b2bd8c331da8 of
+#: paddlets.transform.sklearn_transforms.OneHot:11
+msgid ""
+"'auto' or a list of array-like, default='auto', if categorie is 'auto', "
+"it determine categories automatically from the dataset."
+msgstr "auto或者指定的数组类型，默认是auto，代表自动从数据集中确定类别"
+
+#: 4e274416b4ed485d96714987ab045592 80ae0ad734904caa86d8a4ed2fe5a81e
+#: bf6fb0a6a3f24f7f80d3c0004812762e d4783dd792584a79a81e8da8f73677ca of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler
+#: paddlets.transform.sklearn_transforms.OneHot
+#: paddlets.transform.sklearn_transforms.Ordinal
+#: paddlets.transform.sklearn_transforms.StandardScaler
+msgid "Returns"
+msgstr ""
+
+#: 0431721b14314275ab02ddfaa885bc3f 918dba49c0af4c8eb238bcadf9b13202
+#: ad644e39c62545eabc96711f241eaea5 c6b2e8bbda70479fb5ea2fe680d127bb of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:17
+#: paddlets.transform.sklearn_transforms.OneHot:14
+#: paddlets.transform.sklearn_transforms.Ordinal:16
+#: paddlets.transform.sklearn_transforms.StandardScaler:15
+msgid "None"
+msgstr ""
+
+#: 070b33263e554c02bea6269bf8dcf3dc of
+#: paddlets.transform.sklearn_transforms.Ordinal:1
+msgid "Encode categorical features as an integer array."
+msgstr "将分类特征编码为ordinal数值数组"
+
+#: 0f3d7044b2434fd3a3801d2f0b0024bb of
+#: paddlets.transform.sklearn_transforms.Ordinal:3
+msgid "Name of columns to Encode"
+msgstr "需要进行编码的列名"
+
+#: 82659e2f47094a689f6e4546c939a09c of
+#: paddlets.transform.sklearn_transforms.Ordinal:5
+msgid "{‘error’, ‘use_encoded_value’}, default=’error’"
+msgstr "可选值为{‘error’, ‘use_encoded_value’}， 默认为erro"
+
+#: 2fd0cb44b5e04d7d80f116eada04ae52 of
+#: paddlets.transform.sklearn_transforms.Ordinal:7
+msgid "Whether to delete the original column, default=False."
+msgstr "是否在原数据上进行转换，默认否。"
+
+#: 852ea9ec4f8e42ee971631604f3a98a4 of
+#: paddlets.transform.sklearn_transforms.Ordinal:9
+msgid "Number type, default=float."
+msgstr "数据类型，默认为float"
+
+#: 581a6504beed4f12a6a2ad7c5ee1b822 of
+#: paddlets.transform.sklearn_transforms.Ordinal:11
+msgid "int or np.nan, default=None."
+msgstr "类型为int类型或者为None，默认为None"
+
+#: e2d1ad85072e4fbdaed152f1654aa10a of
+#: paddlets.transform.sklearn_transforms.Ordinal:13
+msgid ""
+"'auto' or a list of array-like, default='auto',if categorie is 'auto', it"
+" determine categories automatically from the training data. if categorie "
+"is list, categories[i] holds the categories expected in the ith column. "
+"The passed categories should not mix strings and numeric values, and "
+"should be sorted in case of numeric values."
+msgstr ""
+"'auto'或数组类型，默认='auto'，如果categorie 是'auto',它会根据训练数据自动确定类别。如果类别是列表, "
+"categorie[i] 保存第 i 列中预期的类别。传递的类别不能混合字符串和数值，如果是数值则要排序"
+
+#: 2de7ed05623049b89629a978863f2fe4 of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:1
+msgid ""
+"Transform a dataset by scaling the values of sepcified column(s) to the "
+"expected range: [min, max]."
+msgstr "将需要归一化的列的值缩放到预期范围来转换数据集：[min, max]。"
+
+#: 7df401d7bc77484ca7d0733e69dec415 of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:3
+msgid "The transformation is done by:"
+msgstr "转换公式为："
+
+#: 0af23148319d4fb9aa5d6245bcd62510 of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:5
+msgid "X_std = (X - X.min) / (X.max - X.min)"
+msgstr ""
+
+#: c5c7b254a8a144439894ca129a9b21cc of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:7
+msgid "X_scaled = X_std * (max - min) + min"
+msgstr ""
+
+#: ee556d7d24e04bd6a2b0cdf4c4c8a08e of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:10
+msgid "Column name(s) to be scaled."
+msgstr "归一化的数据列。"
+
+#: bb8a113e692d454cadf6ba3843dfd803 of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:12
+msgid "tuple (min, max), default=(0, 1), Desired range of transformed values."
+msgstr "tuple (min, max), default=(0, 1), 所需的转换数据范围。"
+
+#: 3e243fba178d460eaf565d12570a274d of
+#: paddlets.transform.sklearn_transforms.MinMaxScaler:14
+msgid ""
+"Set to True to clip transformed values of held-out data to provided "
+"feature range."
+msgstr "该值为True时，保留数据的转换值裁剪到提供的特征范围。"
+
+#: f7752d7be36c49c183acece1d5722fe0 of
+#: paddlets.transform.sklearn_transforms.StandardScaler:1
+msgid ""
+"Transform a dataset by scaling the values of sepcified column(s) to zero "
+"mean and unit variance."
+msgstr "通过将指定列的值缩放为零均值和单位方差来转换数据集。"
+
+#: 6c2364ec945242f98b3294a89c37297e of
+#: paddlets.transform.sklearn_transforms.StandardScaler:3
+msgid "The transformation is done by: z = (x - u) / s."
+msgstr "转换公式为：z = (x - u) / s。"
+
+#: aac5ad1d42cd46a4a3167778242c3ac5 of
+#: paddlets.transform.sklearn_transforms.StandardScaler:6
+msgid ""
+"where u is the MEAN or zero if with_mean=False, and s is the standard "
+"deviation or one if with_std=False."
+msgstr "其中 u 是训练样本的平均值，如果 with_mean=False，则为 0，s 是训练样本的标准差，如果 with_std=False，则为 1。"
+
+#: ff9c4150ae694dab8c21844e9d3e7223 of
+#: paddlets.transform.sklearn_transforms.StandardScaler:8
+msgid "Column name or names to be scaled."
+msgstr "归一化的数据列。"
+
+#: 85a63bfa6ccf492587c55f9f2110a74e of
+#: paddlets.transform.sklearn_transforms.StandardScaler:10
+msgid "If True, center the data before scaling."
+msgstr "如果为 True，则在缩放之前将数据居中处理。"
+
+#: 838ff9b0011741f0824334045a879841 of
+#: paddlets.transform.sklearn_transforms.StandardScaler:12
+msgid "If True, scale the data to unit variance."
+msgstr "如果为 True，则将数据缩放到单位方差（或等效地，单位标准差）。"
+

@@ -10,3 +10,4 @@ paddlets.utils
 
     paddlets.utils.utils.rst
     paddlets.utils.backtest.rst
+    paddlets.utils.validation.rst

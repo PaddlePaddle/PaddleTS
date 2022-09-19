@@ -13,6 +13,21 @@ from paddlets.models import BaseModel
 
 logger = Logger(__name__)
 
+SAMPLE_ATTR_NAME = "_num_samples"
+QUANTILE_OUTPUT_MODE = "quantiles"
+QUANTILE_NUM = 101
+
+def get_target_from_tsdataset(tsdataset: TSDataset):
+    """
+    Just reserve target in tsdataset.
+   
+    Args:
+        tsdataset(TSDataset): Data to be converted.
+    """
+    if tsdataset.known_cov is not None or tsdataset.observed_cov is not None or tsdataset.static_cov is not None:
+        logger.warning('covariant exists and will be filtered.')
+        tsdataset = TSDataset(tsdataset.target)
+    return tsdataset
 
 def check_tsdataset(tsdataset: TSDataset):
     """Ensure the robustness of input data (consistent feature order), at the same time, 
@@ -90,11 +105,14 @@ def to_tsdataset(func) -> Callable[..., TSDataset]:
                 periods=obj._out_chunk_len,
                 freq=freq
             )
+        target_cols = tsdataset.get_target().data.columns
+        # for probability forecasting and quantile output
+        if hasattr(obj, SAMPLE_ATTR_NAME) and obj._output_mode == QUANTILE_OUTPUT_MODE: 
+            target_cols = [x + "@" + "quantile" + str(y) for x in target_cols for y in range(QUANTILE_NUM)]
         future_target = pd.DataFrame(
             np.reshape(results, newshape=[obj._out_chunk_len, -1]),
             index=future_target_index,
-            columns=tsdataset.get_target().data.columns
+            columns=target_cols
         )
         return TSDataset.load_from_dataframe(future_target, freq=freq)
     return wrapper
-

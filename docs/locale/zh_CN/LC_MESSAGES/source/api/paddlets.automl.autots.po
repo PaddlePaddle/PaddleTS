@@ -1,0 +1,238 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-19 15:25+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.automl.autots.rst:2
+#: 831ba46381494c5282ad9231643f87b9
+msgid "paddlets.automl.autots"
+msgstr ""
+
+#: ed42e7d60e864b27a9f39bd68eb58aca of paddlets.automl.autots.AutoTS:1
+msgid "Bases: :py:class:`~paddlets.models.base.BaseModel`"
+msgstr ""
+
+#: cc7a10c05d2b40b98b915bfadbfebe1d of paddlets.automl.autots.AutoTS:1
+msgid ""
+"The AutoTS Class. AutoTS is an automated machine learning tool for "
+"PaddleTS. It frees the user from selecting hyperparameters for PaddleTS "
+"models or PaddleTS pipelines."
+msgstr ""
+
+#: 3abc018a711a469795c3698b6a0766c1 3be00928421b42d29e187d38b61a742d
+#: 70e5c3bd8b194d7eb46542100a235cdc of paddlets.automl.autots.AutoTS
+#: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.predict
+msgid "Parameters"
+msgstr ""
+
+#: bbfe6b02f4034a49a126c999a9ae2a15 of paddlets.automl.autots.AutoTS:5
+msgid ""
+"A class of a PaddleTS model or a list of classes consisting of several "
+"PaddleTS transformers and a PaddleTS model"
+msgstr ""
+
+#: e3f455905bf54329bbb313df865306f1 of paddlets.automl.autots.AutoTS:8
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr ""
+
+#: fa3f681e4fcf4090a95869b2c238fe3b of paddlets.automl.autots.AutoTS:10
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr ""
+
+#: 055eb08bf4654b25927be92f1bd6f07a of paddlets.automl.autots.AutoTS:12
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr ""
+
+#: 44e96317335e418d84afdb6d7e7e13b1 of paddlets.automl.autots.AutoTS:16
+msgid "Sampling intervals between two adjacent samples."
+msgstr ""
+
+#: fe55184b657f4072844d0016a398d993 of paddlets.automl.autots.AutoTS:18
+msgid ""
+"The domain of the automl to be optimized. If search_space is 'auto', the "
+"default search space will be used."
+msgstr ""
+
+#: 95c64a52761c4a62ba224c20acb65e33 of paddlets.automl.autots.AutoTS:21
+msgid ""
+"The algorithm for optimization. Supported algorithms are \"auto\", "
+"\"Random\", \"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\". When"
+" the algorithm is \"auto\", search_alg is set to be \"Random\" by "
+"default."
+msgstr ""
+
+#: b7514901a2594e87b3bfe1c40280724c of paddlets.automl.autots.AutoTS:25
+msgid ""
+"A string of resampling strategies. Supported resampling strategy are "
+"\"auto\", \"cv\", \"holdout\".When the strategy is \"auto\", "
+"resampling_strategy is set to be \"holdout\" and split_ratio is set to be"
+" DEFAULT_SPLIT_RATIO by default."
+msgstr ""
+
+#: d1f7ea8e408444bc8ab1784c90981f04 of paddlets.automl.autots.AutoTS:29
+msgid ""
+"The proportion of the dataset included in the validation split for "
+"holdout. The split_ratio should be in the range of (0, 1). When the "
+"split_ratio is \"auto\", split_ratio is set to be DEFAULT_SPLIT_RATIO by "
+"default. Note that the split_ratio will be ignored if valid_tsdataset is "
+"provided in the `AutoTS.fit()`."
+msgstr ""
+
+#: 818addb29ece4698b8203e1890a80e06 of paddlets.automl.autots.AutoTS:34
+msgid ""
+"Number of folds for cv. The k_fold should be in the range of (0, 10].When"
+" the k_fold is \"auto\", k_fold is set to be DEFAULT_K_FOLD by default. "
+"Note that the k_fold will be ignored if valid_tsdataset is provided in "
+"the `AutoTS.fit()`."
+msgstr ""
+
+#: 456f7c8bbbe24e42b219cd8c6696127a of paddlets.automl.autots.AutoTS:38
+msgid ""
+"A string of the metric name. The specified metric will be used to "
+"calculate validation loss reported to the search_algo. Supported metric "
+"are \"mae\", \"mse\", \"logloss\". When the metric is \"auto\", metric is"
+" set to be \"mae\" by default."
+msgstr ""
+
+#: 4464d56f79a0494ab092471cec1c3330 of paddlets.automl.autots.AutoTS:43
+msgid ""
+"According to the mode, the metric is maximized or minimized. Supported "
+"mode are \"min\", \"max\". When the mode is \"auto\", metric is set to be"
+" \"min\" by default."
+msgstr ""
+
+#: 80e0e1a6aa874b038e2389def30046f3 of paddlets.automl.autots.AutoTS:46
+msgid ""
+"Whether to refit the model with the best parameter on full training "
+"data.If refit is True, the AutoPaddleTS object can be used to predict. If"
+" refit is False, the AutoPaddleTS object can be used to get the best "
+"parameter, but can not make predictions."
+msgstr ""
+
+#: 09786f26aa684aceb43f163ccd2c8db3 1b6085de691b4237b66e7eac2607e86d
+#: 8bf0f80de60049d2a9ec6c868f3a9d3b of paddlets.automl.autots.AutoTS:50
+#: paddlets.automl.autots.AutoTS:52 paddlets.automl.autots.AutoTS:54
+msgid "Not supported yet. This feature will be comming in future."
+msgstr ""
+
+#: 1189bfb47eb2488697503c83606b9b3f of paddlets.automl.autots.AutoTS:58
+msgid "Examples"
+msgstr ""
+
+#: 875a783ed06a42949556a05b024d135c of paddlets.automl.autots.AutoTS.fit:1
+msgid ""
+"Fit the estimator with the given tsdataset. The way fit is done is that "
+"the search algorithm will suggest configurations from the hyperparameter "
+"search space, then choose the best parameter from all configurations. If "
+"refit is True, the fit() will refit the model with the best parameters on"
+" full training data."
+msgstr ""
+
+#: 03efe568b5194938863f723d3eca96bb of paddlets.automl.autots.AutoTS.fit:6
+msgid "Train dataset."
+msgstr ""
+
+#: 619b87069dd44a3e850e0f34eae396e6 of paddlets.automl.autots.AutoTS.fit:8
+msgid "Valid dataset."
+msgstr ""
+
+#: df79d99490e7459488750081d30597d6 of paddlets.automl.autots.AutoTS.fit:10
+msgid "The number of configurations suggested by the search algorithm."
+msgstr ""
+
+#: b10a9a17af154b3ababa2a63dbfd2dd4 of paddlets.automl.autots.AutoTS.fit:12
+msgid "CPU resources to allocate per trial."
+msgstr ""
+
+#: ff68dc0e2b404799acb7cd060879f001 of paddlets.automl.autots.AutoTS.fit:13
+msgid "GPU resources to allocate per trial."
+msgstr ""
+
+#: 221fa022b8054cb2b3ab495462d9a51b 4c247d7395e2470b9a31e761e926d740
+#: a5ee046b29b5439d9d7d62e29acc9290 d1ba16cea2954e4f977ade4915dab032
+#: ec00f9d12bc44889ab395e7215253f16 of paddlets.automl.autots.AutoTS.best_param
+#: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.is_refitted
+#: paddlets.automl.autots.AutoTS.predict
+#: paddlets.automl.autots.AutoTS.search_space
+msgid "Returns"
+msgstr ""
+
+#: a04f06d48d4b42fb824e166c2ed9523b of paddlets.automl.autots.AutoTS.fit:15
+msgid "Refitted estimator."
+msgstr ""
+
+#: 4ab3900283b7464199b73c0280618166 833d4b5c9b5841a4b13e948f4f06fef0
+#: 878d466842c943e3b264457b5e030a62 8db5f84667f947eea25e05f3d23f9572
+#: de3784d21991472d9c3c3c9e7521cbe3 of paddlets.automl.autots.AutoTS.best_param
+#: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.is_refitted
+#: paddlets.automl.autots.AutoTS.predict
+#: paddlets.automl.autots.AutoTS.search_space
+msgid "Return type"
+msgstr ""
+
+#: 48614e9e300a4510afa505f0ee502ba9 of paddlets.automl.autots.AutoTS.predict:1
+msgid "Make prediction."
+msgstr ""
+
+#: 35245874814c41309743851957d66405 of paddlets.automl.autots.AutoTS.predict:3
+msgid "Data to be predicted."
+msgstr ""
+
+#: 206c5b4591fa48998f52d7449bbf05b0 of paddlets.automl.autots.AutoTS.predict:5
+msgid "Predicted results of calling `self.predict` on the refitted estimator."
+msgstr ""
+
+#: a85e8a41cc3541278503a0c5ab78dcb0 of
+#: paddlets.automl.autots.AutoTS.best_param:1
+msgid "Return the best parameters in optimization."
+msgstr ""
+
+#: c675ac610850485e8bfb2e8ca9d0b276 of
+#: paddlets.automl.autots.AutoTS.best_param:3
+msgid "The dict of the best parameters."
+msgstr ""
+
+#: b7b7c4e943b343e689d19176f365a254 of
+#: paddlets.automl.autots.AutoTS.search_space:1
+msgid ""
+"Return the search space. If search_space is 'auto', it will return the "
+"default search space."
+msgstr ""
+
+#: 1d0b7d9e119d472192e12d7b8710bf16 of
+#: paddlets.automl.autots.AutoTS.search_space:4
+msgid "The dict of search space."
+msgstr ""
+
+#: 550ab75f1b9d4ecc9db9cd91c1b833ef 91309f529e0a4106b595894800d5bd13 of
+#: paddlets.automl.autots.AutoTS.load:1 paddlets.automl.autots.AutoTS.save:1
+msgid "AutoPaddleTS doesn't support save() yet."
+msgstr ""
+
+#: fce1d4bc665049dea96c227551866209 of
+#: paddlets.automl.autots.AutoTS.is_refitted:1
+msgid "Whether the autots model has been refitted"
+msgstr ""
+

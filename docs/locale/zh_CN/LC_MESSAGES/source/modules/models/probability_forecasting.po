@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-19 16:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/probability_forecasting.rst:3
+#: df6b7da87180414692634cd33281e996
+msgid "Probability Forecasting"
+msgstr "概率预测"
+
+#: ../../source/modules/models/probability_forecasting.rst:5
+#: c9ec7c6f804c4d608714e754b411b493
+msgid "PaddleTS provides professional probability forecasting modules:"
+msgstr "PaddleTS提供了专业的概率预测模块:"
+
+#: ../../source/modules/models/probability_forecasting.rst:7
+#: 0e631eb2fadf43348ff5dc079393fa0a
+msgid "High performance probability forecasting models."
+msgstr "高性能的概率预测模型"
+
+#: ../../source/modules/models/probability_forecasting.rst:8
+#: 6ca3b69ad62d4eebbdb7981dffb7bc52
+msgid "Likelihood models."
+msgstr "似然函数"
+
+#: ../../source/modules/models/probability_forecasting.rst:9
+#: 427b2fdd920648eaa7264d63147b5190
+msgid "Specific loss functions and metrics."
+msgstr "特定的损失函数与评估指标"
+
+#: ../../source/modules/models/probability_forecasting.rst:14
+#: 78c9f230c08f485897e98571b40b7e5e
+msgid "An example"
+msgstr "使用例子"
+
+#: ../../source/modules/models/probability_forecasting.rst:16
+#: 965abb5c666148a5aec9b454da688755
+msgid ""
+"We use a build-in `DeepAR` model to illustrate the base use of "
+"probability forecasting."
+msgstr "我们用`DeepAR`模型来展示概率预测的基本使用。"
+
+#: ../../source/modules/models/probability_forecasting.rst:27
+#: b95ed87545c0408ebfdefcba3f0c9a26
+msgid "1. Data load and processing"
+msgstr "1. 数据集加载与处理"
+
+#: ../../source/modules/models/probability_forecasting.rst:29
+#: 2504299e65d84e238a6b92b5335883b6
+msgid ""
+"The built-in API: `get_dataset` is used to load dataset whether dataset: "
+"`WTH`."
+msgstr "使用内置的API: `get_dataset` 加载天气数据集: WTH。"
+
+#: ../../source/modules/models/probability_forecasting.rst:35
+#: 72a5441aefa649b08de19c3b8dbed2c0
+msgid "By feature engineering, time features are added to the dataset."
+msgstr "通过特征工程，加入时间类特征。"
+
+#: ../../source/modules/models/probability_forecasting.rst:42
+#: d3a815938756463aa03e6c9295348a6f
+msgid ""
+"At last, scaling is necessary to normalize all features to the same "
+"magnitude."
+msgstr "最后，对数据集做归一化。"
+
+#: ../../source/modules/models/probability_forecasting.rst:53
+#: 9679626c8f34406bbfbab43e2afd941f
+msgid "2. Training a model"
+msgstr "训练模型"
+
+#: ../../source/modules/models/probability_forecasting.rst:55
+#: a7796b5cef6e438bb9b9c8bded53c9ec
+msgid ""
+"Be different from other point forecasting models, the built-in "
+"`DeepARModel` has several specific parameters. For `regression_mode`, "
+"users may select `sampling` or `mean` to set the regression mode, for "
+"`output_mode`, `quantiles` and `predictions` are optional, `quantiles` "
+"will output the satandard quantiles result for probability while "
+"`predictions` only output single forecasting point, which degernerates "
+"the model to point forecasting."
+msgstr "与其它点预测模型不同的是，`DeepAR`模型有一些特定的参数，`regression_mode`参数可以选择"
+"`sampling`或`mean`方法来设定回归模式，另外，`output_mode`支持`quantiles`或`predictions`模式，分别"
+"代表概率预测标准的分位数结果以及普通的点预测结果。"
+
+#: ../../source/modules/models/probability_forecasting.rst:77
+#: 2bbcf6932c664b60a7d82e8d7e1e7d09
+msgid "3. Prediction and evaluate"
+msgstr "预测与评估"
+
+#: ../../source/modules/models/probability_forecasting.rst:79
+#: 38b13f39df5e43b99bbfb07def0d4e89
+msgid ""
+"The build-int API `backtest` is used for both prediction and evaluation, "
+"quantile loss and quantile result are returned."
+msgstr "内置的API: `backtest`可用于预测与评估，最终返回的是分位数损失以及预测分位数。"
+
+#: ../../source/modules/models/probability_forecasting.rst:95
+#: da0c29a164a44c9382eab10701b996ef
+msgid "4. Visiualization"
+msgstr "可视化"
+
+#: ../../source/modules/models/probability_forecasting.rst:97
+#: edf309912fe045ca90cc826c52497c15
+msgid ""
+"The new updated API `plot` fits probability forecasting well, by setting "
+"`low_quantile` and `high_quantile`, the predictions curve and confidence "
+"interval will show on the plot."
+msgstr "最新的API `plot`很好地适配了概率预测，通过设定`low_quantile`以及`high_quantile`"
+"可以得到点预测曲线与置信区间的展示图。"
+

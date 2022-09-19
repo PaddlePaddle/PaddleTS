@@ -24,5 +24,6 @@ python:
     - requirements: requirements/core.txt
     - requirements: requirements/docs.txt
     - requirements: requirements/paddle.txt
+    - requirements: requirements/autots.txt
 
   system_packages: true

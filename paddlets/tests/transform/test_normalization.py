@@ -9,8 +9,8 @@ import time
 import unittest
 from unittest import TestCase
 from sklearn import preprocessing
-from paddlets.transform.normalization import MinMaxScaler
-from paddlets.transform.normalization import StandardScaler
+from paddlets.transform.sklearn_transforms import MinMaxScaler
+from paddlets.transform.sklearn_transforms import StandardScaler
 from paddlets.datasets.tsdataset import TimeSeries
 from paddlets.datasets.tsdataset import TSDataset
 

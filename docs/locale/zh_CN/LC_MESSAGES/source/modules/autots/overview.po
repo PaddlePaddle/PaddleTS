@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 19:13+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/autots/overview.rst:3 297401b305b2434f8ff05d9b1eed983b
+msgid "AutoTS"
+msgstr ""
+
+#: ../../source/modules/autots/overview.rst:5 4892e391e77346ccb279b295f3b18ad1
+msgid "AutoTS is an automated machine learning tool for PaddleTS."
+msgstr "AutoTS是用于支持PaddleTS的自动机器学习能力组件。"
+
+#: ../../source/modules/autots/overview.rst:7 b767921004724aaca200fe624ead011e
+msgid ""
+"It frees the user from selecting hyperparameters for PaddleTS models or "
+"PaddleTS pipelines."
+msgstr "AutoTS 可以支持 PaddleTS 模型和 pipeline 的自动超参数选择，减少人工介入成本，降低专业门槛。"
+
+#: ../../source/modules/autots/overview.rst:10 04ba2a957d3549c18d6f21185cb8e493
+msgid "1. Installation"
+msgstr "1. 安装"
+
+#: ../../source/modules/autots/overview.rst:17 34df05221cd54f53a1d6ec6f1e7d8e2f
+msgid "2. Quickstart"
+msgstr "2. 快速入门"
+
+#: ../../source/modules/autots/overview.rst:20 fc8ff82c0a1c4111adbbeaf4b43c7948
+msgid "2.1. Prepare Data"
+msgstr "2.1. 准备数据"
+
+#: ../../source/modules/autots/overview.rst:28 cef68fa62045493c970f8d927f184177
+msgid "2.2. Construct and Fitting"
+msgstr "2.2. 构造和训练"
+
+#: ../../source/modules/autots/overview.rst:30 dccec255b36645d3b1dc93c9b8b357ea
+msgid ""
+"With four lines of code, we initialize an `AutoTS` model with "
+"`MLPRegressor` and perform model fitting. Autots will automatically "
+"optimize hyperparameters during the fitting process."
+msgstr "通过四行代码，我们利用 `MLPRegressor` 初始化了一个 `AutoTS` 模型。 AutoTS 会在训练的过程中"
+"自动进行超参优化。"
+
+#: ../../source/modules/autots/overview.rst:41 2d66211df4e94dca9a750de005c70508
+msgid "3. Search Space"
+msgstr "3. 搜索空间"
+
+#: ../../source/modules/autots/overview.rst:43 3b283edc7f864b538cceaf3108ea512f
+msgid ""
+"For hyperparameter optimization, you can define a search space, or we "
+"also provide built-in recommended search space for the PaddleTS models if you "
+"do not define a search space."
+msgstr "对于超参数优化来说，你可以定义一个搜索空间。如果你没有指定一个搜索空间，我们也为每个 PaddleTS 模型内置了推荐的默认搜索空间。"
+
+#: ../../source/modules/autots/overview.rst:46 e69ae5bb5ece45739a8ead7205505669
+msgid ""
+"You can specify how your hyperparameters are sampled and define valid "
+"ranges for hyperparameters."
+msgstr "你可以利用搜索空间去控制你的超参的取值是如何采样的，控制值范围是多少。"
+
+#: ../../source/modules/autots/overview.rst:48 f4860a4f21ab418d879cb681e2349b35
+msgid ""
+"The following is an example of a autots pipeline which specifying the "
+"search space:"
+msgstr "下面是一个指定了搜索空间的 autots pipeline 的例子："
+
+#: ../../source/modules/autots/overview.rst:71 9edc07b9f1174e53be70415dc03fdfc3
+msgid ""
+"Search space API can refer to: "
+"https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
+msgstr "搜索空间定义的 API 可以参考：https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
+
+#: ../../source/modules/autots/overview.rst:74 5071ee72a7a94f6cad0f21a07795cf50
+msgid "4. Search Algorithms"
+msgstr "4. 搜索算法"
+
+#: ../../source/modules/autots/overview.rst:76 8b9c9bf465be4692a994cfaceddccb13
+msgid "Search Algorithms are wrappers around open-source optimization libraries."
+msgstr "PaddleTS 的搜索算法是利用多个开源的超参优化库包装而成。"
+
+#: ../../source/modules/autots/overview.rst:79 a2c916cad4e44ccaaf0a05855df0b5d5
+msgid "We have built in the following algorithms："
+msgstr "我们内置了如下几种搜索算法："
+
+#: ../../source/modules/autots/overview.rst:79 7dc4d4fdd23445748361a04f8fed5ac4
+msgid "[\"Random\", \"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\"]"
+msgstr ""
+
+#: ../../source/modules/autots/overview.rst:81 ae551e9ddbb945d388ff2f3a109e75a4
+msgid ""
+"For more details about those optimization libraries, please refer to "
+"their documentation."
+msgstr "对于这些超参优化库的细节，可以参考它们对应的开源文档。"
+
+#: ../../source/modules/autots/overview.rst:83 77be0b56834c424baa38ecf2a56388dc
+msgid "You can specify different algorithms as follows:"
+msgstr "你可以通过下面的方式指定搜索算法："
+
+#: ../../source/modules/autots/overview.rst:89 ecf7c40d2d474407b51c1adfd71f5c70
+msgid "If no search algorithm is specified, \"TPE\" will be used as default."
+msgstr "如果搜索算法没有被指定，我们会默认使用TPE算法。"
+

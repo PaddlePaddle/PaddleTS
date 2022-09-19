@@ -10,7 +10,7 @@ import time
 import unittest
 from unittest import TestCase
 
-from paddlets.transform.onehot import OneHot
+from paddlets.transform.sklearn_transforms import OneHot
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 class TestOneHot(TestCase):
