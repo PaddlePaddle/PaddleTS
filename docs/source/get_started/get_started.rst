@@ -148,7 +148,7 @@ To get a brief overview, simply call ``TSDataset.summary``.
    from paddlets.analysis import FFT
    fft = FFT()
    res = fft(dataset, columns='WetBulbCelsius')
-   res.plot()
+   fft.plot()
 
 --------------
 

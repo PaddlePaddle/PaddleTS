@@ -16,11 +16,21 @@ and excellent user experiences for practitioners and professionals. It’s featu
 
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary).
 
+* Automatic hyper-parameter tuning.
+
+* Third-party ML models & data transformations integration (e.g., scikit-learn).
+
+* Run models on GPU devices.
+
+* TS2Vec, a time series representation learning model.
+
+* DeepAR, a deep time series model for probabilistic forecasting.
+
 In future, more advanced features will be coming, including:
 
-* Automatic hyper-parameter tuning;
-* Time series representation learning models；
-* Add support for probabilistic forecasting;
+* Time series anomaly detection;
+* More time series representation learning models；
+* More probabilistic forecasting models;
 * Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems;
 * And more.
 
