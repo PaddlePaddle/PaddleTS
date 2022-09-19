@@ -1,0 +1,308 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 18:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.ml.ml_model_wrapper.rst:2
+#: a079584303d0405d9d795111eefa7fb3
+msgid "paddlets.models.forecasting.ml.ml_model_wrapper"
+msgstr ""
+
+#: 2f1c4a76d48743bb9bf994bac45cae81 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:1
+msgid "Bases: :py:class:`~paddlets.models.forecasting.ml.ml_base.MLBaseModel`"
+msgstr ""
+
+#: d06ebd57846141f7bbb69f1c8b7e6f5d of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:1
+msgid "Time series model base wrapper for third party models."
+msgstr "用于将第三方模型封装为时序模型的基类。"
+
+#: 48f73cd91d7741f1b43aa34dcbc94275 4e55ba2a0397458fb2b5db642c2a0487
+#: 637fab771d304d3dafed14821db574f5 6631988d4c8c421783cf118063694bd5
+#: 8eda356119ba41f495f11f2e93eb4c1b 96238ce07adc4d3d8cc1969fc9040fa6
+#: a2a4d21ce1b24bea83d92539d36b3b0b of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.fit
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model
+msgid "Parameters"
+msgstr ""
+
+#: 18f3400c700f4ba3b6b4b62bb01ebaa2 3fa99a92b6f647f39fabdf02eeae99df
+#: eefdeedbb7bb41b9b06e029c2ebe1590 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:3
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:3
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:3
+msgid "Class type of the third party model."
+msgstr "第三方模型类的类型。"
+
+#: 2b7fe50d7d8e4aeba63d0216cf7e11ee 75e2939bc604490f8db3e0f4714036c8
+#: 8ba635f22d604fc89456345e1613d2d1 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:5
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:5
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:5
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 78e3a35c48464e72b78c9dd8f46b9248 9b80285a24ea4cfa817a1ac5feb99c50
+#: a2e7aebae1824689a763b4e84716b4e3 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:7
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:7
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:7
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的时间序列长度。"
+
+#: 0f90d7529c85455da81617529fc62d95 4008e844c28c4971a9aabe49648f9a23
+#: e9315d9ed2f944ac93ebb19b411ac109 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:9
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:9
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:9
+msgid ""
+"The number of time steps between in_chunk and out_chunk for a single "
+"sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
+"(i.e. Y) for a single sample. By default, it will NOT skip any time "
+"steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+
+#: 375ff820215c4fa5b0b354632d3697ad f688e7cbb2b243758d42fd6560157fab
+#: ffcb2f9f597f4077a142711c469a32c4 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:13
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:13
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:13
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 5b91cdef0109408f8b842fb1751e00ad 960c4e465b5a45ff93ec414a62d9f4b4
+#: 9695d59ff4a14d1390c7e0cf9c9f9024 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:18
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:18
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:18
+msgid "All params for initializing the third party model."
+msgstr "用于初始化第三方模型的所有参数。"
+
+#: 1e0cec70f9574e7eb1086814383d136e 811b3ba67f8b43eeb64049762dea2f86
+#: e85add137a064cf2b7003af5d8445bdb of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:20
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:20
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:20
+msgid "All params for fitting third party model except x_train / y_train."
+msgstr "第三方模型的fit接口接收的所有参数，训练集数据除外。"
+
+#: 5783a83c9f634169aa5fa67f756683c8 c00bc46f7f02415097e342ffcc0936ba
+#: c75d750b936a450e8b00809001ebcfed of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper:22
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:22
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:22
+msgid "All params for forecasting third party model except x_test / y_test."
+msgstr "第三方模型的predict接口接收的所有参数，待预测数据除外。"
+
+#: 1e1ca89d20d348a7969a4eb793d1feae of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.ml.ml_model_wrapper.MLModelBaseWrapper`"
+msgstr ""
+
+#: 39a4d51214a64d58b0a5c53174cec306 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:1
+msgid "Time series model wrapper for sklearn third party models."
+msgstr "用于将sklearn第三方模型封装为时序模型的基类。"
+
+#: b6f7db3885b243d6828457238964787a of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:24
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `fit` method of the third "
+"party model."
+msgstr "用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`fit`接口可接收的 numpy.ndarray 类型数据。"
+
+#: 57f0d4a657b5494ea59133b8e6168813 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper:27
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `predict` method of the "
+"third party model."
+msgstr "用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`predict`接口可接收的 numpy.ndarray 类型数据。"
+
+#: f395c16db73d4d25a1ed97a6e74a4649 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.fit:1
+msgid "Fit a machine learning model."
+msgstr "训练一个机器学习模型。"
+
+#: 8b283014a8cc4e54a4d88073bf58e6c1 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.fit:3
+msgid "training dataset."
+msgstr "训练集。"
+
+#: 1835dc76e9c040599c66eee9f3f70eda of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.fit:5
+msgid "validation dataset."
+msgstr "验证集。"
+
+#: 7db41f8e55a640d5b3b94cd9be447f79 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict:1
+msgid "Make prediction."
+msgstr "预测。"
+
+#: 382a0483165f4981950e78cfcfcded6b of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict:3
+msgid "TSDataset to predict."
+msgstr "待预测的时序数据集。"
+
+#: 439ea66d93fc4c5587a69764848e9cf0 46699fcacbe447feb3e81c717f1f744c
+#: 494fd5072ac54a3e90fef721503a5fe6 ff85014aa33b4d5fa5fc941c04fbbf65 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model
+msgid "Returns"
+msgstr ""
+
+#: 60ad3d818ebc476fa84a5f955b0c3d6b of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict:6
+msgid "TSDataset with predictions."
+msgstr "包含预测结果的时序数据集。"
+
+#: 283353a473f5443dbc9f1f5a3a67d8a5 4345ec809ac2421c858f4706322df030
+#: 8fcb8da9a09143199b88c3ef8ca09e7c fe17e98c1b294e4da038766c1a7d06f6 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model
+msgid "Return type"
+msgstr ""
+
+#: 5c4bd5ee6c29472194aae39dfb75d067 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" used for fitting the sklearn model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为sklearn第三方模型`fit`接口可接收的 numpy.ndarray "
+"类型数据。"
+
+#: 2b303f2433104d50b125c2ab4a4d1962 fb040b15ea2c45f7988fdcc605136ceb of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:3
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:3
+msgid "MLDataLoader object to be converted."
+msgstr "待转换的 MLDataLoader 对象。"
+
+#: 116cb37d09944e4d89a4a70b767e6b12 f02649bc321448d3863dd465a0e3a27b of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:5
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:5
+msgid ""
+"parameters when initializing sklearn models, possibly be used while "
+"converting."
+msgstr "初始化sklearn模型时需要提供的参数。在数据转换时可能会用到。"
+
+#: 2e9bfbe6714741bcb8178485173b773d 5de57c1cd177402ebc364a4fa1c4ca46 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:7
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:7
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model. Possibly be used while converting."
+msgstr "模型输入的时间序列长度。在数据转换时可能会用到。"
+
+#: 044eb271c0cd4e12939f48fa1015bcfb 770e04ce8aef45f48ee942468b9974dc of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:10
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:10
+msgid ""
+"The number of time steps between in_chunk and out_chunk for a single "
+"sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
+"(i.e. Y) for a single sample. By default, it will NOT skip any time "
+"steps. Possibly be used while converting."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+
+#: 8d2935be49034da7a7fbde3495cfc06a c014b08478c346fab7be522b280ea315 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:14
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:14
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model. Possibly be used while converting."
+msgstr "模型输出的时间序列长度。在数据转换时可能会用到。"
+
+#: 670532e961434f5bb2b773bde64f38fc of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray:18
+msgid ""
+"Converted numpy array. The first and second element in the tuple "
+"represent x_train and y_train, respectively."
+msgstr "转换得到的 numpy array 数据。元组的第一、第二个元素分别代表x_train 和 y_train。"
+
+#: f5b1178970ae498b89da392041dbc6ea of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" predicted by the sklearn model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为sklearn第三方模型`predict`接口可接收的 numpy.ndarray"
+" 类型数据。"
+
+#: 4550a3652e93479880e5c2be4c542a45 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray:18
+msgid ""
+"Converted numpy array. The first and second element in the tuple "
+"represent x and y, respectively, where y is optional."
+msgstr "转换得到的 numpy array 数据。元组的第一、第二个元素分别代表 x 和 y，其中 y 可能为None。"
+
+#: d0fd3df84c3e4fd899b09e0ba597e857 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:1
+msgid "Make Wrapped time series model based on the third-party model."
+msgstr "基于第三方模型，构建时序模型。"
+
+#: 8d164f3b4163464d85269f5c474dcfd3 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:24
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `fit` method of the third "
+"party model. Any third party models that accept numpy array as fit inputs"
+" can use this function to build the data for training."
+msgstr ""
+"用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`fit`接口可接收的 numpy.ndarray "
+"类型数据。任何第三方模型的fit接口如果可以接收 numpy array 作为输入，则可以使用该函数构建训练数据。"
+
+#: bbf9f42aada0488f955b8c91db9fd28a of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:28
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `predict` method of the "
+"third party model. Any third-party models that accept numpy array as "
+"predict inputs can use this function to build the data for prediction."
+msgstr ""
+"用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`predict`接口可接收的 numpy.ndarray "
+"类型数据。任何第三方模型的predict接口如果可以接收 numpy array 作为输入，则可以使用该函数构建待预测的数据。"
+
+#: 0f57478cb5da428c9ca3d7464a0c0625 of
+#: paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model:34
+msgid "Wrapped time series model wrapper object."
+msgstr "封装完成的时序模型对象。"
+

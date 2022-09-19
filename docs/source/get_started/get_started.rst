@@ -34,7 +34,7 @@ Once installed successfully, you can import PaddleTS in your code:
 
 ::
 
-   #0.1.0
+   #0.2.0
 
 .. _Build TSDataset:
 .. _构建TSDataset:
@@ -148,7 +148,7 @@ To get a brief overview, simply call ``TSDataset.summary``.
    from paddlets.analysis import FFT
    fft = FFT()
    res = fft(dataset, columns='WetBulbCelsius')
-   res.plot()
+   fft.plot()
 
 --------------
 
@@ -477,6 +477,44 @@ Next, we can fit the pipeline and evaluate the performance:
    #mae: 4.992150762390378
 
 | To learn more about the ``Pipeline``, refer to `Pipeline <../modules/pipeline/overview.html>`__
+
+9. AutoTS
+-----------
+AutoTS is an automated machine learning tool for PaddleTS.
+
+It frees the user from selecting hyperparameters for PaddleTS models or PaddleTS pipelines.
+
+.. code:: python
+
+    from paddlets.automl.autots import AutoTS
+    from paddlets.models.forecasting import MLPRegressor
+    from paddlets.datasets.repository import get_dataset
+    tsdataset = get_dataset("UNI_WTH")
+
+Here we initialize an `AutoTS` model with `MLPRegressor`, while its in_chunk_len is 96 and out_chunk_len is 2.
+
+.. code:: python
+
+    autots_model = AutoTS(MLPRegressor, 96, 2)
+
+Next, we can train the AutoTS model and use it to make predictions, just like a PaddleTS model.
+
+AutoTS has a built-in recommended search space for the PaddleTS models, so this MLPRegressor performs hyperparameter
+optimization in the default built-in search space and uses the best parameters found during the optimization process to
+fit the MLPRegressor.
+
+.. code:: python
+
+    autots_model.fit(tsdataset)
+    predicted_tsdataset = autots_model.predict(tsdataset)
+
+AutoTS also allows us to obtain the best parameters found during the optimization process.
+
+.. code:: python
+
+    best_param = autots_model.best_param
+
+| To learn more about the ``AutoTS``, refer to `AutoTS <../modules/AutoTS/overview.html>`__
 
 .. |UNI_WTH| image:: ../../static/images/UNI_WTH.png
 .. |CUS_DATASET_2| image:: ../../static/images/CUS_DATASET_2.png

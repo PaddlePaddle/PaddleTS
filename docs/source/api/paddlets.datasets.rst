@@ -9,4 +9,4 @@ paddlets.datasets
     :maxdepth: 4
 
     paddlets.datasets.tsdataset.rst
-
+    paddlets.datasets.splitter.rst

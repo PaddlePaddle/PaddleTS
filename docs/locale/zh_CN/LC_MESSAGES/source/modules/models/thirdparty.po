@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/thirdparty.rst:3
+#: 18d52da22a99434b9cf4cb7233a353d1
+msgid "Third-party Model"
+msgstr "第三方模型自动集成"
+
+#: ../../source/modules/models/thirdparty.rst:5
+#: 6a1cef76b5084952b1ccf3d2ef04afaf
+msgid ""
+"PaddleTS allows users to implement time series models based on third "
+"party models and verify the feasibility and performance efficiently."
+msgstr "PaddleTS支持用户方便地基于第三方模型进行时序建模，并高效验证其可行性、效果。"
+
+#: ../../source/modules/models/thirdparty.rst:7
+#: ffc27e169dd64f80b9f6057bb9f1b0d9
+msgid ""
+"`scikit-learn <https://scikit-learn.org>`_ is currently the only "
+"supported third-party library for PaddleTS."
+msgstr "`scikit-learn <https://scikit-learn.org>`_ 是PaddleTS目前支持的第三方库。"
+
+#: ../../source/modules/models/thirdparty.rst:10
+#: c20184ed731349629164b33aaa592a60
+msgid "1. Make Time Series Model Based On Third-party Model"
+msgstr "1. 基于第三方模型构建时序模型"
+
+#: ../../source/modules/models/thirdparty.rst:12
+#: fad0fee96022443c83d681fc2908857e
+msgid ""
+"PaddleTS provides `make_ml_model "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.forecasting.ml.ml_model_wrapper.make_ml_model>`_"
+" interface that allows users to build time series models by simply "
+"specifying a third party model class and relevant parameters without "
+"extra development."
+msgstr ""
+"PaddleTS 提供了 `make_ml_model "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.forecasting.ml.ml_model_wrapper.make_ml_model>`_"
+" 接口，用户仅需指定一个第三方机器学习模型类的类型和相关参数，即可构建时序模型，无需额外开发。"
+
+#: ../../source/modules/models/thirdparty.rst:16
+#: 3fc2b4c29da44238a32bb555e3221334
+msgid "1.1 Minimal Example"
+msgstr "1.1 最小化示例"
+
+#: ../../source/modules/models/thirdparty.rst:18
+#: 873a36a31fea447a959dcf4f8bbfeac8
+msgid ""
+"Below is an example of how to make time series models based on "
+"`sklearn.neighbors.KNeighborsRegressor <https://scikit-"
+"learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html>`_"
+" ."
+msgstr ""
+"下方示例展示了如何基于 `sklearn.neighbors.KNeighborsRegressor <https://scikit-"
+"learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html>`_"
+" 构建时序机器学习模型。"
+
+#: ../../source/modules/models/thirdparty.rst:48
+#: b7c95e1982704fc6ac0ff75700cc7fc5
+msgid "1.2 Convert MLDataLoader to Trainable / Predictable ndarray"
+msgstr "1.2 将MLDataLoader转换为可训练/预测的ndarray数据"
+
+#: ../../source/modules/models/thirdparty.rst:50
+#: a0a461ba184e4232b5adda6e92cda2e5
+msgid ""
+"The third-party library such as `scikit-learn <https://scikit-"
+"learn.org>`_ usually accepts numpy.ndarray data as `fit` and `predict` "
+"method inputs, while PaddleTS uses "
+"`paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader` to "
+"represent trainable / predictable time series data. Thus, `make_ml_model`"
+" provides 2 optional arguments `udf_ml_dataloader_to_fit_ndarray` and "
+"`udf_ml_dataloader_to_predict_ndarray` allow users to convert "
+"`MLDataLoader` to an `numpy.ndarray` object."
+msgstr ""
+"一些第三方库（如 `scikit-learn <https://scikit-learn.org>`_ "
+"）的机器学习模型通常会接收numpy.ndarray类型数据作为 `fit` 和 `predict` 方法的输入。但是在PaddleTS中，会使用"
+" `paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader` "
+"表示可用于训练/预测的时序数据。因此，`make_ml_model` 提供了 `udf_ml_dataloader_to_fit_ndarray`"
+" 和 `udf_ml_dataloader_to_predict_ndarray` 两个可选参数，用于支持用户将 `MLDataLoader` "
+"转换为 `numpy.ndarray` 数据对象。"
+
+#: ../../source/modules/models/thirdparty.rst:55
+#: 6e4be276f94d40dda70f11efc8bb2c9a
+msgid ""
+"By default, `make_ml_model` uses `default_ml_dataloader_to_fit_ndarray "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray>`_"
+" and `default_ml_dataloader_to_predict_ndarray "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray>`_"
+" to convert MLDataLoader to `numpy.ndarray` for `fit` and `predict` "
+"method, respectively. Also, users are able to develop user-defined "
+"convert functions to get expected trainable / predictable output."
+msgstr ""
+"`make_ml_model` 默认会使用 `default_ml_dataloader_to_fit_ndarray "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray>`_"
+" 和 `default_ml_dataloader_to_predict_ndarray "
+"<../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray>`_"
+" 两个函数将 MLDataLoader 分别转换为 `fit` 和 `predict` 方法可接收的 `numpy.ndarray` "
+"数据。同时，用户也可以开发自定义的数据转换函数，用于得到可用于训练/预测的数据。"
+
+#: ../../source/modules/models/thirdparty.rst:109
+#: efccfd547ab7421db52478ceedf75ba0
+msgid "2. Multi-step forecasting"
+msgstr "2. 多时间点时序预测"
+
+#: ../../source/modules/models/thirdparty.rst:111
+#: eb4a3126cc8c47ed9c8d6a8618ecf2a7
+msgid ""
+"The time series models also support multi-timestep forecasting by calling"
+" `recursive_predict "
+"<../../api/paddlets.models.base.html#bts.models.base.BaseModel.recursive_predict>`_"
+" ."
+msgstr ""
+"通过第三方模型构建的时序模型也可以通过调用 `recursive_predict "
+"<../../api/paddlets.models.base.html#bts.models.base.BaseModel.recursive_predict>`_"
+" 实现多时间点预测。"
+

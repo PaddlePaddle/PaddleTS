@@ -1,0 +1,290 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.informer.rst:2
+#: a1930e39274042a18f0e730d0b103e7b
+msgid "paddlets.models.forecasting.dl.informer"
+msgstr ""
+
+#: 7fe4bd50685840c79685ce7c1337e6a9 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 4d8354432cf143ad856a6ea57bfd437a of
+#: paddlets.models.forecasting.dl.informer.InformerModel:1
+msgid ""
+"Informer\\[1\\] is a state-of-the-art deep learning model introduced in "
+"2021. It is an encoder-decoder architecture whose core feature is the "
+"`prob sparse attention` mechanism, which achieves the O(LlogL) time "
+"complexity and O(LlogL) memory usage on dependency alignments."
+msgstr ""
+"Informer\\[1\\] 是2021年提出的一种编码器-解码器架构的深度学习模型. 核心特征是\"ProbSparse注意力\"机制, "
+"在注意力计算上达到了O(LlogL)的时间复杂度和O(LlogL)的空间复杂度."
+
+#: 6ebed7b84e174c3bbcd17a3b7fb02b47 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:5
+msgid ""
+"\\[1\\] Zhou H, et al. \"Informer: Beyond efficient transformer for long "
+"sequence time-series forecasting\", `<https://arxiv.org/abs/2012.07436>`_"
+msgstr ""
+
+#: a149984a6c3d4c1783b5e2e94b957eac of
+#: paddlets.models.forecasting.dl.informer.InformerModel
+msgid "Parameters"
+msgstr "参数"
+
+#: 3c2f5fc96900460892013da2e638edd2 3e118722a8dc4ab4984e0813ff220ba4 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:7
+#: paddlets.models.forecasting.dl.informer.InformerModel:57
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 1d675ad8430f4f44ab26402e42401c6a 9d7af5ee04104c7cbf0a807bda494755 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:9
+#: paddlets.models.forecasting.dl.informer.InformerModel:63
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 62742cd22d6540a0a1c9a2f64662a092 ffa1ecd33f384e42bd9e76fd47a2838d of
+#: paddlets.models.forecasting.dl.informer.InformerModel:11
+#: paddlets.models.forecasting.dl.informer.InformerModel:69
+msgid "The start token size of the forecasting horizon."
+msgstr "解码器输入时间序列的填充长度."
+
+#: 66740dd03e6b45e684d4dc3bfc87ba86 791883fd78514aeeaf5d91eda9f0b7d2 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:13
+#: paddlets.models.forecasting.dl.informer.InformerModel:75
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: bddecb6a3bf0400c86b7715dc249207d e40e90fe345c43109bb04fde89e8d5fa of
+#: paddlets.models.forecasting.dl.informer.InformerModel:17
+#: paddlets.models.forecasting.dl.informer.InformerModel:83
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 828c9df7910545629bd8efce623c9fd5 9b679d427f99432f9bf657f3859e9c63 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:19
+#: paddlets.models.forecasting.dl.informer.InformerModel:89
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 38c44e2ee5594aefa9b745d46807913e b9a766cb10fe47b78585e8b9f16492d0 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:21
+#: paddlets.models.forecasting.dl.informer.InformerModel:95
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 32619c5d3cb443849fa3a5e1a6a457f8 dc01f0b0ef464024b2e5ec52f0ff9de8 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:23
+#: paddlets.models.forecasting.dl.informer.InformerModel:101
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 30085cdff7f74302a6bbf81ee216c93a ec046d924579411f9e09a07b1ddef03d of
+#: paddlets.models.forecasting.dl.informer.InformerModel:25
+#: paddlets.models.forecasting.dl.informer.InformerModel:107
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: 97b1013ee9de4f5fb652a980ae45eea9 9f21d4b99e5a4bcca6fb131cf28f0694 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:27
+#: paddlets.models.forecasting.dl.informer.InformerModel:113
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 1c95c5de739b4af1a52da92e1b4d8279 3b8707e9482e480ebb5384aeda98d92f of
+#: paddlets.models.forecasting.dl.informer.InformerModel:29
+#: paddlets.models.forecasting.dl.informer.InformerModel:119
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: 2c364b2b64be429f845114831e70668f c7fd8ae3e07741d3a308e2b67438532a of
+#: paddlets.models.forecasting.dl.informer.InformerModel:31
+#: paddlets.models.forecasting.dl.informer.InformerModel:125
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: e1f45c2b4b5f4577b5f01aefe6ab55b5 f8998f87159f4bfcb7006c396ba32ba5 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:33
+#: paddlets.models.forecasting.dl.informer.InformerModel:131
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 4b4f4558d20447c999b86d70b5edda42 60ef00fab03a4b2b96ac30fcbd1c59f3 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:35
+#: paddlets.models.forecasting.dl.informer.InformerModel:137
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: 0120772750844d58bd37a20f43a44626 5689823f067c463d91705da49aa3a68a of
+#: paddlets.models.forecasting.dl.informer.InformerModel:37
+#: paddlets.models.forecasting.dl.informer.InformerModel:143
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 8e0aca8cb1cb410db749b96e7a78765f d93a439388d847289407d8941f927c31 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:39
+#: paddlets.models.forecasting.dl.informer.InformerModel:155
+msgid ""
+"The expected feature size for the input/output of the informer's "
+"encoder/decoder."
+msgstr "编码器/解码器的输入特征维度."
+
+#: 7d4e249da60c4afa9eb0ed9a38eba9f2 b9ccad14b0944306a24450fdc51cada9 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:41
+#: paddlets.models.forecasting.dl.informer.InformerModel:161
+msgid "The number of heads in the multi-head attention mechanism."
+msgstr "多头注意力机制中的头数."
+
+#: 04eec66a777a4ce2bf67dccfcf7a1355 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:43
+msgid "The Number of channels for Conv1D of FFN layer."
+msgstr "FFN网络中Conv1D的通道数."
+
+#: 6041744e4abf4ec99834bb73881cdd33 e18b276f8afa46b294967031c88dbf0d of
+#: paddlets.models.forecasting.dl.informer.InformerModel:45
+#: paddlets.models.forecasting.dl.informer.InformerModel:167
+msgid "The number of encoder layers in the encoder."
+msgstr "编码器中的编码层数."
+
+#: 3c85fee94a9b4cf58141ede6433b4cb4 a06ef4fb65f746babee690f36d9044df of
+#: paddlets.models.forecasting.dl.informer.InformerModel:47
+#: paddlets.models.forecasting.dl.informer.InformerModel:173
+msgid "The number of decoder layers in the decoder."
+msgstr "解码器中的解码层数."
+
+#: 716fd2c2f4514eafab3bdd919660a78d of
+#: paddlets.models.forecasting.dl.informer.InformerModel:49
+msgid ""
+"The activation function of encoder/decoder intermediate layer, [\"relu\","
+" \"gelu\"] is optional."
+msgstr "编码器/解码器中间层的激活函数, 可选[\"relu\", \"gelu\"]."
+
+#: 2255e0a630d14e2a8b072e9873506310 830c198610cf476aac523b51446540a7 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:52
+#: paddlets.models.forecasting.dl.informer.InformerModel:186
+msgid "Fraction of neurons affected by Dropout."
+msgstr "神经元丢弃概率."
+
+#: 100c7550b0ba41459299b361677ab2fd 1385bec8816648fd91fa75871b528cd2
+#: 2f033a85988a4d43aa894ae94473c607 3b697eecbd0e4214af2fbc7a201f4b01
+#: 48d653603b104ca8836d5343b5a42c41 4b38cf36579e48d58a4c624533578c72
+#: 5cbb3fe4aca54861b323f776886b8e2a 62df01c922854678a5d5ece28345304d
+#: 6b58aae40363496698e9a0e0daf3dabb 71971a39ed8e4fe794f3890b14a0a486
+#: 846f070fb7ee4568981be387565f31b8 8bc044c7fae84adeb039840eb9bd6a13
+#: 8be6d943d94e464494de2360b757d1f7 8d5ee478d3cb41b8a08ddb6ea5bffb62
+#: 8dc44fc6eff5451283f43dbfd9e178b2 9dbef02671584a2f8158dd7a915ee565
+#: bc16422bed2b41ac88fb49ac476b3cdf d6bfb720767d4657b31bc9a14575803a
+#: d9450eb218b341928ada1e19a3a2704e e4debff749614d36883861b9346df6f5
+#: e6c4f2eadeac44c2a24e6322058254dc f2adbc056e524bc8bbc5a08b92783352 of
+#: paddlets.models.forecasting.dl.informer.InformerModel
+msgid "type"
+msgstr ""
+
+#: 08765f27df0a4604a79e523015c7ad34 11396779f2834eb2ad7073bcf6015486
+#: 1f0cc72d9c1d4e71987e65601b3b4025 234def5ea65741338b9baabdda5ea2c8
+#: 52976d8965e2456eb916de5889a226b7 5d67a8c29caa40e9be95cca5931331d7
+#: 765d951235e345a9ab2ba0976b312969 79c153d3d6c84658a68eae7d18820f0c
+#: b9d0fbde21364030a7ad98cbefd7e671 d1792f92767d495495c3ed715c458236
+#: d6eaab25f62346b0a42613f0486db508 e0b55c9bec8a4ebba63b7c13fd8fba86
+#: fd72265f59494fcaba2ad4ffcc243ed2 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:59
+#: paddlets.models.forecasting.dl.informer.InformerModel:65
+#: paddlets.models.forecasting.dl.informer.InformerModel:71
+#: paddlets.models.forecasting.dl.informer.InformerModel:79
+#: paddlets.models.forecasting.dl.informer.InformerModel:85
+#: paddlets.models.forecasting.dl.informer.InformerModel:121
+#: paddlets.models.forecasting.dl.informer.InformerModel:127
+#: paddlets.models.forecasting.dl.informer.InformerModel:133
+#: paddlets.models.forecasting.dl.informer.InformerModel:139
+#: paddlets.models.forecasting.dl.informer.InformerModel:157
+#: paddlets.models.forecasting.dl.informer.InformerModel:163
+#: paddlets.models.forecasting.dl.informer.InformerModel:169
+#: paddlets.models.forecasting.dl.informer.InformerModel:175
+msgid "int"
+msgstr ""
+
+#: e5f4acd5b28045749cfe8ac14b9c1f53 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:91
+msgid "Callable[..., paddle.Tensor]|None"
+msgstr ""
+
+#: 6c767e4e070949cdb7ee0ec9e4c390c9 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:97
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 35d3945c15ff45b2b3e6b30c5d1d422b of
+#: paddlets.models.forecasting.dl.informer.InformerModel:103
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 87f005f9320147afa6110f8c0fd66d0c of
+#: paddlets.models.forecasting.dl.informer.InformerModel:109
+msgid "List[str]"
+msgstr ""
+
+#: d322f7baf5a6411385391d776b769ab1 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:115
+msgid "List[Callback]"
+msgstr ""
+
+#: 9b86ae89b5d24c37a1b176514d0401cb of
+#: paddlets.models.forecasting.dl.informer.InformerModel:145
+msgid "int|None"
+msgstr ""
+
+#: a92dae2064c043679c141b322fa3fca3 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:151
+msgid "bool"
+msgstr ""
+
+#: 0b18f204c56b480f9bf258d90c427acb of
+#: paddlets.models.forecasting.dl.informer.InformerModel:179
+msgid ""
+"The activation function of encoder/decoder intermediate layer. [\"relu\","
+" \"gelu\"] is optional."
+msgstr "编码器/解码器中间层的激活函数, 可选[\"relu\", \"gelu\"]."
+
+#: 4252e024e9d24d45b986ea521f85d5b4 of
+#: paddlets.models.forecasting.dl.informer.InformerModel:182
+msgid "str"
+msgstr ""
+
+#: 62c0ca5fd1b643589c5794f8dc17325f of
+#: paddlets.models.forecasting.dl.informer.InformerModel:188
+msgid "float"
+msgstr ""
+
+#~ msgid ""
+#~ "Bases: "
+#~ ":py:class:`~bts.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+#~ msgstr ""
+

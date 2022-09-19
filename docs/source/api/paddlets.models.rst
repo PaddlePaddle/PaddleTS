@@ -9,6 +9,8 @@ paddlets.models
     :maxdepth: 4
 
     paddlets.models.base.rst
-    paddlets.models.dl.rst
+    paddlets.models.forecasting.rst
+    paddlets.models.representation.rst
+    paddlets.models.common.rst
     paddlets.models.model_loader.rst
     paddlets.models.utils.rst

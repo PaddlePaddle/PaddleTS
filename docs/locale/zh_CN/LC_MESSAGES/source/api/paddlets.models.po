@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-05 09:48+0800\n"
+"POT-Creation-Date: 2022-09-16 16:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../source/api/paddlets.models.rst:2 8a675d9684024283859be6293d786ed8
+#: ../../source/api/paddlets.models.rst:2 af28b4d1ef4d446590e9373ecbe8a8d1
 msgid "paddlets.models"
 msgstr ""
 
-#: 21e05ae80fe640608591f45c17d0034d paddlets.models:1 of
+#: e4132df52e314b398e9e848f871f2553 of paddlets.models:1
 msgid "paddlets models"
 msgstr ""
+
+#~ msgid "bts models"
+#~ msgstr ""
 

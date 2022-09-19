@@ -1,0 +1,137 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-22 15:40+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.utils.validation.rst:2
+#: a0bc70e98ed14b7caafd1f8b4b9a1b59
+msgid "paddlets.utils.validation"
+msgstr ""
+
+#: bts.utils.validation.cross_validate:1 fa386297b3b14075a1372ae60c6becc8 of
+msgid "Cross validate Evaluate forecaster using timeseries cross-validation."
+msgstr "时间序列的交叉验证"
+
+#: 4c4d4d9475204b7c9c8348d976563104 568f3d9099cb42e0a564e4e7c6cd7009
+#: bts.utils.validation.cross_validate bts.utils.validation.fit_and_score of
+msgid "Parameters"
+msgstr ""
+
+#: 04616aac09834c7a95f065c663358e73 bts.utils.validation.cross_validate:4 of
+msgid "The  TSdataset to use in cross validate."
+msgstr "待验证的数据"
+
+#: 03ca47f814fd427f8027fc72faf7e537 bts.utils.validation.cross_validate:6
+#: bts.utils.validation.fit_and_score:7 c5553a0a83f54652a6d0761377672d2e of
+msgid "The  model use in cross validate."
+msgstr "交叉验证所用的模型"
+
+#: 415c3ce3d195440a885c5dcea89d4043 bts.utils.validation.cross_validate:8 of
+msgid "CV splitter, use 5-folds ExpandingWindowSplitter by default."
+msgstr "CV splitter，默认使用5折扩大窗口交叉验证"
+
+#: b08b1a679c9f4e618c2e2c0a9232998a bts.utils.validation.cross_validate:10 of
+msgid ""
+"Use backtest or not, set to True by default, use recursive predict if "
+"False."
+msgstr "是否使用回测，默认使用回测，如果不使用回测的话默认使用滚动预测"
+
+#: bts.utils.validation.cross_validate:12 df27905289b84189bc9a47d71fb75935 of
+msgid "The size of  predict window for the  prediction."
+msgstr "预测窗口的长度，只有开启回测时需要"
+
+#: 1200b04191b84052a16a91d20b543904 bts.utils.validation.cross_validate:14
+#: bts.utils.validation.fit_and_score:13 debdc809ade240e2a5c6f8aef6a81cef of
+msgid "The number of time steps between two consecutive predict window."
+msgstr "两个连续预测之间的步长，只有开启回测时需要"
+
+#: 708573cbacf3416d9fa81a784d6ef05d bts.utils.validation.cross_validate:16
+#: bts.utils.validation.fit_and_score:15 dc9053c06ff949eda821699bc56de482 of
+msgid ""
+"A function that takes two ``TSdataset`` instances as inputs and returns "
+"an error value."
+msgstr "指标计算方法,默认为MAE()"
+
+#: a20dfd62bdc64623966bf9a236b27623 bts.utils.validation.cross_validate:18 of
+msgid ""
+"Compute and return score on test set. Will return a list of dict if set "
+"to False"
+msgstr "如果为True返回score值，如果为false返回一个dict（包括score，预测值，模型等）。"
+
+#: 6a66ba4032e64c6297787816214debfd bts.utils.validation.cross_validate:20
+#: bts.utils.validation.fit_and_score:23 c7fad4a230c54142bc70696553e1bd4d of
+msgid ""
+"A function used to combine the individual error scores obtained when "
+"predict_window ！= stride. If explicitely set to `None`, the method will "
+"return a list of the individual error scores instead. Set to ``np.mean`` "
+"by default."
+msgstr "指标计算公式，默认为 ``np.mean``"
+
+#: 5f85bc49ba1f4df3a5bd02c6da32091f bts.utils.validation.cross_validate:24 of
+msgid "Verbose mode."
+msgstr "是否开启日志打印，默认开启"
+
+#: 756178a49acf4d019843b9805ff5134c 9f0ad69ef3104ee784c52191c523e5c0
+#: bts.utils.validation.cross_validate bts.utils.validation.fit_and_score of
+msgid "Returns"
+msgstr ""
+
+#: 489a917ec75a4669bde9803428db813b bts.utils.validation.cross_validate:27 of
+msgid "float, list[dict]"
+msgstr ""
+
+#: 4b1ac0e11d544c0da16ef9109100c680 5b4b52b552aa4768bdc43ebb13296278
+#: bts.utils.validation.cross_validate bts.utils.validation.fit_and_score of
+msgid "Raises"
+msgstr ""
+
+#: 236680c23b8643618975387a4b713fc7 bts.utils.validation.fit_and_score:1 of
+msgid "Fit and score"
+msgstr "训练并计算score"
+
+#: bts.utils.validation.fit_and_score:3 d5ec1c3ba2094c95a724528e4f00cfea of
+msgid "Train dataset ."
+msgstr "训练集"
+
+#: 2047f9183a1d45d28e07442290e46cb2 bts.utils.validation.fit_and_score:5 of
+msgid "Test dataset ."
+msgstr "测试集"
+
+#: b6669dc49e8141a2aba024e5d2869d1b bts.utils.validation.fit_and_score:9 of
+msgid "Use backtest or not."
+msgstr "是否使用回测，默认使用回测，如果不使用回测的话默认使用滚动预测"
+
+#: 3e538e24c6144db486a67a2ab20267c3 bts.utils.validation.fit_and_score:11 of
+msgid "The predict window for the  prediction."
+msgstr "预测窗口的长度，只有开启回测时需要"
+
+#: bts.utils.validation.fit_and_score:17 e32be38374824e7395c4be90d5f18a3d of
+msgid "verbose mode."
+msgstr "是否开启日志打印，默认开启"
+
+#: 603520d769d841dbb1d58146670787d1 bts.utils.validation.fit_and_score:19 of
+msgid "Compute and return score on test set."
+msgstr "结果是否返回score"
+
+#: 947c1e07210c492f9c25b9aac1a05d68 bts.utils.validation.fit_and_score:21 of
+msgid "Whether to return the fitted estimator."
+msgstr "是否返回模型"
+
+#: 9e02b4a9a20f492285f9c47b51d8221a bts.utils.validation.fit_and_score:28 of
+msgid "dict"
+msgstr ""
+
