@@ -94,30 +94,30 @@ msgstr ""
 #: 8d154e227d2c41cea24db885f885cdcf of
 #: paddlets.utils.utils.check_train_valid_continuity:1
 msgid "Check if train and test TSDataset are continous"
-msgstr ""
+msgstr "查看训练集和测试集是否是时间上连续的"
 
 #: 1680c3ed3e964b279e22606786cc1728 of
 #: paddlets.utils.utils.check_train_valid_continuity:3
 msgid "Train dataset."
-msgstr ""
+msgstr "训练集"
 
 #: f6cef24bd0214ccfb0393d3201a3edc1 of
 #: paddlets.utils.utils.check_train_valid_continuity:5
 msgid "Test dataset."
-msgstr ""
+msgstr "测试集"
 
 #: bfe3d26791a64254a0a573d047a6cd66 of
 #: paddlets.utils.utils.check_train_valid_continuity:8
 msgid "if train and test TSDataset are continous"
-msgstr ""
+msgstr "训练集和测试集是否连续"
 
 #: 4c72f53486764d8a80ac5378d52a3747 of paddlets.utils.utils.split_dataset:1
 msgid "Split dataset (accroding to the max length)"
-msgstr ""
+msgstr "根据最大长度切割TSDataset"
 
 #: 97e4c247305d4b1e85a88d5c2ab4f3ed of paddlets.utils.utils.split_dataset:3
 msgid "dataset to be splited."
-msgstr ""
+msgstr "需要分割的TSDataset"
 
 #: 3e2f26b820014db69870e21d080ed83d of paddlets.utils.utils.split_dataset:5
 msgid "split point."
@@ -130,12 +130,12 @@ msgstr ""
 #: c09fb09105c84cdd83ffae21ef1aed13 of
 #: paddlets.utils.utils.get_tsdataset_max_len:1
 msgid "Get dataset max length"
-msgstr ""
+msgstr "获得TSDataset的最大长度"
 
 #: f0855b9cfba24545a919726c965cd6c9 of
 #: paddlets.utils.utils.get_tsdataset_max_len:3
 msgid "dataset use to get length."
-msgstr ""
+msgstr "需要用到的TSDataset"
 
 #: daa85915a7534aecb5b8ed1174ff9963 of
 #: paddlets.utils.utils.get_tsdataset_max_len:6
