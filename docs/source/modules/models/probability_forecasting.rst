@@ -17,11 +17,12 @@ We use a build-in `DeepAR` model to illustrate the base use of probability forec
 
 .. code-block:: python
 
-   from bts.datasets.tsdataset import TSDataset
-   from bts.models.forecasting import DeepARModel
-   from bts.metrics import MAE
-   from bts.metrics import MSE
-   from bts.metrics import QuantileLoss
+
+   from paddlets.datasets.tsdataset import TSDataset
+   from paddlets.models.forecasting import DeepARModel
+   from paddlets.metrics import MAE
+   from paddlets.metrics import MSE
+   from paddlets.metrics import QuantileLoss
 
 1. Data load and processing
 ---------------------------
@@ -80,7 +81,7 @@ The build-int API `backtest` is used for both prediction and evaluation, quantil
 
 .. code-block:: python
    
-   from bts.utils import backtest
+   from paddlets.utils import backtest
    q_loss, quantiles = backtest(data=ts_test_scaled,
         model=deepar,
         start="2013-11-01 00:00:00",
