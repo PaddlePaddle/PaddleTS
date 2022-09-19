@@ -514,7 +514,7 @@ AutoTS also allows us to obtain the best parameters found during the optimizatio
 
     best_param = autots_model.best_param
 
-| To learn more about the ``AutoTS``, refer to `AutoTS <../modules/AutoTS/overview.html>`__
+| To learn more about the ``AutoTS``, refer to `AutoTS <../modules/autots/overview.html>`__
 
 .. |UNI_WTH| image:: ../../static/images/UNI_WTH.png
 .. |CUS_DATASET_2| image:: ../../static/images/CUS_DATASET_2.png
