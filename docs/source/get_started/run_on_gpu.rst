@@ -128,7 +128,7 @@ Now we can pull the gpu-capable docker image.
 
 .. code-block:: shell
 
-    nvidia-docker pull registry.baidubce.com/paddlets:latest-gpu-cuda11.2-cudnn8
+    nvidia-docker pull registry.baidubce.com/paddlets:0.2.0-gpu-paddle2.3.2-cuda11.2-cudnn8
 
 
 2.3 Use GPU device to fit and predict models
