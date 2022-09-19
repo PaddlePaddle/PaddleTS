@@ -279,7 +279,7 @@ msgid ""
 "after the last `non-Nan` element in the current time series. eg: [nan, 3,"
 " 2, nan, nan] -> [nan, 3, 2], [3, 2, nan, nan] -> [3, 2], [nan, nan, nan]"
 " -> []"
-msgstr ""
+msgstr "是否删除时序尾部连续的nan值，如果设置为True, 则会自动删除尾部的Nan值"
 
 #: 1da0772aa39c4a84a7ef63730eae24c7 of
 #: paddlets.datasets.tsdataset.TimeSeries.load_from_dataframe:17
@@ -577,13 +577,13 @@ msgstr "合并的维度，1是横向合并，0代表纵向合并"
 #: paddlets.datasets.tsdataset.TSDataset.concat:10
 #: paddlets.datasets.tsdataset.TimeSeries.concat:10
 msgid "Drop duplicate indices."
-msgstr ""
+msgstr "是否对重复index的行进行删除，默认删除"
 
 #: 6d25afaa14b14f50a72f0d282f46dc13 d869d95eddbd47b5b7a9133ae66a8d81 of
 #: paddlets.datasets.tsdataset.TSDataset.concat:12
 #: paddlets.datasets.tsdataset.TimeSeries.concat:12
 msgid "keep 'first' or 'last' when drop duplicates."
-msgstr ""
+msgstr "当对concat的时序数据有重复index并设置删除，保留第一个或者最后一个重复时序的数据"
 
 #: 86eb3b3eefaa4a6aa5c3883d89b2e199 of
 #: paddlets.datasets.tsdataset.TimeSeries.reindex:1
@@ -732,7 +732,7 @@ msgstr ""
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:29
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:28
 msgid "Drop time series tail nan value or not"
-msgstr ""
+msgstr "是否删除时序尾部连续的nan值，如果设置为True, 则会自动删除尾部的Nan值"
 
 #: 0b191341fe6a46aebb1e5ba9452197aa of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:31
@@ -965,7 +965,7 @@ msgid ""
 "The quantile (between 0 and 1) to plot as a \"central\" value, For "
 "instance, setting `central_quantile=0.5` will plot the median of each "
 "component.  (only used when dataset is probability forecasting output )"
-msgstr ""
+msgstr "中心分位- 概率区间的中心点，默认为0.5分位。（此参数只会在概率预测结果打印中用到）"
 
 #: c83b50a448fa4e9787b7daae8c649c69 of
 #: paddlets.datasets.tsdataset.TSDataset.plot:13
@@ -976,7 +976,7 @@ msgid ""
 "confidence interval is shown if `confidence_low_quantile` is None "
 "(default 0.05). (only used when dataset is probability forecasting output"
 " )"
-msgstr ""
+msgstr "低分位- 概率区间的下界，默认为0.05分位。（此参数只会在概率预测结果打印中用到）"
 
 #: ad9a127538044ef093976aabad71e86f of
 #: paddlets.datasets.tsdataset.TSDataset.plot:17
@@ -986,7 +986,7 @@ msgid ""
 "component separately (i.e., displaying marginal distributions). No "
 "confidence interval is shown if `high_quantile` is None (default 0.95). "
 "(only used when dataset is probability forecasting output )"
-msgstr ""
+msgstr "高分位- 概率区间的上界，默认为0.95分位。（此参数只会在概率预测结果打印中用到）"
 
 #: 6a6b68a0f91b486792eecc7d02b33fab of
 #: paddlets.datasets.tsdataset.TSDataset.plot:21
