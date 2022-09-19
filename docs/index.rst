@@ -71,6 +71,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
     Overview <source/modules/models/overview.rst>
     Third-party Model <source/modules/models/thirdparty.rst>
+    Probability Forecasting <source/modules/models/probability_forecasting.rst>
 
 
 .. toctree::
