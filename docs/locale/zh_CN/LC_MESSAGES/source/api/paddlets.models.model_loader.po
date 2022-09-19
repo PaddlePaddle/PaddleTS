@@ -22,26 +22,26 @@ msgstr ""
 msgid "paddlets.models.model_loader"
 msgstr "paddlets.models.model_loader"
 
-#: paddlets.models.model_loader.load:1 ee946e13802a474db73d4bda4033feb8 of
+#: bts.models.model_loader.load:1 ee946e13802a474db73d4bda4033feb8 of
 msgid "Loads a saved model from a file path."
 msgstr "从给定的文件路径下加载一个模型。"
 
-#: paddlets.models.model_loader.load dd4605bc490848578237142883a48bd1 of
+#: bts.models.model_loader.load dd4605bc490848578237142883a48bd1 of
 msgid "Parameters"
 msgstr "参数"
 
-#: 4ad96891f7f74efe92d789fe641e440e paddlets.models.model_loader.load:3 of
+#: 4ad96891f7f74efe92d789fe641e440e bts.models.model_loader.load:3 of
 msgid "A path string containing a model file name."
 msgstr "一个字符串格式的文件路径，该路径包含模型文件名。"
 
-#: 39c3194a631e43498f448ffe65f8edf6 paddlets.models.model_loader.load of
+#: 39c3194a631e43498f448ffe65f8edf6 bts.models.model_loader.load of
 msgid "Returns"
 msgstr "返回"
 
-#: 7b4e536ef7aa4252ab0ce2d4fbb4ecee paddlets.models.model_loader.load:6 of
+#: 7b4e536ef7aa4252ab0ce2d4fbb4ecee bts.models.model_loader.load:6 of
 msgid "Loaded model."
 msgstr "加载得到的模型。"
 
-#: 964181752c004363b992fdf600bc31c4 paddlets.models.model_loader.load of
+#: 964181752c004363b992fdf600bc31c4 bts.models.model_loader.load of
 msgid "Return type"
 msgstr "返回类型"

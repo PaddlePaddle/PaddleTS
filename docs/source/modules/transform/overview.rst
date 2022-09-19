@@ -19,16 +19,18 @@ Currently, PaddleTS supports the following data transformations:
 
 - `fill <../../api/paddlets.transform.fill.html>`_
 - `ksigma <../../api/paddlets.transform.ksigma.html>`_
-- `normalization <../../api/paddlets.transform.normalization.html>`_
-- `onehot <../../api/paddlets.transform.onehot.html>`_
-- `ordinal <../../api/paddlets.transform.ordinal.html>`_
+- `min_max_scaler <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.MinMaxScaler>`_
+- `standard_scaler <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.MinMaxScaler>`_
+- `onehot <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.OneHot>`_
+- `ordinal <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.Ordinal>`_
 - `statistical <../../api/paddlets.transform.statistical.html>`_
 - `time_feature <../../api/paddlets.transform.time_feature.html>`_
 
 1. Example
 ===========
 
-The below demo takes `OneHot <../../api/paddlets.transform.onehot.html>`_ as an example to illustrates the basic usage of data transformations.
+The below demo takes `OneHot <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.OneHot>`_ as
+an example to illustrates the basic usage of data transformations.
 
 .. code-block:: python
 

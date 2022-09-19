@@ -4,8 +4,8 @@ Overview
 TSDataset
 ---------
 
-`TSDataset` is the fundamental data class in `PaddleTS`, which is designed as the first-class citizen 
-to represent the time series data. It is widely used in `PaddleTS`. In many cases, a function consumes a TSDataset and produces another TSDataset. 
+`TSDataset` is the fundamental data class in `PaddleTS`, which is designed as the first-class citizen
+to represent the time series data. It is widely used in `PaddleTS`. In many cases, a function consumes a TSDataset and produces another TSDataset.
 A TSDataset object is comprised of two kinds of time series data: 
 
 	1. `Target`:  the key time series data in the time series modeling tasks (e.g. those needs to be forecasted in the time series forecasting tasks).

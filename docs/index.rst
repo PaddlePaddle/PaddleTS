@@ -16,11 +16,21 @@ and excellent user experiences for practitioners and professionals. It’s featu
 
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary).
 
+* Automatic hyper-parameter tuning.
+
+* Third-party ML models & data transformations integration (e.g., scikit-learn).
+
+* Run models on GPU devices.
+
+* TS2Vec, a time series representation learning model.
+
+* DeepAR, a deep time series model for probabilistic forecasting.
+
 In future, more advanced features will be coming, including:
 
-* Automatic hyper-parameter tuning;
-* Time series representation learning models；
-* Add support for probabilistic forecasting;
+* Time series anomaly detection;
+* More time series representation learning models；
+* More probabilistic forecasting models;
 * Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems;
 * And more.
 
@@ -33,6 +43,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :caption: Get Started
 
     Get Started <source/get_started/get_started.rst>
+    Run On GPU <source/get_started/run_on_gpu.rst>
 
 .. toctree::
     :maxdepth: 1
@@ -52,12 +63,16 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :caption: Transform
 
     Transform <source/modules/transform/overview.md>
+    Third-Party And User-Define Transform <source/modules/transform/thirdparty_userdefine.rst>
 
 .. toctree::
     :maxdepth: 1
     :caption: Models
 
-    Models <source/modules/models/overview.md>
+    Overview <source/modules/models/overview.rst>
+    Third-party Model <source/modules/models/thirdparty.rst>
+    Probability Forecasting <source/modules/models/probability_forecasting.rst>
+    Representation  <source/modules/models/representation.rst>
 
 
 .. toctree::
@@ -87,12 +102,20 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
 .. toctree::
     :maxdepth: 1
+    :caption: AutoTS
+
+    AutoTS <source/modules/autots/overview.rst>
+
+.. toctree::
+    :maxdepth: 1
     :caption: API
 
     paddlets.analysis <source/api/paddlets.analysis.rst>
+    paddlets.automl <source/api/paddlets.automl.rst>
     paddlets.datasets <source/api/paddlets.datasets.rst>
     paddlets.metrics <source/api/paddlets.metrics.rst>
     paddlets.models <source/api/paddlets.models.rst>
     paddlets.pipeline <source/api/paddlets.pipeline.rst>
     paddlets.transform <source/api/paddlets.transform.rst>
     paddlets.utils <source/api/paddlets.utils.rst>
+

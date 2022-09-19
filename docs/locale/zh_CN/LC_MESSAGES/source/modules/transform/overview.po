@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-26 10:45+0800\n"
+"POT-Creation-Date: 2022-09-16 18:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/modules/transform/overview.rst:3
-#: 7b1f667b275045468daedc760613c1b8
+#: 99ae297b083345b5b62597c76eb45d6c
 msgid "Transform"
 msgstr "Transform"
 
 #: ../../source/modules/transform/overview.rst:5
-#: 8a9e85e356284056a6e7a96843218cd4
+#: cf26282735ee4b0fab33dc1a21859e72
 msgid ""
 "Before reading this document, it is recommended to first read the "
 "`TSDataset Document <../datasets/overview.html>`_ to understand the "
@@ -36,11 +36,12 @@ msgid ""
 " helpful for deep diving into this documentation and building well-"
 "performed models."
 msgstr ""
-"在阅读本文档之前，建议先阅读 `TSDataset 文档 <../datasets/overview.html>`_ ，以了解TSDataset的设计。 "
+"在阅读本文档之前，建议先阅读 `TSDataset 文档 <../datasets/overview.html>`_ "
+"，以了解TSDataset的设计。 "
 "简单来说，TSDataset是PaddleTS中贯穿整个建模生命周期的、统一的时间序列数据结构。它引出了几个基本但重要的时间序列相关概念，例如待预测目标（过去目标、未来目标）以及协变量（观测协变量和未来已知协变量）。对这些概念的理解将有助于深入探究该文档并构建性能良好的模型。"
 
 #: ../../source/modules/transform/overview.rst:11
-#: 72ede16309994de6ac566aa12c0669f8
+#: 78b0629537b34e16b188dc2b141552bc
 msgid ""
 "PaddleTS provides a series of operators for data transformation, which "
 "can be applied to fill missing values, normalize the data, or encode the "
@@ -58,62 +59,77 @@ msgstr ""
 "方法将训练完成的数据转换模块应用于待转换的数据集；fit_transform 方法将 fit 和 transform 提供的能力合并到一步内完成。"
 
 #: ../../source/modules/transform/overview.rst:18
-#: c63cdfc22c4246b38a2d7125bc117912
+#: cd7aca8a31d346269ea7d74ac65e4e2c
 msgid "Currently, PaddleTS supports the following data transformations:"
 msgstr "目前PaddleTS支持以下时序数据转换能力："
 
 #: ../../source/modules/transform/overview.rst:20
-#: 70e6fefae47142de99bbf818de1ef554
+#: 31afed9b8011406f9859e29819d3a9d4
 msgid "`fill <../../api/paddlets.transform.fill.html>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:21
-#: 6d5841381923446e94b34b0db3773e3b
+#: 7c7540366eec4590bc9986fdafdc7973
 msgid "`ksigma <../../api/paddlets.transform.ksigma.html>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:22
-#: 1a6a7d407c27496baba9351c38a03cab
-msgid "`normalization <../../api/paddlets.transform.normalization.html>`_"
+#: 339db1abde024c48bc3fb07fda304e89
+msgid ""
+"`min_max_scaler "
+"<../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.MinMaxScaler>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:23
-#: 27fbde3b2b8d4896830beb224eb6e597
-msgid "`onehot <../../api/paddlets.transform.onehot.html>`_"
+#: 06a1c49b30604d8da0b325abffe3048c
+msgid ""
+"`standard_scaler "
+"<../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.MinMaxScaler>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:24
-#: a83a8e8ca31b48a0acf276590fb1d306
-msgid "`ordinal <../../api/paddlets.transform.ordinal.html>`_"
+#: fa5a8d4f45304fb1be9305418a006855
+msgid ""
+"`onehot "
+"<../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.OneHot>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:25
-#: c1a8dea6ad2d49b786dbada485357317
-msgid "`statistical <../../api/paddlets.transform.statistical.html>`_"
+#: 34c01a8612174b65b3d9f270a18fef3e
+msgid ""
+"`ordinal "
+"<../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.Ordinal>`_"
 msgstr ""
 
 #: ../../source/modules/transform/overview.rst:26
-#: 3eaf4209904b4352b99475b3d5075f20
+#: 9eea2c33db9f445dbb48e1839bd97df7
+msgid "`statistical <../../api/paddlets.transform.statistical.html>`_"
+msgstr ""
+
+#: ../../source/modules/transform/overview.rst:27
+#: e90441c787764df6b3f9cc73615429a4
 msgid "`time_feature <../../api/paddlets.transform.time_feature.html>`_"
 msgstr ""
 
-#: ../../source/modules/transform/overview.rst:29
-#: a9d745bef7a344279fb48e908ebd8170
+#: ../../source/modules/transform/overview.rst:30
+#: b13bb936fd1c4d4297beba80912280fd
 msgid "1. Example"
 msgstr "1. 示例"
 
-#: ../../source/modules/transform/overview.rst:31
-#: f09954dcbe25498f9c760e8e8388a674
+#: ../../source/modules/transform/overview.rst:32
+#: 506f78f5426f4cf5848bb7ec08dfde95
 msgid ""
-"The below demo takes `OneHot <../../api/paddlets.transform.onehot.html>`_"
+"The below demo takes `OneHot "
+"<../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.OneHot>`_"
 " as an example to illustrates the basic usage of data transformations."
 msgstr ""
-"以下代码使用 `Onehot <../../api/paddlets.transform.onehot.html>`_ "
+"以下代码使用 `Onehot <../../api/paddlets.transform.sklearn_transforms.html#paddlets.transform.sklearn_transforms.OneHot>`_ "
 "作为一个具体的transform实例来阐述基本用法。"
 
-#: ../../source/modules/transform/overview.rst:51
-#: 64e5cc15dd5c4478b65dc549a97f3626
+#: ../../source/modules/transform/overview.rst:53
+#: b96b6d03541046818b8dc96833d986d7
 msgid ""
 "Alternatively, one can also call the combined ``fit_transform`` to "
 "achieve the same purpose:"
 msgstr "作为以上 ``fit`` 与 ``transform`` 方案的替代选项，也可以通过调用 ``fit_transform`` 方法实现相同的目标："
+

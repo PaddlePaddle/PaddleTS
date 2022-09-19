@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:42+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:3
+#: f9fa6c6bc85b4972bf734ab1e7daa9c2
+msgid "Third-Party And User-Define Transform"
+msgstr "第三方以及自定义的数据转换模块支持"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:6
+#: 81fdfc6b90ea40caae4aa11cfe67aeff
+msgid "1. Third-Party Transform"
+msgstr "第三方数据转换模块使用"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:8
+#: 434f1a1bf04f4e359d99251f08275812
+msgid "(The current version supports ``sklearn style`` dataset transformations)"
+msgstr "当前版本支持sklearn风格数据转换模块的集成"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:10
+#: 02350aea587d4a8bba4529429bac18f1
+msgid ""
+"Paddlets introduces the ``make_ts_transform`` function, which can wrap "
+"the universal third-party data transformation modules into paddlets "
+"easily."
+msgstr "PaddleTS提供 ``make_ts_transform`` 的方法实现对第三方数据转换模块的简单集成；"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:18
+#: 7e28ec0e50a645f28d40cdb75bf16338
+msgid "|UNI_WTH_DATA|"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:81
+#: 33575d985168437f9135c31dee9e9d55 eba6e55de4a7411cbd03994b9923e888
+msgid "UNI_WTH_DATA"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:32
+#: 3a923d80564544dd849cd495301bfcf6
+msgid "|UNI_WTH_ABS|"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:82
+#: 0ebca38cd7a042f7afebd3dcbbdbdbd5 cfbcad3199164a8799d31170f0cb2558
+msgid "UNI_WTH_ABS"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:34
+#: c52ec59ae2c84081842e9e7d4004fed7
+msgid ""
+"As shown in the above example, one can instantiate the ``MaxAbsScaler`` "
+"module in ``sklearn`` into a ``ts_max_abs_scaler`` object through "
+"``make_ts_transform``. ``make_ts_transform`` realizes automatic "
+"encapsulation of ``MaxAbsScaler`` object, which support the trasnfrom of "
+"time-series data while retaining its core functions. The interfaces of "
+"``ts_max_abs_scaler`` consumes a TSDataset and produces another "
+"TSDataset. We can use the transformations object which build by "
+"``make_ts_transform`` just like using the built-in data transformations "
+"module, it has the same interface and functions as the built-in module. "
+"Below example illustrates the usage in pipeline."
+msgstr ""
+"如上述例子所示，用户可以通过 ``make_ts_transform`` 方法，将sklearn中的 ``MaxAbsScaler`` "
+"模块实例化成一个 ``ts_max_abs_scaler`` ，该实例实现了对 ``MaxAbsScaler`` "
+"实例的自动化封装，在保留其核心功能基础上，支持对时序数据的处理；确保支持TSDataset类型数据的出入以及输出。用户可以像使用内置数据转换模块一样去使用基于"
+" ``make_ts_transform`` 自动生成的实例，其具备和内置算子一样的接口以及功能，如将 ``ts_max_abs_scaler``"
+" 加入到pipeline流程中："
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:52
+#: d699785fd4904459a2f829ac3c186e3d
+msgid "2. User-Define Transform"
+msgstr "自定义数据转换模块使用"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:54
+#: a28034aad5d34815b362cfd4b961d26f
+msgid ""
+"``make_ts_transform`` function can also wrap the user-define data "
+"transformations modules into paddlets."
+msgstr "``make_ts_transform`` 的方法通用支持对自定义数据转换模块的集成；"
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:74
+#: 39d2d0b0f08a49cfa44f6abbdc28ea90
+msgid "|UNI_WTH_MY_ABS|"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:83
+#: 562f9ce0d4884907a9b14960cfd5e13c b832107b4bcb4f388bcb938fdd68e253
+msgid "UNI_WTH_MY_ABS"
+msgstr ""
+
+#: ../../source/modules/transform/thirdparty_userdefine.rst:76
+#: f3051847437b4a6f88c149ef9d10dfa2
+msgid ""
+"``make_ts_transform`` function can also wrap universal third-party or the"
+" user-define data transformations modules into paddlets. For third-party "
+"modules, not all data transformations modules are suitable for processing"
+" time-series data; at the same time, user-define modules is even more "
+"uncontrollable. So ``make_ts_transform`` includes the logic to check the "
+"legitimacy of its encapsulated functions. It will check the legitimacy "
+"based on the input dataset and output dataset, so as to avoid the import "
+"of some illegal modules leading to abnormalities in subsequent processes,"
+" which increases the difficulty of troubleshooting."
+msgstr ""
+"``make_ts_transform`` "
+"提供对第三方以及自定义的数据转换模块封装，对于第三方模块而言，并不是所有的数据转换模块都适用于时序数据的处理，同时对于自定义算子同样有着更多的不确定因素；因此"
+" ``make_ts_transform`` "
+"包括对其封装功能合法性的检查逻辑，将基于数据的输入以及输出进行合法性检查，避免一些非法模块的引入导致后续流程的异常，从而增加排查难度。"
+

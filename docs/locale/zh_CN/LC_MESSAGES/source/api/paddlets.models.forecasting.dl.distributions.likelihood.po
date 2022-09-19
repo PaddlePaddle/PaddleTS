@@ -1,0 +1,282 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.distributions.likelihood.rst:2
+#: 61cba884f346482fa47f52045a08c701
+msgid "paddlets.models.forecasting.dl.distributions.likelihood"
+msgstr ""
+
+#: 659f2889f4904725a1be56d4c6b8f260 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood:1
+msgid "Bases: :py:class:`~abc.ABC`"
+msgstr ""
+
+#: 29eab60200694e7d89596880e28daf84 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood:1
+msgid "Abstract class for a distributional regression model."
+msgstr "概率分布预测模型抽象类"
+
+#: 00abca0c89674691b07377c045029698 037db03fdb1e43989bf88c0660fa0c52
+#: 10a4b512286d45629a3187c95b59e476 320baa1caa6b4bfd8898edca2ac33161
+#: 32351b8848f34a098355cd8ec292f735 4097e9ed60104e4683dc781e6aae9a8e
+#: 5c9c0e6d3d3a4416a926d968c8625906 7a0626f15349414287c765e59ecca0b9
+#: fe57a9b4cb34490c90bb55ce25e77e7a of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample
+msgid "Parameters"
+msgstr "参数"
+
+#: 1f90d5396a824f79b015ca744eb5b96f of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood:3
+msgid ""
+"The default value is \"distribution\" for probability distributional "
+"regression, for quantile regression, set \"quantiles\"."
+msgstr "默认值为'distribution'表示概率分布回归，设为'quantiles'表示分位数回归。"
+
+#: f14b2a58b72d4a93bb649ff264471ccb of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params:1
+msgid ""
+"Rescale model output to distribution params, to be implemented in "
+"subclasses."
+msgstr "将模型输出结果重新调整为分布参数，在子类中具体实现。"
+
+#: a936cdee42b64d26b9e0610c7ee25427 cb686f4c0c8b432685b2968f1af375aa
+#: ef7a11b6f1bc46d6a04ae2c7b72ae2d4 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params:3
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params:3
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:9
+msgid "The output of model."
+msgstr "模型输出"
+
+#: 545177a31ab7409c81e4f3fc3a1576d7 5a17edf887a24f62a1aac27b2f4d7a10
+#: 5f2fb99b274c4692aa0eabbc607093e4 6a56bc3faa474a158f4d8a87f382e4f8
+#: 841b33eb48884ac097ca30281a4080c1 a1b7649817e64c16a139cbf8f515415d
+#: b9bfea75c6e64bf0b8e99f320e1f8c75 bec04cfd8e094233804c50de450a135e
+#: d50ca52d5a7b40b884509c70265a6823 df689f44a97b4509ad0c23b4c297d59e of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.num_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.num_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample
+msgid "Returns"
+msgstr "返回值"
+
+#: 073954a10f574fd698167c4c33b6810e of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params:6
+msgid "The distribution parameters respect to subclass' distribution."
+msgstr "各子类概率分布的分布参数"
+
+#: 0c9e302e74c14f978efb529dd96d831f 1701cf5235714daa8a78f240c29378dd
+#: 30939ec6cabd4b7299c4a73f2eaacde0 45bec7f3e5cb47eb89c8114848375fd5
+#: 60409a25c56d4e94b5aae3c023b87168 aee51cb9f37f4e219b55ae36fb155d0e
+#: b2ab49e5857c416c8f0db8dc42a2c369 b473d73f4bd44eadb20ada3e87313124
+#: c846de0cd7e144e197684b64d5f65b98 c9bf8076f38d4fd2b191ad6acfef92ff of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.num_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.num_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.output_to_params
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample
+msgid "Return type"
+msgstr "返回类型"
+
+#: 55690cb27a244fceb655f1563087b41d of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr:1
+msgid ""
+"Construct a distribution class by distribution parameters, to be "
+"implemented in subclasses."
+msgstr "通过分布参数建立一个分布类，在子类中具体实现。"
+
+#: 9c865b7d0cd74d269378381e25c4f721 b7f2bad868194f6eaeb109abb9d99580 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss:5
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr:3
+msgid "The parameters of distribution."
+msgstr "分布的参数"
+
+#: 9f924869c65143db8bfcb8ac1f25fb31 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.params_to_distr:6
+msgid "The distribution instance defined in paddle."
+msgstr "paddle定义的概率分布实例。"
+
+#: 8758223501364e5b8bc8cae0c3ba2361 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:1
+msgid "Samples a prediction from the model output："
+msgstr "由模型输出到采样预测过程："
+
+#: 361ae3a769c84a4c928e66e71d3ee380 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:3
+msgid "1> output to distribution parameters;"
+msgstr "1> 模型输出重新调整为分布参数；"
+
+#: cd36cb6d307d431c8def58e657d9ca7e of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:5
+msgid "2> distribution parameters to distribution;"
+msgstr "2> 由分布参数建立分布类；"
+
+#: ad4542e8bd0d41fc881c986d91791ecd of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:7
+msgid "3> sample by distribution"
+msgstr "3> 由分布进行采样。"
+
+#: 61bd5b9a1b854028921f4dc32492b98a of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:11
+msgid "The number of samples to be sampled."
+msgstr "采样数量。"
+
+#: f8320141c5c8412cb644f183df10f3b5 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.sample:14
+msgid "The samples of distribution."
+msgstr "概率分布的样本。"
+
+#: d3d3ed181920473db7579fef78afe4a0 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean:1
+msgid "Compute mean by distribution params, to be implemented in subclasses."
+msgstr "由分布参数计算均值，在子类中具体实现。"
+
+#: 17d3aa01fcaf4f688e72e9d724fa616f of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean:3
+msgid "The params of distribution."
+msgstr "分布的参数。"
+
+#: 5602d88345b042baad058ff5a3b6c824 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.get_mean:5
+msgid "The mean of distribution."
+msgstr "分布的均值。"
+
+#: a9ee2df951aa4a388049ae380b14a5f0 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.num_params:1
+msgid ""
+"Returns the number of parameters that define the probability distribution"
+" for one single target value."
+msgstr "返回每个预测点服从的概率分布的参数数量。"
+
+#: 081c1775aed142aba48bdcdc39edc1e8 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.num_params:3
+msgid "The number of parameters."
+msgstr "参数数量。"
+
+#: 31657d5766c542189cf59e45a3389bad of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss:1
+msgid ""
+"Compute NLL loss by predicted distrbution parameters and ground truth "
+"target."
+msgstr "由分布参数与实际目标值计算负对数似然损失。"
+
+#: 5376429e407f430a865eb802a7cda0dd of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss:3
+msgid ""
+"This is the basic way to compute the NLL loss. It can be overwritten by "
+"likelihood for which paddle proposes a numerically better NLL loss."
+msgstr "计算负对数似然损失的基础方法，如有更佳方案，可以在子类中复写。"
+
+#: 3d9b50c94b1f4995809f9f6d41a528d7 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss:6
+msgid "The ground truth of the sample."
+msgstr "样本真实值。"
+
+#: fedfe65babaf471d90dd76616d06bae0 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.Likelihood.loss:8
+msgid "The loss computed by distribution parameters and ground truth."
+msgstr "通过分布参数与真实值计算损失。"
+
+#: de63d853ae094c5f817c18533ef3a7f3 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.distributions.likelihood.Likelihood`"
+msgstr ""
+
+#: 10e40d747e0a42359a48b48c57e830c8 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood:1
+msgid "Univariate Gaussian distribution."
+msgstr "单变量高斯分布。"
+
+#: 23d51919604b4355b33d705b32fa453c of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params:1
+msgid "Use softplus to rescale sigma parameter as it should be positive."
+msgstr "使用`softplus`重新调整`sigma`参数为正实数。"
+
+#: a4258e5e408248c8a84447579b722fb8 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.output_to_params:6
+msgid "The Gaussian distribution parameters(mu and sigma)."
+msgstr "高斯分布参数(均值与标准差)。"
+
+#: 9bc10bd60aef42faaeea712f7d983745 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr:1
+msgid "Construct Normal instance by parameters: mu and sigma."
+msgstr "由均值与方差建立高斯分布实例。"
+
+#: bc3d5f7a2685496388b48dc37e00ab24 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr:3
+msgid "Tensor of mu and sigma."
+msgstr "由均值与方差构成的Tensor"
+
+#: 37adbafb376c40568120682fedc28c42 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.params_to_distr:6
+msgid "The Gaussian instance defined in paddle."
+msgstr "paddle定义的高斯分布类实例。"
+
+#: 151e2e3d02b940e0a52f4a7b150ec4e2 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean:1
+msgid "Return mean of the distribution."
+msgstr "返回分布均值。"
+
+#: 18c61c046e0b4e5b867d6d99b65fd2b9 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean:3
+msgid "Tensor of parameters mu and sigma."
+msgstr "由均值与方差构成的Tensor."
+
+#: 940b05577ffe48c385febb7228256d1a of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.get_mean:5
+msgid "Mean of Gaussian distribution."
+msgstr "高斯分布的均值。"
+
+#: cc34b4e67061406fb17db50f7acb3ba7 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.num_params:1
+msgid "For Gaussian, the number of parameters is 2."
+msgstr "高斯分布参数量为2。"
+
+#: d9350d5137b640e1a0925675aeb9f571 of
+#: paddlets.models.forecasting.dl.distributions.likelihood.GaussianLikelihood.num_params:3
+msgid "The number of parameters of Gaussian distribution."
+msgstr "高斯分布的参数量。"
+
+#~ msgid "paddlets.models.dl.paddlepaddle.distributions.likelihood"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bases: "
+#~ ":py:class:`~bts.models.forecasting.dl.distributions.likelihood.Likelihood`"
+#~ msgstr ""
+

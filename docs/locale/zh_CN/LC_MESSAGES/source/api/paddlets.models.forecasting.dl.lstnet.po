@@ -1,0 +1,292 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:31+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.lstnet.rst:2
+#: f3952c5d3f034b8d99ea5046bce88348
+msgid "paddlets.models.forecasting.dl.lstnet"
+msgstr ""
+
+#: 654a32dc611d43b6a2494a28c9d12d74 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: a884e0aef2d64648839b4039cfaf417e of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:1
+msgid ""
+"LSTNet\\[1\\] is a time series forecasting model introduced in 2018. "
+"LSTNet uses the Convolution Neural Network (CNN) and the Recurrent Neural"
+" Network (RNN) to extract short-term local dependency patterns among "
+"variables and to discover long-term patterns for time series trends."
+msgstr ""
+"LSTNet\\[1\\] 是2018年提出的时序预测模型, 它同时利用卷积层和循环层的优势, "
+"提取时间序列多变量之间的局部依赖模式和捕获复杂的长期依赖."
+
+#: 794a49b6307a4bd3accbb00482b487c3 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:5
+msgid ""
+"\\[1\\] Lai G, et al. \"Modeling Long- and Short-Term Temporal Patterns "
+"with Deep Neural Networks\", `<https://arxiv.org/abs/1703.07015>`_"
+msgstr ""
+
+#: 736eceb6b08a45deb0e43e1bb690f5d4 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor
+msgid "Parameters"
+msgstr ""
+
+#: 4818f9542f314ed1b0aac4b3b0aa0772 96ad457371d54b11911b61f458c7d565 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:7
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:59
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度."
+
+#: 4bc0ef1fb2764a299a2ec28aa690ca9f 7a8c46ba7e094f2aa79f23b3af50ec6c of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:9
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:65
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的时间序列长度."
+
+#: 70a45feb3b8f45c48a41b6d70b700723 9315e06125ea4100a6f081ec3c2632e2 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:11
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:71
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0"
+
+#: 1b78f110f0bf412397ffed81a8e42fed f6a3be2ac0784da1822905c63228ed9f of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:15
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:79
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 5a12800ffd9f4b12903167df479aef50 e282ab4ed1744ca28f9f27ec4261691d of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:17
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:85
+msgid "Loss function."
+msgstr "损失函数."
+
+#: 6f9eca7a384f4a7caaa4210088b26a01 c6e8a92193964b97a7397eabdd2f8050 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:19
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:91
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 870a5b3642114a17b6243d3eb6dfb8e3 a8fa3e255d9f4c4ba5d5e17bc92052a8 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:21
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:97
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 1193320a421e4c2cab470ff2ef7aa7a8 1371f341ef3c479c821efe8ca5a36f4b of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:23
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:103
+msgid "Evaluation metrics of model."
+msgstr "模型训练过程中的需要观测的评估指标."
+
+#: 0ecda850cbb94285b8cbf4a3b66c216d e8510d0f417a4a4f917d04b17c6b8c4a of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:25
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:109
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 0ce678e79b9f43a29781250a0c705ab7 d2bce9430bb241658d7b8bc25d0bc19d of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:27
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:115
+msgid "Number of samples per batch."
+msgstr "训练数据或评估数据的批大小."
+
+#: b4924ce8b4e6460a8f88087d4d536fed c1cd365c2511409a81e385086fe187c9 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:29
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:121
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 05219370fdb540a8abd2fe81e1f95573 5df941a975214d18849ecfde54d9dfe4 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:31
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:127
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔."
+
+#: 04a680d4ef444e40b86bbeb1492d1c8e 4f4d784631dc470d92ed557ff7f49c2d of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:33
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:133
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练."
+
+#: 8ef8db204db84ca6b7c395b81d66bb1e c43e97af110540269b5fc5d078ef3b42 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:35
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:139
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 91b69015e96a4438a7bf6edbdc5f94a2 b5ffa59e0ff746d99639aef54753edf8 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:37
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:151
+msgid "Skip size for the skip RNN layer."
+msgstr "递归跳跃组件(Skip RNN)用来捕获时间序列中的周期性所需的周期长度."
+
+#: 10134851316c4dc99217a52b3e579405 d9cf749bc3fc40e2bea9a0cfd7866a10 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:39
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:157
+msgid "Number of channels for first layer Conv1D."
+msgstr "第一层Conv1D的通道数量."
+
+#: 67fb49cbde4f4e3da3031b44c5f76c8d 91768f6d6f174dc9a4f770ac0d410b64 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:41
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:163
+msgid "Kernel size for first layer Conv1D."
+msgstr "第一层Conv1D的卷积核大小."
+
+#: 8003cb31b25440f59b55dc848b6dfe2f e60ab4d8a788402fa29e9a1c57821ecf of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:43
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:169
+msgid "Type of the RNN cell, Either GRU or LSTM."
+msgstr "RNN cell的类型, 支持GRU或LSTM."
+
+#: 468f02cb5cc34236991b0cf47d8837fa 77ccb95d23e74bb680ed76ebf80760a0 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:45
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:175
+msgid "Number of RNN cells for each layer."
+msgstr "RNN层中神经元的数量."
+
+#: 6b5236d4650244e09ae5a7807b94dc23 7b2edbd4d2de4b83a1764c8b4514c07a of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:47
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:181
+msgid "Type of the RNN cell for the skip layer, Either GRU or LSTM."
+msgstr "Skip RNN cell的类型, 支持GRU或LSTM."
+
+#: 5e76882029654cada3f0908aed6a9016 de6d38a49712479a9f092cca47bad9d5 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:49
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:187
+msgid "Number of RNN cells for each layer for skip part."
+msgstr "Skip RNN层中神经元的数量."
+
+#: 334f781ee3f4422aa9f672403f12cff9 595f8496dfee4abc96508f8f888be37a of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:51
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:193
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃概率."
+
+#: 2117a6fa8bd84f41bdbc3e63b291e7e5 d47dd0a804a74c739f6900f964af3edf of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:53
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:199
+msgid ""
+"The last activation to be used for output. Accepts either None (default "
+"no activation), sigmoid or tanh."
+msgstr "输出层的激活函数类型, 可以是None(无激活函数), sigmoid, tanh."
+
+#: 07942ab035fb4f85a988c7b4c336189f 13bb2beda8244fd184413de9903a4aa5
+#: 218af26ee7b54d6e9aa81cd84153c069 374e4d8210d8470bbabca20a0df29df0
+#: 3f49bc96b8584f44a4fdb29d44ac0b40 4a3afe0691774ee0946e687689abacad
+#: 4c368b6ef6504d308c83972d87fef807 530e18c5f44549ac9aa01fd05b38b446
+#: 5473377fcb4f4749a57a12809bb22f95 597cd6cc86734d82800e72b2deea23b2
+#: 63a57c9ab2e04f239a86cb17d1185fbe 6dff94d320954fa3ae40e4435a94d87a
+#: 71cc71ad92ef4d7cbb541d70bffcc9bd 81b41612e3a64e5ebaec72658604ec14
+#: 8925eaa3c7f541aca6527a7b801d08db 8e8ea125b67246c797793fcb34d3e3ab
+#: a3cf7523011e49948f390b71b244705a cde74bfedb4d4f7f8f631ab6e97bfcb0
+#: da0b2154ad07452aa59a6607fba1f0bc df8a7e729dc34130831149ab7b1b67e0
+#: e38d2ab5c83144349c311287a408f5af ed130a023628427b8cc710dfd435e538
+#: f9c0d3a4a9574dd0986085e2f2b931b6 fbc46b2b126b43d1aa33c85485c8f4d5 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor
+msgid "type"
+msgstr ""
+
+#: 0ab2de9975334b75b4814a6c70fff5ef 253639a69e0a4bb183988820b8b4ce7b
+#: 543704df20cf4bbaaa76edc9d2bd8b53 5a1280540bf34b4dadff25614808084f
+#: 694c60d426da4aee92b2a951779a98d9 91a1b8e92f91436f8a66211b3c37bc69
+#: a81d287768f944ce8befd59559ca0b27 b24c3b757ff84b82b8b1a2ca2850d000
+#: b7392bcbaa014f198042aafeb08942c7 bb18fdd61f7c4c80b3a024b098f38e69
+#: e0aaa5c3f1e045af95e1296f9fc8a1f4 e6e3a23e7ee14886a6d8794c5bd735f2
+#: ea958807445c45c891c54f039170865c of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:61
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:67
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:75
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:81
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:117
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:123
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:129
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:135
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:153
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:159
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:165
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:177
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:189
+msgid "int"
+msgstr ""
+
+#: 9c591f9c2aa94859b119ba92b2bec2fc of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:87
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: b1c7059158094d70867f42670e805799 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:93
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 480ab42a6f17411c9f26242d7b663bef of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:99
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: ba915eb4c5604c1d9cda6396f4fa87df of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:105
+msgid "List[str]"
+msgstr ""
+
+#: 2706d3084ca0448a94e97f5e5de44ccc of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:111
+msgid "List[Callback]"
+msgstr ""
+
+#: a15145993c3941f5a4d4909153f6c0a4 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:141
+msgid "int|None"
+msgstr ""
+
+#: 0af9c53c73e34b35a9457ebd2dc60722 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:147
+msgid "bool"
+msgstr ""
+
+#: 463e4242b8a14e5fa72d1c4083120f16 bd1003dc6ec148bba3ada142b2b025cf of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:171
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:183
+msgid "str"
+msgstr ""
+
+#: 6106bf35c9bd40d08fc185d4f3cfa32a of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:195
+msgid "float"
+msgstr ""
+
+#: 8b71a20961d148eeae31c3fb9c4a2eb3 of
+#: paddlets.models.forecasting.dl.lstnet.LSTNetRegressor:202
+msgid "str|None"
+msgstr ""
+
