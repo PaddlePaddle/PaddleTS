@@ -244,10 +244,10 @@ class TestSklearnModelWrapper(unittest.TestCase):
             {"clazz": SVR, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             
             # cross_decomposition
-            {"clazz": PLSCanonical, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
+            # {"clazz": PLSCanonical, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": PLSRegression, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             # {"clazz": PLSSVD, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            {"clazz": CCA, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
+            # {"clazz": CCA, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             
             # decomposition
             # {"clazz": DictionaryLearning, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
@@ -484,7 +484,15 @@ class TestSklearnModelWrapper(unittest.TestCase):
             CalibratedClassifierCV,
 
             # Isotonic regression input X should be a 1d array or 2d array with 1 feature
-            IsotonicRegression
+            IsotonicRegression,
+
+            # This model only failed for scikit-learn 1.1.2, it works for scikit-learn 1.0.2
+            # n_components == 2, must be <= 1.
+            PLSCanonical,
+
+            # This model only failed for scikit-learn 1.1.2, it works for scikit-learn 1.0.2
+            # n_components == 2, must be <= 1.
+            CCA
         }
         self._good_to_fit_and_predict_sklearn_model_list = list()
         for model in self._good_to_init_sklearn_model_list:
@@ -731,7 +739,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-
+        
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
