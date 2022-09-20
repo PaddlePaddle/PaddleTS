@@ -35,7 +35,7 @@ Example
 
 .. code:: python
 
-    from paddlets.models.dl.paddlepaddle import MLPRegressor
+    from paddlets.models.forecasting import MLPRegressor
     mlp = MLPRegressor(
         in_chunk_len = 7 * 96,
         out_chunk_len = 96,
@@ -61,12 +61,12 @@ Backtest will start at model input_chunk_length and return a MSE score by Defaul
         model=mlp
     )
     print(score)
-    #1.7069822928807792
+    #{'WetBulbCelsius': 14.125747060941888}
 
 
 •  Backtesting Example 2
 
-If set ``return_score`` to False, Backtest will return a ``TSDataset``.
+If set ``return_predicts`` to True, Backtest will return both score and  predictions.
 
 .. code:: python
     
@@ -74,7 +74,7 @@ If set ``return_score`` to False, Backtest will return a ``TSDataset``.
     preds_data= backtest(
         data=test_dataset,
         model=mlp,
-        return_score =False)
+        return_predicts = True)
 
     val_test_dataset.plot(add_data=preds_data,labels="backtest")
 
@@ -89,53 +89,53 @@ If set ``return_score`` to False, Backtest will return a ``TSDataset``.
 .. code:: python
     
     from paddlets.utils import backtest
-    preds_data= backtest(
+    score, preds_data= backtest(
         data=test_dataset,
         model=mlp,
         start =0.5,
-        return_score =False)
+        return_predicts = True)
     test_dataset.plot(add_data=preds_data,labels="backtest")
 
 --------------
 
-|fig_4| 
+|fig_5|
 
 •  Backtesting Example 4
 
-``predict_window`` is the window for the prediction.
-``stride`` is the number of time steps between two consecutive predict window.
+``predict_window`` is the window for the prediction.(Equal to model.out_chunk_len by default)
+``stride`` is the number of time steps between two consecutive predict window. (Equal to ``predict_window`` by default)
 In most situations, ``predict_window`` and ``stride``  should be set to simulate the realy prediction. 
 
 .. code:: python
     
     from paddlets.utils import backtest
-    preds_data= backtest(
+    score, preds_data = backtest(
         data=test_dataset,
         model=mlp,
         start =0.5,
-        predict_window=24,
-        stride=24,
-        return_score =False)
+        predict_window=1,
+        stride=1,
+        return_predicts = True)
     test_dataset.plot(add_data=preds_data,labels="backtest")
 
 --------------
 
-|fig_5| 
+|fig_4|
 
 •  Backtesting Example 5
 
-If set ``predict_window`` != ``stride`` and ``return_score`` = False, backtest will generate a List of TSdataset as output.
+If set ``predict_window`` != ``stride`` and ``return_predicts`` = True, backtest will generate a List of TSdataset as predictions.
 Because the predict results are overlaped in this situation.
 
 .. code:: python
     
     from paddlets.utils import backtest
-    preds_data= backtest(
+    score, preds_data = backtest(
         data=test_dataset,
         model=mlp,
         predict_window=24,
         stride=12,
-        return_score =False)
+        return_predicts = True)
     type(preds_data)
     #list[TSdataset]
     

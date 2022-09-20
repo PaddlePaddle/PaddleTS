@@ -14,6 +14,7 @@ from paddlets.metrics import (
     Metric,
     MSE,
     MAE,
+    QuantileLoss
 )
 
 
@@ -118,6 +119,29 @@ class TestMetrics(TestCase):
         for schema in ret:
             self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
 
+    def test_prob(self):
+        periods = 100
+        mse_prob = MSE("prob")
+        df1 = pd.DataFrame(
+            np.ones([periods, 2]),
+            index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["target", "target_2" ]
+        )
+
+        ts1 = TSDataset.load_from_dataframe(df1)
+        df2 = pd.DataFrame(
+            np.zeros([periods, 4]),
+            index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["target@1", "target@2", "target_2@1", "target_2@2"]
+        )
+        ts2 = TSDataset.load_from_dataframe(df2)
+        mse_prob = MSE("prob")
+        self.assertEqual(mse_prob(ts1, ts2), {"target": 1., "target_2": 1.})
+        mae_prob = MAE("prob")
+        self.assertEqual(mae_prob(ts1, ts2), {"target": 1., "target_2": 1.})
+        q_loss = QuantileLoss()
+        self.assertEqual(q_loss(ts1, ts2), {"target": 1., "target_2": 1.})
+
     def test_get_metrics_by_names(self):
         """unittest function
         """
@@ -194,4 +218,3 @@ class TestCheckMetrics(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

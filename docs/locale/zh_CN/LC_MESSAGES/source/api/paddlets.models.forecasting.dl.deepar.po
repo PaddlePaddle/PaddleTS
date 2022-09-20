@@ -1,0 +1,193 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.deepar.rst:2
+#: f490b859751a4552b5175c06b0f44516
+msgid "paddlets.models.forecasting.dl.deepar"
+msgstr ""
+
+#: 0e84b455fc66445ba1f2fc5a606fd7cf of paddlets.models.forecasting.dl.deepar:1
+msgid ""
+"This implementation is based on the article `DeepAR: Probabilistic "
+"forecasting with autoregressive recurrent networks "
+"<https://www.sciencedirect.com/science/article/pii/S0169207019301888>`_ ."
+msgstr ""
+"基于论文 `DeepAR: Probabilistic forecasting with autoregressive recurrent "
+"networks "
+"<https://www.sciencedirect.com/science/article/pii/S0169207019301888>`_ "
+"实现。"
+
+#: bdda51198d0c452c8ace210cfb1d4eb0 of paddlets.models.forecasting.dl.deepar:5
+msgid "Updated features"
+msgstr "升级特性"
+
+#: 32b26ba28b054d339f690becd2e6103c of paddlets.models.forecasting.dl.deepar:4
+msgid ""
+"Recursively decoding by mean: In prediction, we provide another decoding "
+"style besides sample paths raised in the original paper, mean of "
+"predicted distribution is used for next step's input."
+msgstr "均值迭代预测：在预测阶段，除实现原文中的采样路径外，我们提供了另一个可选的解码方式，通过分布均值进行迭代预测。"
+
+#: 33e6afb6708444c6bb37c76b5468a2b8 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: ba5086b09d7a4cf4925a5c25971b8f93 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:1
+msgid "DeepAR model."
+msgstr "DeepAR模型"
+
+#: 00635aa91ac948359cc835bfbde20232 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel
+msgid "Parameters"
+msgstr "模型参数"
+
+#: ef3f7959a5724939979671bc07b36029 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:3
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 2c86cb4a154c4f058565af8c3b1a5596 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: bf51107280a54ddfb16e1221e3e3e2bd of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:7
+msgid "The type of the specific paddle RNN module (\"GRU\" or \"LSTM\")."
+msgstr "具体的RNN模型（\"GRU\" 或 \"LSTM\"）。"
+
+#: f0d375902b154afba58a29c17d637cbd of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:9
+msgid "The number of features in the hidden state `h` of the RNN module."
+msgstr "RNN模型隐藏状态h大小。"
+
+#: 50e6b0512a064b15aafac4a80574f273 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:11
+msgid "The number of recurrent layers."
+msgstr "循环网络的层数。"
+
+#: 8ea00cf39e124971b668fafbc3aae9bd of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:13
+msgid "The fraction of neurons that are dropped in all-but-last RNN layers."
+msgstr "dropout概率，除第一层外每层输入时的dropout概率。"
+
+#: 2a5d58c0c485498bb365bac45d106646 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:15
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 02b5cebe51534ac395f3a9f22ae8f7cd of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:17
+msgid "sampling intervals between two adjacent samples."
+msgstr "相邻两个样本的采样间隔。"
+
+#: 57cbe4a7ab614d9d9389fa2e6ca29ab1 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:19
+msgid "The distribution likelihood to be used for probability forecasting."
+msgstr "概率预测用到的分布似然函数。"
+
+#: 0b523ec11d794e4484cb6affe799dbf0 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:21
+msgid ""
+"The sampling number for validation and prediction phase, it is used for "
+"computation of quantiles loss and the point forecasting result."
+msgstr "在评估和预测阶段的采样数量，用于计算分位数损失与生成预测结果。"
+
+#: e85a4e9cce284aabb900dbbde5fe8dc7 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:23
+msgid "The loss fucntion of probability forecasting respect to likelihood model."
+msgstr "对应于似然函数的概率预测损失函数。"
+
+#: dc4b426ac9484fd0befe2251d8034e70 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:25
+msgid "The regression mode of prediction, `mean` and `sampling` are optional."
+msgstr "用于迭代预测的回归方式，可选值有`mean`与`sampling`。"
+
+#: 438fbdc8c2234e388ad2a54701212029 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:27
+#, fuzzy
+msgid "The mode of model output, `quantiles` and `predictions` are optional."
+msgstr "模型输出形式，支持分位数`quantiles`以及点预测`predictions`。"
+
+#: 0f73c93d58b04beb9db6e9cdd2ac0c4b of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:29
+msgid "optimizer algorithm."
+msgstr "优化器算法。"
+
+#: d437e82f148b4a11ae7a8c34d270f783 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:31
+msgid "optimizer parameters."
+msgstr "优化器参数。"
+
+#: ad9987fbf3174c9bb7cb3a858daa4efd of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:33
+msgid "evaluation metrics of model."
+msgstr "模型评估指标。"
+
+#: ee543c6cb3d641f7b99726bcfa353041 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:35
+msgid "customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: 9bb0bd1f281849188eb9f1e86c631132 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:37
+msgid "number of samples per batch."
+msgstr "每个batch中的样本数量。"
+
+#: ddb673b1b0f54e5ba048ca1c90feb9b6 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:39
+msgid "max epochs during training."
+msgstr "训练过程中最大迭代轮数。"
+
+#: a953a9310ee748c69a0e74328b58d9f4 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:41
+msgid "verbosity mode."
+msgstr "模型日志模式。"
+
+#: dfa3f93be58248d6bac58119c556859d of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:43
+msgid ""
+"number of epochs with no improvement after which learning rate wil be "
+"reduced."
+msgstr "训练停止所需的效果不再提升的轮数。"
+
+#: 992fda0b2c644b1093ba86e9937550f0 of
+#: paddlets.models.forecasting.dl.deepar.DeepARModel:45
+msgid "global random seed."
+msgstr "全局随机种子。"
+
+#~ msgid "paddlets.models.dl.paddlepaddle.deepar"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bases: "
+#~ ":py:class:`~bts.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+#~ msgstr ""
+

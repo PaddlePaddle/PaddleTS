@@ -136,11 +136,11 @@ This pipeline is comprised of the following:
 
     - A `KSigma <../../api/paddlets.transform.ksigma.html>`_ transformer to detect outliers.
     - A `TimeFeatureGenerator <../../api/paddlets.transform.time_feature.html>`_ transformer to generate time features.
-    - A `MLPRegressor <../../api/paddlets.models.dl.paddlepaddle.mlp.html>`_ to build a model on given time series data.
+    - A `MLPRegressor <../../api/paddlets.models.forecasting.dl.mlp.html>`_ to build a model on given time series data.
 
 .. code:: python
 
-    >>> from paddlets.models.dl.paddlepaddle import MLPRegressor
+    >>> from paddlets.models.forecasting import MLPRegressor
     >>> mlp_params = {
     >>>     'in_chunk_len': 3,
     >>>     'out_chunk_len': 2,

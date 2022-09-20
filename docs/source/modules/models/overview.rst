@@ -18,13 +18,16 @@ PaddleTS provides three high-level features for deep time series modeling:
   architecture and provides maximum convenience for the developers to build new models.
 - Out-of-box models. PaddleTS provides off-the-shelf deep time series models:
 
-  - `Long Short-term Time-series Network <../../api/paddlets.models.dl.paddlepaddle.lstnet.html>`_
-  - `Multilayer Perceptron <../../api/paddlets.models.dl.paddlepaddle.mlp.html>`_
-  - `NBEATSModel <../../api/paddlets.models.dl.paddlepaddle.nbeats.html>`_
-  - `NHiTSModel <../../api/paddlets.models.dl.paddlepaddle.nhits.html>`_
-  - `RnnBlockRegressor <../../api/paddlets.models.dl.paddlepaddle.rnn.html>`_
-  - `Temporal Convolution Net Regressor <../../api/paddlets.models.dl.paddlepaddle.tcn.html>`_
-  - `Transformer <../../api/paddlets.models.dl.paddlepaddle.transformer.html>`_
+  - `Long Short-term Time-series Network <../../api/paddlets.models.forecasting.dl.lstnet.html>`_
+  - `Multilayer Perceptron <../../api/paddlets.models.forecasting.dl.mlp.html>`_
+  - `DeepARModel <../../api/paddlets.models.forecasting.dl.deepar.html>`_
+  - `NBEATSModel <../../api/paddlets.models.forecasting.dl.nbeats.html>`_
+  - `NHiTSModel <../../api/paddlets.models.forecasting.dl.nhits.html>`_
+  - `RnnBlockRegressor <../../api/paddlets.models.forecasting.dl.rnn.html>`_
+  - `Temporal Convolution Net Regressor <../../api/paddlets.models.forecasting.dl.tcn.html>`_
+  - `Transformer <../../api/paddlets.models.forecasting.dl.transformer.html>`_
+  - `Informer <../../api/paddlets.models.forecasting.dl.informer.html>`_
+  - `TS2Vec <../../api/paddlets.models.representation.dl.ts2vec.html>`_
 
 
 1. A minimal example
@@ -35,8 +38,8 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
 .. code-block:: python
 
    from paddlets import TSDataset
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
-   from paddlets.models.dl.paddlepaddle import RNNBlockRegressor
+   from bts.models.model_loader import load
+   from paddlets.models.forecasting import RNNBlockRegressor
 
    # 1 prepare the data
    data = TSDataset.load_from_csv("/path/to/data.csv")
@@ -63,7 +66,7 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
    model.save("/path/to/save/modelname")
 
    # 8 load the model
-   loaded_model = PaddleBaseModel.load("/path/to/save/modelname")
+   loaded_model = load("/path/to/save/modelname")
 
 
 2. PaddleBaseModel
@@ -72,7 +75,7 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
 PaddleBaseModel is the base class for all PaddlePaddle-based time series models.
 Below is a simplified version of the **PaddleBaseModel** class declaration,
 the lengthy implementation details are skipped,
-you may refer to the `PaddleBaseModel API <../../api/paddlets.models.dl.paddlepaddle.paddle_base.html>`_ to get a full view.
+you may refer to the `PaddleBaseModel API <../../api/paddlets.models.forecasting.dl.paddle_base.html>`_ to get a full view.
 
 
 2.1. Construct method
@@ -245,8 +248,7 @@ The following sections show you how to persist a PaddleBaseModel. Note that a mo
 .. code-block:: python
 
    from paddlets import TSDataset
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
-   from paddlets.models.dl.paddlepaddle import RNNBlockRegressor
+   from paddlets.models.forecasting import RNNBlockRegressor
 
    # Prepare a fitted model
    training_data = TSDataset.load_from_csv("/path/to/csv")
@@ -263,7 +265,7 @@ Later you can load back the persisted model with:
 
 .. code-block:: python
 
-   from paddlets.models.dl.paddlepaddle.paddle_base import PaddleBaseModel
+   from bts.models.model_loader import load
 
-   loaded_rnn_reg_1 = PaddleBaseModel.load("/path/to/save/modelname_1")
-   loaded_rnn_reg_2 = PaddleBaseModel.load("/path/to/save/modelname_2")
+   loaded_rnn_reg_1 = load("/path/to/save/modelname_1")
+   loaded_rnn_reg_2 = load("/path/to/save/modelname_2")

@@ -1,0 +1,379 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.common.callbacks.callbacks.rst:2
+#: 0b7ca481ff1d453ebfdf3169295bc896
+msgid "paddlets.models.common.callbacks.callbacks"
+msgstr ""
+
+#: 2aa9caa5b1e84aafa0c358192e2bebab 89c8beaf7a3147a981adc9497ce29184 of
+#: paddlets.models.common.callbacks.callbacks.Callback:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 1fbca4ebcde14c4093272b8c520fa77e of
+#: paddlets.models.common.callbacks.callbacks.Callback:1
+msgid "Abstract base class used to build new callbacks."
+msgstr "用于构建新Callback的抽象基类."
+
+#: 246256b38be741e390c4af73ca158596 8c7c48c236164e74945d21933f4316fe
+#: ea9d7607e3014bf6864262e58497f485 of
+#: paddlets.models.common.callbacks.callbacks.Callback:5
+#: paddlets.models.common.callbacks.callbacks.Callback.set_trainer:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.set_trainer:3
+msgid "A model instance."
+msgstr "模型实例."
+
+#: 046793f8fbb7448ea81864977cbd136b 47cca7ae69a8471ca48d26414a7fda43
+#: 53b0113e44dc4d099baac286a3272fa2 5609a5e7bc954cf784b3a4a8d3f6f062
+#: 5a46d5032a2f40c39a049fb875458af4 601024e2bcd34d86a907627688d8c923
+#: 742fb5ecd53841019110b04fa9a5a26d 78dd095cf45c43df9160273effea8c55
+#: 80910047afd0417d861c06007c092cbb 8c4113f6d74c4c7f85e3f7e5ea194729
+#: 8eff2f8ee5644ea29c2cd90b0b52c5c6 b9d9ab40b0a64f75924d9db2cd6e3122
+#: c8e5dc1c6f6a4fb498e87c4872359feb ca07d0b4726540fe90f46303ad9a0be4
+#: cbb2a0dc8de941c4a6e8a5ae82a1b69e d3595a1dccab4dffb707f9c64acbfebc of
+#: paddlets.models.common.callbacks.callbacks.Callback
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping
+#: paddlets.models.common.callbacks.callbacks.History
+msgid "type"
+msgstr "类型"
+
+#: f56feea9eb8d468a99c0c6a68ad52a1a of
+#: paddlets.models.common.callbacks.callbacks.Callback:7
+msgid "PaddleBaseModel"
+msgstr ""
+
+#: 7b3242a0ea284c39ab096cbfe44ef878 c94366a0c74142e8a63fc1765f106ce4 of
+#: paddlets.models.common.callbacks.callbacks.Callback.set_trainer:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.set_trainer:1
+msgid "Set model instance."
+msgstr "设置模型实例."
+
+#: 0ea8e00c1bfb43c69ce75411a0ae4eb5 1eafb663b7294e089748a69817a448dc
+#: 2ecdfd0407d046d58c3bfd8bf70b1b25 3390d22047874e9cb5e07b509033bc74
+#: 357b24baee494368b9907c015bab8f55 35f5e387b2c347eda2ef1c24f63cf19c
+#: 37beee815864441d9ba4446c2bd38a0f 408e22f4299b4607b89f0d6f183916f9
+#: 417bb998296949f4b3642da0f27c7a7a 43175e0eb1644aed944c857d8145c8d7
+#: 4923bb8e536c46909d53a77b392b6cad 514e1da594b8455ca78c17088e3d11cc
+#: 51e10f25a47e43a28448574628ce5467 60ca0a892b254b938cda94971ff68185
+#: 697fa19d8765427f94cbaaf2108f1815 95aa393c18f34ad7a3cf32d26e725849
+#: b9d2913d7e5c483c9b6aa22bc9367a7a c8c3927303ff4842b28de3d3da9c560a
+#: ce8cabac5cd94d59b13533fc68a93e2e d5295ac0e3a44c2c9b1f3757b9bcf791
+#: d88fa6393f0240a58e0a1bec53373096 deb5682792a248c998e953de372ebf40
+#: ef88a871040a48378e293dd702a48afa fcce771efd14482691d52c832f1da0a5 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_begin
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_end
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_begin
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_end
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_begin
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_end
+#: paddlets.models.common.callbacks.callbacks.Callback.set_trainer
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.append
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_begin
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_end
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_begin
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_end
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_begin
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_end
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.set_trainer
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_epoch_end
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_train_end
+#: paddlets.models.common.callbacks.callbacks.History
+#: paddlets.models.common.callbacks.callbacks.History.on_batch_end
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_begin
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_end
+#: paddlets.models.common.callbacks.callbacks.History.on_train_begin
+msgid "Parameters"
+msgstr "参数"
+
+#: 3c58db314b3742948c206e854e60f4ca 57b840c4f0f94466940ebcca9f2d67b1
+#: e33d10d50fae49038a89bde1b54a529f of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_begin:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_begin:1
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_begin:1
+msgid "Called at the beginning of each epoch."
+msgstr "在每个epoch开始前调用."
+
+#: 0c8b4de56eb0423f99971ecd04863f79 4d27e84c112447aba27a77b2f32dc1b8
+#: 4ef04526edd841ee8b65c1bbb9d08cca 5b7db578d5674f53a368dafd863b4c0e
+#: 93664dc8376b4515a0be8dab22424b2d c780ea9e05ba4663bec4a5a42ca54707
+#: db97fd01e1114ba2add8a1ea6534b896 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_begin:3
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_end:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_begin:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_end:3
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_epoch_end:3
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_begin:3
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_end:3
+msgid "The index of epoch."
+msgstr "epoch的索引."
+
+#: 1dc75342c1d140c2b87b5cdc0dded6c9 21a5e97acc0e49498f9a329a26493309
+#: 33c01f5e9c1a4e72ac77909389e9f95d 4e1f192f7c3742e2bc469c6038564964
+#: 752ceb8b995847f2aa322203ebc0e193 7d7efc7d70c64a8b8dbcf5be2ebf96c6
+#: 8cb1a5f98d914b95abec66258a1610b7 a9850ec2b38449fbb0828dbbf83a82d5
+#: bb028f9d2641438e9ec011431d2a4488 c0a658177eb5438cb43a74c700cf9896
+#: fe7ae7057ca245fca1fad02f66e7fd3b of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_begin:5
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_begin:5
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_begin:3
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_end:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_begin:5
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_begin:5
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_begin:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_end:3
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_train_end:3
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_begin:5
+#: paddlets.models.common.callbacks.callbacks.History.on_train_begin:3
+msgid "The logs is a dict or None."
+msgstr "日志信息, 可以是字典或者None."
+
+#: 08b97840f80541be838f213e140c9a83 2f8fffd77c824f8988e87f7019a9d13e
+#: edf3e86a65ca42e39745b8fd51c3f4cd ee01eb5f9959447fa9d412602b88b8ec of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_end:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_end:1
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_epoch_end:1
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_end:1
+msgid "Called at the end of each epoch."
+msgstr "在每个epoch结束后调用."
+
+#: 0debb2d1038f4808a1425b6119feac3b 3f360144175b43cf9bbf4024f1b552b7
+#: 4eac0b4d3e4143c89d1b53de32b7d48f f22f3d8103bc4f7a9283b421d201c4c0 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_epoch_end:5
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_epoch_end:5
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_epoch_end:5
+#: paddlets.models.common.callbacks.callbacks.History.on_epoch_end:5
+msgid "The logs is a dict or None. contains `loss` and `metrics`."
+msgstr "日志信息, 可以是字典或者None."
+
+#: 757fe65953934cb284ca2d8ef5f9e034 80c59a2042fa4ef19d3f6a23647a43a6 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_begin:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_begin:1
+msgid "Called at the beginning of each batch in training."
+msgstr "在每个batch开始前调用."
+
+#: 331b3017597e4f698b8852039be01090 35767d85cdae4b97bf062e2ac5871ec1
+#: 64d35ec16bc8443c92f91dadf16a0897 a1c05e67edf7466c89c859528ff26ff6
+#: de4c6bfaa3b54361b9d6d8ad8df82dfc of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_begin:3
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_end:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_begin:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_end:3
+#: paddlets.models.common.callbacks.callbacks.History.on_batch_end:3
+msgid "The index of batch."
+msgstr "batch的索引."
+
+#: 0878d957936f4480991db14bfcbadff3 3e617889ab794ef489633fa136b20380
+#: d07fae9c7a2846ebb700e42d6bfa1847 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_end:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_end:1
+#: paddlets.models.common.callbacks.callbacks.History.on_batch_end:1
+msgid "Called at the end of each batch in training."
+msgstr "在每个batch结束后调用."
+
+#: 453fd8953cbe49edb8339de1dbb6e418 9994032727b64837a1ab7e756361cd96
+#: d062b1f939a24c188b399b5789b05170 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_batch_end:5
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_batch_end:5
+#: paddlets.models.common.callbacks.callbacks.History.on_batch_end:5
+msgid "The logs is a dict or None. contains `loss` and `batch_size`."
+msgstr "日志信息, 可以是字典或者None."
+
+#: 4f1f9503a4094f999a8be94635f00149 9e7fa7fd4c6842cea32c51d82d251de7
+#: ac29d6ea9e8b45ca806281edf2a07440 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_begin:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_begin:1
+#: paddlets.models.common.callbacks.callbacks.History.on_train_begin:1
+msgid "Called at the start of training."
+msgstr "在模型训练开始前调用."
+
+#: 30f3e0709a574434bd65a19862e6351c 5afa2fc573fc4485bcca079169d53b0e
+#: 7d1875f319634d91a0bc538d205166c3 of
+#: paddlets.models.common.callbacks.callbacks.Callback.on_train_end:1
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.on_train_end:1
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping.on_train_end:1
+msgid "Called at the end of training."
+msgstr "在模型训练结束后调用."
+
+#: 51cf1613ac7d4446b972649b1b6b972a of
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer:1
+msgid "Container holding a list of callbacks."
+msgstr "包含若干Callback的容器."
+
+#: 76ad362a6dd8484c9d4cd5ad1bc39b32 e52e3401fe174daa98da269edafb17c4 of
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer:3
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer:8
+msgid "List of callbacks."
+msgstr "Callback的列表."
+
+#: 1d2b8d11c29f451285e542094d13124b of
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer:10
+msgid "List[Callback]"
+msgstr ""
+
+#: df52c563c8844c31990c7e4e9196c2ee of
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.append:1
+msgid "Append callback to the container."
+msgstr "向容器里追加Callback."
+
+#: 4380b0c30e64401c92d51b7435ef27a5 of
+#: paddlets.models.common.callbacks.callbacks.CallbackContainer.append:3
+msgid "Callback instance."
+msgstr "Callback实例."
+
+#: 8d8a809f86dd4a2b998938adb1906313 f8a44da40bd9465c8e79aa6e934e8a4d of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:1
+#: paddlets.models.common.callbacks.callbacks.History:1
+msgid "Bases: :py:class:`~paddlets.models.common.callbacks.callbacks.Callback`"
+msgstr ""
+
+#: 2b8031da163e4d6da84f87e2c01fae34 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:1
+msgid ""
+"EarlyStopping callback, allow the trainer to exit the training loop if "
+"the given metric stopped improving during evaluation."
+msgstr "EarlyStopping Callback(早停), 在训练过程中, 当提供的metric不再变优，让模型提前停止训练."
+
+#: 69e96bcbf80f487cabece70874871b00 d9418ee80aa049dabc4771159ac81532 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:4
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:17
+msgid "Early stopping metric name."
+msgstr "用于EarlyStopping(早停)的metric名称."
+
+#: 380030f28d5a478189cbcf7a5ece3c69 a494facaa1dc4adc85f1549d65162369 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:6
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:23
+msgid "Whether to maximize or not early_stopping_metric."
+msgstr "标识early_stopping_metric的优化方向."
+
+#: e3607fbfd30447348f2e505d9a02bfca of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:8
+msgid ""
+"Minimum change in monitored value to qualify as improvement. This number "
+"should be positive."
+msgstr "标识early_stopping_metric需要提升的最小delta值."
+
+#: 4ca9e532102d4141b97630015320cee3 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:11
+msgid ""
+"Number of epochs to wait for improvement before terminating. the counter "
+"be reset after each improvement"
+msgstr "训练结束前early_stopping_metric没有提升的次数."
+
+#: 2eba4a75d8a541b9ada1081b63b43201 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:19
+msgid "str"
+msgstr ""
+
+#: 81e0b29781c24917891714fd3908cfce of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:25
+msgid "bool"
+msgstr ""
+
+#: 711956abc593444b9111b2e27d28537c of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:29
+msgid "Minimum change in monitored value to qualify as improvement."
+msgstr "标识early_stopping_metric需要提升的最小delta值."
+
+#: 70b290b957864f928b0cfc728b478c6f 9fd94d5657ed466c9c481fa29c135f1b
+#: a5f9169170f7467bb51ff1fa0053eb1e cec6d144dc9e4fcb97133a7dcfa8c2d2 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:31
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:55
+#: paddlets.models.common.callbacks.callbacks.History:22
+#: paddlets.models.common.callbacks.callbacks.History:28
+msgid "float"
+msgstr ""
+
+#: 2057c83a976441feba2ecb77d0160abc of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:35
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "训练结束前early_stopping_metric没有提升的次数."
+
+#: 59b700c5b680407e863220fb215a102c 714434a687f345b087e43df07fadc216
+#: 835c7dfd93494b91a56a7d2599042cc4 b7ed36f3f75646afa154c7c636a48436
+#: ba16f472afdc4413b4d8a1ed93adaeba c87dbda150bf4ae494a54ea6c20bf9e9 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:37
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:43
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:49
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:61
+#: paddlets.models.common.callbacks.callbacks.History:10
+#: paddlets.models.common.callbacks.callbacks.History:40
+msgid "int"
+msgstr ""
+
+#: 0cb3f89d15db4b24ab5e0d0a17f75d33 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:41
+msgid "Best epoch."
+msgstr "模型达到最优的epoch索引."
+
+#: a2b46d3d7de24c27bb3504a131f88508 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:47
+msgid "Stopped epoch."
+msgstr "模型停止训练时的epoch索引."
+
+#: b750ba3bed924112b6a5dfb8e13b3959 of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:53
+msgid "Best loss."
+msgstr "训练结束时, 模型所能达到的最优early_stopping_metric(反应模型当前的表现)."
+
+#: a6210c08d9dd4310b5c11178faf30c3f of
+#: paddlets.models.common.callbacks.callbacks.EarlyStopping:59
+msgid "Number of times that the early_stopping_metric failed to improve."
+msgstr "训练结束前early_stopping_metric没有提升的次数."
+
+#: b7756aa3852e44c788a52d75253ee9e5 of
+#: paddlets.models.common.callbacks.callbacks.History:1
+msgid "Callback that records events into a `History` object."
+msgstr "History Callback, 记录模型训练过程中各种信息."
+
+#: 2628b2a6a68843588e79b475c251e218 b11e201259a748f9be88bea222a8d7c6 of
+#: paddlets.models.common.callbacks.callbacks.History:3
+#: paddlets.models.common.callbacks.callbacks.History:8
+msgid "Print results every verbose iteration."
+msgstr "设定打印信息的迭代间隔."
+
+#: 4a2e8c05662241f8adceddc203e59ad2 fa64e415f6824e4ab09b6b1fc57beab2 of
+#: paddlets.models.common.callbacks.callbacks.History:14
+#: paddlets.models.common.callbacks.callbacks.History:32
+msgid "Record all information of metrics of each epoch."
+msgstr "记录模型训练过程中各类metric信息."
+
+#: 101f5c43320b47c79faca571cb5b2a9a 5ca1929878cc4bf0a623389e09fb177f of
+#: paddlets.models.common.callbacks.callbacks.History:16
+#: paddlets.models.common.callbacks.callbacks.History:34
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 909ee001b88d4349b9d39703a14930e7 of
+#: paddlets.models.common.callbacks.callbacks.History:20
+msgid "Start time of training."
+msgstr "训练开始时刻."
+
+#: 46fd7fb1ee8342f9b16bd9a2e745c488 of
+#: paddlets.models.common.callbacks.callbacks.History:26
+msgid "Average loss per epoch."
+msgstr "模型训练时, 每一轮的平均loss."
+
+#: 7298b73adff84578b581b01d16138dcb of
+#: paddlets.models.common.callbacks.callbacks.History:38
+msgid "Traversed samples."
+msgstr "遍历的样本数目."

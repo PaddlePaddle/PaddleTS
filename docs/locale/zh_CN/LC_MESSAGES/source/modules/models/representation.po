@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-19 20:17+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/representation.rst:3
+#: 53dd89bed25844bfadf041aae1adc456
+msgid "Representation Model Tutorial"
+msgstr "表征模型使用教程"
+
+#: ../../source/modules/models/representation.rst:5
+#: 4916777f97c84538846720e7d786ace2
+msgid ""
+"The representation model (TS2Vect) is one of the self-supervised models, "
+"mainly hoping to learn a general feature expression for downstream tasks."
+" The current mainstream self-supervised learning mainly includes "
+"Generative-based and Contrastive-based methods, TS2Vect is a Self-"
+"Supervised Model Based on Contrastive Method"
+msgstr "表征模型(TS2Vect)属于自监督模型里的一种，主要是希望能够学习到一种通用的特征表达用于下游任务；当前主流的自监督学习主要有基于Generative和基于Contrative的方法，TS2Vect是一种基于Contrative方法的自监督模型"
+
+#: ../../source/modules/models/representation.rst:9
+#: 87ade9a626d64835a83b5a5c1e26d3ca
+msgid "The use of self-supervised models is divided into two phases:"
+msgstr "自监督模型的使用一般分为两个阶段："
+
+#: ../../source/modules/models/representation.rst:8
+#: 79d5a8e8c96542b894e8ad05e23ce234
+msgid "Pre-training with unlabeled data, independent of downstream tasks"
+msgstr "不涉及任何下游任务，使用无标签的数据进行预训练"
+
+#: ../../source/modules/models/representation.rst:9
+#: 2e834781b9cf4a4792e3531d268ee28f
+msgid "Fine-tune on downstream tasks using labeled data"
+msgstr "使用带标签的数据在下游任务上 Fine-tune"
+
+#: ../../source/modules/models/representation.rst:14
+#: 2499afe1b0bb43ed9fbd8b527653b5ca
+msgid "TS2Vect follows the usage paradigm of self-supervised models:"
+msgstr "TS2Vect遵循自监督模型的使用范式，分为2个阶段："
+
+#: ../../source/modules/models/representation.rst:12
+#: 4a0988d4d08d4256bace0632610c5548
+msgid "Representational model training"
+msgstr "表征模型训练"
+
+#: ../../source/modules/models/representation.rst:13
+#: 2a90c11ce44446f7ae5acb6406a4da45
+msgid ""
+"Use the output of the representation model for the downstream task (the "
+"downstream task of the current case is the prediction task)"
+msgstr "将表征模型的输出用于下游任务(当前案例的下游任务为预测任务)"
+
+#: ../../source/modules/models/representation.rst:17
+#: 823dd18d9282426a962230743d013658
+msgid "A minimal example"
+msgstr "一个最小化的示例"
+
+#: ../../source/modules/models/representation.rst:19
+#: ec311c8460294165998087a0f65ac005
+msgid ""
+"Below minimal example uses a built-in `TS2vect` model to illustrate the "
+"basic usage."
+msgstr "下方的最小化示例使用了PaddleTS内置的 TS2Vect 模型来阐述基本的使用方法。"
+
+#: ../../source/modules/models/representation.rst:22
+#: e1fa9f33f28447489a6e1fcc836d7688
+msgid "1. The first stage:"
+msgstr "第一阶段"
+
+#: ../../source/modules/models/representation.rst:23
+#: b51289c5dabd41fca296b4f07157855a
+msgid "Training of the representation model"
+msgstr "表征模型训练"
+
+#: ../../source/modules/models/representation.rst:24
+#: 96dbe3b99c2247d29bd307f09e194f24
+msgid "Output of training set and test set representation results"
+msgstr "输出训练集和测试集的表征结果"
+
+#: ../../source/modules/models/representation.rst:28
+#: 0b342b500820415889aec1fd1555fe06
+msgid "1.1 Prepare the data"
+msgstr "准备数据集"
+
+#: ../../source/modules/models/representation.rst:47
+#: 34992b848ebd496e838cc39ff7c5abb7
+msgid "1.2 Training of the representation model"
+msgstr "表征模型训练"
+
+#: ../../source/modules/models/representation.rst:62
+#: 9d00b24e9afd4f558642ab9e8b49572b
+msgid "1.3 Output of training set and test set representation results"
+msgstr "输出训练集和测试集的表征结果"
+
+#: ../../source/modules/models/representation.rst:76
+#: 463aabe10290403dbf858432e11a164a
+msgid "2. The second stage:"
+msgstr "第二阶段"
+
+#: ../../source/modules/models/representation.rst:77
+#: 1738cc50d92e4612a1b55ca416f1e5c7
+msgid "Build training and test samples for regression models"
+msgstr "构建回归模型的训练和测试样本"
+
+#: ../../source/modules/models/representation.rst:78
+#: dd5aa6e8386247c382408adedb60062a
+msgid "training and prediction"
+msgstr "训练和预测"
+
+#: ../../source/modules/models/representation.rst:81
+#: 611393fcf9d1439b937030eebfcc8075
+msgid "2.1 Build training and test samples for regression models"
+msgstr "构建回归模型的训练和测试样本"
+
+#: ../../source/modules/models/representation.rst:107
+#: 7c6b16ed496e4443a33dc12218808080
+msgid "2.2 Training and prediction"
+msgstr "训练和预测"
+

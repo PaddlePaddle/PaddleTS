@@ -114,4 +114,3 @@ class KSigma(BaseTransform):
             TSDataset
         """
         return self.fit(dataset).transform(dataset, inplace)
-

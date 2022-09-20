@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 10:34+0800\n"
+"POT-Creation-Date: 2022-09-16 16:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,163 +17,230 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.metrics.metrics.rst:2
-#: 664fd1d31c1548e0a6642984454a882f
+#: c52081b822de40aa82234e9216a659fc
 msgid "paddlets.metrics.metrics"
 msgstr ""
 
-#: 2df7bdcb0d9b4479934bdbe636b4762f 613fc18b31574347806de8053bcb65ac
+#: 37e757b715454ece971ea95ea09a2f6e 6a500f10dcfe4715945697ead9ffbebd
+#: 757b3e244dc341c1b7e8c41c235fcf2d c00a54e7d8494b41891524f8d6981eb6 of
 #: paddlets.metrics.metrics.LogLoss:1 paddlets.metrics.metrics.MAE:1
-#: paddlets.metrics.metrics.MSE:1 f6541078ba6f4223ac569c30192cf01c of
+#: paddlets.metrics.metrics.MSE:1 paddlets.metrics.metrics.QuantileLoss:1
 msgid "Bases: :py:class:`~paddlets.metrics.base.Metric`"
 msgstr ""
 
-#: 826a055b37cb42259f7dda1c48518c31 paddlets.metrics.metrics.MSE:1 of
+#: 077635944ccb4556a485608a3f32748f of paddlets.metrics.metrics.MSE:1
 msgid "Mean Squared Error."
 msgstr "均方误差(mse)."
 
-#: 06009a92b7e94cbbaa5709eca7c58d2a 59c484708f9f407c9b029909d9a419fa
-#: 8900d401df854e01af216fe992377fc4 9f3702389adc4ba2afe254c31403cf57
-#: paddlets.metrics.metrics.LogLoss paddlets.metrics.metrics.LogLoss.metric_fn
-#: paddlets.metrics.metrics.MAE paddlets.metrics.metrics.MAE.metric_fn
-#: paddlets.metrics.metrics.MSE paddlets.metrics.metrics.MSE.metric_fn
-#: paddlets.metrics.metrics.MetricContainer c57a9152b715427e8e2c7563ef507069
-#: e2905d91527b4ef4b7c805cd17363106 fa572dcd937c4f4e9ddc024e736b27a2 of
+#: 035dedd9f23241039ceaf2246e448830 3bed23ea50db4cfe92c72e80caa90dd7
+#: 51e32ea51a564e768ea0a6d9775cf051 7262a9c8c4304e6bab8f3f3fdd92f9c1
+#: 79c47b70f6454c1f84ea7ebcc893840e 7b5f8229fff7463fa0205806cd4f3d6f
+#: a9548e1b49424a50b689cbafae2bf0ca b5d4c4e57b2a4e86aefaa9a4736c6834
+#: b93099f6ba9747efa7c54264fee7ee4b of paddlets.metrics.metrics.LogLoss
+#: paddlets.metrics.metrics.LogLoss.metric_fn paddlets.metrics.metrics.MAE
+#: paddlets.metrics.metrics.MAE.metric_fn paddlets.metrics.metrics.MSE
+#: paddlets.metrics.metrics.MSE.metric_fn
+#: paddlets.metrics.metrics.MetricContainer
+#: paddlets.metrics.metrics.QuantileLoss
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn
 msgid "Parameters"
 msgstr "参数"
 
-#: 167827926599434b8c56c2a7d4483fc7 3692a6b4366241c8b65baefd8906add5
-#: 8d2641c3a89b4ccba6bc742a3f2589e2 paddlets.metrics.metrics.LogLoss:3
-#: paddlets.metrics.metrics.MAE:3 paddlets.metrics.metrics.MSE:3 of
+#: 488bb57498be4addac34388a2c0b1bba 646d07b7afb349318229b8e77c90b4fd
+#: 6e4582dbb9fe4092a05f005ea83b56ac cc33b83c7edb4036bdfc36c4ea741d82 of
+#: paddlets.metrics.metrics.LogLoss:3 paddlets.metrics.metrics.MAE:3
+#: paddlets.metrics.metrics.MSE:3 paddlets.metrics.metrics.QuantileLoss:11
+#, fuzzy
 msgid ""
 "Supported metric modes, only normal and prob are valid values. Set to "
 "normal for non-probability use cases, set to prob for probability use "
-"cases. Note that mode = prob is currently not supported."
+"cases."
 msgstr "支持的metric模式, 支持normal(非概率预测)和prob(概率预测)两种模式, Note: 目前mode=prob尚未支持."
 
-#: 2419f93233544d62b894fccf41a6dd9b paddlets.metrics.metrics.LogLoss:10
-#: paddlets.metrics.metrics.MAE:10 paddlets.metrics.metrics.MSE:10
-#: e4dfbfade55d47af83267b329cbb90cc eacf2c37b8cd4285af47ae29077c33ba of
+#: 2b737f1c9ade4d168e9cdb9426f995cf 752b25b020bd47629b462dee70e0be08
+#: e76142b80dd34c49bf372589eb882f4e of paddlets.metrics.metrics.LogLoss:9
+#: paddlets.metrics.metrics.MAE:9 paddlets.metrics.metrics.MSE:9
 msgid "Metric name."
 msgstr "Metric名称."
 
-#: 57bcb1b65b9e4bc586b99b0f18aa901e 6ba256ac9b484c6dabc2f11995012358
-#: aa7bf5dafa394fbc987bbddf008b0d77 b81d2f29783340838b93d24db761335b
-#: b9692d8c00674ce69eac19c70e318c43 bb2f3dd010d64707ae2175278e3f875e
-#: paddlets.metrics.metrics.LogLoss paddlets.metrics.metrics.MAE paddlets.metrics.metrics.MSE
-#: paddlets.metrics.metrics.MetricContainer cfe2914285824ace9be727a6362efb9c
-#: e534cf84b7ee4b51bed5c9747e10c4ca f52983f1fe374ead8fe6b853d44763ab of
+#: 8b098d79a08d4c229b969607406c96fc 95ebf8e5c9d14faa9ced890c697a10c1
+#: a791d745f81c4ce09416fcbf282afea9 aff316f6a6984215b4ad050089af23fc
+#: bd6ef482bb234aa99928f0f6e9ae4db4 ce9a7e7ba57640c5a1afbbc33f044e2a
+#: ea6c2d102fb746479c5c8187ef8d5a70 eca97f1098ca4bb1b20f5beae79b999e
+#: fee4f56672ef4ee8987f4cb7541212cc of paddlets.metrics.metrics.LogLoss
+#: paddlets.metrics.metrics.MAE paddlets.metrics.metrics.MSE
+#: paddlets.metrics.metrics.MetricContainer
 msgid "type"
 msgstr "类型"
 
-#: 219d2765ea5b41fca44435c374181ac2 54edd67a503046978d12ab6c4b2e5039
-#: 5f519c8423e24096a7174104cd24b47a 7ed4a7681a64467fa77c153b80783628
-#: paddlets.metrics.metrics.LogLoss:12 paddlets.metrics.metrics.MAE:12
-#: paddlets.metrics.metrics.MSE:12 paddlets.metrics.metrics.MetricContainer:12 of
+#: 1be123b35e514000b2ae4890100a2e37 79422b8773e14e88ab8c2b89b6535697
+#: a10d2ae9685148ffa347add6bfc9e06c e8ca8c5452054359a21e279066992884 of
+#: paddlets.metrics.metrics.LogLoss:11 paddlets.metrics.metrics.MAE:11
+#: paddlets.metrics.metrics.MSE:11 paddlets.metrics.metrics.MetricContainer:12
 msgid "str"
 msgstr ""
 
-#: 010884385dd94e968bc9dd38a39ae0b3 2cccd53e4d8f462d94297e70d6cb24e2
-#: 4c605fc487884ce1ba2095e22f24e96e paddlets.metrics.metrics.LogLoss:16
-#: paddlets.metrics.metrics.MAE:16 paddlets.metrics.metrics.MSE:16 of
+#: a401d3e5f04e40d9a72e9956cf5fba79 cc98570240a9474d8d37c5eff131419e
+#: dba57fc313ed4d71b111d3a1e01b37b0 of paddlets.metrics.metrics.LogLoss:15
+#: paddlets.metrics.metrics.MAE:15 paddlets.metrics.metrics.MSE:15
 msgid "Identify optimization direction."
 msgstr "用于标识优化方向."
 
-#: 5a362620609044e5892795121f3d7fb8 64fecd1bfc19489d8f73b6f905d29ed0
-#: paddlets.metrics.metrics.LogLoss:18 paddlets.metrics.metrics.MAE:18
-#: paddlets.metrics.metrics.MSE:18 e8710fa3b8dd462db4eaca88a6ca98f0 of
+#: 451265a2aa7e4fe5a1c01b35fcc1545f 64eb44d9526148cd8925137cc3ab407b
+#: 8cbfa4d698784cf98417b0481fc23e6c of paddlets.metrics.metrics.LogLoss:17
+#: paddlets.metrics.metrics.MAE:17 paddlets.metrics.metrics.MSE:17
 msgid "bool"
 msgstr ""
 
-#: paddlets.metrics.metrics.MSE.metric_fn:1 eb919c422f1b409988462cf7226f267a of
+#: 15e63551fb3a4b9ca08625967591df9e of paddlets.metrics.metrics.MSE.metric_fn:1
 msgid "Mean squared error regression loss."
 msgstr "均方误差(mse)."
 
-#: 5c4e2f4596ba4eefb611352cefa56d89 paddlets.metrics.metrics.MAE.metric_fn:3
-#: paddlets.metrics.metrics.MSE.metric_fn:3 ffab5aed17b944dd84b26b0af172cf96 of
+#: 3e4ba55a0aeb4003a902eecc20824cc9 4e62571b142041768cf5f50aa21780fa of
+#: paddlets.metrics.metrics.MAE.metric_fn:3
+#: paddlets.metrics.metrics.MSE.metric_fn:3
 msgid "Ground truth (correct) target values."
 msgstr "真实目标值."
 
-#: 2efb32611b8548d2a7fb820d7e41dec3 477beb7534a64f0d977ff7f8390dc7ee
-#: paddlets.metrics.metrics.MAE.metric_fn:5 paddlets.metrics.metrics.MSE.metric_fn:5 of
+#: 07dc9b0aa9774c9cbe7ae25b6e5e591c 72927e122e6f4b088b717d1156cfae73 of
+#: paddlets.metrics.metrics.MAE.metric_fn:5
+#: paddlets.metrics.metrics.MSE.metric_fn:5
 msgid "Estimated target values."
 msgstr "模型预测值."
 
-#: 161ac930087a4a219e14d17de72f26e0 236a5ebe93cf401ea7ca5b5c93b7d3b5
-#: 310d9e872e404b5aaa14f4b0b230157b paddlets.metrics.metrics.LogLoss.metric_fn
-#: paddlets.metrics.metrics.MAE.metric_fn paddlets.metrics.metrics.MSE.metric_fn of
+#: 1faeaa215b0f4e489f24aa2296f10240 2f3b86e3a6db435cab94630cfb33382b
+#: 9126aa3ba63e4d6a9cbb2f7a86b8e6ef eb58f938759d4ecd94602e36a856d271 of
+#: paddlets.metrics.metrics.LogLoss.metric_fn
+#: paddlets.metrics.metrics.MAE.metric_fn
+#: paddlets.metrics.metrics.MSE.metric_fn
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn
 msgid "Returns"
 msgstr "返回"
 
-#: paddlets.metrics.metrics.MSE.metric_fn:8 eda7caa65dd6446c8af307fdbbcffbef of
+#: 6d91136e32b14811ade17ed2b1f1e0fb of paddlets.metrics.metrics.MSE.metric_fn:8
 msgid ""
 "Mean squared error regression loss. A non-negative floating point value "
 "(the best value is 0.0)."
 msgstr "均方误差值, 非负的浮点值(最优值为0.0)"
 
-#: 070def7673c247fa94f4149b227178ca 5f9d2435b4a443149f40c3cecd74b6ae
-#: 9c81c37aa0104511975615844ae1eff2 paddlets.metrics.metrics.LogLoss.metric_fn
-#: paddlets.metrics.metrics.MAE.metric_fn paddlets.metrics.metrics.MSE.metric_fn of
+#: 15f420e3532c4273862498d942fae810 4c925ba16c7747a7b5db14a61b47234a
+#: 9083ed998f6547e087af65d5306f02e3 b1c2b019fe714a56bdad75e77ad760ff of
+#: paddlets.metrics.metrics.LogLoss.metric_fn
+#: paddlets.metrics.metrics.MAE.metric_fn
+#: paddlets.metrics.metrics.MSE.metric_fn
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn
 msgid "Return type"
 msgstr "返回类型"
 
-#: 2ed9237eacf8460cb19e6612cb128b8f paddlets.metrics.metrics.MAE:1 of
+#: 3624e2dfe0864469a4253f74e0e5cafb of paddlets.metrics.metrics.MAE:1
 msgid "Mean Absolute Error."
 msgstr "平均绝对误差(mae)."
 
-#: be58429a9cb34bcf9f49f6746538cb4f paddlets.metrics.metrics.MAE.metric_fn:1 of
+#: ebb4cde31d5b4d918fdf3a9f3c0e51b2 of paddlets.metrics.metrics.MAE.metric_fn:1
 msgid "Mean absolute error regression loss."
 msgstr "平均绝对误差(mae)."
 
-#: 42be7173217d4f31a842300b29f10cfb paddlets.metrics.metrics.MAE.metric_fn:8 of
+#: be06fdbe70cf4c47bb19b244df2686e7 of paddlets.metrics.metrics.MAE.metric_fn:8
 msgid ""
 "Mean absolute error regression loss. A non-negative floating point value "
 "(the best value is 0.0)."
 msgstr "平均绝对误差值, 非负的浮点值(最优值为0.0)"
 
-#: 5ed649f865154086ada7bf3156b956a8 abc8fb409e7a4d8da27125f10b5d70f4
-#: paddlets.metrics.metrics.LogLoss:1 paddlets.metrics.metrics.LogLoss.metric_fn:1
-#: paddlets.metrics.metrics.LogLoss.metric_fn:8 ca9984767a354d539a5056a2782cefb4 of
+#: 5e5f49d75e1f41a3a3d33705f9eeed55 c1614b895a8446c5a5a9cb68a906485e
+#: c84f2f34400e4250b596465e4187a77c of paddlets.metrics.metrics.LogLoss:1
+#: paddlets.metrics.metrics.LogLoss.metric_fn:1
+#: paddlets.metrics.metrics.LogLoss.metric_fn:8
 msgid "Log loss or cross-entropy loss."
 msgstr "对数损失(交叉熵损失)."
 
-#: paddlets.metrics.metrics.LogLoss.metric_fn:3 eb8dc23d05214a9faef9e402a2818898 of
+#: 39f3067f7a404ba3a4fb9304e6a60be9 62eb3cb6dca24133ac61d41cc2819a77 of
+#: paddlets.metrics.metrics.LogLoss.metric_fn:3
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn:3
 msgid "Ground truth (correct) labels."
 msgstr "真实目标值."
 
-#: paddlets.metrics.metrics.LogLoss.metric_fn:5 e36884c08eef4f96b0f45bc8c4e7cf00 of
+#: 596387ff98a14d14b636485971e7e8a5 of
+#: paddlets.metrics.metrics.LogLoss.metric_fn:5
 msgid "Predicted probabilities."
 msgstr "模型预测值."
 
-#: 1b320ec612e649e7badd090c4b4a3f48 paddlets.metrics.metrics.MetricContainer:1 of
+#: e7e0dc7238044ba0b469532b32c0722c of paddlets.metrics.metrics.QuantileLoss:2
+msgid ""
+"Quantile loss, following the article: `Bayesian Intermittent Demand "
+"Forecasting for Large Inventories "
+"<https://papers.nips.cc/paper/2016/file/03255088ed63354a54e0e5ed957e9008-Paper.pdf>`_"
+" ."
+msgstr ""
+
+#: 9dbf68b5a4024c868ae7fce3341c2754 of paddlets.metrics.metrics.QuantileLoss:2
+msgid ""
+"A quantile of ``q=0.5`` will give half of the mean absolute error as it "
+"is calcualted as ``max(q * (y-y_pred), (1-q) * (y_pred-y))``."
+msgstr ""
+
+#: df0ea06635554cb887dd24666eb62fee of paddlets.metrics.metrics.QuantileLoss:4
+msgid ""
+"The quantile points of interest, the default value is None. In the "
+"evaluation of the prediction, while q_points is specified, output a dict "
+"which contains each quantile result respect to quantile points."
+msgstr ""
+
+#: 0eff10445bd04fba94274553eba795cf of paddlets.metrics.metrics.QuantileLoss:8
+msgid ""
+"The quantile level of interest. In validation phase, it is used to "
+"measure validation loss."
+msgstr ""
+
+#: a37ef1921c334be8bd16ff48425a2e62 d6fc30c999ce44f49c4139f6fe1da536 of
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn:1
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn:8
+msgid "Quantile loss."
+msgstr ""
+
+#: 6b4cce850f7142e1880bdf3ff9fe05ad of
+#: paddlets.metrics.metrics.QuantileLoss.metric_fn:5
+#, fuzzy
+msgid "Predicted quantiles."
+msgstr "模型预测值."
+
+#: ef3c23ea67fb4107abdf66e551328216 of
+#: paddlets.metrics.metrics.MetricContainer:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
-#: 977825beb52a4bd9be4971f1702b89fc paddlets.metrics.metrics.MetricContainer:1 of
+#: eb0bba4ddcd0461097d8336f5bdbccd5 of
+#: paddlets.metrics.metrics.MetricContainer:1
 msgid "Container holding a list of metrics."
 msgstr "包含若干Metric的容器."
 
-#: 398529fed3084b1ebd1f207ed74aba86 paddlets.metrics.metrics.MetricContainer:3 of
+#: bd3c982dd8ad42bea03d36b2352228f5 of
+#: paddlets.metrics.metrics.MetricContainer:3
 msgid "List of metric names."
 msgstr "Metric名称的列表."
 
-#: 18a92d48499a41429ff723343c484e24 6137879aa2c34c2eb24d2ae1056641d9
-#: paddlets.metrics.metrics.MetricContainer:5 paddlets.metrics.metrics.MetricContainer:10
-#: of
+#: 4a506254aad84d3f9cdbbd905f334c7f c134a4a9ac984598b9f17acb99712a35 of
+#: paddlets.metrics.metrics.MetricContainer:5
+#: paddlets.metrics.metrics.MetricContainer:10
 msgid "Prefix of metric names."
 msgstr "为Metric名称增加前缀."
 
-#: paddlets.metrics.metrics.MetricContainer:16 e2d0000ab7754602a490eabb5d53f66d of
+#: c54a34ddfd414582b2825f900c657b8b of
+#: paddlets.metrics.metrics.MetricContainer:16
 msgid "List of metric instance."
 msgstr "Metric实例的列表."
 
-#: 292b96da3e244eb2b10efcd7e62f2a4a paddlets.metrics.metrics.MetricContainer:18 of
+#: 1506fad54ef24f7a8a32854815784954 of
+#: paddlets.metrics.metrics.MetricContainer:18
 msgid "List[Metric]"
 msgstr ""
 
-#: paddlets.metrics.metrics.MetricContainer:22 f013d1fd619543f78cc1b6cae25ad041 of
+#: d3e199e5accb4af3b0079b6d5062f2be of
+#: paddlets.metrics.metrics.MetricContainer:22
 msgid "List of metric names associated with eval_name."
 msgstr "与评估集名称关联的Metric名称列表."
 
-#: paddlets.metrics.metrics.MetricContainer:24 f161c6b16aca45d4a504711f0a018dd1 of
+#: 5c1b225d7ad04119b20512de342f792f of
+#: paddlets.metrics.metrics.MetricContainer:24
 msgid "List[str]"
 msgstr ""
+

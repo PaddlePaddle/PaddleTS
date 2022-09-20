@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:39+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.sklearn_transforms_base.rst:2
+#: 8ef441ab00c14f9cad6898e9b0cfba99
+msgid "paddlets.transform.sklearn_transforms_base"
+msgstr ""
+
+#: b23f08ef766e466aa5e3f9cd25ed1212 of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:1
+msgid "Bases: :py:class:`~paddlets.transform.base.UdBaseTransform`"
+msgstr ""
+
+#: 1c83eac9740a43a9ab835ff97bce24c7 of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:1
+msgid ""
+"Wrapper for data transformation classes provided by skearn data "
+"transformation."
+msgstr "对sklearn中数据转换模块进行时序封装"
+
+#: 5ead1a5cf58e469ea06527c5dd9318ba of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper
+msgid "Parameters"
+msgstr ""
+
+#: ef98eea6103f4f84b05658c9c8297a7e of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:3
+msgid "The transformer class from sklearn data transformation."
+msgstr "sklearn的数据转换模块类名称，如sklearn.preprocessing.OneHotEncoder"
+
+#: 45a0488565454f9bbb48fbe686beab4a of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:4
+msgid "Column name or names to be transformed."
+msgstr "希望被转换的列名称，支持单列多或者多列"
+
+#: 850a1775c95740009b20c35acd318fb5 of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:6
+msgid "Whether each column of data is transformed independently, default False."
+msgstr "是否对每列数据进行独立的fit以及transform，默认为False"
+
+#: f3e9f7aecaf840a8a269998d78576a9a of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:8
+msgid "Whether to delete the original column, default=False."
+msgstr "是否删除原始输入列，默认为False"
+
+#: 76fcb3c40e784d7f9dcb4aae8fdc839b of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:10
+msgid ""
+"The type of output columns, None represents automatic inference based on "
+"input."
+msgstr "输出列的类型，支持用户手动指定；如果为None，将会基于input以及output进行自动推断"
+
+#: c0f3d441df1b4f7898a4ff6662790f0a of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:12
+msgid ""
+"The name of output columns, None represents automatic inference based on "
+"input."
+msgstr "输出列的名称，支持用户手动指定；如果为None，将会基于input以及output进行自动推断"
+
+#: 507292441fae49a592968a12ef0ac7df of
+#: paddlets.transform.sklearn_transforms_base.SklearnTransformWrapper:14
+msgid "Optional arguments passed to sklearn_transform_class."
+msgstr "传递给sklearn_transform_class的参数，用于类的初始化"
+
+
