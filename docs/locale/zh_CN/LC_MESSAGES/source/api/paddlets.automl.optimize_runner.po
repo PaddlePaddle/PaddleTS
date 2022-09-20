@@ -1,0 +1,201 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-19 15:25+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.automl.optimize_runner.rst:2
+#: 3a763e1202f146a280cb6cfbd0bd19d1
+msgid "paddlets.automl.optimize_runner"
+msgstr ""
+
+#: ff7eeeee66114df69fefb8f1f61c8f4c of
+#: paddlets.automl.optimize_runner.OptimizeRunner:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 0b4f5a4d79e542d99ee8269f976616cd of
+#: paddlets.automl.optimize_runner.OptimizeRunner:1
+msgid "Optimize runner is for experiment execution and hyperparameter tuning."
+msgstr ""
+
+#: 2a55a69007cc44f2b2252e7387e194be 497428fb6ac74acba3b8fd76605768c8
+#: 967c54cfc2664ac9bd26d92a0a47c70f of
+#: paddlets.automl.optimize_runner.OptimizeRunner
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
+msgid "Parameters"
+msgstr ""
+
+#: cac0bbf11120421da61a60677d870ada of
+#: paddlets.automl.optimize_runner.OptimizeRunner:3
+msgid ""
+"The algorithm for optimization.Supported algorithms are \"auto\", "
+"\"Random\", \"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\"."
+msgstr ""
+
+#: 74ae7a2b854a48c19fd1dbf6e3453901 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:1
+msgid "Build a paddlets estimator with config."
+msgstr ""
+
+#: ae214dac3ead4a58b9a82dcbd249fdd9 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:3
+msgid "Algorithm configuration for estimator."
+msgstr ""
+
+#: 116aa4f3b3d54436ba95ca0070eb31d3 89ec15608a294d0882b5c20974f4a273 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:3
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:5
+msgid ""
+"A class of a PaddleTS model or a list of classes consisting of several "
+"PaddleTS transformers and a PaddleTS model."
+msgstr ""
+
+#: bd93091337bf48f19d15a136a555e57e cbd159033e5941379e13ce32ff797b2a of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:5
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:8
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr ""
+
+#: 1d592d85362845a0a527e6828e48a395 bf4c1f82ee5744f194fe2a74850bc319 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:7
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:10
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr ""
+
+#: df2372d4189f46eb85da77740e1dfa6e of
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:12
+msgid ""
+"The number of time steps between in_chunk and out_chunk for a single "
+"sample."
+msgstr ""
+
+#: 2c85ddbb14864555b9a283d84ba2e877 c167d0792c5849f694958fe52d759acb of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:13
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:13
+msgid "Sampling intervals between two adjacent samples."
+msgstr ""
+
+#: 29f5e7388a174f1e83c8beca17abd995 4d440ab9b06147a98708ec810812347e of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
+msgid "Returns"
+msgstr ""
+
+#: 5e59f21f977e480ab7bd009045fae613 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:16
+msgid "Bts estimator."
+msgstr ""
+
+#: 3f05c841f1a946d6a93583826eace253 fe1c71b83032458aadd7a6ebbf273688 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize
+#: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
+msgid "Return type"
+msgstr ""
+
+#: 84663f1931724f9fa0e4579176875d7b of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:1
+msgid "Execute optimization."
+msgstr ""
+
+#: 4a37670516df4bbcb2f22a6362dc449a of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:9
+msgid "Train dataset."
+msgstr ""
+
+#: ba0f1270315142d3b1f1259c51e4386e of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:11
+msgid "Valid dataset."
+msgstr ""
+
+#: 67048d409f8e4c29a8b27e9d1c330487 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:15
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample."
+msgstr ""
+
+#: 4330dc4c765d4559b7e83b9dfa798abe of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:17
+msgid "The domain of the automl to be optimized."
+msgstr ""
+
+#: bd3ccb7d99df4bf09571245aa6406bf9 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:19
+msgid "A class of a metric, e.g. MAE, MSE."
+msgstr ""
+
+#: 6c717c6ec90b438faec26cf51ef24a53 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:21
+msgid ""
+"According to the mode, the metric is maximized or minimized. Supported "
+"mode are \"min\", \"max\""
+msgstr ""
+
+#: 2ac676d75a704454becdc7793e11aeba of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:23
+msgid ""
+"A string of resampling strategies. Supported resampling strategy are "
+"\"cv\", \"holdout\"."
+msgstr ""
+
+#: 74feb617c1444b5cbdf74f4f96a074b9 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:26
+msgid ""
+"The proportion of the dataset included in the validation split for "
+"holdout."
+msgstr ""
+
+#: 23365cd4d11a4904bf466b7625ef6d0b of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:28
+msgid "Number of folds for cv."
+msgstr ""
+
+#: 88c7e0e1179a47c2a5ebf18e286549cb of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:30
+msgid "The number of configurations suggested by the search algorithm."
+msgstr ""
+
+#: 134d5fded3214b08a8591c3311d32e49 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:32
+msgid "CPU resources to allocate per trial."
+msgstr ""
+
+#: 62cc46b86f0a4217b08f2be27bb9df61 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:33
+msgid "GPU resources to allocate per trial."
+msgstr ""
+
+#: 6fe53b497db64a568e2b220c62348204 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:35
+msgid "Object for experiment analysis."
+msgstr ""
+
+#: 9f6925d6e8be45308114b3afb945b14a of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize
+msgid "Raises"
+msgstr ""
+
+#: 5d5243f98a4a4058bded0a2498b36c7d of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:38
+msgid "Any trials failed."
+msgstr ""
+

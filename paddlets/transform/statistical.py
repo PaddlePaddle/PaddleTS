@@ -6,10 +6,10 @@ from typing import Union, List
 import pandas as pd
 import numpy as np
 
-from bts.transform.base import BaseTransform
-from bts.datasets.tsdataset import TimeSeries, TSDataset
-from bts.logger import Logger, raise_if_not, raise_if, raise_log
-from bts.logger.logger import log_decorator
+from paddlets.transform.base import BaseTransform
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
+from paddlets.logger.logger import log_decorator
 
 logger = Logger(__name__)
 
@@ -63,7 +63,6 @@ class StatsTransform(BaseTransform):
                  end: int = 1,
                  statistics: List = STATISTICS):
         super(StatsTransform, self).__init__()
-        
         self._cols = cols
         if isinstance(cols, str):
             self._cols=[cols]
@@ -87,6 +86,9 @@ class StatsTransform(BaseTransform):
         for e in STATISTICS:
             self._map[e] = []
         
+        self.need_previous_data = True
+        self.n_rows_pre_data_need = self._end
+
     @log_decorator
     def fit(self, tsdata: TSDataset):
         """

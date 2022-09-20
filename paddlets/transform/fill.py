@@ -63,6 +63,12 @@ class Fill(BaseTransform):
         raise_if(method not in self.methods, "The specified filling method doesn't exist.")
         self._cols_lost_dict = {}
 
+        self.need_previous_data = True
+        if self.method in ['pre', 'next', 'zero', 'default']:
+            self.n_rows_pre_data_need = -1
+        else:
+            self.n_rows_pre_data_need = self.window_size
+
     @log_decorator
     def fit(self, dataset: TSDataset):
         """

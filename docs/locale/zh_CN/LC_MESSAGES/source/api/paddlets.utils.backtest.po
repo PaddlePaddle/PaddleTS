@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-22 11:56+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.utils.backtest.rst:2
+#: 834ba7492cfe447e8b3e2e004bf2a3f2
+msgid "paddlets.utils.backtest"
+msgstr ""
+
+#: 846816b0c0e946c082385acfb15312b0 paddlets.utils.backtest.backtest:1 of
+msgid ""
+"Backtest A repeated forecasting and validating process. It first use data"
+" with the length of predict_window, and then moves the end of the "
+"training set forward by `stride` time steps. By default, Backtest will "
+"generate a TSdataset with length (data_length - model.skip_chunk_len) as "
+"output. If set predict_window != stride Backtest will generate a List of "
+"TSdataset as output"
+msgstr ""
+"回测在长度等于predict_window的数据集上重复预测，通过“stride”时间步长进行训练，直到移动至末尾。默认情况下，Backtest "
+"将生成一个长度为 (data_length - model.skip_chunk_len) 的 TSdataset 作为输出。如果设置 "
+"predict_window != stride，Backtest 将生成一个 TSdataset List作为输出。 "
+
+
+#: paddlets.utils.backtest.backtest fde171f578d54b12a27dbb10d4bf9966 of
+msgid "Parameters"
+msgstr ""
+
+#: 335b54b2b5c7495885ed95db31fdea4d paddlets.utils.backtest.backtest:7 of
+msgid "The  TSdataset to use to successively evaluate the historical forecasts"
+msgstr "用于回测的 TSdataset"
+
+#: paddlets.utils.backtest.backtest:9 e84c984cf121486f99cf76c21be970f0 of
+msgid "The  fitted model to use to successively evaluate the historical forecasts"
+msgstr "用于回测的模型，需要提前拟合"
+
+#: 631f952697b14754ad6d233e847863ab paddlets.utils.backtest.backtest:11 of
+msgid ""
+"The first prediction time, at which a prediction is computed for a future"
+" time."
+msgstr "回测的起点，默认为model.in_chunk_len的后一个点"
+
+#: paddlets.utils.backtest.backtest:13 fb71c773b2ee401ea01b50c8c63ce082 of
+msgid "The predict window for the  prediction."
+msgstr "预测窗口"
+
+#: bd8d9f9cc22d45989aa048c229cec881 paddlets.utils.backtest.backtest:15 of
+msgid "The number of time steps between two consecutive predict window."
+msgstr "两个连续预测值之间的步长"
+
+#: a80061d0bb7a487fbf19b868d53dc2de paddlets.utils.backtest.backtest:17 of
+msgid ""
+"A function that takes two ``TSdataset`` instances as inputs and returns "
+"an error value."
+msgstr "指标计算公式"
+
+#: 9f127e26b39e4945a54a6cb56d307d76 paddlets.utils.backtest.backtest:19 of
+msgid "If set return_predicts=True, the predict results will return additionaly."
+msgstr "默认只返回score，如果设置为True，返回score和预测值"
+
+#: 24f49f614ee14d778633995cb6a72b0c paddlets.utils.backtest.backtest:21 of
+msgid ""
+"A function used to combine the individual error scores obtained when "
+"predict_window ！= stride. If explicitely set to `None`, the method will "
+"return a list of the individual error scores instead. Set to ``np.mean`` "
+"by default."
+msgstr "最终结果的统计方法，默认为np.mean"
+
+#: 7f6dd3033e8c41e5aa1f61e8a020a72b paddlets.utils.backtest.backtest:25 of
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志打印，默认开启"
+
+#: 6ee9d0f553054036913d1427ae9589f0 paddlets.utils.backtest.backtest of
+msgid "Returns"
+msgstr ""
+
+#: 8621ebb2d26047798ef68746e2c9aabe paddlets.utils.backtest.backtest:28 of
+msgid ""
+"Return score by default, If set return_predicts=True, the predict results"
+" will return additionaly."
+msgstr "默认只返回score，如果设置return_predicts为True，返回score和预测值"
+
+#: 54bce2af1aa14b2082b11a439ea8bf75 paddlets.utils.backtest.backtest of
+msgid "Return type"
+msgstr ""
+
+#: 26de3161f13d49eeab6ba2c1043ebf4d paddlets.utils.backtest.backtest of
+msgid "Raises"
+msgstr ""
+
+

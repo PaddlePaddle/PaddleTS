@@ -10,8 +10,8 @@ import time
 import unittest
 from unittest import TestCase
 
-from bts.transform.ordinal import Ordinal
-from bts.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.transform.sklearn_transforms import Ordinal
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 class TestOrdinal(TestCase):
     def setUp(self):
@@ -52,7 +52,7 @@ class TestOrdinal(TestCase):
         ob = Ordinal(**params)
         ob.fit(ts)
         result = ob.transform(ts, False)
-        known = result.get_known_cov().data
+        known = result.get_known_cov().data[['Type', 'Sex']]
         observed = result.get_observed_cov().data
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
         self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())
@@ -76,7 +76,7 @@ class TestOrdinal(TestCase):
         ob = Ordinal(**params)
         ob.fit(ts)
         result = ob.transform(ts, False)
-        known = result.get_known_cov().data
+        known = result.get_known_cov().data[['Type', 'Sex']]
         observed = result.get_observed_cov().data
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
         self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())

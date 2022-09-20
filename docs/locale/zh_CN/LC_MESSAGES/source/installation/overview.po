@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-25 17:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/installation/overview.rst:3 3cc1281334ef4b5dbffed1e8b36a9eed
+msgid "Installation"
+msgstr "安装"
+
+#: ../../source/installation/overview.rst:8 5561c5534f7646d5966191b27710f6d6
+msgid "Environment Requirements"
+msgstr "环境要求"
+
+#: ../../source/installation/overview.rst:9 072c2114b819426e9b5a20cdf66dceff
+msgid "Python: 3.7/3.8/3.9"
+msgstr ""
+
+#: ../../source/installation/overview.rst:11 5fc64f99feea48c282602dcf6270337f
+msgid "System: Windows/MacOS/Ubuntu/CentOS"
+msgstr ""
+
+#: ../../source/installation/overview.rst:15 7bd09a3a690f4f3d8530ebae4d7f5602
+msgid "Preparations"
+msgstr "准备工作"
+
+#: ../../source/installation/overview.rst:17 0ca998d2cf434bdd8edbbab062824ec6
+msgid "1）Install PaddlePaddle"
+msgstr "1）安装 paddlepaddle"
+
+#: ../../source/installation/overview.rst:19 4571b63bad06424ea7820237e43343aa
+msgid ""
+"The PaddleTS is built upon the `PaddlePaddle "
+"<https://www.paddlepaddle.org.cn/>`__ deep learning framework, thus it is"
+" recommended to install the PaddlePaddle first. To successfully run the "
+"PaddleTS, a PaddlePaddle version no earlier than v2.3 is required."
+msgstr ""
+"PaddleTS 提供的时序模型均基于 `PaddlePaddle <https://www.paddlepaddle.org.cn/>`__ "
+"开发。 建议在安装PaddleTS之前先安装PaddlePaddle 。注意PaddleTS最低要求paddlepaddle的版本大于2.3.0"
+
+#: ../../source/installation/overview.rst:23 d1f8d643fc9c4153a7cccf3caf57046b
+msgid "If you have ``PaddlePaddle`` installed already, please skip this step."
+msgstr "如果你已经安装了 ``PaddlePaddle`` ，请跳过此步骤"
+
+#: ../../source/installation/overview.rst:25 8b8194b53c8b4880a53c9e8d33458ad9
+msgid "Run below command to install PaddlePaddle via pip: ::"
+msgstr "运行下面的命令来用pip安装 PaddlePaddle"
+
+#: ../../source/installation/overview.rst:30 9ae7d82fc06e4ed6b49eb921f939768e
+msgid ""
+"You may also refer to the PaddlePaddle website for a detailed "
+"installation guide:"
+msgstr "你也可以通过前往PaddlePaddle官方网站获取更多安装指南："
+
+#: ../../source/installation/overview.rst:32 cae95ba22e5148acb014e7a356c15746
+msgid ""
+"`PaddlePaddle Install Guide "
+"<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/compile"
+"/linux-compile.html>`__"
+msgstr ""
+"`PaddlePaddle 安装指南 "
+"<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/compile"
+"/linux-compile.html>`__"
+
+#: ../../source/installation/overview.rst:34 d39dd81aa936426abfab8c9fe52b58a8
+msgid "2）Update protobuf (Only needed if paddle version < 2.3.1)"
+msgstr "2）更新protobuf版本（当paddlepaddle 版本< 2.3.1时需要）"
+
+#: ../../source/installation/overview.rst:36 48271edc200342858035e9b27f0fbb28
+msgid ""
+"The version of protobuf required is 3.19.x - 3.20.x. If your protobuf "
+"version is earlier than v3.19 or later than v3.20, you need to upgrade or"
+" downgrade it."
+msgstr "Protobuf的版本要求为 3.19.x - 3.20.x, 如果你的版本不符合则需要更新"
+
+#: ../../source/installation/overview.rst:39 41c342ac9171469195e6167968111337
+msgid "Check protobuf version ::"
+msgstr "检查protobuf版本"
+
+#: ../../source/installation/overview.rst:44 c901d01f58114e4a8a0335d09d35fd08
+msgid "Update protobuf ::"
+msgstr "更新protobuf"
+
+#: ../../source/installation/overview.rst:50 e7a8e29ab4b945b39c3205626f0516b7
+msgid "Install PaddleTS"
+msgstr "安装 paddlepaddle"
+
+#: ../../source/installation/overview.rst:51 7bae048c4a384459a348d26b3783334e
+msgid ""
+"It is strongly recommended that Mac M1 users use the python environment "
+"in conda to install paddlets. The original python of M1 may encounter "
+"problems during the installation process."
+msgstr "强烈建议Mac M1 用户用conda内的python环境装paddlets， 因为M1原装的python在安装过程中可能会遇到问题。"
+
+#: ../../source/installation/overview.rst:55 86d409589ab94d8382b4393f02da8dd1
+msgid "Install PaddleTS with pip"
+msgstr "用pip安装PaddleTS"
+
+#: ../../source/installation/overview.rst:62 13ad571d65e340d59eaa5aac92b279ea
+msgid "Install PaddleTS with docker"
+msgstr "用docker安装PaddleTS"
+
+#: ../../source/installation/overview.rst:63 1514aa4b64ac4eee90038c495dd23c58
+msgid ""
+"`Docker <https://docs.docker.com/engine/install/>`_ needs to be installed"
+" locally."
+msgstr "需要提前在本地安装 `Docker <https://docs.docker.com/engine/install/>`_ "
+
+#: ../../source/installation/overview.rst:66 a1934fe35f08407e8152425e2709f7b6
+msgid "1）Pull PaddleTS image"
+msgstr "1)远程拉取"
+
+#: ../../source/installation/overview.rst:73 151be6dbef334ae6bcd6dc264b44a754
+msgid "2）Start container"
+msgstr "2）启动容器"
+
+

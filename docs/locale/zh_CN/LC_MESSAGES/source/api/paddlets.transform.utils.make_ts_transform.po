@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:39+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.transform.utils.make_ts_transform.rst:2
+#: 1d1d01439b3847798a5d5ab228d7e8da
+msgid "paddlets.transform.utils.make_ts_transform"
+msgstr ""
+
+#: c2314fd5447f42b0928869d689962e0a of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:1
+msgid "Wrap the third-party or user-define transform into time series transform."
+msgstr "将第三方或者自定义的数据转换模块封装成时序数据转换模块"
+
+#: 61007c4f81cd4a699a4a0b5960117a7b of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform
+msgid "Parameters"
+msgstr ""
+
+#: 8e041963c6a14874ab40d5766ecb4e7d of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:3
+msgid "The transformer class from sklearn data transformation."
+msgstr "sklearn的数据转换模块类名称，如sklearn.preprocessing.OneHotEncoder"
+
+#: a95f1184eb7548d890a8d9f3fdecec30 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:4
+msgid "Column name or names to be transformed."
+msgstr "希望被转换的列名称，支持单列多或者多列"
+
+#: 1f4728149b7f48adb51ac98df0028267 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:6
+msgid "Whether each column of data is transformed independently, default False."
+msgstr "是否对每列数据进行独立的fit以及transform，默认为Fals"
+
+#: 68ba1212a0cd4da6b4ac138c28721e00 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:8
+msgid "Whether to delete the original column, default=False."
+msgstr "是否删除原始输入列，默认为False"
+
+#: 8160c72db9b44ad19eb1b4c1b3ca43e5 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:10
+msgid ""
+"The type of output columns, None values represent automatic inference "
+"based on input."
+msgstr "输出列的类型，支持用户手动指定；如果为None，将会基于input以及output进行自动推断"
+
+#: 219fae520de342d79d258af85b616ae6 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:12
+msgid ""
+"The name of output columns, None values represent automatic inference "
+"based on input."
+msgstr "输出列的名称，支持用户手动指定；如果为None，将会基于input以及output进行自动推断"
+
+#: 94d430f857294dcc803359b434c2ab3f of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:14
+msgid "Optional arguments passed to sklearn_transform_class."
+msgstr "传递给sklearn_transform_class的参数，用于类的初始化"
+
+#: 6f591cb401984da5ad799be87f0a217a of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform
+msgid "Returns"
+msgstr ""
+
+#: 8679145a325c45ea9fef359364f21532 of
+#: paddlets.transform.utils.make_ts_transform.make_ts_transform:16
+msgid "UdBaseTransform."
+msgstr ""
+

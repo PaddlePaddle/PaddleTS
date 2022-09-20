@@ -7,8 +7,8 @@ import numpy as np
 import unittest
 from unittest import TestCase
 
-from bts.transform.statistical import StatsTransform
-from bts.datasets.tsdataset import TimeSeries, TSDataset
+from paddlets.transform.statistical import StatsTransform
+from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 
 
 class TestStatsTransform(TestCase):

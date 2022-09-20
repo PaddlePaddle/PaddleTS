@@ -1,0 +1,90 @@
+# Translations template for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-07-11 17:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/metrics/overview.md:1 6c121c15898a486dbb7ba0863717b9d5
+msgid "PaddleTS metrics user guide"
+msgstr "PaddleTS metrics 用户指南"
+
+#: ../../source/modules/metrics/overview.md:3 1c4a5fc2897a4396bf26b3c6554b7e1a
+msgid "Metric introduction"
+msgstr "Metric 介绍"
+
+#: ../../source/modules/metrics/overview.md:5 35c175f71d0a481d9922edc939447366
+msgid ""
+"Metric is used for measuring the performance of a model, usually by "
+"calculating a certain distance between the the ground-truth data and the "
+"predicted results by a model."
+msgstr "评估指标(Metric)用来衡量一个模型的效果, 一般是通过计算模型的预测结果和真实结果之间的某种差距."
+
+#: ../../source/modules/metrics/overview.md:7 915d8c47a10048138b1ba252d074f459
+msgid ""
+"Similar to the loss function, different metrics are used to evaluate the "
+"model performance for different tasks. For example, MAE(Mean Absolute "
+"Error) and MSE(Mean squared error) are usually used for regression tasks."
+" This library has some built-in metrics which are widely used. It also "
+"supports customized metrics by allowing developers to implement new "
+"subclasses of base::Metric."
+msgstr ""
+"与损失函数类似, 不同的任务场景会选择不同的评估指标评估模型的效果, 例如 MAE(Mean Absolute Error) 和 MSE(Mean"
+" squared error) 常用于回归任务. PaddleTS库内置了常用的评估指标, 同时也支持开发者自定义评估指标."
+
+#: ../../source/modules/metrics/overview.md:9
+#: ../../source/modules/metrics/overview.md:31 3ef7729a0ae046d49e91372a6a863d74
+#: 845ae82bf4394dbe8d3421af39ff8833
+msgid "Code example"
+msgstr "代码示例"
+
+#: ../../source/modules/metrics/overview.md:10 cdc44785fe1941ef830832643642cdc0
+msgid ""
+"Take MSE as an example. Given a predicted TSDataset and a corresponding "
+"ground-truth TSDataset, it measures the MSE between these two TSDatasets "
+"as below."
+msgstr "以MSE为例. 已知模型预测数据的TSDataset和相对应的真实数据TSDataset, 使用方式如下所示:"
+
+#: ../../source/modules/metrics/overview.md:23 9c54f036744f4382bb172538172e891e
+msgid "Customize Metric"
+msgstr "自定义评估指标Metric"
+
+#: ../../source/modules/metrics/overview.md:25 1466bd7b534e48c4a59f0c1d1c309765
+msgid "To implement a customized metric, it simply takes the following steps:"
+msgstr "实现自定义评估指标只需以下几个步骤:"
+
+#: ../../source/modules/metrics/overview.md:26 d99009fec60d4f81afc34473ddf96613
+msgid "Create a class that inherits from paddlets.metric.base.Metric."
+msgstr "创建一个继承自paddlets.metric.base.Metric的类."
+
+#: ../../source/modules/metrics/overview.md:27 0a0aec34c66942b29f02ded60e1ef7ff
+msgid ""
+"Set two class members, _NAME(metric name) and _MAXIMIZE(optimization "
+"direction)."
+msgstr "设置 _NAME(metric名称)和_MAXIMIZE(优化方向)两个类成员."
+
+#: ../../source/modules/metrics/overview.md:28 3f466c4897054f4bb43e386e34c05ca5
+msgid "Initialize the required parameter in __init__."
+msgstr "在类的构造函数中初始化必须的参数."
+
+#: ../../source/modules/metrics/overview.md:29 6b3d3f29b4494681a91bbc1dad462e54
+msgid "Implement the metric_fn method according to computation logic."
+msgstr "根据指标具体的计算逻辑实现metric_fn方法."
+
+#: ../../source/modules/metrics/overview.md:32 b2b5329a5d014159a5353a9493b4b044
+msgid ""
+"Again, take MSE as an example. The details of implementation are shown by"
+" the following code snipper."
+msgstr "以MSE为例, 实现细节如下所示:"
+

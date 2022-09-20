@@ -29,7 +29,6 @@ A TSDataset object includes one or more TimeSeries objects, representing targets
 known covariates (known_cov), observed covariates (observed_cov), and static covariates (static_cov), respectively.
 
 """
-
 from copy import deepcopy
 import math
 import pickle
@@ -80,6 +79,7 @@ class TimeSeries(object):
         time_col: Optional[str] = None,
         value_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
+        drop_tail_nan: bool = False
     ) -> "TimeSeries":
         """
         Construct a TimeSeries object from the specified columns of a DataFrame
@@ -91,6 +91,8 @@ class TimeSeries(object):
             value_cols(list|str|None): The name of column or the list of columns from which to extract the time series data.
                 If set to `None`, all columns except for the time column will be used as value columns.    
             freq(str|int|None): A string or int representing the Pandas DateTimeIndex's frequency or RangeIndex's step size
+            drop_tail_nan(bool): Drop time series tail nan value or not, if True, drop all `Nan` value after the last `non-Nan` element in the current time series.
+                eg: [nan, 3, 2, nan, nan] -> [nan, 3, 2], [3, 2, nan, nan] -> [3, 2], [nan, nan, nan] -> []
 
         Returns:
             TimeSeries object
@@ -165,7 +167,10 @@ class TimeSeries(object):
             series_data = series_data.to_frame()
         series_data.set_index(time_index, inplace=True)
         series_data.sort_index(inplace=True)
-        return TimeSeries(series_data, freq)
+        ts = TimeSeries(series_data, freq)
+        if drop_tail_nan:
+            ts.drop_tail_nan()
+        return ts
     
     @property
     def time_index(self):
@@ -414,7 +419,7 @@ class TimeSeries(object):
         raise_log(ValueError(f"Invalid type of `key`: {type(key)}, currently only `pd.DatetimeIndex`, `pd.RangeIndex`, and `slice` are supported"))
         
     @classmethod
-    def concat(cls, tss: List["TimeSeries"], axis: int = 0) -> "TimeSeries":
+    def concat(cls, tss: List["TimeSeries"], axis: int = 0, drop_duplicates: bool = True, keep: str = 'first') -> "TimeSeries":
         """
         Concatenate a list of TimeSeries objects along the specified axis
 
@@ -424,6 +429,8 @@ class TimeSeries(object):
                 When axis=1, time_col is required to be non-repetitive; 
                 when axis=0, all columns are required to be non-repetitive
             axis(int): The axis along which to concatenate the TimeSeries objects
+            drop_duplicates(bool): Drop duplicate indices.
+            keep(str): keep 'first' or 'last' when drop duplicates.
 
         Returns:
             TimeSeries
@@ -436,19 +443,35 @@ class TimeSeries(object):
             len(set(i.freq for i in tss)) == 1,
             f"Failed to concatenate, the freqs of TimeSeries objects are not consistent ." 
         )
+        raise_if_not(
+            keep in ["first", "last"], "keep should set to 'first' or 'last'")
+        
         if axis == 0:
             data = pd.concat([ts.data for ts in tss], axis=axis)
-            raise_if(
-                data.index.duplicated().any(),
-                "Failed to concatenate, duplicated values found in the time column."
-            )
+            if drop_duplicates:
+                data = data[~data.index.duplicated(keep=keep)]
+                if isinstance(tss[0].data.index, pd.RangeIndex):
+                    #Range index concat完会变成Int64index， 需要转换回Range index
+                    data = data.set_index(pd.RangeIndex(data.index.values[0], data.index.values[-1] + tss[0].freq, tss[0].freq))
+            else:
+                raise_if(
+                    data.index.duplicated().any(),
+                    "Failed to concatenate, duplicated values found in the time column.\
+                    You can set drop_duplicates = True to drop Duplicate values.\
+                    And you can set keep = 'first' or 'last' to choose which value to preserve."
+                )
             return TimeSeries(data, tss[0].freq)
         elif axis == 1:
             data = pd.concat([ts.data for ts in tss], axis=axis)
-            raise_if(
-                data.columns.duplicated().any(),
-                "Failed to concatenate, duplicated column names found."
-            )
+            if drop_duplicates:
+                data = data.loc[:,~data.columns.duplicated(keep=keep)]
+            else:
+                raise_if(
+                    data.columns.duplicated().any(),
+                    "Failed to concatenate, duplicated column names found.\
+                    You can set drop_duplicates = True to drop Duplicate columns.\
+                    And you can set keep = 'first' or 'last' to choose which value to preserve."
+                )
             return TimeSeries(data, tss[0].freq)
         else:
             raise_log(
@@ -484,6 +507,31 @@ class TimeSeries(object):
 
         """
         self._data = self._data.sort_index(axis=1, ascending=ascending)
+        return self
+    
+    def _find_end_index(self) -> int:
+        """
+        Identify end indices in series which is not Nan.
+
+        Return:
+            The end index which is not Nan        
+
+        """
+        isna_fun = lambda x: pd.isnull(x).all()
+        for i in range(len(self.data) - 1, -1, -1):
+            if not isna_fun(self.data.iloc[i]):
+                break
+            if i == 0:
+                return -1
+        return i
+    
+    def drop_tail_nan(self):
+        """
+        Drop trailing consecutive Nan values
+        """
+        end_index = self._find_end_index()
+        self.reindex(self.time_index[:end_index + 1])
+
 
 class TSDataset(object):
     """
@@ -519,7 +567,7 @@ class TSDataset(object):
         known_cov(TimeSeries|None): Known covariates
         static_cov(dict|None): Static covariates
         fill_missing_dates(bool): Fill missing dates or not
-        fillna_method(str): Method of filling missing values. Totally 8 methods are supported currently:
+        fillna_method(str): Method of filling missing values. Totally 7 methods are supported currently:
             max: Use the max value in the sliding window
             min: Use the min value in the sliding window
             avg: Use the mean value in the sliding window
@@ -637,6 +685,7 @@ class TSDataset(object):
         fill_missing_dates: bool = False,
         fillna_method: str = "pre",
         fillna_window_size: int = 10,
+        drop_tail_nan: bool = False,
         **kwargs
     ) -> "TSDataset":
         """
@@ -651,7 +700,7 @@ class TSDataset(object):
             static_cov_cols(list|str|None): The names of columns for static covariates
             freq(str|int|None): A str or int representing the DateTimeIndex's frequency or RangeIndex's step size
             fill_missing_dates(bool): Fill missing dates or not
-            fillna_method(str): Method of filling missing values. Totally 8 methods are supported currently:
+            fillna_method(str): Method of filling missing values. Totally 7 methods are supported currently:
                 max: Use the max value in the sliding window
                 min: Use the min value in the sliding window
                 avg: Use the mean value in the sliding window
@@ -660,6 +709,7 @@ class TSDataset(object):
                 back: Use the next value
                 zero:  Use 0 
             fillna_window_size(int): Size of the sliding window
+            drop_tail_nan(bool): Drop time series tail nan value or not
             kwargs: Optional arguments passed to `pandas.read_csv`
 
         Returns:
@@ -677,6 +727,7 @@ class TSDataset(object):
             fill_missing_dates=fill_missing_dates,
             fillna_method=fillna_method,
             fillna_window_size=fillna_window_size,
+            drop_tail_nan=drop_tail_nan,
         )
 
     @classmethod
@@ -692,6 +743,7 @@ class TSDataset(object):
         fill_missing_dates: bool = False,
         fillna_method: str = "pre",
         fillna_window_size: int = 10,
+        drop_tail_nan: bool = False,
     ) -> "TSDataset":
         """
         Construct a TSDataset object from a DataFrame
@@ -713,6 +765,7 @@ class TSDataset(object):
                 back: Use the next value
                 zero:  Use 0s
             fillna_window_size(int): Size of the sliding window
+            drop_tail_nan(bool): Drop time series tail nan value or not
             
         Returns:
             TSDataset object
@@ -733,6 +786,8 @@ class TSDataset(object):
                 [a for a in df.columns if a != time_col],
                 freq,
             )
+            if drop_tail_nan:
+                target.drop_tail_nan()
         else:
             if target_cols:
                 target = TimeSeries.load_from_dataframe(
@@ -741,6 +796,8 @@ class TSDataset(object):
                     target_cols,
                     freq,
                 )
+                if drop_tail_nan:
+                    target.drop_tail_nan()
             if observed_cov_cols:
                 observed_cov = TimeSeries.load_from_dataframe(
                     df, 
@@ -748,6 +805,8 @@ class TSDataset(object):
                     observed_cov_cols,
                     freq,
                 )
+                if drop_tail_nan:
+                    observed_cov.drop_tail_nan()
             if known_cov_cols:            
                 known_cov = TimeSeries.load_from_dataframe(
                     df, 
@@ -755,6 +814,8 @@ class TSDataset(object):
                     known_cov_cols,
                     freq,
                 )
+                if drop_tail_nan:
+                    known_cov.drop_tail_nan()
             if static_cov_cols:
                 if isinstance(static_cov_cols, str):
                     static_cov_cols = [static_cov_cols]
@@ -1054,11 +1115,15 @@ class TSDataset(object):
         )
         train_target, test_target = self._target.split(split_point, after)
         time_point_split = train_target.end_time
-        train_post_cov, test_post_cov = self._observed_cov.split(time_point_split, after) \
+        if isinstance(time_point_split, int):
+            time_point_split = (time_point_split - train_target.start_time) // train_target.freq + 1
+        train_observed_cov, test_observed_cov = self._observed_cov.split(time_point_split, after) \
             if self._observed_cov else (None, None)
+        _, test_known_cov = self._known_cov.split(time_point_split, after) \
+            if self._known_cov else (None, None)
         return (
-            TSDataset(train_target, train_post_cov, self._known_cov, self._static_cov),
-            TSDataset(test_target, test_post_cov, self._known_cov, self._static_cov)
+            TSDataset(train_target, train_observed_cov, self._known_cov, self._static_cov),
+            TSDataset(test_target, test_observed_cov, test_known_cov, self._static_cov)
         )
 
     def get_item_from_column(self, column: Union[str, int]) -> Union["TimeSeries", dict]:
@@ -1229,7 +1294,7 @@ class TSDataset(object):
                     self._static_cov = {column: value}
             else:
                 raise_log(
-                    ValueError("Illegal type")
+                    ValueError(f"Illegal type: {type}")
                 )
             self._check_data()
             return
@@ -1334,6 +1399,9 @@ class TSDataset(object):
              columns:Union[List[str], str] = None, 
              add_data:Union[List["TSDataset"], "TSDataset"] = None,
              labels:Union[List[str], str] = None,
+             low_quantile:float = 0.05,
+             high_quantile:float = 0.95,
+             central_quantile:float = 0.5,
              **kwargs) -> "pyplot":
         """
         plot function, a wrapper for Dataframe.plot()
@@ -1343,6 +1411,14 @@ class TSDataset(object):
                 When columns is None, the targets will be plot by default.
             add_data(List|TSDataset): Add data for joint plotprinting, the default is None
             labels(str|List): Custom labels, length should be equal to nums of added datasets.
+            central_quantile(float):The quantile (between 0 and 1) to plot as a "central" value, For instance, setting `central_quantile=0.5` will plot the
+                median of each component.  (only used when dataset is probability forecasting output )
+            low_quantile(float): The quantile to use for the lower bound of the plotted confidence interval. Similar to `central_quantile`,
+                this is applied to each component separately (i.e., displaying marginal distributions). No confidence
+                interval is shown if `confidence_low_quantile` is None (default 0.05). (only used when dataset is probability forecasting output )
+            high_quantile(float):The quantile to use for the upper bound of the plotted confidence interval. Similar to `central_quantile`,
+                this is applied to each component separately (i.e., displaying marginal distributions). No confidence
+                interval is shown if `high_quantile` is None (default 0.95). (only used when dataset is probability forecasting output )
             **kwargs: Optional arguments passed to `Dataframe.plot` function
 
         Returns:
@@ -1352,8 +1428,13 @@ class TSDataset(object):
             ValueError
 
         """
+
+        quantile_cols = self._get_quantile_cols_origin_names()
         if not columns:
-            columns = self._target.columns
+            if len(quantile_cols) == 0:
+                columns = self._target.columns.values.tolist()
+            else:
+                columns = quantile_cols
         if isinstance(columns, str):
             columns = [columns]
 
@@ -1376,28 +1457,68 @@ class TSDataset(object):
         if "figsize" not in kwargs:
             kwargs["figsize"] = figsize
 
-        #plot self data
-        raise_if_not(set(columns) <= set(self.columns.keys()),
-            f"Columns {set(columns) - set(self.columns.keys())} do not exist in origin datasets!")
-        df = self.__getitem__(columns)
-        plot = df.plot(**kwargs)
+        if len(quantile_cols) == 0:
+            all_cols = self.columns.keys()
+        else:
+            all_cols = quantile_cols
+            if self.known_cov:
+                all_cols = all_cols + self.known_cov.columns.values.tolist()
+            if self.observed_cov:
+                all_cols = all_cols + self.observed_cov.columns.values.tolist()
+        # plot self data
+        raise_if_not(set(columns) <= set(all_cols),
+                     f"Columns {set(columns) - set(all_cols)} do not exist in origin datasets!")
 
+        label = []
+        for column in columns:
+            # quantile plot
+            if column in quantile_cols:
+                central_quantile_str = "@quantile" + str(int(central_quantile * 100))
+                df = self.__getitem__(column + central_quantile_str)
+                plot = df.plot(**kwargs, label = column)
+                self._fill_between_quantiles(column, low_quantile, high_quantile, **kwargs)
+            # normal plot
+            else:
+                df = self.__getitem__(column)
+                plot = df.plot(**kwargs, label = column)
+        plot.legend()
         #plot added data
+
         if add_data:
             if isinstance(add_data, TSDataset):
                 add_data = [add_data]
             col_len = len(columns)
             for ts in add_data:
-                raise_if_not(set(columns) <= set(ts.columns.keys()),
-                            f"Columns {set(columns) - set(ts.columns.keys())} do not exist in added datasets!")
+                ts_quantile_cols = ts._get_quantile_cols_origin_names()
+
+                if len(ts_quantile_cols) == 0:
+                    all_cols = ts.columns.keys()
+                else:
+                    all_cols = ts_quantile_cols
+                    if ts.known_cov:
+                        all_cols = all_cols + ts.known_cov.columns.values.tolist()
+                    if ts.observed_cov:
+                        all_cols = all_cols + ts.observed_cov.columns.values.tolist()
+
+                raise_if_not(set(columns) <= set(all_cols),
+                             f"Columns {set(columns) - set(all_cols)} do not exist in added datasets!")
 
                 if ts.freq != self.freq:
                     logger.warning("Add datas have different frequency with origin data!")
-                df = ts[columns]
-                df.plot(ax=plot, **kwargs)
 
-            #change labels 
+                for column in columns:
+                    if column in ts_quantile_cols:
+                        central_quantile_str = "@quantile" + str(int(central_quantile * 100))
+                        df = ts.__getitem__(column + central_quantile_str)
+                        plot = df.plot(**kwargs)
+                        ts._fill_between_quantiles(column, low_quantile, high_quantile, **kwargs)
+                    else:
+                        df = ts.__getitem__(column)
+                        plot = df.plot(**kwargs)
+
+            # change labels
             _, origin_labels = plot.get_legend_handles_labels()
+            origin_labels = [origin_labels[i].split("@quantile50")[0] for i in range(len(origin_labels))]
             if labels:
                 if isinstance(labels, str):
                     labels = [labels]
@@ -1419,6 +1540,62 @@ class TSDataset(object):
             plot.legend(labels)
             
         return plot
+
+    def _fill_between_quantiles(self,
+                                column: str = None,
+                                low_quantile: float = 0.05,
+                                high_quantile: float = 0.95,
+                                **kwargs):
+        """
+        Fill color between quantiles
+
+        Args:   
+            columns(str|List): The names of columns to be plot. 
+                When columns is None, the targets will be plot by default.
+            low_quantile(float): The quantile to use for the lower bound of the plotted confidence interval. No confidence
+                interval is shown if `confidence_low_quantile` is None (default 0.05). (only used when dataset is probability forecasting output )
+            high_quantile(float):The quantile to use for the upper bound of the plotted confidence interval. No confidence
+                interval is shown if `high_quantile` is None (default 0.95). (only used when dataset is probability forecasting output )
+
+        Return:
+            None      
+
+        """
+        alpha = 0.25
+        raise_if_not("@quantile" in self._target.columns[0], "This dataset do not have quantile info!")
+        raise_if(low_quantile < 0 or low_quantile > 1, "Low quantile value should between 0 and 1!")
+        raise_if(high_quantile < 0 or high_quantile > 1, "High quantile value should between 0 and 1!")
+        raise_if(high_quantile < low_quantile, "Low quantile value should smaller than high quantile!")
+        low_quantile_str = "@quantile" + str(int(low_quantile * 100))
+        high_quantile_str = "@quantile" + str(int(high_quantile * 100))
+
+        plt.fill_between(self.target.data.index,
+                         self[column + low_quantile_str].values,
+                         self[column + high_quantile_str].values,
+                         alpha=(
+                             alpha
+                             if "alpha" not in kwargs
+                             else kwargs["alpha"]
+                         ),
+                         label =str(int(low_quantile * 100)) + "%-" + str(int(high_quantile * 100)) + "% probability interval"
+                         )
+
+    def _get_quantile_cols_origin_names(self) -> List[str]:
+        """
+        Get quantile cols origin names
+
+        Return:
+            List[str]
+
+        """
+        origin_columns = []
+        for name in self.target.columns:
+            tmp = name.split("@quantile")
+            if tmp[0] not in origin_columns and len(tmp) > 1:
+                origin_columns.append(tmp[0])
+
+        return origin_columns
+        
 
     def copy(self) -> "TSDataset":
         """
@@ -1481,11 +1658,11 @@ class TSDataset(object):
     
     @property
     def freq(self):
-        """the _freq"""
+        """Frequency of TSDataset"""
         return self._freq
 
     @classmethod
-    def concat(cls, tss: List["TSDataset"], axis: int = 0) -> "TSDataset":
+    def concat(cls, tss: List["TSDataset"], axis: int = 0, drop_duplicates = True, keep = 'first') -> "TSDataset":
         """
         Concatenate a list of TSDataset objects along the specified axis
 
@@ -1495,6 +1672,8 @@ class TSDataset(object):
                 When axis=1, time_col is required to be non-repetitive; 
                 when axis=0, all columns are required to be non-repetitive
             axis(int): The axis along which to concatenate the TimeSeries objects
+            drop_duplicates(bool): Drop duplicate indices.
+            keep(str): keep 'first' or 'last' when drop duplicates.
 
         Returns:
             TSDataset
@@ -1504,11 +1683,11 @@ class TSDataset(object):
 
         """
         targets = [ts.get_target() for ts in tss if ts.get_target() is not None]
-        target = TimeSeries.concat(targets, axis) if len(targets) != 0 else None
+        target = TimeSeries.concat(targets, axis, drop_duplicates=drop_duplicates, keep=keep) if len(targets) != 0 else None
         known_covs = [ts.get_known_cov() for ts in tss if ts.get_known_cov() is not None]
-        known_cov = TimeSeries.concat(known_covs, axis) if len(known_covs) != 0 else None
+        known_cov = TimeSeries.concat(known_covs, axis, drop_duplicates=drop_duplicates, keep=keep) if len(known_covs) != 0 else None
         observed_covs = [ts.get_observed_cov() for ts in tss if ts.get_observed_cov() is not None]
-        observed_cov = TimeSeries.concat(observed_covs, axis) if len(observed_covs) != 0 else None
+        observed_cov = TimeSeries.concat(observed_covs, axis, drop_duplicates=drop_duplicates, keep=keep) if len(observed_covs) != 0 else None
         static_cov = {}
         for ts in tss:
             if ts.get_static_cov() is not None:
@@ -1596,3 +1775,4 @@ class TSDataset(object):
             self._known_cov.sort_columns(ascending)
         if self._observed_cov is not None:
             self._observed_cov.sort_columns(ascending)
+        return self

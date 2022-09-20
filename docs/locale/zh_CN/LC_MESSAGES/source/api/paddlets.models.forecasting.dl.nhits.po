@@ -1,0 +1,189 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 17:59+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.nhits.rst:2
+#: 8b2a2c93d7514d738a1eef9759508435
+msgid "paddlets.models.forecasting.dl.nhits"
+msgstr ""
+
+#: ed5b5aa1d6f34ca0816187126c831924 of paddlets.models.forecasting.dl.nhits:1
+msgid ""
+"This implementation is based on the article `N-HiTS: Neural Hierarchical "
+"Interpolation for Time Series Forecasting "
+"<https://arxiv.org/abs/2201.12886>`_ ."
+msgstr ""
+"基于论文 `N-HiTS: Neural Hierarchical Interpolation for Time Series "
+"Forecasting <https://arxiv.org/abs/2201.12886>`_ 实现。"
+
+#: 82424c9bc5df40b0832777ff342baf21 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 2ee2b1564c164d2e90705379f6468553 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:1
+msgid "Implementation of NHiTS model"
+msgstr "NHiTS模型实现"
+
+#: 27a9301f1f764bfa93e6b35b50531a7c of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel
+msgid "Parameters"
+msgstr ""
+
+#: cc86140b58af4211b97568731196bfc5 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:3
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 3ea4a961c5794e638aa5d750a5f0e7df of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: 6b0cb74096124ac3a29a683e37543973 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:7
+msgid "The number of stacks that make up the whole model."
+msgstr "Stack数量。"
+
+#: b925c1a921214f7686bc870da9c58056 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:8
+msgid "The number of blocks making up every stack."
+msgstr "构成每个stack的block数量。"
+
+#: 430d5916cc594ee7918886ca7c1da523 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:9
+msgid ""
+"The number of fully connected layers preceding the final forking layers "
+"in each block of every stack."
+msgstr "每个block中分叉结构前的全连接层数量。"
+
+#: 33bd1c9df8424063afb3c776b166e7dd of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:10
+msgid ""
+"Determines the number of neurons that make up each fully connected layer "
+"in each block of every stack. If a list is passed, it must have a length "
+"equal to `num_stacks` and every entry in that list corresponds to the "
+"layer width of the corresponding stack. If an integer is passed, every "
+"stack will have blocks with FC layers of the same width."
+msgstr "每个block中全连接层的神经元数量，如果传入list，则list长度必须等于num_stacks，且list中每个元素对应于当前层的神经元数量。如果传入整数，则每个stack中的block中具有相同的神经元数量。"
+
+#: b6de6627eb014ded88eda7b134d9ce6a of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:11
+msgid "The kernel size for the initial pooling layer."
+msgstr "初始池化层的内核大小。"
+
+#: ba553463fe624f79ae2a685d888dc516 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:13
+msgid ""
+"The factor by which to downsample time at the output (before "
+"interpolating)."
+msgstr "为每个堆栈中的每个块指定插值前的下采样因子。"
+
+#: f4f42ccf5f3c4206b65a017e801d846e of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:15
+msgid "Whether to use batch normalization."
+msgstr "是否做批量标准化。"
+
+#: a3de492c67df47f5a182476a9202bde4 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:17
+msgid "Dropout probability."
+msgstr "神经元节点的随机丢弃概率。"
+
+#: d89f9a5ce40f4c9cbfcfad78f8c3c3d7 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:19
+msgid "The activation function of encoder/decoder intermediate layer."
+msgstr "编码器/解码器中间层的激活函数。"
+
+#: 9e5a67af8f024d24a2c15ca7364e2e43 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:21
+msgid "Whether to use MaxPool1d pooling, False uses AvgPool1d."
+msgstr "是否使用MaxPool1d池化，等于False则使用AvgPool1d。"
+
+#: 9f63fa037cb44f3083c48622593a3afa of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:23
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量，输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 26b17cb855004e6ca420b7e34b53eb69 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:25
+msgid "sampling intervals between two adjacent samples."
+msgstr "相邻两个样本的采样间隔。"
+
+#: 47f293fb97a94f3bb4f53e9d449e8cf4 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:27
+msgid "loss function."
+msgstr "损失函数。"
+
+#: ad12b03a744b46219ec477f6cd7c11b2 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:29
+msgid "optimizer algorithm."
+msgstr "优化器算法。"
+
+#: a4b3d4e6c33e47818eec4de168f176d8 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:31
+msgid "optimizer parameters."
+msgstr "优化器参数。"
+
+#: 3978f94b1f9943d1852eb4d07956309f of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:33
+msgid "evaluation metrics of model."
+msgstr "模型评估指标。"
+
+#: 95155bb07ca94980b483c0bc228a65ae of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:35
+msgid "customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: 92b83675d26242ba93f5460c58a8574a of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:37
+msgid "number of samples per batch."
+msgstr "每个batch中的样本数量。"
+
+#: 89971536e2de46978add36fc1137cd10 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:39
+msgid "max epochs during training."
+msgstr "训练过程中最大迭代轮数。"
+
+#: e5ef6388926e4c3fbefbc3f43b4208db of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:41
+msgid "verbosity mode."
+msgstr "模型日志模式。"
+
+#: 8e45c4c723114edfab876cfef6ff8b77 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:43
+msgid ""
+"number of epochs with no improvement after which learning rate wil be "
+"reduced."
+msgstr "训练过程中学习率降低所需的效果不再提升的轮数。"
+
+#: 1ad9a4d61913489a83b62c1f08bb20f5 of
+#: paddlets.models.forecasting.dl.nhits.NHiTSModel:45
+msgid "global random seed."
+msgstr ""
+

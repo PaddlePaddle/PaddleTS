@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddleTS
+# This file is distributed under the same license as the PaddleTS package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PaddleTS \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.utils.utils.rst:2 32d64f13155b4e888316bb72a23f66e0
+msgid "paddlets.utils.utils"
+msgstr ""
+
+#: b3232a11fc5b49c4829d371c84def6ad of
+#: paddlets.utils.utils.check_model_fitted:1
+msgid "check if model has fitted, Raise Exception if not fitted"
+msgstr "检查模型是否已拟合，如果未拟合则抛出异常"
+
+#: 14cbc077be58433c9cfc64c62cc3dedb 3334fc3e8da44aa9b91120b23cf71874
+#: 4de70e1ab9cd4b2292467e9241958426 bbff55a99f6649b6bf2449e0f419482a
+#: df39df248e8941049fe7cc0ba3180505 of paddlets.utils.utils.check_model_fitted
+#: paddlets.utils.utils.check_train_valid_continuity
+#: paddlets.utils.utils.get_tsdataset_max_len paddlets.utils.utils.get_uuid
+#: paddlets.utils.utils.split_dataset
+msgid "Parameters"
+msgstr ""
+
+#: a9b91fe90fac4985a8957d12d7d4d1d8 of
+#: paddlets.utils.utils.check_model_fitted:3
+msgid "model instance."
+msgstr "模型实例"
+
+#: ae8c49c21cf240239f0fa1d12bbcd1ec of
+#: paddlets.utils.utils.check_model_fitted:5
+#, python-format
+msgid ""
+"str, default=None The default error message is, \"This %(name)s instance "
+"is not fitted yet. Call 'fit' with appropriate arguments before using "
+"this estimator.\" For custom messages if \"%(name)s\" is present in the "
+"message string, it is substituted for the estimator name. Eg. : "
+"\"Estimator, %(name)s, must be fitted before sparsifying\"."
+msgstr "报错消息，不设置即为默认值"
+
+#: 0342f47f2466478381ad7064d64f919f 4aea580017f04bfaac4b902f07c94da4
+#: 85496fd943054b52bf5fb57f6c687620 c138d9bff79247ce8a553ecadcdbb993
+#: d868a25b21b44b9fae13d00dbd699d9b of paddlets.utils.utils.check_model_fitted
+#: paddlets.utils.utils.check_train_valid_continuity
+#: paddlets.utils.utils.get_tsdataset_max_len paddlets.utils.utils.get_uuid
+#: paddlets.utils.utils.split_dataset
+msgid "Returns"
+msgstr ""
+
+#: 0de9719240304e4aa9377395b7961a2a of
+#: paddlets.utils.utils.check_model_fitted:14
+msgid "None"
+msgstr ""
+
+#: 34fbcf3932854fd0aa6b9a4711b99c43 of paddlets.utils.utils.check_model_fitted
+msgid "Raises"
+msgstr ""
+
+#: 7b671a5e9f8c402ebfbf06cef417f803 of paddlets.utils.utils.get_uuid:1
+msgid "Get a random string of 16 characters."
+msgstr "获取一个16个字符的随机字符串。"
+
+#: d8231b97e74a4597a85f0dc5b60d4d7a of paddlets.utils.utils.get_uuid:3
+msgid "The prefix of the returned string."
+msgstr "返回字符串的前缀。"
+
+#: f78e7ffb4a7a4d81a585ce0546da3333 of paddlets.utils.utils.get_uuid:5
+msgid "The suffix of the returned string."
+msgstr "返回字符串的后缀。"
+
+#: 603f6fd5368148abbc767d89663cdadf of paddlets.utils.utils.get_uuid:8
+msgid "String of 16 characters."
+msgstr "16个字符的字符串。"
+
+#: 397395ec989941a0a353a0a037c8544c ae3f9abf0c234e138144c9de5e7a2b6d of
+#: paddlets.utils.utils.check_train_valid_continuity
+#: paddlets.utils.utils.get_uuid
+msgid "Return type"
+msgstr ""
+
+#: 8d154e227d2c41cea24db885f885cdcf of
+#: paddlets.utils.utils.check_train_valid_continuity:1
+msgid "Check if train and test TSDataset are continous"
+msgstr "查看训练集和测试集是否是时间上连续的"
+
+#: 1680c3ed3e964b279e22606786cc1728 of
+#: paddlets.utils.utils.check_train_valid_continuity:3
+msgid "Train dataset."
+msgstr "训练集"
+
+#: f6cef24bd0214ccfb0393d3201a3edc1 of
+#: paddlets.utils.utils.check_train_valid_continuity:5
+msgid "Test dataset."
+msgstr "测试集"
+
+#: bfe3d26791a64254a0a573d047a6cd66 of
+#: paddlets.utils.utils.check_train_valid_continuity:8
+msgid "if train and test TSDataset are continous"
+msgstr "训练集和测试集是否连续"
+
+#: 4c72f53486764d8a80ac5378d52a3747 of paddlets.utils.utils.split_dataset:1
+msgid "Split dataset (accroding to the max length)"
+msgstr "根据最大长度切割TSDataset"
+
+#: 97e4c247305d4b1e85a88d5c2ab4f3ed of paddlets.utils.utils.split_dataset:3
+msgid "dataset to be splited."
+msgstr "需要分割的TSDataset"
+
+#: 3e2f26b820014db69870e21d080ed83d of paddlets.utils.utils.split_dataset:5
+msgid "split point."
+msgstr ""
+
+#: 96f77b03a69c48eba753e9f1f4528c95 of paddlets.utils.utils.split_dataset:8
+msgid "TSDataset"
+msgstr ""
+
+#: c09fb09105c84cdd83ffae21ef1aed13 of
+#: paddlets.utils.utils.get_tsdataset_max_len:1
+msgid "Get dataset max length"
+msgstr "获得TSDataset的最大长度"
+
+#: f0855b9cfba24545a919726c965cd6c9 of
+#: paddlets.utils.utils.get_tsdataset_max_len:3
+msgid "dataset use to get length."
+msgstr "需要用到的TSDataset"
+
+#: daa85915a7534aecb5b8ed1174ff9963 of
+#: paddlets.utils.utils.get_tsdataset_max_len:6
+msgid "int"
+msgstr ""
+
