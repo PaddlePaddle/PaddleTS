@@ -135,7 +135,6 @@ msgstr ""
 
 #: cfd0650838cd42ddbda4b6dc849c3b75 of
 #: paddlets.pipeline.pipeline.Pipeline.transform:8
-#, fuzzy
 msgid "previous transform results cache"
 msgstr "处理完成的数据集。"
 
