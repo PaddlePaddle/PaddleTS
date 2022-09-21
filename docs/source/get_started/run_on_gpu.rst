@@ -42,7 +42,7 @@ You may run `nvidia-smi` command to retrieve a list of the GPU devices containin
 Below is a sample output. Briefly, it indicates the following:
 
 - There are 4 Nvidia A30 GPU devices available.
-- Each device has 22919MiB free memory to use.
+- Each device has 24258MiB free memory to use.
 - Currently no running process occupying any devices.
 
 .. code-block:: shell
