@@ -147,13 +147,11 @@ msgstr "返回类型"
 
 #: 39938640296d4f5e88480f7ac116da9d of
 #: paddlets.transform.base.BaseTransform.transform_n_rows:1
-#, fuzzy
 msgid "Apply the fitted transformer on the part of the dataset"
 msgstr "将训练完成的transformer应用于给定数据集。"
 
 #: c743ddaed244446fb39fbff6b24a3279 of
 #: paddlets.transform.base.BaseTransform.transform_n_rows:6
-#, fuzzy
 msgid "n_rows to be transformed."
 msgstr "待转换的输入数据。"
 
@@ -233,46 +231,44 @@ msgstr ""
 #: 2efe6356afa24655902759035a0e8e4e of
 #: paddlets.transform.base.UdBaseTransform:1
 msgid "User define base transform."
-msgstr ""
+msgstr "用户自定义数据转换模块"
 
 #: 1f51a5f504ee41d8904b07d7ca07c5f1 of
 #: paddlets.transform.base.UdBaseTransform:3
 msgid "User define or third-party transformer object."
-msgstr ""
+msgstr "用户自定义或第三方数据转换模块对象"
 
 #: ac65da2999ba46b0bba5a26f64f74a51 of
 #: paddlets.transform.base.UdBaseTransform:5
-#, fuzzy
 msgid "Column name or names to be transformed."
 msgstr "待转换的输入数据。"
 
 #: 9647a23c5b1d409a91a3f8f5ad2db1a7 of
 #: paddlets.transform.base.UdBaseTransform:7
 msgid "Whether each column of data is transformed independently, default False."
-msgstr ""
+msgstr "是否对每列进行单独的转换处理, 默认为否"
 
 #: e77671ba07304fb2b6f4c24ab709e51a of
 #: paddlets.transform.base.UdBaseTransform:9
 msgid "Whether to delete the original column, default=False."
-msgstr ""
+msgstr "是否删除原始的输入列数据, 默认为否"
 
 #: d3b0bee48e4f4f879e804b3cc12b8c17 of
 #: paddlets.transform.base.UdBaseTransform:11
 msgid ""
 "The type of output columns, None values represent automatic inference "
 "based on input."
-msgstr ""
+msgstr "输出列的类型, None代表将会基于输入列进行自动推断"
 
 #: be3bc35508cb437cbe4c38b3403acaee of
 #: paddlets.transform.base.UdBaseTransform:13
 msgid ""
 "The name of output columns, None values represent automatic inference "
 "based on input."
-msgstr ""
+msgstr "输出列的名称, None代表将会基于输入列进行自动推断"
 
 #: 9115ff064af244558cf3ff782fb3f85e of
 #: paddlets.transform.base.UdBaseTransform.fit:3
-#, fuzzy
 msgid "dataset from which to fit the transformer"
 msgstr "用于训练transformer的数据集。"
 
@@ -283,7 +279,6 @@ msgstr ""
 
 #: 99ad70caa0284081bc9ffe15791e1277 of
 #: paddlets.transform.base.UdBaseTransform.transform:1
-#, fuzzy
 msgid "Transform or inverse_transform the dataset with the fitted transformer."
 msgstr "`transform` 方法的逆向转换方法。"
 
@@ -291,34 +286,31 @@ msgstr "`transform` 方法的逆向转换方法。"
 #: paddlets.transform.base.UdBaseTransform.fit_transform:5
 #: paddlets.transform.base.UdBaseTransform.transform:5
 msgid "whether to replace the original data. default=False"
-msgstr ""
+msgstr "是否替换原始的数据,默认是False"
 
 #: 3828008dd09344aba17ce6d519c947fb dcd863fe77f14a7188d4abee1d588a99 of
 #: paddlets.transform.base.UdBaseTransform.fit_transform:8
 #: paddlets.transform.base.UdBaseTransform.transform:8
-#, fuzzy
 msgid "TSDataset"
 msgstr "完成数据转换的数据集。"
 
 #: 336f3233010a42e88b625c159eef5489 of
 #: paddlets.transform.base.UdBaseTransform.inverse_transform:5
 msgid "Set to True to perform inplace operation and avoid data copy."
-msgstr ""
+msgstr "设置为True以执行就地操作并避免数据复制"
 
 #: 6aa0057702ef48e1969b9e944bb3502c of
 #: paddlets.transform.base.UdBaseTransform.inverse_transform:8
-#, fuzzy
 msgid "Inversely transformed TSDataset."
 msgstr "完成逆向转换的数据集。"
 
 #: 20243ba330b54d28870636aa33caf0d0 of
 #: paddlets.transform.base.UdBaseTransform.fit_transform:1
 msgid "First fit the transformer, and then transform the dataset."
-msgstr ""
+msgstr "先做fit操作, 然后做transform操作"
 
 #: fe7cec66c8e54d9895aa297a268a5354 of
 #: paddlets.transform.base.UdBaseTransform.fit_transform:3
-#, fuzzy
 msgid "dataset to be processed."
 msgstr "将要被处理的数据集。"
 
