@@ -33,13 +33,13 @@ msgid ""
 "Data adapter, converts :class:`paddlets.TSDataset` to "
 ":class:`paddle.io.Dataset` and :class:`paddle.io.DataLoader`."
 msgstr ""
-"数据转换类，用于将 :class:`bts.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集和"
+"数据转换类，用于将 :class:`paddlets.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集和"
 " :class:`paddle.io.DataLoader` 样本数据批量加载器。"
 
 #: 7d5ae41d732b433a8435c1fdaa44d75b of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:1
 msgid "Converts :class:`paddlets.TSDataset` to :class:`paddle.io.Dataset`."
-msgstr "将 :class:`bts.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集。"
+msgstr "将 :class:`paddlets.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集。"
 
 #: 4788b41a4a264dd6a00fb089022ccd8e f03928d9b8524bca8d0769a672cfedc3 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader
@@ -130,7 +130,7 @@ msgid ""
 "Raw :class:`~paddlets.TSDataset` for building "
 ":class:`paddle.io.DataLoader`."
 msgstr ""
-"原始的 :class:`~bts.TSDataset` 数据集，用于构建 :class:`paddle.io.DataLoader` "
+"原始的 :class:`~paddlets.TSDataset` 数据集，用于构建 :class:`paddle.io.DataLoader` "
 "样本批量构建器。"
 
 #: 8d84329106d4433d97e871ae7e09740e of
