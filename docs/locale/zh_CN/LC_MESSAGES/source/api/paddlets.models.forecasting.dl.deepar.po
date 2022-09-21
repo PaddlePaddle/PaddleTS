@@ -183,11 +183,3 @@ msgstr "训练停止所需的效果不再提升的轮数。"
 msgid "global random seed."
 msgstr "全局随机种子。"
 
-#~ msgid "paddlets.models.dl.paddlepaddle.deepar"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Bases: "
-#~ ":py:class:`~bts.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
-#~ msgstr ""
-

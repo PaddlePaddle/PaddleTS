@@ -25,6 +25,3 @@ msgstr ""
 msgid "paddlets models"
 msgstr ""
 
-#~ msgid "bts models"
-#~ msgstr ""
-

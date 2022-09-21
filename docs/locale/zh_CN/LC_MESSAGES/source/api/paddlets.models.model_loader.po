@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, PaddleTS
-# This file is distributed under the same license as the PaddleTS package.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PaddleTS \n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-11 17:01+0800\n"
+"POT-Creation-Date: 2022-09-21 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,30 +18,30 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.model_loader.rst:2
-#: eb3e10c1d8e24e37bd45f5dc2d328e28
+#: eef867a83e62493cb476dfe3fa2d9160
 msgid "paddlets.models.model_loader"
-msgstr "paddlets.models.model_loader"
+msgstr ""
 
-#: bts.models.model_loader.load:1 ee946e13802a474db73d4bda4033feb8 of
+#: 3f7e9274eff845dfb7b3dd1c3b19c848 of paddlets.models.model_loader.load:1
 msgid "Loads a saved model from a file path."
 msgstr "从给定的文件路径下加载一个模型。"
 
-#: bts.models.model_loader.load dd4605bc490848578237142883a48bd1 of
+#: 65583883ce45422abe092aa42c92d0f1 of paddlets.models.model_loader.load
 msgid "Parameters"
-msgstr "参数"
+msgstr ""
 
-#: 4ad96891f7f74efe92d789fe641e440e bts.models.model_loader.load:3 of
+#: 0bb31db05b8b48debd6d5a23fefe9928 of paddlets.models.model_loader.load:3
 msgid "A path string containing a model file name."
 msgstr "一个字符串格式的文件路径，该路径包含模型文件名。"
 
-#: 39c3194a631e43498f448ffe65f8edf6 bts.models.model_loader.load of
+#: 9251f523dd004a87a3f2c5644391dedb of paddlets.models.model_loader.load
 msgid "Returns"
-msgstr "返回"
+msgstr ""
 
-#: 7b4e536ef7aa4252ab0ce2d4fbb4ecee bts.models.model_loader.load:6 of
+#: 4c58df36db804e6d96af1e945e7474f8 of paddlets.models.model_loader.load:6
 msgid "Loaded model."
 msgstr "加载得到的模型。"
 
-#: 964181752c004363b992fdf600bc31c4 bts.models.model_loader.load of
+#: fd8bd6e172314bf2ab8b73a7c51a8615 of paddlets.models.model_loader.load
 msgid "Return type"
 msgstr "返回类型"

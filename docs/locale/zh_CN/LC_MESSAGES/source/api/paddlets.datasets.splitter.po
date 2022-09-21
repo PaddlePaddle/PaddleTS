@@ -313,6 +313,3 @@ msgstr ""
 "3）举例，如果 ``train_size = 5``, ``test_size = 2``, ``skip_size = 1``, "
 "其他参数设置为默认值,下面展示了这种情况下的切割例子:"
 
-#~ msgid "Bases: :py:class:`bts.datasets.splitter.SplitterBase`"
-#~ msgstr ""
-

@@ -32,10 +32,10 @@ Below minimal example uses a built-in `TS2vect` model to illustrate the basic us
    import pandas as pd
    import matplotlib.pyplot as plt
 
-   from bts.datasets import TimeSeries, TSDataset
-   from bts.models.representation.dl.ts2vec import TS2Vec
-   from bts.models.common.callbacks.callbacks import Callback
-   from bts.datasets.repository import get_dataset, dataset_list
+   from paddlets.datasets import TimeSeries, TSDataset
+   from paddlets.models.representation.dl.ts2vec import TS2Vec
+   from paddlets.models.common.callbacks.callbacks import Callback
+   from paddlets.datasets.repository import get_dataset, dataset_list
 
    # 1 prepare the data
    # Single target prediction target_cols is one column, multi-target prediction target_cols is multiple columns

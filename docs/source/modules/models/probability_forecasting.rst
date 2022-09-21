@@ -92,7 +92,7 @@ The build-int API `backtest` is used for both prediction and evaluation, quantil
    )
 
 
-4. Visiualization
+4. Visualization
 ------------------
 
 The new updated API `plot` fits probability forecasting well, by setting `low_quantile` and `high_quantile`, the 
