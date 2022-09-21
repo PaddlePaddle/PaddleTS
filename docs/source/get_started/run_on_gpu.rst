@@ -142,7 +142,7 @@ See `Get Started <../modules/datasets/overview.html>`_ to get more details.
     import numpy as np
 
     from paddlets.datasets.repository import get_dataset
-    from bts.transform.normalization import StandardScaler
+    from paddlets.transform.normalization import StandardScaler
     from paddlets.models.forecasting import MLPRegressor
 
     np.random.seed(2022)

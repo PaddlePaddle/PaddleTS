@@ -26,9 +26,3 @@ msgstr ""
 msgid "paddlets forecasting ml models."
 msgstr ""
 
-#~ msgid "bts ml models"
-#~ msgstr ""
-
-#~ msgid "paddlets ml models"
-#~ msgstr ""
-

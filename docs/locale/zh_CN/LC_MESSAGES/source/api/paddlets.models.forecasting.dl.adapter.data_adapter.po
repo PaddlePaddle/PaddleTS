@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, PaddleTS
-# This file is distributed under the same license as the PaddleTS package.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PaddleTS \n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 16:27+0800\n"
+"POT-Creation-Date: 2022-09-21 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,17 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.forecasting.dl.adapter.data_adapter.rst:2
-#: de9e8645a9224bc4b8a56b3fe00c60cd
+#: ec98a3cdc6454f71b7e54faa61367d3f
 msgid "paddlets.models.forecasting.dl.adapter.data_adapter"
-msgstr "paddlets.models.forecasting.dl.adapter.data_adapter"
+msgstr ""
 
-#: 2d1dd54a648647fbb29584804eadf3bc of
+#: c0c35e9c0e4540e0899732f548164a57 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter:1
 msgid "Bases: :py:class:`object`"
-msgstr "基类: :py:class:`object`"
+msgstr ""
 
-#: f5f411dd700b46469cce66f14e803ca4 of
+#: b8e37142b62b484880064743441e12e7 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter:1
-#, fuzzy
 msgid ""
 "Data adapter, converts :class:`paddlets.TSDataset` to "
 ":class:`paddle.io.Dataset` and :class:`paddle.io.DataLoader`."
@@ -37,38 +36,37 @@ msgstr ""
 "数据转换类，用于将 :class:`bts.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集和"
 " :class:`paddle.io.DataLoader` 样本数据批量加载器。"
 
-#: 4f373782eeff4220926b4c8faf5aab1a of
+#: 7d5ae41d732b433a8435c1fdaa44d75b of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:1
-#, fuzzy
 msgid "Converts :class:`paddlets.TSDataset` to :class:`paddle.io.Dataset`."
 msgstr "将 :class:`bts.TSDataset` 数据集转换为 :class:`paddle.io.Dataset` 样本数据集。"
 
-#: 70996a460d81412f806a1c7e9c0ae414 77d7d2b088d74c11b8731ab1eb464fdc of
+#: 4788b41a4a264dd6a00fb089022ccd8e f03928d9b8524bca8d0769a672cfedc3 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset
 msgid "Parameters"
-msgstr "参数"
+msgstr ""
 
-#: 5346530d79464cb5b3c9fb4d7f6aed11 of
+#: ce8cf428c8504abcb1f8b2d08d8092d2 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:3
 msgid "Raw TSDataset for converting to :class:`paddle.io.Dataset`."
 msgstr "原始的 paddle.TSDataset 数据集，用于构建 :class:`paddle.io.Dataset` 样本数据集。"
 
-#: 5881ba3952484fe8ae1cbd60ecec0786 of
+#: bf3236bc777b4c2c914d7b8e18532f93 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:5
 msgid ""
 "The size of the loopback window, i.e., the number of time steps feed to "
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 8e03d48482ba42a2bb78f072cbceacbc of
+#: 3acd703884394c43b63e5885e6eb3031 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:7
 msgid ""
 "The size of the forecasting horizon, i.e., the number of time steps "
 "output by the model."
 msgstr "模型输出的序列长度。"
 
-#: 0d196583d7814df881dc300bf3255a4b of
+#: 7a1a34452fea4d11ac3813eddc3f2702 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:9
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
@@ -77,7 +75,7 @@ msgid ""
 "time steps."
 msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
 
-#: 27f96efc4ff049f1813c1cff51deb89b of
+#: f7d0f053b0334306a080f842da32916d of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:13
 msgid ""
 "Time steps to stride over the i-th sample and (i+1)-th sample. More "
@@ -90,7 +88,7 @@ msgstr ""
 "为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
 "的计算结果，即2条相邻的样本之间相差的时间点的数量。"
 
-#: 0503488d92764c56b478df660ad33a1f of
+#: 2f5de40712fb48b28fcf916f56b5ea2c of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:18
 msgid ""
 "A two-element-tuple-shaped time window that allows adapter to build "
@@ -102,33 +100,32 @@ msgstr ""
 "一个包含2个元素的元组类型的时间窗口，允许adapter模块在其范围内构建样本。 time_window[0] "
 "值代表窗口范围的下界，time_window[1] 值代表窗口范围的上界。 对于每一个包含在该左闭右闭范围内的元素，都代表一条样本的尾部索引。"
 
-#: 05a2fcff5f9a43c6aa723ff122f4f0f4 c673f4d5bb084d1490be51895bf73c2a of
+#: da4fd8a80a734e5899edc611d4a4e4e4 f9f6ffe560b944dcaf6340a9222b052d of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset
 msgid "Returns"
-msgstr "返回"
+msgstr ""
 
-#: a787ced6b6bf4661a265635d05ed4821 of
+#: a3e25473a62c4428861ed998071f4279 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset:23
 msgid "A built PaddleDatasetImpl."
 msgstr "构建完成的 PaddleDatasetImpl 实例。"
 
-#: 440f1939c0d44e3c8417e31de4a1e4fc 4879635b23d6492eb0cc0539d63ba1ed of
+#: 424a9865d3014b9bad2892c42b62ed03 e8cd0ff5894f4d0b88755b1b07b3c8e3 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataset
 msgid "Return type"
 msgstr "返回类型"
 
-#: 66a1af44ee6341299f105463ff807c71 of
+#: b1d3bd9ea7ad42688be199892f54835f of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:1
 msgid "Converts :class:`paddle.io.Dataset` to :class:`paddle.io.DataLoader`."
 msgstr ""
 "将 :class:`paddle.io.Dataset`  样本数据集转换为 :class:`paddle.io.DataLoader` "
 "样本批量加载器。"
 
-#: 3208c68d5dd54ca2bdaad0e9fee0c55a of
+#: d59d76583d9748d0814cfc0106b54e15 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:3
-#, fuzzy
 msgid ""
 "Raw :class:`~paddlets.TSDataset` for building "
 ":class:`paddle.io.DataLoader`."
@@ -136,17 +133,17 @@ msgstr ""
 "原始的 :class:`~bts.TSDataset` 数据集，用于构建 :class:`paddle.io.DataLoader` "
 "样本批量构建器。"
 
-#: 8900710b9a7143e38d0731177ced41e6 of
+#: 8d84329106d4433d97e871ae7e09740e of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:5
 msgid "The number of samples for a single batch."
 msgstr "单个数据批量中包含的样本条数。"
 
-#: fa71d83e93c04fc1bcee55776a43e0bd of
+#: b92abbea62694768988b3028c5a26f92 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:7
 msgid "User-defined collate function for each batch, optional."
 msgstr "用户自定义的单批量样本整合函数，可选参数。"
 
-#: 24489d9b78f74aacb12b55f797365e0c of
+#: d8b740afc885411298351b74a66ec28a of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:9
 msgid ""
 "Whether to shuffle indices order before generating batch indices, default"
@@ -154,12 +151,12 @@ msgid ""
 " caller to set its value."
 msgstr "是否在生成批量样本之前对数据进行洗牌。默认为True。"
 
-#: a9db85de7aa942cd89978c492fe87778 of
+#: 3393ebc7b37840b2b7d10af7df9bfb0a of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:13
 msgid "A built paddle DataLoader."
 msgstr "一个构建完成的paddle样本批量数据加载器。"
 
-#: d82a41a7b45d42da9dbebdad98b406b3 of
+#: 686ffa9822734742b629993998ccc843 of
 #: paddlets.models.forecasting.dl.adapter.data_adapter.DataAdapter.to_paddle_dataloader:17
 msgid "Examples"
 msgstr "示例"

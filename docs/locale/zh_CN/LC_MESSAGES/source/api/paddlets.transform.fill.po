@@ -23,9 +23,8 @@ msgid "paddlets.transform.fill"
 msgstr ""
 
 #: d01863031664449caa75661e4ac222a1 of paddlets.transform.fill.Fill:1
-#, fuzzy
 msgid "Bases: :py:class:`~paddlets.transform.base.BaseTransform`"
-msgstr "基类: :py:class:`~bts.transform.base.BaseTransform`"
+msgstr "基类: :py:class:`~paddets.transform.base.BaseTransform`"
 
 #: 3781c6f6eb55454daf48711b77edd39c of paddlets.transform.fill.Fill:1
 msgid ""

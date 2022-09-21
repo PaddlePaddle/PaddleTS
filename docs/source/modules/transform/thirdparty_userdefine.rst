@@ -11,7 +11,7 @@ Paddlets introduces the ``make_ts_transform`` function, which can wrap the unive
 
 .. code-block:: python
 
-   from bts.datasets.repository import get_dataset
+   from paddlets.datasets.repository import get_dataset
    dataset = get_dataset('UNI_WTH')
    print(dataset)
 
@@ -19,7 +19,7 @@ Paddlets introduces the ``make_ts_transform`` function, which can wrap the unive
 
 .. code-block:: python
 
-   from bts.transform import make_ts_transform
+   from paddlets.transform import make_ts_transform
    from sklearn.preprocessing import MaxAbsScaler
    ts_max_abs_scaler = make_ts_transform(
        MaxAbsScaler,
@@ -39,7 +39,7 @@ Below example illustrates the usage in pipeline.
 
 .. code-block:: python
 
-   from bts.transform import KSigma, TimeFeatureGenerator
+   from paddlets.transform import KSigma, TimeFeatureGenerator
    transfrom_list = [
        KSigma("cols":["observed_a", "observed_b", "known_c", "known_d"], "k": 1), 
        TimeFeatureGenerator(),

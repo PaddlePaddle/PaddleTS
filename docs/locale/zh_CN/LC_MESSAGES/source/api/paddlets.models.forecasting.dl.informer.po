@@ -283,8 +283,3 @@ msgstr ""
 msgid "float"
 msgstr ""
 
-#~ msgid ""
-#~ "Bases: "
-#~ ":py:class:`~bts.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
-#~ msgstr ""
-

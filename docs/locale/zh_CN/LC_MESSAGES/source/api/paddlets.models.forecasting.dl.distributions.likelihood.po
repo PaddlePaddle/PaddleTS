@@ -272,11 +272,4 @@ msgstr "高斯分布参数量为2。"
 msgid "The number of parameters of Gaussian distribution."
 msgstr "高斯分布的参数量。"
 
-#~ msgid "paddlets.models.dl.paddlepaddle.distributions.likelihood"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Bases: "
-#~ ":py:class:`~bts.models.forecasting.dl.distributions.likelihood.Likelihood`"
-#~ msgstr ""
 

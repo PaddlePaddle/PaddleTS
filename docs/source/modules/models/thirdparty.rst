@@ -9,7 +9,7 @@ PaddleTS allows users to implement time series models based on third party model
 1. Make Time Series Model Based On Third-party Model
 =====================================================
 
-PaddleTS provides `make_ml_model <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.forecasting.ml.ml_model_wrapper.make_ml_model>`_ interface
+PaddleTS provides `make_ml_model <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#paddlets.models.forecasting.ml.ml_model_wrapper.make_ml_model>`_ interface
 that allows users to build time series models by simply specifying a third party model class and relevant parameters without extra development.
 
 1.1 Minimal Example
@@ -20,13 +20,13 @@ Below is an example of how to make time series models based on
 
 .. code-block:: python
 
-    from bts.datasets.repository import get_dataset
-    from bts.models.forecasting.ml.ml_model_wrapper import make_ml_model
+    from paddlets.datasets.repository import get_dataset
+    from paddlets.models.forecasting.ml.ml_model_wrapper import make_ml_model
 
     from sklearn.neighbors import KNeighborsRegressor
 
     # prepare data
-    bts_ds = get_dataset("UNI_WTH")
+    paddlets_ds = get_dataset("UNI_WTH")
 
     # make model based on sklearn.neighbors.KNeighborsRegressor
     model = make_ml_model(
@@ -36,10 +36,10 @@ Below is an example of how to make time series models based on
     )
 
     # fit
-    model.fit(train_data=bts_ds)
+    model.fit(train_data=paddlets_ds)
 
     # predict
-    predicted_ds = model.predict(bts_ds)
+    predicted_ds = model.predict(paddlets_ds)
     #             WetBulbCelsius
     # 2014-01-01           -1.72
 
@@ -53,21 +53,21 @@ Thus, `make_ml_model` provides 2 optional arguments `udf_ml_dataloader_to_fit_nd
 convert `MLDataLoader` to an `numpy.ndarray` object.
 
 By default, `make_ml_model` uses
-`default_ml_dataloader_to_fit_ndarray <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray>`_ and
-`default_ml_dataloader_to_predict_ndarray <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#bts.models.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray>`_
+`default_ml_dataloader_to_fit_ndarray <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#paddlets.models.ml.ml_model_wrapper.default_ml_dataloader_to_fit_ndarray>`_ and
+`default_ml_dataloader_to_predict_ndarray <../../api/paddlets.models.forecasting.ml.ml_model_wrapper.html#paddlets.models.ml.ml_model_wrapper.default_ml_dataloader_to_predict_ndarray>`_
 to convert MLDataLoader to `numpy.ndarray` for `fit` and `predict` method, respectively.
 Also, users are able to develop user-defined convert functions to get expected trainable / predictable output.
 
 .. code-block:: python
 
-    from bts.datasets.repository import get_dataset
-    from bts.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
-    from bts.models.forecasting.ml.ml_model_wrapper import make_ml_model
+    from paddlets.datasets.repository import get_dataset
+    from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
+    from paddlets.models.forecasting.ml.ml_model_wrapper import make_ml_model
 
     from sklearn.neighbors import KNeighborsRegressor
 
     # prepare data
-    bts_ds = get_dataset("UNI_WTH")
+    paddlets_ds = get_dataset("UNI_WTH")
 
     # develop user-defined convert functions
     def udf_ml_dataloader_to_fit_ndarray(
@@ -100,24 +100,24 @@ Also, users are able to develop user-defined convert functions to get expected t
     )
 
     # fit
-    model.fit(train_data=bts_ds)
+    model.fit(train_data=paddlets_ds)
 
     # predict
-    predicted_ds = model.predict(bts_ds)
+    predicted_ds = model.predict(paddlets_ds)
 
 2. Multi-step forecasting
 ==========================
 
 The time series models also support multi-timestep forecasting by calling
-`recursive_predict <../../api/paddlets.models.base.html#bts.models.base.BaseModel.recursive_predict>`_ .
+`recursive_predict <../../api/paddlets.models.base.html#paddlets.models.base.BaseModel.recursive_predict>`_ .
 
 .. code-block:: python
 
-    from bts.datasets.repository import get_dataset
-    from bts.models.forecasting.ml.ml_model_wrapper import make_ml_model
+    from paddlets.datasets.repository import get_dataset
+    from paddlets.models.forecasting.ml.ml_model_wrapper import make_ml_model
 
     # prepare data
-    bts_ds = get_dataset("UNI_WTH")
+    paddlets_ds = get_dataset("UNI_WTH")
 
     # make model
     model = make_ml_model(
@@ -127,10 +127,10 @@ The time series models also support multi-timestep forecasting by calling
     )
 
     # fit
-    model.fit(train_data=bts_ds)
+    model.fit(train_data=paddlets_ds)
 
     # recursively predict
-    recursively_predicted_ds = model.recursive_predict(tsdataset=bts_ds, predict_length=4)
+    recursively_predicted_ds = model.recursive_predict(tsdataset=paddlets_ds, predict_length=4)
     #                      WetBulbCelsius
     # 2014-01-01 00:00:00           -1.72
     # 2014-01-01 01:00:00           -1.88

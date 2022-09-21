@@ -3,26 +3,27 @@
 # This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-16 11:11+0800\n"
+"POT-Creation-Date: 2022-09-21 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.forecasting.dl.distributions.rst:2
-#: 0665ac0c1d4a4b36bf39d54ba448ac0c
+#: 56db611db3584e20aeab6703525edd4a
 msgid "paddlets.models.forecasting.dl.distributions"
 msgstr ""
 
-#: bts.models.forecasting.dl.distributions:1 e1cf7852c63145e5abba2f48cebd2804
-#: of
+#: 22e811fd4bc34e76b8772249af610d71 of
+#: paddlets.models.forecasting.dl.distributions:1
 msgid "distributions"
 msgstr ""
 

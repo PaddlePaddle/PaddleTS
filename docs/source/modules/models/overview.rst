@@ -38,7 +38,7 @@ Below minimal example uses a built-in `RNNBlockRegressor` model to illustrate th
 .. code-block:: python
 
    from paddlets import TSDataset
-   from bts.models.model_loader import load
+   from paddlets.models.model_loader import load
    from paddlets.models.forecasting import RNNBlockRegressor
 
    # 1 prepare the data
@@ -265,7 +265,7 @@ Later you can load back the persisted model with:
 
 .. code-block:: python
 
-   from bts.models.model_loader import load
+   from paddlets.models.model_loader import load
 
    loaded_rnn_reg_1 = load("/path/to/save/modelname_1")
    loaded_rnn_reg_2 = load("/path/to/save/modelname_2")
