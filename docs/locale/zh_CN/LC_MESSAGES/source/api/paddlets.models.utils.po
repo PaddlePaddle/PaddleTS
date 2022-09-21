@@ -35,7 +35,6 @@ msgstr "参数"
 
 #: deeee33378fb40539ac1468cbb675b65 of
 #: paddlets.models.utils.get_target_from_tsdataset:3
-#, fuzzy
 msgid "Data to be converted."
 msgstr "待检查的数据."
 

@@ -37,7 +37,6 @@ msgid "Parameters"
 msgstr "参数"
 
 #: d9bfa233f8fe4be3adeca284d2e1dd1d of paddlets.metrics.base.Metric:3
-#, fuzzy
 msgid ""
 "Supported metric modes, only normal and prob are valid values. Set to "
 "normal for non-probability use cases, set to prob for probability use "

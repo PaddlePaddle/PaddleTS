@@ -50,7 +50,6 @@ msgstr "参数"
 #: 6e4582dbb9fe4092a05f005ea83b56ac cc33b83c7edb4036bdfc36c4ea741d82 of
 #: paddlets.metrics.metrics.LogLoss:3 paddlets.metrics.metrics.MAE:3
 #: paddlets.metrics.metrics.MSE:3 paddlets.metrics.metrics.QuantileLoss:11
-#, fuzzy
 msgid ""
 "Supported metric modes, only normal and prob are valid values. Set to "
 "normal for non-probability use cases, set to prob for probability use "
@@ -199,7 +198,6 @@ msgstr ""
 
 #: 6b4cce850f7142e1880bdf3ff9fe05ad of
 #: paddlets.metrics.metrics.QuantileLoss.metric_fn:5
-#, fuzzy
 msgid "Predicted quantiles."
 msgstr "模型预测值."
 
