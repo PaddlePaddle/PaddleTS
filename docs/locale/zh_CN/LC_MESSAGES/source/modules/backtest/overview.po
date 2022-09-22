@@ -29,7 +29,7 @@ msgid ""
 "historically with a given model. Backtesting is used to predict the "
 "future accuracy of a forecasting method, and is therefore useful in "
 "determining which model can be considered the most accurate ."
-msgstr "回测用给定模型获得的历史上的模拟预测,是用来评测模型预测准曲率的重要工具。"
+msgstr "回测用给定模型获得的历史上的模拟预测,是用来评测模型预测准确率的重要工具。"
 
 #: ../../source/modules/backtest/overview.rst:11
 #: 3b19688f3dc84c428732b1a16ad2e4be
