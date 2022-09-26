@@ -36,7 +36,7 @@ class Fill(BaseTransform):
         method(str): Method of filling missing values. Totally 8 methods are supported currently:
             max: Use the max value in the sliding window.
             min: Use the min value in the sliding window.
-            avg: Use the mean value in the sliding window.
+            mean: Use the mean value in the sliding window.
             median: Use the median value in the sliding window.
             pre: Use the previous value.
             next: Use the next value.
