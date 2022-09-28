@@ -11,10 +11,10 @@ import random
 import pandas as pd
 import numpy as np
 
-from bts.models.forecasting import LSTNetRegressor
-from bts.datasets import TimeSeries, TSDataset
-from bts.utils.backtest import backtest
-from bts.metrics import Metric, MAE
+from paddlets.models.forecasting import LSTNetRegressor
+from paddlets.datasets import TimeSeries, TSDataset
+from paddlets.utils.backtest import backtest
+from paddlets.metrics import Metric, MAE
 
 
 class TestBacktest(TestCase):
@@ -245,8 +245,8 @@ class TestBacktest(TestCase):
             ))
         static_cov = {"f": 1, "g": 2}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
-        from bts.models.forecasting import DeepARModel
-        from bts.metrics import MSE,QuantileLoss
+        from paddlets.models.forecasting import DeepARModel
+        from paddlets.metrics import MSE,QuantileLoss
         reg = DeepARModel(
             in_chunk_len=10,
             out_chunk_len=5,
