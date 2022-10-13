@@ -33,7 +33,8 @@ msgid ""
 "SearchSpaceConfiger is for getting the default search space for the "
 "PaddleTS transformer, PaddleTS model, or PaddleTS pipeline used by "
 "automl."
-msgstr ""
+msgstr "SearchSpaceConfiger 是用于获取 PaddleTS 内置的特征工程、模型"
+"或者 Pipeline 的默认超参搜索空间。"
 
 #: 546077fc8f674cb9a5f3d6c531a71f55 5a8552391f23404b92a10deba3608cd6
 #: 97486d8ce2f146d18216a0dfa893c25d of
@@ -41,7 +42,7 @@ msgstr ""
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.recommend
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.search_space_to_str
 msgid "Parameters"
-msgstr ""
+msgstr "参数"
 
 #: 3ab225e28b514771a064e1f762137ef2 7fb8be7e38014a569fd31a28f878a13f
 #: 8fdb29f022534316a6b1e3bcf3be3455 of
@@ -51,7 +52,8 @@ msgstr ""
 msgid ""
 "A class(or str) of a PaddleTS model or a list of classes(or str) "
 "consisting of several PaddleTS transformers and a PaddleTS model."
-msgstr ""
+msgstr "一个类名(或是字符串)，内容为 PaddleTS 模型的类名，或者是由若干个 PaddleTS "
+"的特征工程类名与一个 PaddleTS 模型类名组成的列表。"
 
 #: 08575f1ce1dc4b71a6c3576b2b9fa69d 20b4a2fc6d6d479a9505263cb6ab670c
 #: 25025273a1b8454cbd68744fd2fc65d9 of
@@ -59,12 +61,12 @@ msgstr ""
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.recommend
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.search_space_to_str
 msgid "Returns"
-msgstr ""
+msgstr "返回值"
 
 #: 11f279680e0c4a47a39467b9524953bf of
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.get_default_search_space:4
 msgid "The domain of the automl to be optimized."
-msgstr ""
+msgstr "用于 AutoTS 超参优化的搜索空间。"
 
 #: 1a859333cc3c4eff94bac19e6dff5589 53728be4cbe74a5d802d8aa93c6006e8
 #: 9ad872c568f74392944d7625306337a0 of
@@ -72,26 +74,26 @@ msgstr ""
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.recommend
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.search_space_to_str
 msgid "Return type"
-msgstr ""
+msgstr "返回类型"
 
 #: ecdb1a4d74ee4d1e9d21654f944bbadf of
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.recommend:1
 msgid "Recommend a search space for the PaddleTS estimator."
-msgstr ""
+msgstr "为 PaddleTS 的评估器推荐一份数搜索空间。"
 
 #: 17f6371c63784360a446c353e838bdbf 472825c299e640249b4fad77ca52e3b7 of
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.recommend:6
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.search_space_to_str:6
 msgid "Search space in form of str"
-msgstr ""
+msgstr "字符串形式的搜索空间。"
 
 #: 372a92e224134a90bd04f78d71ddf260 of
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.search_space_to_str:1
 msgid "Convert search space to string"
-msgstr ""
+msgstr "将搜索空间转化为字符串。"
 
 #: 87b8871740474b088893423573110f14 of
 #: paddlets.automl.search_space_configer.SearchSpaceConfiger.paddlets_default_search_space:1
 msgid "Default search space for PaddleTS"
-msgstr ""
+msgstr "PaddleTS 的默认参数搜索空间。"
 
