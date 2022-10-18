@@ -97,7 +97,7 @@ To get more detailed information, please refer to [Installation](https://paddlet
 
 Feel free to scan below WeChat QR code to join PaddleTS community for technical discussion with PaddleTS maintainers and community members:
 <p align="center">
-    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" width=500>
+    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
 </p>
 
 ## Contributions
