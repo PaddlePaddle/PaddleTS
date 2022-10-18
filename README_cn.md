@@ -84,7 +84,7 @@ pip install paddlets
 欢迎通过扫描下面的微信二维码加入PaddleTS开源社区，与PaddleTS维护者及社区成员随时进行技术讨论：
 
 <p align="center">
-    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" width=500>
+    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
 </p>
 
 ## 代码发布与贡献
