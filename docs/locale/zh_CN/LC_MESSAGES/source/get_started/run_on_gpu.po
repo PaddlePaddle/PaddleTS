@@ -196,7 +196,7 @@ msgstr "现在可以运行以下命令安装最新版本PaddleTS："
 
 #: ../../source/get_started/run_on_gpu.rst:121 6fd84e81115343c2a41f15127712ef5c
 msgid "2.3.2 docker"
-msgstr ""
+msgstr "2.3.2 docker"
 
 #: ../../source/get_started/run_on_gpu.rst:123 db1a6311b52d42fe8d5f9e4e08fe3969
 msgid ""
