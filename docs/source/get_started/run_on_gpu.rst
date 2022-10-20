@@ -122,7 +122,7 @@ Now install the latest version of PaddleTS by running the following:
 
 It is required to follow the
 `Nvidia Container Toolkit Installation Guide <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html>`__
-to install the nvidia-docker engine.
+to install nvidia-docker engine.
 
 Now we can pull the gpu-capable docker image.
 
