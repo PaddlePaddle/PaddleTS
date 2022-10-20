@@ -210,11 +210,11 @@ msgstr ""
 
 #: ../../source/get_started/run_on_gpu.rst:127 3ac5906df30246dbb3109aed34cdf364
 msgid "Now we can pull the gpu-capable docker image."
-msgstr ""
+msgstr "现在可以拉取GPU可用的docker镜像。"
 
 #: ../../source/get_started/run_on_gpu.rst:135 84492fec0d7b4afcbf08e0982e548359
 msgid "2.3 Use GPU device to fit and predict models"
-msgstr ""
+msgstr "2.3 使用GPU设备进行模型训练、预测"
 
 #: ../../source/get_started/run_on_gpu.rst:137 1f9e3abd22744c0193a7d727865f3277
 msgid ""
