@@ -14,7 +14,6 @@ from paddlets.utils.utils import check_model_fitted
 from paddlets.pipeline.pipeline import Pipeline
 from paddlets.utils import get_uuid
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.models.forecasting import NHiTSModel
 from paddlets.ensemble import StackingEnsembleForecaster
 
 class TestUtils(TestCase):
@@ -100,15 +99,11 @@ class TestUtils(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
-            'eval_metrics': ["mse", "mae"],
-        }
-
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1.fit(self.tsdataset1)
         check_model_fitted(model1)
