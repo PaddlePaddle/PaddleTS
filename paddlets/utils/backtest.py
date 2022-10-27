@@ -71,7 +71,7 @@ def backtest(
     def _check():
         # Check whether model fitted or not.
         check_model_fitted(model)
-        raise_if(start < model_in_chunk_len, f"Parameter 'start' value should >= in_chunk_len {model_in_chunk_len}")
+        raise_if(start < model_in_chunk_len + model_skip_chunk_len, f"Parameter 'start' value should >= in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}")
         raise_if(start > target_length, f"Parameter 'start' value should not exceed data target_len {target_length}")
         raise_if(predict_window <= 0, "Parameter 'predict_window' should be positive integer")
         raise_if(stride <= 0, "Parameter 'stride' should be positive integer")
@@ -98,12 +98,13 @@ def backtest(
             logger.info(f"Parameter 'stride' not set, default set to predict_window {predict_window}")
     # If start is not set, set to model._in_chunk_len by default
     if start is None:
-        start = model_in_chunk_len
+        start = model_in_chunk_len + model_skip_chunk_len
         if verbose:
-            logger.info(f"Parameter 'start' not set, default set to model_in_chunk_len {model_in_chunk_len}")
+            logger.info(f"Parameter 'start' not set, default set to model_in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}")
     start = all_target.get_index_at_point(start)
     # Parameter check
     _check()
+    start = start - model_skip_chunk_len
     # When predict_window == stride, the prediction will form a complete continuous time series, which will be automatically merged by default and return the complete TSdataset
     # If predict_window! = stride, the forecast will form a discontinuous time series, do not processed by default and returns List[TSdataset]
     return_tsdataset = True if predict_window == stride else False
@@ -184,4 +185,3 @@ def backtest(
         return scores, predicts
     else:
         return scores
-

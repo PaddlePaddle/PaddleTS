@@ -42,11 +42,11 @@ class TestBacktest(TestCase):
             ))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
-                np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                np.random.randn(2500, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         self.tsdataset1 = TSDataset(target1, observed_cov, known_cov, static_cov)
         self.tsdataset2 = TSDataset(target2, observed_cov, known_cov, static_cov)
         super().setUp()
@@ -83,8 +83,9 @@ class TestBacktest(TestCase):
         score, predicts = backtest(self.tsdataset1, lstnet, start=pd.Timestamp('2022-01-07T12'), predict_window=50, stride=50,
                        return_predicts=True)
 
-
-        assert len(predicts.get_target()) == 1300
+        start = 624
+        data_len = len(self.tsdataset1.get_target())
+        assert len(predicts.get_target()) == data_len - start
 
         # case3 add window,stride, window != stride
         lstnet = LSTNetRegressor(
@@ -106,8 +107,10 @@ class TestBacktest(TestCase):
         lstnet.fit(self.tsdataset1, self.tsdataset1)
         score, predicts = backtest(self.tsdataset1, lstnet, start=200, predict_window=50, stride=50, return_predicts=True)
 
+        start = 200
+        data_len = len(self.tsdataset1.get_target())
+        assert len(predicts.get_target()) == data_len - start
 
-        assert len(predicts.get_target()) == 1700
 
         # case5 add return score
         lstnet = LSTNetRegressor(
@@ -117,7 +120,7 @@ class TestBacktest(TestCase):
             max_epochs=1
         )
         lstnet.fit(self.tsdataset1, self.tsdataset1)
-        res = backtest(self.tsdataset1, lstnet, start=176, predict_window=50, stride=50)
+        res = backtest(self.tsdataset1, lstnet, start=192, predict_window=50, stride=50)
         assert res != 0
 
         # case6 add metric,  return score
@@ -128,7 +131,7 @@ class TestBacktest(TestCase):
             max_epochs=1
         )
         lstnet.fit(self.tsdataset1, self.tsdataset1)
-        res = backtest(self.tsdataset1, lstnet, metric=MAE(), start=176, predict_window=50,
+        res = backtest(self.tsdataset1, lstnet, metric=MAE(), start=192, predict_window=50,
                        stride=50)
         assert res != 0
 
@@ -140,7 +143,7 @@ class TestBacktest(TestCase):
             max_epochs=1
         )
         lstnet.fit(self.tsdataset1, self.tsdataset1)
-        res = backtest(self.tsdataset1, lstnet, metric=MAE(), start=176, predict_window=50, reduction=np.median,
+        res = backtest(self.tsdataset1, lstnet, metric=MAE(), start=192, predict_window=50, reduction=np.median,
                        stride=50)
         assert res != 0
 
@@ -219,7 +222,7 @@ class TestBacktest(TestCase):
             max_epochs=1
         )
         lstnet.fit(self.tsdataset2, self.tsdataset2)
-        res = backtest(self.tsdataset2, lstnet, metric=MAE(), start=176, predict_window=50, reduction=np.median,
+        res = backtest(self.tsdataset2, lstnet, metric=MAE(), start=192, predict_window=50, reduction=np.median,
                        stride=50)
         assert res != 0
 
@@ -243,7 +246,7 @@ class TestBacktest(TestCase):
                 index=pd.date_range("2022-01-01", periods=500, freq="15T"),
                 columns=["b1", "c1"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
         from paddlets.models.forecasting import DeepARModel
         from paddlets.metrics import MSE,QuantileLoss
@@ -268,4 +271,3 @@ class TestBacktest(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
