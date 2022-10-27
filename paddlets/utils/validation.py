@@ -56,6 +56,8 @@ def cross_validate(
     raise_if_not(isinstance(splitter, SplitterBase), "Splitter not right, check instructions to get valid splitters.")
     splits = splitter.split(data)
 
+    if metric is None:
+        metric = MAE()
     res = [fit_and_score(train_data,
                              test_data,
                              estimator,
@@ -116,9 +118,6 @@ def fit_and_score(
         ValueError
     
     """
-    if metric is None:
-        metric = MAE()
-
     estimator.fit(train_data, valid_data)
 
     start = None
@@ -161,3 +160,4 @@ def fit_and_score(
     if return_predicts:
         res["predicts"] = predicts
     return res
+

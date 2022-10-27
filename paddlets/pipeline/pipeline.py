@@ -454,7 +454,7 @@ class Pipeline(Trainable):
             Pipeline: The loaded pipeline.
         """
         if not os.path.exists(path):
-            raise_log(FileNotFoundError(f"path not exist, path : {path}"))
+            raise_log(FileNotFoundError(f"file exist, path : {path}"))
         if not os.path.isdir(path):
             raise_log(ValueError(f"path is not a directory, path : {path}"))
         # 1.Load pipeline
