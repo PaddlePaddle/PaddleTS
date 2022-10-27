@@ -69,7 +69,7 @@ class AutoTS(BaseModel):
         mode(str): According to the mode, the metric is maximized or minimized.
             Supported mode are "min", "max". When the mode is "auto", metric is set to be "min" by default.
         refit(bool): Whether to refit the model with the best parameter on full training data.If refit is True, the
-            AutoPaddleTS object can be used to predict. If refit is False, the AutoPaddleTS
+            AutoTS object can be used to predict. If refit is False, the AutoTS
             object can be used to get the best parameter, but can not make predictions.
         ensemble(bool): Not supported yet. This feature will be comming in future.
         n_jobs(int): Not supported yet. This feature will be comming in future.
@@ -285,14 +285,14 @@ class AutoTS(BaseModel):
 
     def save(self, path: str) -> None:
         """
-        AutoPaddleTS doesn't support save() yet.
+        AutoTS doesn't support save() yet.
         """
         raise NotImplementedError("Not supported yet")
 
     @classmethod
     def load(path: str):
         """
-        AutoPaddleTS doesn't support save() yet.
+        AutoTS doesn't support save() yet.
         """
         raise NotImplementedError("Not supported yet")
 

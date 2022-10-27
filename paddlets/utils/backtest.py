@@ -119,12 +119,15 @@ def backtest(
     for _ in tqdm(range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
         data._target, rest = all_target.split(index) 
         rest_len = len(rest)
-        if rest_len < predict_window + model_skip_chunk_len:
+
+        if rest_len < model_out_chunk_len + model_skip_chunk_len:
             if data.known_cov is not None:
                 target_end_time = data._target.end_time
                 known_index = data.known_cov.get_index_at_point(target_end_time)
-                if len(data.known_cov) - known_index - 1 < predict_window + model_skip_chunk_len:
+                if len(data.known_cov) - known_index - 1 < model_out_chunk_len + model_skip_chunk_len:
                     break
+
+        if rest_len < predict_window + model_skip_chunk_len:
             predict_window = rest_len
             predict_window = predict_window - model_skip_chunk_len
 
