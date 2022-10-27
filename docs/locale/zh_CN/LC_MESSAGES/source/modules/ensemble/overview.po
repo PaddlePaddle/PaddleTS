@@ -90,8 +90,7 @@ msgstr "请注意，为了保持模型预测的一致性， ``in_chunk_len``, ``
 
 #: ../../source/modules/ensemble/overview.rst:83
 #: 43535e869ac647b0b75f7282f23eda90
-#, fuzzy
-msgid "1. Construct and Fitting"
+msgid "3. Construct and Fitting"
 msgstr "3. 组装和拟合模型"
 
 #: ../../source/modules/ensemble/overview.rst:84
