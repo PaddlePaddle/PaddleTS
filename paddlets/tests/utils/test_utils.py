@@ -10,9 +10,9 @@ import numpy as np
 
 from paddlets.models.forecasting import LSTNetRegressor
 from paddlets.datasets import TimeSeries, TSDataset
-from paddlets.utils.utils import check_model_fitted, repr_results_to_tsdataset
+from paddlets.utils.utils import check_model_fitted
 from paddlets.pipeline.pipeline import Pipeline
-from paddlets.utils import get_uuid, plot_anoms
+from paddlets.utils import get_uuid
 from paddlets.models.forecasting import MLPRegressor
 from paddlets.models.forecasting import NHiTSModel
 from paddlets.ensemble import StackingEnsembleForecaster
