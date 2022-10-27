@@ -162,7 +162,7 @@ msgid ""
 " set to simulate the realy prediction."
 msgstr ""
 "``predict_window`` 是每次预测的窗口长度。``stride`` "
-"是两次连续预测之间的移动步长。在大多数情况下我们需要自定义这两个参数来模拟真是的预测场景。"
+"是两次连续预测之间的移动步长。在大多数情况下我们需要自定义这两个参数来模拟真实的预测场景。"
 
 #: ../../source/modules/backtest/overview.rst:123
 #: e4d054512d7440d3a79f7444fae9f856

@@ -42,8 +42,8 @@ class TestBacktest(TestCase):
             ))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
-                np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
+                np.random.randn(2000, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
                 columns=["b1", "c1"]
             ))
         static_cov = {"f": 1.0, "g": 2.0}
@@ -83,9 +83,8 @@ class TestBacktest(TestCase):
         score, predicts = backtest(self.tsdataset1, lstnet, start=pd.Timestamp('2022-01-07T12'), predict_window=50, stride=50,
                        return_predicts=True)
 
-        start = 624
-        data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+
+        assert len(predicts.get_target()) == 1300
 
         # case3 add window,stride, window != stride
         lstnet = LSTNetRegressor(
@@ -110,6 +109,7 @@ class TestBacktest(TestCase):
         start = 200
         data_len = len(self.tsdataset1.get_target())
         assert len(predicts.get_target()) == data_len - start
+
 
         # case5 add return score
         lstnet = LSTNetRegressor(
