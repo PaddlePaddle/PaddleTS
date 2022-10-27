@@ -111,6 +111,12 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
 .. toctree::
     :maxdepth: 1
+    :caption: Ensemble
+
+    Ensemble <source/modules/ensemble/overview.rst>
+
+.. toctree::
+    :maxdepth: 1
     :caption: API
 
     paddlets.analysis <source/api/paddlets.analysis.rst>
@@ -120,5 +126,6 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     paddlets.models <source/api/paddlets.models.rst>
     paddlets.pipeline <source/api/paddlets.pipeline.rst>
     paddlets.transform <source/api/paddlets.transform.rst>
+    paddlets.ensemble <source/api/paddlets.ensemble.rst>
     paddlets.utils <source/api/paddlets.utils.rst>
 
