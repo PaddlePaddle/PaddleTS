@@ -9,7 +9,6 @@ import unittest
 from unittest import TestCase
 
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.models.forecasting import NHiTSModel
 from paddlets import TimeSeries, TSDataset
 from paddlets.ensemble import WeightingEnsembleForecaster, StackingEnsembleForecaster
 
@@ -57,7 +56,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
+        mlp3_params = {
             'eval_metrics': ["mse", "mae"]
         }
 
@@ -65,7 +64,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (MLPRegressor, mlp3_params)])
         assert model2 is not None
 
     def test_fit(self):
@@ -101,7 +100,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
+        mlp3_params = {
             'eval_metrics': ["mse", "mae"]
         }
 
@@ -109,7 +108,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (MLPRegressor, mlp3_params)])
 
         model1.fit(tsdataset)
 
@@ -146,7 +145,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
+        mlp3_params = {
             'eval_metrics': ["mse", "mae"]
         }
 
@@ -154,7 +153,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (MLPRegressor, mlp3_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -191,7 +190,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
+        mlp3_params = {
             'eval_metrics': ["mse", "mae"]
         }
 
@@ -199,7 +198,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (MLPRegressor, mlp3_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -241,7 +240,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
-        nhits_params = {
+        mlp3_params = {
             'eval_metrics': ["mse", "mae"],
         }
 
@@ -249,7 +248,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (MLPRegressor, mlp3_params)])
 
         model1.fit(tsdataset)
         model1.save(path="/tmp/ensemble_test3/")
