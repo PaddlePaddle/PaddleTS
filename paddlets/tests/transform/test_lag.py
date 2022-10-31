@@ -66,6 +66,14 @@ class TestLagFeature(TestCase):
 
         self.assertTrue(known_true_df.equals(known))
 
+        results = ob.transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for resutl in results:
+            known = result.get_known_cov().data
+            known[known.isnull()] = np.nan
+            known_true_df[known_true_df.isnull()] = np.nan
+            self.assertTrue(known_true_df.equals(known))
+
     def test_fit_transform(self):
         """
         unittest function
@@ -111,7 +119,15 @@ class TestLagFeature(TestCase):
         known_true_df[known_true_df.isnull()] = np.nan
 
         self.assertTrue(known_true_df.equals(known))
-        
+
+        results = ob.fit_transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for resutl in results:
+            known = result.get_known_cov().data
+            known[known.isnull()] = np.nan
+            known_true_df[known_true_df.isnull()] = np.nan
+
+            self.assertTrue(known_true_df.equals(known))
 
 if __name__ == "__main__":
     unittest.main()

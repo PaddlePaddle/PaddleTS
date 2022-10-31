@@ -39,7 +39,7 @@ class DifferenceFeatureGenerator(BaseTransform):
         self.need_previous_data = True
         self.n_rows_pre_data_need = difference_points
         
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         This transformer does not need to be fitted.
 
@@ -51,7 +51,7 @@ class DifferenceFeatureGenerator(BaseTransform):
         """
         return self
 
-    def transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
         """
         Transform target column to difference features.
         
@@ -78,16 +78,3 @@ class DifferenceFeatureGenerator(BaseTransform):
                 v = tcov.data[feature_name].diff(index)
                 tcov.data[feature_name + '%s_%d' % (self.suffix, index)] = v
         return new_ts
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        Fit and transform target columns to difference features.
-        
-        Args:
-            dataset(TSDataset): Dataset to be fitted and transformed.
-            inplace(bool): Whether to perform the transformation inplace. default=False
-        
-        Returns:
-            TSDataset: inverserly transformed dataset.
-        """
-        return self.fit(dataset).transform(dataset, inplace)

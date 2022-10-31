@@ -63,6 +63,12 @@ class TestKSigma(TestCase):
         for i in range(len(expect_cols_stats_dict['Math'])):
             self.assertAlmostEqual(expect_cols_stats_dict['Math'][i], real_cols_stats_dict['Math'][i])
 
+        result = ob.fit([ts, ts])
+        expect_cols_stats_dict = {'Math': [81.0, 81.0, 81.0]}
+        real_cols_stats_dict = result._cols_stats_dict
+        for i in range(len(expect_cols_stats_dict['Math'])):
+            self.assertAlmostEqual(expect_cols_stats_dict['Math'][i], real_cols_stats_dict['Math'][i])
+
     def test_transform(self):
         """
         unittest function
@@ -106,6 +112,13 @@ class TestKSigma(TestCase):
         real_known_df = result.get_known_cov().data
         self.assertEqual(np.array(expect_known_df['Math']).tolist(), np.array(real_known_df['Math']).tolist())
 
+        results = ob.fit(ts).transform([ts, ts])
+        self.assertEqual(len(results), 2)
+        for resutl in results:
+            expect_known_df = pd.DataFrame([81, 81, 81, 81, 81], columns=['Math'], dtype=float)
+            real_known_df = result.get_known_cov().data
+            self.assertEqual(np.array(expect_known_df['Math']).tolist(), np.array(real_known_df['Math']).tolist())
+
     def test_fit_transform(self):
         """
         unittest function
@@ -148,6 +161,13 @@ class TestKSigma(TestCase):
         expect_known_df = pd.DataFrame([81, 81, 81, 81, 81], columns=['Math'], dtype=float)
         real_known_df = result.get_known_cov().data
         self.assertEqual(np.array(expect_known_df['Math']).tolist(), np.array(real_known_df['Math']).tolist())
+
+        results = ob.fit_transform([ts, ts])
+        self.assertEqual(len(results), 2)
+        for resutl in results:
+            expect_known_df = pd.DataFrame([81, 81, 81, 81, 81], columns=['Math'], dtype=float)
+            real_known_df = result.get_known_cov().data
+            self.assertEqual(np.array(expect_known_df['Math']).tolist(), np.array(real_known_df['Math']).tolist())
 
 if __name__ == "__main__":
     unittest.main()
