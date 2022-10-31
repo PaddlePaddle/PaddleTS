@@ -165,7 +165,7 @@ class TestAnomalyTransformer(TestCase):
             patience=0
         )
         model._metrics, model._metrics_names, _ = model._init_metrics(["val"])
-        with self.assertLogs("bts", level="WARNING") as captured:
+        with self.assertLogs("paddlets", level="WARNING") as captured:
             model._init_callbacks()
             self.assertEqual(len(captured.records), 1) # check that there is only one log message
             self.assertEqual(

@@ -6,9 +6,9 @@ import pandas as pd
 import numpy as np
 import random
 
-from bts import TSDataset, TimeSeries
-from bts.models.utils import get_target_from_tsdataset, check_tsdataset, to_tsdataset
-from bts.models.forecasting import RNNBlockRegressor
+from paddlets import TSDataset, TimeSeries
+from paddlets.models.utils import get_target_from_tsdataset, check_tsdataset, to_tsdataset
+from paddlets.models.forecasting import RNNBlockRegressor
 
 
 class TestUtils(unittest.TestCase):
@@ -90,7 +90,7 @@ def utils_test_check_tsdataset(test_utils):
     # case 3: test nan
     tsdataset = test_utils.tsdataset3.copy()
     tsdataset["value"][0] = np.NaN
-    with test_utils.assertLogs("bts", level="WARNING") as captured:
+    with test_utils.assertLogs("paddlets", level="WARNING") as captured:
             check_tsdataset(tsdataset)
             test_utils.assertEqual(
                 captured.records[0].getMessage(), 
