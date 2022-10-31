@@ -14,7 +14,9 @@ import json
 
 import paddlets
 from paddlets import TSDataset, TimeSeries
+from paddlets.models.forecasting.ml.arima import ArimaModel
 from paddlets.models.forecasting import RNNBlockRegressor
+from paddlets.models.representation import TS2Vec
 
 
 class _MockNotMLModel(object):
@@ -168,6 +170,39 @@ class TestModelLoader(unittest.TestCase):
 
     def test_load(self):
         """tst paddlets.models.load()"""
+        ######################################################################
+        # case 0 (good case) The loaded model is inherited from MLBaseModel. #
+        ######################################################################
+        in_chunk_len = 18
+        out_chunk_len = 3
+        model = self._build_arima_model(in_chunk_len=in_chunk_len, out_chunk_len=out_chunk_len)
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # get predicted dataset before load
+        pred_ds_before_load = model.predict(paddlets_ds)
+        self.assertEqual(
+            (out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            pred_ds_before_load.get_target().data.shape
+        )
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path)
+
+        # test load
+        loaded_model = paddlets.models.load(abs_model_path)
+
+        self.assertEqual(loaded_model.__class__, ArimaModel)
+
+        pred_ds_after_load = loaded_model.predict(paddlets_ds)
+        # predict expected
+        self.assertTrue(np.alltrue(
+            pred_ds_before_load.get_target().to_numpy(False) == pred_ds_after_load.get_target().to_numpy(False)
+        ))
+        shutil.rmtree(path)
+
         ##########################################################################
         # case 1 (good case) The loaded model is inherited from PaddleBaseModel. #
         ##########################################################################
@@ -221,8 +256,113 @@ class TestModelLoader(unittest.TestCase):
         ))
         shutil.rmtree(path)
 
+        ########################################################################
+        # case 2 (good case) The loaded model is inherited from ReprBaseModel. #
+        ########################################################################
+        segment_size = 300
+        sampling_stride = 300
+        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+
+        paddlets_ds = self._build_mock_ts_dataset(
+            target_periods=segment_size,
+            known_periods=segment_size,
+            observed_periods=segment_size,
+            random_data=True
+        )
+        model.fit(train_tsdataset=paddlets_ds)
+        model_network = model._network
+
+        encoded_ndarray = model.encode(tsdataset=paddlets_ds)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path)
+
+        # load model
+        loaded_model = paddlets.models.load(abs_model_path)
+
+        # model type expected
+        self.assertIsInstance(loaded_model, TS2Vec)
+        assert isinstance(loaded_model, TS2Vec)
+        # network type expected
+        self.assertTrue(isinstance(loaded_model._network, model_network.__class__))
+
+        # network state_dict expected
+        self.assertEqual(
+            model_network.state_dict().keys(),
+            loaded_model._network.state_dict().keys()
+        )
+        common_network_state_dict_keys = model_network.state_dict().keys()
+        for k in common_network_state_dict_keys:
+            # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
+            raw = model_network.state_dict()[k]
+            loaded = loaded_model._network.state_dict()[k]
+            if isinstance(raw, paddle.Tensor):
+                # convert tensor to numpy and call np.alltrue() to compare.
+                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy().astype(np.float64)))
+
+        # encoded results expected.
+        loaded_model_encoded_ndarray = loaded_model.encode(tsdataset=paddlets_ds)
+        self.assertTrue(np.alltrue(encoded_ndarray == loaded_model_encoded_ndarray))
+        shutil.rmtree(path)
+
+        ######################################################
+        # case 2 (bad case)                                  #
+        # 1) The loaded model is inherited from MLBaseModel. #
+        # 2) (bad) Model_meta is invalid.                    #
+        ######################################################
+        in_chunk_len = 18
+        out_chunk_len = 3
+        model = self._build_arima_model(in_chunk_len=in_chunk_len, out_chunk_len=out_chunk_len)
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # get predicted dataset before load
+        pred_ds_before_load = model.predict(paddlets_ds)
+        self.assertEqual(
+            (out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            pred_ds_before_load.get_target().data.shape
+        )
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        modelname = self.default_modelname
+        abs_model_path = os.path.join(path, modelname)
+        model.save(abs_model_path)
+        # case 2.1 Explicitly make model_meta invalid: Delete ancestor_classname_set info from model_meta.
+        abs_modelmeta_path = os.path.join(path, "%s_%s" % (modelname, "model_meta"))
+        with open(abs_modelmeta_path, "r") as f:
+            good_model_meta = json.load(f)
+
+        bad_model_meta = {k: v for k, v in good_model_meta.items() if k not in {"ancestor_classname_set"}}
+        with open(abs_modelmeta_path, "w") as f:
+            json.dump(bad_model_meta, f, ensure_ascii=False)
+
+        succeed = True
+        try:
+            loaded_model = paddlets.models.load(abs_model_path)
+        except Exception as e:
+            succeed = False
+        self.assertFalse(succeed)
+
+        # case 2.2 Explicitly make model_meta invalid: Delete modulename info from model_meta.
+        bad_model_meta = {k: v for k, v in good_model_meta.items() if k not in {"modulename"}}
+        with open(abs_modelmeta_path, "w") as f:
+            json.dump(bad_model_meta, f, ensure_ascii=False)
+
+        succeed = True
+        try:
+            loaded_model = paddlets.models.load(abs_model_path)
+        except Exception as e:
+            succeed = False
+        self.assertFalse(succeed)
+
+        shutil.rmtree(path)
+
         #################################################################################
-        # case 2 (bad case)                                                             #
+        # case 3 (bad case)                                                             #
         # 1) Model exists under the given path.                                         #
         # 1) (bad) The model is neither inherited from MLBaseModel not PaddleBaseModel. #
         #################################################################################
@@ -244,7 +384,7 @@ class TestModelLoader(unittest.TestCase):
         shutil.rmtree(path)
 
         ######################################
-        # case 3 (bad case) Path NOT exists. #
+        # case 4 (bad case) Path NOT exists. #
         ######################################
         # no such path
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -258,7 +398,7 @@ class TestModelLoader(unittest.TestCase):
         self.assertFalse(succeed)
 
         ##########################################################
-        # case 4 (bad case) path is a directory, but NOT a file. #
+        # case 5 (bad case) path is a directory, but NOT a file. #
         ##########################################################
         # path is dir, not a file.
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -272,6 +412,41 @@ class TestModelLoader(unittest.TestCase):
 
         self.assertFalse(succeed)
         shutil.rmtree(path)
+
+    def _build_arima_model(
+        self,
+        in_chunk_len: int = 18,
+        out_chunk_len: int = 3,
+        skip_chunk_len: int = 0,
+        p: int = 0,
+        q: int = 1,
+        d: int = 0,
+        trend: str = "c",
+        method: str = "css-mle"
+    ):
+        """
+        Internal method to build ml arima model.
+
+        Args:
+            in_chunk_len(int, optional): ARIMAModel model required param.
+            out_chunk_len(int, optional): ARIMAModel model required param.
+            skip_chunk_len(int, optional): ARIMAModel model required param.
+            p(int, optional): ARIMAModel model required param.
+            d(int, optional): ARIMAModel model required param.
+            q(int, optional): ARIMAModel model required param.
+            trend(str, optional): ARIMAModel model required param.
+            method(str, optional): ARIMAModel model required param.
+        """
+        return ArimaModel(
+            in_chunk_len=in_chunk_len,
+            out_chunk_len=out_chunk_len,
+            skip_chunk_len=skip_chunk_len,
+            p=p,
+            d=d,
+            q=q,
+            trend=trend,
+            method=method
+        )
 
     def _build_rnn_model(
             self,
@@ -304,6 +479,20 @@ class TestModelLoader(unittest.TestCase):
             fcn_out_config=[32] if fcn_out_config is None else fcn_out_config,
             eval_metrics=["mse", "mae"] if eval_metrics is None else eval_metrics
         )
+
+    def _build_ts2vec_model(
+        self,
+        segment_size=300,
+        sampling_stride=300,
+        max_epochs=1
+    ) -> TS2Vec:
+        """
+        Internal-only method, used for building a model. The model is inherited from ReprBaseModel.
+
+        Returns:
+            TS2Vec: the built model instance.
+        """
+        return TS2Vec(segment_size=segment_size, sampling_stride=sampling_stride, max_epochs=max_epochs)
 
     @staticmethod
     def _build_mock_ts_dataset(
@@ -360,5 +549,5 @@ class TestModelLoader(unittest.TestCase):
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1, "static1": 2}
+            static_cov={"static0": 1.0, "static1": 2.0}
         )
