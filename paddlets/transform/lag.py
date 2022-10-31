@@ -39,7 +39,7 @@ class LagFeatureGenerator(BaseTransform):
         self.need_previous_data = True
         self.n_rows_pre_data_need = lag_points
 
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         This transformer does not need to be fitted.
 
@@ -51,7 +51,7 @@ class LagFeatureGenerator(BaseTransform):
         """
         return self
 
-    def transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
         """
         Transform target column to lag features.
         
@@ -81,16 +81,3 @@ class LagFeatureGenerator(BaseTransform):
                 else:
                     tcov.data[feature_name + '%s_%d' % (self.suffix, index)] = v
         return new_ts
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        Fit and transform target columns to lag features.
-        
-        Args:
-            dataset(TSDataset): Dataset to be fitted and transformed.
-            inplace(bool): Whether to perform the transformation inplace. default=False
-        
-        Returns:
-            TSDataset
-        """
-        return self.fit(dataset).transform(dataset, inplace)

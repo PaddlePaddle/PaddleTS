@@ -30,6 +30,7 @@ known covariates (known_cov), observed covariates (observed_cov), and static cov
 
 """
 from copy import deepcopy
+import json
 import math
 import pickle
 from typing import Any, Callable, List, Optional, Sequence, Tuple, Union, Dict
@@ -58,9 +59,15 @@ class TimeSeries(object):
     """
     def __init__(
         self,
-        data: pd.DataFrame,
+        data: Union[pd.DataFrame, pd.Series],
         freq: Union[int, str],
     ):
+        if isinstance(data, pd.Series):
+            data = data.to_frame()
+        raise_if_not(
+            isinstance(data, pd.DataFrame),
+            f"The type of param `data` must be pd.DataFrame or pd.Series, but {type(data)} received"
+        )
         self._data = data
         self._freq = freq
         if isinstance(self.freq, str):
@@ -79,7 +86,8 @@ class TimeSeries(object):
         time_col: Optional[str] = None,
         value_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
-        drop_tail_nan: bool = False
+        drop_tail_nan: bool = False,
+        dtype: Optional[Union[type, Dict[str, type]]] = None
     ) -> "TimeSeries":
         """
         Construct a TimeSeries object from the specified columns of a DataFrame
@@ -93,6 +101,9 @@ class TimeSeries(object):
             freq(str|int|None): A string or int representing the Pandas DateTimeIndex's frequency or RangeIndex's step size
             drop_tail_nan(bool): Drop time series tail nan value or not, if True, drop all `Nan` value after the last `non-Nan` element in the current time series.
                 eg: [nan, 3, 2, nan, nan] -> [nan, 3, 2], [3, 2, nan, nan] -> [3, 2], [nan, nan, nan] -> []
+            dtype(np.dtype|type|dict): Use a numpy.dtype or Python type to cast entire TimeSeries object to the same type. 
+                Alternatively, use {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or 
+                Python type to cast one or more of the DataFrame’s columns to column-specific types.
 
         Returns:
             TimeSeries object
@@ -127,6 +138,9 @@ class TimeSeries(object):
             time_col_vals.duplicated().any(),
             "duplicated values in the time column!"
         )
+        #Try to convert to string and generate DatetimeIndex
+        if np.issubdtype(time_col_vals.dtype, np.integer) and isinstance(freq, str):
+            time_col_vals = time_col_vals.astype(str)
         #get time_index
         if np.issubdtype(time_col_vals.dtype, np.integer):
             if freq: 
@@ -147,6 +161,7 @@ class TimeSeries(object):
             )
         elif np.issubdtype(time_col_vals.dtype, np.object_) or \
             np.issubdtype(time_col_vals.dtype, np.datetime64):
+            time_col_vals = pd.to_datetime(time_col_vals, infer_datetime_format=True)
             time_index = pd.DatetimeIndex(time_col_vals)
             if freq: 
                 #freq type needs to be string when time_col type is DatetimeIndex
@@ -161,6 +176,8 @@ class TimeSeries(object):
                     freq is None,
                     "Failed to infer the `freq`. A valid `freq` is required."
                 )
+                if freq[0] == '-':
+                    freq = freq[1:]
         else:
             raise_log(ValueError("The type of `time_col` is invalid.")) 
         if isinstance(series_data, pd.Series):
@@ -170,7 +187,9 @@ class TimeSeries(object):
         ts = TimeSeries(series_data, freq)
         if drop_tail_nan:
             ts.drop_tail_nan()
-        return ts
+        if dtype:
+            ts.astype(dtype)
+        return ts 
     
     @property
     def time_index(self):
@@ -234,6 +253,7 @@ class TimeSeries(object):
 
         """
         self._data = self._data.astype(dtype)
+        return self
 
     def to_dataframe(self, copy: bool=True) -> pd.DataFrame:
         """
@@ -531,6 +551,79 @@ class TimeSeries(object):
         """
         end_index = self._find_end_index()
         self.reindex(self.time_index[:end_index + 1])
+    
+    def to_json(self) -> str:
+        """
+        Return a str json representation of the TimeSeries object.
+
+        Returns:
+            str
+        """
+        json_res = {'freq': self._freq}
+        if isinstance(self._freq, str):
+            data = self._data.copy()
+            data.index = data.index.astype(str)
+        else:
+            data = self._data
+        json_res['data'] = data.to_dict()
+        return json.dumps(json_res, ensure_ascii=False)
+    
+    @classmethod
+    def load_from_json(cls, json_data: str, **json_load_kwargs) -> "TimeSeries":
+        """
+        Construct a TimeSeries object from a str json_data
+        
+        Args:
+            json_data(str):  json object from which to load data
+            **json_load_kwargs: Optional arguments passed to `json.loads` function
+        
+        Returns:
+            TimeSeries
+        """
+        res = json.loads(json_data, **json_load_kwargs)
+        freq = res['freq']
+        data = res['data']
+        data = pd.DataFrame(data)
+        if isinstance(freq, str):
+            data.index = pd.DatetimeIndex(data.index.to_list())
+        else:
+            start_idx, stop_idx = min(data.index.astype(int)), max(data.index.astype(int)) + freq
+            data.index = pd.RangeIndex(
+                start=start_idx, stop=stop_idx, step=freq
+            )
+        return TimeSeries(data, freq)
+
+    def to_categorical(self, col: Optional[Union[str, List[str]]] = None):
+        """
+        Modify col's type to int as categorical.
+
+        Args:
+            col(Optional[Union[str, List[str]]]): col names in ts
+
+        """
+        if col:
+            if isinstance(col, str):
+                col = [col]
+            dtype = {col_one: np.int64 for col_one in col}
+            self.astype(dtype)
+        else:
+            self.astype(np.int64)
+
+    def to_numeric(self, col: Optional[Union[str, List[str]]] = None):
+        """
+        Modify col's type to float as numeric.
+
+        Args:
+            col(Optional[Union[str, List[str]]]): col names in ts
+
+        """
+        if col:
+            if isinstance(col, str):
+                col = [col]
+            dtype = {col_one: np.float32 for col_one in col}
+            self.astype(dtype)
+        else:
+            self.astype(np.float32)
 
 
 class TSDataset(object):
@@ -676,9 +769,12 @@ class TSDataset(object):
     def load_from_csv(
         cls,
         filepath_or_buffer: str,
+        group_id: str = None,
         time_col: Optional[str] = None,
         target_cols: Optional[Union[List[str], str]] = None,
+        label_col: Optional[Union[List[str], str]] = None,
         observed_cov_cols: Optional[Union[List[str], str]] = None,
+        feature_cols: Optional[Union[List[str], str]] = None,
         known_cov_cols: Optional[Union[List[str], str]] = None,
         static_cov_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
@@ -686,16 +782,25 @@ class TSDataset(object):
         fillna_method: str = "pre",
         fillna_window_size: int = 10,
         drop_tail_nan: bool = False,
+        dtype: Optional[Union[type, Dict[str, type]]] = None,
         **kwargs
-    ) -> "TSDataset":
+    ) -> Union["TSDataset", List["TSDataset"]]:
         """
         Construct a TSDataset object from a csv file
 
         Args:
             filepath_or_buffer(str): The path to the CSV file, or the file object; 
                 consistent with the argument of `pandas.read_csv` function
+            group_id(str|None): The column name identifying a time series. 
+                This means that the group_id identify a sample together with the `time_index`. 
+                If you have only one timeseries dataset, Do not pass this parameter or set this to the name of column that is constant.
+                If group_id is provided, the function will return a list of TSDataset which length equal to len(group_id.unique()).
+                eg: A sample of equipment load detection guarantees the data of multiple equipment, in which the `ID` column is used to distinguish different equipment. In this case, the group_id='ID'.
             time_col(str|None): The name of time column
+            target_cols(list|str|None): The names of columns for target
+            label_col(list|str|None): The names of columns for label in anomaly detection
             observed_cov_cols(list|str|None): The names of columns for observed covariates
+            feature_cols(list|str|None): The names of columns for feature in anomaly detection
             known_cov_cols(list|str|None): The names of columns for konwn covariates
             static_cov_cols(list|str|None): The names of columns for static covariates
             freq(str|int|None): A str or int representing the DateTimeIndex's frequency or RangeIndex's step size
@@ -710,17 +815,23 @@ class TSDataset(object):
                 zero:  Use 0 
             fillna_window_size(int): Size of the sliding window
             drop_tail_nan(bool): Drop time series tail nan value or not
+            dtype(np.dtype|type|dict): Use a numpy.dtype or Python type to cast entire TimeSeries object to the same type. 
+                Alternatively, use {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or 
+                Python type to cast one or more of the DataFrame’s columns to column-specific types.
             kwargs: Optional arguments passed to `pandas.read_csv`
 
         Returns:
-            TSDataset object
+            Union[TSDataset, List[TSDataset]]
         """
         df = pd.read_csv(filepath_or_buffer=filepath_or_buffer, **kwargs)
         return cls.load_from_dataframe(
             df=df,
+            group_id=group_id,
             time_col=time_col,
             target_cols=target_cols,
+            label_col=label_col,
             observed_cov_cols=observed_cov_cols,
+            feature_cols=feature_cols,
             known_cov_cols=known_cov_cols,
             static_cov_cols=static_cov_cols,
             freq=freq,
@@ -728,15 +839,19 @@ class TSDataset(object):
             fillna_method=fillna_method,
             fillna_window_size=fillna_window_size,
             drop_tail_nan=drop_tail_nan,
+            dtype=dtype,
         )
 
     @classmethod
     def load_from_dataframe(
         cls,
         df: pd.DataFrame,
+        group_id: str = None,
         time_col: Optional[str] = None,
         target_cols: Optional[Union[List[str], str]] = None,
+        label_col: Optional[Union[List[str], str]] = None,
         observed_cov_cols: Optional[Union[List[str], str]] = None,
+        feature_cols: Optional[Union[List[str], str]] = None,
         known_cov_cols: Optional[Union[List[str], str]] = None,
         static_cov_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
@@ -744,14 +859,23 @@ class TSDataset(object):
         fillna_method: str = "pre",
         fillna_window_size: int = 10,
         drop_tail_nan: bool = False,
-    ) -> "TSDataset":
+        dtype: Optional[Union[type, Dict[str, type]]] = None
+    ) -> Union["TSDataset", List["TSDataset"]]:
         """
         Construct a TSDataset object from a DataFrame
 
         Args:
-            df(pd.DataFrame): panas.DataFrame object from which to load data         
+            df(pd.DataFrame): panas.DataFrame object from which to load data
+            group_id(str|None): The column name identifying a time series. 
+                This means that the group_id identify a sample together with the `time_index`. 
+                If you have only one timeseries dataset, Do not pass this parameter or set this to the name of column that is constant.
+                If group_id is provided, the function will return a list of TSDataset which length equal to len(group_id.unique()).
+                eg: A sample of equipment load detection guarantees the data of multiple equipment, in which the `ID` column is used to distinguish different equipment. In this case, the group_id='ID'.
             time_col(str|None): The name of time column
+            target_cols(list|str|None): The names of columns for target
+            label_col(list|str|None): The names of columns for label in anomaly detection
             observed_cov_cols(list|str|None): The names of columns for observed covariates
+            feature_cols(list|str|None): The names of columns for feature in anomaly detection
             known_cov_cols(list|str|None): The names of columns for konwn covariates
             static_cov_cols(list|str|None): The names of columns for static covariates
             freq(str|int|None): A str or int representing the DateTimeIndex's frequency or RangeIndex's step size
@@ -766,74 +890,110 @@ class TSDataset(object):
                 zero:  Use 0s
             fillna_window_size(int): Size of the sliding window
             drop_tail_nan(bool): Drop time series tail nan value or not
+            dtype(np.dtype|type|dict): Use a numpy.dtype or Python type to cast entire TimeSeries object to the same type. 
+                Alternatively, use {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or 
+                Python type to cast one or more of the DataFrame’s columns to column-specific types.
             
         Returns:
-            TSDataset object
+            Union[TSDataset, List[TSDataset]]
         """
         raise_if_not(
             df.columns.is_unique,
-            "The column names of the input DataFramw are not unique."
+            "The column names of the input DataFrame are not unique."
         )
-        target = None
-        observed_cov = None
-        known_cov = None
-        static_cov = dict()
-        if not any([target_cols, observed_cov_cols, known_cov_cols, static_cov_cols]):
-            #By default all columns are target columns
-            target = TimeSeries.load_from_dataframe(
-                df, 
-                time_col,
-                [a for a in df.columns if a != time_col],
-                freq,
+        dfs = []
+        if group_id is not None:
+            raise_if_not(
+                group_id in df.columns,
+                f"group_id: {group_id} not in df!"
             )
-            if drop_tail_nan:
-                target.drop_tail_nan()
+            group_unique = df[group_id].unique()
+            for column in group_unique:
+                dfs.append(df[df[group_id].isin([column])])
         else:
-            if target_cols:
+            dfs = [df]
+        res = []
+        if label_col:
+            raise_if(
+                target_cols is not None,
+                "label_col and target_cols cannot pass at the same time!"
+            )
+            raise_if(
+                isinstance(label_col, list) and len(label_col) > 1,
+                "The length of label_col must be 1."
+            )
+            target_cols = label_col
+        if feature_cols:
+            raise_if(
+                observed_cov_cols is not None or known_cov_cols is not None,
+                "feature_cols and cov_cols cannot pass at the same time!"
+            )
+            observed_cov_cols = feature_cols
+        for df in dfs:
+            target = None
+            observed_cov = None
+            known_cov = None
+            static_cov = dict()
+            if not any([target_cols, observed_cov_cols, known_cov_cols, static_cov_cols]):
+                #By default all columns are target columns
                 target = TimeSeries.load_from_dataframe(
                     df, 
                     time_col,
-                    target_cols,
+                    [a for a in df.columns if a != time_col],
                     freq,
                 )
                 if drop_tail_nan:
                     target.drop_tail_nan()
-            if observed_cov_cols:
-                observed_cov = TimeSeries.load_from_dataframe(
-                    df, 
-                    time_col,
-                    observed_cov_cols,
-                    freq,
-                )
-                if drop_tail_nan:
-                    observed_cov.drop_tail_nan()
-            if known_cov_cols:            
-                known_cov = TimeSeries.load_from_dataframe(
-                    df, 
-                    time_col,
-                    known_cov_cols,
-                    freq,
-                )
-                if drop_tail_nan:
-                    known_cov.drop_tail_nan()
-            if static_cov_cols:
-                if isinstance(static_cov_cols, str):
-                    static_cov_cols = [static_cov_cols]
-                for col in static_cov_cols:
-                    raise_if(
-                        col not in df.columns or len(np.unique(df[col])) != 1,
-                        "static cov cals data is not in columns or schema is not right!"
+            else:
+                if target_cols:
+                    target = TimeSeries.load_from_dataframe(
+                        df, 
+                        time_col,
+                        target_cols,
+                        freq,
                     )
-                    static_cov[col] = df[col][0]
-        return cls(
-            target, 
-            observed_cov, 
-            known_cov, 
-            static_cov,
-            fill_missing_dates,
-            fillna_method,
-            fillna_window_size,
-        )
+                    if drop_tail_nan:
+                        target.drop_tail_nan()
+                if observed_cov_cols:
+                    observed_cov = TimeSeries.load_from_dataframe(
+                        df, 
+                        time_col,
+                        observed_cov_cols,
+                        freq,
+                    )
+                    if drop_tail_nan:
+                        observed_cov.drop_tail_nan()
+                if known_cov_cols:            
+                    known_cov = TimeSeries.load_from_dataframe(
+                        df, 
+                        time_col,
+                        known_cov_cols,
+                        freq,
+                    )
+                    if drop_tail_nan:
+                        known_cov.drop_tail_nan()
+                if static_cov_cols:
+                    if isinstance(static_cov_cols, str):
+                        static_cov_cols = [static_cov_cols]
+                    for col in static_cov_cols:
+                        raise_if(
+                            col not in df.columns or len(np.unique(df[col])) != 1,
+                            "static cov cals data is not in columns or schema is not right!"
+                        )
+                        static_cov[col] = df[col].iloc[0]
+            res.append(cls(
+                target, 
+                observed_cov, 
+                known_cov, 
+                static_cov,
+                fill_missing_dates,
+                fillna_method,
+                fillna_window_size,
+            ))
+            if dtype:
+                for one in res:
+                    one.astype(dtype) 
+        return res if len(res) > 1 else res[0]
     
     def to_dataframe(self, copy: bool=True) -> pd.DataFrame:
         """
@@ -878,6 +1038,14 @@ class TSDataset(object):
         """
         return self._target
     
+    def get_label(self) -> Optional["TimeSeries"]:
+        """
+        Returns:
+            TimeSeries|None: target
+
+        """
+        return self.get_target()
+    
     def get_observed_cov(self) -> Optional["TimeSeries"]:
         """
         Returns:
@@ -885,6 +1053,14 @@ class TSDataset(object):
 
         """
         return self._observed_cov
+    
+    def get_feature(self) -> Optional["TimeSeries"]:
+        """
+        Returns:
+            TimeSeries|None: observed_cov
+
+        """
+        return self.get_observed_cov()
     
     def get_known_cov(self) -> Optional["TimeSeries"]:
         """
@@ -912,6 +1088,15 @@ class TSDataset(object):
         return self._target
     
     @property
+    def label(self) -> Optional["TimeSeries"]:
+        """
+        Returns:
+            TimeSeries|None: target
+
+        """
+        return self.target
+    
+    @property
     def observed_cov(self) -> Optional["TimeSeries"]:
         """
         Returns:
@@ -919,6 +1104,15 @@ class TSDataset(object):
 
         """
         return self._observed_cov
+    
+    @property
+    def feature(self) -> Optional["TimeSeries"]:
+        """
+        Returns:
+            TimeSeries|None: observed_cov
+
+        """
+        return self.observed_cov
     
     @property
     def known_cov(self) -> Optional["TimeSeries"]:
@@ -966,6 +1160,20 @@ class TSDataset(object):
         self._target = target
         self._check_data()
     
+    def set_label(self, label: "TimeSeries"):
+        """
+        Args:
+            label(TimeSeries): New label
+
+        Returns:
+            None
+
+        Raise:
+            ValueError
+
+        """
+        return self.set_target(label)
+    
     def set_observed_cov(self, observed_cov: "TimeSeries"):
         """
         Args:
@@ -980,6 +1188,20 @@ class TSDataset(object):
         """
         self._observed_cov = observed_cov
         self._check_data()   
+
+    def set_feature(self, feature: "TimeSeries"):
+        """
+        Args:
+            feature(TimeSeries): New feature
+
+        Returns:
+            None
+
+        Raise:
+            ValueError
+
+        """
+        return self.set_observed_cov(feature)  
 
     def set_known_cov(self, known_cov: "TimeSeries"):
         """
@@ -1030,6 +1252,21 @@ class TSDataset(object):
         """
         self._target = target
         self._check_data()
+
+    @label.setter
+    def label(self, label: "TimeSeries"):
+        """
+        Args:
+            label(TimeSeries): New target
+
+        Returns:
+            None
+
+        Raise:
+            ValueError
+
+        """
+        return self.set_label(label)
     
     @observed_cov.setter
     def observed_cov(self, observed_cov: "TimeSeries"):
@@ -1045,7 +1282,22 @@ class TSDataset(object):
 
         """
         self._observed_cov = observed_cov
-        self._check_data()   
+        self._check_data()
+
+    @feature.setter
+    def feature(self, feature: "TimeSeries"):
+        """
+        Args:
+            feature(TimeSeries): New feature
+
+        Returns:
+            None
+
+        Raise:
+            ValueError
+
+        """
+        return self.set_feature(feature)
 
     @known_cov.setter
     def known_cov(self, known_cov: "TimeSeries"):
@@ -1109,14 +1361,18 @@ class TSDataset(object):
 
         """
 
-        raise_if_not(
-            self._target,
-            "Failed to split, the TSDataset's target is None."
-        )
-        train_target, test_target = self._target.split(split_point, after)
-        time_point_split = train_target.end_time
-        if isinstance(time_point_split, int):
-            time_point_split = (time_point_split - train_target.start_time) // train_target.freq + 1
+        if self.target is not None:
+            train_target, test_target = self._target.split(split_point, after)
+            time_point_split = train_target.end_time
+            if isinstance(time_point_split, int):
+                time_point_split = (time_point_split - train_target.start_time) // train_target.freq + 1
+        else:
+            raise_if(
+                self.observed_cov is not None and self.known_cov is not None,
+                "Failed to split, the TSDataset's target can not be None when both observed_cov and known_cov are not None."
+            )
+            train_target, test_target = (None, None)
+            time_point_split = split_point
         train_observed_cov, test_observed_cov = self._observed_cov.split(time_point_split, after) \
             if self._observed_cov else (None, None)
         _, test_known_cov = self._known_cov.split(time_point_split, after) \
@@ -1124,7 +1380,7 @@ class TSDataset(object):
         return (
             TSDataset(train_target, train_observed_cov, self._known_cov, self._static_cov),
             TSDataset(test_target, test_observed_cov, test_known_cov, self._static_cov)
-        )
+        )  
 
     def get_item_from_column(self, column: Union[str, int]) -> Union["TimeSeries", dict]:
         """
@@ -1197,12 +1453,14 @@ class TSDataset(object):
                 res = pd.concat([res, self._known_cov.data[columns_in_known_cov]], axis=1) \
                     if res is not None else self._known_cov.data[columns_in_known_cov]
         if self._static_cov:
-            columns_in_staitc_cov = [v for v in columns if v in self._static_cov]
-            if columns_in_staitc_cov:
-                for tmp in columns_in_staitc_cov:
+            columns_in_static_cov = [v for v in columns if v in self._static_cov]
+            if columns_in_static_cov:
+                len_static = 1 if res is None else res.shape[0]
+                index_static = [1] if res is None else res.index
+                for tmp in columns_in_static_cov:
                     tmp_df = pd.Series(
-                        [self._static_cov[tmp] for i in range(len(self._target.data))],
-                        index=self._target.time_index,
+                        [self._static_cov[tmp] for i in range(len_static)],
+                        index=index_static,
                         name=tmp
                     )
                     res = pd.concat([res, tmp_df], axis=1) \
@@ -1388,9 +1646,9 @@ class TSDataset(object):
                 if self._known_cov.data.shape[1] == 0:
                     self._known_cov = None
         if self._static_cov is not None:
-            columns_in_staitc_cov = [v for v in columns if v in self._static_cov]
-            if columns_in_staitc_cov:
-                for tmp in columns_in_staitc_cov:
+            columns_in_static_cov = [v for v in columns if v in self._static_cov]
+            if columns_in_static_cov:
+                for tmp in columns_in_static_cov:
                     del self._static_cov[tmp]
                 if len(self._static_cov) == 0:
                     self._static_cov = None
@@ -1637,6 +1895,49 @@ class TSDataset(object):
         with open(file, 'rb') as f:
             return pickle.load(f)
     
+    def to_json(self) -> str:
+        """
+        Return a str json representation of the TSDataset object.
+
+        Returns:
+            str
+        """
+        attrs = ['target', 'observed_cov', 'known_cov']
+        res = {}
+        for attr in attrs:
+            attr_ts = getattr(self, attr) 
+            if attr_ts is not None:
+                res[attr] = attr_ts.to_json()
+            else:
+                res[attr] = None
+        if self.static_cov is not None:
+            res['static_cov'] = json.dumps(self.static_cov, ensure_ascii=False)
+        else:
+            res['static_cov'] = None
+        return json.dumps(res)
+
+    @classmethod
+    def load_from_json(cls, json_data: str, **json_load_kwargs) -> "TSDataset":
+        """
+        Construct a TSDataset object from a str json_data
+        
+        Args:
+            json_data(str):  json object from which to load data
+            **json_load_kwargs: Optional arguments passed to `json.loads` function
+        
+        Returns:
+            TSDataset
+        """
+        res = json.loads(json_data, **json_load_kwargs)
+        attrs = ['target', 'observed_cov', 'known_cov']
+        params = {}
+        for attr in attrs:
+            if res[attr] is not None:
+                params[attr] = TimeSeries.load_from_json(res[attr], **json_load_kwargs)
+        if res['static_cov'] is not None:
+            params['static_cov'] = json.loads(res['static_cov'], **json_load_kwargs)
+        return TSDataset(**params)
+    
     @property
     def columns(self) -> dict:
         """return all columns(except static columns)
@@ -1701,12 +2002,12 @@ class TSDataset(object):
                         static_cov[key] = value
         return TSDataset(target, observed_cov, known_cov, static_cov)
 
-    def astype(self, type: Union[str, Dict[str, str]]):
+    def astype(self, dtype: Union[np.dtype, type, Dict[str, Union[np.dtype, type]]]):
         """
         Cast a TSDataset object to the specified dtype
 
         Args:
-            type(str|dict): Use a numpy.dtype or Python type to cast entire TimeSeries object to the same type. 
+            dtype(Union[np.dtype, type, Dict[str, Union[np.dtype, type]]]): Use a numpy.dtype or Python type to cast entire TimeSeries object to the same type. 
                 Alternatively, use {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or 
                 Python type to cast one or more of the DataFrame’s columns to column-specific types.
 
@@ -1718,30 +2019,38 @@ class TSDataset(object):
         target_type = {}
         known_cov_type = {}
         observed_cov_type = {}
-        if isinstance(type, str):
-            target_type = known_cov_type = observed_cov_type = type
-        elif isinstance(type, dict):
-            for key, value in type.items():
+        static_cov_type = {}
+        if isinstance(dtype, dict):
+            for key, value in dtype.items():
                 raise_if_not(
-                    key in self.columns,
+                    key in self.columns or \
+                    (self._static_cov and key in self._static_cov),
                     f"Invaild key: {key}"
                 )
-                if self.columns[key] == 'target':
+                if self._static_cov and key in self._static_cov:
+                    static_cov_type[key] = value
+                elif self.columns[key] == 'target':
                     target_type[key] = value
                 elif self.columns[key] == 'known_cov':
                     known_cov_type[key] = value
                 elif self.columns[key] == 'observed_cov':
                     observed_cov_type[key] = value
         else:
-            raise_log(
-                TypeError(f"Invaild type: {type}")
-            )    
+            target_type = known_cov_type = observed_cov_type = static_cov_type = dtype   
         if self._target is not None and target_type:
             self._target.astype(target_type)
         if self._known_cov is not None and known_cov_type:
             self._known_cov.astype(known_cov_type)
         if self._observed_cov is not None and observed_cov_type:
             self._observed_cov.astype(observed_cov_type)
+        if self._static_cov and static_cov_type:
+            if isinstance(static_cov_type, dict):
+                for key, value in static_cov_type.items():
+                    self._static_cov[key] = np.array([self._static_cov[key]]).astype(value)[0]
+            else:
+                for key, value in self._static_cov.items():
+                    self._static_cov[key] = np.array([value]).astype(static_cov_type)[0]
+        return self
     
     @property
     def dtypes(self) -> pd.Series:
@@ -1758,6 +2067,8 @@ class TSDataset(object):
             type_list.append(self._known_cov.dtypes)
         if self._observed_cov is not None:
             type_list.append(self._observed_cov.dtypes)
+        if self._static_cov:
+            type_list.append(pd.DataFrame(self._static_cov, index=[0]).dtypes)
         return pd.concat(type_list)
 
     def sort_columns(self, ascending: bool = True):
@@ -1776,3 +2087,35 @@ class TSDataset(object):
         if self._observed_cov is not None:
             self._observed_cov.sort_columns(ascending)
         return self
+
+    def to_categorical(self, col: Optional[Union[str, List[str]]] = None):
+        """
+        Modify col's type to int as categorical.
+
+        Args:
+            col(Optional[Union[str, List[str]]]): col names in ts
+
+        """
+        if col:
+            if isinstance(col, str):
+                col = [col]
+            dtype = {col_one: np.int64 for col_one in col}
+            self.astype(dtype)
+        else:
+            self.astype(np.int64)
+
+    def to_numeric(self, col: Optional[Union[str, List[str]]] = None):
+        """
+        Modify col's type to float as numeric.
+
+        Args:
+            col(Optional[Union[str, List[str]]]): col names in ts
+
+        """
+        if col:
+            if isinstance(col, str):
+                col = [col]
+            dtype = {col_one: np.float32 for col_one in col}
+            self.astype(dtype)
+        else:
+            self.astype(np.float32)

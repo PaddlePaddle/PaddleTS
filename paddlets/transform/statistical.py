@@ -90,7 +90,7 @@ class StatsTransform(BaseTransform):
         self.n_rows_pre_data_need = self._end
 
     @log_decorator
-    def fit(self, tsdata: TSDataset):
+    def fit_one(self, tsdata: TSDataset):
         """
         Fit the StatsTransform to dataset.
         
@@ -103,7 +103,7 @@ class StatsTransform(BaseTransform):
         return self
 
     @log_decorator
-    def transform(self, tsdata: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, tsdata: TSDataset, inplace: bool = False) -> TSDataset:
         """
         Transform dataset to statstransform codes.
         
@@ -147,16 +147,3 @@ class StatsTransform(BaseTransform):
                 self._map[e].clear()
 
         return new_ts
-
-    def fit_transform(self, tsdata: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        Fit StatsTransform to dataset, then transform dataset.
-        
-        Args:
-            tsdata(TSDataset): Dataset to be fitted and transformed.
-            inplace(bool): Whether to perform the transformation inplace. default=False
-        
-        Returns:
-            TSDataset
-        """
-        return self.fit(tsdata).transform(tsdata, inplace)

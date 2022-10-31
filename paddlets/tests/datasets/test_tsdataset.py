@@ -107,6 +107,27 @@ class TestTimeSeries(TestCase):
         ts1 = TimeSeries.load_from_dataframe(data=sample1, freq=2)
         self.assertEqual(ts1.freq, 2)
         self.assertEqual(ts1.data.shape, (100, 1))
+        self.assertEqual(ts1.dtypes['a'], np.float64)
+
+        ts1 = TimeSeries.load_from_dataframe(data=sample1, freq=2, dtype=np.int64)
+        self.assertEqual(ts1.freq, 2)
+        self.assertEqual(ts1.data.shape, (100, 1))
+        self.assertEqual(ts1.dtypes['a'], np.int64)
+
+        ts1 = TimeSeries.load_from_dataframe(data=sample1, freq=2, dtype={'a': np.int64})
+        self.assertEqual(ts1.freq, 2)
+        self.assertEqual(ts1.data.shape, (100, 1))
+        self.assertEqual(ts1.dtypes['a'], np.int64)
+
+        ts1.to_numeric()
+        self.assertEqual(ts1.dtypes['a'], np.float32)
+        ts1.to_categorical()
+        self.assertEqual(ts1.dtypes['a'], np.int64)
+        
+        ts1.to_numeric('a')
+        self.assertEqual(ts1.dtypes['a'], np.float32)
+        ts1.to_categorical(['a'])
+        self.assertEqual(ts1.dtypes['a'], np.int64)
 
     def test_property(self):
         """
@@ -352,6 +373,42 @@ class TestTimeSeries(TestCase):
         ts1 = TimeSeries.load_from_dataframe(data=sample1)
         self.assertEqual(ts1.data.shape, (200, 3))
 
+    def test_json(self):
+        """
+        unittest function
+        """
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            index=pd.date_range('2022-01-01', periods=200, freq='1D'),
+            columns=['a', 'b', 'c']
+        )
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        json_data = ts1.to_json()
+        ts2 = TimeSeries.load_from_json(json_data)
+        self.assertEqual(ts1.data.shape, ts2.data.shape)
+        self.assertTrue((ts1.time_index == ts2.time_index).all())
+
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            columns=['a', 'b', 'c']
+        )
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        json_data = ts1.to_json()
+        ts2 = TimeSeries.load_from_json(json_data)
+        self.assertEqual(ts1.data.shape, ts2.data.shape)
+        self.assertTrue((ts1.time_index == ts2.time_index).all())
+
+        sample1 = pd.DataFrame(
+            np.random.randn(200, 3), 
+            columns=['a', 'b', '测试列']
+        )
+        ts1 = TimeSeries.load_from_dataframe(data=sample1)
+        json_data = ts1.to_json()
+        ts2 = TimeSeries.load_from_json(json_data)
+        self.assertEqual(ts1.data.shape, ts2.data.shape)
+        self.assertTrue((ts1.time_index == ts2.time_index).all())
+        self.assertTrue((ts1.columns == ts2.columns).all())
+
 
 class TestTSDataset(TestCase): 
     def setUp(self):
@@ -463,7 +520,129 @@ class TestTSDataset(TestCase):
         self.assertEqual(tsdataset.get_target().data.shape, (399, 1))
         self.assertFalse(tsdataset.get_all_cov().data.isna().values.any())
         self.assertFalse(tsdataset.get_target().data.isna().values.any())
-    
+        tsdataset = TSDataset.load_from_dataframe(
+            df=sample1, 
+            label_col='a', 
+            feature_cols=['c', 'd'], 
+            static_cov_cols='s', 
+            time_col='f',
+            freq = '12H',
+            fill_missing_dates=True,
+            fillna_method='max'
+        )
+        self.assertEqual(tsdataset.get_all_cov().data.shape, (399, 2))
+        self.assertEqual(tsdataset.get_target().data.shape, (399, 1))
+        self.assertFalse(tsdataset.get_all_cov().data.isna().values.any())
+        self.assertFalse(tsdataset.get_target().data.isna().values.any())
+        self.assertEqual(tsdataset.get_feature().data.shape, (399, 2))
+        self.assertEqual(tsdataset.get_label().data.shape, (399, 1))
+        self.assertFalse(tsdataset.get_feature().data.isna().values.any())
+        self.assertFalse(tsdataset.get_label().data.isna().values.any())
+
+        #load multi time series
+        sample1['id'] = pd.Series(
+            [0]*100 + [1]*100, 
+            name='id'
+        )
+        tsdatasets = TSDataset.load_from_dataframe(
+            df=sample1,
+            group_id='id',
+            label_col='a', 
+            feature_cols=['c', 'd'], 
+            static_cov_cols='s', 
+            time_col='f',
+            freq = '12H',
+            fill_missing_dates=True,
+            fillna_method='max'
+        )
+        self.assertEqual(len(tsdatasets), 2)
+        for tsdataset in tsdatasets:
+            self.assertEqual(tsdataset.get_all_cov().data.shape, (199, 2))
+            self.assertEqual(tsdataset.get_target().data.shape, (199, 1))
+            self.assertFalse(tsdataset.get_all_cov().data.isna().values.any())
+            self.assertFalse(tsdataset.get_target().data.isna().values.any())
+            self.assertEqual(tsdataset.get_feature().data.shape, (199, 2))
+            self.assertEqual(tsdataset.get_label().data.shape, (199, 1))
+            self.assertFalse(tsdataset.get_feature().data.isna().values.any())
+            self.assertFalse(tsdataset.get_label().data.isna().values.any())
+
+        tsdatasets = TSDataset.load_from_dataframe(
+            df=sample1,
+            group_id='id',
+            label_col='a', 
+            feature_cols=['c', 'd'], 
+            static_cov_cols=['s', 'id'], 
+            time_col='f',
+            freq = '12H',
+            fill_missing_dates=True,
+            fillna_method='max'
+        )
+        self.assertEqual(len(tsdatasets), 2)
+        for tsdataset in tsdatasets:
+            self.assertEqual(list(tsdataset.get_static_cov().keys()), ['s', 'id'])
+            self.assertEqual(tsdataset.dtypes['a'], np.float64)
+
+        with self.assertRaises(ValueError):
+            tsdatasets = TSDataset.load_from_dataframe(
+                df=sample1,
+                group_id='id',
+                label_col=['a', 'c'], 
+                feature_cols=['d'], 
+                static_cov_cols='s', 
+                time_col='f',
+                freq = '12H',
+                fill_missing_dates=True,
+                fillna_method='max'
+            )
+
+        tsdataset = TSDataset.load_from_dataframe(
+            df=sample1,
+            label_col='a', 
+            feature_cols=['c', 'd'], 
+            static_cov_cols=['s'], 
+            time_col='f',
+            freq = '12H',
+            fill_missing_dates=True,
+            fillna_method='max',
+            dtype=np.int64
+        )
+        self.assertEqual(tsdataset.dtypes['a'], np.int64)
+        self.assertEqual(tsdataset.dtypes['c'], np.int64)
+
+        tsdataset = TSDataset.load_from_dataframe(
+            df=sample1,
+            label_col='a', 
+            feature_cols=['c', 'd'], 
+            static_cov_cols=['s'], 
+            time_col='f',
+            freq = '12H',
+            fill_missing_dates=True,
+            fillna_method='max',
+            dtype={'a': np.int64}
+        )
+        self.assertEqual(tsdataset.dtypes['a'], np.int64)
+        self.assertEqual(tsdataset.dtypes['c'], np.float64)
+
+        tsdataset.to_categorical()
+        self.assertEqual(tsdataset.dtypes['c'], np.int64)
+        tsdataset.to_numeric()
+        self.assertEqual(tsdataset.dtypes['a'], np.float32)
+
+        tsdataset.to_categorical('c')
+        self.assertEqual(tsdataset.dtypes['c'], np.int64)
+        tsdataset.to_numeric(['a', 'c'])
+        self.assertEqual(tsdataset.dtypes['c'], np.float32)
+
+        dataset = pd.DataFrame()
+        dataset['time'] = pd.Series(['2022-01-04', '2022-01-03', '2022-01-02', '2022-01-01'])
+        dataset['target'] = pd.Series([1, 2, 3, 4])
+        tsdataset = TSDataset.load_from_dataframe(
+            dataset,
+            time_col='time',
+            target_cols='target'
+        )
+        self.assertEqual(tsdataset.target.data.shape, (4, 1))
+
     def test_load_from_csv(self):
         """
         unittest function
@@ -501,6 +680,17 @@ class TestTSDataset(TestCase):
         self.assertEqual(tsdataset.get_static_cov(), {'s': 1})
         self.assertTrue((tsdataset.get_target().time_index == \
             pd.RangeIndex(start=0, stop=200, step=1)).all())
+        #case3
+        tsdataset = TSDataset.load_from_csv(
+            "/tmp/sample1.csv",
+            target_cols='a', 
+            observed_cov_cols=['c', 'd'], 
+            static_cov_cols='s', 
+            time_col='f',
+            dtype=np.int64,
+        )
+        self.assertEqual(tsdataset.dtypes['a'], 'int64')
+
 
     def test_get_property(self):
         """
@@ -522,6 +712,8 @@ class TestTSDataset(TestCase):
         ndarray = tsdataset.to_numpy()
         self.assertTrue(isinstance(ndarray, np.ndarray))
         self.assertEqual(ndarray.shape, (200, 6))
+        self.assertEqual(tsdataset.label.data.shape, (200, 1))
+        self.assertEqual(tsdataset.feature.data.shape, (200, 3))
 
     def test_set_property(self):
         """
@@ -555,7 +747,12 @@ class TestTSDataset(TestCase):
         tsdataset.static_cov = None
         self.assertEqual(tsdataset.static_cov, None)
         tsdataset.static_cov = {'f': 2, 'e': 4}
-        self.assertEqual(tsdataset.static_cov, {'f': 2, 'e': 4})     
+        self.assertEqual(tsdataset.static_cov, {'f': 2, 'e': 4})
+
+        tsdataset.label = self.target
+        self.assertEqual(tsdataset.label.data.shape, (200, 1))
+        tsdataset.feature = self.observed_cov
+        self.assertEqual(tsdataset.feature.data.shape, (200, 2))
 
     def test_split(self):
         """
@@ -607,6 +804,30 @@ class TestTSDataset(TestCase):
         self.assertEqual(test.get_target().data.shape, (200 - start_num, 1))
         self.assertEqual(test.get_observed_cov().data.shape, (200 - start_num, 1))
         self.assertEqual(test.get_known_cov().data.shape, (200 - start_num, 1))
+
+        tsdataset = TSDataset(None, self.observed_cov, None, self.static_cov)
+        start_num = 120
+        train, test = tsdataset.split(start_num)
+        self.assertEqual(train.get_target(), None)
+        self.assertEqual(train.get_observed_cov().data.shape, (start_num, 2))
+        self.assertEqual(train.get_known_cov(), None)
+        self.assertEqual(test.get_observed_cov().data.shape, (200 - start_num, 2))
+
+        start_ratio = 0.8
+        train, test = tsdataset.split(start_ratio)
+        self.assertEqual(train.get_observed_cov().data.shape, (200 * start_ratio, 2))
+        self.assertEqual(test.get_observed_cov().data.shape, (40, 2))
+        self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
+
+        train, test = tsdataset.split('2022-01-08')
+        self.assertEqual(train.get_observed_cov().data.shape, (8, 2))
+        self.assertEqual(test.get_observed_cov().data.shape, (192, 2))
+        self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
+
+        tsdataset = TSDataset(None, self.observed_cov, self.known_cov, self.static_cov)
+        start_num = 120
+        with self.assertRaises(ValueError):
+            train, test = tsdataset.split(start_num)
 
     def test_copy(self):
         """
@@ -729,6 +950,10 @@ class TestTSDataset(TestCase):
         ts1.save("/tmp/ts.tmp")
         ts2 = TSDataset.load("/tmp/ts.tmp")
         self.assertEqual(ts1.to_dataframe().shape, ts2.to_dataframe().shape)
+
+        json_data = ts1.to_json()
+        ts2 = TSDataset.load_from_json(json_data)
+        self.assertEqual(ts1.to_dataframe().shape, ts2.to_dataframe().shape)
     
     def test_property(self):
         """
@@ -739,7 +964,7 @@ class TestTSDataset(TestCase):
         self.assertEqual(res, ts1.columns)
 
         #test dtypes
-        self.assertEqual(ts1.dtypes.shape, (5, ))
+        self.assertEqual(ts1.dtypes.shape, (7, ))
 
         self.assertEqual(repr(ts1.to_dataframe()), repr(ts1))
         self.assertEqual(str(ts1.to_dataframe()), str(ts1))
@@ -893,7 +1118,7 @@ class TestTSDataset(TestCase):
                 columns=["b1", "c1"]
             ))
         static_cov = {"f": 1, "g": 2}
-        ts = TSDataset(target, observed_cov, known_cov, static_cov)
+        ts = TSDataset(target, observed_cov, known_cov, None)
         from paddlets.models.forecasting import DeepARModel
         reg = DeepARModel(
             in_chunk_len=10,
@@ -937,10 +1162,15 @@ class TestTSDataset(TestCase):
         tsdataset2.astype('float32')
         self.assertEqual(tsdataset2.get_target().data.dtypes['a'], 'float32')
         self.assertEqual(tsdataset2.get_all_cov().data.dtypes['e'], 'float32')
+        self.assertEqual(type(tsdataset2.static_cov['s']), np.float32)
         tsdataset2 = tsdataset1.copy()
-        tsdataset2.astype({'a': 'float32'})
+        tsdataset2.astype({'a': 'float32', 's': 'float32'})
         self.assertEqual(tsdataset2.get_target().data.dtypes['a'], 'float32')
         self.assertEqual(tsdataset2.get_all_cov().data.dtypes['e'], 'float64')
+        self.assertEqual(type(tsdataset2.static_cov['s']), np.float32)
+
+        tsdataset2.astype({'s': 'float32'})
+        self.assertEqual(type(tsdataset2.static_cov['s']), np.float32)
 
     def test_reindex(self):
         """

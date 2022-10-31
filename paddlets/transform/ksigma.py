@@ -44,7 +44,7 @@ class KSigma(BaseTransform):
         self._cols_stats_dict = {}
     
     @log_decorator
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         The process to determine the mean (mu), standard deviation (std), and valid interval ([mu - k * std, mu + k * std])
         
@@ -72,7 +72,7 @@ class KSigma(BaseTransform):
         return self
 
     @log_decorator
-    def transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
         """
         Replace the outliers with mu
         
@@ -101,16 +101,3 @@ class KSigma(BaseTransform):
             for i, value in enumerate(new_ts[col].astype(float)):
                 new_ts[col][i] = float(np.where(((value < lower)|(value > upper)), mean, value))                
         return new_ts
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        Execute fit and transform sequentially
-        
-        Args:
-            dataset(TSDataset): TSDataset
-            inplace(bool): Whether to perform fit/transform inplace, the default is False.
-        
-        Returns:
-            TSDataset
-        """
-        return self.fit(dataset).transform(dataset, inplace)

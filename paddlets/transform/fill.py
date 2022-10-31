@@ -36,7 +36,7 @@ class Fill(BaseTransform):
         method(str): Method of filling missing values. Totally 8 methods are supported currently:
             max: Use the max value in the sliding window.
             min: Use the min value in the sliding window.
-            mean: Use the mean value in the sliding window.
+            avg: Use the mean value in the sliding window.
             median: Use the median value in the sliding window.
             pre: Use the previous value.
             next: Use the next value.
@@ -70,7 +70,7 @@ class Fill(BaseTransform):
             self.n_rows_pre_data_need = self.window_size
 
     @log_decorator
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         Args:
             dataset(TSDataset): dataset to process
@@ -81,7 +81,7 @@ class Fill(BaseTransform):
         return self
 
     @log_decorator
-    def transform(self, dataset: TSDataset, inplace: bool=False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset, inplace: bool=False) -> TSDataset:
         """
         Fill missing values.
 
@@ -113,17 +113,3 @@ class Fill(BaseTransform):
                 for index in lack_index:
                     new_ts[col].loc[index]  = roll_window.__getattribute__(self.method)()[index]           
         return new_ts
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool=False) -> TSDataset:
-        """
-        First fit the scaler, and then do transformation.
-
-        Args:
-            dataset(TSDataset|List[TSDataset]): TSDataset or List[TSDataset]
-            inplace(bool): Set to True to perform inplace row normalization and avoid a copy.
-
-        Returns:
-            TSDataset: Transformed TSDataset.
-        """
-        raise_if_not(dataset is not None, "The specified dataset is None, please check your data!")
-        return self.fit(dataset).transform(dataset, inplace=inplace)

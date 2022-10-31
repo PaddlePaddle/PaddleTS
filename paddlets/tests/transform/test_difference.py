@@ -46,6 +46,15 @@ class TestDifferenceFeature(TestCase):
 
         self.assertTrue(known_true_df.equals(known))
 
+        ob.fit([ts, ts])
+        results = ob.transform([ts, ts])
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            known[known.isnull()] = np.nan
+            known_true_df[known_true_df.isnull()] = np.nan
+            self.assertTrue(known_true_df.equals(known))
+
     def test_fit_transform(self):
         """
         unittest function
@@ -71,6 +80,15 @@ class TestDifferenceFeature(TestCase):
         known_true_df[known_true_df.isnull()] = np.nan
 
         self.assertTrue(known_true_df.equals(known))
+
+        ob.fit([ts, ts])
+        results = ob.transform([ts, ts])
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            known[known.isnull()] = np.nan
+            known_true_df[known_true_df.isnull()] = np.nan
+            self.assertTrue(known_true_df.equals(known))
         
 
 if __name__ == "__main__":

@@ -39,6 +39,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1']} 
         ob = eval("Fill")(**params)
         result = ob.fit(ts)
+        results = ob.fit([ts, ts])
 
     def test_transform(self):
         """
@@ -209,6 +210,13 @@ class TestFill(TestCase):
         at = ob.transform(ts)
         self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov().data))
+
+        ats= ob.transform([ts, ts])
+        self.assertEqual(len(ats), 2)
+        for at in ats:
+            self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
+            self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov().data))
+
         return
 
     def test_fit_transform(self):
@@ -380,6 +388,13 @@ class TestFill(TestCase):
         at = ob.fit_transform(ts)
         self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov().data))
+        
+        ats= ob.fit_transform([ts, ts])
+        self.assertEqual(len(ats), 2)
+        for at in ats:
+            self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
+            self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov().data))
+
         return
 
 if __name__ == "__main__":

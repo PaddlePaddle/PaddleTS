@@ -172,7 +172,7 @@ class TimeFeatureGenerator(BaseTransform):
         self.extend_points = extend_points
         
     @log_decorator
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         This transformer does not need to be fitted.
 
@@ -185,7 +185,7 @@ class TimeFeatureGenerator(BaseTransform):
         return self
 
     @log_decorator
-    def transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
         """
         Transform time column to time features.
         
@@ -224,16 +224,3 @@ class TimeFeatureGenerator(BaseTransform):
             new_ts.set_column(k, v, 'known_cov')
                 
         return new_ts
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        Fit and transform time columns to time features.
-        
-        Args:
-            dataset(TSDataset): Dataset to be fitted and transformed.
-            inplace(bool): Whether to perform the transformation inplace. default=False
-        
-        Returns:
-            TSDataset
-        """
-        return self.fit(dataset).transform(dataset, inplace)

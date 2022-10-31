@@ -30,7 +30,7 @@ class TestOneHot(TestCase):
         ts = TSDataset.load_from_dataframe(df=ts_df, known_cov_cols=['Sex', 'Type'], observed_cov_cols = ['Test'])
         ob = OneHot(['Test', 'Sex'], handle_unknown='ignore', drop=True)
         result = ob.fit(ts)
-
+        results = ob.fit([ts, ts])
 
     def test_transform(self):
         """
@@ -59,6 +59,15 @@ class TestOneHot(TestCase):
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
         self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())
 
+        ob.fit([ts, ts])
+        results = ob.transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            observed = result.get_observed_cov().data
+            self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
+            self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())
+
     def test_fit_transform(self):
         """
         unittest function
@@ -83,6 +92,14 @@ class TestOneHot(TestCase):
         observed = result.get_observed_cov().data
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
         self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())
+
+        results = ob.fit_transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            observed = result.get_observed_cov().data
+            self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
+            self.assertEqual(np.array(observed_true_df).tolist(), np.array(observed).tolist())
    
 if __name__ == "__main__":
     unittest.main()
