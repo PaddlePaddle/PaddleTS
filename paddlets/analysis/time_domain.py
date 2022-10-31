@@ -103,7 +103,7 @@ class Seasonality(Analyzer):
         season_dict = {}
         for col in period_dict:
             if period_dict[col] is not None and period_dict[col] * 2 < len(X[col]):
-                ret = sm.tsa.seasonal_decompose(X[col].dropna().values, freq=period_dict[col], model=self.mode, extrapolate_trend="freq")
+                ret = sm.tsa.seasonal_decompose(X[col].dropna().values, period=period_dict[col], model=self.mode, extrapolate_trend="freq")
                 season_dict[col] = ret.seasonal[: period_dict[col]]
             else:
                 season_dict[col] = None
