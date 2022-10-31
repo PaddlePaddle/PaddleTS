@@ -9,9 +9,15 @@ import pandas as pd
 import numpy as np
 import paddle
 
+<<<<<<< HEAD
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.anomaly import AnomalyTransformer
 from paddlets.datasets import TimeSeries, TSDataset
+=======
+from bts.models.common.callbacks import Callback
+from bts.models.anomaly import AnomalyTransformer
+from bts.datasets import TimeSeries, TSDataset
+>>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3
 
 
 class TestAnomalyTransformer(TestCase):
@@ -341,4 +347,8 @@ class TestAnomalyTransformer(TestCase):
         self.assertEqual(res.get_target().data.columns[0], 'anomaly_score')
         
 if __name__ == "__main__":
+<<<<<<< HEAD
     unittest.main()
+=======
+    unittest.main()
+>>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3
