@@ -214,3 +214,4 @@ def to_tsdataset2(
                 return TSDataset.load_from_dataframe(anomaly_target, freq=freq)
         return wrapper
     return decorate
+
