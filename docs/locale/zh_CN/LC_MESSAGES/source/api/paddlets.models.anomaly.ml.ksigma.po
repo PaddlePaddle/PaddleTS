@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-24 15:37+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.ml.ksigma.rst:2
+#: f7e851cc8ed24935b428cef48a188199
+msgid "paddlets.models.anomaly.ml.ksigma"
+msgstr ""
+
+#: e83594b1cb814adbb8af270e62ea734d of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.anomaly.ml.statistical_base.StatisticalBase`"
+msgstr ""
+
+#: bf67d6287cf442a99551cb76c0f31b27 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:1
+msgid "The ksigma method for anomaly detection. It involves:"
+msgstr "利用ksima方法对数据完成异常检测，计算规则包括："
+
+#: d5226265f8354aacb4aade5f542bab16 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:3
+msgid "Calculate the mean (`mu`) and standard deviation (`std`) of a column."
+msgstr "计算指定列的平均值(`mu`)和标准差(`std`)。"
+
+#: 71100b8c8a8c4043b458ed3a4e76b67f of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:5
+msgid ""
+"Determine the interval of normal data according to `mu` and `std`: `[mu -"
+" k * std, mu + k * std]` where `k` is a hyper-parameter (3.0 by default)."
+msgstr "根据平均值(`mu`)和标准差(`std`)来确定正常数据的范围，正常数值范围是：[`mu - k*std, mu + k*std`]，"
+"其中k是超参数，默认为3.0。"
+
+#: 606008fd7c3542b3b2cef6e53715ee3a of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:8
+msgid "Any value of the interval will be considered as an outlier."
+msgstr "不在正常数值范围内的数据会被判定为异常点。"
+
+#: 85b04c58141d40949f791c975fa0e536 f3fea108eebb4ec093178048aa7940c2 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma
+#: paddlets.models.anomaly.ml.ksigma.KSigma.fit
+msgid "Parameters"
+msgstr ""
+
+#: 4cd161f8a92d483a9b53b86553bbe060 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:10
+msgid "Column name for ksigma method"
+msgstr "异常检测所需要的列名。"
+
+#: ea1241251e044d2fb197ff9cdfaa3918 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:12
+msgid "The hyper-parameter which takes a positive value (3.0 by default)."
+msgstr "ksigma中k的取值， 大于0，默认是3.0。"
+
+#: 14e66979b5cb47c78972e168bda7cd39 7a4afb680851499fbeb611d6763f96f1 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma
+#: paddlets.models.anomaly.ml.ksigma.KSigma.fit
+msgid "Returns"
+msgstr ""
+
+#: 7538fb05adad4e2b8413f449a17c6528 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma:18
+msgid "None"
+msgstr ""
+
+#: 16eaaac5a546461e849f2792a4ddfb26 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma.fit:1
+msgid ""
+"The process to determine the mean (mu), standard deviation (std), and "
+"valid interval ([mu - k * std, mu + k * std])"
+msgstr "ksigma异常检测过程，包括计算平均值、标准差以及正常值的范围。"
+
+#: fd00327343b84ea4b18ef25ada724d76 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma.fit:3
+msgid "TSDataset"
+msgstr ""
+
+#: 3227b115c63a4f9bbf5f68b512bed4e5 of
+#: paddlets.models.anomaly.ml.ksigma.KSigma.fit:6
+msgid "self"
+msgstr ""
+
