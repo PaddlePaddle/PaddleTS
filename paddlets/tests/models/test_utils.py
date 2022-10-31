@@ -67,7 +67,7 @@ class TestUtils(unittest.TestCase):
 def utils_test_get_target_from_tsdataset(test_utils):
     """unittest function for get_target_from_tsdataset
     """
-    with test_utils.assertLogs("bts", level="WARNING") as captured:
+    with test_utils.assertLogs("paddlets", level="WARNING") as captured:
         tsdataset = get_target_from_tsdataset(test_utils.tsdataset1)
         test_utils.assertEqual(
             captured.records[0].getMessage(), 
