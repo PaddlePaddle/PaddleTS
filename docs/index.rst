@@ -1,39 +1,42 @@
 Welcome to PaddleTS
 ======================
 
-PaddleTS is an easy to use Python library for deep time series modeling,
+PaddleTS is an easy-to-use Python library for deep time series modeling,
 focusing on the state-of-the-art deep neural network models based on 
 PaddlePaddle deep learning framework. It aims to provide great flexibility 
 and excellent user experiences for practitioners and professionals. It’s featured with:
 
-* A unified data structure named TSDataset for representing time series data with one or multiple target variables and optional different kinds of covariates (e.g. known covariates, observed covariates, and static covariates, etc.);
+* A unified data structure named TSDataset for representing time series data with one or multiple target variables and optional different kinds of covariates (e.g. known covariates, observed covariates, static covariates, etc.)
 
-* A base model class named PaddleBaseModelImpl , which inherits from the PaddleBaseModel and further encapsulates some routine procedures (e.g. data loading, callbacks setup, loss computation, training loop control, etc.) and allows developers to focus on the implementation of network architectures when developing new models;
+* A base model class named PaddleBaseModelImpl, which inherits from the PaddleBaseModel and further encapsulates some routine procedures (e.g. data loading, callbacks setup, loss computation, training loop control, etc.) and allows developers to focus on the implementation of network architectures when developing new models
 
-* A set of state-of-the-art deep learning models (e.g. NBEATS, NHiTS, LSTNet, TCN, Transformer, etc);
+* A set of state-of-the-art deep learning models (e.g. NBEATS, NHiTS, LSTNet, TCN, Transformer, etc.)
 
-* A set of transformation operators for data preprocessing (e.g. missing values/outliers handling, one-hot encoding, normalization, and automatic date/time-related covariate generation, etc.);
+* A set of transformation operators for data preprocessing (e.g. missing values/outliers handling, one-hot encoding, normalization, and automatic date/time-related covariate generation, etc.)
 
-* A set of analysis operators for quick data exploration (e.g. basic statistics and summary).
+* A set of analysis operators for quick data exploration (e.g. basic statistics and summary)
 
-* Automatic hyper-parameter tuning.
+* Automatic hyper-parameter tuning, enhance model performance easily and efficiently
 
-* Third-party ML models & data transformations integration (e.g., scikit-learn).
+Recently updated:
 
-* Run models on GPU devices.
+* Time series representation learning model supported, with TS2Vec model released
 
-* TS2Vec, a time series representation learning model.
+* Probabilistic forecasting supported, with DeepAR model released
 
-* DeepAR, a deep time series model for probabilistic forecasting.
+* Some new time series forecasting models like Informer released
 
-In future, more advanced features will be coming, including:
+* Auto tuning module AutoTS released, which supports mainstream HPO algorithms and shows significant improvement on multiple models and datasets
 
-* Time series anomaly detection;
-* More time series representation learning models；
-* More probabilistic forecasting models;
-* Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems;
-* And more.
+* Third-party (e.g. scikit-learn) ML models & data transformations integration supported
 
+In the future, more advanced features will be coming, including:
+
+* Time series anomaly detection
+* More time series representation learning models
+* More probabilistic forecasting models
+* Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems
+* And more
 
 Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
