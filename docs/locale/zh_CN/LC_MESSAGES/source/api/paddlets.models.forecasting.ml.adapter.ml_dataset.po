@@ -1,0 +1,140 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-27 15:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.ml.adapter.ml_dataset.rst:2
+#: 5083586ef103460ba424c43ce7db02c1
+msgid "paddlets.models.forecasting.ml.adapter.ml_dataset"
+msgstr ""
+
+#: 5722b294edac47be8354cee7a7d68314 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: e1e553c2f8484b5884231d3d20296f94 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:1
+msgid "Machine learning Dataset."
+msgstr "机器学习样本数据集。"
+
+#: 6b1f323e8cd54f4197b38177c6457ebd of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:3
+msgid ""
+"1> The in_chunk_len can be divided into several case: in_chunk_len = 0 "
+"indicates that the ML model has been processed by lag transform; "
+"in_chunk_len > 0 indicates that the ML model has NOT been processed by "
+"lag transform; in_chunk_len < 0 is NOT allowed."
+msgstr ""
+"1> in_chunk_len 参数可分为几种情况讨论：若 in_chunk_len = 0, 则说明该数据之前已被Lag数据转换模块处理过；若 "
+"in_chunk_len > 0, 则说明其未被Lag数据转换模块处理过；不允许出现 in_chunk_len < 0 的情况。"
+
+#: b1aea6d283684aa9b59931d5367b711a of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:7
+msgid ""
+"2> The unused (known / observed) columns should be deleted before the "
+"dataset passed in."
+msgstr ""
+"2> 对于传入的TSdataset数据集中的任何列（如 known / "
+"observed），如果其不会被用于构建样本，则应当从TSDataset传入之前删除这些列。"
+
+#: 09535f1e0e704ca8aba586c9f8b8058a of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:9
+msgid ""
+"3> The default time_window assumes each sample contains X (i.e. "
+"in_chunk), skip_chunk, and Y (i.e. out_chunk)."
+msgstr ""
+"3> 默认的time_window参数会假定每条将要构建的样本既包含X（即 in_chunk），skip_chunk, 和 "
+"Y（即out_chunk）。"
+
+#: 99b883e3daf948e3b456b6efbe197dde of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:12
+msgid ""
+"4> If caller explicitly passes time_window parameter in, and time_window "
+"upper bound is larger than len(TSDataset._target) - 1, it means that each"
+" built sample will only contain X (i.e. in_chunk), but will not contain "
+"skip_chunk or Y (i.e. out_chunk). This occurs only if caller wants to "
+"build a sample used for prediction, as only in this scenario the Y (i.e. "
+"out_chunk) is not required."
+msgstr ""
+"3> 如果调用者显式地传入time_window参数，并且time_window窗口的上界大于 len(TSDataset._target) - "
+"1, 则意味着构建出的样本将仅包含特征X（即 in_chunk），而不会包含跳过的时间块（即 skip_chunk）或者标签Y（即 "
+"out_chunk）。"
+
+#: 124ae712cc7246eca998e4021f7e62d6 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset
+msgid "Parameters"
+msgstr ""
+
+#: 0bc14745e94146349612e3c0ea0ac033 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:17
+msgid "Raw TSDataset to be converted."
+msgstr "待转换的TSDataset数据集。"
+
+#: 1e47e33abfa0471b8e3f90d471630534 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:19
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: ef3938b525ce4dcea314e92638a2d7b9 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:21
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: 5fb5b1389e6c46639048ab4e9ee67f5e of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:23
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量，输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: a4995a27b4b9451287b98fcb862d2c8e of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:27
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: a8a0d2bad062443ab47178ddd98effc5 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:32
+msgid ""
+"A two-element-tuple-shaped time window that allows adapter to build "
+"samples. time_window[0] refers to the window lower bound, while "
+"time_window[1] refers to the window upper bound. Each element in the "
+"left-closed-and-right-closed interval refers to the TAIL index of each "
+"sample."
+msgstr ""
+"一个包含2个元素的元组类型的时间窗口，允许adapter模块在其范围内构建样本。 time_window[0] "
+"值代表窗口范围的下界，time_window[1] 值代表窗口范围的上界。 对于每一个包含在该左闭右闭范围内的元素，都代表一条样本的尾部索引。"
+
+#: 42162dd082a942e98c8e270cf1782101 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataset.MLDataset:38
+msgid "Examples"
+msgstr ""
+

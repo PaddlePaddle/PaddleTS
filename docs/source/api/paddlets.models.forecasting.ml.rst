@@ -8,5 +8,5 @@ paddlets.models.forecasting.ml
 .. toctree::
     :maxdepth: 4
 
-    paddlets.models.forecasting.ml.ml_model_wrapper.rst
+    paddlets.models.forecasting.ml.adapter.rst
 
