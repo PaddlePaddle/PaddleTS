@@ -1,0 +1,238 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-28 16:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/api/paddlets.analysis.time_domain.rst:2
+#: 7b07f3cf3393408fbcab4758adc50bc6
+msgid "paddlets.analysis.time_domain"
+msgstr "paddlets.analysis.time_domain"
+
+#: 14edf8c2ae4f4f18a0f2a4af0bacad8d 497ea6e80e7c49b2a15f60ead5a4f9e2
+#: 52906cb875e6456baeb82974a7e4017b of paddlets.analysis.time_domain.Acf:1
+#: paddlets.analysis.time_domain.Correlation:1
+#: paddlets.analysis.time_domain.Seasonality:1
+msgid "Bases: :py:class:`~paddlets.analysis.base.Analyzer`"
+msgstr "基类: :py:class:`~paddlets.analysis.base.Analyzer`"
+
+#: 18e8c971a597424e91d28ec28530ae11 of
+#: paddlets.analysis.time_domain.Seasonality:1
+msgid "Compute the seasonality period of given columns."
+msgstr "计算所给列的周期性，默认自动计算所有列周期性；若提供周期性按照提供的计算周期性曲线"
+
+#: 37bf30f057404cb284e169ff81c4e61c 66c23c29953c4809800039275765c418
+#: 88a659639d8646b1ad35c23279762a2c 9123ba4821814bdfbe56ec3477257f07
+#: a7d044c257714392bbb96d1e73b2ccf0 e71223b9a86640c88b4358948ffd5e0b
+#: e9207394e99c4ec3ab87f479be4afff8 eb6e7f79637445549db679050a6e11bb
+#: f9680e8ce51c4a5e92d0c7f669936e7c of paddlets.analysis.time_domain.Acf
+#: paddlets.analysis.time_domain.Acf.analyze
+#: paddlets.analysis.time_domain.Acf.plot
+#: paddlets.analysis.time_domain.Correlation
+#: paddlets.analysis.time_domain.Correlation.analyze
+#: paddlets.analysis.time_domain.Correlation.plot
+#: paddlets.analysis.time_domain.Seasonality
+#: paddlets.analysis.time_domain.Seasonality.analyze
+#: paddlets.analysis.time_domain.Seasonality.plot
+msgid "Parameters"
+msgstr "参数"
+
+#: 553bd50272094ebeae4b6ebbba7fab93 of
+#: paddlets.analysis.time_domain.Seasonality:3
+msgid ""
+"The period of the data. If None(by default), we will calculate a unique "
+"seasonality period."
+msgstr ""
+"数据周期长度。如果默认会自动计算并基于此计算周期性曲线, 若提供数值按照提供的计算"
+"周期性曲线"
+
+#: 36ae20daf61e483baa2b2887a0582cee 52e755b5b23f428aa9b681300d6ea77d of
+#: paddlets.analysis.time_domain.Acf:3
+#: paddlets.analysis.time_domain.Seasonality:5
+msgid "Number of lags to return autocorrelation for, default=300."
+msgstr "自相关性lag阶数，默认300"
+
+#: b53ab93e1d744f6da1bdf4097bcaff54 of
+#: paddlets.analysis.time_domain.Seasonality:7
+msgid "The confidence intervals for the seasonality. default=0.05."
+msgstr "自相关性置信区间，默认0.05"
+
+#: 52398fb2f98444d6ab9c264863af7797 of
+#: paddlets.analysis.time_domain.Seasonality:9
+msgid ""
+"Type of seasonal component. Abbreviations are accepted. "
+"Optional(\"additive\", \"multiplicative\")."
+msgstr "周期性曲线数值"
+"周期性曲线提取方法，可选{additive, multiplicative}，默认additive"
+
+#: fda6d6bdce2748afb6c62ac7ba47c9ee of
+#: paddlets.analysis.time_domain.Seasonality:11
+msgid ""
+"How many points on each side to use for the comparisont o consider "
+"``comparator(n, n+x)`` to be True."
+msgstr "提取周期性时计算局部最大值两侧的数据"
+"对比当前点数值更小的点数"
+
+#: 3417200787c84d498a56d969e87d90d0 873259d7c7dd41b182e8db142183a9a8
+#: fe0c04c71ef04553a44362eaedebd19b of paddlets.analysis.time_domain.Acf:7
+#: paddlets.analysis.time_domain.Correlation:9
+#: paddlets.analysis.time_domain.Seasonality:13
+msgid "Other parameters."
+msgstr "其他参数"
+
+#: 905bc9b7f1f846ce8952b15b224a2fe9 of
+#: paddlets.analysis.time_domain.Seasonality.analyze:1
+msgid "Compute the seasonality period of given columns"
+msgstr "计算所给列周期性"
+
+#: 13220f6da124442c8e7c9eaa4feb8350 3300bb8eeaeb414180af5e880e6f5009
+#: 70329178e5a74bce8cba7f36887c3e6b of
+#: paddlets.analysis.time_domain.Acf.analyze:3
+#: paddlets.analysis.time_domain.Correlation.analyze:3
+#: paddlets.analysis.time_domain.Seasonality.analyze:3
+msgid "columns to be analyzed"
+msgstr "需要分析的列数据"
+
+#: 0efe69d7a176481697b9254cec2b102b 260094a61010439198295e033aba3a73
+#: 43232485fd314404b9620cec1d63a4cb 4cd3a4bd2ae8472b85bc7b8e66475050
+#: 55dbe32e9c9744db96553b03b446eed9 9c99b50cf4bf42009e3ea3bbfaffea13
+#: b9335ad74b7740929714e28ff7687cab caf566c596a748bfb83999c8ff851e9c
+#: e90e785607174b44a7a6c46ce07c5d4e of
+#: paddlets.analysis.time_domain.Acf.analyze
+#: paddlets.analysis.time_domain.Acf.get_properties
+#: paddlets.analysis.time_domain.Acf.plot
+#: paddlets.analysis.time_domain.Correlation.analyze
+#: paddlets.analysis.time_domain.Correlation.get_properties
+#: paddlets.analysis.time_domain.Correlation.plot
+#: paddlets.analysis.time_domain.Seasonality.analyze
+#: paddlets.analysis.time_domain.Seasonality.get_properties
+#: paddlets.analysis.time_domain.Seasonality.plot
+msgid "Returns"
+msgstr "返回"
+
+#: 0aaff64c19574b919295f00e1d8e238e of
+#: paddlets.analysis.time_domain.Seasonality.analyze:6
+msgid "The seasonality period and seasonality values"
+msgstr "周期性长度和周期性曲线数据"
+
+#: 2a8cce7e58a7471991317bc55756078b 5f2124c6403046a7a35c19b24b7eed8c
+#: 844616daf81e4043821100293c642b46 ac81e82140624c339c7abaa5c9963611
+#: e3a4b4871664492fb1802503e6b473ac e4c8309159b843d8b6d815e87936c8fa of
+#: paddlets.analysis.time_domain.Acf.analyze
+#: paddlets.analysis.time_domain.Acf.plot
+#: paddlets.analysis.time_domain.Correlation.analyze
+#: paddlets.analysis.time_domain.Correlation.plot
+#: paddlets.analysis.time_domain.Seasonality.analyze
+#: paddlets.analysis.time_domain.Seasonality.plot
+msgid "Return type"
+msgstr "返回类型"
+
+#: 208079c2e0c14413a7da9f6ee43e119b 2366e789920946d383c029a02aa85464
+#: 337f8069f2e845709bd6943e7aa70241 5263e6b435544db7854c40b5727113bf
+#: 7a9935a9f6f94d989f9072060afc55d9 ac437d532b554f5496dcc82b1aab10a8 of
+#: paddlets.analysis.time_domain.Acf.analyze
+#: paddlets.analysis.time_domain.Acf.plot
+#: paddlets.analysis.time_domain.Correlation.analyze
+#: paddlets.analysis.time_domain.Correlation.plot
+#: paddlets.analysis.time_domain.Seasonality.analyze
+#: paddlets.analysis.time_domain.Seasonality.plot
+msgid "Raises"
+msgstr ""
+
+#: 86343056e373462d960d544dff82ca96 of
+#: paddlets.analysis.time_domain.Seasonality.plot:1
+msgid "display seasonality result."
+msgstr "展示周期性数据结果"
+
+#: 972ebcbb30f3404584a0f2d4c8524ce5 of
+#: paddlets.analysis.time_domain.Seasonality.plot:5
+msgid "The seasonality figure"
+msgstr "周期性图示"
+
+#: 0188e668d13447e4820da6353d0d233b 0f1bb731539c48a4b8361cccc6ef9acc
+#: 65e65a26b4834c3da641b17f28a87291 of
+#: paddlets.analysis.time_domain.Acf.get_properties:1
+#: paddlets.analysis.time_domain.Correlation.get_properties:1
+#: paddlets.analysis.time_domain.Seasonality.get_properties:1
+msgid "Get the properties of the analyzer."
+msgstr "获取分析器属性"
+
+#: 133bd047a01a43428104ba1bfd8db88e 325388f0d83342c38907d86f2f3fb046
+#: b5d571a092cd42e8b7f22dfd4ca11ed2 of
+#: paddlets.analysis.time_domain.Acf.get_properties:3
+#: paddlets.analysis.time_domain.Correlation.get_properties:3
+#: paddlets.analysis.time_domain.Seasonality.get_properties:3
+msgid "Dict"
+msgstr "Dict"
+
+#: 146d65156ec44991ba7d77365bf9ae0b of paddlets.analysis.time_domain.Acf:1
+msgid "Compute the acf values of given columns."
+msgstr "计算所提供的列的自相关性数值"
+
+#: 1fd1dd7e588947bfa2a185d6670d415f of paddlets.analysis.time_domain.Acf:5
+msgid "The confidence intervals for the acf. default=0.05."
+msgstr "自相关性的置信区间，默认0.05"
+
+#: 50c9945d60674478bb24572a6834ee22 of
+#: paddlets.analysis.time_domain.Acf.analyze:1
+msgid "Compute the acf values of given columns"
+msgstr "计算所提供列自相关性数值"
+
+#: 0fea56facee84309bcedfed92859a318 27b4a632880a4e2e90d66883bc720244 of
+#: paddlets.analysis.time_domain.Acf.analyze:6
+#: paddlets.analysis.time_domain.Correlation.analyze:6
+msgid "The acf values and confident values"
+msgstr "自相关性数值与置信区间"
+
+#: cab1b4903ead4ed49ba8543d1446db18 of paddlets.analysis.time_domain.Acf.plot:1
+msgid "display acf result."
+msgstr "展示自相关性结果"
+
+#: 7527b1bfcdbf4637b64a9e289b689a50 of paddlets.analysis.time_domain.Acf.plot:5
+msgid "The acf figure"
+msgstr "自相关性图示"
+
+#: 8b20bde0bb91478699f37f76d6a1d254 a9827c9ecb6c4d9ca5976d5c5ae6371e of
+#: paddlets.analysis.time_domain.Correlation:1
+#: paddlets.analysis.time_domain.Correlation.analyze:1
+msgid "Compute the correlation values of given columns."
+msgstr "计算所提供列之间的相关系数数值"
+
+#: 547b6875cad347c889e23c03bf3c6ba9 of
+#: paddlets.analysis.time_domain.Correlation:3
+msgid "{'pearson', 'kendall', 'spearman'} or callable"
+msgstr "相关系数计算方法，可选{'pearson', 'kendall', 'spearman'}或者自定义"
+
+#: 82f092672a9a41778f679cc3bfa74af6 of
+#: paddlets.analysis.time_domain.Correlation:5
+msgid "lag time points."
+msgstr "延迟点数目，便于计算延迟互相关性"
+
+#: 58f89a975c7443dab9098cb3b0822092 of
+#: paddlets.analysis.time_domain.Correlation:7
+msgid "columns that need lag."
+msgstr "需要延迟的列名列表"
+
+#: aad8ccf566b046bd8aa9fb6a0e64fbac of
+#: paddlets.analysis.time_domain.Correlation.plot:1
+msgid "display correlation result."
+msgstr "展示相关系数结果"
+
+#: 3ae71df1d1f14bd2bd58d9e8c88a8ee2 of
+#: paddlets.analysis.time_domain.Correlation.plot:5
+msgid "The correlation figure"
+msgstr "相关系数图示"
+
