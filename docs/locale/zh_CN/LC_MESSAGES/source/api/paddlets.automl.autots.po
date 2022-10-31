@@ -8,90 +8,96 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 15:25+0800\n"
+"POT-Creation-Date: 2022-10-13 14:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../source/api/paddlets.automl.autots.rst:2
-#: 831ba46381494c5282ad9231643f87b9
+#: aac049653a624960992fcc53b2e99925
 msgid "paddlets.automl.autots"
 msgstr ""
 
-#: ed42e7d60e864b27a9f39bd68eb58aca of paddlets.automl.autots.AutoTS:1
+#: 40b1f2859be4421abe36985f7bde3540 of paddlets.automl.autots.AutoTS:1
 msgid "Bases: :py:class:`~paddlets.models.base.BaseModel`"
 msgstr ""
 
-#: cc7a10c05d2b40b98b915bfadbfebe1d of paddlets.automl.autots.AutoTS:1
+#: 2689ae9ba6c741118aee4141b8a27b0b of paddlets.automl.autots.AutoTS:1
 msgid ""
 "The AutoTS Class. AutoTS is an automated machine learning tool for "
 "PaddleTS. It frees the user from selecting hyperparameters for PaddleTS "
 "models or PaddleTS pipelines."
 msgstr ""
+"AutoTS是用于支持PaddleTS的自动机器学习能力组件。AutoTS 可以支持 PaddleTS 模型和 pipeline "
+"的自动超参数选择，减少人工介入成本，降低专业门槛。"
 
-#: 3abc018a711a469795c3698b6a0766c1 3be00928421b42d29e187d38b61a742d
-#: 70e5c3bd8b194d7eb46542100a235cdc of paddlets.automl.autots.AutoTS
+#: 2c4dd45e3ef44a89828866212b51d8fd 48f533862622450fbf2aa361a5adbe43
+#: 563a807f30bd4d70b890741a8a7c33b7 of paddlets.automl.autots.AutoTS
 #: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.predict
 msgid "Parameters"
 msgstr ""
 
-#: bbfe6b02f4034a49a126c999a9ae2a15 of paddlets.automl.autots.AutoTS:5
+#: 2462011ba47243c6ba7f7a4b3fa826b0 of paddlets.automl.autots.AutoTS:5
 msgid ""
 "A class of a PaddleTS model or a list of classes consisting of several "
 "PaddleTS transformers and a PaddleTS model"
-msgstr ""
+msgstr "一个 PaddleTS 模型的类名，或者是由若干个 PaddleTS 的特征工程类名与一个 PaddleTS 模型类名组成的列表。"
 
-#: e3f455905bf54329bbb313df865306f1 of paddlets.automl.autots.AutoTS:8
+#: 3619b44f4b3444bf91675d9a8ce48396 of paddlets.automl.autots.AutoTS:8
 msgid ""
 "The size of the loopback window, i.e., the number of time steps feed to "
 "the model."
-msgstr ""
+msgstr "模型输入的时间序列长度。"
 
-#: fa3f681e4fcf4090a95869b2c238fe3b of paddlets.automl.autots.AutoTS:10
+#: ed344aa4d3964895bfc5c58ed971b0d2 of paddlets.automl.autots.AutoTS:10
 msgid ""
 "The size of the forecasting horizon, i.e., the number of time steps "
 "output by the model."
-msgstr ""
+msgstr "模型输出的序列长度。"
 
-#: 055eb08bf4654b25927be92f1bd6f07a of paddlets.automl.autots.AutoTS:12
+#: 7b8ed86393b141d1a879f97bcb3ff7c0 of paddlets.automl.autots.AutoTS:12
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
 "single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
 " label (i.e. Y) for a single sample. By default, it will NOT skip any "
 "time steps."
-msgstr ""
+msgstr "可选变量，输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
 
-#: 44e96317335e418d84afdb6d7e7e13b1 of paddlets.automl.autots.AutoTS:16
+#: fc59b2c332cc436b9fbfb1c399587b44 of paddlets.automl.autots.AutoTS:16
 msgid "Sampling intervals between two adjacent samples."
-msgstr ""
+msgstr "相邻样本间的采样间隔。"
 
-#: fe55184b657f4072844d0016a398d993 of paddlets.automl.autots.AutoTS:18
+#: 6e7d310288354d3db7b9c67f93deab9a of paddlets.automl.autots.AutoTS:18
 msgid ""
 "The domain of the automl to be optimized. If search_space is 'auto', the "
 "default search space will be used."
-msgstr ""
+msgstr "用于 AutoTS 超参优化的搜索空间。若搜索空间设置为 'auto'，内置的默认搜索空间会被应用于超参优化。"
 
-#: 95c64a52761c4a62ba224c20acb65e33 of paddlets.automl.autots.AutoTS:21
+#: 8a71efd1a17e48a49b26adbf5171be2b of paddlets.automl.autots.AutoTS:21
 msgid ""
 "The algorithm for optimization. Supported algorithms are \"auto\", "
 "\"Random\", \"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\". When"
 " the algorithm is \"auto\", search_alg is set to be \"Random\" by "
 "default."
 msgstr ""
+"超参优化算法。支持的算法为 'auto', 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
+"'Bayes'。若设置为 'auto'， 则会采用'Random'作为默认超参优化算法。"
 
-#: b7514901a2594e87b3bfe1c40280724c of paddlets.automl.autots.AutoTS:25
+#: af69c5b259be4d3a89695f31666cbea5 of paddlets.automl.autots.AutoTS:25
 msgid ""
 "A string of resampling strategies. Supported resampling strategy are "
 "\"auto\", \"cv\", \"holdout\".When the strategy is \"auto\", "
 "resampling_strategy is set to be \"holdout\" and split_ratio is set to be"
 " DEFAULT_SPLIT_RATIO by default."
 msgstr ""
+"重采样策略。支持的重采样策略是 'auto', 'cv', 'holdout'。若设置为 'auto'，则 "
+"'holdout'策略会被默认使用，split_ratio 会被设置为DEFAULT_SPLIT_RATIO。"
 
-#: d1f7ea8e408444bc8ab1784c90981f04 of paddlets.automl.autots.AutoTS:29
+#: ad5f8f70bd7449749f4236a6a5c7f4cd of paddlets.automl.autots.AutoTS:29
 msgid ""
 "The proportion of the dataset included in the validation split for "
 "holdout. The split_ratio should be in the range of (0, 1). When the "
@@ -99,140 +105,148 @@ msgid ""
 "default. Note that the split_ratio will be ignored if valid_tsdataset is "
 "provided in the `AutoTS.fit()`."
 msgstr ""
+"重采样策略为 holdout 时，被留作验证集的数据的比例。切分比例必须在(0, 1)内。当切分比例设置为 'auto'， 则切分比例会被设置为 "
+"DEFAULT_SPLIT_RATIO。 注意：若 valid_tsdataset 在 fit 中被提供，则此变量会被忽略。"
 
-#: 818addb29ece4698b8203e1890a80e06 of paddlets.automl.autots.AutoTS:34
+#: 4f75b1f38e4b4620a903099871c5e4a6 of paddlets.automl.autots.AutoTS:34
 msgid ""
 "Number of folds for cv. The k_fold should be in the range of (0, 10].When"
 " the k_fold is \"auto\", k_fold is set to be DEFAULT_K_FOLD by default. "
 "Note that the k_fold will be ignored if valid_tsdataset is provided in "
 "the `AutoTS.fit()`."
 msgstr ""
+"当重采样策略为 cv 时，交叉验证的 fold 的数量。此参数必须在(0, 10]内。当被设置为 'auto'，k_fold "
+"会被设置为DEFAULT_K_FOLD。注意：若 valid_tsdataset 在 fit 中被提供，则此变量会被忽略。"
 
-#: 456f7c8bbbe24e42b219cd8c6696127a of paddlets.automl.autots.AutoTS:38
+#: 6705737382de45c38c8a79e7b835a628 of paddlets.automl.autots.AutoTS:38
 msgid ""
 "A string of the metric name. The specified metric will be used to "
 "calculate validation loss reported to the search_algo. Supported metric "
 "are \"mae\", \"mse\", \"logloss\". When the metric is \"auto\", metric is"
 " set to be \"mae\" by default."
-msgstr ""
+msgstr "metric的名字。metric 会被用于计算在 validation 数据集上的 loss，并反馈给超参优化算法。"
 
-#: 4464d56f79a0494ab092471cec1c3330 of paddlets.automl.autots.AutoTS:43
+#: 5aae09e82dfc406c9012343d36560351 of paddlets.automl.autots.AutoTS:43
 msgid ""
 "According to the mode, the metric is maximized or minimized. Supported "
 "mode are \"min\", \"max\". When the mode is \"auto\", metric is set to be"
 " \"min\" by default."
-msgstr ""
+msgstr "根据优化模式，metric会向增大或者减小的方向优化。"
 
-#: 80e0e1a6aa874b038e2389def30046f3 of paddlets.automl.autots.AutoTS:46
+#: 4ac528d9636e4d039a40b7a21a676888 of paddlets.automl.autots.AutoTS:46
 msgid ""
 "Whether to refit the model with the best parameter on full training "
-"data.If refit is True, the AutoPaddleTS object can be used to predict. If"
-" refit is False, the AutoPaddleTS object can be used to get the best "
-"parameter, but can not make predictions."
+"data.If refit is True, the AutoTS object can be used to predict. If refit"
+" is False, the AutoTS object can be used to get the best parameter, but "
+"can not make predictions."
 msgstr ""
+"是否利用超参寻优过程中获得的最佳参数 refit 模型。若是 True，则AutoTS 模型可以用于预测。若是  False，则 AutoTS "
+"模型可以用来获取寻优过程中获得的最优参数，但不能用于预测。"
 
-#: 09786f26aa684aceb43f163ccd2c8db3 1b6085de691b4237b66e7eac2607e86d
-#: 8bf0f80de60049d2a9ec6c868f3a9d3b of paddlets.automl.autots.AutoTS:50
+#: 3a075a3bcdd449e6b458fc14a5ff67aa c0045d32931041b689971e9f137d7181
+#: e094d9e89e7848558326b4fb7203d017 of paddlets.automl.autots.AutoTS:50
 #: paddlets.automl.autots.AutoTS:52 paddlets.automl.autots.AutoTS:54
 msgid "Not supported yet. This feature will be comming in future."
-msgstr ""
+msgstr "暂未支持。"
 
-#: 1189bfb47eb2488697503c83606b9b3f of paddlets.automl.autots.AutoTS:58
+#: 951b91bb730647dfad55d699d0ebb600 of paddlets.automl.autots.AutoTS:58
 msgid "Examples"
-msgstr ""
+msgstr "使用案例："
 
-#: 875a783ed06a42949556a05b024d135c of paddlets.automl.autots.AutoTS.fit:1
+#: 34c0901c7ec64921a6e9c1cfd25bd164 of paddlets.automl.autots.AutoTS.fit:1
 msgid ""
 "Fit the estimator with the given tsdataset. The way fit is done is that "
 "the search algorithm will suggest configurations from the hyperparameter "
 "search space, then choose the best parameter from all configurations. If "
 "refit is True, the fit() will refit the model with the best parameters on"
 " full training data."
-msgstr ""
+msgstr "利用给定的 tsdataset 拟合评估器。拟合过程中，优化算法将从搜索空间中推荐算法的参数配置，"
+"并在配置中选择最佳的算法参数配置。如果 refit 是 True，那么最佳的参数配置与训练数据将被用于拟合最佳模型。"
 
-#: 03efe568b5194938863f723d3eca96bb of paddlets.automl.autots.AutoTS.fit:6
+#: 2d2fc3f7722145fe852542f287339332 of paddlets.automl.autots.AutoTS.fit:6
 msgid "Train dataset."
-msgstr ""
+msgstr "训练数据集。"
 
-#: 619b87069dd44a3e850e0f34eae396e6 of paddlets.automl.autots.AutoTS.fit:8
+#: 2e2263f57af348fc9aec8e789321c3a6 of paddlets.automl.autots.AutoTS.fit:8
 msgid "Valid dataset."
-msgstr ""
+msgstr "验证数据集"
 
-#: df79d99490e7459488750081d30597d6 of paddlets.automl.autots.AutoTS.fit:10
+#: 19e879929a1c4741be082b0def2aa18d of paddlets.automl.autots.AutoTS.fit:10
 msgid "The number of configurations suggested by the search algorithm."
-msgstr ""
+msgstr "超参优化算法可以建议的算法配置的数量。"
 
-#: b10a9a17af154b3ababa2a63dbfd2dd4 of paddlets.automl.autots.AutoTS.fit:12
+#: a6177b4a2f434dfb89e49b87ce94f814 of paddlets.automl.autots.AutoTS.fit:12
 msgid "CPU resources to allocate per trial."
-msgstr ""
+msgstr "被分配到每个算法配置训练过程中的 CPU 资源。"
 
-#: ff68dc0e2b404799acb7cd060879f001 of paddlets.automl.autots.AutoTS.fit:13
+#: cf1415fa4fa647b9a61b8e03cd8fbb7d of paddlets.automl.autots.AutoTS.fit:13
 msgid "GPU resources to allocate per trial."
-msgstr ""
+msgstr "被分配到每个算法配置训练过程中的 GPU 资源。"
 
-#: 221fa022b8054cb2b3ab495462d9a51b 4c247d7395e2470b9a31e761e926d740
-#: a5ee046b29b5439d9d7d62e29acc9290 d1ba16cea2954e4f977ade4915dab032
-#: ec00f9d12bc44889ab395e7215253f16 of paddlets.automl.autots.AutoTS.best_param
+#: 16a54e368a8243b49210c1ed9451b5e1 58684a0aac5549098546defe49124706
+#: 693c80505e2e4a8e8c70d70614bec6b3 707040a072784441bb05fc5b851fb564
+#: ea7e8fcb3d454d84bb3b684ebd55f397 of paddlets.automl.autots.AutoTS.best_param
 #: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.is_refitted
 #: paddlets.automl.autots.AutoTS.predict
 #: paddlets.automl.autots.AutoTS.search_space
 msgid "Returns"
-msgstr ""
+msgstr "返回值"
 
-#: a04f06d48d4b42fb824e166c2ed9523b of paddlets.automl.autots.AutoTS.fit:15
+#: 085ca8bdc7fe41ccb14d0b362913386a of paddlets.automl.autots.AutoTS.fit:15
 msgid "Refitted estimator."
-msgstr ""
+msgstr "拟合过的评估器。"
 
-#: 4ab3900283b7464199b73c0280618166 833d4b5c9b5841a4b13e948f4f06fef0
-#: 878d466842c943e3b264457b5e030a62 8db5f84667f947eea25e05f3d23f9572
-#: de3784d21991472d9c3c3c9e7521cbe3 of paddlets.automl.autots.AutoTS.best_param
+#: 22350517d55a4b3eac5fbe7631d18560 388ee7d6956d4c149c1f081b53a2c47e
+#: 5622b46986254a498bd6966513a48bae aa8e8d5b8c1c427c86b2938dd7ed1236
+#: d4e28e38bbb74002a30ea7f0b9d03dad of paddlets.automl.autots.AutoTS.best_param
 #: paddlets.automl.autots.AutoTS.fit paddlets.automl.autots.AutoTS.is_refitted
 #: paddlets.automl.autots.AutoTS.predict
 #: paddlets.automl.autots.AutoTS.search_space
 msgid "Return type"
-msgstr ""
+msgstr "返回类型"
 
-#: 48614e9e300a4510afa505f0ee502ba9 of paddlets.automl.autots.AutoTS.predict:1
+#: 5ae1c41407bf40d5b4e5d1c284aea9a2 of paddlets.automl.autots.AutoTS.predict:1
 msgid "Make prediction."
-msgstr ""
+msgstr "推理预测。"
 
-#: 35245874814c41309743851957d66405 of paddlets.automl.autots.AutoTS.predict:3
+#: 1ffe03de4b284ba4b8708710af43c2f6 of paddlets.automl.autots.AutoTS.predict:3
 msgid "Data to be predicted."
-msgstr ""
+msgstr "被预测数据。"
 
-#: 206c5b4591fa48998f52d7449bbf05b0 of paddlets.automl.autots.AutoTS.predict:5
+#: 1e661d4cc9f34645b7d16e83b627cad5 of paddlets.automl.autots.AutoTS.predict:5
 msgid "Predicted results of calling `self.predict` on the refitted estimator."
-msgstr ""
+msgstr "在 refit 后的评估器上调用 predict 的预测结果。"
 
-#: a85e8a41cc3541278503a0c5ab78dcb0 of
+#: f05a2012bdf248be8d72418644d20710 of
 #: paddlets.automl.autots.AutoTS.best_param:1
 msgid "Return the best parameters in optimization."
-msgstr ""
+msgstr "返回超参寻优过程中获得的最佳算法配置参数。"
 
-#: c675ac610850485e8bfb2e8ca9d0b276 of
+#: 7991b112096e48e1939b38e850bc3b93 of
 #: paddlets.automl.autots.AutoTS.best_param:3
 msgid "The dict of the best parameters."
-msgstr ""
+msgstr "最佳算法配置参数的字典。"
 
-#: b7b7c4e943b343e689d19176f365a254 of
+#: ab5a4d4ccc054c83bb13532da6566093 of
 #: paddlets.automl.autots.AutoTS.search_space:1
 msgid ""
 "Return the search space. If search_space is 'auto', it will return the "
 "default search space."
-msgstr ""
+msgstr "返回参数搜索空间。如果搜索空间是 'auto'，它会返回内置的默认搜索空间。"
 
-#: 1d0b7d9e119d472192e12d7b8710bf16 of
+#: 77873a2dc6cd478b8d468f019209a662 of
 #: paddlets.automl.autots.AutoTS.search_space:4
 msgid "The dict of search space."
-msgstr ""
+msgstr "搜索空间的配置字典。"
 
-#: 550ab75f1b9d4ecc9db9cd91c1b833ef 91309f529e0a4106b595894800d5bd13 of
+#: 047833d56bfb40989093a9560f2ff759 bd7633ac3ca14532805f2bf508bebfc6 of
 #: paddlets.automl.autots.AutoTS.load:1 paddlets.automl.autots.AutoTS.save:1
-msgid "AutoPaddleTS doesn't support save() yet."
-msgstr ""
+msgid "AutoTS doesn't support save() yet."
+msgstr "暂未支持。"
 
-#: fce1d4bc665049dea96c227551866209 of
+#: 45770811e2584bde9ed01f2b87749071 of
 #: paddlets.automl.autots.AutoTS.is_refitted:1
 msgid "Whether the autots model has been refitted"
-msgstr ""
+msgstr "Autots 模型是否进行 refit。"
+
 

@@ -63,7 +63,7 @@ class OptimizeRunner:
             sampling_stride(int): Sampling intervals between two adjacent samples.
 
         Returns:
-            BaseModel: Bts estimator.
+            BaseModel: PaddleTS estimator.
 
         """
         running_config = copy.deepcopy(config)
