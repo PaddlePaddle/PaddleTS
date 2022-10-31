@@ -14,3 +14,5 @@ paddlets.models
     paddlets.models.common.rst
     paddlets.models.model_loader.rst
     paddlets.models.utils.rst
+    paddlets.models.anomaly.rst
+    paddlets.models.ml_model_wrapper.rst
