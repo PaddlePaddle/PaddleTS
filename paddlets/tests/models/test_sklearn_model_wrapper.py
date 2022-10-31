@@ -10,6 +10,7 @@ import datetime
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, Tuple, Optional
+from itertools import product
 
 import sklearn
 from sklearn.linear_model import (
@@ -141,7 +142,7 @@ from sklearn.cluster import (
 )
 
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
-from paddlets.models.forecasting.ml.ml_model_wrapper import SklearnModelWrapper, make_ml_model
+from paddlets.models.ml_model_wrapper import SklearnModelWrapper, make_ml_model
 from paddlets.datasets import TSDataset, TimeSeries
 from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
 
@@ -160,13 +161,14 @@ class TestSklearnModelWrapper(unittest.TestCase):
             sklearn.linear_model.QuantileRegressor
             sklearn.linear_model.SGDOneClassSVM
     """
+
     def setUp(self):
         """
         unittest setup.
 
         self._good_to_init_sklearn_model_list: can be init, but some of them may NOT be fitted / predicted.
         self._not_implement_predict_method_sklearn_model_class_set: models that do NOT implement predict method.
-        self.__cannot_fit_or_predict_sklearn_model_class_set: models that implement predict method, but have other 
+        self.__cannot_fit_or_predict_sklearn_model_class_set: models that implement predict method, but have other
             errors while fitting / predicting.
         """
         self._default_modelname = "modelname"
@@ -233,7 +235,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
             {"clazz": PoissonRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": GammaRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": TweedieRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # svm
             {"clazz": LinearSVC, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": LinearSVR, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
@@ -242,13 +244,13 @@ class TestSklearnModelWrapper(unittest.TestCase):
             {"clazz": OneClassSVM, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": SVC, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": SVR, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # cross_decomposition
             # {"clazz": PLSCanonical, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": PLSRegression, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             # {"clazz": PLSSVD, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             # {"clazz": CCA, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # decomposition
             # {"clazz": DictionaryLearning, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             # {"clazz": FastICA, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
@@ -278,11 +280,11 @@ class TestSklearnModelWrapper(unittest.TestCase):
             #     "fit_params": dict(),
             #     "predict_params": dict()
             # },
-            
+
             # gaussian_process
             {"clazz": GaussianProcessRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": GaussianProcessClassifier, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # discriminant_analysis
             {
                 "clazz": LinearDiscriminantAnalysis,
@@ -296,17 +298,17 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 "fit_params": dict(),
                 "predict_params": dict()
             },
-            
+
             # naive_bayes
             {"clazz": BernoulliNB, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": GaussianNB, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": MultinomialNB, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": ComplementNB, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": CategoricalNB, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # kernel_ridge
             {"clazz": KernelRidge, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # neighbors
             {"clazz": KNeighborsClassifier, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": KNeighborsRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
@@ -340,47 +342,47 @@ class TestSklearnModelWrapper(unittest.TestCase):
             # tree
             {"clazz": DecisionTreeClassifier, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": DecisionTreeRegressor, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # multiclass
             {
-                "clazz": OneVsRestClassifier, 
-                "init_params": {"estimator": SVC()}, 
+                "clazz": OneVsRestClassifier,
+                "init_params": {"estimator": SVC()},
                 "fit_params": dict(),
                 "predict_params": dict()
             },
             {
-                "clazz": OneVsOneClassifier, 
-                "init_params": {"estimator": SVC()}, 
+                "clazz": OneVsOneClassifier,
+                "init_params": {"estimator": SVC()},
                 "fit_params": dict(),
                 "predict_params": dict()
             },
             {
-                "clazz": OutputCodeClassifier, 
-                "init_params": {"estimator": SVC()}, 
+                "clazz": OutputCodeClassifier,
+                "init_params": {"estimator": SVC()},
                 "fit_params": dict(),
                 "predict_params": dict()
             },
-            
+
             # semi_supervised
             {
-                "clazz": SelfTrainingClassifier, 
+                "clazz": SelfTrainingClassifier,
                 "init_params": {"base_estimator": SVC(probability=True, gamma="auto")},
                 "fit_params": dict(),
                 "predict_params": dict()
             },
             {"clazz": LabelPropagation, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": LabelSpreading, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # isotonic
             {"clazz": IsotonicRegression, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # calibration
             {"clazz": CalibratedClassifierCV, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # mixture
             {"clazz": GaussianMixture, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             {"clazz": BayesianGaussianMixture, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
-            
+
             # cluster
             {"clazz": AffinityPropagation, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
             # {"clazz": AgglomerativeClustering, "init_params": dict(), "fit_params": dict(), "predict_params": dict()},
@@ -739,11 +741,11 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        
+
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
@@ -755,8 +757,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_class=model["clazz"],
                 model_init_params=model["init_params"]
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         #######################################
@@ -774,13 +776,13 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
                 observed_periods=observed_periods
             )
-            paddlets_ds.known_cov = None
+            bts_ds.known_cov = None
 
             model_wrapper = SklearnModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
@@ -788,8 +790,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_class=model["clazz"],
                 model_init_params=model["init_params"]
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         #######################################
@@ -807,13 +809,13 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
                 observed_periods=observed_periods
             )
-            paddlets_ds.observed_cov = None
+            bts_ds.observed_cov = None
 
             model_wrapper = SklearnModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
@@ -821,8 +823,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_class=model["clazz"],
                 model_init_params=model["init_params"]
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         #######################################
@@ -840,14 +842,14 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
                 observed_periods=observed_periods
             )
-            paddlets_ds.observed_cov = None
-            paddlets_ds.known_cov = None
+            bts_ds.observed_cov = None
+            bts_ds.known_cov = None
 
             model_wrapper = SklearnModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
@@ -855,8 +857,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_class=model["clazz"],
                 model_init_params=model["init_params"]
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         ##########################################
@@ -874,14 +876,14 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
                 observed_periods=observed_periods
             )
-            paddlets_ds.observed_cov = None
-            paddlets_ds.known_cov = None
+            bts_ds.observed_cov = None
+            bts_ds.known_cov = None
 
             model_wrapper = SklearnModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
@@ -890,8 +892,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_init_params=model["init_params"]
             )
 
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         #################################################################
@@ -909,7 +911,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] != dict() or model["predict_params"] != dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
@@ -924,8 +926,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 udf_ml_dataloader_to_fit_ndarray=self.udf_ml_dataloader_to_fit_ndarray,
                 udf_ml_dataloader_to_predict_ndarray=self.udf_ml_dataloader_to_predict_ndarray
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         ##################################################################
@@ -943,7 +945,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         for model in self._good_to_fit_and_predict_sklearn_model_list:
             if model["fit_params"] == dict() or model["predict_params"] == dict():
                 continue
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
@@ -957,16 +959,16 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 fit_params=model["fit_params"],
                 predict_params=model["predict_params"]
             )
-            model_wrapper.fit(train_data=paddlets_ds)
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         ######################
         # case 7 (bad case)  #
         # 1) target is None. #
         ######################
-        paddlets_ds = self._build_mock_ts_dataset()
-        paddlets_ds.target = None
+        bts_ds = self._build_mock_ts_dataset()
+        bts_ds.target = None
 
         model_wrapper = SklearnModelWrapper(
             in_chunk_len=self._default_in_chunk_len,
@@ -976,7 +978,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
 
         succeed = True
         try:
-            model_wrapper.fit(train_data=paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -989,7 +991,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(
+        bts_ds = self._build_mock_ts_dataset(
             target_col_num=target_col_num,
             target_periods=target_periods,
             known_periods=known_periods,
@@ -1004,11 +1006,41 @@ class TestSklearnModelWrapper(unittest.TestCase):
 
         succeed = True
         try:
-            model_wrapper.fit(train_data=paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
-        
+
+        ################################################
+        # case 9 (bad case)                            #
+        # 1) target.dtype != numeric (i.e. np.float32) #
+        ################################################
+        target_col_num = 1
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        bts_ds = self._build_mock_ts_dataset(
+            target_col_num=target_col_num,
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            # Explicitly set target to (invalid) np.int64 to repro this bad case.
+            target_dtype=np.int64
+        )
+        model_wrapper = SklearnModelWrapper(
+            in_chunk_len=self._default_in_chunk_len,
+            out_chunk_len=self._default_out_chunk_len,
+            model_class=self._default_model_class
+        )
+
+        succeed = True
+        try:
+            # target.dtype is NOT numeric (np.float32), bad.
+            model_wrapper.fit(train_data=bts_ds)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
     def test_save(self):
         """
         test SklearnModelWrapper::save (inherited from MLBaseModel::save).
@@ -1031,15 +1063,15 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(
+        bts_ds = self._build_mock_ts_dataset(
             target_col_num=target_col_num,
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods
         )
 
-        model_wrapper.fit(train_data=paddlets_ds)
-        predicted_ds = model_wrapper.predict(paddlets_ds)
+        model_wrapper.fit(train_data=bts_ds)
+        predicted_ds = model_wrapper.predict(bts_ds)
         self.assertIsNotNone(predicted_ds.get_target())
 
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -1081,13 +1113,13 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(
+        bts_ds = self._build_mock_ts_dataset(
             target_col_num=target_col_num,
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods
         )
-        model_wrapper.fit(train_data=paddlets_ds)
+        model_wrapper.fit(train_data=bts_ds)
 
         # save the first one.
         model_1_name = "a"
@@ -1136,18 +1168,18 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(
+        bts_ds = self._build_mock_ts_dataset(
             target_col_num=target_col_num,
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods
         )
-        model_wrapper.fit(train_data=paddlets_ds)
+        model_wrapper.fit(train_data=bts_ds)
 
         # store predicted dataset before load
-        pred_ds_before_load = model_wrapper.predict(paddlets_ds)
+        pred_ds_before_load = model_wrapper.predict(bts_ds)
         self.assertEqual(
-            (self._default_out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            (self._default_out_chunk_len, len(bts_ds.get_target().data.columns)),
             pred_ds_before_load.get_target().data.shape
         )
 
@@ -1164,7 +1196,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         self.assertTrue(isinstance(loaded_model_wrapper, SklearnModelWrapper))
 
         # predict using loaded model
-        pred_ds_after_load = loaded_model_wrapper.predict(paddlets_ds)
+        pred_ds_after_load = loaded_model_wrapper.predict(bts_ds)
 
         # compare predicted dataset
         self.assertTrue(np.alltrue(
@@ -1190,18 +1222,18 @@ class TestSklearnModelWrapper(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(
+        bts_ds = self._build_mock_ts_dataset(
             target_col_num=target_col_num,
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods
         )
-        model_wrapper.fit(train_data=paddlets_ds)
+        model_wrapper.fit(train_data=bts_ds)
 
         # store predicted dataset before load
-        pred_ds_before_load = model_wrapper.predict(paddlets_ds)
+        pred_ds_before_load = model_wrapper.predict(bts_ds)
         self.assertEqual(
-            (self._default_out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            (self._default_out_chunk_len, len(bts_ds.get_target().data.columns)),
             pred_ds_before_load.get_target().data.shape
         )
 
@@ -1227,8 +1259,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         self.assertEqual(model_wrapper.__class__, loaded_model_2.__class__)
 
         # predicted results expected.
-        loaded_model_1_pred_ds = loaded_model_1.predict(paddlets_ds)
-        loaded_model_2_pred_ds = loaded_model_2.predict(paddlets_ds)
+        loaded_model_1_pred_ds = loaded_model_1.predict(bts_ds)
+        loaded_model_2_pred_ds = loaded_model_2.predict(bts_ds)
         self.assertTrue(np.alltrue(
             pred_ds_before_load.get_target().to_numpy(False) == loaded_model_1_pred_ds.get_target().to_numpy(False)
         ))
@@ -1250,7 +1282,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
         known_periods = target_periods + 10
         observed_periods = target_periods
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            paddlets_ds = self._build_mock_ts_dataset(
+            bts_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
                 target_periods=target_periods,
                 known_periods=known_periods,
@@ -1264,9 +1296,9 @@ class TestSklearnModelWrapper(unittest.TestCase):
                 model_init_params=model["init_params"]
             )
 
-            model_wrapper.fit(train_data=paddlets_ds)
+            model_wrapper.fit(train_data=bts_ds)
 
-            predicted_ds = model_wrapper.predict(paddlets_ds)
+            predicted_ds = model_wrapper.predict(bts_ds)
             self.assertIsNotNone(predicted_ds.get_target())
 
         ###########################
@@ -1303,93 +1335,217 @@ class TestSklearnModelWrapper(unittest.TestCase):
 
     @staticmethod
     def _build_mock_ts_dataset(
-        target_col_num: int = 1,
-        known_col_num: int = 2,
-        observed_col_num: int = 2,
-        target_periods: int = 10,
-        known_periods: int = 10,
-        observed_periods: int = 10,
-        target_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        known_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        observed_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        freq: str = "1D"
+            target_col_num: int = 1,
+            known_col_num: int = 2,
+            observed_col_num: int = 2,
+            target_periods: int = 10,
+            known_periods: int = 10,
+            observed_periods: int = 10,
+            target_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
+            known_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
+            observed_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
+            freq: str = "1D",
+            cov_dtypes_contain_numeric: bool = True,
+            cov_dtypes_contain_categorical: bool = True,
+            target_dtype: type = np.float32
     ):
         """
-        Build mock paddlets dataset.
+        Build mock bts dataset.
 
         all timeseries must have same freq.
         """
+        numeric_dtype = np.float32
+        categorical_dtype = np.int64
+
+        # target (ml model requires target col num MUST == 1, thus cannot both contain numeric + categorical).
         target_df = pd.DataFrame(
-            [[i for n in range(target_col_num)] for i in range(target_periods)],
+            np.array([[i for n in range(target_col_num)] for i in range(target_periods)], dtype=target_dtype),
             index=pd.date_range(start=target_start_timestamp, periods=target_periods, freq=freq),
-            columns=[f"target{n}" for n in range(target_col_num)]
+            columns=[f"target{n}" for n in range(target_col_num)],
         )
 
-        known_cov_df = pd.DataFrame(
-            [[i * (10 ** (n + 1)) for n in range(known_col_num)] for i in range(known_periods)],
-            index=pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq),
-            columns=[f"known{n}" for n in range(known_col_num)]
-        )
+        # known
+        known_raw_data = [[i * (10 ** (n + 1)) for n in range(known_col_num)] for i in range(known_periods)]
+        # known_raw_data = [(i * 10, i * 100) for i in range(known_periods)]
+        known_numeric_df = None
+        if cov_dtypes_contain_numeric:
+            # numeric
+            known_numeric_data = np.array(known_raw_data, dtype=numeric_dtype)
+            known_numeric_df = pd.DataFrame(
+                data=known_numeric_data,
+                index=pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq),
+                columns=["known_numeric_0", "known_numeric_1"]
+            )
 
-        observed_cov_df = pd.DataFrame(
-            [[i * (-10 ** (n + 1)) for n in range(observed_col_num)] for i in range(observed_periods)],
-            index=pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq),
-            columns=[f"observed{n}" for n in range(observed_col_num)]
-        )
+        known_categorical_df = None
+        if cov_dtypes_contain_categorical:
+            # categorical
+            known_categorical_data = np.array(known_raw_data, dtype=categorical_dtype)
+            known_categorical_df = pd.DataFrame(
+                data=known_categorical_data,
+                index=pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq),
+                columns=["known_categorical_0", "known_categorical_1"]
+            )
+        if (known_numeric_df is None) and (known_categorical_df is None):
+            raise Exception(f"failed to build known cov data, both numeric df and categorical df are all None.")
+        if (known_numeric_df is not None) and (known_categorical_df is not None):
+            # both are NOT None.
+            known_cov_df = pd.concat([known_numeric_df, known_categorical_df], axis=1)
+        else:
+            known_cov_df = [known_numeric_df, known_categorical_df][1 if known_numeric_df is None else 0]
+
+        # observed
+        observed_raw_data = [[i * (-10 ** (n + 1)) for n in range(observed_col_num)] for i in range(observed_periods)]
+        # observed_raw_data = [(i * -1, i * -10) for i in range(observed_periods)]
+        observed_numeric_df = None
+        if cov_dtypes_contain_numeric:
+            # numeric
+            observed_numeric_data = np.array(observed_raw_data, dtype=numeric_dtype)
+            observed_numeric_df = pd.DataFrame(
+                data=observed_numeric_data,
+                index=pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq),
+                columns=["observed_numeric_0", "observed_numeric_1"]
+            )
+
+        observed_categorical_df = None
+        if cov_dtypes_contain_categorical:
+            # categorical
+            observed_categorical_data = np.array(observed_raw_data, dtype=categorical_dtype)
+            observed_categorical_df = pd.DataFrame(
+                data=observed_categorical_data,
+                index=pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq),
+                columns=["observed_categorical_0", "observed_categorical_1"]
+            )
+
+        if (observed_numeric_df is None) and (observed_categorical_df is None):
+            raise Exception(f"failed to build observed cov data, both numeric df and categorical df are all None.")
+        if (observed_numeric_df is not None) and (observed_categorical_df is not None):
+            # both are NOT None.
+            observed_cov_df = pd.concat([observed_numeric_df, observed_categorical_df], axis=1)
+        else:
+            observed_cov_df = [observed_numeric_df, observed_categorical_df][
+                1 if observed_numeric_df is None else 0]
+
+        # static
+        static = dict()
+        if cov_dtypes_contain_numeric:
+            # numeric
+            static["static_numeric"] = np.float32(1)
+        if cov_dtypes_contain_categorical:
+            # categorical
+            static["static_categorical"] = np.int64(2)
 
         return TSDataset(
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1, "static1": 2}
+            static_cov=static
         )
 
     @staticmethod
     def udf_ml_dataloader_to_fit_ndarray(
-        ml_dataloader: MLDataLoader,
-        model_init_params: Dict[str, Any],
-        in_chunk_len: int,
-        skip_chunk_len: int,
-        out_chunk_len: int
+            ml_dataloader: MLDataLoader,
+            model_init_params: Dict[str, Any],
+            in_chunk_len: int,
+            skip_chunk_len: int,
+            out_chunk_len: int
     ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
         data = next(ml_dataloader)
 
-        observed_cov = data['observed_cov']
-        observed_cov = observed_cov.reshape(observed_cov.shape[0], observed_cov.shape[1] * observed_cov.shape[2])
-        known_cov = data['known_cov']
-        known_cov = known_cov.reshape(known_cov.shape[0], known_cov.shape[1] * known_cov.shape[2])
+        sample_x_keys = data.keys() - {"future_target"}
         if in_chunk_len < 1:
-            x_train = np.hstack((known_cov, observed_cov))
-        else:
-            past_target = data['past_target']
-            past_target = past_target.reshape(past_target.shape[0], past_target.shape[1] * past_target.shape[2])
-            x_train = np.hstack((known_cov, observed_cov, past_target))
+            # lag scenario cannot use past_target as features.
+            sample_x_keys -= {"past_target"}
+        # concatenated ndarray will follow the below ordered list rule:
+        # [rule 1] past_target features will ALWAYS be on the left side of known_cov features.
+        # [rule 2] numeric features will ALWAYS be on the left side of categorical features.
+        full_ordered_x_key_list = ["past_target"]
+        full_ordered_x_key_list.extend(
+            [f"{t[1]}_{t[0]}" for t in product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])]
+        )
 
-        # data["future_target"].shape = (n_samples, out_chunk_len, target_col_num)
-        # y_train.shape must be (n_samples, )
-        # the pre-check in the self.__init__ already guarantee that out_chunk_len must be equal to 1.
-        # the pre-check in the self.predict already guarantee that target_col_num must be equal to 1.
-        y_train = np.squeeze(data["future_target"])
-        return x_train, y_train
+        # For example, given:
+        # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
+        # full_ordered_x_key_list = [
+        #   "past_target",
+        #   "known_cov_numeric",
+        #   "observed_cov_numeric",
+        #   "static_cov_numeric",
+        #   "known_cov_categorical",
+        #   "observed_cov_categorical",
+        #   "static_cov_categorical"
+        # ]
+        # Thus, actual_ordered_x_key_list = [
+        #   "known_cov_numeric",
+        #   "observed_cov_categorical",
+        #   "static_cov_categorical"
+        # ]
+        actual_ordered_x_key_list = []
+        for k in full_ordered_x_key_list:
+            if k in sample_x_keys:
+                actual_ordered_x_key_list.append(k)
+
+        reshaped_x_ndarray_list = []
+        for k in actual_ordered_x_key_list:
+            ndarray = data[k]
+            # 3-dim -> 2-dim
+            reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+            reshaped_x_ndarray_list.append(reshaped_ndarray)
+        x = np.hstack(tup=reshaped_x_ndarray_list)
+
+        # sklearn requires that y.shape must be (n_samples, ), so the invocation of np.squeeze() is required.
+        # As we already make pre-assertions in _validate_train_data(), thus we can ensure the following:
+        # 1. target.dtype must be np.float32 (i.e., numeric);
+        # 2. len(target.columns) must == 1;
+        y = np.squeeze(data["future_target"])
+        return x, y
 
     @staticmethod
     def udf_ml_dataloader_to_predict_ndarray(
-        ml_dataloader: MLDataLoader,
-        model_init_params: Dict[str, Any],
-        in_chunk_len: int,
-        skip_chunk_len: int,
-        out_chunk_len: int
+            ml_dataloader: MLDataLoader,
+            model_init_params: Dict[str, Any],
+            in_chunk_len: int,
+            skip_chunk_len: int,
+            out_chunk_len: int
     ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
         data = next(ml_dataloader)
 
-        observed_cov = data['observed_cov']
-        observed_cov = observed_cov.reshape(observed_cov.shape[0], observed_cov.shape[1] * observed_cov.shape[2])
-        known_cov = data['known_cov']
-        known_cov = known_cov.reshape(known_cov.shape[0], known_cov.shape[1] * known_cov.shape[2])
+        sample_x_keys = data.keys() - {"future_target"}
         if in_chunk_len < 1:
-            x_test = np.hstack((known_cov, observed_cov))
-        else:
-            past_target = data['past_target']
-            past_target = past_target.reshape(past_target.shape[0], past_target.shape[1] * past_target.shape[2])
-            x_test = np.hstack((known_cov, observed_cov, past_target))
-        return x_test, None
+            # lag scenario cannot use past_target as features.
+            sample_x_keys -= {"past_target"}
+        # concatenated ndarray will follow the below ordered list rule:
+        # [rule 1] past_target features will ALWAYS be on the left side of known_cov features.
+        # [rule 2] numeric features will ALWAYS be on the left side of categorical features.
+        product_keys = product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])
+        full_ordered_x_key_list = ["past_target"] + [f"{t[1]}_{t[0]}" for t in product_keys]
+
+        # For example, given:
+        # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
+        # full_ordered_x_key_list = [
+        #   "past_target",
+        #   "known_cov_numeric",
+        #   "observed_cov_numeric",
+        #   "static_cov_numeric",
+        #   "known_cov_categorical",
+        #   "observed_cov_categorical",
+        #   "static_cov_categorical"
+        # ]
+        # Thus, actual_ordered_x_key_list = [
+        #   "known_cov_numeric",
+        #   "observed_cov_categorical",
+        #   "static_cov_categorical"
+        # ]
+        actual_ordered_x_key_list = []
+        for k in full_ordered_x_key_list:
+            if k in sample_x_keys:
+                actual_ordered_x_key_list.append(k)
+
+        reshaped_x_ndarray_list = []
+        for k in actual_ordered_x_key_list:
+            ndarray = data[k]
+            # 3-dim -> 2-dim
+            reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+            reshaped_x_ndarray_list.append(reshaped_ndarray)
+        x = np.hstack(tup=reshaped_x_ndarray_list)
+        return x, None

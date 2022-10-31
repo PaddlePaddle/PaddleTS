@@ -64,7 +64,7 @@ class MLDataLoader(object):
         return self._start + min(self._batch_size, len(self._dataset.samples[self._start:]))
 
     @staticmethod
-    def _default_collate_fn(minibatch: List[Dict[str, np.ndarray]]) -> Dict[str, np.ndarray]:
+    def _default_collate_fn(batch: List[Dict[str, np.ndarray]]) -> Dict[str, np.ndarray]:
         """
         Internal method that takes in a batch of data and puts the elements within the batch
         into a container (e.g. python built-in dict container) with an additional outer dimension - batch size.
@@ -73,53 +73,24 @@ class MLDataLoader(object):
         parameter is NOT.
 
         Args:
-            minibatch(List[Dict[str, np.ndarray]]): A batch of data to collate.
+            batch(List[Dict[str, np.ndarray]]): A batch of data to collate.
 
         Returns:
             Dict[str, np.ndarray]: A collated batch of data with an additional outer dimension - batch size.
         """
-        batch_size = len(minibatch)
+        batch_size = len(batch)
+        sample = batch[0]
 
-        target_in_chunk_len = minibatch[0]["past_target"].shape[0]
-        target_out_chunk_len = minibatch[0]["future_target"].shape[0]
-        # Tips:
-        # In case if known/observed timeSeries is None, the shape of known_cov/observed_cov will be (0, 0).
-        # Thus, in this case, the known/observed chunk len cannot be computed by target input/output chunk, but need
-        # to be represented by the corresponding shape of known/observed cov.
-        known_cov_chunk_len = minibatch[0]["known_cov"].shape[0]
-        observed_cov_chunk_len = minibatch[0]["observed_cov"].shape[0]
-
-        # Tips:
-        # In some cases, the past_target.shape are NOT equivalent to future_target.shape, see following example:
-        # 1) In `Lag + build training sample` case, past_target.shape is ALWAYS equal to (0, 0), while
-        # future_target.shape[1] = TSDataset._target.columns.
-        # 2) In `Not-Lat + build predict sample` case, past_target.shape[1] = TSDataset._target.columns, while
-        # future_target.shape is ALWAYS equal to (1, 1).
-        # Thus, past_target_col_num 和 future_target_col_num need to be computed separately.
-        past_target_col_num = minibatch[0]["past_target"].shape[1]
-        future_target_col_num = minibatch[0]["future_target"].shape[1]
-        known_col_num = minibatch[0]["known_cov"].shape[1]
-        observed_col_num = minibatch[0]["observed_cov"].shape[1]
-
-        collated_minibatch = dict()
-        collated_minibatch["past_target"] = np.zeros(
-            shape=(batch_size, target_in_chunk_len, past_target_col_num)
-        )
-        collated_minibatch["future_target"] = np.zeros(
-            shape=(batch_size, target_out_chunk_len, future_target_col_num)
-        )
-        collated_minibatch["known_cov"] = np.zeros(
-            shape=(batch_size, known_cov_chunk_len, known_col_num)
-        )
-        collated_minibatch["observed_cov"] = np.zeros(
-            shape=(batch_size, observed_cov_chunk_len, observed_col_num)
-        )
-        for sidx in range(len(minibatch)):
-            collated_minibatch["past_target"][sidx] = minibatch[sidx]["past_target"]
-            collated_minibatch["future_target"][sidx] = minibatch[sidx]["future_target"]
-            collated_minibatch["known_cov"][sidx] = minibatch[sidx]["known_cov"]
-            collated_minibatch["observed_cov"][sidx] = minibatch[sidx]["observed_cov"]
-        return collated_minibatch
+        collated_batch = dict()
+        for sidx in range(len(batch)):
+            for k in sample.keys():
+                if k not in collated_batch.keys():
+                    collated_batch[k] = np.zeros(
+                        shape=(batch_size, sample[k].shape[0], sample[k].shape[1]),
+                        dtype=sample[k].dtype
+                    )
+                collated_batch[k][sidx] = batch[sidx][k]
+        return collated_batch
 
     @property
     def dataset(self):
