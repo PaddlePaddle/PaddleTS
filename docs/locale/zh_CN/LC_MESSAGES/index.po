@@ -7,130 +7,130 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 14:18+0800\n"
+"POT-Creation-Date: 2022-10-26 19:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: ../../index.rst:44 c40005f1dde1415db5a52ef0b8db3dc0
+#: ../../index.rst:41 47d8f53b7be5489a957209188966c51d
 msgid "Get Started"
 msgstr "开始使用"
 
-#: ../../index.rst:44
+#: ../../index.rst:41
+msgid "Joint Training of Multiple Time Series"
+msgstr "多路时序数据联合训练"
+
+#: ../../index.rst:41
 msgid "Run On GPU"
 msgstr "使用GPU计算时序模型"
 
-#: ../../index.rst:51 8b8c7a8d98794ac39d2d5be1e1d65b8f
+#: ../../index.rst:49 0dd79034e19d48698b92aa8afcb044d1
 msgid "Installation"
 msgstr "安装"
 
-#: ../../index.rst:57 c30ec787e0384615a98d80bed87a95e9
+#: ../../index.rst:55 5758d08dc244434b89a7d6e31a54a773
 msgid "Dataset"
 msgstr "数据集定义、加载以及操作"
 
-#: ../../index.rst:64 89befbbee817422a87be9603a0aadeec
+#: ../../index.rst:62 913f71009b9446278ea2c985bd3267e9
 msgid "Transform"
 msgstr "数据转换"
 
-#: ../../index.rst:64
+#: ../../index.rst:62
 msgid "Third-Party And User-Define Transform"
 msgstr "第三方以及自定义的数据转换模块自动集成"
 
-#: ../../index.rst:71
+#: ../../index.rst:69
 msgid "Overview"
 msgstr "模型"
 
-#: ../../index.rst:71
+#: ../../index.rst:69
 msgid "Third-party Model"
 msgstr "第三方模型自动集成"
 
-#: ../../index.rst:71
+#: ../../index.rst:69
 msgid "Probability Forecasting"
 msgstr "概率预测模型"
 
-#: ../../index.rst:71
+#: ../../index.rst:69
 msgid "Representation"
 msgstr "表征模型"
 
-#: ../../index.rst:71 5eead43f84c34bb9a12fba4efabb5783
+#: ../../index.rst:69
+msgid "Anomaly Detection"
+msgstr "时序异常检测"
+
+#: ../../index.rst:69 bdde893d96d24f20911adc5c004d1454
 msgid "Models"
 msgstr "模型"
 
-#: ../../index.rst:81 2ef04a85f35e44cb80d6fdc2c31fc9fe
+#: ../../index.rst:80 6e05c3ccec1d40c4aa48557acf8ec2c9
 msgid "Metrics"
 msgstr "评估指标"
 
-#: ../../index.rst:88 a5be996c04ea4226bd4b65d9e38d9148
+#: ../../index.rst:87 395af0ff93c04efaa8379a73dfd74f88
 msgid "Pipeline"
 msgstr ""
 
-#: ../../index.rst:94 d9ea8cf46276414180cd31a58d1cd1e0
+#: ../../index.rst:93 750024b2f8734b65ac4b4608a45a91bd
 msgid "Analysis"
 msgstr "分析"
 
-#: ../../index.rst:100 f2fd332e89b9487c9de4dc93bea1e733
+#: ../../index.rst:99 84e2bf65720b4395a39647ea3bdfaf22
 msgid "Backtest"
 msgstr "回测"
 
-#: ../../index.rst:106 c5d636a882034864a8983ce0b2258b9f
+#: ../../index.rst:105 88dbdbb1baee46cb8db8a4486ec61f19
 msgid "AutoTS"
 msgstr ""
 
-#: ../../index.rst:112 275e3442f5e64f35a22a5753f14a016d
-msgid "Ensemble"
-msgstr "集成学习"
-
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.analysis"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.automl"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.datasets"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.metrics"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.models"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.pipeline"
 msgstr ""
 
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.transform"
 msgstr ""
 
-#: ../../index.rst:118
-msgid "paddlets.ensemble"
-msgstr ""
-
-#: ../../index.rst:118
+#: ../../index.rst:111
 msgid "paddlets.utils"
 msgstr ""
 
-#: ../../index.rst:118 50dd18d0dfaa457e8577f287b663469b
+#: ../../index.rst:111 72c81b4a05654aeeba0984bb2b24b897
 msgid "API"
 msgstr ""
 
-#: ../../index.rst:2 d52603ef08494871bc078d73c0db11ca
+#: ../../index.rst:2 5d4354e0af254db2967d385f2aedc988
 msgid "Welcome to PaddleTS"
 msgstr "欢迎使用PaddleTS"
 
-#: ../../index.rst:4 7929d7e1663f4e9a82daa17c042e5ac8
+#: ../../index.rst:4 af2565bb989846f6aa68958298d3ee19
 msgid ""
-"PaddleTS is an easy-to-use Python library for deep time series modeling, "
+"PaddleTS is an easy to use Python library for deep time series modeling, "
 "focusing on the state-of-the-art deep neural network models based on "
 "PaddlePaddle deep learning framework. It aims to provide great "
 "flexibility and excellent user experiences for practitioners and "
@@ -139,106 +139,94 @@ msgstr ""
 "PaddleTS "
 "是一个易用的深度时序建模的Python库，它基于飞桨深度学习框架PaddlePaddle，专注业界领先的深度模型，旨在为领域专家和行业用户提供可扩展的时序建模能力和便捷易用的用户体验。PaddleTS的主要特性包括："
 
-#: ../../index.rst:9 cf7c1bfaeef44ded8090bcfd64376337
+#: ../../index.rst:9 6521acb187564e1fa70076bf51d790a8
 msgid ""
 "A unified data structure named TSDataset for representing time series "
 "data with one or multiple target variables and optional different kinds "
-"of covariates (e.g. known covariates, observed covariates, static "
-"covariates, etc.)"
+"of covariates (e.g. known covariates, observed covariates, and static "
+"covariates, etc.);"
 msgstr "设计统一数据结构，实现对多样化时序数据的表达，支持单目标与多目标变量，支持多类型协变量"
 
-#: ../../index.rst:11 1c3ed70ccc724d579d2b4b8f469eeabb
+#: ../../index.rst:11 b51ca4c5f7b94b9d8639144980464abc
 msgid ""
-"A base model class named PaddleBaseModelImpl, which inherits from the "
+"A base model class named PaddleBaseModelImpl , which inherits from the "
 "PaddleBaseModel and further encapsulates some routine procedures (e.g. "
 "data loading, callbacks setup, loss computation, training loop control, "
 "etc.) and allows developers to focus on the implementation of network "
-"architectures when developing new models"
+"architectures when developing new models;"
 msgstr "封装基础模型功能，如数据加载、回调设置、损失函数、训练过程控制等公共方法，帮助开发者在新模型开发过程中专注于网络结构本身"
 
-#: ../../index.rst:13 a626ddee6cdf4873ae229dda42ea492b
+#: ../../index.rst:13 09b45fa979a74cda8e139d25cd5f9226
 msgid ""
 "A set of state-of-the-art deep learning models (e.g. NBEATS, NHiTS, "
-"LSTNet, TCN, Transformer, etc.)"
+"LSTNet, TCN, Transformer, etc);"
 msgstr "内置业界领先的深度学习模型，例如NBEATS、NHiTS、LSTNet、TCN、Transformer 等"
 
-#: ../../index.rst:15 bf8845fa96f64224863654053f92027f
+#: ../../index.rst:15 22b4312d98e44cdead8c214e218eda7f
 msgid ""
 "A set of transformation operators for data preprocessing (e.g. missing "
 "values/outliers handling, one-hot encoding, normalization, and automatic "
-"date/time-related covariate generation, etc.)"
+"date/time-related covariate generation, etc.);"
 msgstr "内置经典数据转换算子，支持数据处理与转换，包括缺失值填充、异常值处理、归一化、时间相关的协变量提取等"
 
-#: ../../index.rst:17 c03ba1844e324c01be833aac11fdfd9f
+#: ../../index.rst:17 4f0f4d6b837e4c0ca195b9cc236f4af3
 msgid ""
 "A set of analysis operators for quick data exploration (e.g. basic "
-"statistics and summary)"
+"statistics and summary)."
 msgstr "内置时序数据分析算子，帮助开发者便捷实现数据探索，包括数据统计量信息及数据摘要等功能"
 
-#: ../../index.rst:19 9906d52929c44c5eb98f4ca1f3524244
+#: ../../index.rst:19 2498bf4432554c10973f4f716c9e475b
+msgid "Automatic hyper-parameter tuning."
+msgstr "自动超参寻优"
+
+#: ../../index.rst:21 28fc6185c57548d88a01a2e19788067c
 msgid ""
-"Automatic hyper-parameter tuning, enhance model performance easily and "
-"efficiently"
-msgstr "支持自动超参寻优，自动、高效满足效果调优需求"
+"Third-party ML models & data transformations integration (e.g., scikit-"
+"learn)."
+msgstr "第三方机器学习模型及数据转换模块自动集成"
 
-#: ../../index.rst:21 1e440ef629244edeb57c2752f1a7bc00
-msgid "Recently updated:"
-msgstr "最新更新："
+#: ../../index.rst:23 2e902fdb7fb140aab94f717dfac136eb
+msgid "Run models on GPU devices."
+msgstr "支持在GPU设备上运行基于PaddlePaddle的时序模型"
 
-#: ../../index.rst:23 61f57fd60cb141c88d72f210c8d619e0
-msgid ""
-"Time series representation learning model supported, with TS2Vec model "
-"released"
-msgstr "新增时序表征学习支持，发布TS2Vec模型"
+#: ../../index.rst:25 ef5399521191422fad600234e9f07dc5
+msgid "TS2Vec, a time series representation learning model."
+msgstr "新增TS2Vec模型，支持时序表征学习"
 
-#: ../../index.rst:25 abe585539ef5471697ec43f6efacd86b
-msgid "Probabilistic forecasting supported, with DeepAR model released"
-msgstr "新增概率预测模型支持，发布DeepAR模型"
+#: ../../index.rst:27 ab7505d3a8d24d0e98637771ee072719
+msgid "DeepAR, a deep time series model for probabilistic forecasting."
+msgstr "新增DeepAR模型，支持时序概率预测"
 
-#: ../../index.rst:27 5bb3dfe0b0ba430981e6096aafbb7f36
-msgid "Some new time series forecasting models like Informer released"
-msgstr "新增informer等一批新预测模型发布"
-
-#: ../../index.rst:29 4e3b5232a0724e1cbef5b29afc6075c4
-msgid ""
-"Auto tuning module AutoTS released, which supports mainstream HPO "
-"algorithms and shows significant improvement on multiple models and "
-"datasets"
-msgstr "自动模型调优AutoTS发布，支持多类型HPO算法，在多个模型和数据集上展现显著调优效果"
-
-#: ../../index.rst:31 3b23551a1b2546029bea86e53441f8cd
-msgid ""
-"Third-party (e.g. scikit-learn) ML models & data transformations "
-"integration supported"
-msgstr "支持第三方机器学习模型及数据转换模块自动集成，支持包括sklearn等第三方库的时序应用"
-
-#: ../../index.rst:33 7984253514f64a368b404bd3a8e5628b
-msgid "In the future, more advanced features will be coming, including:"
+#: ../../index.rst:29 e5701a4d76944de79b5d0b82f1ee6477
+msgid "In future, more advanced features will be coming, including:"
 msgstr "未来，更多的高级特性会进一步发布，包括："
 
-#: ../../index.rst:35 ac38a13a3ec44f86b86e100c736a0afb
-msgid "Time series anomaly detection"
+#: ../../index.rst:31 0c39ec8a39a3496e8902548799cb2eb5
+msgid "Time series anomaly detection;"
 msgstr "支持时序异常检测"
 
-#: ../../index.rst:36 5808dfeccd8042bbb54dc84be4a61609
-msgid "More time series representation learning models"
+#: ../../index.rst:32 06cfe0db6f9341499d6334aaeab622e7
+msgid "More time series representation learning models；"
 msgstr "更多时序表征模型"
 
-#: ../../index.rst:37 fdbd2f3586a143ffadca2eb02c08e9ed
-msgid "More probabilistic forecasting models"
+#: ../../index.rst:33 37e9b8e50c4a4c91b6bf4fc4b3c9a16c
+msgid "More probabilistic forecasting models;"
 msgstr "更多概率预测模型"
 
-#: ../../index.rst:38 bd41a98a3c8d4b70acc65f4d9c4fad39
+#: ../../index.rst:34 b2720131b08040f685d7a90630c06c06
 msgid ""
 "Scenario-specific pipelines which aim to provide an end-to-end solution "
-"for solving real-world business problems"
+"for solving real-world business problems;"
 msgstr "场景化Pipeline"
 
-#: ../../index.rst:39 c59fab452deb40c3809f05f3d9a48c16
-msgid "And more"
+#: ../../index.rst:35 3056e6d4b73d40f3a0b779614efbc208
+msgid "And more."
 msgstr "以及更多"
 
-#: ../../index.rst:41 bae580a993a8492ba93f97348db84ca1
+#: ../../index.rst:38 8430535456554a0185a4d63071b2e05a
 msgid "Project GitHub: https://github.com/PaddlePaddle/PaddleTS"
 msgstr "项目 Github: https://github.com/PaddlePaddle/PaddleTS"
+
+#~ msgid "paddlets.automl"
+#~ msgstr ""
 
