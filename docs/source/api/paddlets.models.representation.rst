@@ -9,4 +9,5 @@ paddlets.models.representation
     :maxdepth: 4
 
     paddlets.models.representation.dl.rst
+    paddlets.models.representation.task.rst
 
