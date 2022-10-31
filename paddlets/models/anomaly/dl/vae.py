@@ -8,21 +8,12 @@ import paddle.nn.functional as F
 import numpy as np
 import paddle
 
-<<<<<<< HEAD
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.anomaly.dl._ed.ed import MLP, CNN, LSTM
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.anomaly.dl import utils as U
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
-=======
-from bts.models.anomaly.dl.anomaly_base import AnomalyBaseModel
-from bts.models.anomaly.dl._ed.ed import MLP, CNN, LSTM
-from bts.models.common.callbacks import Callback
-from bts.models.anomaly.dl import utils as U
-from bts.datasets import TSDataset
-from bts.logger import raise_if, raise_if_not
->>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3
 
 
 class stack(paddle.nn.Layer):

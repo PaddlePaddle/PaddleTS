@@ -22,7 +22,6 @@ import numpy as np
 import paddle
 import time
 
-<<<<<<< HEAD
 from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.common.callbacks import Callback
@@ -33,18 +32,6 @@ from paddlets.logger import raise_if, raise_if_not
 from paddlets.models.anomaly.dl._anomaly_transformer.encoder import Encoder, EncoderLayer
 from paddlets.models.anomaly.dl._anomaly_transformer.attention import AttentionLayer, AnomalyAttention
 from paddlets.models.anomaly.dl._anomaly_transformer.embedding import DataEmbedding
-=======
-from bts.models.anomaly.dl.adapter import AnomalyDataAdapter
-from bts.models.anomaly.dl.anomaly_base import AnomalyBaseModel
-from bts.models.common.callbacks import Callback
-from bts.models.utils import to_tsdataset, to_tsdataset2
-from bts.models.anomaly.dl import utils as U
-from bts.datasets import TSDataset
-from bts.logger import raise_if, raise_if_not
-from bts.models.anomaly.dl._anomaly_transformer.encoder import Encoder, EncoderLayer
-from bts.models.anomaly.dl._anomaly_transformer.attention import AttentionLayer, AnomalyAttention
-from bts.models.anomaly.dl._anomaly_transformer.embedding import DataEmbedding
->>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3
 
 
 class _Anomaly(paddle.nn.Layer):
@@ -527,8 +514,4 @@ class AnomalyTransformer(AnomalyBaseModel):
             paddle.Tensor: Loss value.
         """
         return self._loss_fn(y_score, y_true, criterion, win_size, k)
-<<<<<<< HEAD
     
-=======
-    
->>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3

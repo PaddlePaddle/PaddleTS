@@ -10,17 +10,10 @@ import pandas as pd
 import numpy as np
 import paddle
 
-<<<<<<< HEAD
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.anomaly import VAE
 from paddlets.datasets import TimeSeries
 from paddlets.datasets import TSDataset
-=======
-from bts.models.common.callbacks import Callback
-from bts.models.anomaly import VAE
-from bts.datasets import TimeSeries
-from bts.datasets import TSDataset
->>>>>>> 998764fc5a434d83f0ee9aadb9ca16e8449afde3
 
 
 class TestVAE(TestCase):
