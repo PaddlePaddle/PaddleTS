@@ -9,7 +9,8 @@ import unittest
 import pandas as pd
 import numpy as np
 import math
-from typing import Dict
+from typing import Dict, Set
+import paddle.io
 
 
 class TestDataAdapter(unittest.TestCase):
@@ -28,19 +29,11 @@ class TestDataAdapter(unittest.TestCase):
         # 1) TSDataset is valid.             #
         # 2) Use default adapter parameters. #
         ######################################
-        # This is the simplest scenario for illustrating the basic usage.
-        # Construct tsdataset.
+        # This is the typical scenario for illustrating the basic usage.
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
-        adapter = DataAdapter()
-
-        # Invoke the convert method with default params.
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
-        # Start to assert
         expect_param = {
             "in_chunk_len": 1,
             "skip_chunk_len": 0,
@@ -48,17 +41,78 @@ class TestDataAdapter(unittest.TestCase):
             "sampling_stride": 1,
             "time_window": (1, 9)
         }
-        self.assertEqual(expect_param["in_chunk_len"], paddle_ds._target_in_chunk_len)
-        self.assertEqual(expect_param["skip_chunk_len"], paddle_ds._target_skip_chunk_len)
-        self.assertEqual(expect_param["out_chunk_len"], paddle_ds._target_out_chunk_len)
-        self.assertEqual(expect_param["sampling_stride"], paddle_ds._sampling_stride)
-        self.assertEqual(expect_param["time_window"], paddle_ds._time_window)
-        self._compare_if_paddlets_sample_match_paddle_sample(
-            paddlets_ds=paddlets_ds,
-            paddle_ds=paddle_ds,
+
+        # 0.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+
+        adapter = DataAdapter()
+
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        self.assertEqual(expect_param["in_chunk_len"], sample_ds._target_in_chunk_len)
+        self.assertEqual(expect_param["skip_chunk_len"], sample_ds._target_skip_chunk_len)
+        self.assertEqual(expect_param["out_chunk_len"], sample_ds._target_out_chunk_len)
+        self.assertEqual(expect_param["sampling_stride"], sample_ds._sampling_stride)
+        self.assertEqual(expect_param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
             param=expect_param,
-            future_target_is_nan=False,
-            paddle_version_compatible=True
+            future_target_is_nan=False
+        )
+
+        # 0.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+
+        adapter = DataAdapter()
+
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        self.assertEqual(expect_param["in_chunk_len"], sample_ds._target_in_chunk_len)
+        self.assertEqual(expect_param["skip_chunk_len"], sample_ds._target_skip_chunk_len)
+        self.assertEqual(expect_param["out_chunk_len"], sample_ds._target_out_chunk_len)
+        self.assertEqual(expect_param["sampling_stride"], sample_ds._sampling_stride)
+        self.assertEqual(expect_param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=expect_param,
+            future_target_is_nan=False
+        )
+
+        # 0.3 ONLY categorical cov features.
+        # 0.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+
+        adapter = DataAdapter()
+
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        self.assertEqual(expect_param["in_chunk_len"], sample_ds._target_in_chunk_len)
+        self.assertEqual(expect_param["skip_chunk_len"], sample_ds._target_skip_chunk_len)
+        self.assertEqual(expect_param["out_chunk_len"], sample_ds._target_out_chunk_len)
+        self.assertEqual(expect_param["sampling_stride"], sample_ds._sampling_stride)
+        self.assertEqual(expect_param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=expect_param,
+            future_target_is_nan=False
         )
 
         #######################################################
@@ -67,14 +121,10 @@ class TestDataAdapter(unittest.TestCase):
         # 2) Split TSDataset to train / valid / test dataset. #
         # 3) Do NOT use default adapter parameters.           #
         #######################################################
-        # Construct paddlets tsdataset
         target_periods = 12
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
-        adapter = DataAdapter()
         common_param = {
             "in_chunk_len": 2,
             "skip_chunk_len": 1,
@@ -82,54 +132,168 @@ class TestDataAdapter(unittest.TestCase):
             "sampling_stride": 1
         }
         ratio = (0.5, 0.25, 0.25)
-        target_len = len(paddlets_ds.get_target().data)
         window_bias = common_param["in_chunk_len"] + \
-            common_param["skip_chunk_len"] + \
-            common_param["out_chunk_len"] - \
-            1
+                      common_param["skip_chunk_len"] + \
+                      common_param["out_chunk_len"] - \
+                      1
+
+        # 1.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+        target_len = len(tsdataset.get_target().data)
+
+        adapter = DataAdapter()
 
         # training dataset
         train_window_min = 0 + window_bias
         train_window_max = math.ceil(target_len * sum(ratio[:1]))
         train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
-        train_paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **train_param)
-        self.assertEqual(train_param["time_window"], train_paddle_ds._time_window)
-        self._compare_if_paddlets_sample_match_paddle_sample(
-            paddlets_ds=paddlets_ds,
-            paddle_ds=train_paddle_ds,
+        train_sample_ds = adapter.to_paddle_dataset(tsdataset, **train_param)
+        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=train_sample_ds,
             param=train_param,
-            future_target_is_nan=False,
-            paddle_version_compatible=True
+            future_target_is_nan=False
         )
 
         # validation dataset
         valid_window_min = train_window_max + 1
         valid_window_max = math.ceil(target_len * sum(ratio[:2]))
         valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
-        valid_paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **valid_param)
+        valid_sample_ds = adapter.to_paddle_dataset(tsdataset, **valid_param)
 
-        self.assertEqual(valid_param["time_window"], valid_paddle_ds._time_window)
-        self._compare_if_paddlets_sample_match_paddle_sample(
-            paddlets_ds=paddlets_ds,
-            paddle_ds=valid_paddle_ds,
+        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=valid_sample_ds,
             param=valid_param,
-            future_target_is_nan=False,
-            paddle_version_compatible=True
+            future_target_is_nan=False
         )
 
         # test dataset
         test_window_min = valid_window_max + 1
         test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
         test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
-        test_paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **test_param)
+        test_sample_ds = adapter.to_paddle_dataset(tsdataset, **test_param)
 
-        self.assertEqual(test_param["time_window"], test_paddle_ds._time_window)
-        self._compare_if_paddlets_sample_match_paddle_sample(
-            paddlets_ds=paddlets_ds,
-            paddle_ds=test_paddle_ds,
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=test_sample_ds,
             param=test_param,
-            future_target_is_nan=False,
-            paddle_version_compatible=True
+            future_target_is_nan=False
+        )
+
+        # 1.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+        target_len = len(tsdataset.get_target().data)
+
+        adapter = DataAdapter()
+
+        # training dataset
+        train_window_min = 0 + window_bias
+        train_window_max = math.ceil(target_len * sum(ratio[:1]))
+        train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
+        train_sample_ds = adapter.to_paddle_dataset(tsdataset, **train_param)
+        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=train_sample_ds,
+            param=train_param,
+            future_target_is_nan=False
+        )
+
+        # validation dataset
+        valid_window_min = train_window_max + 1
+        valid_window_max = math.ceil(target_len * sum(ratio[:2]))
+        valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
+        valid_sample_ds = adapter.to_paddle_dataset(tsdataset, **valid_param)
+
+        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=valid_sample_ds,
+            param=valid_param,
+            future_target_is_nan=False
+        )
+
+        # test dataset
+        test_window_min = valid_window_max + 1
+        test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
+        test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
+        test_sample_ds = adapter.to_paddle_dataset(tsdataset, **test_param)
+
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=test_sample_ds,
+            param=test_param,
+            future_target_is_nan=False
+        )
+
+        # 1.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+        target_len = len(tsdataset.get_target().data)
+
+        adapter = DataAdapter()
+
+        # training dataset
+        train_window_min = 0 + window_bias
+        train_window_max = math.ceil(target_len * sum(ratio[:1]))
+        train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
+        train_sample_ds = adapter.to_paddle_dataset(tsdataset, **train_param)
+        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=train_sample_ds,
+            param=train_param,
+            future_target_is_nan=False
+        )
+
+        # validation dataset
+        valid_window_min = train_window_max + 1
+        valid_window_max = math.ceil(target_len * sum(ratio[:2]))
+        valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
+        valid_sample_ds = adapter.to_paddle_dataset(tsdataset, **valid_param)
+
+        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=valid_sample_ds,
+            param=valid_param,
+            future_target_is_nan=False
+        )
+
+        # test dataset
+        test_window_min = valid_window_max + 1
+        test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
+        test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
+        test_sample_ds = adapter.to_paddle_dataset(tsdataset, **test_param)
+
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=test_sample_ds,
+            param=test_param,
+            future_target_is_nan=False
         )
 
         ############################################################################################
@@ -138,16 +302,22 @@ class TestDataAdapter(unittest.TestCase):
         # 2) Predict scenario. The built sample only contains X, but not contains skip_chunk or Y. #
         # 3) Do NOT use default adapter parameters.                                                #
         ############################################################################################
-        # Construct paddlets tsdataset
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
+        # 2.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+
         adapter = DataAdapter()
 
-        max_target_idx = len(paddlets_ds.get_target().data) - 1
+        max_target_idx = len(tsdataset.get_target().data) - 1
         param = {
             "in_chunk_len": 2,
             "skip_chunk_len": 1,
@@ -160,27 +330,296 @@ class TestDataAdapter(unittest.TestCase):
             )
         }
         # Build sample.
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
 
-        self.assertEqual(param["time_window"], paddle_ds._time_window)
-        self._compare_if_paddlets_sample_match_paddle_sample(
-            paddlets_ds=paddlets_ds,
-            paddle_ds=paddle_ds,
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
             param=param,
-            future_target_is_nan=True,
-            paddle_version_compatible=True
+            future_target_is_nan=True
         )
 
+        # 2.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+
+        adapter = DataAdapter()
+
+        max_target_idx = len(tsdataset.get_target().data) - 1
+        param = {
+            "in_chunk_len": 2,
+            "skip_chunk_len": 1,
+            "out_chunk_len": 2,
+            "sampling_stride": 1,
+            "time_window": (
+                # max_target_idx + skip + chunk
+                max_target_idx + 1 + 2,
+                max_target_idx + 1 + 2
+            )
+        }
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
+
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=param,
+            future_target_is_nan=True
+        )
+
+        # 2.3 ONLY categorical features
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+
+        adapter = DataAdapter()
+
+        max_target_idx = len(tsdataset.get_target().data) - 1
+        param = {
+            "in_chunk_len": 2,
+            "skip_chunk_len": 1,
+            "out_chunk_len": 2,
+            "sampling_stride": 1,
+            "time_window": (
+                # max_target_idx + skip + chunk
+                max_target_idx + 1 + 2,
+                max_target_idx + 1 + 2
+            )
+        }
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
+
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=param,
+            future_target_is_nan=True
+        )
+
+        ############################
+        # case 3 (good case)       #
+        # 1) known_cov is None.    #
+        # 2) observed_cov is None. #
+        # 3) static_cov is None.   #
+        ############################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+
+        # 3.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None
+        tsdataset._known_cov = None
+        tsdataset._observed_cov = None
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+
+        max_target_idx = len(tsdataset.get_target().data) - 1
+        param = {
+            "in_chunk_len": 2,
+            "skip_chunk_len": 1,
+            "out_chunk_len": 2,
+            "sampling_stride": 1,
+            "time_window": (
+                # max_target_idx + skip + chunk
+                max_target_idx + 1 + 2,
+                max_target_idx + 1 + 2
+            )
+        }
+        # Build sample.
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
+
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=param,
+            future_target_is_nan=True
+        )
+
+        # 3.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+        # Explicitly set to None
+        tsdataset._known_cov = None
+        tsdataset._observed_cov = None
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+
+        max_target_idx = len(tsdataset.get_target().data) - 1
+        param = {
+            "in_chunk_len": 2,
+            "skip_chunk_len": 1,
+            "out_chunk_len": 2,
+            "sampling_stride": 1,
+            "time_window": (
+                # max_target_idx + skip + chunk
+                max_target_idx + 1 + 2,
+                max_target_idx + 1 + 2
+            )
+        }
+        # Build sample.
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
+
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=param,
+            future_target_is_nan=True
+        )
+
+        # 3.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None
+        tsdataset._known_cov = None
+        tsdataset._observed_cov = None
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+
+        max_target_idx = len(tsdataset.get_target().data) - 1
+        param = {
+            "in_chunk_len": 2,
+            "skip_chunk_len": 1,
+            "out_chunk_len": 2,
+            "sampling_stride": 1,
+            "time_window": (
+                # max_target_idx + skip + chunk
+                max_target_idx + 1 + 2,
+                max_target_idx + 1 + 2
+            )
+        }
+        # Build sample.
+        sample_ds = adapter.to_paddle_dataset(tsdataset, **param)
+
+        self.assertEqual(param["time_window"], sample_ds._time_window)
+        self._compare_tsdataset_and_sample_dataset(
+            tsdataset=tsdataset,
+            sample_ds=sample_ds,
+            param=param,
+            future_target_is_nan=True
+        )
+
+        ###############################################
+        # case 4 (bad case) TSDataset.target is None. #
+        ###############################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        # target is None.
+        tsdataset._target = None
+
+        adapter = DataAdapter()
+        succeed = True
+        try:
+            _ = adapter.to_paddle_dataset(tsdataset)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
+        #######################################
+        # case 5 (bad case) in_chunk_len < 1. #
+        #######################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        adapter = DataAdapter()
+        succeed = True
+        try:
+            _ = adapter.to_paddle_dataset(tsdataset, in_chunk_len=0)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
+        #########################################
+        # case 6 (bad case) skip_chunk_len < 0. #
+        #########################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        adapter = DataAdapter()
+        succeed = True
+        try:
+            _ = adapter.to_paddle_dataset(tsdataset, skip_chunk_len=-1)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
+        ########################################
+        # case 7 (bad case) out_chunk_len < 1. #
+        ########################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        adapter = DataAdapter()
+        succeed = True
+        try:
+            _ = adapter.to_paddle_dataset(tsdataset, out_chunk_len=0)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
+        ##########################################
+        # case 8 (bad case) sampling_stride < 1. #
+        ##########################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        adapter = DataAdapter()
+        succeed = True
+        try:
+            _ = adapter.to_paddle_dataset(tsdataset, sampling_stride=0)
+        except ValueError:
+            succeed = False
+        self.assertFalse(succeed)
+
         ###########################################################
-        # case 3 (bad case) time_window lower bound is too small. #
+        # case 9 (bad case) time_window lower bound is too small. #
         ###########################################################
-        # Construct paddlets tsdataset
         target_periods = 12
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
         adapter = DataAdapter()
         # Given the following params, the min allowed time_window lower bound can be calculated as follows:
         # min_allowed_time_window_lower_bound = (in + skip + out - 1) = 5 - 1 = 4.
@@ -193,51 +632,49 @@ class TestDataAdapter(unittest.TestCase):
         }
 
         # time_window[0] = 3, too small.
-        param = {**common_param, "time_window": (3, len(paddlets_ds.get_target().data) - 1)}
+        param = {**common_param, "time_window": (3, len(tsdataset.get_target().data) - 1)}
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         # time_window[0] = 2, too small.
-        param = {**common_param, "time_window": (2, len(paddlets_ds.get_target().data) - 1)}
+        param = {**common_param, "time_window": (2, len(tsdataset.get_target().data) - 1)}
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         # time_window[0] = 1, too small.
-        param = {**common_param, "time_window": (1, len(paddlets_ds.get_target().data) - 1)}
+        param = {**common_param, "time_window": (1, len(tsdataset.get_target().data) - 1)}
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         # time_window[0] = 0, too small.
-        param = {**common_param, "time_window": (0, len(paddlets_ds.get_target().data) - 1)}
+        param = {**common_param, "time_window": (0, len(tsdataset.get_target().data) - 1)}
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
-        ###########################################################
-        # case 4 (bad case) time_window upper bound is too large. #
-        ###########################################################
-        # Construct paddlets tsdataset
+        ############################################################
+        # case 10 (bad case) time_window upper bound is too large. #
+        ############################################################
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
         adapter = DataAdapter()
 
         # Given the following params, the max allowed time_window upper bound can be calculated as follows:
@@ -251,114 +688,21 @@ class TestDataAdapter(unittest.TestCase):
             "time_window": (
                 2,
                 # 13 > 12, too large.
-                len(paddlets_ds.get_target().data) + 1 + 2 - 1 + 1
+                len(tsdataset.get_target().data) + 1 + 2 - 1 + 1
             )
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
-            succeed = False
-        self.assertFalse(succeed)
-
-        ###############################################
-        # case 5 (bad case) TSDataset.target is None. #
-        ###############################################
-        # Construct paddlets tsdataset
-        target_periods = 10
-        known_periods = target_periods + 10
-        observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-        # target is None.
-        paddlets_ds._target = None
-
-        # Initialize adapter
-        adapter = DataAdapter()
-        succeed = True
-        try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
-        except Exception as e:
-            succeed = False
-        self.assertFalse(succeed)
-
-        #######################################
-        # case 6 (bad case) in_chunk_len < 1. #
-        #######################################
-        # Construct paddlets tsdataset
-        target_periods = 10
-        known_periods = target_periods + 10
-        observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-
-        # Initialize adapter
-        adapter = DataAdapter()
-        succeed = True
-        try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, in_chunk_len=0)
-        except Exception as e:
-            succeed = False
-        self.assertFalse(succeed)
-
-        #########################################
-        # case 7 (bad case) skip_chunk_len < 0. #
-        #########################################
-        # Construct paddlets tsdataset
-        target_periods = 10
-        known_periods = target_periods + 10
-        observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-
-        # Initialize adapter
-        adapter = DataAdapter()
-        succeed = True
-        try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, skip_chunk_len=-1)
-        except Exception as e:
-            succeed = False
-        self.assertFalse(succeed)
-
-        ########################################
-        # case 8 (bad case) out_chunk_len < 1. #
-        ########################################
-        # Construct paddlets tsdataset
-        target_periods = 10
-        known_periods = target_periods + 10
-        observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-
-        # Initialize adapter
-        adapter = DataAdapter()
-        succeed = True
-        try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, out_chunk_len=0)
-        except Exception as e:
-            succeed = False
-        self.assertFalse(succeed)
-
-        ##########################################
-        # case 9 (bad case) sampling_stride < 1. #
-        ##########################################
-        # Construct paddlets tsdataset
-        target_periods = 10
-        known_periods = target_periods + 10
-        observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-
-        # Initialize adapter
-        adapter = DataAdapter()
-        succeed = True
-        try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, sampling_stride=0)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         #############################################################
-        # case 10 (bad case)                                        #
+        # case 11 (bad case)                                        #
         # 1) Given time_window[1] <= max_target_idx                 #
         # 2) (bad) TSDataset.known_cov.time_index[-1] is too small. #
         #############################################################
-        # Construct paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -386,9 +730,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = target_periods - 1
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
         adapter = DataAdapter()
         param = {
             "in_chunk_len": 1,
@@ -399,17 +742,16 @@ class TestDataAdapter(unittest.TestCase):
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         #############################################################
-        # case 11 (bad case)                                        #
+        # case 12 (bad case)                                        #
         # 1) Given time_window[1] > max_target_idx.                 #
         # 2) (bad) TSDataset.known_cov.time_index[-1] is too small. #
         #############################################################
-        # Construct paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -453,9 +795,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = target_periods - 1
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
         adapter = DataAdapter()
         param = {
             "in_chunk_len": 1,
@@ -466,17 +807,16 @@ class TestDataAdapter(unittest.TestCase):
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         #############################################################
-        # case 12 (bad case)                                        #
+        # case 13 (bad case)                                        #
         # 1) Given time_window[1] > max_target_idx.                 #
         # 2) (bad) TSDataset.known_cov.time_index[-1] is too small. #
         #############################################################
-        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -522,32 +862,29 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = 11
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # 初始化 adapter
         adapter = DataAdapter()
         param = {
-            # in > 0, 因此是非lag场景
             "in_chunk_len": 1,
             "skip_chunk_len": 1,
             "out_chunk_len": 2,
             "sampling_stride": 1,
-            # known_cov长度=11 小于window[1]
+            # known_cov len = 11, smaller than window[1].
             "time_window": (12, 12)
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         ################################################################
-        # case 13 (bad case)                                           #
+        # case 14 (bad case)                                           #
         # 1) time_window[1] > max_target_idx.                          #
         # 2) (bad) TSDataset.observed_cov.time_index[-1] is too small. #
         ################################################################
-        # Construct paddlets tsdataset
         target_periods = 10
         known_periods = target_periods + 10
 
@@ -575,29 +912,28 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given observed_ts is too small to build samples.
         # End.
         observed_periods = target_periods - 1
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # 初始化 adapter
         adapter = DataAdapter()
         param = {
-            # in > 0, 因此是非lag场景
             "in_chunk_len": 1,
             "skip_chunk_len": 1,
             "out_chunk_len": 2,
             "sampling_stride": 1,
-            # observed_cov 的校验不需要考虑 time_window[1] 是否超过 max_target_idx, 因为判断逻辑都一样.
+            # validates observed_cov does NOT need to check if time_window[1] > max_target_idx, because the check
+            # logic is same.
             "time_window": (12, 12)
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
         ################################################################
-        # case 14 (bad case)                                           #
-        # 1) time_window[1] <= max_target_idx.                          #
+        # case 15 (bad case)                                           #
+        # 1) time_window[1] <= max_target_idx.                         #
         # 2) (bad) TSDataset.observed_cov.time_index[-1] is too small. #
         ################################################################
         target_periods = 10
@@ -635,9 +971,8 @@ class TestDataAdapter(unittest.TestCase):
         # End.
         observed_periods = 5
         known_periods = target_periods + 10
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
 
-        # Initialize adapter
         adapter = DataAdapter()
         param = {
             "in_chunk_len": 1,
@@ -648,8 +983,8 @@ class TestDataAdapter(unittest.TestCase):
         }
         succeed = True
         try:
-            paddle_ds = adapter.to_paddle_dataset(paddlets_ds, **param)
-        except Exception as e:
+            _ = adapter.to_paddle_dataset(tsdataset, **param)
+        except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
@@ -661,242 +996,693 @@ class TestDataAdapter(unittest.TestCase):
         # case 0 (good case)           #
         # 1) known_cov is NOT None.    #
         # 2) observed_cov is NOT None. #
+        # 3) static_cov is NOT None.   #
         ################################
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        # 0.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
 
         adapter = DataAdapter()
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
         batch_size = 2
-        paddle_dataloader = adapter.to_paddle_dataloader(paddle_ds, batch_size, shuffle=False)
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
 
-        all_keys = {"past_target", "future_target", "known_cov", "observed_cov"}
-        for batch_idx, batch_dict in enumerate(paddle_dataloader):
-            curr_batch_size = list(batch_dict.values())[0].shape[0]
-            for sample_idx in range(curr_batch_size):
-                dataset_sample = paddle_ds[batch_idx * batch_size + sample_idx]
-                for key in all_keys:
-                    dataloader_ndarray_sample = batch_dict[key][sample_idx].numpy()
-                    dataset_ndarray_sample = dataset_sample[key]
-                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "known_cov_categorical",
+            "observed_cov_numeric",
+            "observed_cov_categorical",
+            "static_cov_numeric",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 0.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "observed_cov_numeric",
+            "static_cov_numeric"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 0.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_categorical",
+            "observed_cov_categorical",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
 
         ################################
         # case 1 (good case)           #
         # 1) known_cov is None.        #
         # 2) observed_cov is NOT None. #
+        # 3) static_cov is NOT None.   #
         ################################
-        # This is an expected scenario because it is not mandatory for a model to use known covariates as features.
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-        # Explicitly set known timeseries to None.
-        paddlets_ds._known_cov = None
+
+        # 1.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._known_cov = None
 
         adapter = DataAdapter()
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
         batch_size = 2
-        paddle_dataloader = adapter.to_paddle_dataloader(paddle_ds, batch_size, shuffle=False)
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
 
-        all_keys = {"past_target", "future_target", "known_cov", "observed_cov"}
-        good_keys = {"past_target", "future_target", "observed_cov"}
-        none_keys = all_keys - good_keys
-        for batch_idx, batch_dict in enumerate(paddle_dataloader):
-            curr_batch_size = list(batch_dict.values())[0].shape[0]
-            for sample_idx in range(curr_batch_size):
-                dataset_sample = paddle_ds[batch_idx * batch_size + sample_idx]
-                for key in all_keys:
-                    if key in none_keys:
-                        self.assertTrue(key not in dataset_sample.keys())
-                        continue
+        good_keys = {
+            "past_target",
+            "future_target",
+            "observed_cov_numeric",
+            "observed_cov_categorical",
+            "static_cov_numeric",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
 
-                    # good keys
-                    dataloader_ndarray_sample = batch_dict[key][sample_idx].numpy()
-                    dataset_ndarray_sample = dataset_sample[key]
-                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
+        # 1.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+        # Explicitly set to None.
+        tsdataset._known_cov = None
 
-        #############################
-        # case 2 (good case)        #
-        # 1) known_cov is NOT None. #
-        # 2) observed_cov is None.  #
-        #############################
-        # This is an expected scenario because it is not mandatory for a model to use observed covariates as features.
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "observed_cov_numeric",
+            "static_cov_numeric"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 1.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._known_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "observed_cov_categorical",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        ##############################
+        # case 2 (good case)         #
+        # 1) known_cov is NOT None.  #
+        # 2) observed_cov is None.   #
+        # 3) static_cov is NOT None. #
+        ##############################
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
-        # Explicitly set observed timeseries to None.
-        paddlets_ds._observed_cov = None
+
+        # 2.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._observed_cov = None
 
         adapter = DataAdapter()
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
         batch_size = 2
-        paddle_dataloader = adapter.to_paddle_dataloader(paddle_ds, batch_size, shuffle=False)
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
 
-        all_keys = {"past_target", "future_target", "known_cov", "observed_cov"}
-        good_keys = {"past_target", "future_target", "known_cov"}
-        none_keys = all_keys - good_keys
-        for batch_idx, batch_dict in enumerate(paddle_dataloader):
-            curr_batch_size = list(batch_dict.values())[0].shape[0]
-            for sample_idx in range(curr_batch_size):
-                dataset_sample = paddle_ds[batch_idx * batch_size + sample_idx]
-                for key in all_keys:
-                    if key in none_keys:
-                        self.assertTrue(key not in dataset_sample.keys())
-                        continue
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "known_cov_categorical",
+            "static_cov_numeric",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
 
-                    # good keys
-                    dataloader_ndarray_sample = batch_dict[key][sample_idx].numpy()
-                    dataset_ndarray_sample = dataset_sample[key]
-                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
+        # 2.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+        # Explicitly set to None.
+        tsdataset._observed_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "static_cov_numeric"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 2.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._observed_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_categorical",
+            "static_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        ################################
+        # case 3 (good case)           #
+        # 1) known_cov is NOT None.    #
+        # 2) observed_cov is NOT None. #
+        # 3) static_cov is None.       #
+        ################################
+        target_periods = 10
+        known_periods = target_periods + 10
+        observed_periods = target_periods
+
+        # 3.1 Both numeric and categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "known_cov_categorical",
+            "observed_cov_numeric",
+            "observed_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 3.2 ONLY numeric cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=True,
+            cov_dtypes_contain_categorical=False
+        )
+        # Explicitly set to None.
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "observed_cov_numeric"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
+
+        # 3.3 ONLY categorical cov features.
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            cov_dtypes_contain_numeric=False,
+            cov_dtypes_contain_categorical=True
+        )
+        # Explicitly set to None.
+        tsdataset._static_cov = None
+
+        adapter = DataAdapter()
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
+        batch_size = 2
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+
+        good_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_categorical",
+            "observed_cov_categorical"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
 
         ############################
-        # case 3 (good case)       #
+        # case 4 (good case)       #
         # 1) known_cov is None.    #
         # 2) observed_cov is None. #
+        # 3) static_cov is None.   #
         ############################
-        # This is an expected scenario because it is not mandatory for a model to use known / observed covariates
-        # as features.
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        paddlets_ds = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+
+        tsdataset = self._build_mock_ts_dataset(
+            target_periods=target_periods,
+            known_periods=known_periods,
+            observed_periods=observed_periods,
+            # does not matter because it will be then set to None.
+            cov_dtypes_contain_numeric=True,
+            # does not matter because it will be then set to None.
+            cov_dtypes_contain_categorical=True
+        )
         # Explicitly set known and observed timeseries to None.
-        paddlets_ds._known_cov = None
-        paddlets_ds._observed_cov = None
+        tsdataset._known_cov = None
+        tsdataset._observed_cov = None
+        tsdataset._static_cov = None
 
         adapter = DataAdapter()
-        paddle_ds = adapter.to_paddle_dataset(paddlets_ds)
+        sample_ds = adapter.to_paddle_dataset(tsdataset)
         batch_size = 2
-        paddle_dataloader = adapter.to_paddle_dataloader(paddle_ds, batch_size, shuffle=False)
+        sample_dataloader = adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
 
-        all_keys = {"past_target", "future_target", "known_cov", "observed_cov"}
-        good_keys = {"past_target", "future_target"}
-        none_keys = all_keys - good_keys
-        for batch_idx, batch_dict in enumerate(paddle_dataloader):
-            curr_batch_size = list(batch_dict.values())[0].shape[0]
-            for sample_idx in range(curr_batch_size):
-                dataset_sample = paddle_ds[batch_idx * batch_size + sample_idx]
-                for key in all_keys:
-                    if key in none_keys:
-                        self.assertTrue(key not in dataset_sample.keys())
-                        continue
+        good_keys = {
+            "past_target",
+            "future_target"
+        }
+        self._compare_sample_dataset_and_sample_dataloader(sample_ds, sample_dataloader, batch_size, good_keys)
 
-                    # good keys
-                    dataloader_ndarray_sample = batch_dict[key][sample_idx].numpy()
-                    dataset_ndarray_sample = dataset_sample[key]
-                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
+    def _build_mock_ts_dataset(
+            self,
+            target_periods: int,
+            known_periods: int,
+            observed_periods: int,
+            cov_dtypes_contain_numeric: bool = True,
+            cov_dtypes_contain_categorical: bool = True
+    ):
+        """Build mock bts dataset"""
+        numeric_dtype = np.float32
+        categorical_dtype = np.int64
+        freq: str = "1D"
 
-    def _build_mock_ts_dataset(self, target_periods, known_periods, observed_periods):
-        """Build mock paddlets dataset"""
-        target_df = pd.Series(
-            [i for i in range(target_periods)],
-            index=pd.date_range("2022-01-01", periods=target_periods, freq="1D"),
-            name="target0"
+        # target
+        target_df = pd.DataFrame(
+            data=np.array([i for i in range(target_periods)], dtype=numeric_dtype),
+            index=pd.date_range("2022-01-01", periods=target_periods, freq=freq),
+            columns=["target_numeric_0"]
         )
 
-        known_cov_df = pd.DataFrame(
-            [(i * 10, i * 100) for i in range(known_periods)],
-            index=pd.date_range("2022-01-01", periods=known_periods, freq="1D"),
-            columns=["known0", "known1"]
-        )
+        # known
+        known_raw_data = [(i * 10, i * 100) for i in range(known_periods)]
+        known_numeric_df = None
+        if cov_dtypes_contain_numeric:
+            known_numeric_data = np.array(known_raw_data, dtype=numeric_dtype)
+            known_numeric_df = pd.DataFrame(
+                data=known_numeric_data,
+                index=pd.date_range("2022-01-01", periods=known_periods, freq=freq),
+                columns=["known_numeric_0", "known_numeric_1"]
+            )
 
-        observed_cov_df = pd.DataFrame(
-            [(i * -1, i * -10) for i in range(observed_periods)],
-            index=pd.date_range("2022-01-01", periods=observed_periods, freq="1D"),
-            columns=["past0", "past1"]
-        )
+        known_categorical_df = None
+        if cov_dtypes_contain_categorical:
+            known_categorical_data = np.array(known_raw_data, dtype=categorical_dtype)
+            known_categorical_df = pd.DataFrame(
+                data=known_categorical_data,
+                index=pd.date_range("2022-01-01", periods=known_periods, freq=freq),
+                columns=["known_categorical_0", "known_categorical_1"]
+            )
+        if (known_numeric_df is None) and (known_categorical_df is None):
+            raise Exception(f"failed to build known cov data, both numeric df and categorical df are all None.")
+        if (known_numeric_df is not None) and (known_categorical_df is not None):
+            # both are NOT None.
+            known_cov_df = pd.concat([known_numeric_df, known_categorical_df], axis=1)
+        else:
+            known_cov_df = [known_numeric_df, known_categorical_df][1 if known_numeric_df is None else 0]
+
+        # observed
+        observed_raw_data = [(i * -1, i * -10) for i in range(observed_periods)]
+        observed_numeric_df = None
+        if cov_dtypes_contain_numeric:
+            observed_numeric_data = np.array(observed_raw_data, dtype=numeric_dtype)
+            observed_numeric_df = pd.DataFrame(
+                data=observed_numeric_data,
+                index=pd.date_range("2022-01-01", periods=observed_periods, freq=freq),
+                columns=["observed_numeric_0", "observed_numeric_1"]
+            )
+
+        observed_categorical_df = None
+        if cov_dtypes_contain_categorical:
+            observed_categorical_data = np.array(observed_raw_data, dtype=categorical_dtype)
+            observed_categorical_df = pd.DataFrame(
+                data=observed_categorical_data,
+                index=pd.date_range("2022-01-01", periods=observed_periods, freq=freq),
+                columns=["observed_categorical_0", "observed_categorical_1"]
+            )
+
+        if (observed_numeric_df is None) and (observed_categorical_df is None):
+            raise Exception(f"failed to build observed cov data, both numeric df and categorical df are all None.")
+        if (observed_numeric_df is not None) and (observed_categorical_df is not None):
+            # both are NOT None.
+            observed_cov_df = pd.concat([observed_numeric_df, observed_categorical_df], axis=1)
+        else:
+            observed_cov_df = [observed_numeric_df, observed_categorical_df][1 if observed_numeric_df is None else 0]
+
+        # static
+        static = dict()
+        if cov_dtypes_contain_numeric:
+            static["static_numeric"] = np.float32(1)
+        if cov_dtypes_contain_categorical:
+            static["static_categorical"] = np.int64(2)
 
         return TSDataset(
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1, "static1": 2}
+            static_cov=static
         )
 
-    def _compare_if_paddlets_sample_match_paddle_sample(
-        self,
-        paddlets_ds: TSDataset,
-        paddle_ds: PaddleDatasetImpl,
-        param: Dict,
-        future_target_is_nan: bool = False,
-        paddle_version_compatible: bool = False
+    def _compare_tsdataset_and_sample_dataset(
+            self,
+            tsdataset: TSDataset,
+            sample_ds: PaddleDatasetImpl,
+            param: Dict,
+            future_target_is_nan: bool = False
     ) -> None:
         """
-        Given a TSDataset and a built paddle.io.Dataset, compare if these data are matched.
+        Given a TSDataset and a built sample Dataset, compare if these data are matched.
 
         Args:
-            paddlets_ds(TSDataset): Raw TSDataset.
-            paddle_ds(PaddleDatasetImpl): Built paddle.io.Dataset.
+            tsdataset(TSDataset): Raw TSDataset.
+            sample_ds(PaddleDatasetImpl): Built sample Dataset.
             param(Dict): param for building samples.
             future_target_is_nan(bool, optional): Set to True to indicates that the label (i.e. Y) of the built
                 sample(s) are np.NaN. Default is False.
-            paddle_version_compatible(bool, optional): Set to True to be compatible with old paddle version. Default
-                is False.
         """
+        numeric_dtype = np.float32
+        categorical_dtype = np.int64
+
         in_chunk_len = param["in_chunk_len"]
         skip_chunk_len = param["skip_chunk_len"]
         out_chunk_len = param["out_chunk_len"]
         sampling_stride = param["sampling_stride"]
         time_window = param["time_window"]
-        target_ts = paddlets_ds.get_target()
-        known_ts = paddlets_ds.get_known_cov()
-        observed_ts = paddlets_ds.get_observed_cov()
+        target_ts = tsdataset.get_target()
+        known_ts = tsdataset.get_known_cov()
+        observed_ts = tsdataset.get_observed_cov()
+        static_cov = tsdataset.get_static_cov()
 
-        for sidx in range(len(paddle_ds.samples)):
-            curr_paddle_sample = paddle_ds[sidx]
+        for sidx in range(len(sample_ds.samples)):
+            curr_sample = sample_ds[sidx]
+            ###############
+            # past_target #
+            ###############
+            target_df = target_ts.to_dataframe(copy=False)
+            past_target_tail = time_window[0] + sidx * sampling_stride - skip_chunk_len - out_chunk_len
+            past_target_ndarray = \
+                target_df.to_numpy(copy=False)[past_target_tail - in_chunk_len + 1:past_target_tail + 1]
+            # data ok.
+            self.assertTrue(np.alltrue(past_target_ndarray == curr_sample["past_target"]))
+            # dtype ok.
+            self.assertEqual(past_target_ndarray.dtype, curr_sample["past_target"].dtype)
+            # # numeric
+            # if "past_target_numeric" in curr_sample.keys():
+            #     numeric_df = target_df.select_dtypes(include=numeric_dtype)
+            #     numeric_ndarray = numeric_df.to_numpy(copy=False)
+            #     past_target_numeric_ndarray = numeric_ndarray[past_target_tail - in_chunk_len + 1:past_target_tail + 1]
+            #     # data ok.
+            #     self.assertTrue(np.alltrue(past_target_numeric_ndarray == curr_sample["past_target_numeric"]))
+            #     # dtype ok.
+            #     self.assertEqual(past_target_numeric_ndarray.dtype, curr_sample["past_target_numeric"].dtype)
+            #
+            # # categorical
+            # if "past_target_categorical" in curr_sample.keys():
+            #     categorical_df = target_df.select_dtypes(include=categorical_dtype)
+            #     categorical_ndarray = categorical_df.to_numpy(copy=False)
+            #     past_target_categorical_ndarray = \
+            #         categorical_ndarray[past_target_tail - in_chunk_len + 1:past_target_tail + 1]
+            #     # data ok.
+            #     self.assertTrue(np.alltrue(past_target_categorical_ndarray == curr_sample["past_target_categorical"]))
+            #     # dtype ok.
+            #     self.assertEqual(past_target_categorical_ndarray.dtype, curr_sample["past_target_categorical"].dtype)
 
-            # past_target
-            paddle_past_target = curr_paddle_sample["past_target"]
-            paddlets_past_target_tail = time_window[0] + sidx * sampling_stride - skip_chunk_len - out_chunk_len
-            paddlets_past_target = \
-                target_ts.to_numpy(False)[paddlets_past_target_tail - in_chunk_len + 1:paddlets_past_target_tail + 1]
-
-            self.assertTrue(np.alltrue(paddlets_past_target == paddle_past_target))
-
-            # future_target
-            paddle_future_target = curr_paddle_sample["future_target"]
+            #################
+            # future_target #
+            #################
             # Built sample does NOT contain Y, i.e. the chunk is filled with np.NaN.
             if future_target_is_nan is True:
-                self.assertEqual(out_chunk_len, paddle_future_target.shape[0])
-                # No matter the built samples contain Y or not, the shape[0] of future_target will always be equal to
-                # out_chunk_len. The only diff is that for predict scenario, the future_target ndarray will be filled
-                # with np.NaN, while for fit scenario, it will be filled with the actual future target time series data.
-                self.assertTrue(np.alltrue(np.isnan(paddle_future_target)))
+                self.assertEqual(out_chunk_len, curr_sample["future_target"].shape[0])
+                self.assertTrue(np.alltrue(np.isnan(curr_sample["future_target"])))
 
             # Built samples contain Y.
             else:
-                paddlets_future_target_tail = time_window[0] + (sidx * sampling_stride) + 1
-                paddlets_future_target_head = paddlets_future_target_tail - out_chunk_len
-                paddlets_future_target = target_ts.to_numpy(False)[paddlets_future_target_head:paddlets_future_target_tail]
-                self.assertTrue(np.alltrue(paddlets_future_target == paddle_future_target))
+                future_target_tail = time_window[0] + (sidx * sampling_stride) + 1
+                future_target_head = future_target_tail - out_chunk_len
+                future_target_ndarray = target_df.to_numpy(copy=False)[future_target_head:future_target_tail]
+                # data ok.
+                self.assertTrue(np.alltrue(future_target_ndarray == curr_sample["future_target"]))
+                # dtype ok.
+                self.assertEqual(future_target_ndarray.dtype, curr_sample["future_target"].dtype)
+                # # numeric
+                # if "future_target_numeric" in curr_sample.keys():
+                #     numeric_df = target_df.select_dtypes(include=numeric_dtype)
+                #     numeric_ndarray = numeric_df.to_numpy(copy=False)
+                #     future_target_numeric_ndarray = numeric_ndarray[future_target_head:future_target_tail]
+                #     # data ok.
+                #     self.assertTrue(np.alltrue(future_target_numeric_ndarray == curr_sample["future_target_numeric"]))
+                #     # dtype ok.
+                #     self.assertEqual(future_target_numeric_ndarray.dtype, curr_sample["future_target_numeric"].dtype)
+                # # categorical
+                # if "future_target_categorical" in curr_sample.keys():
+                #     categorical_df = target_df.select_dtypes(include=categorical_dtype)
+                #     categorical_ndarray = categorical_df.to_numpy(copy=False)
+                #     future_target_categorical_ndarray = categorical_ndarray[future_target_head:future_target_tail]
+                #     # data ok.
+                #     self.assertTrue(np.alltrue(
+                #         future_target_categorical_ndarray == curr_sample["future_target_categorical"]
+                #     ))
+                #     # dtype ok.
+                #     self.assertEqual(
+                #         future_target_categorical_ndarray.dtype, curr_sample["future_target_categorical"].dtype
+                #     )
 
-            # known_cov
-            paddle_known_cov = curr_paddle_sample["known_cov"]
-            if paddlets_ds.get_known_cov() is not None:
-                paddlets_known_cov_right_tail = time_window[0] + (sidx * sampling_stride) + 1
-                paddlets_known_cov_right_head = paddlets_known_cov_right_tail - out_chunk_len
-                paddlets_known_cov_right = known_ts.to_numpy(False)[paddlets_known_cov_right_head:paddlets_known_cov_right_tail]
+            #############
+            # known_cov #
+            #############
+            if known_ts is not None:
+                known_df = known_ts.to_dataframe(copy=False)
 
-                paddlets_known_cov_left_tail = paddlets_known_cov_right_head - 1 - skip_chunk_len + 1
-                paddlets_known_cov_left_head = paddlets_known_cov_left_tail - in_chunk_len
-                paddlets_known_cov_left = known_ts.to_numpy(False)[paddlets_known_cov_left_head:paddlets_known_cov_left_tail]
+                known_right_tail = time_window[0] + (sidx * sampling_stride) + 1
+                known_right_head = known_right_tail - out_chunk_len
 
-                paddlets_known_cov = np.vstack((paddlets_known_cov_left, paddlets_known_cov_right))
-                self.assertTrue(np.alltrue(paddlets_known_cov == paddle_known_cov))
+                known_left_tail = known_right_head - 1 - skip_chunk_len + 1
+                known_left_head = known_left_tail - in_chunk_len
+                # numeric
+                if "known_cov_numeric" in curr_sample.keys():
+                    numeric_df = known_df.select_dtypes(include=numeric_dtype)
+                    numeric_ndarray = numeric_df.to_numpy(copy=False)
+                    numeric_right_ndarray = numeric_ndarray[known_right_head:known_right_tail]
+                    numeric_left_ndarray = numeric_ndarray[known_left_head:known_left_tail]
+                    known_numeric_ndarray = np.vstack((numeric_left_ndarray, numeric_right_ndarray))
+                    # data ok.
+                    self.assertTrue(np.alltrue(known_numeric_ndarray == curr_sample["known_cov_numeric"]))
+                    # dtype ok.
+                    self.assertEqual(known_numeric_ndarray.dtype, curr_sample["known_cov_numeric"].dtype)
+
+                # categorical
+                if "known_cov_categorical" in curr_sample.keys():
+                    categorical_df = known_df.select_dtypes(include=categorical_dtype)
+                    categorical_ndarray = categorical_df.to_numpy(copy=False)
+                    categorical_right_ndarray = categorical_ndarray[known_right_head:known_right_tail]
+                    categorical_left_ndarray = categorical_ndarray[known_left_head:known_left_tail]
+                    known_categorical_ndarray = np.vstack((categorical_left_ndarray, categorical_right_ndarray))
+                    # data ok.
+                    self.assertTrue(np.alltrue(known_categorical_ndarray == curr_sample["known_cov_categorical"]))
+                    # dtype ok.
+                    self.assertEqual(known_categorical_ndarray.dtype, curr_sample["known_cov_categorical"].dtype)
             # known_cov is None.
             else:
-                self.assertTrue("known_cov" not in curr_paddle_sample.keys())
+                self.assertTrue("known_cov_numeric" not in curr_sample.keys())
+                self.assertTrue("known_cov_categorical" not in curr_sample.keys())
 
-            # observed_cov
-            paddle_observed_cov = curr_paddle_sample["observed_cov"]
-            if paddlets_ds.get_observed_cov() is not None:
-                paddlets_observed_cov_tail = time_window[0] + sidx * sampling_stride - skip_chunk_len - out_chunk_len
-                paddlets_observed_cov = \
-                    observed_ts.to_numpy(False)[paddlets_observed_cov_tail - in_chunk_len + 1:paddlets_observed_cov_tail + 1]
-                self.assertTrue(np.alltrue(paddlets_observed_cov == paddle_observed_cov))
+            ################
+            # observed_cov #
+            ################
+            if observed_ts is not None:
+                observed_df = observed_ts.to_dataframe(copy=False)
+                observed_tail = time_window[0] + sidx * sampling_stride - skip_chunk_len - out_chunk_len
+                # numeric
+                if "observed_cov_numeric" in curr_sample.keys():
+                    numeric_df = observed_df.select_dtypes(include=numeric_dtype)
+                    numeric_ndarray = numeric_df.to_numpy(copy=False)
+                    observed_numeric_ndarray = numeric_ndarray[observed_tail - in_chunk_len + 1:observed_tail + 1]
+                    # data ok.
+                    self.assertTrue(np.alltrue(observed_numeric_ndarray == curr_sample["observed_cov_numeric"]))
+                    # dtype ok.
+                    self.assertEqual(observed_numeric_ndarray.dtype, curr_sample["observed_cov_numeric"].dtype)
+                # categorical
+                if "observed_cov_categorical" in curr_sample.keys():
+                    categorical_df = observed_df.select_dtypes(include=categorical_dtype)
+                    categorical_ndarray = categorical_df.to_numpy(copy=False)
+                    observed_categorical_ndarray = \
+                        categorical_ndarray[observed_tail - in_chunk_len + 1:observed_tail + 1]
+                    # data ok.
+                    self.assertTrue(np.alltrue(observed_categorical_ndarray == curr_sample["observed_cov_categorical"]))
+                    # dtype ok.
+                    self.assertEqual(observed_categorical_ndarray.dtype, curr_sample["observed_cov_categorical"].dtype)
             # observed_cov is None.
             else:
-                self.assertTrue("observed_cov" not in curr_paddle_sample.keys())
+                self.assertTrue("observed_cov_numeric" not in curr_sample.keys())
+                self.assertTrue("observed_cov_categorical" not in curr_sample.keys())
+
+            ##############
+            # static_cov #
+            ##############
+            if static_cov is not None:
+                # unsorted dict -> sorted list
+                sorted_static_cov = sorted(static_cov.items(), key=lambda t: t[0])
+                # numeric
+                if "static_cov_numeric" in curr_sample.keys():
+                    sorted_static_cov_numeric = [t[1] for t in sorted_static_cov if isinstance(t[1], numeric_dtype)]
+                    # data ok.
+                    self.assertTrue(np.alltrue(sorted_static_cov_numeric == curr_sample["static_cov_numeric"][0]))
+                    # dtype ok.
+                    self.assertEqual(sorted_static_cov_numeric[0].dtype, curr_sample["static_cov_numeric"][0].dtype)
+                # categorical
+                if "static_cov_categorical" in curr_sample.keys():
+                    sorted_static_cov_categorical = \
+                        [t[1] for t in sorted_static_cov if isinstance(t[1], categorical_dtype)]
+                    # data ok.
+                    self.assertTrue(np.alltrue(
+                        sorted_static_cov_categorical == curr_sample["static_cov_categorical"][0])
+                    )
+                    # dtype ok.
+                    self.assertEqual(
+                        sorted_static_cov_categorical[0].dtype, curr_sample["static_cov_categorical"][0].dtype
+                    )
+            # static_cov is None
+            else:
+                self.assertTrue("static_cov_numeric" not in curr_sample.keys())
+                self.assertTrue("static_cov_categorical" not in curr_sample.keys())
+
+    def _compare_sample_dataset_and_sample_dataloader(
+            self,
+            sample_ds: paddle.io.Dataset,
+            sample_dataloader: paddle.io.DataLoader,
+            batch_size: int,
+            good_keys: Set[str]
+    ):
+        """Check if sample dataset matches batched sample dataloader."""
+        all_keys = {
+            "past_target",
+            "future_target",
+            "known_cov_numeric",
+            "known_cov_categorical",
+            "observed_cov_numeric",
+            "observed_cov_categorical",
+            "static_cov_numeric",
+            "static_cov_categorical"
+        }
+        none_keys = all_keys - good_keys
+        for batch_idx, batch_dict in enumerate(sample_dataloader):
+            curr_batch_size = list(batch_dict.values())[0].shape[0]
+            for sample_idx in range(curr_batch_size):
+                dataset_sample = sample_ds[batch_idx * batch_size + sample_idx]
+                for key in all_keys:
+                    if key in none_keys:
+                        self.assertTrue(key not in dataset_sample.keys())
+                        continue
+
+                    # good keys
+                    dataloader_ndarray_sample = batch_dict[key][sample_idx].numpy()
+                    dataset_ndarray_sample = dataset_sample[key]
+                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
+                    self.assertEqual(dataloader_ndarray_sample.dtype, dataset_ndarray_sample.dtype)

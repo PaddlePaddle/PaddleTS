@@ -5,15 +5,18 @@ import abc
 import numpy as np
 import sklearn
 from typing import Type, Dict, Any, Optional, Callable, Tuple
+from itertools import product
 
 from paddlets.models.base import BaseModel
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
-from paddlets.models.forecasting.ml.adapter.data_adapter import DataAdapter
-from paddlets.models.forecasting.ml.adapter.ml_dataset import MLDataset
+from paddlets.models.forecasting.ml.adapter.data_adapter import DataAdapter as MLForecastingDataAdapter
+from paddlets.models.forecasting.ml.adapter.ml_dataset import MLDataset as MLForecastingDataset
 from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
-from paddlets.models.utils import to_tsdataset
+from paddlets.models.utils import to_tsdataset, check_tsdataset
 from paddlets.datasets import TSDataset
-from paddlets.logger import raise_log, raise_if, raise_if_not
+from paddlets.logger import Logger, raise_log, raise_if, raise_if_not
+
+logger = Logger(__name__)
 
 
 class MLModelBaseWrapper(MLBaseModel, metaclass=abc.ABCMeta):
@@ -39,7 +42,7 @@ class MLModelBaseWrapper(MLBaseModel, metaclass=abc.ABCMeta):
         self,
         model_class: Type,
         in_chunk_len: int,
-        out_chunk_len: int,
+        out_chunk_len: int = 1,
         skip_chunk_len: int = 0,
         sampling_stride: int = 1,
         model_init_params: Dict[str, Any] = None,
@@ -115,16 +118,16 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             predict_params=predict_params
         )
         raise_if(self._model_class is None, "model_class must not be None.")
-        raise_if_not(isinstance(self._model_class, type), "isinstance(model_class, type) must be True.)")
+        raise_if_not(isinstance(self._model_class, type), "isinstance(model_class, type) must be True.")
 
         self._model = self._init_model()
         self._data_adapter = self._init_data_adapter()
 
-        self._udf_ml_dataloader_to_fit_ndarray = default_ml_dataloader_to_fit_ndarray
+        self._udf_ml_dataloader_to_fit_ndarray = default_sklearn_ml_dataloader_to_fit_ndarray
         if udf_ml_dataloader_to_fit_ndarray is not None:
             self._udf_ml_dataloader_to_fit_ndarray = udf_ml_dataloader_to_fit_ndarray
 
-        self._udf_ml_dataloader_to_predict_ndarray = default_ml_dataloader_to_predict_ndarray
+        self._udf_ml_dataloader_to_predict_ndarray = default_sklearn_ml_dataloader_to_predict_ndarray
         if udf_ml_dataloader_to_predict_ndarray is not None:
             self._udf_ml_dataloader_to_predict_ndarray = udf_ml_dataloader_to_predict_ndarray
 
@@ -251,20 +254,20 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         )
         return model
 
-    def _init_data_adapter(self) -> DataAdapter:
+    def _init_data_adapter(self) -> MLForecastingDataAdapter:
         """
         Internal method, initialize data adapter.
 
         Returns:
             DataAdapter: Initialized data adapter object.
         """
-        return DataAdapter()
+        return MLForecastingDataAdapter()
 
     def _tsdataset_to_ml_dataset(
         self,
         tsdataset: TSDataset,
         time_window: Optional[Tuple[int, int]] = None
-    ) -> MLDataset:
+    ) -> MLForecastingDataset:
         """
         Internal method, convert TSDataset to MLDataset.
 
@@ -280,9 +283,9 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             time_window=time_window
         )
 
-    def _ml_dataset_to_ml_dataloader(self, ml_dataset: MLDataset) -> MLDataLoader:
+    def _ml_dataset_to_ml_dataloader(self, ml_dataset: MLForecastingDataset) -> MLDataLoader:
         """
-        Internal method, convert MLDataset to MLDataLoader.
+        Internal method, convert bts.models.forecasting.ml.adapter.ml_dataset.MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
@@ -299,32 +302,48 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         raise_if(train_data is None, "training dataset must not be None.")
         raise_if(train_data.get_target() is None, "target timeseries must not be None.")
 
+        check_tsdataset(train_data)
         target_ts = train_data.get_target()
         # multi target is NOT supported.
         raise_if(
-            len(target_ts.columns) > 1,
+            len(target_ts.columns) != 1,
             f"training dataset target timeseries columns number ({len(target_ts.columns)}) must be 1."
         )
 
-    def _validate_predict_data(self, test_data: TSDataset) -> None:
+        # target dtype must be numeric (np.float32), not categorical (np.int64).
+        target_dtype = target_ts.data.iloc[:, 0].dtype
+        raise_if(
+            np.float32 != target_dtype,
+            f"The dtype of TSDataset.target ({target_dtype}) must be sub-type of numpy.floating."
+        )
+
+    def _validate_predict_data(self, tsdataset: TSDataset) -> None:
         """
         Internal method, validate data for prediction. Raises if invalid.
 
         Args:
-            test_data(TSDataset): Predict data to be validated.
+            tsdataset(TSDataset): Predict data to be validated.
         """
-        raise_if(test_data is None, "The dataset to be predicted must not be None.")
-        raise_if(test_data.get_target() is None, "target timeseries to be predicted must not be None.")
+        raise_if(tsdataset is None, "The dataset to be predicted must not be None.")
+        raise_if(tsdataset.get_target() is None, "target timeseries to be predicted must not be None.")
 
-        target_ts = test_data.get_target()
+        check_tsdataset(tsdataset)
+        target_ts = tsdataset.get_target()
         # multi target is NOT supported.
         raise_if(
-            len(target_ts.columns) > 1,
+            len(target_ts.columns) != 1,
             f"columns number of target timeseries to be predicted ({len(target_ts.columns)}) must be 1."
         )
 
+        # target dtype must be numeric (np.float32), not categorical (np.int64).
+        target_dtype = target_ts.data.iloc[:, 0].dtype
+        raise_if(
+            np.float32 != target_dtype,
+            f"The dtype of TSDataset.target ({target_dtype}) must be sub-type of numpy.floating."
+        )
 
-def default_ml_dataloader_to_fit_ndarray(
+
+def default_sklearn_ml_dataloader_to_fit_ndarray(
     ml_dataloader: MLDataLoader,
     model_init_params: Dict[str, Any],
     in_chunk_len: int,
@@ -351,26 +370,73 @@ def default_ml_dataloader_to_fit_ndarray(
     """
     data = next(ml_dataloader)
 
-    observed_cov = data['observed_cov']
-    observed_cov = observed_cov.reshape(observed_cov.shape[0], observed_cov.shape[1] * observed_cov.shape[2])
-    known_cov = data['known_cov']
-    known_cov = known_cov.reshape(known_cov.shape[0], known_cov.shape[1] * known_cov.shape[2])
+    sample_x_keys = data.keys() - {"future_target"}
     if in_chunk_len < 1:
-        x_train = np.hstack((known_cov, observed_cov))
-    else:
-        past_target = data['past_target']
-        past_target = past_target.reshape(past_target.shape[0], past_target.shape[1] * past_target.shape[2])
-        x_train = np.hstack((known_cov, observed_cov, past_target))
+        # lag scenario cannot use past_target as features.
+        sample_x_keys -= {"past_target"}
+    # concatenated ndarray will follow the below ordered list rule:
+    # [rule 1] left -> right = target features, ..., known features, ..., observed features, ..., static_cov_features.
+    # [rule 2] left -> right = numeric features, ..., categorical features.
+    full_ordered_x_key_list = ["past_target"]
+    full_ordered_x_key_list.extend(
+        [f"{t[1]}_{t[0]}" for t in product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])]
+    )
 
-    # data["future_target"].shape = (n_samples, out_chunk_len, target_col_num)
-    # y_train.shape must be (n_samples, )
-    # the pre-check in the self.__init__ already guarantee that out_chunk_len must be equal to 1.
-    # the pre-check in the self.predict already guarantee that target_col_num must be equal to 1.
-    y_train = np.squeeze(data["future_target"])
-    return x_train, y_train
+    # For example, given:
+    # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
+    # full_ordered_x_key_list = [
+    #   "past_target",
+    #   "known_cov_numeric",
+    #   "observed_cov_numeric",
+    #   "static_cov_numeric",
+    #   "past_target_categorical",
+    #   "known_cov_categorical",
+    #   "observed_cov_categorical",
+    #   "static_cov_categorical"
+    # ]
+    # Thus, actual_ordered_x_key_list = [
+    #   "known_cov_numeric",
+    #   "observed_cov_categorical",
+    #   "static_cov_categorical"
+    # ]
+    # The built sample ndarray will be like below:
+    # [
+    #   [
+    #       known_cov_numeric_feature, observed_cov_categorical_feature, static_cov_categorical_feature
+    #   ],
+    # [
+    #       known_cov_numeric_feature, observed_cov_categorical_feature, static_cov_categorical_feature
+    #   ],
+    #   ...
+    # ]
+    actual_ordered_x_key_list = []
+    for k in full_ordered_x_key_list:
+        if k in sample_x_keys:
+            actual_ordered_x_key_list.append(k)
+
+    reshaped_x_ndarray_list = []
+    for k in actual_ordered_x_key_list:
+        ndarray = data[k]
+        # 3-dim -> 2-dim
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+        reshaped_x_ndarray_list.append(reshaped_ndarray)
+    # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
+    # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
+    x = np.hstack(tup=reshaped_x_ndarray_list)
+
+    # Why needs to call np.squeeze? See below:
+    # Because sklearn requires that y.shape must be (n_samples, ), so it is required to call np.squeeze().
+    # Meanwhile, as we already make pre-assertions in _validate_train_data(), thus we can ensure the following:
+    # 1. data["future_target"].shape[1] (i.e., out_chunk_len) must == 1.
+    # 2. data["future_target"].shape[2] (i.e., len(target.columns)) must == 1;
+    # Thus, np.squeeze() call can successfully remove these single-dimensional entries (shape[1] and shape[2]) and
+    # only make shape[0] (i.e., batch_size dim) reserved.
+    # As a result, after the below call, y.shape == (batch_size, ), which fits sklearn requirement.
+    y = np.squeeze(data["future_target"])
+    return x, y
 
 
-def default_ml_dataloader_to_predict_ndarray(
+def default_sklearn_ml_dataloader_to_predict_ndarray(
     ml_dataloader: MLDataLoader,
     model_init_params: Dict[str, Any],
     in_chunk_len: int,
@@ -397,23 +463,66 @@ def default_ml_dataloader_to_predict_ndarray(
         """
     data = next(ml_dataloader)
 
-    observed_cov = data['observed_cov']
-    observed_cov = observed_cov.reshape(observed_cov.shape[0], observed_cov.shape[1] * observed_cov.shape[2])
-    known_cov = data['known_cov']
-    known_cov = known_cov.reshape(known_cov.shape[0], known_cov.shape[1] * known_cov.shape[2])
+    sample_x_keys = data.keys() - {"future_target"}
     if in_chunk_len < 1:
-        x_test = np.hstack((known_cov, observed_cov))
-    else:
-        past_target = data['past_target']
-        past_target = past_target.reshape(past_target.shape[0], past_target.shape[1] * past_target.shape[2])
-        x_test = np.hstack((known_cov, observed_cov, past_target))
-    return x_test, None
+        # lag scenario cannot use past_target as features.
+        sample_x_keys -= {"past_target"}
+    # concatenated ndarray will follow the below ordered list rule:
+    # [rule 1] left -> right = target features, ..., known features, ..., observed features, ..., static_cov_features.
+    # [rule 2] left -> right = numeric features, ..., categorical features.
+    full_ordered_x_key_list = ["past_target"]
+    full_ordered_x_key_list.extend(
+        [f"{t[1]}_{t[0]}" for t in product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])]
+    )
+
+    # For example, given:
+    # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
+    # full_ordered_x_key_list = [
+    #   "past_target",
+    #   "known_cov_numeric",
+    #   "observed_cov_numeric",
+    #   "static_cov_numeric",
+    #   "past_target_categorical",
+    #   "known_cov_categorical",
+    #   "observed_cov_categorical",
+    #   "static_cov_categorical"
+    # ]
+    # Thus, actual_ordered_x_key_list = [
+    #   "known_cov_numeric",
+    #   "observed_cov_categorical",
+    #   "static_cov_categorical"
+    # ]
+    # The built sample ndarray will be like below:
+    # [
+    #   [
+    #       known_cov_numeric_feature, observed_cov_categorical_feature, static_cov_categorical_feature
+    #   ],
+    #   [
+    #       known_cov_numeric_feature, observed_cov_categorical_feature, static_cov_categorical_feature
+    #   ],
+    #   ...
+    # ]
+    actual_ordered_x_key_list = []
+    for k in full_ordered_x_key_list:
+        if k in sample_x_keys:
+            actual_ordered_x_key_list.append(k)
+
+    reshaped_x_ndarray_list = []
+    for k in actual_ordered_x_key_list:
+        ndarray = data[k]
+        # 3-dim -> 2-dim
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+        reshaped_x_ndarray_list.append(reshaped_ndarray)
+    # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
+    # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
+    x = np.hstack(tup=reshaped_x_ndarray_list)
+    return x, None
 
 
 def make_ml_model(
     model_class: Type,
     in_chunk_len: int,
-    out_chunk_len: int,
+    out_chunk_len: int = 1,
     skip_chunk_len: int = 0,
     sampling_stride: int = 1,
     model_init_params: Dict[str, Any] = None,
@@ -453,11 +562,13 @@ def make_ml_model(
     raise_if(model_class is None, "model_class must not be None.")
     raise_if_not(isinstance(model_class, type), "isinstance(model_class, type) must be True.")
 
-    if model_class.__module__.split(".")[0] == sklearn.__name__:
+    module = model_class.__module__.split(".")[0]
+
+    if module == sklearn.__name__:
         return SklearnModelWrapper(
+            model_class=model_class,
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
-            model_class=model_class,
             skip_chunk_len=skip_chunk_len,
             sampling_stride=sampling_stride,
             model_init_params=model_init_params,
