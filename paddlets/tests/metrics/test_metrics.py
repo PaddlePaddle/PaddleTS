@@ -14,7 +14,11 @@ from paddlets.metrics import (
     Metric,
     MSE,
     MAE,
-    QuantileLoss
+    QuantileLoss,
+    ACC,
+    Precision,
+    Recall,
+    F1
 )
 
 
@@ -141,6 +145,370 @@ class TestMetrics(TestCase):
         self.assertEqual(mae_prob(ts1, ts2), {"target": 1., "target_2": 1.})
         q_loss = QuantileLoss()
         self.assertEqual(q_loss(ts1, ts2), {"target": 1., "target_2": 1.})
+        
+    def test_ACC(self):
+        """unittest function
+        """
+        # case1
+        acc = ACC()
+        y_true = np.random.randint(0,2,5)
+        y_score = y_true.copy()
+        res = acc.metric_fn(y_true, y_score)
+        self.assertEqual(res, 1.)
+        
+        #case2 
+        y_true = np.array([1, 1, 0, 0, 0])
+        y_score = np.array([1, 0, 1, 0, 0])
+        res = acc.metric_fn(y_true, y_score)
+        self.assertEqual(res, 0.6)
+
+        # case3
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(acc(ts, ts2), {"label": 1.0})
+        
+        # case4
+        periods = 4
+        df = pd.DataFrame(
+            y_true[1:5], index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        self.assertEqual(acc(ts, ts2), {"label": 1.0})
+        
+        # case5
+        periods = 10
+        y_true = np.random.randint(0,2,10)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        try:
+            self.assertEqual(acc(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+            str(message),
+            "In `anomaly` mode, the length of the true must be greater than or equal to the length of the pred!"
+        )
+        
+        # case6
+        periods = 5
+        y_true = np.random.randint(2,4,5)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        try:
+            self.assertEqual(acc(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+           str(message),
+           "In `anomaly` mode, the value in true label must be 0 or 1, please check your data!"
+        )
+        
+        # case7
+        y_true = np.random.randint(0,2,5)
+        index = pd.RangeIndex(0, 5, 1)
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        df = df.reset_index(drop=True).reindex(index)
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(acc(ts, ts2), {"label": 1.0})
+        
+    def test_Precision(self):
+        """unittest function
+        """
+        # case1
+        precision = Precision()
+        y_true = np.random.randint(0,2,5)
+        y_score = y_true.copy()
+        res = precision.metric_fn(y_true, y_score)
+        self.assertEqual(res, 1.)
+        
+        #case2 
+        y_true = np.array([1, 1, 0, 0, 0])
+        y_score = np.array([1, 0, 1, 0, 0])
+        res = precision.metric_fn(y_true, y_score)
+        self.assertEqual(res, 0.5)
+
+        # case3
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        
+        # case4
+        periods = 4
+        df = pd.DataFrame(
+            y_true[1:5], index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        
+        # case5
+        periods = 10
+        y_true = np.random.randint(0,2,10)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        try:
+            self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+            str(message),
+            "In `anomaly` mode, the length of the true must be greater than or equal to the length of the pred!"
+        )
+        
+        # case6
+        periods = 5
+        y_true = np.random.randint(2,4,5)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        try:
+            self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+           str(message),
+           "In `anomaly` mode, the value in true label must be 0 or 1, please check your data!"
+        )
+        
+        # case7
+        y_true = np.random.randint(0,2,5)
+        index = pd.RangeIndex(0, 5, 1)
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        df = df.reset_index(drop=True).reindex(index)
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        
+    def test_Recall(self):
+        """unittest function
+        """
+        # case1
+        recall = Recall()
+        y_true = np.random.randint(0,2,5)
+        y_score = y_true.copy()
+        res = recall.metric_fn(y_true, y_score)
+        self.assertEqual(res, 1.)
+        
+        #case2 
+        y_true = np.array([1, 1, 0, 0, 0])
+        y_score = np.array([1, 0, 1, 0, 0])
+        res = recall.metric_fn(y_true, y_score)
+        self.assertEqual(res, 0.5)
+
+        # case3
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        
+        # case4
+        periods = 4
+        df = pd.DataFrame(
+            y_true[1:5], index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        
+        # case5
+        periods = 10
+        y_true = np.random.randint(0,2,10)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        try:
+            self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+            str(message),
+            "In `anomaly` mode, the length of the true must be greater than or equal to the length of the pred!"
+        )
+        
+        # case6
+        periods = 5
+        y_true = np.random.randint(2,4,5)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        try:
+            self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+           str(message),
+           "In `anomaly` mode, the value in true label must be 0 or 1, please check your data!"
+        )
+        
+        # case7
+        y_true = np.random.randint(0,2,5)
+        index = pd.RangeIndex(0, 5, 1)
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        df = df.reset_index(drop=True).reindex(index)
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        
+    def test_F1(self):
+        """unittest function
+        """
+        # case1
+        f1 = F1()
+        y_true = np.random.randint(0,2,5)
+        y_score = y_true.copy()
+        res = f1.metric_fn(y_true, y_score)
+        self.assertEqual(res, 1.)
+        
+        #case2 
+        y_true = np.array([1, 1, 0, 0, 0])
+        y_score = np.array([1, 0, 1, 0, 0])
+        res = f1.metric_fn(y_true, y_score)
+        self.assertEqual(res, 0.5)
+
+        # case3
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(f1(ts, ts2), {"label": 1.0})
+  
+        # case4
+        periods = 4
+        df = pd.DataFrame(
+            y_true[1:5], index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        ts3 = TSDataset.load_from_dataframe(df, label_col="label")
+        self.assertEqual(f1(ts, ts2), {"label": 1.0})
+        
+        # case5
+        periods = 10
+        y_true = np.random.randint(0,2,10)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-02", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        try:
+            self.assertEqual(f1(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+            str(message),
+            "In `anomaly` mode, the length of the true must be greater than or equal to the length of the pred!"
+        )
+        
+        # case6
+        periods = 5
+        y_true = np.random.randint(2,4,5)
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        message = ''
+        succeed = True
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        try:
+            self.assertEqual(f1(ts, ts2), {"label": 1.0})
+        except Exception as e:
+            succeed = False
+            message = e
+        self.assertFalse(succeed)
+        self.assertEqual(
+           str(message),
+           "In `anomaly` mode, the value in true label must be 0 or 1, please check your data!"
+        )
+
+        # case7
+        y_true = np.random.randint(0,2,5)
+        index = pd.RangeIndex(0, 5, 1)
+        periods = 5
+        df = pd.DataFrame(
+            y_true, index = pd.date_range("2022-01-01", periods=periods, freq="1D"),
+            columns=["label"]
+        )
+        df = df.reset_index(drop=True).reindex(index)
+        ts = TSDataset.load_from_dataframe(df, label_col="label")
+        ts2 = ts.copy()
+        self.assertEqual(f1(ts, ts2), {"label": 1.0})
 
     def test_get_metrics_by_names(self):
         """unittest function
