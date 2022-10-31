@@ -10,9 +10,9 @@ import numpy as np
 
 from paddlets.models.forecasting import LSTNetRegressor
 from paddlets.datasets import TimeSeries, TSDataset
-from paddlets.utils.utils import check_model_fitted
+from paddlets.utils.utils import check_model_fitted, repr_results_to_tsdataset
 from paddlets.pipeline.pipeline import Pipeline
-from paddlets.utils import get_uuid
+from paddlets.utils import get_uuid, plot_anoms
 from paddlets.models.forecasting import MLPRegressor
 from paddlets.ensemble import StackingEnsembleForecaster
 
@@ -114,6 +114,50 @@ class TestUtils(TestCase):
         """
         uuid = get_uuid("hello-", "-world")
         self.assertEqual(len(uuid), 28)
+
+    def test_repr_results_to_tsdataset(self):
+        """
+        unittest function
+        """
+        data_array = np.random.randn(2,4)
+        data_df = pd.DataFrame(data_array, columns=['a','b','c','y'])
+        tsdataset = TSDataset.load_from_dataframe(
+                                df=data_df, 
+                                observed_cov_cols=['a', 'b', 'c'],
+                                target_cols='y')
+        result = repr_results_to_tsdataset(np.random.randn(1, 2, 4), tsdataset)
+        self.assertEqual(result.to_dataframe().columns.tolist(), ['y', 'repr_0', 'repr_1', 'repr_2', 'repr_3'])
+
+    def test_plot_anoms(self):
+        label = pd.Series(
+                np.random.randint(0, 2, 200),
+                index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
+                name="label")
+        feature = pd.DataFrame(
+                np.random.randn(200, 2).astype(np.float32),
+                index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
+                columns=["a", "b"])
+  
+
+        # index is RangeIndex
+        index = pd.RangeIndex(0, 200, 1)
+        label = label.reset_index(drop=True).reindex(index)
+        feature = feature.reset_index(drop=True).reindex(index)
+        tsdataset = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
+                label_col='label', feature_cols='a')
+                
+        from paddlets.models.anomaly import AutoEncoder
+        ae = AutoEncoder(
+            in_chunk_len=32,
+            eval_metrics=["mse", "mae"],
+            max_epochs=1,
+            patience=1
+        )
+        ae.fit(tsdataset, tsdataset)
+        predict = ae.predict(tsdataset)
+        plot_anoms(predict,tsdataset,"a")
+        plot_anoms(predict,tsdataset)
+        plot_anoms(predict)
 
 if __name__ == "__main__":
     unittest.main()

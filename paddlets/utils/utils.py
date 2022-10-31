@@ -7,15 +7,14 @@ import hashlib
 
 from inspect import isclass
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 from paddlets.models.base import Trainable
-from paddlets.logger import raise_if_not, raise_if, raise_log
+from paddlets.logger import raise_if_not, raise_if, raise_log, Logger
 from paddlets.datasets.tsdataset import TSDataset
 
-try:
-    from paddlets.automl import AutoTS
-except Exception as e:
-    AutoTS = None
+logger = Logger(__name__)
 
 def check_model_fitted(model: Trainable, msg: str = None):
     """
@@ -40,6 +39,11 @@ def check_model_fitted(model: Trainable, msg: str = None):
     from paddlets.models.forecasting.ml.ml_base import MLBaseModel
     from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
     from paddlets.ensemble.ensemble_forecaster_base import EnsembleForecasterBase
+    try:
+        from paddlets.automl import AutoTS
+    except Exception as e:
+        logger.warning(f"error occurred while import autots, err: {str(e)}")
+        AutoTS = None
     #不需要fit的模型列表  
     MODEL_NEED_NO_FIT = ["ArimaModel"]    
     if model.__class__.__name__ in MODEL_NEED_NO_FIT:
@@ -235,3 +239,91 @@ def get_tsdataset_max_len(dataset:TSDataset) -> int:
     all_index = pd.concat([x.to_series() for x in index_list]).index.drop_duplicates()
 
     return len(all_index)
+
+def repr_results_to_tsdataset(reprs: np.array, dataset: TSDataset)-> TSDataset:
+    """
+    Convert representation model output to a TSDataset 
+
+    Args:
+        reprs(np.array): output results of representation model 
+        dataset(TSDataset): dataset use to get target 
+
+    Return:
+        TSDataset
+    """
+    labels_df = dataset.get_target().data
+    reprs = reprs[0]
+    if reprs.shape[0] != labels_df.shape[0]:
+        raise_log("The length of labels_df and reprs should be equal")
+    reprs_df = pd.DataFrame(reprs, columns=[f"repr_{i}" for i in range(reprs.shape[-1])], index=dataset.get_target().data.index)
+    new_dataset = TSDataset.load_from_dataframe(
+                    df=reprs_df.join(labels_df),
+                    observed_cov_cols=reprs_df.columns.tolist(),
+                    target_cols=labels_df.columns.tolist())
+    return new_dataset
+
+def plot_anoms(predict_data:TSDataset = None, 
+                origin_data:TSDataset = None , 
+                feature_name:str = None):
+    """
+    Plots anomalies
+
+    Args:
+        predict_data(TSDataset): Data used to print predict anom labels.
+        origin_data(TSDataset|None): Data used to print features or origin anom labels. only print predict anom labels if set to None.
+        feature_name(str|None): feature name in origin data to print
+    """
+    def plot_anoms_point(ax: plt.Axes, anomaly_data: TSDataset):
+        """
+        plot anoms point
+        """
+        ax2 = ax.twinx()
+        anom_vals = anomaly_data.target.data.to_numpy()
+        anom_label = anomaly_data.target.data.columns[0]
+        ax2.plot(anomaly_data.target.data.index, anom_vals, color="r",label=anom_label)
+        ax2.set_ylabel(anom_label)
+        minval, maxval = min(anom_vals), max(anom_vals)
+        delta = maxval - minval
+        if delta > 0:
+            ax2.set_ylim(minval - delta / 8, maxval + 2 * delta)
+        else:
+            ax2.set_ylim(minval - 1 / 30, maxval + 1)
+
+
+    def plot_anoms_window(ax: plt.Axes, anomaly_data: TSDataset):
+        """
+        Plots anomalies as windows 
+        """
+        anomaly_labels = anomaly_data.get_target().data
+        t, y = anomaly_labels.index, anomaly_labels.values
+        splits = np.where(y[1:] != y[:-1])[0] + 1
+        splits = np.concatenate(([0], splits, [len(y) - 1]))
+        for k in range(len(splits) - 1):
+            if y[splits[k]]:  # If splits[k] is anomalous
+                ax.axvspan(t[splits[k]], t[splits[k + 1]], color="purple", alpha=0.5)
+
+    ax = plt
+
+    if predict_data is None:
+        pass
+    else:       
+        raise_if_not(isinstance(predict_data, TSDataset), f"origin data type ({type(origin_data)}) must be TSDataset")
+        predict_data = predict_data.copy()
+
+    if origin_data is None:
+        plot_anoms_point(ax, predict_data)
+        return
+    else:
+        raise_if_not(isinstance(origin_data, TSDataset), f"origin data type ({type(origin_data)}) must be TSDataset")  
+        origin_data = origin_data.copy()
+
+    if feature_name is not None:
+        ax = origin_data.plot(columns=feature_name, x_compat=True)
+
+    if origin_data.target is not None:
+        plot_anoms_window(ax,origin_data)
+    
+    if predict_data is None:
+        pass
+    else:
+        plot_anoms_point(ax, predict_data)
