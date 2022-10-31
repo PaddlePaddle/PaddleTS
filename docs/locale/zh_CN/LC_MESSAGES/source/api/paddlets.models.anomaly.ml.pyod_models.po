@@ -1,0 +1,405 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-25 11:04+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.ml.pyod_models.rst:2
+#: e1ea67a6cb47413fa692901b73041df8
+msgid "paddlets.models.anomaly.ml.pyod_models"
+msgstr ""
+
+#: 27749ab2e9e345b2bb66d32d6e909271 2b2d335b13054a5e9d733794839f9967
+#: 6c748497d06d47f2bc564b3ff767a38b 971621f329fa4f6db0761f49f7dd1b2b
+#: a571a863e9a940f8a9ba33ae5f40a726 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:1
+#: paddlets.models.anomaly.ml.pyod_models.KNN:1
+#: paddlets.models.anomaly.ml.pyod_models.LOF:1
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:1
+#: paddlets.models.anomaly.ml.pyod_models.PCA:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.ml.ml_model_wrapper.PyodModelWrapper`"
+msgstr ""
+
+#: 019caf9ba3fa45438ddfdb98f02b80f4 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:1
+msgid ""
+"IForeast model for anomaly dection. Check "
+"https://github.com/yzhao062/pyod/blob/master/pyod/models/iforest.py for "
+"more information."
+msgstr "基于孤立森林的异常检测方法，更多详细信息请参考：https://github.com/yzhao062/pyod/blob/master/pyod/models/iforest.py。"
+
+#: 59e80cb5a38a419aa172fface48b10ca 8c3b4654820644309b6a69302e605ddf
+#: 8d7c478fa77a477fb327bba52611df7c 8f9bbe95f2764baf9bf6c63f081d1a53
+#: faab3e4fa308449d8ec1f22d5005fbe5 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest
+#: paddlets.models.anomaly.ml.pyod_models.KNN
+#: paddlets.models.anomaly.ml.pyod_models.LOF
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM
+#: paddlets.models.anomaly.ml.pyod_models.PCA
+msgid "Parameters"
+msgstr ""
+
+#: 010a8ee2811f46dd92f09b1ec52fca70 337f505f72b44d75acff96b827adc886
+#: 5a8e6646570b4c96a0028dab6147094e 611f0df46df347bb8bf161408f98f6fb
+#: a0b34b73034447e1a7c7ce446bef140b of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:4
+#: paddlets.models.anomaly.ml.pyod_models.KNN:4
+#: paddlets.models.anomaly.ml.pyod_models.LOF:4
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:4
+#: paddlets.models.anomaly.ml.pyod_models.PCA:4
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 169af62716c44f13aeac6983cc1586c2 7cae97e4d89a4fbdb3e31fb34e3c53f1
+#: a54357911f2d4604987207e4a17a77ca b602e970d5ec45de8d82b610ec558966
+#: db149f2fb9b946df9c6900a3e20a4246 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:6
+#: paddlets.models.anomaly.ml.pyod_models.KNN:6
+#: paddlets.models.anomaly.ml.pyod_models.LOF:6
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:6
+#: paddlets.models.anomaly.ml.pyod_models.PCA:6
+msgid "Sampling intervals between two adjacent samples, default=1."
+msgstr "相邻样本间的采样间隔。"
+
+#: f95337b0374a419487178372b08bca71 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:8
+msgid "The number of base estimators in the ensemble, default=100."
+msgstr "森林中生成的随机树数量，默认值100。"
+
+#: cce4485d62404d5ab6fa35f12915c0f8 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:10
+msgid ""
+"The number of samples to draw from X to train each base estimator, "
+"default=\"auto\"."
+msgstr "用来训练随机数的样本数量，即子采样的大小，默认值为auto。"
+
+#: 57ac9913ae434d139a821b2603e0e0a9 62b84cd58e36488fbe2b3ecaccc90aad
+#: 67f12a934e904812801415c9b265859c b0c9b009b4e545629d9718dfe9f22772
+#: ea7a5b1d060a4409b82cf7061b5914f0 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:12
+#: paddlets.models.anomaly.ml.pyod_models.KNN:8
+#: paddlets.models.anomaly.ml.pyod_models.LOF:20
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:28
+#: paddlets.models.anomaly.ml.pyod_models.PCA:12
+msgid ""
+"The amount of contamination of the data set, float in (0., 0.5), "
+"default=0.1."
+msgstr "异常数据占给定的数据集的比例，范围为[0, 0.5]，默认值0.1。"
+
+#: a27f8c51367c43d982a58a5c1d20231c of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:14
+msgid ""
+"The number of features to draw from X to train each base estimator, "
+"default=1.0."
+msgstr "指定从总样本X中抽取来训练每棵树iTree的属性的数量，默认只使用一个属性，默认值为1.0。"
+
+#: cc99980ea00e4345aa85862620f7cdf5 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:16
+msgid ""
+"If True, individual trees are fit on random subsets of the training data "
+"sampled with replacement. If False, sampling without replacement is "
+"performed, default=False."
+msgstr "如果为True，则各个树可放回地对训练数据进行采样。如果为False，则执行不放回的采样，默认值为False。"
+
+#: 266e402e586a469fbc3bcaf0a46d9917 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:18
+msgid ""
+"The number of jobs to run in parallel for both `fit` and `predict`, if "
+"-1, then the number of jobs is set to the number of cores, default=1."
+msgstr "在运行fit()和predict()函数时并行运行的作业数量。除了在joblib.parallel_backend上下文的情况下，None表示为1。设置为-1则表示使用所有可用的处理器，默认值为1。"
+
+#: 5d4800f0c6344ab2a611efea4332c26e of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:20
+msgid ""
+"Behaviour of the ``decision_function`` which can be either 'old' or "
+"'new', default=\"old\"."
+msgstr "默认为old。"
+
+#: 480e1d168f5c471e9593f4f63db9cc4d e9dbd37ce75e421fb3eb06888c5aac39 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:22
+#: paddlets.models.anomaly.ml.pyod_models.PCA:24
+msgid "Method of generating random seed, default=None."
+msgstr "生成随机种子的方法，默认值为None。"
+
+#: 25b933c692a946c691d25f25b50bf75d of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:24
+msgid "Controls the verbosity of the tree building process, default=0."
+msgstr "控制树构建过程的冗长性，默认值为0。"
+
+#: 16206ca7f6544e69a75512dc54045f92 2fd5109506994ada8610e96a63d14a3d
+#: 66ab6ee791ac4a738f50df2e95930590 75559c2103fc409e8259e5f8bfd941de
+#: 9745cd8424fe4bc19017193d6aa4dd83 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:27
+#: paddlets.models.anomaly.ml.pyod_models.KNN:28
+#: paddlets.models.anomaly.ml.pyod_models.LOF:27
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:31
+#: paddlets.models.anomaly.ml.pyod_models.PCA:31
+msgid "Returns"
+msgstr ""
+
+#: 003140dd219848c79206057794aad1ee 44acf2672cbb4d33ac2a5d30f33f3c4a
+#: 6493ce6a7d24437bbfb970898d484e45 7aba824fa0624e38b53f0dcd3898beb4
+#: 9ad64c46be93409fb0901100d44eacc0 of
+#: paddlets.models.anomaly.ml.pyod_models.IForest:28
+#: paddlets.models.anomaly.ml.pyod_models.KNN:29
+#: paddlets.models.anomaly.ml.pyod_models.LOF:28
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:32
+#: paddlets.models.anomaly.ml.pyod_models.PCA:32
+msgid "None"
+msgstr ""
+
+#: 64bf492dfc5744b39da0dce40283c248 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:1
+msgid ""
+"PCA model for anomaly dection. Check "
+"https://github.com/yzhao062/pyod/blob/master/pyod/models/pca.py for more "
+"information."
+msgstr "基于PCA的异常检测方法，更多详细信息请参考：https://github.com/yzhao062/pyod/blob/master/pyod/models/pca.py。"
+
+#: 663b2ce5381948fea002454dd746f166 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:8
+msgid "Number of components to keep, default=None."
+msgstr "指定希望PCA降维后的特征维度数目，默认值为None。"
+
+#: c9b7a339dde34528b7736ea0252531a9 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:10
+msgid "Number of selected principal components, default=None."
+msgstr "所选特征的数量,在计算异常值分数时选择多少特征进行计算，如果没有选，则采用全部的特征进行计算，默认值为None。"
+
+#: c8ddf839bd484c93b846e0985d786502 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:14
+msgid ""
+"If False, data passed to fit are overwritten and running "
+"fit(X).transform(X) will not yield the expected results, use "
+"fit_transform(X) instead, default=True."
+msgstr "表示是否在运行算法时，将原始训练数据复制一份，默认值为True。"
+
+#: 00f50249dc444ead8c0dcb2326c6d515 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:16
+msgid ""
+"When True the `components_` vectors are multiplied by the square root of "
+"n_samples and then divided by the singular values to ensure uncorrelated "
+"outputs with unit component-wise variances, default=True."
+msgstr "是否进行白化，默认值为True。"
+
+#: 8c14864f997040aab09bf9bd362af7f3 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:18
+msgid "String in {'auto', 'full', 'arpack', 'randomized'}, default=\"auto\"."
+msgstr "指定奇异值分解SVD的方法，由于特征分解是奇异值分解SVD的一个特例，一般的PCA库都是基于SVD实现，默认值为auto。"
+
+#: 6af2ba50ef684b37b512243fb3c1649f of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:20
+msgid ""
+"Tolerance for singular values computed by svd_solver == 'arpack', "
+"default=0.0."
+msgstr "svd_solver =='arpack'时计算的奇异值的公差，默认值为0.0。"
+
+#: 26044348d16d4268b0931f19e3944c02 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:22
+msgid ""
+"Number of iterations for the power method computed by svd_solver == "
+"'randomized', default=\"auto\"."
+msgstr "svd_solver =='randomized'时计算出的幂方法的迭代次数，默认值为auto。"
+
+#: d3ef7129e07d4a8380d4930e7b751f01 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:26
+msgid ""
+"If True, the eigenvalues are used in score computation, the eigenvectors "
+"with small eigenvalues comes with more importance, in outlier score "
+"calculation, default=True."
+msgstr "如果为True，特征值将参与分数计算，在异常值分数计算中，特征向量中特征值越小越重要，默认值为True。"
+
+#: 8c55d741326f47afbb4934207e8acbb4 of
+#: paddlets.models.anomaly.ml.pyod_models.PCA:28
+msgid ""
+"If True, perform standardization first to convert data to zero mean and "
+"unit variance, default=True."
+msgstr "如果为True，将先对数据执行(0,1)标准化，默认值为True。"
+
+#: 226de50b5f0847c4b472cc5c313db8c4 of
+#: paddlets.models.anomaly.ml.pyod_models.LOF:1
+msgid ""
+"LOF model for anomaly dection. Check "
+"https://github.com/yzhao062/pyod/blob/master/pyod/models/lof.py for more "
+"information."
+msgstr "基于LOF的异常检测方法，更多详细信息请参考：https://github.com/yzhao062/pyod/blob/master/pyod/models/lof.py。"
+
+#: 57fcc0701b8d4ef1856187677f1509d0 of
+#: paddlets.models.anomaly.ml.pyod_models.LOF:8
+msgid ""
+"Number of neighbors to use by default for `kneighbors` queries, "
+"default=20."
+msgstr "取离样本点p第k个最近的距离，默认值为20。"
+
+#: 962d7cbfe33a4c0a823ede4a23072573 of
+#: paddlets.models.anomaly.ml.pyod_models.LOF:10
+msgid "String in {'auto', 'ball_tree', 'kd_tree', 'brute'}, default=\"auto\"."
+msgstr "内部采用什么算法实现，默认值为auto。"
+
+#: d86c5b45fac84a6084264cda0f47483f of
+#: paddlets.models.anomaly.ml.pyod_models.LOF:12
+msgid "Leaf size passed to `BallTree` or `KDTree`, default=30."
+msgstr "kd_tree或者ball_tree叶节点规模，默认值为30。"
+
+#: 67b1755126824f0395b3630dd64cab1b 8db91223f7d542fd8edcbb538be2062c of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:20
+#: paddlets.models.anomaly.ml.pyod_models.LOF:14
+msgid ""
+"Metric used for the distance computation. Any metric from scikit-learn or"
+" scipy.spatial.distance can be used, default='minkowski'."
+msgstr "度量距离的方法，默认值是minkowski。"
+
+#: 813e3c6d1beb431c923d70dcbcc16938 926c11e6ff934dfeac48b25b72dd1829 of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:22
+#: paddlets.models.anomaly.ml.pyod_models.LOF:16
+msgid ""
+"Parameter for the Minkowski metric from "
+"sklearn.metrics.pairwise.pairwise_distances, default=2."
+msgstr "闵氏距离各种不同的距离参数，默认值为2，即采样欧氏距离。"
+
+#: bde0aef1941d473fb0be7c96f1e40eac c545b064f36f4c649dc7d0c1cee9f47b of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:24
+#: paddlets.models.anomaly.ml.pyod_models.LOF:18
+msgid "Additional keyword arguments for the metric function, default=None."
+msgstr "距离度量函数的额外关键字参数，默认值为None。"
+
+#: 3c770a073698491ca72103fd7f0a2076 70ffce4783604c28a9dc8a45b645b099 of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:25
+#: paddlets.models.anomaly.ml.pyod_models.LOF:22
+msgid ""
+"The number of parallel jobs to run for neighbors search, If ``-1``, then "
+"the number of jobs is set to the number of CPU cores, affects only "
+"kneighbors and kneighbors_graph methods, default=1."
+msgstr "在执行邻居搜索时并行运行的作业数量，默认值为1。"
+
+#: 94c6c15def5040d79acdf7ad763bc7cc of
+#: paddlets.models.anomaly.ml.pyod_models.LOF:24
+msgid ""
+"LocalOutlierFactor is only meant to be used for outlier detection "
+"(novelty=True), default=True."
+msgstr "异常检测模式，默认值为True。"
+
+#: 7398e11a9fe5427f85cdbee19fd5150b of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:1
+msgid ""
+"KNN model for anomaly dection. Check "
+"https://github.com/yzhao062/pyod/blob/master/pyod/models/knn.py for more "
+"information."
+msgstr "基于KNN的异常检测方法，更多详细信息请参考：https://github.com/yzhao062/pyod/blob/master/pyod/models/knn.py。"
+
+#: 2fd8315454c5491293df84b02dc4593e of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:10
+msgid "Number of neighbors to use by default for k neighbors queries, default=5."
+msgstr "查询使用的邻居数，默认值为5。"
+
+#: 27ce551461dd4692bdc555e7d2f1eeb4 of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:12
+msgid "String in {'largest', 'mean', 'median'}, default='largest'."
+msgstr "离群值得分的计算方法，默认值为largest。"
+
+#: 1b8ed31c45ed4e8e87f9d78d959f12ed of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:14
+msgid ""
+"Range of parameter space to use by default for `radius_neighbors` "
+"queries, default=1.0."
+msgstr "查询使用的参数空间范围，默认值为1.0。"
+
+#: 0b1b3279c7494b3798cae1901ca85ac7 of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:16
+msgid ""
+"String in {'auto', 'ball_tree', 'kd_tree', 'brute'}, algorithm used to "
+"compute the nearest neighbors, default=\"auto\"."
+msgstr "用于计算最近邻居的算法，默认值为auto。"
+
+#: 1ec542055b5a4186ba3bcb236379e6f2 of
+#: paddlets.models.anomaly.ml.pyod_models.KNN:18
+msgid "Leaf size passed to BallTree, default=30."
+msgstr "传递给BallTree或KDTree的叶子大小，默认值为30。"
+
+#: 207249758c6f44218ceb46b34107551d of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:1
+msgid ""
+"OCSVM model for anomaly dection. Check "
+"https://github.com/yzhao062/pyod/blob/master/pyod/models/ocsvm.py for "
+"more information."
+msgstr "基于OCSVM的异常检测方法，更多详细信息请参考：https://github.com/yzhao062/pyod/blob/master/pyod/models/ocsvm.py。"
+
+#: 9b5cd2940d32426388078d436dbbc08d of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:8
+msgid ""
+"String in {'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'} or a "
+"callable, specifies the kernel type to be used in the algorithm, "
+"default='rbf'."
+msgstr "核函数，默认值为rbf。"
+
+#: 9c1bc2ac098f4b6db82f8c2ccf3d4c1c of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:10
+msgid ""
+"Degree of the polynomial kernel function ('poly'), ignored by all other "
+"kernels, default=3."
+msgstr "阶数, 多项式内核函数（'poly'）的阶数, 默认值为3。"
+
+#: 21c433c4e67c49f68470d988922bd86e of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:12
+msgid ""
+"Kernel coefficient for 'rbf', 'poly' and 'sigmoid', if gamma is 'auto' "
+"then 1/n_features will be used instead, default=\"auto\"."
+msgstr "内核系数，默认值为auto。"
+
+#: 3d84db3928a24b9f8bbe8e15c23a4c1c of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:14
+msgid ""
+"Independent term in kernel function, it is only significant in 'poly' and"
+" 'sigmoid', default=0.0."
+msgstr "内核参数，默认值为0.0。"
+
+#: 27980dd53c2e42dba7be704801601e66 of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:16
+msgid "Tolerance for stopping criterion, default=1e-3."
+msgstr "停止标准的度量，默认值为0.001。"
+
+#: 36665229110d4b2e8a05068411649414 of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:18
+msgid ""
+"An upper bound on the fraction of training errors and a lower bound of "
+"the fraction of support vectors. Should be in the interval (0, 1], "
+"default=0.5."
+msgstr "训练误差分数的上限, 支持向量分数的下限, 范围是（0, 1]，默认值为0.5。"
+
+#: 9c064960ca194eb1b1ab1d81bd67b92f of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:20
+msgid "Whether to use the shrinking heuristic, default=True."
+msgstr "是否使用缩小的启发式方法，默认值为True。"
+
+#: f8722c8d717042a7a5a108d9d08cfb75 of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:22
+msgid "Specify the size of the kernel cache (in MB), default=200."
+msgstr "指定内核缓存的大小，单位是MB，默认值为200。"
+
+#: 62a75d12b7734e21a75bb846a917740b of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:24
+msgid "Enable verbose output, default=False."
+msgstr "是否启用详细输出，默认值为False。"
+
+#: 498163db1a6c4a2798329479ba90900b of
+#: paddlets.models.anomaly.ml.pyod_models.OCSVM:26
+msgid "Hard limit on iterations within solver, or -1 for no limit, default=-1."
+msgstr "对求解器内的迭代进行硬性限制，默认值为-1。"
+

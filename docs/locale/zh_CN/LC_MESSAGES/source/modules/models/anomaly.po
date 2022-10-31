@@ -1,0 +1,161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-26 17:40+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/anomaly.rst:3 c91cdfecd66c43199a5d47c51379bd15
+msgid "Anomaly Detection Model Tutorial"
+msgstr "异常检测使用指南"
+
+#: ../../source/modules/models/anomaly.rst:5 62dbad10dfdd4b1d8dae41aad6be9d67
+msgid ""
+"PaddleTS provides the components of time series anomaly detection, mainly"
+" including:"
+msgstr "PaddleTS提供了时序异常检测的能力，主要包括:"
+
+#: ../../source/modules/models/anomaly.rst:7 c66cc02075344e8991080c840dcc1eba
+msgid ""
+"The TSDataset is designed to adapt to the data characteristics of the "
+"time series anomaly detection scenario. For details, refer to: `TSDataset"
+" Document <../datasets/overview.html>`_."
+msgstr ""
+"设计了TSDataset数据结构，适配时序异常检测场景的数据特征，详情可参考："
+"`TSDataset 文档 <../datasets/overview.html>`_。"
+
+#: ../../source/modules/models/anomaly.rst:8 5c55669cb71a4218b67bcd2f9d36998b
+msgid ""
+"Some data visualization methods are provided to facilitate users to "
+"understand data more intuitively."
+msgstr "提供了一些针对时序异常检测场景的数据可视化方法，方便用户更加直观的理解数据。"
+
+#: ../../source/modules/models/anomaly.rst:9 ae1744ea21634660826fdbc3c9d7b575
+msgid ""
+"Several time series anomaly detection deep neural network models have "
+"been implemented, including the classic model such as AutoEncoder, VAE "
+"and the state-of-the art model Anomaly Transfomer. At the same time, the "
+"`AnomalyBaseModel` base class is provided to facilitate developers to "
+"build new time series anomaly detection models."
+msgstr ""
+"实现了若干个时序异常检测的深度模型，包括经典的AutoEncoder、VAE以及领先的Anomaly Transfomer，同时提供AnomalyBaseModel基类，方便广大开发者构建新的时序异常检测模型。"
+
+#: ../../source/modules/models/anomaly.rst:10 0b3572a698184eaf956d476351489aef
+msgid ""
+"Support automatic integration of machine learning models in the third-"
+"party anomaly detection library `pyod`, and adapt time series data to "
+"give users more modeling options when the data volume is relatively "
+"small."
+msgstr "支持自动集成第三方异常检测库pyod中的机器学习模型，并适配时序数据，当数据量比较少的时候给用户多一种建模选择。"
+
+#: ../../source/modules/models/anomaly.rst:11 b884cf96612e4ee9a0b097bb7fc64bfa
+msgid ""
+"The evaluation operators applicable to anomaly detection scenarios are "
+"provided, including Precision, Recall and F1."
+msgstr "提供了适用于时序异常检测场景的评估算子，包括Precision、Recall、F1。"
+
+#: ../../source/modules/models/anomaly.rst:15 d075a81fb8164e63b714afef7eb1c782
+msgid "An example"
+msgstr "示例"
+
+#: ../../source/modules/models/anomaly.rst:16 c0e9fec40a8d4d7f8fc7f461eb28a6b5
+msgid ""
+"The following example shows how to use the built-in AutoEncoder model to "
+"do an anomaly detection task based on PaddleTS."
+msgstr "下方的示例使用了内置的AutoEncoder模型展示如何基于PaddleTS进行时序异常检测。"
+
+#: ../../source/modules/models/anomaly.rst:19 1faf1ff270544f508a634e6265b4ea20
+msgid "1. Prepare data"
+msgstr "1. 数据准备"
+
+#: ../../source/modules/models/anomaly.rst:21 b519eeef5834409a80053e3efc389e5c
+msgid ""
+"The built-in API: `get_dataset` is used to load nab_temp dataset: "
+"`NAB_TEMP`."
+msgstr "使用内置的API：get_dataset加载NAB温度数据集：NAB_TEMP。"
+
+#: ../../source/modules/models/anomaly.rst:31 696b26d2084f400d8f4cf42aa4b54030
+msgid "2. Data visualization"
+msgstr "2. 数据可视化"
+
+#: ../../source/modules/models/anomaly.rst:33 af7e8b54c9b44fd9b57cc712ef822554
+msgid ""
+"Display the dataset and anomaly windows through the visual interface "
+"provided by PaddleTS."
+msgstr "通过PaddleTS提供的可视化接口显示数据集及相应的异常片段。"
+
+#: ../../source/modules/models/anomaly.rst:-1 9b07b3430a854664a1effb0f613c073b
+msgid "Anomaly Windows"
+msgstr "异常窗口"
+
+#: ../../source/modules/models/anomaly.rst:46 9708338a74584e31afd9934e6b5b434d
+msgid "3. Data processing"
+msgstr "3. 数据处理"
+
+#: ../../source/modules/models/anomaly.rst:48 ddaccc69026b497eb199fa64b8430458
+msgid "Set up training set (top 15%), and standardize the data."
+msgstr "设置训练集(前15%)和测试集，并对数据进行标准化。"
+
+#: ../../source/modules/models/anomaly.rst:70 5a9d1d8e3bdc4a56a1aae8ed98f64414
+msgid "4. Train model"
+msgstr "4. 模型训练"
+
+#: ../../source/modules/models/anomaly.rst:72 bea52ebfdc56431894f0338f6453a086
+msgid "Training anomaly detection model."
+msgstr "训练异常检测模型。"
+
+#: ../../source/modules/models/anomaly.rst:83 581e544e7e074909b51afa4268c22a01
+msgid "5. Model prediction and evaluation"
+msgstr "5. 模型预测和评估"
+
+#: ../../source/modules/models/anomaly.rst:85 ff288fe0f7174875947d292a26039af5
+msgid "Use the trained model for prediction and evaluation."
+msgstr "使用训练好的模型进行预测和评估。"
+
+#: ../../source/modules/models/anomaly.rst:102 683f34bcdcec420aa155ce62577b05a7
+msgid "6. Visualization of prediction results"
+msgstr "6. 预测结果可视化"
+
+#: ../../source/modules/models/anomaly.rst:104 2b142def13c9429cb5b202a3f9f80b8e
+msgid "Compare the prediction results withe the true labels."
+msgstr "将模型的预测结果和真实的异常点做对比。"
+
+#: ../../source/modules/models/anomaly.rst:-1 3c8e409e5e1b4bf483b847e0fc3a682d
+msgid "Pred_label VS True_label"
+msgstr "预测结果 VS 真实结果"
+
+#: ../../source/modules/models/anomaly.rst:113 78359f3672434e59b2c7e866e76992a1
+msgid ""
+"The model also provides `predict_score` interface returns the anomaly "
+"score of each point. The higher the score, the higher the probability of "
+"anomaly."
+msgstr "异常检测还提供了predict_score接口，返回每个点的异常分数，分数越高表示异常的可能性越高。"
+
+#: ../../source/modules/models/anomaly.rst:-1 66736e99ff0d493aa243c62d7bba40fd
+msgid "Pred_score VS True_label"
+msgstr "预测分数 VS 真实结果"
+
+#: ../../source/modules/models/anomaly.rst:125 4e3d05eb320b47148c5c82abca283100
+msgid "7. Model persistence"
+msgstr "7. 模型持久化"
+
+#: ../../source/modules/models/anomaly.rst:127 37a00d96007247f98ab4d1eb137cbcd3
+msgid "The trained model can be saved to the specified path."
+msgstr "可以将训练完成的模型保存到指定路径。"
+
+#: ../../source/modules/models/anomaly.rst:133 9531fe22d8b7408d9416b970b6a2d6a1
+msgid "After the model is saved, the model can be loaded for new data prediction."
+msgstr "模型保存之后，可以加载模型用于新的数据预测。"
+
