@@ -31,7 +31,7 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """BTS/PaddleTS deep time series framework, 
+    """PaddleTS deep time series framework,
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
