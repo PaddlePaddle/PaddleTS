@@ -31,23 +31,26 @@ PaddleTS is an easy-to-use Python library for deep time series modeling,
     and further encapsulates some routine procedures (e.g. data loading, callbacks setup, 
     loss computation, training loop control, etc.) and allows developers to focus on 
     the implementation of network architectures when developing new models
-* A set of state-of-the-art deep learning models (e.g. NBEATS, NHiTS, LSTNet, TCN, Transformer, etc.)
+* A set of state-of-the-art deep learning models containing
+    NBEATS, NHiTS, LSTNet, TCN, Transformer, DeepAR(Probabilistic), Informer, etc. for forecasting, TS2Vec for representation
 * A set of transformation operators for data preprocessing (e.g. missing values/outliers handling, 
     one-hot encoding, normalization, and automatic date/time-related covariate generation, etc.)
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary)
-* Automatic hyper-parameter tuning, enhance model performance easily and efficiently
+* Automatic time series modeling module (AutoTS) which supports mainstream Hyper Parameter Optimization algorithms and shows significant improvement on multiple models and datasets
+* Third-party (e.g. scikit-learn) ML models & data transformations integration
 
 Recently updated:
 
-* Time series representation learning model supported, with TS2Vec model released
-* Probabilistic forecasting supported, with DeepAR model released
-* Some new time series forecasting models like Informer released
-* Auto tuning module AutoTS released, which supports mainstream HPO algorithms and shows significant improvement on multiple models and datasets
-* Third-party (e.g. scikit-learn) ML models & data transformations integration supported
+* Time series anomaly detection model supported, with deep learning models AutoEncoder / VAE / AnomalyTransformer released
+* Third-party [pyod](https://github.com/yzhao062/pyod) ML models integration supported
+* Support time series model ensemble with two types of ensemble forecaster, StackingEnsembleForecaster and WeightingEnsembleForecaster proposed
+* RNN time series forecasting model supports categorical features and static covariates
+* New representation forecaster to support representation models to solve time series forecasting task
+* Support joint training of multiple time series datasets
 
 In the future, more advanced features will be coming, including:
 
-* Time series anomaly detection
+* More time series anomaly detection models
 * More time series representation learning models
 * More probabilistic forecasting models
 * Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems
@@ -59,16 +62,19 @@ In the future, more advanced features will be coming, including:
 Specifically, PaddleTS consists of the following modules:
 
 
-| Module                                                                                                     | Description                                                                                   |
-|------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)   | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets. |
-| [**paddlets.autots**](https://paddlets.readthedocs.io/en/latest/source/modules/autots/overview.html)       | Automatic hyper-parameter tuning.                                                             |
-| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html) | Data preprocessing and data transformations.                                                  |
-| [**paddlets.models**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)       | PaddlePaddle-based deep neural network models for time series modeling.                       |
-| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)   | Pipeline for building time series analysis and modeling workflows.                            |
-| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)     | Metrics for measuring the performance of a model.                                             |
-| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)   | Quick data exploration and advanced data analysis.                                            |
-| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)      | Utility functions.                                                                            |
+| Module                                                                                                                    | Description                                                                                   |
+|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| [**paddlets.datasets**](https://paddlets.readthedocs.io/en/latest/source/modules/datasets/overview.html)                  | Unified time series representation (TSDataset) and data repository with pre-built TSDatasets. |
+| [**paddlets.autots**](https://paddlets.readthedocs.io/en/latest/source/modules/autots/overview.html)                      | Automatic hyper-parameter tuning.                                                             |
+| [**paddlets.transform**](https://paddlets.readthedocs.io/en/latest/source/modules/transform/overview.html)                | Data preprocessing and data transformations.                                                  |
+| [**paddlets.models.forecasting**](https://paddlets.readthedocs.io/en/latest/source/modules/models/overview.html)          | PaddlePaddle-based deep neural network models for time series forecasting.                    |
+| [**paddlets.models.representation**](https://paddlets.readthedocs.io/en/latest/source/modules/models/representation.html) | PaddlePaddle-based deep neural network models for time series representation.                 |
+| [**paddlets.models.anomaly**](https://paddlets.readthedocs.io/en/latest/source/modules/models/anomaly.html)               | PaddlePaddle-based deep neural network models for time series anomaly detection.              |
+| [**paddlets.pipeline**](https://paddlets.readthedocs.io/en/latest/source/modules/pipeline/overview.html)                  | Pipeline for building time series analysis and modeling workflows.                            |
+| [**paddlets.metrics**](https://paddlets.readthedocs.io/en/latest/source/modules/metrics/overview.html)                    | Metrics for measuring the performance of a model.                                             |
+| [**paddlets.analysis**](https://paddlets.readthedocs.io/en/latest/source/modules/analysis/overview.html)                  | Quick data exploration and advanced data analysis.                                            |
+| [**paddlets.ensemble**](https://paddlets.readthedocs.io/en/latest/source/modules/ensemble/overview.html)                  | Time series ensemble methods.                                                                 |
+| [**paddlets.utils**](https://paddlets.readthedocs.io/en/latest/source/modules/backtest/overview.html)                     | Utility functions.                                                                            |
 
 
 ## Installation
