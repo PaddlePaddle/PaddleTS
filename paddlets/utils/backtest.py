@@ -87,6 +87,7 @@ def backtest(
 
     data = data.copy()
     all_target = data.get_target()
+    all_observe = data.get_observed_cov() if data.get_observed_cov() else None
     target_length = len(all_target)
     if predict_window is None:
         predict_window = model_out_chunk_len
@@ -118,6 +119,7 @@ def backtest(
     TQDM_PREFIX = "Backtest Progress"
     for _ in tqdm(range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
         data._target, rest = all_target.split(index) 
+        data._observed_cov, _ = all_observe.split(index) if all_observe else (None, None)
         rest_len = len(rest)
 
         if rest_len < model_out_chunk_len + model_skip_chunk_len:
