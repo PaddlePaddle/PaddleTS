@@ -15,12 +15,12 @@ logger = Logger(__name__)
 
 class ReprPaddleDatasetImpl(PaddleDataset):
     """
-    An implementation of :class:`paddle.io.Dataset`.
+    An implementation of paddle Dataset.
 
     Note that any unused (known / observed) columns should be removed from the TSDataset before handled by this class.
 
     Args:
-        rawdataset(TSDataset): Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.Dataset`.
+        rawdataset(TSDataset): Raw TSDataset to be converted.
         segment_size(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
             let `t` be the time index of target time series, `t[i]` be the start time of the i-th sample,

@@ -95,7 +95,7 @@ msgid ""
 "sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
 "(i.e. Y) for a single sample. By default, it will NOT skip any time "
 "steps."
-msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+msgstr "输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
 
 #: 46268530fcfe4723a9f792fe7f36e2af 5140532dedf445b688dbc8167da48ee7
 #: 664a1fe7cea44af6871a798c3e1090af d590aa8ce95047f5a22537e75b32bb9d of
@@ -282,7 +282,7 @@ msgid ""
 "sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
 "(i.e. Y) for a single sample. By default, it will NOT skip any time "
 "steps. Possibly be used while converting."
-msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+msgstr "输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。转换期间可能会用到。"
 
 #: 28ec7a2f7c254764b598a039f164b7fc 38960097d67848e781f65b4b3799e0c4 of
 #: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:14

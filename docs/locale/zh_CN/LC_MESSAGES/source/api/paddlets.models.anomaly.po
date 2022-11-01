@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-27 11:24+0800\n"
+"POT-Creation-Date: 2022-10-31 17:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.rst:2
-#: f5841d41fdeb4c8599c4d8012ba6d9f3
+#: b8a927e2648441f9b6ace0b430bee386
 msgid "paddlets.models.anomaly"
-msgstr ""
-
-#: 86415ceafad7453fa94780e51c4b4934 of paddlets.models.anomaly:1
-msgid "Bts anomaly."
 msgstr ""
 

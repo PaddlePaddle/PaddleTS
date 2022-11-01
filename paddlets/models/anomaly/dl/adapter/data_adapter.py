@@ -13,7 +13,7 @@ logger = Logger(__name__)
 
 class AnomalyDataAdapter(object):
     """
-    Data adapter, converts :class:`bts.TSDataset` to :class:`paddle.io.Dataset` and :class:`paddle.io.DataLoader`.
+    Data adapter, convert TSDataset to paddle Dataset and paddle DataLoader.
     """
     def __init__(self):
         pass
@@ -25,10 +25,10 @@ class AnomalyDataAdapter(object):
         sampling_stride: int = 1
     ) -> AnomalyPaddleDatasetImpl:
         """
-        Converts :class:`bts.TSDataset` to :class:`paddle.io.Dataset`.
+        Convert TSDataset to paddle Dataset.
 
         Args:
-            rawdataset(TSDataset): Raw TSDataset for converting to :class:`paddle.io.Dataset`.
+            rawdataset(TSDataset): Raw TSDataset to be converted.
             in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample.
                 More precisely, let `t` be the time index of target time series,
@@ -52,10 +52,10 @@ class AnomalyDataAdapter(object):
         shuffle: bool = True
     ) -> PaddleDataLoader:
         """
-        Converts :class:`paddle.io.Dataset` to :class:`paddle.io.DataLoader`.
+        Convert paddle Dataset to paddle DataLoader.
 
         Args:
-            paddle_dataset(PaddleDatasetImpl): Raw :class:`~bts.TSDataset` for building :class:`paddle.io.DataLoader`.
+            paddle_dataset(PaddleDatasetImpl): paddle Dataset to be converted.
             batch_size(int): The number of samples for a single batch.
             collate_fn(Callable, optional): User-defined collate function for each batch, optional.
             shuffle(bool, optional): Whether to shuffle indices order before generating batch indices, default True.
@@ -70,22 +70,25 @@ class AnomalyDataAdapter(object):
                 batch_size = 4
                 in_chunk_len = 3
                 observed_cov_chunk_len = in_chunk_len = 3
-                observed_cov_col_num = 1 (observed covariates column number, e.g. ["obs0"])
+                observed_cov_numeric_col_num = 1 (observed covariates column number with numeric dtype)
+                observed_cov_categorical_col_num = 0 (observed covariates column number with categorical dtype)
 
                 # Built DataLoader instance:
                 dataloader = [
                     # 1st batch
                     {
-                        "observed_cov": paddle.Tensor(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)),
-                        "static_cov": paddle.Tensor(shape=(batch_size, 1, static_cov_col_num))
+                        "observed_cov": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_numeric_col_num)
+                        )
                     },
 
                     # ...
 
                     # N-th batch
                     {
-                        "observed_cov": paddle.Tensor(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)),
-                        "static_cov": paddle.Tensor(shape=(batch_size, 1, static_cov_col_num))
+                        "observed_cov": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_numeric_col_num)
+                        )
                     }
                 ]
         """
