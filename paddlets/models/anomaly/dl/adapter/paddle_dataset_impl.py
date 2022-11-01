@@ -13,12 +13,12 @@ logger = Logger(__name__)
 
 class AnomalyPaddleDatasetImpl(PaddleDataset):
     """
-    An implementation of :class:`paddle.io.Dataset`.
+    An implementation of paddle Dataset.
 
     Note that any unused (target / known) columns should be removed from the TSDataset before handled by this class.
 
     Args:
-        rawdataset(TSDataset): Raw :class:`~bts.TSDataset` for building :class:`paddle.io.Dataset`.
+        rawdataset(TSDataset): Raw TSDataset to be converted.
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
             let `t` be the time index of observed cov time series, `t[i]` be the start time of the i-th sample,

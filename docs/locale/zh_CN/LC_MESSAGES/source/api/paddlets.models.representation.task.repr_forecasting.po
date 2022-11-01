@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-01 11:06+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/api/paddlets.models.representation.task.repr_forecasting.rst:2
+#: ab9414febb1544238b4898f4d14e0bbe
+msgid "paddlets.models.representation.task.repr_forecasting"
+msgstr ""
+
+#: adbf8a905d544540a71cb5ff91668b3f of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:1
+msgid ""
+"Bases: "
+":py:class:`paddlets.ensemble.ensemble_forecaster_base.EnsembleForecasterBase`"
+msgstr ""
+
+
+#: 1709793f49f04971a43c696dd4d2d6b5 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:1
+msgid "The ReprForecasting Class."
+msgstr "表征预测"
+
+
+#: 2aa563190ccb449da30b8070a46c4b32 577cc543bec84b749ef384b65836f59a of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.predict
+msgid "Parameters"
+msgstr ""
+
+
+#: ae1098179b114bc28c2d3ed7561c7e77 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:3
+msgid "The size of previous time point window  to use for representation results"
+msgstr "模型输入的时间序列长度"
+
+
+#: baf1b3f401d54753895025d6a1897e21 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度"
+
+
+#: c1a8b4c4d66c49589cf3ff990999fcd1 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:7
+msgid "Representation model to use for forecasting."
+msgstr "用来表征的上游模型"
+
+
+#: 92dab63b766c4575b8a1beaf30ba679e of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:9
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+
+#: ffba6917e57f468c931c1b9dfc3775d9 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:13
+msgid "Sampling intervals between two adjacent samples."
+msgstr "表征结果生成下游样本时，相邻两个样本的采样间隔"
+
+
+#: fa02c7ace26c44eba00754b15f831b33 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:14
+msgid "params for reprmodel init."
+msgstr "表征模型的参数"
+
+
+#: 0421a8328c6a4f89946724f6bda7142e of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:16
+msgid ""
+"params for reprmodel encode, \"slide_len\" will set to in_chunk_len by "
+"force."
+msgstr "表征模型的encode参数"
+
+
+#: 9bc2cd4a7cef40bc9cc38e283a966ad7 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:18
+msgid ""
+"The downstream learner, should be a sklearn-like regressor, set to "
+"Ridge(alpha=0.5) by default."
+msgstr "下游的学习器，需要是一个sklearn回归器，默认设置成Ridge(alpha=0.5) "
+
+
+#: 56131adc988a498199b27ade52032486 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting:20
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志"
+
+
+#: e8d078b0039947f78e9e302879469d26 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.predict:1
+msgid "Dataset to predict."
+msgstr "需要预测的数据"
+

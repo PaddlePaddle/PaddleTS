@@ -287,7 +287,7 @@ class SklearnModelWrapper(MLModelBaseWrapper):
 
     def _ml_dataset_to_ml_dataloader(self, ml_dataset: MLForecastingDataset) -> MLDataLoader:
         """
-        Internal method, convert bts.models.forecasting.ml.adapter.ml_dataset.MLDataset to MLDataLoader.
+        Internal method, convert MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
@@ -736,7 +736,7 @@ class PyodModelWrapper(MLModelBaseWrapper):
 
     def _ml_dataset_to_ml_dataloader(self, ml_dataset: "MLAnomalyDataset") -> "MLDataLoader":
         """
-        Internal method, convert bts.models.anomaly.ml.adapter.ml_dataset.MLDataset to MLDataLoader.
+        Internal method, convert MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
@@ -917,7 +917,7 @@ def make_ml_model(
 
     Returns:
         MLModelBaseWrapper: Wrapped time series model wrapper object, currently support SklearnModelWrapper and
-            PyodModelWrapper.
+        PyodModelWrapper.
     """
     raise_if(model_class is None, "model_class must not be None.")
     raise_if_not(isinstance(model_class, type), "isinstance(model_class, type) must be True.")

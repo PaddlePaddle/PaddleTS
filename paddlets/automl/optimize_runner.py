@@ -108,8 +108,8 @@ class OptimizeRunner:
                  paddlets_estimator: Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]],
                  in_chunk_len: int,
                  out_chunk_len: int,
-                 train_tsdataset: TSDataset,
-                 valid_tsdataset: Optional[TSDataset] = None,
+                 train_tsdataset: Union[TSDataset, List[TSDataset]],
+                 valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
                  sampling_stride: int = 1,
                  skip_chunk_len: int = 0,
                  search_space: Optional[dict] = None,
@@ -120,7 +120,8 @@ class OptimizeRunner:
                  k_fold: int = 3,  # cv的fold切分数, 默认5折切分
                  n_trials: int = 5,
                  cpu_resource: float = 1.0,
-                 gpu_resource: float = 0
+                 gpu_resource: float = 0,
+                 local_dir: Optional[str] = None,
                  ):
         """
         Execute optimization.
@@ -130,8 +131,8 @@ class OptimizeRunner:
                 A class of a PaddleTS model or a list of classes consisting of several PaddleTS transformers and a PaddleTS model.
             in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-            train_tsdataset(TSDataset): Train dataset.
-            valid_tsdataset(TSDataset, optional): Valid dataset.
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
+            valid_tsdataset(Union[TSDataset, List[TSDataset]], optional): Valid dataset.
             sampling_stride(int): Sampling intervals between two adjacent samples.
             skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
             search_space(Optional[dict]): The domain of the automl to be optimized.
@@ -144,6 +145,7 @@ class OptimizeRunner:
             n_trials(int): The number of configurations suggested by the search algorithm.
             cpu_resource: CPU resources to allocate per trial.
             gpu_resource: GPU resources to allocate per trial.
+            local_dir(str): Local dir to save training results to. Defaults to ``~/ray_results``.
 
         Returns:
             ExperimentAnalysis: Object for experiment analysis.
@@ -185,6 +187,11 @@ class OptimizeRunner:
 
             tune.report(**{self.report_metric: score})
 
+        if isinstance(train_tsdataset, list):
+            # check valid tsdataset exist
+            if valid_tsdataset is None:
+                raise NotImplementedError("When the train_tsdataset is a list, valid_tsdataset is required!")
+
         # 若sp不存在，则获取默认search space
         if search_space is None:
             search_space = self.paddlets_configer.get_default_search_space(paddlets_estimator)
@@ -202,7 +209,8 @@ class OptimizeRunner:
                         resources_per_trial={
                             "cpu": cpu_resource,
                             "gpu": gpu_resource
-                        }
+                        },
+                        local_dir=local_dir,
                         )
 
     def _backtrack_traverse_search_space(self, sp, track, track_choice_mapping):

@@ -12,7 +12,6 @@ import seaborn as sns
 from scipy.signal import argrelmax
 from scipy.stats import norm
 import statsmodels.api as sm
-from statsmodels.tsa.seasonal import STL
 from statsmodels.tsa.stattools import acf
 
 from paddlets import TimeSeries, TSDataset

@@ -17,6 +17,7 @@ from paddlets.utils.utils import get_tsdataset_max_len, split_dataset
 
 logger = Logger(__name__)
 
+
 class Pipeline(Trainable):
     """
     The pipeline is designed to build a workflow for time series modeling which may be comprised of a set of
@@ -103,11 +104,11 @@ class Pipeline(Trainable):
         self._fitted = True
         return self
 
-    def transform(self, 
-                tsdataset: Union[TSDataset, List[TSDataset]],
-                inplace: bool = False, 
-                cache_transform_steps: bool = False, 
-                previous_caches: List[TSDataset] = None) -> Union[TSDataset, Tuple[TSDataset, List[TSDataset]]]:
+    def transform(self,
+                  tsdataset: Union[TSDataset, List[TSDataset]],
+                  inplace: bool = False,
+                  cache_transform_steps: bool = False,
+                  previous_caches: List[TSDataset] = None) -> Union[TSDataset, Tuple[TSDataset, List[TSDataset]]]:
         """
         Transform the `TSDataset` using the fitted transformers in the pipeline.
 
@@ -131,7 +132,7 @@ class Pipeline(Trainable):
             else:
                 tsdataset_transformed = tsdataset.copy()
         if cache_transform_steps is False:
-            #normal transform
+            # normal transform
             for transform in self._transform_list:
                 tsdataset_transformed = transform.transform(tsdataset_transformed)
             return tsdataset_transformed
@@ -146,9 +147,9 @@ class Pipeline(Trainable):
 
         for i in range(tansform_list_length):
             transformed_data_len = get_tsdataset_max_len(tsdataset_transformed)
-            data_pre = previous_caches[i] if previous_caches  else None
+            data_pre = previous_caches[i] if previous_caches else None
             transformer = self._transform_list[i]
-            
+
             if data_pre:
                 tsdataset_transformed = TSDataset.concat([data_pre, tsdataset_transformed])
             tsdataset_transformed = transformer.transform_n_rows(tsdataset_transformed, transformed_data_len)
@@ -169,7 +170,7 @@ class Pipeline(Trainable):
 
     def inverse_transform(self,
                           tsdataset: Union[TSDataset, List[TSDataset]],
-                          inplace: bool=False) -> TSDataset:
+                          inplace: bool = False) -> TSDataset:
         """
         The inverse transformation of `self.transform`.
         Apply `inverse_transform` using the fitted transformers in the pipeline.
@@ -240,7 +241,7 @@ class Pipeline(Trainable):
         raise_if_not(hasattr(self._model, "predict_proba"), \
                      "predict_proba is only valid if the final model implements predict_proba")
         return self._model.predict_proba(tsdataset_transformed)
-    
+
     def predict_score(self, tsdataset: TSDataset) -> TSDataset:
         """
         Transform the `TSDataset` using the fitted transformers and perform anomaly detection score prediction with the fitted
@@ -413,18 +414,18 @@ class Pipeline(Trainable):
                 predictions = self._model.predict(data_pre_transformed)
             predictions = self.inverse_transform(predictions)
             results.append(predictions)
-            #break in last round
-            if i == recursive_rounds -1:
+            # break in last round
+            if i == recursive_rounds - 1:
                 break
 
             # predict concat to origindata
             tsdataset_copy = TSDataset.concat([tsdataset_copy, predictions], keep="last")
             target_length = target_length + self._model._out_chunk_len
-            
+
             # split new predict chunk
             _, new_chunk = tsdataset_copy.split(target_length - self._model._out_chunk_len)
             if tsdataset_copy.known_cov:
-                    new_chunk, _ = split_dataset(new_chunk, 2 * self._model._out_chunk_len)
+                new_chunk, _ = split_dataset(new_chunk, 2 * self._model._out_chunk_len)
 
             # transform one chunk
             chunk_transformed, chunk_transformed_caches = self.transform(new_chunk,
@@ -448,7 +449,6 @@ class Pipeline(Trainable):
             TimeSeries(result.get_target().data[0: predict_length], result.freq)
         )
         return result
-        
 
     def save(self, path: str, pipeline_file_name: str = "pipeline-partial.pkl", model_file_name: str = "paddlets_model"):
         """

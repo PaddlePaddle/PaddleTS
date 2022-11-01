@@ -38,7 +38,7 @@ class TestOptimizeRunner(TestCase):
             np.random.randn(200, 2).astype(np.float32),
             index=pd.date_range("2022-01-01", periods=200, freq="15T"),
             columns=["b1", "c1"])
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1., "g": 2.}
 
         # index为DatetimeIndex类型
         tsdataset = TSDataset(

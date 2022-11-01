@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-27 11:24+0800\n"
+"POT-Creation-Date: 2022-10-31 17:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.dl.adapter.rst:2
-#: f95d90cfe8ed46039d8a72bbc2cdcad0
+#: ca916f83b6004c31a5c156a3ab5cdf1c
 msgid "paddlets.models.anomaly.dl.adapter"
 msgstr ""
 
-#: 975753adc3044a7194c89b875c571164 of paddlets.models.anomaly.dl.adapter:1
-msgid "bts dl anomaly data adapter."
+#: c1f35d68cdef4b1793540d17f2492a78 of paddlets.models.anomaly.dl.adapter:1
+msgid "dl anomaly data adapter."
 msgstr ""
 

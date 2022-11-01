@@ -33,7 +33,7 @@ class TestInformer(TestCase):
                 np.random.randn(2500, 2).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"])
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
 
         # index为DatetimeIndex类型
         self.tsdataset1 = TSDataset(
@@ -130,6 +130,21 @@ class TestInformer(TestCase):
             patience=1,
         )
         informer.fit(self.tsdataset1, self.tsdataset1)
+
+        informer = InformerModel(
+            in_chunk_len=96,
+            out_chunk_len=96,
+            d_model=8,
+            nhead=1,
+            num_encoder_layers=1,
+            num_decoder_layers=1,
+            ffn_channels=64,
+            optimizer_params=dict(learning_rate=1e-1),
+            batch_size=512,
+            max_epochs=5,
+            patience=1,
+        )
+        informer.fit([self.tsdataset1, self.tsdataset1], self.tsdataset1)
 
     def test_predict(self):
         """unittest function
