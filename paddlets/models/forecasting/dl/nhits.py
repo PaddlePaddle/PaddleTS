@@ -5,7 +5,8 @@
 This implementation is based on the article `N-HiTS: Neural Hierarchical Interpolation for Time Series Forecasting <https://arxiv.org/abs/2201.12886>`_ .
 """
 
-from typing import List, Dict, Any, Callable, Optional, Tuple, Union
+from enum import Enum
+from typing import List, Dict, Any, Callable, Optional, NewType, Tuple, Union
 
 import numpy as np
 import paddle
@@ -23,7 +24,6 @@ logger = Logger(__name__)
 
 ACTIVATIONS = [
     "ReLU",
-    "RReLU",
     "PReLU",
     "ELU",
     "Softplus",
@@ -445,8 +445,8 @@ class _NHiTSModule(nn.Layer):
             forecast(padle.Tensor): Tensor containing the output of the NHiTS model.
         """
         backcast = data["past_target"]
-        known_cov = data["known_cov"] if self._known_cov_dim > 0 else None
-        observed_cov = data["observed_cov"] if self._observed_cov_dim > 0 else None
+        known_cov = data["known_cov_numeric"] if self._known_cov_dim > 0 else None
+        observed_cov = data["observed_cov_numeric"] if self._observed_cov_dim > 0 else None
         # init forecast tensor
         forecast = paddle.zeros(
             shape = (backcast.shape[0], self._target_length, self._target_dim))
@@ -577,28 +577,29 @@ class NHiTSModel(PaddleBaseModelImpl):
         super(NHiTSModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-            self,
-            train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None
-            ) -> Dict[str, Any]:
+        self,
+        train_tsdataset: List[TSDataset],
+        valid_tsdataset: Optional[List[TSDataset]] = None
+    ) -> Dict[str, Any]:
         """
         Infer parameters by TSDataset automatically.
 
         Args:
-            train_tsdataseet(TSDataset): train dataset
-            valid_tsdataset(TSDataset, optional): validation dataset
+            train_tsdataseet(List[TSDataset]): list of train dataset
+            valid_tsdataset(List[TSDataset], optional): list of validation dataset
         Returns:
             Dict[str, Any]: model parameters
         """
+        train_ts0 = train_tsdataset[0]
         fit_params = {
-                "target_dim": train_tsdataset.get_target().data.shape[1],
+                "target_dim": train_ts0.get_target().data.shape[1],
                 "known_cov_dim": 0,
                 "observed_cov_dim": 0
                 }
-        if train_tsdataset.get_known_cov() is not None:
-            fit_params["known_cov_dim"] = train_tsdataset.get_known_cov().data.shape[1]
-        if train_tsdataset.get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_tsdataset.get_observed_cov().data.shape[1]
+        if train_ts0.get_known_cov() is not None:
+            fit_params["known_cov_dim"] = train_ts0.get_known_cov().data.shape[1]
+        if train_ts0.get_observed_cov() is not None:
+            fit_params["observed_cov_dim"] = train_ts0.get_observed_cov().data.shape[1]
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:
@@ -626,4 +627,3 @@ class NHiTSModel(PaddleBaseModelImpl):
             self._activation,
             self._MaxPool1d,
         )
-

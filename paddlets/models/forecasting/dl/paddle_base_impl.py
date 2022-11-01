@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from typing import List, Dict, Any, Callable, Optional, Tuple
+from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 from collections import OrderedDict
 from copy import deepcopy
 import time
@@ -31,7 +31,7 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """PaddleTS/PaddleTS deep time series framework, 
+    """BTS/PaddleTS deep time series framework, 
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
@@ -183,39 +183,56 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
     def _init_fit_dataloaders(
         self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdataset: Union[TSDataset, List[TSDataset]], 
+        valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None
     ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
         """Generate dataloaders for train and eval set.
 
         Args: 
-            train_tsdataset(TSDataset): Train set.
-            valid_tsdataset(TSDataset|None): Eval set.
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train set.
+            valid_tsdataset(Optional[Union[TSDataset, List[TSDataset]]]): Eval set.
 
         Returns:
             paddle.io.DataLoader: Training dataloader.
             List[paddle.io.DataLoader]: List of validation dataloaders..
         """
-        self._check_tsdataset(train_tsdataset)
         data_adapter = DataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdataset,
-            in_chunk_len=self._in_chunk_len,
-            out_chunk_len=self._out_chunk_len,
-            skip_chunk_len=self._skip_chunk_len,
-            sampling_stride=self._sampling_stride,
-        )
-        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
-        valid_dataloaders = []
-        if valid_tsdataset is not None:
-            self._check_tsdataset(valid_tsdataset)
-            valid_dataset = data_adapter.to_paddle_dataset(
-                valid_tsdataset,
+        train_dataset = None
+        if isinstance(train_tsdataset, TSDataset):
+            train_tsdataset = [train_tsdataset]
+        for dataset in train_tsdataset:
+            self._check_tsdataset(dataset)
+            dataset = data_adapter.to_paddle_dataset(
+                dataset,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
                 skip_chunk_len=self._skip_chunk_len,
                 sampling_stride=self._sampling_stride,
             )
+            if train_dataset is None:
+                train_dataset = dataset
+            else:
+                train_dataset.samples = train_dataset.samples + dataset.samples
+        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
+        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
+        valid_dataloaders = []
+        if valid_tsdataset is not None:
+            valid_dataset = None
+            if isinstance(valid_tsdataset, TSDataset):
+                valid_tsdataset = [valid_tsdataset]
+            for dataset in valid_tsdataset:
+                self._check_tsdataset(dataset)
+                dataset = data_adapter.to_paddle_dataset(
+                    dataset,
+                    in_chunk_len=self._in_chunk_len,
+                    out_chunk_len=self._out_chunk_len,
+                    skip_chunk_len=self._skip_chunk_len,
+                    sampling_stride=self._sampling_stride,
+                )
+                if valid_dataset is None:
+                    valid_dataset = dataset
+                else:
+                    valid_dataset.samples = valid_dataset.samples + dataset.samples
             valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size)
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
@@ -306,17 +323,25 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
     
     def fit(
         self,
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdataset: Union[TSDataset, List[TSDataset]], 
+        valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None
     ):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data and valid_dataloader for validation.
 
         Args: 
-            train_tsdataset(TSDataset): Train set. 
-            valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train set. 
+            valid_tsdataset(Optional[Union[TSDataset, List[TSDataset]]]): Eval set, used for early stopping.
         """
+        if isinstance(train_tsdataset, TSDataset):
+            train_tsdataset = [train_tsdataset]
+        if isinstance(valid_tsdataset, TSDataset):
+            valid_tsdataset = [valid_tsdataset]
+        self._check_multi_tsdataset(train_tsdataset)
         self._fit_params = self._update_fit_params(train_tsdataset, valid_tsdataset)
+        
+        if isinstance(valid_tsdataset, list):
+            self._check_multi_tsdataset(valid_tsdataset)
         train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
         self._fit(train_dataloader, valid_dataloaders)
         
@@ -361,7 +386,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._callback_container.on_train_end()
         self._network.eval()
     
-    @to_tsdataset
+    @to_tsdataset(scenario="forecasting")
     def predict(
         self,
         tsdataset: TSDataset
@@ -542,4 +567,3 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             paddle.nn.Layer.
         """
         pass
-
