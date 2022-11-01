@@ -6,6 +6,9 @@ analysis
 """
 from paddlets.analysis.base_analyzers import Summary, Max
 from paddlets.analysis.base_analyzers import summary, max
+from paddlets.analysis.time_domain import Seasonality
+from paddlets.analysis.time_domain import Acf
+from paddlets.analysis.time_domain import Correlation
 from paddlets.analysis.frequency_domain import FFT
 from paddlets.analysis.frequency_domain import STFT
 from paddlets.analysis.frequency_domain import CWT
