@@ -10,7 +10,7 @@ import numpy as np
 from unittest import TestCase
 
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.models.anomaly import AutoEncoder, KSigma as KSigmaModel
+from paddlets.models.anomaly import AutoEncoder
 from paddlets.transform import KSigma, TimeFeatureGenerator, StandardScaler, StatsTransform, Fill
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 from paddlets.pipeline.pipeline import Pipeline
@@ -561,31 +561,6 @@ class TestPipeline(TestCase):
         self.assertTrue(res_before_save_load.get_target().to_dataframe() \
                         .equals(res_after_save_load.get_target().to_dataframe()))
         
-        #case3 (statistical anomaly)
-        ksigmamodel_params = {"col": 'b', "k": 0.5}
-        anomaly_pipe = Pipeline([(KSigma, transform_params), (StandardScaler, {}), (KSigmaModel, ksigmamodel_params)])
-        anomaly_pipe.fit(tsdataset)
-        res_before_save_load = anomaly_pipe.predict(tsdataset)
-        shutil.rmtree(self.tmp_dir)
-        anomaly_pipe.save(self.tmp_dir)
-        # save again
-        with self.assertRaises(FileExistsError):
-            anomaly_pipe.save(self.tmp_dir)
-        # path is not a directory
-        with self.assertRaises(ValueError):
-            anomaly_pipe.save(os.path.join(self.tmp_dir, "pipeline-partial.pkl"))
-        # load pipeline bad case
-        with self.assertRaises(FileNotFoundError):
-            Pipeline.load(self.tmp_dir + "hello")
-        # load pipeline
-        pipeline_after_save_load = Pipeline.load(self.tmp_dir)
-        # test predict
-        res_after_save_load = pipeline_after_save_load.predict(tsdataset)
-        # clear file
-        shutil.rmtree(self.tmp_dir)
-        self.assertTrue(res_before_save_load.get_target().to_dataframe() \
-                        .equals(res_after_save_load.get_target().to_dataframe()))
-
     def test_multiple_datasets_fit(self):
 
         # load multi time series

@@ -754,5 +754,5 @@ class TestPaddleBaseModel(unittest.TestCase):
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1, "static1": 2}
+            static_cov={"static0": 1., "static1": 2.}
         )
