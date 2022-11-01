@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-bts models forecasting tests.
+paddlets models forecasting tests.
 """
