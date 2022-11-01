@@ -196,6 +196,6 @@ msgid ""
 "backtest will generate a List of TSdataset as predictions. Because the "
 "predict results are overlaped in this situation."
 msgstr ""
-"如果设置 ``predict_window`` != ``stride`` 并且 ``predict_window`` != ``stride``"
+"如果设置 ``predict_window`` != ``stride`` 并且 ``return_predicts`` = True"
 " ，回测函数会返回指标结果和一个TSdataset 的list。 因为预测结果相互重叠或相互间隔无法组成完整TSDataset。"
 
