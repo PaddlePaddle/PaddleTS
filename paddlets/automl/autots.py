@@ -226,7 +226,7 @@ class AutoTS(BaseModel):
         if self._refit:
             logger.info("AutoTS: start refit")
             self._best_estimator = self._optimize_runner.setup_estimator(config=self._best_param,
-                                                                         bts_estimator=self._estimator,
+                                                                         paddlets_estimator=self._estimator,
                                                                          in_chunk_len=self._in_chunk_len,
                                                                          out_chunk_len=self._out_chunk_len,
                                                                          skip_chunk_len=self._skip_chunk_len,
