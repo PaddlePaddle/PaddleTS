@@ -54,7 +54,8 @@ class ReprDataAdapter(object):
         paddle_dataset: ReprPaddleDatasetImpl,
         batch_size: int,
         collate_fn: Callable = None,
-        shuffle: bool = True
+        shuffle: bool = True,
+        drop_last: bool = False
     ) -> PaddleDataLoader:
         """
         Converts paddle Dataset to paddle DataLoader.
@@ -64,6 +65,7 @@ class ReprDataAdapter(object):
             batch_size(int): The number of samples for a single batch.
             collate_fn(Callable, optional): User-defined collate function for each batch, optional.
             shuffle(bool, optional): Whether to shuffle indices order before generating batch indices, default True.
+            drop_last(bool, optional): Whether to discard when the remaining data does not meet a batch, default False.
 
         Returns:
             PaddleDataLoader: A built paddle DataLoader.
@@ -119,4 +121,6 @@ class ReprDataAdapter(object):
                     }
                 ]
         """
-        return PaddleDataLoader(dataset=paddle_dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=shuffle)
+        return PaddleDataLoader(
+            dataset=paddle_dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=shuffle, drop_last=drop_last
+        )
