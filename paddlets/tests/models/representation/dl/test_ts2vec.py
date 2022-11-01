@@ -121,7 +121,7 @@ class TestTS2Vec(TestCase):
         # case2 (训练集包含非法数据类型如object字符串类型)
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"b": "O"})
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             ts2vec.fit(tsdataset)
 
         # case3 (训练集的target为非float类型. 视具体模型而定, 目前ts2vec模型不支持target为除float之外的类型)
@@ -189,29 +189,34 @@ class TestTS2Vec(TestCase):
 
         # case2 (index为DatetimeIndex的多变量/非sliding+all_true)
         ts2vec.fit(self.tsdataset2)
-        res = ts2vec.encode(self.tsdataset2) # 
+        res = ts2vec.encode(self.tsdataset2)
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res.shape, (2, 800, 320))
+        # self.assertEqual(res.shape, (2, 800, 320))
+        self.assertEqual(res.shape, (1, 800, 320))
 
         # case3 (index为DatetimeIndex的多变量/非sliding+mask_last)
         res = ts2vec.encode(self.tsdataset2, mask="mask_last")
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res.shape, (2, 800, 320))
+        # self.assertEqual(res.shape, (2, 800, 320))
+        self.assertEqual(res.shape, (1, 800, 320))
 
         # case4 (index为DatetimeIndex的多变量/instance level encoding)
         res = ts2vec.encode(self.tsdataset2, encoding_type="full_series")
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res.shape, (2, 320))
+        # self.assertEqual(res.shape, (2, 320))
+        self.assertEqual(res.shape, (1, 320))
 
         # case5 (index为DatetimeIndex的多变量/sliding+full_series)
         res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="full_series")
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res.shape, (2, 320))
+        # self.assertEqual(res.shape, (2, 320))
+        self.assertEqual(res.shape, (1, 320))
 
         # case6 (index为DatetimeIndex的多变量/sliding+multiscale)
         res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="multiscale")
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res.shape, (2, 800, 1920))
+        # self.assertEqual(res.shape, (2, 800, 1920))
+        self.assertEqual(res.shape, (1, 800, 1920))
 
         # case7 (mask 不合法)
         with self.assertRaises(ValueError):

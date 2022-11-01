@@ -3,6 +3,7 @@
 
 from unittest import TestCase
 import unittest
+import random
 
 import pandas as pd
 import numpy as np
@@ -32,7 +33,7 @@ class TestLSTNetRegressor(TestCase):
                 np.random.randn(2500, 2).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"])
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         self.tsdataset1 = TSDataset(
             TimeSeries.load_from_dataframe(target1), 
             TimeSeries.load_from_dataframe(observed_cov), 
@@ -200,6 +201,17 @@ class TestLSTNetRegressor(TestCase):
         )
         lstnet.fit(self.tsdataset1, self.tsdataset1)
 
+        lstnet = LSTNetRegressor(
+            in_chunk_len=1 * 96 + 20 * 4,
+            out_chunk_len=96,
+            skip_chunk_len=4 * 4,
+            optimizer_params=dict(learning_rate=1e-1),
+            batch_size=512,
+            max_epochs=10,
+            patience=1
+        )
+        lstnet.fit([self.tsdataset1, self.tsdataset1], self.tsdataset1)
+
     def test_predict(self):
         """unittest function
         """
@@ -225,4 +237,3 @@ class TestLSTNetRegressor(TestCase):
  
 if __name__ == "__main__":
     unittest.main()
-
