@@ -256,10 +256,10 @@ class _DeepAR(nn.Layer):
             hidden_state(paddle.Tensor): The output of rnn's hidden state.
         """
         past_target = data["past_target"]
-        if "known_cov" not in data:
+        if "known_cov_numeric" not in data:
             past_known_cov = None
         else:
-            past_known_cov = data["known_cov"][:, :past_target.shape[1]]
+            past_known_cov = data["known_cov_numeric"][:, :past_target.shape[1]]
 
         #1> build input tensor
         input_tensor = self._build_input(past_target, past_known_cov) # encoder do not need `first_target_replace`
@@ -283,10 +283,10 @@ class _DeepAR(nn.Layer):
             output(paddle.Tensor): For training phase, output distribution parameters for computation of nllloss; for evaluation phase, output samples for quantile loss metric; for prediction phase, output quantiles(probability) or predictions(point).
         """
         future_target = data["future_target"]
-        if "known_cov" not in data:
+        if "known_cov_numeric" not in data:
             future_known_cov = None
         else:
-            future_known_cov = data["known_cov"][:, -future_target.shape[1]:, :]
+            future_known_cov = data["known_cov_numeric"][:, -future_target.shape[1]:, :]
         first_target_replace = data["past_target"][:, -1]
         
         #1> build input
@@ -467,28 +467,28 @@ class DeepARModel(PaddleBaseModelImpl):
 
     def _update_fit_params(
         self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdataset: List[TSDataset],
+        valid_tsdataset: Optional[List[TSDataset]] = None
     ) -> Dict[str, Any]:
         """
         Infer parameters by TSdataset automatically.
 
         Args:
-            train_tsdataset(TSDataset): train dataset
-            valid_tsdataset(TSDataset, optional): validation dataset
+            train_tsdataset(List[TSDataset]): list of train dataset
+            valid_tsdataset(List[TSDataset], optional): list of validation dataset
 
         Returns:
             Dict[str, Any]: model parameters
         """
         fit_params = {
-                "target_dim": train_tsdataset.get_target().data.shape[1],
+                "target_dim": train_tsdataset[0].get_target().data.shape[1],
                 "known_cov_dim": 0,
                 "observed_cov_dim": 0
                 }
-        if train_tsdataset.get_known_cov() is not None:
-            fit_params["known_cov_dim"] = train_tsdataset.get_known_cov().data.shape[1]
-        if train_tsdataset.get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_tsdataset.get_observed_cov().data.shape[1]
+        if train_tsdataset[0].get_known_cov() is not None:
+            fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov().data.shape[1]
+        if train_tsdataset[0].get_observed_cov() is not None:
+            fit_params["observed_cov_dim"] = train_tsdataset[0].get_observed_cov().data.shape[1]
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:
