@@ -13,7 +13,7 @@ from paddlets.models.common.callbacks import Callback
 from paddlets.logger import raise_if_not
 from paddlets.datasets import TSDataset
 
-COVS = ["observed_cov", "known_cov"]
+COVS = ["observed_cov_numeric", "known_cov_numeric"]
 PAST_TARGET = "past_target"
 
 
@@ -76,8 +76,8 @@ class _PositionalEncoding(paddle.nn.Layer):
         return self._dropout(out)
 
 
-class _TransformerBlock(paddle.nn.Layer):
-    """Paddle layer implementing Transformer block.
+class _TransformerModule(paddle.nn.Layer):
+    """Paddle layer implementing Transformer module.
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -121,7 +121,7 @@ class _TransformerBlock(paddle.nn.Layer):
         custom_encoder: Optional[paddle.nn.Layer] = None,
         custom_decoder: Optional[paddle.nn.Layer] = None,
     ):
-        super(_TransformerBlock, self).__init__()
+        super(_TransformerModule, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._target_dim = target_dim 
@@ -350,33 +350,41 @@ class TransformerModel(PaddleBaseModelImpl):
         Args:
             tsdataset(TSDataset): Data to be checked.
         """
-        for column, dtype in tsdataset.get_target().dtypes.items():
+        target_columns = tsdataset.get_target().dtypes.keys()
+        for column, dtype in tsdataset.dtypes.items():
+            if column in target_columns:
+                raise_if_not(
+                    np.issubdtype(dtype, np.floating),
+                    f"transformer's target dtype only supports [float16, float32, float64], " \
+                    f"but received {column}: {dtype}."
+                )
+                continue
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
-                f"transformer's target dtype only supports [float16, float32, float64], " \
+                f"transformer's cov(observed or known) dtype currently only supports [float16, float32, float64], " \
                 f"but received {column}: {dtype}."
             )
         super(TransformerModel, self)._check_tsdataset(tsdataset)
         
     def _update_fit_params(
         self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdataset: List[TSDataset],
+        valid_tsdataset: Optional[List[TSDataset]] = None
     ) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
-            train_tsdataset(TSDataset): train dataset.
-            valid_tsdataset(TSDataset|None): validation dataset.
+            train_tsdataset(List[TSDataset]): list of train dataset.
+            valid_tsdataset(List[TSDataset]|None): list of validation dataset.
         
         Returns:
             Dict[str, Any]: model parameters.
         """
-        input_dim = target_dim = train_tsdataset.get_target().data.shape[1]
-        if train_tsdataset.get_observed_cov():
-            input_dim += train_tsdataset.get_observed_cov().data.shape[1]
-        if train_tsdataset.get_known_cov():
-            input_dim += train_tsdataset.get_known_cov().data.shape[1]
+        input_dim = target_dim = train_tsdataset[0].get_target().data.shape[1]
+        if train_tsdataset[0].get_observed_cov():
+            input_dim += train_tsdataset[0].get_observed_cov().data.shape[1]
+        if train_tsdataset[0].get_known_cov():
+            input_dim += train_tsdataset[0].get_known_cov().data.shape[1]
         fit_params = {
             "target_dim": target_dim,
             "input_dim": input_dim
@@ -389,7 +397,7 @@ class TransformerModel(PaddleBaseModelImpl):
         Returns:
             paddle.nn.Layer
         """
-        return _TransformerBlock(
+        return _TransformerModule(
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
             target_dim=self._fit_params["target_dim"],
