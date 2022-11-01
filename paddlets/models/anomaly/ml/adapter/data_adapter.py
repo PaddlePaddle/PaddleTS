@@ -39,19 +39,22 @@ def anomaly_collate_fn(batch: List[Dict[str, np.ndarray]]) -> Dict[str, np.ndarr
 
 class DataAdapter(object):
     """
-    Data adapter, converts bts.datasets.tsdataset.TSDataset to MLDataset and MLDataLoader.
+    Data adapter, converts TSDataset to MLDataset and MLDataLoader.
     """
     def __init__(self):
         pass
 
     def to_ml_dataset(self, rawdataset: TSDataset, in_chunk_len: int = 1, sampling_stride: int = 1) -> MLDataset:
         """
-        Converts bts.TSDataset to bts.models.anomaly.ml.adapter.MLDataset.
+        Convert TSDataset to MLDataset.
 
         Args:
-            rawdataset(TSDataset): TSDataset to be converted.
-            in_chunk_len(int): The length of past target time series chunk for a single sample.
+            rawdataset(TSDataset): Raw TSDataset to be converted.
+            in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample.
+                More precisely, let `t` be the time index of target time series,
+                `t[i]` be the start time of the i-th sample, `t[i+1]` be the start time of the (i+1)-th sample, then
+                `sampling_stride` represents the result of `t[i+1] - t[i]`.
 
         Returns:
             PaddleDatasetImpl: A built MLDataset.
@@ -69,10 +72,10 @@ class DataAdapter(object):
         collate_fn: Callable = anomaly_collate_fn
     ) -> MLDataLoader:
         """
-        Converts bts.models.anomaly.ml.adapter.MLDataset to bts.models.forecasting.ml.adapter.MLDataLoader.
+        Convert MLDataset to MLDataLoader.
 
         Args:
-            ml_dataset(MLDataset): TSDataset to be converted.
+            ml_dataset(MLDataset): MLDataset to be converted.
             batch_size(int): Number of samples for a single batch.
             collate_fn(Callable): User defined collate function for each batch.
 
@@ -86,22 +89,25 @@ class DataAdapter(object):
                 batch_size = 4
                 in_chunk_len = 3
                 observed_cov_chunk_len = in_chunk_len = 3
-                observed_cov_col_num = 1 (observed covariates column number, e.g. ["obs0"])
+                observed_cov_numeric_col_num = 1 (observed cov column number with numeric dtype)
+                observed_cov_categorical_col_num = 0 (observed cov column number with categorical dtype)
 
                 # Built MLDataLoader instance:
                 dataloader = [
                     # 1st batch
                     {
-                        "observed_cov": np.ndarray(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)),
-                        "static_cov": np.ndarray(shape=(batch_size, 1, static_cov_col_num))
+                        "observed_cov_numeric": np.ndarray(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_numeric_col_num)
+                        )
                     },
 
                     # ...
 
                     # N-th batch
                     {
-                        "observed_cov": np.ndarray(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)),
-                        "static_cov": np.ndarray(shape=(batch_size, 1, static_cov_col_num))
+                        "observed_cov_numeric": np.ndarray(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_numeric_col_num)
+                        )
                     }
                 ]
                 """

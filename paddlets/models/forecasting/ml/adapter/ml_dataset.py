@@ -13,8 +13,8 @@ class MLDataset(object):
     Machine learning Dataset.
 
     1> The in_chunk_len can be divided into several case: in_chunk_len = 0 indicates that the ML model has been
-        processed by lag transform; in_chunk_len > 0 indicates that the ML model has NOT been processed by lag
-        transform; in_chunk_len < 0 is NOT allowed.
+    processed by lag transform; in_chunk_len > 0 indicates that the ML model has NOT been processed by lag
+    transform; in_chunk_len < 0 is NOT allowed.
 
     2> The unused (known / observed) columns should be deleted before the dataset passed in.
 
@@ -27,29 +27,19 @@ class MLDataset(object):
     used for prediction, as only in this scenario the Y (i.e. out_chunk) is not required.
 
     Args:
-        rawdataset(TSDataset): TSDataset to build.
-        in_chunk_len(int): The length of past target time series chunk for a single sample.
-        out_chunk_len(int): The length of future target time series chunk for a single sample.
-        skip_chunk_len(int): The length of time series chunk between past target and future target for a single sample.
-             The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
-        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample.
+        rawdataset(TSDataset): Raw TSDataset to be converted.
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
+        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
+            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
+            default, it will NOT skip any time steps.
+        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
+            let `t` be the time index of target time series, `t[i]` be the start time of the i-th sample,
+            `t[i+1]` be the start time of the (i+1)-th sample, then `sampling_stride` represents the result of
+            `t[i+1] - t[i]`.
         time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
-                time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
-                Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
-
-    Attributes:
-        _rawdataset(TSDataset) Tsdataset to build.
-        _target_in_chunk_len(int): The length of past target time series chunk for a single sample.
-        _target_out_chunk_len(int): The length of future target time series chunk for a single sample.
-        _target_skip_chunk_len(int): The length of time series chunk between past target and future target for a single
-            sample. The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
-        _known_cov_chunk_len(int): The length of known covariates time series chunk for a single sample.
-        _observed_cov_chunk_len(int): The length of observed covariates time series chunk for a single sample.
-        _sampling_stride(int): Time steps to stride over the i-th sample and (i+1)-th sample.
-        _time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
             time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
             Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
-        _samples(List[Dict[str, np.ndarray]]): The built samples.
 
     Examples:
         .. code-block:: python
