@@ -48,7 +48,7 @@ class TestDeepARModel(TestCase):
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["c1", "c2"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
 
         int_target = TimeSeries.load_from_dataframe(
             pd.Series(

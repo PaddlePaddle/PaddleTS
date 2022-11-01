@@ -1,14 +1,17 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from unittest import TestCase
+from unittest import TestCase, mock
 import unittest
+from enum import Enum
+from typing import List, NewType, Tuple, Union
 
 import paddle
 import pandas as pd
 import numpy as np
 
 from paddlets.datasets import TimeSeries, TSDataset
+from paddlets.models.common.callbacks import Callback
 from paddlets.models.forecasting.dl.nbeats import (
     NBEATSModel,
     _TrendGenerator,
@@ -17,7 +20,6 @@ from paddlets.models.forecasting.dl.nbeats import (
     _Block,
     _Stack
 )
-
 
 np.random.seed(2023)
 paddle.seed(0)
@@ -144,7 +146,7 @@ class TestNBeatsModel(TestCase):
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["c1", "c2"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
 
         int_target = TimeSeries.load_from_dataframe(
             pd.Series(
