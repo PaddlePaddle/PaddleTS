@@ -11,7 +11,6 @@ from paddlets.datasets.tsdataset import TSDataset
 from paddlets.models.base import BaseModel
 from paddlets.transform.base import BaseTransform
 from paddlets.metrics.metrics import MAE, MSE, LogLoss
-from paddlets.pipeline.pipeline import Pipeline
 from paddlets.automl.searcher import Searcher
 from paddlets.automl.search_space_configer import SearchSpaceConfiger
 from paddlets.automl.optimize_runner import OptimizeRunner
@@ -51,26 +50,27 @@ class AutoTS(BaseModel):
             If search_space is 'auto', the default search space will be used.
         search_alg(str): The algorithm for optimization.
             Supported algorithms are "auto", "Random", "CMAES", "TPE", "CFO", "BlendSearch", "Bayes". When the algorithm
-            is "auto", search_alg is set to be "Random" by default.
+            is "auto", search_alg is set to "TPE" based on experimental experiences.
         resampling_strategy(str): A string of resampling strategies.
             Supported resampling strategy are "auto", "cv", "holdout".When the strategy is "auto", resampling_strategy
-            is set to be "holdout" and split_ratio is set to be DEFAULT_SPLIT_RATIO by default.
+            is set to "holdout" and split_ratio is set to DEFAULT_SPLIT_RATIO by default.
         split_ratio(Union[str, float]): The proportion of the dataset included in the validation split for holdout.
-            The split_ratio should be in the range of (0, 1). When the split_ratio is "auto", split_ratio is set to be
+            The split_ratio should be in the range of (0, 1). When the split_ratio is "auto", split_ratio is set to
             DEFAULT_SPLIT_RATIO by default.
             Note that the split_ratio will be ignored if valid_tsdataset is provided in the `AutoTS.fit()`.
         k_fold(Union[str, int]): Number of folds for cv.
-            The k_fold should be in the range of (0, 10].When the k_fold is "auto", k_fold is set to be DEFAULT_K_FOLD by default.
+            The k_fold should be in the range of (0, 10].When the k_fold is "auto", k_fold is set to DEFAULT_K_FOLD by default.
             Note that the k_fold will be ignored if valid_tsdataset is provided in the `AutoTS.fit()`.
         metric(str): A string of the metric name. The specified metric will be used to calculate validation loss reported
             to the search_algo.
-            Supported metric are "mae", "mse", "logloss". When the metric is "auto", metric is set to be "mae" by
+            Supported metric are "mae", "mse", "logloss". When the metric is "auto", metric is set to "mae" by
             default.
         mode(str): According to the mode, the metric is maximized or minimized.
-            Supported mode are "min", "max". When the mode is "auto", metric is set to be "min" by default.
+            Supported mode are "min", "max". When the mode is "auto", metric is set to "min" by default.
         refit(bool): Whether to refit the model with the best parameter on full training data.If refit is True, the
             AutoTS object can be used to predict. If refit is False, the AutoTS
             object can be used to get the best parameter, but can not make predictions.
+        local_dir(str): Local dir to save training results to. Defaults to `~/ray_results`.
         ensemble(bool): Not supported yet. This feature will be comming in future.
         n_jobs(int): Not supported yet. This feature will be comming in future.
         verbose(int): Not supported yet. This feature will be comming in future.
@@ -103,6 +103,7 @@ class AutoTS(BaseModel):
             mode: str = 'auto',
             refit: bool = True,
             ensemble: bool = False,
+            local_dir: Optional[str] = None,
             n_jobs: int = -1,
             verbose: int = 4
     ):
@@ -132,7 +133,7 @@ class AutoTS(BaseModel):
             self._search_space = search_space
 
         if search_alg == 'auto':
-            self._search_alg = 'Random'
+            self._search_alg = 'TPE'
         elif search_alg in Searcher.get_supported_algs():
             self._search_alg = search_alg
         else:
@@ -172,12 +173,13 @@ class AutoTS(BaseModel):
         self._n_jobs = n_jobs
         self._verbose = verbose
         self._optimize_runner = OptimizeRunner(search_alg=self._search_alg)
+        self._local_dir = local_dir
 
     @log_decorator
     def fit(
             self,
-            train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None,
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
             n_trails: int = 20,
             cpu_resource: float = 1.0,
             gpu_resource: float = 0
@@ -189,8 +191,8 @@ class AutoTS(BaseModel):
         If refit is True, the fit() will refit the model with the best parameters on full training data.
 
         Args:
-            train_tsdataset(TSDataset): Train dataset.
-            valid_tsdataset(TSDataset, optional): Valid dataset.
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
+            valid_tsdataset(Union[TSDataset, List[TSDataset]], optional): Valid dataset.
             n_trails(int): The number of configurations suggested by the search algorithm.
             cpu_resource: CPU resources to allocate per trial.
             gpu_resource: GPU resources to allocate per trial.
@@ -198,6 +200,10 @@ class AutoTS(BaseModel):
         Returns:
             Optional(BaseModel, Pipeline): Refitted estimator.
         """
+        if isinstance(train_tsdataset, list):
+            # check valid tsdataset exist
+            if valid_tsdataset is None:
+                raise NotImplementedError("When the train_tsdataset is a list, valid_tsdataset is required!")
         analysis = self._optimize_runner.optimize(self._estimator,
                                                   self._in_chunk_len,
                                                   self._out_chunk_len,
@@ -213,17 +219,18 @@ class AutoTS(BaseModel):
                                                   k_fold=self._k_fold,  # cv的fold切分数, 默认DEFAULT_K_FOLD折切分
                                                   n_trials=n_trails,
                                                   cpu_resource=cpu_resource,
-                                                  gpu_resource=gpu_resource
+                                                  gpu_resource=gpu_resource,
+                                                  local_dir=self._local_dir
                                                   )
         self._best_param = analysis.best_config
         if self._refit:
             logger.info("AutoTS: start refit")
             self._best_estimator = self._optimize_runner.setup_estimator(config=self._best_param,
-                                                   paddlets_estimator=self._estimator,
-                                                   in_chunk_len=self._in_chunk_len,
-                                                   out_chunk_len=self._out_chunk_len,
-                                                   skip_chunk_len=self._skip_chunk_len,
-                                                   sampling_stride=self._sampling_stride)
+                                                                         bts_estimator=self._estimator,
+                                                                         in_chunk_len=self._in_chunk_len,
+                                                                         out_chunk_len=self._out_chunk_len,
+                                                                         skip_chunk_len=self._skip_chunk_len,
+                                                                         sampling_stride=self._sampling_stride)
 
             estimator_model = self._estimator[-1] if self._is_pipeline else self._estimator
             if hasattr(estimator_model, "__mro__") and PaddleBaseModel in estimator_model.__mro__:
@@ -241,7 +248,10 @@ class AutoTS(BaseModel):
                     self._best_estimator.fit(train_tsdataset, valid_tsdataset)
             elif hasattr(estimator_model, "__mro__") and MLBaseModel in estimator_model.__mro__:
                 # if is ml model && data is continuity, concat
-                if valid_tsdataset is not None and check_train_valid_continuity(train_tsdataset, valid_tsdataset):
+                if valid_tsdataset is not None \
+                        and not isinstance(train_tsdataset, list) \
+                        and not isinstance(valid_tsdataset, list) \
+                        and check_train_valid_continuity(train_tsdataset, valid_tsdataset):
                     train_tsdataset = TSDataset.concat([train_tsdataset, valid_tsdataset])
                 self._best_estimator.fit(train_tsdataset)
             self._refitted = True
