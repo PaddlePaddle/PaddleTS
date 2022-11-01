@@ -25,7 +25,7 @@ class ReprForecasting(EnsembleForecasterBase, metaclass=abc.ABCMeta):
 
         in_chunk_len(int): The size of previous time point window  to use for representation results
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-        repr_model(ReprBasemodel): Representation model to use for forcast.
+        repr_model(ReprBasemodel): Representation model to use for forecasting.
         skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
             The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
             default, it will NOT skip any time steps.
@@ -156,7 +156,7 @@ class ReprForecasting(EnsembleForecasterBase, metaclass=abc.ABCMeta):
             final_learner = clone(final_learner)
         return final_learner
 
-
+    @to_tsdataset(scenario="forecasting")
     def predict(self, tsdataset: TSDataset) -> TSDataset:
         """
         predict 
