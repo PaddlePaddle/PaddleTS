@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-27 16:44+0800\n"
+"POT-Creation-Date: 2022-10-31 19:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,52 +18,51 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.forecasting.ml.adapter.data_adapter.rst:2
-#: 6e0c32d82c7a4a72b708a4a02ce06d92
+#: 219aa81739e1486aaf57d821be15fe0f
 msgid "paddlets.models.forecasting.ml.adapter.data_adapter"
 msgstr ""
 
-#: 0e8a7a0a7f8c4d26845f64cadf1331a6 of
+#: 1bae8b65bffc4703bbb0040278b5474e of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
-#: 0a9bba1eec244048ae20d010aabad6fd of
+#: a304b15a0a4b4bcb883487dda23f459a of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter:1
 msgid "Data adapter, converts TSDataset to MLDataset and MLDataLoader."
 msgstr "数据转换类，用于将TSDataset数据集转换为MLDataset样本数据集和MLDataLoader样本数据批量加载器。"
 
-#: d1869e6fe0b84ce2be06c7da350a3027 of
+#: 6b60e82605774c3f933e5a13714dfeb0 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:1
 msgid "Convert TSDataset to MLDataset."
 msgstr "将TSDataset数据集转换为MLDataset样本数据集。"
 
-#: 4bb9334b85b3420b877c3320e7611117 d8a2582c1727416ca09f1f8c1b2b589b of
+#: 07ac50993b6a4025a441ed3f8fd68c44 a71f8872869b4723a7489871d0fa76c6 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset
 msgid "Parameters"
 msgstr ""
 
-#: 5796e484d35d4f118f9ea76734ae9993 of
+#: 4ceac8c0b363462d9a84b76ea02da2fd of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:3
-#, fuzzy
 msgid "Raw TSDataset to be converted."
-msgstr "待转换的MLDataset样本数据集。"
+msgstr "待转换的TSDataset数据集。"
 
-#: cb7f2d3fb8d74db080e1db458a501cc8 of
+#: 298ceb6b5d564db49f9f29a1dbb07077 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:5
 msgid ""
 "The size of the loopback window, i.e., the number of time steps feed to "
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: c38ae220003449b6a92952a05c1c5b5b of
+#: 525a2e175c2347b590aaffb76b84a4d6 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:7
 msgid ""
 "The size of the forecasting horizon, i.e., the number of time steps "
 "output by the model."
 msgstr "模型输出的序列长度。"
 
-#: ecbd31f6029e4449a429a732ff0a660d of
+#: b804a785e65f4728b7554afec2d6bb99 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:9
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
@@ -72,7 +71,7 @@ msgid ""
 "time steps."
 msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
 
-#: 6db9957084e9413185564da3930648c1 of
+#: dbadcdad50114ead90497247068953fe of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:13
 msgid ""
 "Time steps to stride over the i-th sample and (i+1)-th sample. More "
@@ -85,7 +84,7 @@ msgstr ""
 "为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
 "的计算结果，即2条相邻的样本之间相差的时间点的数量。"
 
-#: c71238ea4e36482cb80106f05489361e of
+#: d7a0d59fcefa41a39998acc88528b8b4 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:18
 msgid ""
 "A two-element-tuple-shaped time window that allows adapter to build "
@@ -97,51 +96,50 @@ msgstr ""
 "一个包含2个元素的元组类型的时间窗口，允许adapter模块在其范围内构建样本。 time_window[0] "
 "值代表窗口范围的下界，time_window[1] 值代表窗口范围的上界。 对于每一个包含在该左闭右闭范围内的元素，都代表一条样本的尾部索引。"
 
-#: 7530faf03988402ca66c94f14e0ffaa7 ac6dcc313fdb4b31b1fa7580792122bf of
+#: 61f67f5d8f9a418fa2b0ceb680187818 f3c6cd569f964106a9e408a36722f9eb of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset
 msgid "Returns"
 msgstr ""
 
-#: 003e79446ade4564b91e106771f6a8a2 of
+#: ad9bfaa3940a4d4ab63f6703eb9ba145 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset:23
 msgid "A built MLDataset."
 msgstr "构建完成的 MLDataset 实例。"
 
-#: 97fd3cbc4f89434aabec841e36703d24 bf94b18183cc4794baa3e9bba079fdbc of
+#: cc4fac75188648488c2b8905a923d465 e0673c092e9845768be2b23f91e7629d of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataset
 msgid "Return type"
 msgstr ""
 
-#: 22759c636556410b8b846c194d3c17ea of
+#: 84d4c70416014b08a6fa83d7ebfe2b39 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:1
-msgid "Converts MLDataset to MLDataLoader."
+msgid "Convert MLDataset to MLDataLoader."
 msgstr "将MLDataset样本数据集转换为MLDataLoader样本批量加载器。"
 
-#: d32881d5ca70435c9fc3c44718f66f52 of
+#: c9069aa817824e288b30a855f4b7e423 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:3
 msgid "MLDataset to be converted."
 msgstr "待转换的MLDataset样本数据集。"
 
-#: 8f85f748d54f41779bf8993e2ab53926 of
+#: 7a163463617a4abb94d92f9542748710 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:5
 msgid "The number of samples for a single batch."
 msgstr "单个数据批量中包含的样本条数。"
 
-#: 1e4777e487904de8a229129927eeb87c of
+#: 64fe38ca4fe1439e9513463dd14733a2 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:7
 msgid "User defined collate function for each batch, optional."
 msgstr "用户自定义的单批量样本整合函数，可选参数。"
 
-#: 2c42b444e1ff4b9bb674bc0a7fd72aa9 of
+#: 0ccb67fa87304d4aba761f73d6e217c8 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:10
 msgid "A built MLDataLoader."
 msgstr "构建完成的MLDataLoader样本批量加载器。"
 
-#: 5c1d5c27de4b47e59fdaa22df460d319 of
+#: 1dbd14043f59409ba7993b0f8fd01775 of
 #: paddlets.models.forecasting.ml.adapter.data_adapter.DataAdapter.to_ml_dataloader:14
 msgid "Examples"
 msgstr ""
-
 

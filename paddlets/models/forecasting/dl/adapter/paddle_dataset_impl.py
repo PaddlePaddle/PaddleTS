@@ -13,7 +13,7 @@ logger = Logger(__name__)
 
 class PaddleDatasetImpl(PaddleDataset):
     """
-    An implementation of :class:`paddle.io.Dataset`.
+    An implementation of paddle Dataset.
 
     1> Any unused (known / observed) columns should be removed from the TSDataset before handled by this class.
 
@@ -25,7 +25,7 @@ class PaddleDatasetImpl(PaddleDataset):
     will not contain skip_chunk or Y (i.e. out_chunk).
 
     Args:
-        rawdataset(TSDataset): Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.Dataset`.
+        rawdataset(TSDataset): Raw TSDataset to be converted.
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
         skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.

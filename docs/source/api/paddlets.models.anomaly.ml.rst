@@ -13,4 +13,3 @@ paddlets.models.anomaly.ml
     paddlets.models.anomaly.ml.ksigma.rst
     paddlets.models.anomaly.ml.pyod_models.rst
     paddlets.models.anomaly.ml.statistical_base.rst
-

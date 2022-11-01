@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-27 11:24+0800\n"
+"POT-Creation-Date: 2022-10-31 17:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,13 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.representation.dl.adapter.rst:2
-#: 910927fdfc004607a3e15db71e5d6acc
+#: fb5c2041c5654a6cacc06c6b7432fa6e
 msgid "paddlets.models.representation.dl.adapter"
 msgstr ""
 
-#: d2bd3848e96a4ffaa2896f34d25a7e1a of
+#: 924dfef87d314bfd8bb20263d7530ad6 of
 #: paddlets.models.representation.dl.adapter:1
-msgid "Bts representation adapter."
+msgid "paddlets representation adapter."
 msgstr ""
+
 
