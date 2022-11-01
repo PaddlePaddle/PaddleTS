@@ -1,11 +1,11 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from paddlets import TSDataset
+from paddlets import TSDataset, TimeSeries
 from paddlets.logger import raise_if
 
 import numpy as np
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Union
 
 
 class MLDataset(object):
@@ -13,8 +13,8 @@ class MLDataset(object):
     Machine learning Dataset.
 
     1> The in_chunk_len can be divided into several case: in_chunk_len = 0 indicates that the ML model has been
-        processed by lag transform; in_chunk_len > 0 indicates that the ML model has NOT been processed by lag
-        transform; in_chunk_len < 0 is NOT allowed.
+    processed by lag transform; in_chunk_len > 0 indicates that the ML model has NOT been processed by lag
+    transform; in_chunk_len < 0 is NOT allowed.
 
     2> The unused (known / observed) columns should be deleted before the dataset passed in.
 
@@ -27,29 +27,19 @@ class MLDataset(object):
     used for prediction, as only in this scenario the Y (i.e. out_chunk) is not required.
 
     Args:
-        rawdataset(TSDataset): TSDataset to build.
-        in_chunk_len(int): The length of past target time series chunk for a single sample.
-        out_chunk_len(int): The length of future target time series chunk for a single sample.
-        skip_chunk_len(int): The length of time series chunk between past target and future target for a single sample.
-             The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
-        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample.
+        rawdataset(TSDataset): Raw TSDataset to be converted.
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
+        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
+            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
+            default, it will NOT skip any time steps.
+        sampling_stride(int, optional): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
+            let `t` be the time index of target time series, `t[i]` be the start time of the i-th sample,
+            `t[i+1]` be the start time of the (i+1)-th sample, then `sampling_stride` represents the result of
+            `t[i+1] - t[i]`.
         time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
-                time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
-                Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
-
-    Attributes:
-        _rawdataset(TSDataset) Tsdataset to build.
-        _target_in_chunk_len(int): The length of past target time series chunk for a single sample.
-        _target_out_chunk_len(int): The length of future target time series chunk for a single sample.
-        _target_skip_chunk_len(int): The length of time series chunk between past target and future target for a single
-            sample. The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
-        _known_cov_chunk_len(int): The length of known covariates time series chunk for a single sample.
-        _observed_cov_chunk_len(int): The length of observed covariates time series chunk for a single sample.
-        _sampling_stride(int): Time steps to stride over the i-th sample and (i+1)-th sample.
-        _time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
             time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
             Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
-        _samples(List[Dict[str, np.ndarray]]): The built samples.
 
     Examples:
         .. code-block:: python
@@ -477,357 +467,593 @@ class MLDataset(object):
             List[Dict[str, np.ndarray]]: A list of samples.
 
         Examples:
-            1) lag scenario (TSDataset has been processed by lag transform):
-            Given:
-            in_chunk_len = 0 (in_chunk_len = 0 indicates that this is lag scenario.)
-            skip_chunk_len = 1
-            out_chunk_len = 2
-            sampling_stride = 1
-            time_window = (2, 5)
-            rawdataset = {
-                target: [
-                    [0, 0],
-                    [1, 10],
-                    [2, 20],
-                    [3, 30],
-                    [4, 40],
-                    [5, 50],
-                    [6, 60],
-                    [7, 70]
-                ],
-                known_cov: [
-                    [0, 0, 0],
-                    [10, 100, 1000],
-                    [20, 200, 2000],
-                    [30, 300, 3000],
-                    [40, 400, 4000],
-                    [50, 500, 5000],
-                    [60, 600, 6000],
-                    [70, 700, 7000],
-                    [80, 800, 8000]
-                ],
-                # Note that features originally in target timeseries will be processed and added to observed_cov.
-                # For example, the following 2nd and 3rd columns are originally lying in target time series, and then
-                # being processed by lag-transform and added to observed_cov.
-                observed_cov: [
-                    [0, NaN, NaN],
-                    [-1, 0, 0],
-                    [-2, 1, 10],
-                    [-3, 2, 20],
-                    [-4, 3, 30],
-                    [-5, 4, 40],
-                    [-6, 5, 50],
-                    [-7, 6, 60]
-                ],
-                static_cov: {"f": 1, "g": 2}
-            }
+            .. code-block:: python
 
-            The built samples:
-            np.ndarray = [
-                # sample[0]
-                {
-                    # past_target will always be empty matrix, which is what `in_chunk_len = 0` means.
-                    "past_target": np.array(shape=(0, 0)),
-
-                    # future target time series chunk (i.e. Y), totally contains _target_out_chunk_len time steps.
-                    # Note that skip_chunk_len = 1 time steps are skipped, so [1, 10] are not showing up here.
-                    "future_target": [
-                        [2, 20],
-                        [3, 30]
-                    ],
-                    known covariates time series chunk, totally contains _known_cov_chunk_len time steps.
-                    "known_cov": [
-                        [20, 200, 2000]，
-                        [30, 300, 3000]
-                    ],
-                    # observed covariates time series chunk, totally contains _observed_cov_chunk_len time steps.
-                    "observed_cov": [
-                        [0, NaN, NaN]
-                    ]
-                },
-
-                # sample[1]
-                {
-                    "past_target": np.array(shape=(0, 0)),
-                    "future_target": [
-                        [3, 30],
-                        [4, 40]
+                # 1) lag scenario (TSDataset has been processed by lag transform):
+                # Given:
+                in_chunk_len = 0 (in_chunk_len = 0 indicates that this is lag scenario.)
+                skip_chunk_len = 1
+                out_chunk_len = 2
+                sampling_stride = 1
+                time_window = (2, 5)
+                rawdataset = {
+                    "target": [
+                        [0, 0.0],
+                        [1, 10.0],
+                        [2, 20.0],
+                        [3, 30.0],
+                        [4, 40.0],
+                        [5, 50.0],
+                        [6, 60.0],
+                        [7, 70.0]
                     ],
                     "known_cov": [
-                        [30, 300, 3000],
-                        [40, 400, 4000]
+                        [0, 0.0, 0],
+                        [10, 100.0, 1000],
+                        [20, 200.0, 2000],
+                        [30, 300.0, 3000],
+                        [40, 400.0, 4000],
+                        [50, 500.0, 5000],
+                        [60, 600.0, 6000],
+                        [70, 700.0, 7000],
+                        [80, 800.0, 8000]
                     ],
+                    # Note that features originally in target timeseries will be processed and added to observed_cov.
+                    # For example, the following 2nd and 3rd columns are originally in target time series, and then
+                    # being processed by lag-transform and moved to observed_cov.
                     "observed_cov": [
-                        [-1, 0, 0]
-                    ]
-                },
-
-                # sample[2]
-                {
-                    "past_target": np.array(shape=(0, 0)),
-                    "future_target": [
-                        [4, 40],
-                        [5, 50]
+                        # Note: np.NaN is float, cannot be converted to np.int64, so if the input tsdataset needs to
+                        # be lag-transformed, in case if the original lagged column.dtype = int, then after lag
+                        # transform, it must be another INT-convertible number rather than a np.NaN.
+                        [0，int_convertible_num, NaN],
+                        [-1, 0, 0.0],
+                        [-2, 1, 10.0],
+                        [-3, 2, 20.0],
+                        [-4, 3, 30.0],
+                        [-5, 4, 40.0],
+                        [-6, 5, 50.0],
+                        [-7, 6, 60.0]
                     ],
-                    "known_cov": [
-                        [40, 400, 4000],
-                        [50, 500, 5000]
-                    ],
-                    "observed_cov": [
-                        [-2, 1, 10]
-                    ]
-                },
-
-                # sample[3]
-                {
-                    "past_target": np.array(shape=(0, 0)),
-                    "future_target": [
-                        [5, 50],
-                        [6, 60]
-                    ],
-                    "known_cov": [
-                        [50, 500, 5000],
-                        [60, 600, 6000]
-                    ],
-                    "observed_cov": [
-                        [-3, 2, 20]
-                    ]
-                },
-
-                sample[4] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
-                {
-                    "past_target": np.array(shape=(0, 0)),
-                    "future_target": [
-                        [6, 60],
-                        [7, 70]
-                    ],
-                    "known_cov": [
-                        [60, 600, 6000],
-                        [70, 700, 7000]
-                    ],
-                    "observed_cov": [
-                        [-4, 3, 30]
-                    ]
+                    "static_cov": {"static0": 0, "static1": 1.0, "static2": 2, "static3": 3.0}
                 }
-            ]
 
-            2) non-lag scenario (TSDataset has NOT been processed by lag transform):
-            Given:
-            in_chunk_len = 2 (in_chunk_len > 0 indicates that this is NOT lag scenario.)
-            skip_chunk_len = 1
-            out_chunk_len = 2
-            sampling_stride = 1
-            time_window = (4, 7)
-            rawdataset = {
-                target: [
-                    [0, 0],
-                    [1, 10],
-                    [2, 20],
-                    [3, 30],
-                    [4, 40],
-                    [5, 50],
-                    [6, 60],
-                    [7, 70]
-                ],
-                known_cov: [
-                    [0, 0, 0],
-                    [10, 100, 1000],
-                    [20, 200, 2000],
-                    [30, 300, 3000],
-                    [40, 400, 4000],
-                    [50, 500, 5000],
-                    [60, 600, 6000],
-                    [70, 700, 7000],
-                    [80, 800, 8000]
-                ],
-                observed_cov: [
-                    [0],
-                    [-1],
-                    [-2],
-                    [-3],
-                    [-4],
-                    [-5],
-                    [-6],
-                    [-7]
-                ],
-                static_cov: {"f": 1, "g": 2}
-            }
+                # Built samples:
+                samples = [
+                    # sample[0]
+                    {
+                        ###############
+                        # past_target #
+                        ###############
+                        # Note: shape always be (0, 0) in lag scenario.
+                        "past_target": np.array(shape=(0, 0)),
 
-            Built samples:
-            np.ndarray = [
-                # sample[0]
-                {
-                    # past target time series chunk, totally contains _target_in_chunk_len time steps.
-                    "past_target": [
-                        [0, 0],
-                        [1, 10]
+                        #################
+                        # future_target #
+                        #################
+                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                        # row = _target_out_chunk_len = 2
+                        # col = len(TSDataset._target.data.columns) = 2
+                        "future_target": [
+                            [2,0, 20.0],
+                            [3.0, 30.0]
+                        ],
+
+                        #############
+                        # known_cov #
+                        #############
+                        # numeric
+                        # row = _target_out_chunk_len = 2
+                        # col = len(TSDataset._known_cov.data.select_dtypes(include=np.float32)) = 1
+                        "known_cov_numeric": [
+                            [200.0],
+                            [300.0]
+                        ],
+
+                        # categorical
+                        # row = _target_out_chunk_len = 2
+                        # col = len(TSDataset._known_cov.data.select_dtypes(include=np.int64)) = 2
+                        "known_cov_categorical": [
+                            [20, 2000],
+                            [30, 3000]
+                        ],
+
+                        ################
+                        # observed_cov #
+                        ################
+                        # numeric
+                        # row = _observed_cov_chunk_len = 1
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.int64)) = 1
+                        "observed_cov_numeric": [
+                            [NaN],
+                        ],
+
+                        # categorical
+                        # row = _observed_cov_chunk_len = 1
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.int64)) = 2
+                        "observed_cov_categorical": [
+                            [0, int_convertible_num]
+                        ],
+
+                        ##############
+                        # static_cov #
+                        ##############
+                        # numeric
+                        # row = (fixed) 1.
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.float32)) = 2
+                        "static_cov_numeric": [
+                            # key-wise ascending sorted data.
+                            [1.0, 3.0]
+                        ],
+
+                        # categorical
+                        # row = (fixed) 1.
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.int64)) = 2
+                        "static_cov_categorical": [
+                            # key-wise ascending sorted data.
+                            [0, 2]
+                        ]
+                    },
+
+                    # sample[1]
+                    {
+                        "past_target": np.array(shape=(0, 0)),
+                        "future_target": [
+                            [3.0, 30.0],
+                            [4.0, 40.0]
+                        ],
+                        "known_cov_numeric": [
+                            [300.0],
+                            [400.0]
+                        ],
+                        "known_cov_categorical": [
+                            [30, 3000],
+                            [40, 4000]
+                        ],
+                        "observed_cov_numeric": [
+                            [0.0],
+                        ],
+                        "observed_cov_categorical": [
+                            [-1, 0]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    },
+
+                    # sample[2]
+                    {
+                        "past_target": np.array(shape=(0, 0)),
+                        "future_target": [
+                            [4.0, 40.0],
+                            [5.0, 50.0]
+                        ],
+                        "known_cov_numeric": [
+                            [400.0],
+                            [500.0]
+                        ],
+                        "known_cov_categorical": [
+                            [40, 4000],
+                            [50, 5000]
+                        ],
+                        "observed_cov_numeric": [
+                            [1.0],
+                        ],
+                        "observed_cov_categorical": [
+                            [-2, 1]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    },
+
+                    # sample[3]
+                    {
+                        "past_target": np.array(shape=(0, 0)),
+                        "future_target": [
+                            [5.0, 50.0],
+                            [6.0, 60.0]
+                        ],
+                        "known_cov_numeric": [
+                            [500.0],
+                            [600.0]
+                        ],
+                        "known_cov_categorical": [
+                            [50, 5000],
+                            [60, 6000]
+                        ],
+                        "observed_cov_numeric": [
+                            [2.0],
+                        ],
+                        "observed_cov_categorical": [
+                            [-3, 2]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    },
+
+                    sample[4] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
+                    {
+                        "past_target": np.array(shape=(0, 0)),
+                        "future_target": [
+                            [6.0, 60.0],
+                            [7.0, 70.0]
+                        ],
+                        "known_cov_numeric": [
+                            [600.0],
+                            [700.0]
+                        ],
+                        "known_cov_categorical": [
+                            [60, 6000],
+                            [70, 7000]
+                        ],
+                        "observed_cov_numeric": [
+                            [3.0],
+                        ],
+                        "observed_cov_categorical": [
+                            [-4, 3]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    }
+                ]
+
+                # 2) not lag scenario (TSDataset has NOT been processed by lag transform):
+                # Given:
+                in_chunk_len = 2
+                skip_chunk_len = 1
+                out_chunk_len = 2
+                sampling_stride = 1
+                time_window = (4, 7)
+                rawdataset = {
+                    "target": [
+                        [0, 0.0],
+                        [1, 10.0],
+                        [2, 20.0],
+                        [3, 30.0],
+                        [4, 40.0],
+                        [5, 50.0],
+                        [6, 60.0],
+                        [7, 70.0]
                     ],
-                    # future target time series chunk (i.e. Y), totally contains _target_out_chunk_len time steps.
-                    # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
-                    "future_target": [
-                        [3, 30],
-                        [4, 40]
-                    ],
-                    # known covariates time series chunk, totally contains _known_cov_chunk_len time steps.
-                    # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
                     "known_cov": [
-                        [0, 0, 0],
-                        [10, 100, 1000],
-                        # Note that skip_chunk [20, 200, 2000] is skipped between [10, 100, 1000] and [30, 300, 3000].
-                        [30, 300, 3000],
-                        [40, 400, 4000]
+                        [0, 0.0, 0],
+                        [10, 100.0, 1000],
+                        [20, 200.0, 2000],
+                        [30, 300.0, 3000],
+                        [40, 400.0, 4000],
+                        [50, 500.0, 5000],
+                        [60, 600.0, 6000],
+                        [70, 700.0, 7000],
+                        [80, 800.0, 8000]
                     ],
-                    # observed covariates time series chunk, totally contains _observed_cov_chunk_len time steps.
                     "observed_cov": [
                         [0],
-                        [-1]
-                    ]
-                },
-                # sample[1]
-                {
-                    "past_target": [
-                        [1, 10]
-                        [2, 20]
-                    ],
-                    "future_target": [
-                        [4, 40],
-                        [5, 50]
-                    ],
-                    "known_cov": [
-                        [10, 100, 1000],
-                        [20, 200, 2000],
-                        [40, 400, 4000],
-                        [50, 500, 5000]
-                    ],
-                    "observed_cov": [
                         [-1],
-                        [-2]
-                    ]
-                },
-                # sample[2]
-                {
-                    "past_target": [
-                        [2, 30]
-                        [3, 30]
-                    ],
-                    "future_target": [
-                        [5, 50],
-                        [6, 60],
-                    ],
-                    "known_cov": [
-                        [20, 200, 2000],
-                        [30, 300, 3000],
-                        [50, 500, 5000],
-                        [60, 600, 6000]
-                    ],
-                    "observed_cov": [
                         [-2],
-                        [-3]
-                    ]
-                },
-                # sample[3] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
-                {
-                    "past_target": [
-                        [3, 30]
-                        [4, 40]
-                    ],
-                    "future_target": [
-                        [6, 60],
-                        [7, 70]
-                    ],
-                    "known_cov": [
-                        [30, 300, 3000],
-                        [40, 400, 4000],
-                        [60, 600, 6000],
-                        [70, 700, 7000]
-                    ],
-                    "observed_cov": [
                         [-3],
-                        [-4]
-                    ]
+                        [-4],
+                        [-5],
+                        [-6],
+                        [-7]
+                    ],
+                    "static_cov": {"static0": 0, "static1": 1.0, "static2": 2, "static3": 3.0}
                 }
-            ]
+
+            .. code-block:: python
+
+                # Built samples:
+                samples = [
+                    # sample[0]
+                    {
+                        ###############
+                        # past_target #
+                        ###############
+                        # row = _target_in_chunk_len = 2
+                        # col = len(TSDataset._target.data.columns) = 1
+                        "past_target": [
+                            [0.0, 0.0],
+                            [1.0, 10.0]
+                        ],
+
+                        #################
+                        # future_target #
+                        #################
+                        # numeric
+                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                        # row = _target_out_chunk_len = 2
+                        # col = len(TSDataset._target.data.columns) = 1
+                        "future_target": [
+                            [3.0, 30.0],
+                            [4.0, 40.0]
+                        ],
+
+                        #############
+                        # known_cov #
+                        #############
+                        # numeric
+                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                        # row = _target_in_chunk_len + _target_out_chunk_len = 2 + 2 = 4
+                        # col = len(TSDataset._known_cov.data.select_dtypes(include=np.float32)) = 1
+                        "known_cov_numeric": [
+                            [0.0],
+                            [100.0],
+                            # Note: skip_chunk [20, 200.0, 2000] is skipped.
+                            [300.0],
+                            [400.0]
+                        ],
+
+                        # categorical
+                        # Note that skip_chunk_len = 1 time steps are skipped between past_target and future_target.
+                        # row = _target_in_chunk_len + _target_out_chunk_len = 2 + 2 = 4
+                        # col = len(TSDataset._known_cov.data.select_dtypes(include=np.int64)) = 2
+                        "known_cov_categorical": [
+                            [0, 0],
+                            [10, 1000],
+                            # Note: skip_chunk [20, 200.0, 2000] is skipped.
+                            [30, 3000],
+                            [40, 4000]
+                        ],
+
+                        ################
+                        # observed_cov #
+                        ################
+                        # numeric (None)
+                        # NOTE: As no float-dtype column in TSDataset._observed_cov, thus the given TSDataset can NOT
+                        # build observed_cov_numeric features, but can ONLY build observed_cov_categorical.
+
+                        # categorical
+                        # row = _observed_cov_chunk_len = 2
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.int64)) = 1
+                        "observed_cov_categorical": [
+                            [0],
+                            [-1]
+                        ],
+
+                        ##############
+                        # static_cov #
+                        ##############
+                        # numeric
+                        # row = (fixed) 1.
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.float32)) = 2
+                        "static_cov_numeric": [
+                            # key-wise ascending sorted data.
+                            [1.0, 3.0]
+                        ],
+
+                        # categorical
+                        # row = (fixed) 1.
+                        # col = len(TSDataset._observed_cov.data.select_dtypes(include=np.int64)) = 2
+                        "static_cov_categorical": [
+                            # key-wise ascending sorted data.
+                            [0, 2]
+                        ]
+                    },
+                    # sample[1]
+                    {
+                        "past_target": [
+                            [1.0, 10.0],
+                            [2.0, 20.0]
+                        ],
+                        "future_target": [
+                            [4.0, 40.0],
+                            [5.0, 50.0]
+                        ],
+                        "known_cov_numeric": [
+                            [100.0],
+                            [200.0],
+                            [400.0],
+                            [500.0]
+                        ],
+                        "known_cov_categorical": [
+                            [10, 1000],
+                            [20, 2000],
+                            [40, 4000],
+                            [50, 5000]
+                        ],
+                        "observed_cov_categorical": [
+                            [-1],
+                            [-2]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    },
+                    # sample[2]
+                    {
+                        "past_target": [
+                            [2.0, 20.0],
+                            [3.0, 30.0]
+                        ],
+                        "future_target": [
+                            [5.0, 50.0],
+                            [6.0, 60.0]
+                        ],
+                        "known_cov_numeric": [
+                            [200.0],
+                            [300.0],
+                            [500.0],
+                            [600.0]
+                        ],
+                        "known_cov_categorical": [
+                            [20, 2000],
+                            [30, 3000],
+                            [50, 5000],
+                            [60, 6000]
+                        ],
+                        "observed_cov_categorical": [
+                            [-2],
+                            [-3]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    },
+                    # sample[3] (i.e. last sample, future_target tail index = 7 reaches time_window upper bound)
+                    {
+                        "past_target": [
+                            [3.0, 30.0],
+                            [4.0, 40.0]
+                        ],
+                        "future_target": [
+                            [6.0, 60.0],
+                            [7.0, 70.0]
+                        ],
+                        "known_cov_numeric": [
+                            [300.0],
+                            [400.0],
+                            [600.0],
+                            [700.0]
+                        ],
+                        "known_cov_categorical": [
+                            [30, 3000],
+                            [40, 4000],
+                            [60, 6000],
+                            [70, 7000]
+                        ],
+                        "observed_cov_categorical": [
+                            [-3],
+                            [-4]
+                        ],
+                        "static_cov_numeric": [
+                            [1.0, 3.0]
+                        ],
+                        "static_cov_categorical": [
+                            [0, 2]
+                        ]
+                    }
+                ]
         """
+        numeric_dtype = np.float32
+        categorical_dtype = np.int64
+
+        # target
         target_ts = self._rawdataset.get_target()
         target_ndarray = target_ts.to_numpy(copy=False)
 
-        # Consider the case where covariates is None.
-        # As it is not mandatory for the models to use the covariates as features, thus covariates are VALID to be None.
+        # known cov (possibly be None)
         known_cov_ts = self._rawdataset.get_known_cov()
-        known_cov_ndarray = None
+        known_cov_numeric_ndarray = None
+        known_cov_categorical_ndarray = None
         if known_cov_ts is not None:
-            known_cov_ndarray = known_cov_ts.to_numpy(copy=False)
+            known_cov_numeric_ndarray = self._build_ndarray_from_timeseries_by_dtype(
+                timeseries=known_cov_ts,
+                dtype=numeric_dtype
+            )
+            known_cov_categorical_ndarray = self._build_ndarray_from_timeseries_by_dtype(
+                timeseries=known_cov_ts,
+                dtype=categorical_dtype
+            )
+
+        # observed (possibly be None)
         observed_cov_ts = self._rawdataset.get_observed_cov()
-        observed_cov_ndarray = None
+        observed_cov_numeric_ndarray = None
+        observed_cov_categorical_ndarray = None
         if observed_cov_ts is not None:
-            observed_cov_ndarray = observed_cov_ts.to_numpy(copy=False)
+            observed_cov_numeric_ndarray = self._build_ndarray_from_timeseries_by_dtype(
+                timeseries=observed_cov_ts,
+                dtype=numeric_dtype
+            )
+            observed_cov_categorical_ndarray = self._build_ndarray_from_timeseries_by_dtype(
+                timeseries=observed_cov_ts,
+                dtype=categorical_dtype
+            )
+
+        static_cov = self._rawdataset.get_static_cov()
+        pre_computed_static_cov_numeric_for_single_sample = None
+        pre_computed_static_cov_categorical_for_single_sample = None
+        if static_cov is not None:
+            static_cov_numeric = dict()
+            static_cov_categorical = dict()
+            for k, v in static_cov.items():
+                if type(v) in {numeric_dtype, float}:
+                    # built-in float type will be implicitly converted to numpy.float32 dtype.
+                    static_cov_numeric[k] = numeric_dtype(v)
+                if type(v) in {categorical_dtype, int}:
+                    # built-in int type will be implicitly converted to numpy.int64 dtype.
+                    static_cov_categorical[k] = categorical_dtype(v)
+
+            pre_computed_static_cov_numeric_for_single_sample = self._build_static_cov_for_single_sample(
+                static_cov_dict=static_cov_numeric
+            )
+            pre_computed_static_cov_categorical_for_single_sample = self._build_static_cov_for_single_sample(
+                static_cov_dict=static_cov_categorical
+            )
 
         samples = []
         # `future_target_tail` refers to the tail index of the future_target chunk for each sample.
         future_target_tail = self._time_window[0]
         # Because _time_window is left-closed-right-closed, thus using `<=` operator rather than `<`.
         while future_target_tail <= self._time_window[1]:
-            sample = {"past_target": None, "future_target": None, "known_cov": None, "observed_cov": None}
-
-            # Build future_target
-            if future_target_tail > len(target_ts.time_index) - 1:
-                # In this case, the built sample only contains  X, but not contains skip_chunk and Y, thus filled with
-                # all zeros ndarray.
-                sample["future_target"] = np.zeros(shape=(0, 0))
-            else:
-                # In this case, the built samples contain both X, skip_chunk and Y.
-                sample["future_target"] = \
-                    target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
-
-            # Build past_target
             past_target_tail = future_target_tail - self._target_out_chunk_len - self._target_skip_chunk_len
-            if self._target_in_chunk_len == 0:
-                # lag case.
-                sample["past_target"] = np.zeros(shape=(0, 0))
-            else:
-                # not-lag case.
-                sample["past_target"] = \
-                    target_ndarray[past_target_tail - self._target_in_chunk_len + 1:past_target_tail + 1]
+            sample = {
+                "future_target": self._build_future_target_for_single_sample(
+                    future_target_tail=future_target_tail,
+                    target_ndarray=target_ndarray
+                ),
+                "past_target": self._build_past_target_for_single_sample(
+                    past_target_tail=past_target_tail,
+                    target_ndarray=target_ndarray
+                )
+            }
 
-            # Build known_cov.
-            # known_cov = left + right, where left = (in, skip), right = (skip, out).
+            # known_cov
             if known_cov_ts is not None:
-                if future_target_tail > len(target_ts.time_index) - 1:
-                    max_target_timestamp = target_ts.time_index[-1]
-                    # compute the index position of max_target_timestamp in known_cov.
-                    max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
-                    known_cov_right_tail = max_target_timestamp_idx_in_known + \
-                        self._target_skip_chunk_len + \
-                        self._target_out_chunk_len
-                else:
-                    future_target_tail_timestamp = target_ts.time_index[future_target_tail]
-                    known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
-                # right
-                known_cov_right = \
-                    known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
-                # left
-                known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
-                known_cov_left = \
-                    known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
-                # known = right + left
-                sample["known_cov"] = np.vstack((known_cov_left, known_cov_right))
-            else:
-                # If known_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
-                # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be
-                # converted from a python built-in None object, but can be converted from a np.ndarray filled with NaN.
-                sample["known_cov"] = np.zeros(shape=(0, 0))
+                # numeric
+                if 0 not in known_cov_numeric_ndarray.shape:
+                    sample["known_cov_numeric"] = self._build_known_cov_for_single_sample(
+                        future_target_tail=future_target_tail,
+                        known_cov_ndarray=known_cov_numeric_ndarray
+                    )
+                # categorical
+                if 0 not in known_cov_categorical_ndarray.shape:
+                    sample["known_cov_categorical"] = self._build_known_cov_for_single_sample(
+                        future_target_tail=future_target_tail,
+                        known_cov_ndarray=known_cov_categorical_ndarray
+                    )
 
-            # Build observed_cov
+            # observed_cov
             if observed_cov_ts is not None:
-                past_target_tail_timestamp = target_ts.time_index[past_target_tail]
-                observed_cov_tail = observed_cov_ts.time_index.get_loc(past_target_tail_timestamp)
-                sample["observed_cov"] = \
-                    observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
-            else:
-                # If observed_cov timeseries is None, to avoid the failure of the conversion from paddle.Dataset to
-                # paddle.DataLoader, we need to fill the empty ndarray with np.NaN because paddle.Tensor cannot be
-                # converted from a python built-in None object, but can be converted from a np.ndarray filled with NaN.
-                sample["observed_cov"] = np.zeros(shape=(0, 0))
+                # numeric
+                if 0 not in observed_cov_numeric_ndarray.shape:
+                    sample["observed_cov_numeric"] = self._build_observed_cov_for_single_sample(
+                        past_target_tail=past_target_tail,
+                        observed_cov_ndarray=observed_cov_numeric_ndarray
+                    )
+                # categorical
+                if 0 not in observed_cov_categorical_ndarray.shape:
+                    sample["observed_cov_categorical"] = self._build_observed_cov_for_single_sample(
+                        past_target_tail=past_target_tail,
+                        observed_cov_ndarray=observed_cov_categorical_ndarray
+                    )
+
+            # static_cov
+            if static_cov is not None:
+                # numeric
+                if 0 not in pre_computed_static_cov_numeric_for_single_sample.shape:
+                    sample["static_cov_numeric"] = pre_computed_static_cov_numeric_for_single_sample
+                # categorical
+                if 0 not in pre_computed_static_cov_categorical_for_single_sample.shape:
+                    sample["static_cov_categorical"] = pre_computed_static_cov_categorical_for_single_sample
 
             samples.append(sample)
 
@@ -848,6 +1074,164 @@ class MLDataset(object):
         """
         return max(1, self._target_in_chunk_len) + self._target_skip_chunk_len + self._target_out_chunk_len - 1
 
+    def _build_future_target_for_single_sample(
+        self,
+        future_target_tail: int,
+        target_ndarray: np.ndarray
+    ) -> np.ndarray:
+        """
+        Internal method, builds a numeric or categorical future_target chunk for a single sample.
+
+        Args:
+            future_target_tail(int): the tail idx of future_target chunk of the same sample.
+            target_ndarray(np.ndarray): an np.ndarray matrix.
+
+        Returns:
+            np.ndarray: built numeric or categorical future_target chunk (Y) for the current single sample.
+        """
+        # sample only contains  X, but not contains skip_chunk and Y, thus filled with all zeros ndarray.
+        if future_target_tail > len(self._rawdataset.get_target().time_index) - 1:
+            return np.zeros(shape=(0, 0))
+
+        # samples contain both X, skip_chunk and Y.
+        return target_ndarray[future_target_tail - self._target_out_chunk_len + 1:future_target_tail + 1]
+
+    def _build_past_target_for_single_sample(
+        self,
+        past_target_tail: int,
+        target_ndarray: np.ndarray
+    ):
+        """
+        Internal method, builds a past_target chunk for a single sample.
+
+        Args:
+            past_target_tail(int): the tail idx of past_target chunk of the same sample.
+            target_ndarray(np.ndarray): an np.ndarray matrix.
+
+        Returns:
+            np.ndarray: built past_target chunk for the current single sample.
+        """
+        if self._target_in_chunk_len == 0:
+            # lag case.
+            return np.zeros(shape=(0, 0))
+        # not-lag case.
+        return target_ndarray[past_target_tail - self._target_in_chunk_len + 1:past_target_tail + 1]
+
+    def _build_known_cov_for_single_sample(
+        self,
+        future_target_tail: int,
+        known_cov_ndarray: np.ndarray
+    ) -> np.ndarray:
+        """
+        Internal method, builds a known_cov chunk for a single sample.
+
+        Args:
+            future_target_tail(int): the tail idx of future_target chunk of the same sample.
+            known_cov_ndarray(np.ndarray): an np.ndarray matrix comes from known_cov_ts.to_numpy().
+
+        Returns:
+            np.ndarray: built known cov chunk for the current single sample.
+        """
+        target_ts = self._rawdataset.get_target()
+        known_cov_ts = self._rawdataset.get_known_cov()
+        if future_target_tail > len(target_ts.time_index) - 1:
+            max_target_timestamp = target_ts.time_index[-1]
+            # compute the index position of max_target_timestamp in known_cov.
+            max_target_timestamp_idx_in_known = known_cov_ts.time_index.get_loc(max_target_timestamp)
+            known_cov_right_tail = max_target_timestamp_idx_in_known + \
+                self._target_skip_chunk_len + \
+                self._target_out_chunk_len
+        else:
+            future_target_tail_timestamp = target_ts.time_index[future_target_tail]
+            known_cov_right_tail = known_cov_ts.time_index.get_loc(future_target_tail_timestamp)
+        # right
+        known_cov_right = \
+            known_cov_ndarray[known_cov_right_tail - self._target_out_chunk_len + 1:known_cov_right_tail + 1]
+        # left
+        known_cov_left_tail = known_cov_right_tail - self._target_out_chunk_len - self._target_skip_chunk_len
+        known_cov_left = \
+            known_cov_ndarray[known_cov_left_tail - self._target_in_chunk_len + 1:known_cov_left_tail + 1]
+        # known = right + left
+        return np.vstack((known_cov_left, known_cov_right))
+
+    def _build_observed_cov_for_single_sample(
+        self,
+        past_target_tail: int,
+        observed_cov_ndarray: np.ndarray
+    ) -> np.ndarray:
+        """
+        Internal method, builds an observed_cov chunk for a single sample.
+
+        Args:
+            past_target_tail(int): the tail idx of past_target chunk of the same sample.
+            observed_cov_ndarray(np.ndarray, optional): an np.ndarray matrix, as it comes from
+                observed_cov_ts.to_numpy(), its value will be None if the passed known_cov_ts is None.
+
+        Returns:
+            np.ndarray: built observed cov chunk for the current single sample.
+        """
+        past_target_tail_timestamp = self._rawdataset.get_target().time_index[past_target_tail]
+        observed_cov_tail = self._rawdataset.get_observed_cov().time_index.get_loc(past_target_tail_timestamp)
+        return observed_cov_ndarray[observed_cov_tail - self._observed_cov_chunk_len + 1:observed_cov_tail + 1]
+
+    def _build_static_cov_for_single_sample(
+        self,
+        static_cov_dict: Dict[str, Union[np.float32, np.int64]]
+    ) -> np.ndarray:
+        """
+        Internal method, build static_cov chunk for a single sample.
+
+        Args:
+            static_cov_dict(Dict[str, Union[np.float32, np.int64]]): a k-v static cov map.
+
+        Returns:
+            np.ndarray: built static cov chunk for the current single sample.
+        """
+        # [(k1, v1), (k2, v2)]
+        sorted_static_cov_list = sorted(static_cov_dict.items(), key=lambda t: t[0], reverse=False)
+
+        # [[v1, v2]]
+        return np.array([[t[1] for t in sorted_static_cov_list]])
+
+    def _build_ndarray_from_timeseries_by_dtype(self, timeseries: TimeSeries, dtype: type) -> np.ndarray:
+        """
+        Internal method, extract dataframe from given timeseries with specified dtype, then return the converted
+        numpy.ndarray.
+
+        Args:
+            timeseries(TimeSeries): TimeSeries object to be extracted.
+            dtype(type]): dtype to be included when extract from given timeseries.
+
+        Returns:
+            np.ndarray: The ndarray object which is converted from the extracted dataframe from the given timeseries.
+
+        Examples:
+
+            .. code-block :: python
+
+                # Note that in case if the given timeseries does NOT contain columns with given dtypes, the returned
+                # ndarray.shape[1] = 0. See examples to get more details.
+
+                # Given target time series only contains arrays of float type, but NOT contains arrays of int type.
+                target_timeseries = {
+                    "col_1_float": [1.0, 2.0, 3.0],
+                    "col_2_float": [100.0, 200.0, 300.0]
+                }
+
+                # Thus, returned shape will be (3, 0), where the row-wise shape is NOT 0, but ONLY the column-wise
+                # shape is 0.
+                ndarray = self._build_ndarray_from_timeseries_by_dtypes(target_timeseries, np.int64)
+                print(ndarray.shape)
+                # (3, 0)
+        """
+        full_df = timeseries.to_dataframe(copy=False)
+        extracted_df = full_df.select_dtypes(include=dtype)
+        return extracted_df.to_numpy(copy=False)
+
     @property
     def samples(self):
         return self._samples
+
+    @samples.setter
+    def samples(self, samples):
+        self._samples = samples

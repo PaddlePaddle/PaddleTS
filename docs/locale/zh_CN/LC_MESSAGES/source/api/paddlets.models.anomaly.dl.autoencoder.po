@@ -1,0 +1,279 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-24 15:37+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl.autoencoder.rst:2
+#: 4deea01a3b964ee891c1b3ce3a042af1
+msgid "paddlets.models.anomaly.dl.autoencoder"
+msgstr ""
+
+#: c542e22082bf406b8aa56a705ea07a59 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
+msgstr ""
+
+#: 320db64abc7b48b3ab274e222dfea453 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:1
+msgid "Auto encoder network for anomaly detection."
+msgstr "基于AutoEncoder的异常检测的网络结构。"
+
+#: eb800deb1bd34673838290bde2584262 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder
+msgid "Parameters"
+msgstr ""
+
+#: 44ed4cc5784649b0869557c18d7485f0 512c9774bea74b53a8009a8dd14edb04 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:3
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:50
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: ca28ebde53664eb6976ed505290fbef9 ccf39bb5708a47448a09583c84343de4 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:5
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:56
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔。"
+
+#: 509108a43fc840d58c5482fe42d4c8c4 e5817f6202e644a498d7eedc63145b57 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:7
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:62
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: ec889319b4c740598b84ce6af771e89d f2b90ce5ce3f43468f051862da28b322 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:9
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:68
+msgid "Optimizer algorithm."
+msgstr "优化器算法。"
+
+#: 1f050688e4a54af6871a3503f4c5d9ca 6e1cb4aec6bd44859af0c2ddc31141d4 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:11
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:74
+msgid "The method to get anomaly thresold."
+msgstr "获取异常阈值的方法。"
+
+#: 808658b5e51d485b900d8654acf08f29 c13852ac21f147e09b3f0839c9c36ef0 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:13
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:80
+msgid "The thresold to judge anomaly."
+msgstr "判断异常的阈值。"
+
+#: 25af07bc77f145d5b703ea2af85c0d90 dbf63f49412648c39e29b147ae810e0c of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:15
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:86
+msgid "The method to get anomaly score."
+msgstr "获取异常分数的方法。"
+
+#: 44857ecb95ea4b4d8ce89fb46b45d3ea d0f9f382eab8469fb69a9728248d7b8d of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:17
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:92
+msgid "Optimizer parameters."
+msgstr "优化器参数。"
+
+#: 359c13029a1e4e50b36c2cb729c5db96 38451bd30eb842788f7a0304f66759cd of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:19
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:98
+msgid "Evaluation metrics of model."
+msgstr "模型的评估指标。"
+
+#: 6d6e0f083e58492ab32534c35091da30 82c75d1f870041a5a2cb13d7a3a470be of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:21
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:104
+msgid "Customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: 6b472ab728a946b08da2f8fd5f33549c 7197b2f5265a43db87a0d17d58905e72 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:23
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:110
+msgid "Number of samples per batch."
+msgstr "每个批次中的样本数量。"
+
+#: 3bf70c24390a4cf991059bdeaac099ba 675883ed623f4be3ae033b11c17c4d4f of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:25
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:116
+msgid "Max epochs during training."
+msgstr "训练过程中的最大迭代轮数。"
+
+#: 341253480a9c48b3b27e4f2a9c32932b 6bd480c6a05943a499ef44f56292b003 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:27
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:122
+msgid "Verbosity mode."
+msgstr "模型日志模式。"
+
+#: d81ade1a12ef4fc3b3f27749b6e69220 f5adb1c33c6c4b80a91284ce84b3e710 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:29
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:128
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
+
+#: 1f195eba2fe9495d971358cb96a604a4 4f08604b434043ba9b42eadce0280b06 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:31
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:134
+msgid "Global random seed."
+msgstr "全局随机种子，注: 保证每次模型参数初始化一致。"
+
+#: 7b131554a8e242a4ae8dc5cf50fb4e13 88c7c702833843b1b8672c900e39396d of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:33
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:146
+msgid "The type of encoder and decoder."
+msgstr "编码器和解码器的类型，目前支持MLP和CNN。"
+
+#: 5f2345dbe7944f3e8622a643e98d146a bd77ac6eeebf4942b94b2eebe72a8413 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:35
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:152
+msgid "The activation function for the hidden layers."
+msgstr "隐层的激活函数。"
+
+#: 84ae65fed9c14bffa0c8cce6bd85f907 aacb51c1a1584bdb8a74fa621cf46e49 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:37
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:158
+msgid "The activation function for the last layer."
+msgstr "最后一层的激活函数。"
+
+#: 43e9943db28e42be961205661f5d1233 74347d08ec224265a13744264c62e34f of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:39
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:164
+msgid "The ith element represents the number of neurons in the ith hidden layer."
+msgstr "列表第i个元素表示第i层神经元的个数(MLP)或者输出通道数(CNN)。"
+
+#: dd9a6d9412794a40a7fd257150206f52 ed7f42862bb14d90bab2494835557a7c of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:41
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:170
+msgid "Kernel size for Conv1D."
+msgstr "卷积核的大小。"
+
+#: 7066b528fb5c45519fc51b3a4617ded9 ccb2037294e345b2ab5c4790e5d7193a of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:43
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:176
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃的比例。"
+
+#: 8d044167d01c40f596c0b66d924ca8bc fde8106f35ef4f8486c5dd78e7b778b3 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:45
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:182
+msgid "Whether to use batch normalization."
+msgstr "是否开启batch normalization。"
+
+#: 00e4aceea4bd479783d9ffaded9c7d25 03e8a047d7cb49a4a05b22c0412dad0f
+#: 08ee975da9c84cc6aff67159fc417f8c 15f208393c9244a6a79797afc79e35d1
+#: 16c33deebc384bc9888ba41ff01de833 1ba434e2670d49f392db2bb25475ea04
+#: 28cd683976b3459982fd9651b46c804c 2c7c6143a9e64c638c8f7b5c58b077a7
+#: 3e389ca9e57d4858988ff3bfac0c1234 541be5164d744331b90c8f39e387a7ba
+#: 565c162599d945dc8995b42e3cc6cf54 6019595e59374236b1cbf6b86f776aec
+#: 739ac3364d264b8987a6753eedd6bd78 8a3725ee7abf41379f93c1ea3f19243d
+#: a32e85b89aec4b35b475a54378fe8ad0 a5694e5d8f294f4e8222dfbd9a4e2a2a
+#: b40730eaa03145a8963d83d643033c1c c5d3d51b7d2e4478a784b5cef7b7eb65
+#: cae38171eb8645129985308e6b4e4471 cbdb09fc75454262bf108ec93adbabaa
+#: d16b00891cce491c8295c7802e867987 d50338b8808b4165a380844711e25034
+#: f796b368c73348b4bcb5a37f46340254 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder
+msgid "type"
+msgstr ""
+
+#: 02805446c5aa4ca398f0760e858ec5fd 0aea3a7a7cfc43369cabc7e03ad27ede
+#: 8e49a4d7db2c41d8b055288a2912e738 d463b2a7ccbb44458cc71ff434d81306
+#: dd7966256e064cedb44f53d9c8f626c7 f108b61b73d94166887241fd675bed62
+#: f7cd64437ca4450a95971e0f71596461 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:52
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:58
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:112
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:118
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:124
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:130
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:172
+msgid "int"
+msgstr ""
+
+#: b7a1514ecd6e4c4899a4e9329ddfc4fa e6ac22da251c4450ab2f399a50e2cbf8
+#: e6de05c7aa274e799cfd8724384c1972 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:64
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:154
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:160
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: de8c7af5e74f432ea539abfe511e3d08 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:70
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 9c8ded3435cd49408932fe36a5067d60 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:76
+msgid "Callable[..., float]|None)"
+msgstr ""
+
+#: 2660fc53931f44b682b30101e0a0f1d6 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:82
+msgid "float|None"
+msgstr ""
+
+#: 2b29b422daa243bda1306475af27c6f6 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:88
+msgid "Callable[..., List[float]]|None"
+msgstr ""
+
+#: 67391b4c71b54f71996bb4fba60ff31f of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:94
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: ce9dbbb2d0534c299b272712b01a12b7 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:100
+msgid "List[str]"
+msgstr ""
+
+#: 3d7ef05a5b0541a09698dea29a91eada of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:106
+msgid "List[Callback]"
+msgstr ""
+
+#: 93c66645f3e14dfd81fde3d17578bb3e of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:136
+msgid "int|None"
+msgstr ""
+
+#: 0ecec717702e4accb3720bffd7e6db70 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:140
+msgid "Training status."
+msgstr ""
+
+#: e18ddef0086b41eea43c62b46ce1eaa6 eb951cbb93a7420eb8dc67957572e166 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:142
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:184
+msgid "bool"
+msgstr ""
+
+#: fcdbaf4656754cde9a63bc279f1d5423 of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:148
+msgid "str"
+msgstr ""
+
+#: fe2208e165744c50beb97076c782730d of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:166
+msgid "List[int]|None"
+msgstr ""
+
+#: 192b14b4e115447fa9be1a869a30dadd of
+#: paddlets.models.anomaly.dl.autoencoder.AutoEncoder:178
+msgid "float"
+msgstr ""
+

@@ -5,4 +5,4 @@
 dl anomaly data adapter.
 """
 
-# from paddlets.models.anomaly.dl.adapter.data_adapter import AnomalyDataAdapter
+from paddlets.models.anomaly.dl.adapter.data_adapter import AnomalyDataAdapter

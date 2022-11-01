@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-27 16:10+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.dl.adapter.paddle_dataset_impl.rst:2
+#: 205e48829f4e4d84935821324dedc2d4
+msgid "paddlets.models.representation.dl.adapter.paddle_dataset_impl"
+msgstr ""
+
+#: 3ad8e72d076349b0991219434fc64fe7 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:1
+msgid "Bases: :py:class:`~paddle.fluid.dataloader.dataset.Dataset`"
+msgstr ""
+
+#: 3ba92dd7904b4454bfea9eb7304fd155 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:1
+msgid "An implementation of paddle Dataset."
+msgstr "paddle Dataset接口的实现。"
+
+#: e6c2b0aaa98b463b886f18a849c6dd24 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:3
+msgid ""
+"Note that any unused (known / observed) columns should be removed from "
+"the TSDataset before handled by this class."
+msgstr ""
+"对于传入的TSdataset数据集中的任何列（如 known / "
+"observed），如果其不会被用于构建样本，则应当从TSDataset传入之前删除这些列。"
+
+#: 50018ff8b9cf40939bdc05582a87897b of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl
+msgid "Parameters"
+msgstr ""
+
+#: d063c6065988493f892b583020d4b728 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:5
+msgid "Raw TSDataset to be converted."
+msgstr "待转换的TSDataset数据集。"
+
+#: 2a78d6a4f77949da92cb715ce7c3a194 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:7
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 05921247fc654477a3856ce42e32c5e7 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:9
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 7dcf190ea80f424ba285a50faa6e2624 of
+#: paddlets.models.representation.dl.adapter.paddle_dataset_impl.ReprPaddleDatasetImpl:14
+msgid "The value used for filling last sample. Set to None if no need to fill."
+msgstr "用于填充最后一条样本的值。如果无需填充最后一条样本，请将该值设置为None。"
+

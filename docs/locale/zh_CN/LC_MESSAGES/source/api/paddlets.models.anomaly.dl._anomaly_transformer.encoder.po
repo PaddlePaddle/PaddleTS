@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-25 20:56+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._anomaly_transformer.encoder.rst:2
+#: adf3fb06cb1a43aab293e7f6ac6b6b37
+msgid "paddlets.models.anomaly.dl._anomaly_transformer.encoder"
+msgstr "paddlets.models.anomaly.dl._anomaly_transformer.encoder"
+
+#: 0ac4f3a12d4a4cf59e3976ee56e6b909 5e14550314e146a0b933718d9e246467 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:1
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+
+#: dd846b272a6a4c25bdbc12d9089fa1df of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:1
+msgid "EncoderLayer in anomaly transformer."
+msgstr "anomaly transformer模型的编码层。"
+
+#: 76b6e6d128074e0bb6a7a391b079fddb aa8a3f28299042e4b5fddd92dd509de1
+#: d7a735e0984446ba928f723a44570e48 e6ca363ed6b9469fbc891132a60c2f7e of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward
+msgid "Parameters"
+msgstr "参数。"
+
+#: 12c2f9b076b24d0b81a734561e2d9c77 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:3
+msgid "The attention in encoderlayer."
+msgstr "编码层的注意力机制。"
+
+#: 69e018aabe83497581e4f712b454e599 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:5
+msgid "The expected feature size for the input of the anomaly transformer."
+msgstr "anomaly transformer模型的输入数据维度。"
+
+#: 46cd8835c3c0441d8e5e61e2144345db of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:7
+msgid "The Number of channels for FFN layers."
+msgstr "前馈神经网络的通道数量。"
+
+#: a766038ef7114c849e3f1ce38ea87e37 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:9
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃概率。"
+
+#: 079a3332d0dc4b71aea390360dd68f07 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:11
+msgid "The activation function for the EncoderLayer, defalut: F.gelu."
+msgstr "编码层中的激活函数，默认:F.gelu。"
+
+#: 02e8354ac5a445af8005be410f9f0b21 b43a261e92d242728ffe718310229338 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:10
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:16
+msgid "Dynamic graph LayerList."
+msgstr "动态网络层列表。"
+
+#: c4d9125dee454b34a15296f57351cf22 ced68d2fc7ad4c52ba4ecc231323b308 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer
+msgid "type"
+msgstr ""
+
+#: 33866856be7a44f98f808301d4a115e3 cc889dce480444f9b329184961146e3e of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:12
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer:18
+msgid "paddle.nn.Sequential"
+msgstr "paddle.nn.Sequential"
+
+#: 5c3713f8d4224467938ef4ed433ff089 640f921216d44afbb4085bfbbc533018 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward:1
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward:1
+msgid "Encoder Forward."
+msgstr "编码层前向网络。"
+
+#: 69c74d1fe65d421bb5af07b6a94429fd bb6a8ae891cf4f95bd1018b5112e1a14 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:3
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward:3
+msgid "Dict of feature tensor."
+msgstr "tensor字典。"
+
+#: 2e2b232c29bd418aa41b9e10208adc1d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward:5
+msgid "Whether to use mask in encoder."
+msgstr "编码层是否开启掩码。"
+
+#: 3e6d8f0d429946548cefc64925bf94d9 b7d0dca2693a4f8e911383c758e2e7ad of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward
+msgid "Returns"
+msgstr ""
+
+#: 21d7af85c6d0477b92acb6147bc5e57b of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward:8
+msgid "Output of EncoderLayer."
+msgstr "编码层的输出结果。"
+
+#: 80c523a4898c466282eafa31493d23ba fc460bc9dc0848e9a3d1bebc7eb974ed of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.EncoderLayer.forward
+msgid "Return type"
+msgstr ""
+
+#: 0775b2dc59d042039333d9a0398fe532 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:1
+msgid "Encoder layers in anomaly transformer."
+msgstr "anomaly transformer的编码层结果。"
+
+#: 38a292066ccb4592b93a6a6a96557836 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder:5
+msgid "Layernorm in encoder for attention layer."
+msgstr "编码层注意力网络的批次归一化。"
+
+#: 4733408f75fa4cb29e0fda572f4473ec of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward:3
+msgid "The input of Encoder."
+msgstr "编码层输入。"
+
+#: eb22d8de0b0d4686aba5fa8fedaca9ba of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward:5
+msgid "Whether to use mask in ecoder."
+msgstr "编码层中是否使用掩码。"
+
+#: 2b5ad428aa2545c88129e7f10f12fbbe of
+#: paddlets.models.anomaly.dl._anomaly_transformer.encoder.Encoder.forward:8
+msgid "Output of model."
+msgstr "模型输出。"
+

@@ -1,8 +1,9 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from unittest import TestCase
+from unittest import TestCase, mock
 import unittest
+import random
 
 import pandas as pd
 import numpy as np
@@ -34,7 +35,7 @@ class TestMLPRegressor(TestCase):
                 np.random.randn(2500, 2).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"])
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         
         # index为DatetimeIndex类型
         self.tsdataset1 = TSDataset(
@@ -188,18 +189,22 @@ class TestMLPRegressor(TestCase):
         _, valid_dataloaders = mlp._init_fit_dataloaders(self.tsdataset1, self.tsdataset1)
         self.assertNotEqual(len(valid_dataloaders), 0)
 
-        # case3 (训练集包含非int64 和 非float32)
+        # case3 (训练集协变量包含非float32)
         tsdataset = self.tsdataset1.copy()
-        tsdataset.astype({"b": "float64", "c": "int32"})
+        tsdataset.astype({"b": "float64"})
         mlp.fit(tsdataset, tsdataset)
         dtypes = tsdataset.dtypes.to_dict()
         self.assertEqual(dtypes["b"], np.float32)
-        self.assertEqual(dtypes["c"], np.int64)
+
+        tsdataset = self.tsdataset1.copy()
+        tsdataset.astype({"c": "int32"})
+        with self.assertRaises(ValueError):
+            mlp.fit(tsdataset, tsdataset)
 
         # case4 (训练集包含非法数据类型如object字符串类型)
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"b": "O"})
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             mlp.fit(tsdataset, tsdataset)
 
         # case5 (训练集的target为非float类型. 视具体模型而定, 目前mlp模型不支持target为除float之外的类型)
@@ -315,6 +320,20 @@ class TestMLPRegressor(TestCase):
         mlp.fit(self.tsdataset1, self.tsdataset1)
         self.assertEqual(mlp._stop_training, True)
 
+        # case3 (用户传入多组时序数据用于组合训练)
+        mlp = MLPRegressor(
+            in_chunk_len=7 * 96 + 20 * 4,
+            out_chunk_len=96,
+            skip_chunk_len=4 * 4,
+            optimizer_params=dict(learning_rate=5e-1),
+            eval_metrics=["mse", "mae"],
+            batch_size=512,
+            max_epochs=10,
+            patience=1
+        )
+        mlp.fit([self.tsdataset1, self.tsdataset1], [self.tsdataset1, self.tsdataset1])
+        self.assertEqual(mlp._stop_training, True)
+
     def test_predict(self):
         """unittest function
         """
@@ -397,4 +416,3 @@ class TestMLPRegressor(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

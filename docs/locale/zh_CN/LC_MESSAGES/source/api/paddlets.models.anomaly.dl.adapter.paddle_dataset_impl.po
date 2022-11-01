@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-27 16:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.rst:2
+#: a0167975f9df408ca1aca523eb18aace
+msgid "paddlets.models.anomaly.dl.adapter.paddle_dataset_impl"
+msgstr ""
+
+#: 10470e9a35ed4c18aea9fe147cd11e21 of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:1
+msgid "Bases: :py:class:`~paddle.fluid.dataloader.dataset.Dataset`"
+msgstr ""
+
+#: 34f5099fcc034bb29f97a1130784c559 of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:1
+msgid "An implementation of paddle Dataset."
+msgstr "一个paddle Dataset数据集接口的实现。"
+
+#: f50819834736411793cdf31fa28fe224 of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:3
+msgid ""
+"Note that any unused (target / known) columns should be removed from the "
+"TSDataset before handled by this class."
+msgstr ""
+"对于传入的TSdataset数据集中的任何列（如 known / "
+"observed），如果其不会被用于构建样本，则应当从TSDataset传入之前删除这些列。"
+
+#: 121529f10f37402c868cc3662c456f44 of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl
+msgid "Parameters"
+msgstr ""
+
+#: 6bb8a04d1bb44d158cc12afab0a94991 of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:5
+msgid "Raw TSDataset to be converted."
+msgstr "待转换的TSDataset数据集。"
+
+#: cc32860a5068456db6c811fbb7410bfe of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:7
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 6c87cbbc5210461abd232e24985953ad of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:9
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of observed cov time series, `t[i]` "
+"be the start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` is equal to `t[i+1] - t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: fcb38c779a2d44e49677568b78959b2a of
+#: paddlets.models.anomaly.dl.adapter.paddle_dataset_impl.AnomalyPaddleDatasetImpl:15
+msgid "Examples"
+msgstr ""
+
+
+
