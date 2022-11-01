@@ -63,15 +63,31 @@ Backtest will start at model input_chunk_length and return a MSE score by Defaul
     print(score)
     #{'WetBulbCelsius': 14.125747060941888}
 
-
 •  Backtesting Example 2
+
+User define metrics.
+
+.. code:: python
+    
+    from paddlets.utils import backtest
+    from paddlets.metrics import MAE
+    mae = MAE()
+    score = backtest(
+        data=test_dataset,
+        model=mlp,
+        metric = mae)
+    print(score)
+--------------
+
+
+•  Backtesting Example 3
 
 If set ``return_predicts`` to True, Backtest will return both score and  predictions.
 
 .. code:: python
     
     from paddlets.utils import backtest
-    preds_data= backtest(
+    score, preds_data= backtest(
         data=test_dataset,
         model=mlp,
         return_predicts = True)
@@ -82,7 +98,7 @@ If set ``return_predicts`` to True, Backtest will return both score and  predict
 
 |fig_3| 
 
-•  Backtesting Example 3
+•  Backtesting Example 4
 
 ``start`` can control the start point of backtest, If set ``start`` to 0.5, Backtest will start at the middle of dataset.
 
@@ -100,7 +116,7 @@ If set ``return_predicts`` to True, Backtest will return both score and  predict
 
 |fig_5|
 
-•  Backtesting Example 4
+•  Backtesting Example 5
 
 ``predict_window`` is the window for the prediction.(Equal to model.out_chunk_len by default)
 ``stride`` is the number of time steps between two consecutive predict window. (Equal to ``predict_window`` by default)
@@ -122,7 +138,7 @@ In most situations, ``predict_window`` and ``stride``  should be set to simulate
 
 |fig_4|
 
-•  Backtesting Example 5
+•  Backtesting Example 6
 
 If set ``predict_window`` != ``stride`` and ``return_predicts`` = True, backtest will generate a List of TSdataset as predictions.
 Because the predict results are overlaped in this situation.
