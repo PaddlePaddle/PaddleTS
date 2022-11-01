@@ -79,6 +79,14 @@ pip install paddlets
 * [API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
 
 
+## 社区
+
+欢迎通过扫描下面的微信二维码加入PaddleTS开源社区，与PaddleTS维护者及社区成员随时进行技术讨论：
+
+<p align="center">
+    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
+</p>
+
 ## 代码发布与贡献
 
 我们非常感谢每一位代码贡献者。如果您发现任何Bug，请随时通过[提交issue](https://github.com/PaddlePaddle/PaddleTS/issues)的方式告知我们。

@@ -93,6 +93,13 @@ To get more detailed information, please refer to [Installation](https://paddlet
 * [API Reference](https://paddlets.readthedocs.io/en/latest/source/api/paddlets.analysis.html)
 
 
+## Community
+
+Feel free to scan below WeChat QR code to join PaddleTS community for technical discussion with PaddleTS maintainers and community members:
+<p align="center">
+    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
+</p>
+
 ## Contributions
 
 We appreciate all kinds of contributions. Please let us know if you encounter any bug by [filing an issue](https://github.com/PaddlePaddle/PaddleTS/issues).
