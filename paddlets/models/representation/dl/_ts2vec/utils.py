@@ -7,7 +7,7 @@ import paddle.nn.functional as F
 import numpy as np
 import paddle
 
-COVS = ["observed_cov", "known_cov"]
+COVS = ["observed_cov_numeric", "known_cov_numeric"]
 PAST_TARGET = "past_target"
 
 
@@ -15,7 +15,7 @@ def create_ts2vec_inputs(
     X: Dict[str, paddle.Tensor]
 ) -> paddle.Tensor:
     """`TSDataset` stores time series in the (batch_size, seq_len, target_dim) format.
-    Convert it into the shape of (batch_size * target_dim, seq_len, 1 + cov_dim) 
+    Convert it into the shape of (batch_size, seq_len, target_dim + cov_dim)
     as the input of the model.
 
     Args:
@@ -24,19 +24,10 @@ def create_ts2vec_inputs(
     Returns:
          paddle.Tensor: The inputs of the model.
     """
-    past_target = X[PAST_TARGET]
-    seq_len, target_dim = past_target.shape[1:]
-    past_target = paddle.transpose(past_target, perm=[0, 2, 1])       # [batch_size, target_dim, seq_len]
-    past_target = paddle.reshape(past_target, shape=[-1, seq_len, 1]) # [batch_size * target_dim, seq_len, 1]
-    covs = [
-        X[cov] for cov in COVS if cov in X
+    feats = [
+        X[col] for col in [PAST_TARGET] + COVS if col in X
     ]
-    if covs:
-        covs = paddle.concat(covs, axis=2)           # [batch_size, seq_len, cov_dim]
-        covs = paddle.tile(covs, [target_dim, 1, 1]) # [batch_size * target_dim, seq_len, cov_dim]
-        covs = [covs]
-    feats = paddle.concat([past_target] + covs, -1)  # [batch_size * target_dim, seq_len, 1 + cov_dim]
-    feats = centerize_effective_series(feats)
+    feats = paddle.concat(feats, axis=-1)
     return feats
 
 
@@ -118,35 +109,6 @@ def multiscale_encoding(
         p += 1
     out = paddle.concat(reprs, axis=-1)
     return out
-
-
-def paddle_padding_nan(
-    tensor: paddle.tensor, 
-    padding_left: int, 
-    padding_right: int,
-    axis: int,
-) -> paddle.Tensor:
-    """When model inference, the parts at both ends of the series that do not meet the required length 
-    need to be padded to the required length.
-
-    Args:
-        tensor(paddle.Tensor): The series to be padded.
-        padding_left(int): The padded length on the left.
-        padding_right(int): The padded length on the right.
-        axis(int): axis.
-
-    Returns:
-        paddle.Tensor: The padded series.
-    """
-    if padding_left > 0:
-        padding_shape = tensor.shape
-        padding_shape[axis] = padding_left
-        tensor = paddle.concat([paddle.full(padding_shape, np.nan), tensor], axis)
-    if padding_right > 0:
-        padding_shape = tensor.shape
-        padding_shape[axis] = padding_right
-        tensor = paddle.concat([tensor, paddle.full(padding_shape, np.nan), axis])
-    return tensor
 
 
 def centerize_effective_series(

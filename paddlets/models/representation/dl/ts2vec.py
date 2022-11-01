@@ -8,14 +8,14 @@ import paddle
 import tqdm
 
 from paddle.optimizer import Optimizer
+import paddle.nn.functional as F
 
 from paddlets.models.representation.dl._ts2vec.utils import (
     create_ts2vec_inputs,
     create_contrastive_inputs,
     instance_level_encoding,
     multiscale_encoding,
-    paddle_padding_nan,
-    custom_collate_fn
+    custom_collate_fn,
 )
 from paddlets.models.representation.dl._ts2vec.losses import hierarchical_contrastive_loss
 from paddlets.models.representation.dl._ts2vec.encoder import TSEncoder
@@ -27,7 +27,7 @@ from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if_not
 
 
-class _TS2VecLayer(paddle.nn.Layer):
+class _TS2VecModule(paddle.nn.Layer):
     """Paddle layer implementing TS2Vec.
 
     Args:
@@ -47,7 +47,7 @@ class _TS2VecLayer(paddle.nn.Layer):
         hidden_channels: int,
         num_layers: int,
     ):
-        super(_TS2VecLayer, self).__init__()
+        super(_TS2VecModule, self).__init__()
         self._feat_extractor = TSEncoder(
             in_channels=in_channels,
             out_channels=out_channels,
@@ -66,6 +66,7 @@ class _TS2VecLayer(paddle.nn.Layer):
 
         Args:
             X(paddle.Tensor): The input of TS2Vec's feature extractor.
+            mask(str): The mask type, ["binomial", "all_true", "mask_last"] is optional.
 
         Returns:
             paddle.Tensor: Out of model.
@@ -99,6 +100,11 @@ class TS2Vec(ReprBaseModel):
         verbose(int): Verbosity mode.
         seed(int|None): Global random seed.
 
+        repr_dims(int): The dimension of representation.
+        hidden_dims(int): The number of channels in the hidden layer.
+        num_layers(int): The number of `ConvLayer` to be stacked.
+        temporal_unit(int): The minimum unit to perform temporal contrast.
+
     Attributes:
         _segment_size(int): The size of time series segment.
         _sampling_stride(int): Sampling intervals between two adjacent samples.
@@ -109,6 +115,10 @@ class TS2Vec(ReprBaseModel):
         _max_epochs(int): Max epochs during training.
         _verbose(int): Verbosity mode.
         _seed(int|None): Global random seed.
+        _repr_dims(int): The dimension of representation.
+        _hidden_dims(int): The number of channels in the hidden layer.
+        _num_layers(int): The number of `ConvLayer` to be stacked.
+        _temporal_unit(int): The minimum unit to perform temporal contrast.
     """
     def __init__(
         self,
@@ -161,10 +171,18 @@ class TS2Vec(ReprBaseModel):
         Args:
             tsdataset(TSDataset): Data to be checked.
         """
-        for column, dtype in tsdataset.get_target().dtypes.items():
+        target_columns = tsdataset.get_target().dtypes.keys()
+        for column, dtype in tsdataset.dtypes.items():
+            if column in target_columns:
+                raise_if_not(
+                    np.issubdtype(dtype, np.floating),
+                    f"TS2Vec's target dtype only supports [float16, float32, float64], " \
+                    f"but received {column}: {dtype}."
+                )
+                continue
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
-                f"TS2Vec's target dtype only supports [float16, float32, float64], " \
+                f"TS2Vec's cov(observed or known) dtype currently only supports [float16, float32, float64], " \
                 f"but received {column}: {dtype}."
             )
         super(TS2Vec, self)._check_tsdataset(tsdataset)
@@ -181,7 +199,7 @@ class TS2Vec(ReprBaseModel):
         Returns:
             Dict[str, Any]: model parameters.
         """
-        input_dim = 1
+        input_dim = train_tsdataset.get_target().data.shape[1]
         if train_tsdataset.get_observed_cov():
             input_dim += train_tsdataset.get_observed_cov().data.shape[1]
         if train_tsdataset.get_known_cov():
@@ -213,14 +231,14 @@ class TS2Vec(ReprBaseModel):
         # In order to align with the paper of TS2Vec, a customized data organization is required.
         train_dataset._samples = custom_collate_fn(train_dataset._samples)
         return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
-
+    
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
         Returns:
             paddle.nn.Layer
         """
-        return _TS2VecLayer(
+        return _TS2VecModule(
             in_channels=self._fit_params["input_dim"],
             out_channels=self._repr_dims,
             hidden_channels=self._hidden_dims,
@@ -273,24 +291,25 @@ class TS2Vec(ReprBaseModel):
         mask: Optional[str] = "all_true",
         encoding_type: Optional[str] = None,
         sliding_len: Optional[int] = None,
-        batch_size: Optional[int] = None
+        batch_size: Optional[int] = None,
+        verbose: bool = True
     ) -> np.ndarray:
         """Encode function core logic.
 
         Args:
-             dataloader(paddle.io.DataLoader): The data to be encoded.
-             mask(str): The mask used by encoder can be specified with this parameter. 
+            dataloader(paddle.io.DataLoader): The data to be encoded.
+            mask(str): The mask used by encoder can be specified with this parameter. 
                 ["all_true", "mask_last"] is optional.
-             encoding_type(str): When this parameter is specified, the computed representation would be 
+            encoding_type(str): When this parameter is specified, the computed representation would be 
                 max pooling over all input series. ["full_series", "multiscale"] is optional.
-             sliding_len(int): The contextual series length used for inference.
-             batch_size(int): The batch size used for inference. If not specified, 
-                this would be the same batch size as training.
+            sliding_len(int): The contextual series length used for inference.
+            batch_size(int): The batch size used for inference. If not specified, this would be the same batch size as training.
+            verbose(bool): Turn on Verbose mode,set to true by default.
 
         Returns:
             np.ndarray: The representations for input series.
         """
-        def _encode_batch(buffer, series_num):
+        def _encode_one_batch(buffer):
             """Encode one batch of data.
             """
             padding_tensor = paddle.concat(buffer, axis=0)
@@ -298,7 +317,7 @@ class TS2Vec(ReprBaseModel):
             if encoding_type == "multiscale":
                 out = multiscale_encoding(out)
             out = out[:, -1:, :].cpu()
-            out = paddle.split(out, out.shape[0] // series_num)
+            out = paddle.transpose(out, perm=[1, 0, 2])
             buffer.clear()
             return out
 
@@ -317,32 +336,33 @@ class TS2Vec(ReprBaseModel):
         )
         data = iter(dataloader).next()
         feats = create_ts2vec_inputs(data)
-        series_num = feats.shape[0]
         self._network.eval()
         # Sliding inference(casual)
         # The timestamp t's representation is computed
         #   using the observations located in [t - sliding_len, t].
         if sliding_len is not None:
             seq_len, buffer, reprs = feats.shape[1], [], []
-            for timestamp_idx in tqdm.tqdm(range(seq_len)):
+            for timestamp_idx in tqdm.tqdm(range(seq_len), disable=not verbose):
                 start = timestamp_idx - sliding_len
                 end = timestamp_idx + 1
-                padding_tensor = paddle_padding_nan(
+                padding_left = (-start if start < 0 else 0)
+                padding_right = (end - seq_len if end > seq_len else 0)
+                padding_tensor = F.pad(
                     feats[:, max(start, 0): min(end, seq_len), :],
-                    padding_left=(-start if start < 0 else 0),
-                    padding_right=(end - seq_len if end > seq_len else 0),
-                    axis=1
+                    (padding_left, padding_right),
+                    value=np.nan,
+                    data_format="NLC"
                 )
                 # Accumulate a batch and encode together.
                 buffer.append(padding_tensor)
                 if len(buffer) < batch_size:
                     continue
-                out = _encode_batch(buffer, series_num)
-                reprs.extend(out)
+                out = _encode_one_batch(buffer)
+                reprs.append(out)
 
             if len(buffer) > 0:
-                out = _encode_batch(buffer, series_num)
-                reprs.extend(out)
+                out = _encode_one_batch(buffer)
+                reprs.append(out)
 
             out = paddle.concat(reprs, axis=1)
             if encoding_type == "full_series":
