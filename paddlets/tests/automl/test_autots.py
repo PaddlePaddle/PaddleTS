@@ -1,7 +1,9 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
+import unittest
 from unittest import TestCase
+
+import copy
 
 from paddlets.automl.autots import AutoTS, DEFAULT_K_FOLD, DEFAULT_SPLIT_RATIO
 from paddlets.models.forecasting import MLPRegressor
@@ -27,7 +29,7 @@ class TestOptimizeRunner(TestCase):
         self.assertEqual(autots_model._out_chunk_len, 2)
         self.assertEqual(autots_model._skip_chunk_len, 0)
         self.assertEqual(autots_model._search_space, autots_model.search_space())
-        self.assertEqual(autots_model._search_alg, "Random")
+        self.assertEqual(autots_model._search_alg, "TPE")
         self.assertEqual(autots_model._resampling_strategy, "holdout")
         self.assertEqual(autots_model._split_ratio, DEFAULT_SPLIT_RATIO)
         self.assertEqual(autots_model._k_fold, DEFAULT_K_FOLD)
@@ -111,3 +113,21 @@ class TestOptimizeRunner(TestCase):
             autots_model.fit(tsdataset, n_trails=5)
             sp = autots_model.search_space()
             predicted = autots_model.predict(tsdataset)
+
+    def test_multiple_datasets_fit(self):
+
+        # load multi time series
+        tsdataset_1 = get_dataset("UNI_WTH")
+        _, tsdataset_1 = tsdataset_1.split(int(len(tsdataset_1.get_target()) * 0.99))
+        tsdataset_2 = copy.deepcopy(tsdataset_1)
+        valid_tsdataset = copy.deepcopy(tsdataset_1)
+        tsdatasets = [tsdataset_1, tsdataset_2]
+        self.assertEqual(len(tsdatasets), 2)
+        autots_model = AutoTS(MLPRegressor, 25, 2, sampling_stride=25)
+        autots_model.fit(tsdatasets, valid_tsdataset, n_trails=1)
+        autots_model.fit(tsdatasets, tsdatasets, n_trails=1)
+        autots_model.fit(valid_tsdataset, tsdatasets, n_trails=1)
+
+
+if __name__ == "__main__":
+    unittest.main()
