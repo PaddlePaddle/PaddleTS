@@ -9,7 +9,7 @@ import os
 import pickle
 import paddle
 import abc
-from typing import Optional
+from typing import Optional, List, Union
 import json
 
 
@@ -48,8 +48,8 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def fit(
         self,
-        train_data: TSDataset,
-        valid_data: Optional[TSDataset] = None
+        train_data: Union[TSDataset, List[TSDataset]],
+        valid_data: Optional[Union[TSDataset, List[TSDataset]]] = None
     ):
         """
         Fit a paddle deep learning model instance.
@@ -57,8 +57,8 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         Any non-abstract classes inherited from this class should implement this method.
 
         Args:
-            train_data(TSDataset): training dataset.
-            valid_data(TSDataset, optional): validation dataset, optional.
+            train_data(Union[TSDataset, List[TSDataset]]): training dataset.
+            valid_data(Optional[Union[TSDataset, List[TSDataset]]]): validation dataset, optional.
         """
         pass
 

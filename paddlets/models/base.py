@@ -2,13 +2,13 @@
 # -*- coding:utf-8 -*-
 
 import abc
-from typing import Optional
+from typing import Optional, List, Union
 import numpy as np
 import pandas as pd
 import math
 
 from paddlets import TSDataset, TimeSeries
-from paddlets.logger import raise_if, raise_log
+from paddlets.logger import raise_if, raise_log, raise_if_not
 # WARN: import paddlets.models.utils here would cause circular reference, below is raised error:
 # ImportError: cannot import name 'BaseModel' from 'paddlets.models' (/home/work/paddlets/paddlets/models/__init__.py)
 
@@ -17,7 +17,7 @@ class Trainable(object, metaclass=abc.ABCMeta):
     """
     Base class for all trainable classes.
 
-    Any classes need to be fitted (e.g. :class:`~paddlets.models.base.BaseModel`, :class:`~paddlets.pipeline.Pipeline`, etc.) may
+    Any classes need to be fitted (e.g. :class:`~paddlets.models.base.BaseModel`, :class:`~paddlets.pipeline.Pipeline`, etc.) may 
     inherit from this base class and optionally implement :func:`fit` method.
     """
     def __init__(self):
@@ -84,6 +84,23 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._skip_chunk_len = skip_chunk_len
+
+    def _check_multi_tsdataset(self, datasets: List[TSDataset]):
+        """
+        Check the validity of multi time series combination transform
+
+        Args:
+            datasets(List[TSDataset]): Training datasets.
+        """
+        raise_if(
+            len(datasets) == 0,
+            "The Length of datasets cannot be 0!"
+        )
+        columns_set = set(tuple(sorted(dataset.columns.items())) for dataset in datasets)
+        raise_if_not(
+            len(columns_set) == 1,
+            "The schema of datasets is not same! Cannot be combined for conversion!"
+        )
 
     @abc.abstractmethod
     def fit(
