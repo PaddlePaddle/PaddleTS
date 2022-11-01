@@ -10,20 +10,13 @@ class MLDataLoader(object):
     """
     Machine learning Data loader, provides an iterable over the given MLDataset.
 
-    The :class:`~paddlets.models.ml.adapter.MLDataLoader` supports iterable-style datasets with single-process loading and
-    optional user defined batch collation.
+    The MLDataLoader supports iterable-style datasets with single-process loading and optional user defined batch
+    collation.
 
     Args:
-        dataset(MLDataset): MLDataset for building :class:`~paddlets.models.ml.adapter.MLDataLoader`.
+        dataset(MLDataset): MLDataset for building MLDataLoader.
         batch_size(int): The number of samples for each batch.
         collate_fn(Callable, optional): A user defined collate function for each batch, optional.
-
-    Attributes:
-        _dataset(MLDataset): MLDataset for building :class:`~paddlets.models.ml.adapter.MLDataLoader`.
-        _batch_size(int): The number of samples for each batch.
-        _collate_fn(Callable): A user defined collate function for each batch, optional.
-        _start(int): The start index of the current batch in the full MLDataset, updated per iteration.
-        _end(int): The end index of the current batch in the full MLDataset, updated per iteration.
     """
     def __init__(
         self,
