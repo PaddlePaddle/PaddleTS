@@ -160,7 +160,7 @@ class TestReprForcaster(TestCase):
                                 skip_chunk_len=2,
                                 sampling_stride=2,
                                 repr_model=TS2Vec,
-                                downstream_leaner='err_final_learner',
+                                downstream_learner='err_final_learner',
                                 repr_model_params=ts2vec_params,
                                 encode_params=encode_params)
         # case7 add right final_learner
@@ -176,7 +176,7 @@ class TestReprForcaster(TestCase):
                                 skip_chunk_len=2,
                                 sampling_stride=2,
                                 repr_model=TS2Vec,
-                                downstream_leaner=GradientBoostingRegressor(max_depth=5),
+                                downstream_learner=GradientBoostingRegressor(max_depth=5),
                                 repr_model_params=ts2vec_params,
                                 encode_params=encode_params)
  
