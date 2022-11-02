@@ -328,5 +328,7 @@ class TestEnsembleBase(TestCase):
         model1.save(path="/tmp/ensemble_test2/")
 
         model1 = model1.load(path="/tmp/ensemble_test2/")
+        import shutil
+        shutil.rmtree("/tmp/ensemble_test2/")
         predictions = model1.predict(tsdataset)
         assert (len(predictions.target) == 16)
