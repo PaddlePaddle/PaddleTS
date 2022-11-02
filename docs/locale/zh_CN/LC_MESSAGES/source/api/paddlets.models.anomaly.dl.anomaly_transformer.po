@@ -1,0 +1,411 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-25 20:56+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl.anomaly_transformer.rst:2
+#: 1fbb3a34b28b459c8d6b3e6c0b121ca9
+msgid "paddlets.models.anomaly.dl.anomaly_transformer"
+msgstr "paddlets.models.anomaly.dl.anomaly_transformer"
+
+#: d7fcd7a97f934ca8ab435034e3dbb1b8 of
+#: paddlets.models.anomaly.dl.anomaly_transformer:1
+msgid "paddlets.models.anomaly.dl.anomaly_transformer"
+"This implementation is based on the article `Anomaly Transformer: Time "
+"Series Anomaly Detection with Association Discrepancy "
+"<https://arxiv.org/pdf/2110.02642.pdf>`_ ."
+msgstr "基于Anomaly Transformer论文复现模型，论文地址:"<https://arxiv.org/pdf/2110.02642.pdf>`_ ."
+
+#: bc95e0371a054ec282e07117cc57d90f of
+#: paddlets.models.anomaly.dl.anomaly_transformer:9
+msgid "Base model features"
+msgstr "模型基本特征。"
+
+#: 240f7655080b41098c3418369bf8a029 of
+#: paddlets.models.anomaly.dl.anomaly_transformer:4
+msgid "Basic architecture: A network with stacking anomaly Attention."
+msgstr "模型基本结构: 一个堆积异常注意力机制的网络模型。"
+
+#: 9fea7ae03b6c4e97b7008614bc62b5a0 of
+#: paddlets.models.anomaly.dl.anomaly_transformer:6
+msgid "paddlets.models.anomaly.dl.anomaly_transformer"
+"Anomaly Attention have two branch,  one is self attention,  another one "
+"is Gaussian kernel."
+msgstr "Anomaly Attention的两个分支:一个是自注意力机制，另一个是高斯核函数。"
+
+#: 88ab9f7bc977422aa7d0afadaa973c79 of
+#: paddlets.models.anomaly.dl.anomaly_transformer:8
+msgid "paddlets.models.anomaly.dl.anomaly_transformer"
+"The backward is for computing of the the prior-association loss  and the "
+"series-association loss, distinguishing anomaly data in raw data."
+msgstr "反向传播过程中: 同时计算局部关联损失差异和全局关联损失差异，这是用来区分正常数据和异常数据的方法。"
+
+#: edd41320d2044d4788732b24e18164b2 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:1
+msgid "paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer"
+"Bases: "
+":py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
+msgstr "paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer"
+
+#: 6048661420154bb492d83f4f7ab1c66c of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:1
+msgid "Anomaly Transformer network for anomaly detection."
+msgstr "Anomaly Transformer神经网络用于计算异常检测。"
+
+#: 221458c2707649fe997d4a9dea65064d 26f60076eb0d4aa88056fd83541d1d9e
+#: c09d99b096364ec2a9ceb750986b08d5 c2aebcbe575d4ac49317ff3256b4615d of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict_score
+msgid "Parameters"
+msgstr "参数。"
+
+#: 258ec2438aa04457855b284dbe5fc1c3 ab8924fde003437e9d5eb9c9902dfa02 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:3
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:60
+msgid "paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer"
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 2e7845eb382748338ac01969e6efc4e9 d90eccdf74f943ec8a2742801c19248e of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:5
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:66
+msgid "Sampling intervals between two adjacent samples."
+msgstr "每两个相邻样本之间的采集间隔。"
+
+#: 5fc9489c3b434c94a1cbca85c99285b0 7eda6b6ad1bf42c78e321fc0e1b8a411 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:7
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:72
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: 5490d74aa3e04cf18d1012f9bee7b79a f5b3043725c64fb4a302a2064b4553fa of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:9
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:78
+msgid "Optimizer algorithm."
+msgstr "优化方法。"
+
+#: 8eeb977d8845422493eb8a85d21b966a 9a25bea201a44cf596b905cab74e451d of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:11
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:84
+msgid "The method to get anomaly thresold."
+msgstr "计算阈值的方法。"
+
+#: 215cd88b68834164a14766187624497f 2269315f149846deb94750f1beda2322 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:13
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:90
+msgid "Loss function for for the reconstruction loss."
+msgstr "计算重建损失的损失函数。"
+
+#: 6ca127a5b7e6498fb31dbafdbb3b6399 923d1b8a23694f43a62ca14e709a0c81 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:15
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:96
+msgid "The thresold to judge anomaly."
+msgstr "用于判别异常的阈值。"
+
+#: 7e62d42f9a9b4f03a6ef7042d16f3771 935933dd65b14650a5a774912c4860c4 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:17
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:102
+msgid "The coefficient of thresold."
+msgstr "阈值的系数。"
+
+#: 7020448398d4413ea8f0f8c43ffeee1a db92c4da543a4f3ab63b1296eab5a1b3 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:19
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:108
+msgid "The method to get anomaly score."
+msgstr "用于计算异常得分的方法。"
+
+#: b48faf1030ae49658eb7c19a84abf7cf d3ebe5ab267f47e7931af0ee520cad25 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:21
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:114
+msgid "Optimizer parameters."
+msgstr "优化器参数。"
+
+#: 8628accd98ae4f5abdb950a58986c4d1 866785cacda44dbea965a2c506ec1623 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:23
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:120
+msgid "Evaluation metrics of model."
+msgstr "模型评估指标。"
+
+#: 2c27f09c072e4ddd9adbb2ac7a81dd71 fc8cb73f74054352a6750140a86f5e59 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:25
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:126
+msgid "Customized callback functions."
+msgstr "自定义回调函数。"
+
+#: 108db039407f47fbb77aff802125daa3 7f30fd22e11f4e0aa4d789e5bda83084 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:27
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:132
+msgid "Number of samples per batch."
+msgstr "每个训练批次的样本数量。"
+
+#: 83343c2202cd4b1dbbf17a504e2e7991 cf815c9f326d4cafb468a34509de761f of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:29
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:138
+msgid "Max epochs during training."
+msgstr "训练过程的最大迭代次数。"
+
+#: e6a72e5b3c0049788be6586bb2241134 f85e08dd61714023ae372579eb9cdb3e of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:31
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:144
+msgid "Verbosity mode."
+msgstr "详细模式。"
+
+#: 1c3910a98d464b1e91dcd5908d27934c 2fdc82817e52430698bab3c2aeb04d3e of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:33
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:150
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "设置多少轮迭代没有提升后，则提前结束训练。"
+
+#: 515446a8ac554debb98de5edc4c3acb9 bc2f085e305547bf8769d456ed73020c of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:35
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:156
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致。"
+
+#: 1fd1d2114dd143b9858ff6deaf5a6740 c9d93dc404574e2293aae1ac8ab7b2ee of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:37
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:162
+msgid "A parameter to adjust series loss and prior loss."
+msgstr "一个用于调整全局关联损失和局部关联损失的参数。"
+
+#: 9920732e694a44eb80f37af205e2384c 99655ed51bf6461d8351ad797047cd72 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:39
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:168
+msgid "The optimization is to enlarge the association discrepancy."
+msgstr "优化策略：放大关联差异。"
+
+#: 74b37d3ea9184895a49043c20afaa6d5 98b560bc1aae4195aa4c8ef041348334 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:41
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:174
+msgid "The Proportion of Anomaly data in train set and test set."
+msgstr "训练集和测试集比例。"
+
+#: 01ff869b468a462e8586f7f660b514fd c79b3610c42b4377af24f37f31071ea1 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:43
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:180
+msgid "The expected feature size for the input of the anomaly transformer."
+msgstr "anomaly transformer模型的输入维度大小。"
+
+#: c4d0fcd131c34144a303ad95663837f6 f4f06863267e4fd5b3b089a897177437 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:45
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:186
+msgid "The number of heads in multi-head attention."
+msgstr "模型多头的数量。"
+
+#: 3292d240c40047379be11cbb77cf1bcc ce81576a2c944ea4b352883d81afe368 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:47
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:192
+msgid "The number of attentionLayer layers to be stacked."
+msgstr "注意力层的堆积数量。"
+
+#: 1c279e3f2b5d4d3abb4ea4fe7a72e224 a81b6efd89b24771a2a7fd58f22bd0b2 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:49
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:198
+msgid "The Number of channels for FFN layers."
+msgstr "前馈神经网络的通道数量。"
+
+#: 03890836d60d4ee3b703f20194b9fa87 a4d6636ce9ce44a39227b6de9e9d28bc of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:51
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:204
+msgid "Dropout regularization parameter."
+msgstr "Dropout参数。"
+
+#: 4f12333b9d22498bbb03fa7562ce3abc 600c02e5d0cd4874af87fe17684d7b08 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:53
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:210
+msgid "The activation function for AnomalyAttention."
+msgstr "AnomalyAttention中的注意力函数。"
+
+#: 50d73bfe33294c988d5287dc3ffe962c of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:55
+msgid "Whether to output series, prior and sigma."
+msgstr "是否要输出全局向量，相邻向量，高斯核参数向量。"
+
+#: 016c79f50e024d2e8ac6d79b533e6724 0248de62b53d42f98a942f0c13967fd9
+#: 0562b21e82874ac6a1d44c0b36e02ba1 08a325e2290e49efa06dac299a37e756
+#: 0ce94747ddca480da5ad0531537d7bec 258c0ea1c0704af6b7c8c20575003c26
+#: 2a7c99ab316641e8a2705c7aa647556a 2d3b360a885e402a9de8f7b2a649ef2c
+#: 2fe3061d7ff146deb482b63c3f2874e9 40b1fc7402c54973b5fbb1545c90d1a9
+#: 43208f4f5625414fb6c5e5e0c91e7c53 45c3156c74b446d9bb341b317caab14a
+#: 48fe53bbd3784f29aa37924e2ba6a492 4d288769fd9744d6a66e013fb1332a9e
+#: 6d81d5f9eae044cc92e4b81265b4396a 76190190b85c4ba6853b257f1a6b78b5
+#: 7ca4030538db4af09be03bd700e844b9 89983f8c28d94a19b35f88b29bfeeb4d
+#: a1ddfacdd27e4fb1b3ce6ece93ccf6b8 b222082bbb5b4e5485b2a48beda845ca
+#: b712e6beb99f4a8eb5f5f73870cdfa70 b7bc5960cd1d46aeb3741ad537dada5b
+#: c45b4ca44645427ca47d2edb7d52568d c8786d245be94eb3b70710a0c2306ca5
+#: c9960a0b90ec4b96a01eeddf6018059e d5105a0121d641bfbd1238ebc7a50262
+#: da345ada37414d10b2710731a50609a4 ec8e31b9b80348b4bf2997c719551e19 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer
+msgid "type"
+msgstr ""
+
+#: 1d438a595cf0409cb574b32092226819 2886171d8d6143849f8c969a6bffa23d
+#: 3b8d25e17fb74298b1adc8a2579df806 46a2b506eb094939b9777e5b12fd88ef
+#: 5db5f1d6b83e4b05b41f884f5bee7dda 723e1e9d3ac24608be29a9d074586f3e
+#: 7391620bb1414b82b381083ea5fd16f8 819f2818e0e849159f702fe57d39dcb8
+#: 86d64d5877e342c287d1743bf2ec0fe9 876cf70b543e4815971fcfb4d2375423
+#: cb3c669937c44d38ba1ee4d10e97a444 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:62
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:68
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:134
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:140
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:146
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:152
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:170
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:182
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:188
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:194
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:200
+msgid "int"
+msgstr ""
+
+#: 24cfbc3c18fb4b08a1662a1ef57d1236 af4534c3ca9545be929259aecde0dadd
+#: dc1e55ba95b943b0932448276142c3e1 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:74
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:92
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:212
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 61d09f2849444f508acf25027a1b3815 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:80
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 99d252ecfb6742a9b1b555261339e02f of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:86
+msgid "Callable[..., float]|None"
+msgstr ""
+
+#: bce485c2525145a5888661d3df4ec4be of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:98
+msgid "float|None"
+msgstr ""
+
+#: 296c4e4f03e748d3a14c386fbd80e00a b407991b68e3437eb6c2cd8d0edf82fc
+#: d506803f5c2b47cf8cafa55e36bbb31c of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:104
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:206
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:218
+msgid "float"
+msgstr ""
+
+#: 2b6f3eeeafbc477fbb3558d4306bf736 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:110
+msgid "Callable[..., List[float]]|None"
+msgstr ""
+
+#: 653a70a88f324bc9b96c363fb3cbb805 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:116
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 328a148cf03f450fbdd5b5d73c92868e of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:122
+msgid "List[str]"
+msgstr ""
+
+#: 88ad3d926cb44942acbc4732a6f86646 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:128
+msgid "List[Callback]"
+msgstr ""
+
+#: 5561e9e19cf744f5876a63035d248416 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:158
+msgid "int|None"
+msgstr ""
+
+#: 1d0019c267af4d2789bc9ffb06a2fde7 722ea82e11b144a999276c859356e54b of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:164
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:176
+msgid "int|float"
+msgstr ""
+
+#: db0ef38f927044d0a5ab4e2acddfe0a4 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:216
+msgid "whether to output series, prior and sigma."
+msgstr "是否要输出全局向量，相邻向量，高斯核参数向量。"
+
+#: 6537f48b0883488b92596f3dc15f7cee of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:222
+msgid "Dynamic Learning Rate Adjustment."
+msgstr "动态调整学习率。"
+
+#: d7d31bc44c2e4788b317b8bd5aca676e of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer:224
+msgid "function"
+msgstr "功能。"
+
+#: b6368217d88b41e9b4f75664bf3b2c7c of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict:1
+msgid "Get anomaly label on a batch. the result are output as tsdataset."
+msgstr "得出每个批次的异常label，输出为tsdataset数据类型。"
+
+#: 0f3f3fa9f9874b6d81d318ceaeffd814 65b7139d310946be81088dd5ebdf7b02 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit:4
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict:3
+msgid "Train set."
+msgstr "训练集。"
+
+#: 91596db3d8da47eaba6c4be5e6563e45 d9a8b7066ead4b59a2522b58d97df174 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict:5
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict_score:3
+msgid "Data to be predicted."
+msgstr "被预测的数据。"
+
+#: c2397d8027764f17b4b2e2f8be148c03 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict:7
+msgid "Use result_adjust function to optimize prediction, Default: True."
+msgstr "使用后处理方法优化后的预测结果，默认:开启。"
+
+#: 3ea75359db48476bbe76063af52a38a8 8584b9e27d0348709b3cbc3e1b150fc5 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict_score
+msgid "Returns"
+msgstr ""
+
+#: 4d218176a7344edd8e239893d50105e6 7fa7bd53d829493b97ef3afcd5557b90 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict:10
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict_score:6
+msgid "TSDataset."
+msgstr ""
+
+#: c89f9109f3f740cfbecc6228501629bd of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.predict_score:1
+msgid "Get anomaly score on a batch. the result are output as tsdataset."
+msgstr "得出每个批次的异常得分，输出为tsdataset数据类型。"
+
+#: 5c18d58fc66a4051b4f0b21a7d9f4aa0 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit:2
+msgid "Train a neural network stored in self._network,"
+msgstr "在self._network训练一个神经网络。"
+
+#: 42284063df15448c9218b2abfc50d849 of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit:2
+msgid "paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit"
+"Using train_dataloader for training data and valid_dataloader for "
+"validation."
+msgstr "加载训练集用于训练，加载验证集用于验证。"
+
+#: 544db56bd75b4ffe9960a1cc499db96f of
+#: paddlets.models.anomaly.dl.anomaly_transformer.AnomalyTransformer.fit:6
+msgid "Eval set, used for early stopping."
+msgstr "验证集，训练过程中模型早停参数。"
+

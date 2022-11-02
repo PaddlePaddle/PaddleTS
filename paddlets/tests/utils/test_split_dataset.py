@@ -44,7 +44,7 @@ class TestUtils(TestCase):
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         # case1
         pre, after = split_dataset(tsdataset, 1900)
@@ -102,7 +102,7 @@ class TestUtils(TestCase):
                 index=pd.RangeIndex(start=10, stop=5010, step=2),
                 columns=["b1", "c1"]
             ), freq = 2)
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
         # case1
@@ -162,7 +162,7 @@ class TestUtils(TestCase):
                 index=pd.RangeIndex(start=10, stop=5010, step=2),
                 columns=["b1", "c1"]
             ), freq = 2)
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
         # case1

@@ -12,11 +12,75 @@ TS2Vect follows the usage paradigm of self-supervised models:
     - Representational model training
     - Use the output of the representation model for the downstream task (the downstream task of the current case is the prediction task)
 
+For the sake of accommodating both beginners and experienced developers, there are two ways to use representation tasks:
+    - A pipeline that combines the representation model and downstream tasks, which is very friendly to beginners
+    - Decoupling the representational model and downstream tasks, showing in detail how the representational model and downstream tasks are used in combination
 
-A minimal example
+Method one
 =================
 
-Below minimal example uses a built-in `TS2vect` model to illustrate the basic usage.
+A pipeline that combines the representation model and downstream tasks
+
+Prepare the data
+================
+.. code-block:: python
+
+   import numpy as np
+   np.random.seed(2022)
+   import pandas as pd
+
+   import paddle
+   paddle.seed(2022)
+   from paddlets.datasets import TimeSeries, TSDataset
+   from paddlets.models.representation.dl.ts2vec import TS2Vec
+   from paddlets.models.common.callbacks.callbacks import Callback
+   from paddlets.datasets.repository import get_dataset, dataset_list
+   from paddlets.models.representation.task.repr_forecasting import ReprForecasting
+
+   data = get_dataset('ETTh1')
+   data, _ = data.split('2016-09-22 06:00:00')
+   train_data, test_data = data.split('2016-09-21 05:00:00')
+
+Training 
+========
+.. code-block:: python
+
+   ts2vec_params = {"segment_size": 200, 
+                    "repr_dims": 320,
+                    "batch_size": 32,
+                    "sampling_stride": 200,
+                    "max_epochs": 20}
+   model = ReprForecasting(in_chunk_len=200,
+                           out_chunk_len=24,
+                           sampling_stride=1,
+                           repr_model=TS2Vec,
+                           repr_model_params=ts2vec_params)
+   model.fit(train_data)
+
+Prediction
+==========
+.. code-block:: python
+
+   model.predict(train_data)
+
+Backtest
+========
+.. code-block:: python
+
+   from paddlets.utils.backtest import backtest
+   score, predicts = backtest(
+            data,
+            model, 
+            start="2016-09-21 06:00:00", 
+            predict_window=24, 
+            stride=24,
+            return_predicts=True)
+
+
+Method two
+=================
+
+Decoupling the representational model and downstream tasks. It's divided into two stages, the first stage is representation model training and prediction, and the second stage is the training and prediction of downstream tasks
 
 1. The first stage:
 ===================
@@ -29,17 +93,17 @@ Below minimal example uses a built-in `TS2vect` model to illustrate the basic us
 .. code-block:: python
 
    import numpy as np
+   np.random.seed(2022)
    import pandas as pd
-   import matplotlib.pyplot as plt
 
+   import paddle
+   paddle.seed(2022)
    from paddlets.datasets import TimeSeries, TSDataset
    from paddlets.models.representation.dl.ts2vec import TS2Vec
    from paddlets.models.common.callbacks.callbacks import Callback
    from paddlets.datasets.repository import get_dataset, dataset_list
 
-   # 1 prepare the data
-   # Single target prediction target_cols is one column, multi-target prediction target_cols is multiple columns
-   data = get_dataset('ETTh1') # target_cols: 'OT'
+   data = get_dataset('ETTh1')
    data, _ = data.split('2016-09-22 06:00:00')
    train_data, test_data = data.split('2016-09-21 05:00:00')
 
@@ -49,7 +113,7 @@ Below minimal example uses a built-in `TS2vect` model to illustrate the basic us
 
    # initialize the TS2Vect object
    ts2vec = TS2Vec(
-    segment_size=200, # maximum sequence length
+    segment_size=200,
     repr_dims=320,
     batch_size=32,
     max_epochs=20,
@@ -62,11 +126,7 @@ Below minimal example uses a built-in `TS2vect` model to illustrate the basic us
 ==============================================================
 .. code-block:: python
 
-   # output_shape: [n_instance, n_timestamps, repr_dims]
-   # n_instance: number of instances
-   # n_timestamps: sequence length
-   # repr_dims: the representation dimension
-   sliding_len = 100 # Use past sliding_len length points to infer the representation of the current point in time
+   sliding_len = 200 # Use past sliding_len length points to infer the representation of the current point in time
    all_reprs = ts2vec.encode(data, sliding_len=sliding_len) 
    split_tag = len(train_data['OT'])
    train_reprs = all_reprs[:, :split_tag]
@@ -95,12 +155,12 @@ Below minimal example uses a built-in `TS2vect` model to illustrate the basic us
 
    # generate training samples
    train_to_numpy = train_data.to_numpy()
-   train_to_numpy = np.expand_dims(train_to_numpy.T, -1) # keep the same dimensions as the encode output
+   train_to_numpy = np.expand_dims(train_to_numpy, 0) # keep the same dimensions as the encode output
    train_features, train_labels = generate_pred_samples(train_reprs, train_to_numpy, pre_len, drop=sliding_len)
 
    # generate test samples
    test_to_numpy = test_data.to_numpy()
-   test_to_numpy = np.expand_dims(test_to_numpy.T, -1) 
+   test_to_numpy = np.expand_dims(test_to_numpy, 0) 
    test_features, test_labels = generate_pred_samples(test_reprs, test_to_numpy, pre_len) 
 
 2.2 Training and prediction

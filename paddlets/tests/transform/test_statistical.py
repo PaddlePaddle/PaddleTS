@@ -72,7 +72,7 @@ class TestStatsTransform(TestCase):
                                     [26.5, 26.5, 24.5, 28.5]], columns=["WW_median", "WW_mean", "WW_min", "WW_max"])
         self.assertEqual(np.array(known_true_df).tolist()[1:], np.array(known[["WW_median", "WW_mean", "WW_min", "WW_max"]]).tolist()[1:])
         
-        #¶ÔtargetÁÐ½øÐÐÊ±ÐòÍ³¼Æ
+        #ï¿½ï¿½targetï¿½Ð½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Í³ï¿½ï¿½
         fake_input = pd.DataFrame([[0.72, 0.29, 0.55, "2021-01-01 00:00:00"], 
                                    [0.80, -0.84, -0.7, "2021-01-01 00:00:01"],
                                    [-1.2, 0.6, 2.1, "2021-01-01 00:00:02"], 
@@ -84,6 +84,13 @@ class TestStatsTransform(TestCase):
         new_ts = ob.transform(ts)
         observed = new_ts.get_observed_cov().data
         self.assertEqual(observed['value_min'].tolist(), [0.72, 0.8, -1.2, 0.6])
+
+        ob.fit([ts, ts])
+        new_tss = ob.transform([ts, ts])
+        self.assertEqual(len(new_tss), 2)
+        for new_ts in new_tss:
+            observed = new_ts.get_observed_cov().data
+            self.assertEqual(observed['value_min'].tolist(), [0.72, 0.8, -1.2, 0.6])
     
     def test_fit_transform(self):
         """
@@ -101,6 +108,16 @@ class TestStatsTransform(TestCase):
                                     [18.5, 18.5, 16.5, 20.5], [22.5, 22.5, 20.5, 24.5],\
                                     [26.5, 26.5, 24.5, 28.5]], columns=["WW_median", "WW_mean", "WW_min", "WW_max"])
         self.assertEqual(np.array(known_true_df).tolist()[1:], np.array(known[["WW_median", "WW_mean", "WW_min", "WW_max"]]).tolist()[1:])
+
+        new_tss = ob.fit_transform([ts, ts])
+        self.assertEqual(len(new_tss), 2)
+        for new_ts in new_tss:
+            known = new_ts.get_known_cov().data
+
+            known_true_df = pd.DataFrame([[float('NaN'), float('NaN'), float('NaN'), float('NaN')], [14.5, 14.5, 12.5, 16.5], \
+                                        [18.5, 18.5, 16.5, 20.5], [22.5, 22.5, 20.5, 24.5],\
+                                        [26.5, 26.5, 24.5, 28.5]], columns=["WW_median", "WW_mean", "WW_min", "WW_max"])
+            self.assertEqual(np.array(known_true_df).tolist()[1:], np.array(known[["WW_median", "WW_mean", "WW_min", "WW_max"]]).tolist()[1:])
 
 
    

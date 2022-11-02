@@ -59,6 +59,25 @@ class TestDatasetRepository(TestCase):
         ts = get_dataset(dataset_name)
         self.assertEqual(ts.get_target().data.shape, (35064, 1))
         self.assertEqual(ts.get_all_cov().data.shape, (35064, 11))
+        
+        dataset_name = "NAB_TEMP"
+        ts = get_dataset(dataset_name)
+        self.assertEqual(ts.get_target().data.shape, (22683, 1))
+        self.assertEqual(ts.get_all_cov().data.shape, (22683, 1))
+        self.assertEqual(ts.get_label().data.shape, (22683, 1))
+        self.assertEqual(ts.get_feature().data.shape, (22683, 1))
+        
+        dataset_name = "psm_train"
+        ts = get_dataset(dataset_name)
+        self.assertEqual(ts.get_all_cov().data.shape, (132481, 25))
+        self.assertEqual(ts.get_feature().data.shape, (132481, 25))
+        
+        dataset_name = "psm_test"
+        ts = get_dataset(dataset_name)
+        self.assertEqual(ts.get_target().data.shape, (87841, 1))
+        self.assertEqual(ts.get_all_cov().data.shape, (87841, 25))
+        self.assertEqual(ts.get_label().data.shape, (87841, 1))
+        self.assertEqual(ts.get_feature().data.shape, (87841, 25))
 
 
 if __name__ == "__main__":

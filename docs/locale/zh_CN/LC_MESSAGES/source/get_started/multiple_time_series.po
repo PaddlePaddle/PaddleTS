@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-18 15:51+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/get_started/multiple_time_series.rst:3
+#: e41e97a961754f97b2eee2de1be9e1da
+msgid "Joint Training of Multiple Time Series"
+msgstr "多路时序数据联合训练"
+
+#: ../../source/get_started/multiple_time_series.rst:5
+#: 2ef72eeb18e54d418026dbcd5c8aed83
+msgid ""
+"When we need to train and predict multiple time series data, one of the "
+"methods is to create a model for each group of time series data for "
+"independent training and prediction; but in many practical case, we hope "
+"to create only one model with multiple time series data, which can better"
+" improve efficiency and obtain better model effects. For the needs of "
+"joint training of Multiple Time Series, PaddleTS provides full process "
+"support from data load, data transformation and model training."
+msgstr ""
+"当我们需要对多路时序数据进行训练以及预测的时候，其中的一个方法即是对每组时序数据分别创建模型进行独立的训练以及预测；"
+"但是在很多实际的场景中，我们希望针对多组时序数据去联合训练一个模型，这样能更好的提升效率以及获得更好的模型效果。"
+"针对多时序数据组合训练的需求，PaddleTS提供了从数据导入、数据转换以及模型训练的全流程支持。"
+
+#: ../../source/get_started/multiple_time_series.rst:9
+#: 7b6fc3dd97bc41408d7e7e73becb9504
+msgid "1. Multiple Time Series Load"
+msgstr "1. 多时序数据导入"
+
+#: ../../source/get_started/multiple_time_series.rst:11
+#: f9dbd149ad1943a797b6e228325fd52b
+msgid ""
+"PaddleTS support automatically load data groups based on the `group_id` "
+"in the original data, such as device ID or other attributes, with the "
+"same `group_id` represents a group of time series. The time indexes of "
+"different groups of time series can be repeated."
+msgstr "PaddleTS支持基于原始数据中的 `group_id` 属性进行自动的数据分组导入，如设备id等属性，相同的 `group_id` 代表一组时间序列，不同组时间序列时间的时间索引可以重复。"
+
+#: ../../source/get_started/multiple_time_series.rst:44
+#: 083f315e237944aca9012e6fab9b99a3
+msgid ""
+"Whether to pass `static_cov_cols` and assign them as `group_id` is "
+"optional. If set, the `group_id` will be added to training model as a "
+"static covariate. Note that not all PaddleTS models currently support the"
+" input of static covariates. Please refer to the introduction of the "
+"model section for details."
+msgstr ""
+"上述中的 `static_cov_cols` 是否传递并指定为 `group_id` 是可选的，如果设置了改选项，` group_id` 将作为静态协变量加入模型的训练。"
+"需要注意的是，PaddleTS当前不是所有的模型都支持静态协变量的输入，详情请参考模型部分介绍。"
+
+#: ../../source/get_started/multiple_time_series.rst:47
+#: fe055640399d40d6a2936c5334d7be81
+msgid ""
+"One can also load time series data from different groups to build "
+"TSDatasets separately, and then form a List for subsequent joint "
+"training. It should be noted that all TSDatasets in joint training "
+"require data homogeneity, that is, the columns and dtypes attributes are "
+"the same."
+msgstr ""
+"用户也可以分别导入不同组的时序数据去单独构建TSDataset, 然后自己去组成一个List进行后续的联合训练，"
+"需要注意的是，联合训练中的所有TSDataset要求数据具有同质性，即columns以及dtypes属性相同。"
+
+#: ../../source/get_started/multiple_time_series.rst:59
+#: 7819fe8e5bef40cfa051ad9642a8817d
+msgid "2. Multiple Time Series Transformation"
+msgstr "2. 多时序数据转换"
+
+#: ../../source/get_started/multiple_time_series.rst:61
+#: 5e6886a6007c422e99c0c57fbf909397
+msgid ""
+"When data transformation is required before joint training of multiple "
+"time series data, such as normalization, feature generation and other "
+"operations, joint transformation of data is usually required to ensure "
+"the consistency of input data. The Transform module of PaddleTS supports "
+"the TSDataset arrays input and joint transformation of multiple time "
+"series data."
+msgstr ""
+"多路时序数据在联合训练之前，如需进行数据转换，如归一化、特征生成等操作，通常也需要对数据进行联合的转换，这样可以保证入模数据的一致性。"
+"PaddleTS的Transform模块支持TSDataset数组的传递，并进行多时序的联合转换。"
+
+#: ../../source/get_started/multiple_time_series.rst:72
+#: 243d7ce5835a431b86374d0dc7dff067
+msgid "3. Joint Training of Multiple Time Series"
+msgstr "3. 多时序联合训练"
+
+#: ../../source/get_started/multiple_time_series.rst:74
+#: dea6b958c1524eb7ad538b5a841c91ea
+msgid ""
+"The models in PaddleTS forecasting supports the TSDataset arrays input "
+"and joint training of multiple time series data."
+msgstr "PaddleTS中目前所有forecasting模型的fit接口都支持TSDataset数组的传递，并进行多时序的联合训练。"
+
+#: ../../source/get_started/multiple_time_series.rst:94
+#: f707928f417340aead1f69f5d747f999
+msgid "4. Pipeline for Multiple Time Series"
+msgstr "4. Pipeline多时序支持"
+
+#: ../../source/get_started/multiple_time_series.rst:96
+#: 4444bef96ec54c8894c30761a8b1c0ab
+msgid "The Pipeline in PaddleTS also supports the TSDataset arrays input."
+msgstr "PaddleTS中pipeline同样支持多时序输入的训练输入。"
+

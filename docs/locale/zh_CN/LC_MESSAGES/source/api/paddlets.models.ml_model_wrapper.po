@@ -1,0 +1,415 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-26 19:32+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.ml_model_wrapper.rst:2
+#: ffc5dc7aa2c44684b4f7f015cf5265f9
+msgid "paddlets.models.ml_model_wrapper"
+msgstr ""
+
+#: 17939bf8f78643bf89919b1e591be98e of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:1
+msgid "Bases: :py:class:`~paddlets.models.forecasting.ml.ml_base.MLBaseModel`"
+msgstr ""
+
+#: 1da3fa151ef34c648361806c1a9a9362 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:1
+msgid "Time series model base wrapper for third party models."
+msgstr "用于将第三方模型封装为时序模型的基类。"
+
+#: 231ae8ae4dae4fa996b000df1ef5f090 3c0a65a689f841d6912ac1c7c77726b3
+#: 40523cfd7a8e4a0a895843e6eaf4d29c 5f878c3bcf724f5e963e28f2784e82bb
+#: 68c794ba40904fa382887d62b95a8051 6a1e5a46810948ddbc4e1549ba64a42c
+#: 7992b6d041fc4444b2570aefc1db5bfd be373c3906a3416eb6157f3fb1d8853b
+#: d2c85468e09c42c4b4a56568c43b7129 e3e42ac8449a4fb5a7f9f461fe9319e4
+#: eae7b1ec51ec413aa6cb23847fc336db f0bfa74f8b3c4988b06217e792d4886f
+#: fd2f36c5bbb74a248112554a0f98adeb of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.fit
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.fit
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.make_ml_model
+msgid "Parameters"
+msgstr ""
+
+#: 19b2119f6ee6424188bda65b7a00179f 46a51e646b7b4c5e91b47cc6a1907567
+#: aeead3f5815c4916a989f02e9df08492 bca0d3ccf72845249a094908a53b86e7 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:3
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:3
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:3
+#: paddlets.models.ml_model_wrapper.make_ml_model:3
+msgid "Class type of the third party model."
+msgstr "第三方模型类的类型。"
+
+#: 56a0025870754e2e839e559ec2571d8f 5f2a5eb2ce36402491435ee9f74b313f
+#: b4f0a9879d4e4e8d8754c4a57ddfa3fb e0d41909aa7e47bea6023b0956bef6a4 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:5
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:5
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:5
+#: paddlets.models.ml_model_wrapper.make_ml_model:5
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 293ab221ceb14ab8bd98821d3fcd5cbd 397b212d7a144ec4a1d33e474288f5ad
+#: 86f75bc277f1475eba196231644657a7 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:7
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:7
+#: paddlets.models.ml_model_wrapper.make_ml_model:7
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的时间序列长度。"
+
+#: 3255b58ba06d4ddda6036a188e78d58d 3c8954f8e0444f618edec6699fffd980
+#: 51cc47d91d2e4428a30b89672d781dda of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:9
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:9
+#: paddlets.models.ml_model_wrapper.make_ml_model:9
+msgid ""
+"The number of time steps between in_chunk and out_chunk for a single "
+"sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
+"(i.e. Y) for a single sample. By default, it will NOT skip any time "
+"steps."
+msgstr "输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+
+#: 46268530fcfe4723a9f792fe7f36e2af 5140532dedf445b688dbc8167da48ee7
+#: 664a1fe7cea44af6871a798c3e1090af d590aa8ce95047f5a22537e75b32bb9d of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:13
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:7
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:13
+#: paddlets.models.ml_model_wrapper.make_ml_model:13
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 29bad617367242a281f5a50d4e316385 71d2407e7e014a94845b3a01320881dc
+#: 88fa149a6c8e4a8dafed20f41b7809ab 8901876ca0fe4163b007053bfe6a27d4 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:18
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:12
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:18
+#: paddlets.models.ml_model_wrapper.make_ml_model:18
+msgid "All params for initializing the third party model."
+msgstr "用于初始化第三方模型的所有参数。"
+
+#: 1f9e82dc95d346d6bd3004f6d23ac752 4b8c7be70eff4ce299ea63f890e9927e
+#: ceb39bf2df4e4585bb33287d057dbabc of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:20
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:20
+#: paddlets.models.ml_model_wrapper.make_ml_model:20
+msgid "All params for fitting third party model except x_train / y_train."
+msgstr "第三方模型的fit接口接收的所有参数，训练集数据除外。"
+
+#: 237f1a92fa514d67a75aca5029d70e62 6be460ba9bf84e23a1acc3c75adab08c
+#: bcf56173ad3048778008e80ff09de0fd d55485609f4d42f1b0218fb52bfd8219 of
+#: paddlets.models.ml_model_wrapper.MLModelBaseWrapper:22
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:14
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:22
+#: paddlets.models.ml_model_wrapper.make_ml_model:22
+msgid "All params for forecasting third party model except x_test / y_test."
+msgstr "第三方模型的predict接口接收的所有参数，待预测数据除外。"
+
+#: 1fa6e6d0a7494efda8671e6608ce076e 2a91488d83074b81a639b50e04c12cf7 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:1
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:1
+msgid "Bases: :py:class:`~paddlets.models.ml_model_wrapper.MLModelBaseWrapper`"
+msgstr ""
+
+#: eb0b08ff4628490ca4735c11e28b07b9 of
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:1
+msgid "Time series model wrapper for sklearn third party models."
+msgstr "用于将sklearn第三方模型封装为时序模型的基类。"
+
+#: 2617b186aa014f9989b7d51d3619978d 409e1b94db8540678fb2bdb805b29ee5 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:16
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:24
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `fit` method of the third "
+"party model."
+msgstr "用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`fit`接口可接收的 numpy.ndarray 类型数据。"
+
+#: 0185626faf504faca4b725f79d5862c6 fb6c48d7ad2b41bb9e2636822d80059b of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:19
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper:27
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `predict` method of the "
+"third party model."
+msgstr "用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`predict`接口可接收的 numpy.ndarray 类型数据。"
+
+#: 06811ecf30c24f86af3d9075c36f8e85 5c20a90ed7fd489588f9e0190c779a9a of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.fit:1
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.fit:1
+msgid "Fit a machine learning model."
+msgstr "训练一个机器学习模型。"
+
+#: 6e17fda5c9874c5b897a2644209df4dc 8895b1dfdf4b4c51bdd032a6321ffdcc of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.fit:3
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.fit:3
+msgid "training dataset."
+msgstr "训练集。"
+
+#: 1cb3d835956047df8da6a29aa9f79919 of
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.fit:5
+msgid "validation dataset."
+msgstr "验证集。"
+
+#: 7e19854b9e3547e8bd6b6d4eb83b253c b219c07f7c234230a73cb54b3b3cd864 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict:1
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict:1
+msgid "Make prediction."
+msgstr "预测。"
+
+#: 631ec28c57874eacb3f29496c0270ecb 885d2b3f0db44ffb86fe9cc9dcfea8f5 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict:3
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict:3
+msgid "TSDataset to predict."
+msgstr "待预测的时序数据集。"
+
+#: 265aa2e641fa40b2a670107a48cb4aea 35c7d8bfcdc342419e7d00720503c311
+#: 5243ea93225d483085237b93a3a081e8 599760f9fa1149d59fb767ba8db4051a
+#: a94a0773658d46d999d1ac3f17039434 c326e1ce735e4eb3bbae508ce546cd1e
+#: e1fb8fd24d964df18b21be2c6bd71549 f0d6217f24484d10950ef31d3478cbe8 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.make_ml_model
+msgid "Returns"
+msgstr ""
+
+#: 4b53a912d7da4238aaa9e730fdcc901e df1d5f0f8367485787c761e76077bdf7 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict:6
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict:6
+msgid "TSDataset with predictions."
+msgstr "包含预测结果的时序数据集。"
+
+#: 28bf28ff3288465d85c17fb4b3caaf0e 402f12cae8624f0a8663be4970d085d4
+#: 5dbd97bfe34b4b9bac3c1bb0c18b961d 6b84522466de47f79d807d30467e63a5
+#: 708f94f6d63540d796914b6630285ac7 ab464d77a5054eb7aa6442ff3b03cb9a
+#: e9589c6edace42c394149320eef04532 fe12d9ef3e54424aafd90cf0248b1714 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score
+#: paddlets.models.ml_model_wrapper.SklearnModelWrapper.predict
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray
+#: paddlets.models.ml_model_wrapper.make_ml_model
+msgid "Return type"
+msgstr ""
+
+#: 90e5b3da1a9541c285f4c256ef34975b of
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" used for fitting the sklearn model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为sklearn第三方模型`fit`接口可接收的 numpy.ndarray "
+"类型数据。"
+
+#: 168a5e00901a4ba88499749b37ec8490 695b36201736483895c70f817d97639e
+#: 949e65b7dbe2496fa6a2c2f759d44bca bf2bb855c6054627800a44d366058045 of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:10
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray:3
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:3
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:3
+msgid "MLDataLoader object to be converted."
+msgstr "待转换的 MLDataLoader 对象。"
+
+#: 09ed2a3146a1475cb13df41a88ce7248 3758a2640f52474ca735c35cbdb9409c
+#: b5a1a63658024878b97cc90b93ed4f04 ba6e42bbe8ac42b6b63b325ee9487f5b of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:12
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray:5
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:5
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:5
+msgid ""
+"parameters when initializing sklearn models, possibly be used while "
+"converting."
+msgstr "初始化sklearn模型时需要提供的参数。在数据转换时可能会用到。"
+
+#: 267f3f1e4e634765b3aa6f6057893f65 26bb0ccecbd04e43b440eb03c8fcb5d2
+#: 5b4b5654df7d446e98d930f71f771b86 b19a4171d1144a3cbfc4883470ab6ad1 of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:14
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray:7
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:7
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:7
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model. Possibly be used while converting."
+msgstr "模型输入的时间序列长度。在数据转换时可能会用到。"
+
+#: 0ee128e2a92144d1b5025160c40e1422 33b36b832bd44d589948dc3359a1748c of
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:10
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:10
+msgid ""
+"The number of time steps between in_chunk and out_chunk for a single "
+"sample. The skip chunk is neither used as a feature (i.e. X) nor a label "
+"(i.e. Y) for a single sample. By default, it will NOT skip any time "
+"steps. Possibly be used while converting."
+msgstr "输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。转换期间可能会用到。"
+
+#: 28ec7a2f7c254764b598a039f164b7fc 38960097d67848e781f65b4b3799e0c4 of
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:14
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:14
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model. Possibly be used while converting."
+msgstr "模型输出的时间序列长度。在数据转换时可能会用到。"
+
+#: 136a516b61ae46deaa2451024157a948 991bdb5fab5c4fb19ff4c75aa0605323 of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:18
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_fit_ndarray:18
+msgid ""
+"Converted numpy array. The first and second element in the tuple "
+"represent x_train and y_train, respectively."
+msgstr "转换得到的 numpy array 数据。元组的第一、第二个元素分别代表x_train 和 y_train。"
+
+#: c5810160f2c7434bba339ca7752bcc0d of
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" predicted by the sklearn model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为sklearn第三方模型`predict`接口可接收的 numpy.ndarray"
+" 类型数据。"
+
+#: 353327a5e68e400abf8cf2a0f3b01fe2 6efd30760a9d49658b0936688f03f74c of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray:11
+#: paddlets.models.ml_model_wrapper.default_sklearn_ml_dataloader_to_predict_ndarray:18
+msgid ""
+"Converted numpy array. The first and second element in the tuple "
+"represent x and y, respectively, where y is optional."
+msgstr "转换得到的 numpy array 数据。元组的第一、第二个元素分别代表 x 和 y，其中 y 可能为None。"
+
+#: d6ac690509f94be3b1f96008bf7ff18a of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper:1
+msgid "Time series model wrapper for pyod third party models."
+msgstr "用于将pyod第三方模型封装为时序模型的基类。"
+
+#: 7a64be80fc1541c0996eae8175dadfc1 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score:1
+msgid ""
+"Predict raw anomaly scores of tsdataset using the fitted model, outliers "
+"are assigned with higher scores."
+msgstr "使用训练完成的模型对输入的时序数据集预测得到原始的异常分数，高分预测结果将会被标记为异常点。"
+
+#: 6d10866fb93d4054849bc1a72d7e5dc4 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score:3
+msgid "The input samples for which will be computed."
+msgstr "待计算的输入样本。"
+
+#: 2d3826ef51a149358ea8b2f7e3331d81 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.predict_score:6
+msgid "numpy array of shape (n_samples,), the anomaly score of the input samples."
+msgstr "一个shape为 (n_samples, )的numpy向量，代表数据样本的异常分数。"
+
+#: b5316772a7a9452fa8218f5102e0e9d2 of
+#: paddlets.models.ml_model_wrapper.PyodModelWrapper.fit:5
+msgid "validation dataset. Not used, present for API consistency by convention."
+msgstr "验证集。该方法暂未使用，出于接口一致性考虑，保留此参数。"
+
+#: 35a1b299f1374928bd40e511f69865fa of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" used for fitting the pyod model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为pyod第三方模型`fit`接口可接收的 numpy.ndarray "
+"类型数据。"
+
+#: dcaeefeb1eeb4e258ced3a5dbc93ef88 of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_fit_ndarray:3
+msgid ""
+"In this method will remove in_chunk_len dimension for the passed data. "
+"The reason is that all models in pyod requires X.ndim must == (n_samples,"
+" n_features), where n_samples is identical to batch_size, n_features is "
+"identical to observed_cov_col_num (In paddlets context, we define "
+"n_samples as batch_size, define n_features as observed_cov_col_num for "
+"anomaly detection models). However, the samples built by data adapter are"
+" 3-dim ndarray with shape of (batch_size, in_chunk_len, "
+"observed_cov_col_num), thus needs to flatten (i.e. remove) the first "
+"dimension (i.e., batch_size) and make it a 2-dim array."
+msgstr ""
+"该方法中会移除输入数据的 in_chunk_len 维度。原因是所有pyod三方模型要求X维度必须为 (n_samples, n_features)，其中"
+"n_samples、n_features分别与PaddleTS中的batch_size、observed_cov_col_num概念相同。但是PaddleTS构建的样本是一个三维的ndarray"
+"向量，其shape为(batch_size, in_chunk_len, observed_cov_col_num)，因此需要将第一维(即 batch_size)打平，使其变为2维特征。"
+
+#: 8b93166d0e5644baa490a0d8a163e150 of
+#: paddlets.models.ml_model_wrapper.default_pyod_ml_dataloader_to_predict_ndarray:1
+msgid ""
+"Default function for converting MLDataLoader to a numpy array that can be"
+" predicted by the pyod model."
+msgstr ""
+"默认的转换函数，用于将一个 MLDataLoader 对象转换为pyod第三方模型`predict`接口可接收的 numpy.ndarray "
+"类型数据。"
+
+#: a8bc1511b43c46858c94791b11c184d2 of
+#: paddlets.models.ml_model_wrapper.make_ml_model:1
+msgid "Make Wrapped time series model based on the third-party model."
+msgstr "基于第三方模型，构建时序模型。"
+
+#: 4c3ce10736674d6ea3d8ac2b6c92fec7 of
+#: paddlets.models.ml_model_wrapper.make_ml_model:24
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `fit` method of the third "
+"party model. Any third party models that accept numpy array as fit inputs"
+" can use this function to build the data for training."
+msgstr ""
+"用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`fit`接口可接收的 numpy.ndarray "
+"类型数据。任何第三方模型的fit接口如果可以接收 numpy array 作为输入，则可以使用该函数构建训练数据。"
+
+#: 368499d9b6744e5f8875156c86eca8f3 of
+#: paddlets.models.ml_model_wrapper.make_ml_model:28
+msgid ""
+"User defined function for converting MLDataLoader object to a "
+"numpy.ndarray object that can be processed by `predict` method of the "
+"third party model. Any third-party models that accept numpy array as "
+"predict inputs can use this function to build the data for prediction."
+msgstr ""
+"用户自定义函数，用于将一个 MLDataLoader 对象转换为第三方模型的`fit`接口可接收的 numpy.ndarray "
+"类型数据。任何第三方模型的fit接口如果可以接收 numpy array 作为输入，则可以使用该函数构建训练数据。"
+
+#: 84febfc40a42453bb10760f64b57facf of
+#: paddlets.models.ml_model_wrapper.make_ml_model:34
+msgid ""
+"Wrapped time series model wrapper object, currently support "
+"SklearnModelWrapper and PyodModelWrapper."
+msgstr "封装完成的时序模型对象, 目前支持 SklearnModelWrapper 和 PyodModelWrapper。"
+

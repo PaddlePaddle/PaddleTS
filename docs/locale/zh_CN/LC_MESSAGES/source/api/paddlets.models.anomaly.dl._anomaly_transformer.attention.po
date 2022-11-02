@@ -1,0 +1,244 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-02 12:25+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._anomaly_transformer.attention.rst:2
+#: 0b489be3a3ad4dbe88cc46c97283c733
+msgid "paddlets.models.anomaly.dl._anomaly_transformer.attention"
+msgstr ""
+
+#: afcf2fd179fa4329a413b930c87641d0 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: c739e87daae34df18608f2fb900d5bb3 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:1
+msgid "Triangular Causal Mask."
+msgstr ""
+
+#: 2be4fcc9db3a4355944545263a2d4848 2c660b157d7a44aea8e1afddb195228b
+#: 2c6f45fa0a634008af3c5ebc5131b347 3c29c9fb4c4445e788ba9b3c3a6a305b
+#: d5f230dd25d544c5b3f7745c21fb2138 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask
+msgid "Parameters"
+msgstr "参数。"
+
+#: e3dbde91da8b45eabcb77be542261b4d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:3
+msgid "Number of samples per batch."
+msgstr "每个批次的样本数量。"
+
+#: bcd8da31f1e84075bc8fff0e66b0b9c1 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:5
+msgid "Length of samples per data."
+msgstr "每个数据的样本长度。"
+
+#: 42d24b3fdaab486980ac1a2bc53f3530 4fcb47d310a2420c8aa0e890065c9055
+#: b92f9eb382524714bc227291d4d5d679 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:18
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:16
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:10
+msgid "Dynamic graph LayerList."
+msgstr "神经网络。"
+
+#: 2a01d75e026e43928a4adb1faa06565c 9c320ec68ec245a588458a1c90941425
+#: dbd4ba9500ba4d8a820da02e94d02186 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask
+msgid "type"
+msgstr ""
+
+#: 830e9e83cf8d4f1ba3d259009e1d5ad3 98d85e974bc044df848d6ada1eade20e
+#: d64ee65f815c4715866fac0e7842646d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:20
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:18
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.TriangularCausalMask:12
+msgid "paddle.nn.Sequential"
+msgstr "paddle.nn.Sequential"
+
+#: 41257293de6b48b983949d29bd1eac5c a8e3e9bcac504b3b9c8c312ac8ec9a96 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:1
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+
+#: cfc4e83fbf47402a8762142672f1679d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:3
+msgid "Anomaly Attention:"
+msgstr "Anomaly Attention:"
+
+#: 4ff420de3f7244edb995070cdf6debf8 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:2
+msgid ""
+"For the prior-association, a learnable Gaussian kernel to calculate the "
+"prior with the relative temporal distance. For the series-association "
+"branch is to learn the associations from raw series."
+msgstr "一个可学习的参数，用于高斯核函数中计算局部关联。局部关联计算会从原数据中学习。"
+
+#: c0479eb3b3ce442d926d7f74115e3813 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:5
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: e2eb21675a674ff682ed6aa3c2c1a9b0 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:7
+msgid "Whether to use attn_mask."
+msgstr "编码层是否开启掩码。"
+
+#: 46cbe5fcd42c4457bca70b39f3a425af of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:9
+msgid "It can scale the dot products."
+msgstr "缩放自注意力层的点积结果。"
+
+#: f6227f97912f4a508b2c48945959b3b7 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:11
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃概率。"
+
+#: 6c0e393424b8463c8db48f5f8ccb0c70 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention:13
+msgid "Whether to output series, prior and sigma."
+msgstr "是否要输出全局向量，相邻向量，高斯核参数向量。"
+
+#: ca2e1f1edd9f4cec9a49ff2c055d5f91 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:1
+msgid ""
+"The prior-association result from Gaussian kernel branch. the series-"
+"association result from self attention branch."
+msgstr "局部关联结果源于高斯核计算分支.全局关联结果源于自注意力分支计算。"
+
+#: 2c4c28acf34347328bc0387cfb695b7f of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:3
+msgid "The query projection layer."
+msgstr "query的投影层。"
+
+#: 50c205a2d7b147679835ff4c7ce77654 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:5
+msgid "The key projection layer."
+msgstr "key的投影层。"
+
+#: 3a324058f6e947fcaeb0258b0e7786bc of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:7
+msgid "The value projection layer."
+msgstr "value的投影层。"
+
+#: aab2120a8b1f4701af053b88ddef568c of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:9
+msgid ""
+"A learnable scale parameter for the Gaussian kernel, making ther prior-"
+"associations adapt the various time series patterns."
+msgstr "高斯核的一个可学习参数，使局部关联适应各种时间序列模式。"
+
+#: 560fda1003bb4856ba2d3c52af634cf0 7e9c7c7e808f4739b13149963c1f9ffc of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:12
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:11
+msgid "Whether to use mask in ecoder."
+msgstr "编码层中是否使用掩码。"
+
+#: b19868c2ccc6471cb41348df55435ecb f857110cc9504cc6a3c4704fa63f9ef5 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward
+msgid "Returns"
+msgstr ""
+
+#: 692d0f56084a4141996ac9c97931ed07 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward:15
+msgid ""
+"Output of AnomalyAttention. series(paddle.Tensor): The series-association"
+" from Gaussian kernel branch. prior(paddle.Tensor): The prior-association"
+" from self attention. sigma(paddle.Tensor): A learnable scale parameter "
+"for the Gaussian kernel."
+msgstr "AnomalyAttention的输出。series:来自高斯内核分支的局部关联。prior:来自自我注意的先验关联。sigma:高斯核的可学习参数."
+
+#: 98e3643862e24fdbacccfe470975f2f0 ef355cbfd98847d1b3a1ecc442f764c0 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AnomalyAttention.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward
+msgid "Return type"
+msgstr ""
+
+#: de616e62f9b3433db1a9f30323947d69 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:1
+msgid "AttentionLayer for anomaly transformer."
+msgstr "anomaly transformer模型的注意力层。"
+
+#: ce66cd75f2334e29996ec2b57a37764f of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:3
+msgid "Attention layers in anomaly transformer."
+msgstr "anomaly transformer模型的注意力层。"
+
+#: 6bf37bc09732413f9430d95884f3282d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:5
+msgid "The expected feature size for the input of the anomaly transformer."
+msgstr "anomaly transformer模型输入数据的特征维度。"
+
+#: 0a499896268b4d79b1fec2f0f4c78d18 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:7
+msgid "The number of heads in multi-head attention."
+msgstr "模型多头的数量。"
+
+#: b57759f67bd6426990c8d7e6cf0fec62 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:9
+msgid "The feature size in key."
+msgstr "key的特征尺度。"
+
+#: bf12e16510524f478b51f3558c2e2fd5 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer:11
+msgid "The feature size in value."
+msgstr "value的特征尺度。"
+
+#: 6d783232e3fd45bb96fc9db07655bf4e of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:1
+msgid "The series-association and the prior-association forward."
+msgstr "全局关联和局部关联。"
+
+#: 7fc43923ae494827869b6679384b405b of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:3
+msgid "The query projection layer tensor."
+msgstr "query的投影层张量。"
+
+#: bc306be1653c4f67a164b8869dfacac3 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:5
+msgid "The key projection layer tensor."
+msgstr "key的投影层张量。"
+
+#: 0bc1b9c201d64336819e7e4fb51d1eaf of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:7
+msgid "The value projection layer tensor."
+msgstr "value的投影层张量。"
+
+#: 9fcb5ac904cf44edb7420df50a35e99a of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:9
+msgid "A learnable scale parameter for the Gaussian kernel."
+msgstr "高斯核中的一个可学习参数。"
+
+#: 263ec85bf750429f9c2f5ba9e12132d1 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.attention.AttentionLayer.forward:14
+msgid ""
+"pred of model. series(paddle.Tensor): The series-association output "
+"tensor. prior(paddle.Tensor): The prior-association output tensor. "
+"sigma(paddle.Tensor): A learnable scale parameter for the Gaussian "
+"kernel."
+msgstr "模型预测结果.series:全局关联输出.prior:局部关联输出.sigma:高斯核中的一个可学习参数。"
+

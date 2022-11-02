@@ -66,6 +66,13 @@ class TestTimeFeature(TestCase):
 
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
 
+        results = ob.fit([ts, ts])
+        results= ob.transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
+
     def test_fit_transform(self):
         """
         unittest function
@@ -111,6 +118,12 @@ class TestTimeFeature(TestCase):
         known = result.get_known_cov().data
 
         self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
+
+        results= ob.fit_transform([ts, ts], False)
+        self.assertEqual(len(results), 2)
+        for result in results:
+            known = result.get_known_cov().data
+            self.assertEqual(np.array(known_true_df).tolist(), np.array(known).tolist())
    
 
 if __name__ == "__main__":

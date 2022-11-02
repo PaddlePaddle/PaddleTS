@@ -17,6 +17,9 @@ from paddlets.datasets.repository._data_config import ETTm1Dataset
 from paddlets.datasets.repository._data_config import ECLDataset
 from paddlets.datasets.repository._data_config import WTHDataset
 from paddlets.datasets.repository._data_config import UNIWTHDataset
+from paddlets.datasets.repository._data_config import NABTEMPDataset
+from paddlets.datasets.repository._data_config import PSMTRAINDataset
+from paddlets.datasets.repository._data_config import PSMTESTDataset
 
 
 DATASETS = {
@@ -24,7 +27,10 @@ DATASETS = {
     ETTh1Dataset.name: ETTh1Dataset,
     ETTm1Dataset.name: ETTm1Dataset,
     ECLDataset.name: ECLDataset,
-    WTHDataset.name: WTHDataset
+    WTHDataset.name: WTHDataset,
+    NABTEMPDataset.name: NABTEMPDataset,
+    PSMTRAINDataset.name: PSMTRAINDataset,
+    PSMTESTDataset.name: PSMTESTDataset
 }
 
 def dataset_list() -> List[str]:

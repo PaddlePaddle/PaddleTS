@@ -13,7 +13,7 @@ logger = Logger(__name__)
 
 class DataAdapter(object):
     """
-    Data adapter, converts :class:`paddlets.TSDataset` to :class:`paddle.io.Dataset` and :class:`paddle.io.DataLoader`.
+    Data adapter, converts TSDataset to paddle Dataset and paddle DataLoader.
     """
     def __init__(self):
         pass
@@ -28,10 +28,10 @@ class DataAdapter(object):
         time_window: Optional[Tuple] = None
     ) -> PaddleDatasetImpl:
         """
-        Converts :class:`paddlets.TSDataset` to :class:`paddle.io.Dataset`.
+        Convert TSDataset to paddle Dataset.
 
         Args:
-            rawdataset(TSDataset): Raw TSDataset for converting to :class:`paddle.io.Dataset`.
+            rawdataset(TSDataset): Raw TSDataset to be converted.
             in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
             skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
@@ -65,14 +65,13 @@ class DataAdapter(object):
         shuffle: bool = True
     ) -> PaddleDataLoader:
         """
-        Converts :class:`paddle.io.Dataset` to :class:`paddle.io.DataLoader`.
+        Convert paddle Dataset to paddle DataLoader.
 
         Args:
-            paddle_dataset(PaddleDatasetImpl): Raw :class:`~paddlets.TSDataset` for building :class:`paddle.io.DataLoader`.
+            paddle_dataset(PaddleDatasetImpl): paddle Dataset to be converted.
             batch_size(int): The number of samples for a single batch.
             collate_fn(Callable, optional): User-defined collate function for each batch, optional.
             shuffle(bool, optional): Whether to shuffle indices order before generating batch indices, default True.
-                TODO: add this argument to :func:`__init__` construct method allow caller to set its value.
 
         Returns:
             PaddleDataLoader: A built paddle DataLoader.
@@ -86,28 +85,72 @@ class DataAdapter(object):
                 out_chunk_len = 2
                 known_cov_chunk_len = in_chunk_len + out_chunk_len = 3 + 2 = 5
                 observed_cov_chunk_len = in_chunk_len = 3
-                target_col_num = 2 (target column number, e.g. ["t0", "t1"])
-                known_cov_col_num = 3 (known covariates column number, e.g. ["k0", "k1", "k2"])
-                observed_cov_col_num = 1 (observed covariates column number, e.g. ["obs0"])
+                target_col_num = 2 (target column number)
+                known_cov_numeric_col_num = 3 (known covariates column number with numeric dtype)
+                known_cov_categorical_col_num = 1 (known covariates column number with categorical dtype)
+                observed_cov_numeric_col_num = 1 (observed covariates column number with numeric dtype)
+                observed_cov_categorical_col_num = 2 (observed covariates column number with categorical dtype)
+                static_cov_numeric_col_num = 1 (static covariates column number with numeric dtype)
+                static_cov_categorical_col_num = 1 (static covariates column number with categorical dtype)
 
                 # Built DataLoader instance:
                 dataloader = [
                     # 1st batch
                     {
-                        "past_target": paddle.Tensor(shape=(batch_size, in_chunk_len, target_col_num)),
-                        "future_target": paddle.Tensor(shape=(batch_size, out_chunk_len, target_col_num)),
-                        "known_cov": paddle.Tensor(shape=(batch_size, known_cov_chunk_len, known_cov_col_num)),
-                        "observed_cov": paddle.Tensor(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num))
+                        "past_target": paddle.Tensor(
+                            shape=(batch_size, in_chunk_len, target_col_num)
+                        ),
+                        "future_target": paddle.Tensor(
+                            shape=(batch_size, out_chunk_len, target_col_num)
+                        ),
+                        "known_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, known_cov_chunk_len, known_cov_numeric_col_num)
+                        ),
+                        "known_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, known_cov_chunk_len, known_cov_categorical_col_num)
+                        ),
+                        "observed_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)
+                        ),
+                        "observed_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_categorical_col_num)
+                        ),
+                        "static_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, 1, static_cov_numeric_col_num)
+                        ),
+                        "static_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, 1, static_cov_categorical_col_num)
+                        )
                     },
 
                     # ...
 
                     # N-th batch
                     {
-                        "past_target": paddle.Tensor(shape=(batch_size, in_chunk_len, target_col_num)),
-                        "future_target": paddle.Tensor(shape=(batch_size, out_chunk_len, target_col_num)),
-                        "known_cov": paddle.Tensor(shape=(batch_size, known_cov_chunk_len, known_cov_col_num)),
-                        "observed_cov": paddle.Tensor(shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num))
+                        "past_target": paddle.Tensor(
+                            shape=(batch_size, in_chunk_len, target_col_num)
+                        ),
+                        "future_target": paddle.Tensor(
+                            shape=(batch_size, out_chunk_len, target_col_num)
+                        ),
+                        "known_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, known_cov_chunk_len, known_cov_numeric_col_num)
+                        ),
+                        "known_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, known_cov_chunk_len, known_cov_categorical_col_num)
+                        ),
+                        "observed_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)
+                        ),
+                        "observed_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, observed_cov_chunk_len, observed_cov_categorical_col_num)
+                        ),
+                        "static_cov_numeric": paddle.Tensor(
+                            shape=(batch_size, 1, static_cov_numeric_col_num)
+                        ),
+                        "static_cov_categorical": paddle.Tensor(
+                            shape=(batch_size, 1, static_cov_categorical_col_num)
+                        )
                     }
                 ]
         """
