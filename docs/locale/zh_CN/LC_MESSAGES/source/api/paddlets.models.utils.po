@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"POT-Creation-Date: 2022-11-02 12:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,73 +17,87 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.utils.rst:2
-#: 40a6a9ecc8de4dbeacb1eda5136732cb
+#: 1b71442a82e24aaf890c062215a3fdcd
 msgid "paddlets.models.utils"
 msgstr ""
 
-#: aa99f0ca27bb416881a36af4f6c8933d of
+#: bc9a2a8a6ddd43368b979fa2a025b4a8 of
 #: paddlets.models.utils.get_target_from_tsdataset:1
 msgid "Just reserve target in tsdataset."
 msgstr ""
 
-#: b12397ce6f9e427882ff813e74172f40 c6773f95183b4e34b3d94760e3bd9e0c
-#: fdb2b532fd514ecbb0e4131ae8324abc of paddlets.models.utils.check_tsdataset
+#: 44d4e08b3cad4fb1ae1611e3cac48fa8 61c243a418fe432583ed3e6a73236390
+#: 8fa2682c0a9a47efbf5e4cc01ec3ee0d bf579cdc8f4d4418869795367d100871 of
+#: paddlets.models.utils.check_tsdataset
 #: paddlets.models.utils.get_target_from_tsdataset
-#: paddlets.models.utils.to_tsdataset
+#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
 msgid "Parameters"
 msgstr "参数"
 
-#: deeee33378fb40539ac1468cbb675b65 of
+#: d5ad42570b1b40c9bebf1007495d00ca of
 #: paddlets.models.utils.get_target_from_tsdataset:3
 msgid "Data to be converted."
 msgstr "待检查的数据."
 
-#: 4a83eaf3b89d41e3bf30e333b1471805 of paddlets.models.utils.check_tsdataset:1
+#: caa9951e962e45c18b199d5b2c944209 of paddlets.models.utils.check_tsdataset:1
 msgid ""
 "Ensure the robustness of input data (consistent feature order), at the "
 "same time, check whether the data types are compatible. If not, the "
 "processing logic is as follows."
 msgstr "保证入模数据的鲁棒性(特征顺序的一致性), 同时, 检查数据类型的兼容性, 如果不兼容, 处理逻辑如下."
 
-#: 80fd715b0de2416f9158d3ff4864bdbe of paddlets.models.utils.check_tsdataset:4
+#: 81439556c9754b7789970b03c9c19092 of paddlets.models.utils.check_tsdataset:4
 msgid "1> Integer: Convert to np.int64."
 msgstr "整形: 统一转换为np.int64."
 
-#: 976e1152bc704dc1abe77b9afbcd4848 of paddlets.models.utils.check_tsdataset:6
+#: 1c6c6bc00ef041129f1fe45d5d4db4c0 of paddlets.models.utils.check_tsdataset:6
 msgid "2> Floating: Convert to np.float32."
 msgstr "浮点型: 统一转换为np.float32."
 
-#: 50b2ed1ae0b24c65921860d4a9b62d20 of paddlets.models.utils.check_tsdataset:8
+#: 38930abd0802476c90e73858f6f465db of paddlets.models.utils.check_tsdataset:8
 msgid "3> Missing value: Warning."
 msgstr "缺失值: 警告."
 
-#: 72d4eae0e67844f48a52c395ccac4807 of paddlets.models.utils.check_tsdataset:10
+#: 9cc233f4de1b401598f2470c678f4682 of paddlets.models.utils.check_tsdataset:10
 msgid "4> Other: Illegal."
 msgstr "其他: 非法."
 
-#: 9355852a7ad9414c9e9f3f2c6d167218 of paddlets.models.utils.check_tsdataset:12
+#: f610c7adc44846b0a5468ddfaa8ee174 of paddlets.models.utils.check_tsdataset:12
 msgid "Data to be checked."
 msgstr "待检查的数据."
 
-#: c79cc6844c834c32b3ebbe5955f0babc of paddlets.models.utils.to_tsdataset:1
+#: 0222c4ff4b7a49e8a899cda186a7e2b1 045ad7c0b9984ac3a22fc1213f02a4b5 of
+#: paddlets.models.utils.to_tsdataset:1 paddlets.models.utils.to_tsdataset2:1
 msgid ""
 "A decorator, used for converting ndarray to tsdataset (compatible with "
-"both DL and ML)."
+"both DL and ML, compatible with both forecasting and anomaly)."
 msgstr "装饰器, 基于np.ndarray类型数据生成TSDataset类型数据(兼容ML模型和DL模型)."
 
-#: 7fc82b5111ce45e4825579cd673f353c of paddlets.models.utils.to_tsdataset:3
-msgid "Core function."
-msgstr "核心函数."
+#: 51a63e59f1b543b897cd02abb1375f87 of paddlets.models.utils.to_tsdataset:4
+msgid ""
+"The task type. [\"forecasting\", \"anomaly_label\", \"anomaly_score\"] is"
+" optional."
+msgstr ""
 
-#: 34c2bff9e28043198cf9887260e2592a of paddlets.models.utils.to_tsdataset
+#: 70f4fd011d0544f294a60aeb95a401ca f459a26ee0e846caa04a43046169a2f1 of
+#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
 msgid "Returns"
 msgstr "返回"
 
-#: 9883991d44bd448da3db50ba0c17d859 of paddlets.models.utils.to_tsdataset:6
+#: 18788521c28840bbb12e7510731e0c63 91c526c6593545ff99081202b4f464fd of
+#: paddlets.models.utils.to_tsdataset:7 paddlets.models.utils.to_tsdataset2:7
 msgid "Wrapped core function."
 msgstr "被装饰的函数."
 
-#: ab5320502bd54dad8a9e28908c5d3794 of paddlets.models.utils.to_tsdataset
+#: 2e0e9f0fa0e54f46b5a14ee1320e7964 32955fba142b464f949714e955675eba of
+#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
 msgid "Return type"
 msgstr ""
+
+#: 68aae619ff5246a9bf98125e10edc3ea of paddlets.models.utils.to_tsdataset2:4
+msgid "The task type. [\"anomaly_label\", \"anomaly_score\"] is optional."
+msgstr ""
+
+#~ msgid "Core function."
+#~ msgstr "核心函数."
 
