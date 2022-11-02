@@ -5,15 +5,17 @@ sys.path.append(".")
 from typing import List
 from unittest import TestCase
 import unittest
+import copy
 
 import pandas as pd
 import numpy as np
 
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
-from paddlets.utils.validation import cross_validate
+from paddlets.utils.validation import cross_validate, fit_and_score
 from paddlets.datasets.splitter import ExpandingWindowSplitter, SlideWindowSplitter
-from paddlets.models.forecasting import LSTNetRegressor
+from paddlets.models.forecasting import LSTNetRegressor, MLPRegressor
 from paddlets.utils import check_train_valid_continuity
+from paddlets.datasets.repository import get_dataset
 
 
 class TestCV(TestCase):
@@ -43,7 +45,7 @@ class TestCV(TestCase):
                 index=pd.date_range("2022-01-01", periods=500, freq="15T"),
                 columns=["b1", "c1"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
         self.tsdataset2 = TSDataset(target2, observed_cov, known_cov, static_cov)
 
@@ -193,7 +195,7 @@ class TestCV(TestCase):
                 index=pd.date_range("2022-01-01", periods=500, freq="15T"),
                 columns=["b1", "c1"]
             ))
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
         ts1,ts2 = dataset.split(0.5)
@@ -216,7 +218,7 @@ class TestCV(TestCase):
                 np.random.randn(2500, 2).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
                 columns=["b1", "c1"])
-        static_cov = {"f": 1, "g": 2}
+        static_cov = {"f": 1.0, "g": 2.0}
         target2 = target2.reset_index(drop=True).reindex(index)
         observed_cov = observed_cov.reset_index(drop=True).reindex(index)
         known_cov = known_cov.reset_index(drop=True).reindex(index2)
@@ -231,6 +233,60 @@ class TestCV(TestCase):
         assert check_train_valid_continuity(ts1, ts2) == True
         assert check_train_valid_continuity(ts1, ts4) == False
 
+    def test_fit_and_score(self):
+        tsdataset_1 = get_dataset("UNI_WTH")
+        _, tsdataset_1 = tsdataset_1.split(int(len(tsdataset_1.get_target()) * 0.99))
+        tsdataset_2 = copy.deepcopy(tsdataset_1)
+        tsdataset = copy.deepcopy(tsdataset_1)
+        tsdatasets = [tsdataset_1, tsdataset_2]
+
+        nn_params = {
+            'in_chunk_len': 25,
+            'out_chunk_len': 5,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"],
+            'max_epochs': 3,
+            'patience':2
+        }
+
+        model = MLPRegressor(**nn_params)
+
+        fit_and_score(
+            tsdatasets,
+            tsdatasets,
+            estimator=model)
+
+        fit_and_score(
+            tsdataset,
+            tsdataset,
+            estimator=model)
+
+        fit_and_score(
+            tsdataset,
+            tsdatasets,
+            estimator=model)
+
+        fit_and_score(
+            tsdatasets,
+            tsdataset,
+            estimator=model)
+
+        with self.assertRaises(NotImplementedError):
+            fit_and_score(
+                tsdatasets,
+                tsdataset,
+                estimator=model,
+                use_backtest=False)
+
+        with self.assertRaises(NotImplementedError):
+            fit_and_score(
+                tsdataset,
+                tsdatasets,
+                estimator=model,
+                use_backtest=False)
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
-

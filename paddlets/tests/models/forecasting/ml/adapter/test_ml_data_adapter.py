@@ -29,7 +29,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 0 (good case) 非lag场景 + 给定一个数据集, 返回其中所有的样本 #
         ###############################################################
         # 这种场景是最简单的构建样本的调用方式, 常用于构建训练样本.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -41,7 +41,7 @@ class TestDataAdapter(unittest.TestCase):
             "sampling_stride": 1,
             "time_window": (1, 9)
         }
-
+        
         # 0.1 Both numeric and categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
@@ -51,10 +51,10 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_contain_categorical=True
         )
         adapter = DataAdapter()
-
+        
         # 调用接口, 构建样本(除了数据集之外, 不传入任何其他参数)
         sample_ds = adapter.to_ml_dataset(tsdataset)
-
+        
         # 默认作为 X 的 target 长度为与 in_chunk 长度相等, 默认值为 1
         self.assertEqual(param["in_chunk_len"], sample_ds._target_in_chunk_len)
         # 默认不跳过任何时间点 (skip = 0)
@@ -89,9 +89,9 @@ class TestDataAdapter(unittest.TestCase):
         ratio = (0.5, 0.25, 0.25)
         target_len = len(tsdataset.get_target().data)
         window_bias = common_param["in_chunk_len"] + \
-                      common_param["skip_chunk_len"] + \
-                      common_param["out_chunk_len"] - \
-                      1
+            common_param["skip_chunk_len"] + \
+            common_param["out_chunk_len"] - \
+            1
 
         # 构建train样本
         train_window_min = 0 + window_bias
@@ -147,7 +147,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 2 (good case) 非lag场景, 给定一个数据集, 只从中构建一条只有X, 没有Y的预测样本 #
         ##############################################################################
         # 常用于在生产环境中，给真实的时序数据构建一条待预测的样本
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -192,7 +192,7 @@ class TestDataAdapter(unittest.TestCase):
         # 5) built only one sample contains both X and Y. #
         ###################################################
         # 这种场景是在TSDataset被lag处理的前提下, 最简单的构建样本的调用方式, 常用于构建训练样本.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -229,7 +229,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 4 (good case) lag场景 + 给定一个数据集, 返回其中所有的样本 #
         #############################################################
         # 这种场景是在TSDataset被lag处理的前提下, 最简单的构建样本的调用方式, 常用于构建训练样本.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -286,9 +286,9 @@ class TestDataAdapter(unittest.TestCase):
         ratio = (0.5, 0.25, 0.25)
         target_len = len(tsdataset.get_target().data)
         window_bias = max(1, common_param["in_chunk_len"]) + \
-                      common_param["skip_chunk_len"] + \
-                      common_param["out_chunk_len"] - \
-                      1
+            common_param["skip_chunk_len"] + \
+            common_param["out_chunk_len"] - \
+            1
 
         # 构建train样本
         train_window_min = 0 + window_bias
@@ -344,7 +344,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 6 (good case) lag场景, 给定一个数据集, 只从中构建一条只有X, 没有Y的预测样本 #
         ############################################################################
         # 常用于在生产环境中，给真实的时序数据构建一条待预测的样本
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -390,7 +390,7 @@ class TestDataAdapter(unittest.TestCase):
         # 5) built only one sample contains both X and Y. #
         ###################################################
         # 常用于在生产环境中，在真实的时序数据中所有协变量均为None的情况下，构建训练样本。
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -430,7 +430,7 @@ class TestDataAdapter(unittest.TestCase):
         ##############################################################
         # case 8 (bad case) 非 lag + 给定一个数据集, 且time_window越下界 #
         ##############################################################
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 12
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -490,7 +490,7 @@ class TestDataAdapter(unittest.TestCase):
         ############################################################
         # case 9 (bad case) lag + 给定一个数据集, 且time_window越下界 #
         ############################################################
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 12
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -543,7 +543,7 @@ class TestDataAdapter(unittest.TestCase):
         ##############################################################
         # case 10 (bad case) 非lag场景 + 给定数据集, 且time_window越上界 #
         ##############################################################
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -574,7 +574,7 @@ class TestDataAdapter(unittest.TestCase):
         #############################################################
         # case 11 (bad case) lag场景 + 给定数据集, 且time_window越上界 #
         #############################################################
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -606,7 +606,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 12 (bad case) 非lag场景 + 给定数据集 + 给定 time_window, 且known_cov长度不符合预期 #
         #####################################################################################
         # 这个 case 中 time_window 上界没有超过 max_target_idx, 构建的样本即包含X, 也包含skip_chunk + Y.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -650,7 +650,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 13 (bad case) 非lag场景 + 给定数据集 + 给定 time_window, 且known_cov长度不符合预期 #
         #####################################################################################
         # 这个 case 中 time_window 上界超过了 max_target_idx, 构建的样本只包含X, 不包含 skip_chunk 或 Y.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -692,7 +692,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 14 (bad case) lag场景 + 给定数据集 + 给定 time_window, 且known_cov长度不符合预期 #
         ####################################################################################
         # 这个 case 中 time_window 上界没有超过 max_target_idx, 构建的样本即包含X, 也包含skip_chunk + Y.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -733,7 +733,7 @@ class TestDataAdapter(unittest.TestCase):
         # case 15 (bad case) lag场景 + 给定数据集 + 给定 time_window, 且known_cov长度不符合预期 #
         ####################################################################################
         # 这个 case 中 time_window 上界超过了 max_target_idx, 构建的样本只包含X, 不包含 skip_chunk 或 Y.
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
         observed_periods = target_periods
 
@@ -814,7 +814,7 @@ class TestDataAdapter(unittest.TestCase):
         #############################################################################################################
         # 因为 observed 的校验逻辑中, 只需要考虑 skip_chunk_len 和 out_chunk_len, 和 in_chunk_len 无关，所以其实
         # case 13 和 case 14 (当前case) 逻辑上没有区别。但是仍然区分了 lag / 非lag 两个场景测试两次，没有坏处。
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
 
         # 这里所说的超过, 是比较 timestamp 时间戳的大小比较, 而不是比较 periods / idx 的数字大小.
@@ -892,7 +892,7 @@ class TestDataAdapter(unittest.TestCase):
         ############################################################################################################
         # 因为 observed 的校验逻辑中, 只需要考虑 skip_chunk_len 和 out_chunk_len, 和 in_chunk_len 无关，所以其实
         # case 16 和 case 17 (当前case) 逻辑上没有区别。但是仍然区分了 lag / 非lag 两个场景测试两次，没有坏处。
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 10
 
         # 这里所说的超过, 是比较 timestamp 时间戳的大小比较, 而不是比较 periods / idx 的数字大小.
@@ -971,7 +971,7 @@ class TestDataAdapter(unittest.TestCase):
         # 3) observed_cov is NOT None. #
         # 2) static_cov is NOT None.   #
         ################################
-        # 构造bts tsdataset
+        # 构造paddlets tsdataset
         target_periods = 20
         observed_periods = target_periods
         known_periods = target_periods + 10
@@ -1595,9 +1595,9 @@ class TestDataAdapter(unittest.TestCase):
         sample_dataloader = adapter.to_ml_dataloader(sample_ds, batch_size=batch_size)
 
         good_keys = all_target_keys.union(all_numeric_keys).union(all_categorical_keys) \
-                    - all_known_keys \
-                    - all_observed_keys \
-                    - all_static_keys
+            - all_known_keys \
+            - all_observed_keys \
+            - all_static_keys
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
@@ -1658,12 +1658,12 @@ class TestDataAdapter(unittest.TestCase):
         )
 
     def _build_mock_ts_dataset(
-            self,
-            target_periods: int,
-            known_periods: int,
-            observed_periods: int,
-            cov_dtypes_contain_numeric: bool = True,
-            cov_dtypes_contain_categorical: bool = True
+        self,
+        target_periods: int,
+        known_periods: int,
+        observed_periods: int,
+        cov_dtypes_contain_numeric: bool = True,
+        cov_dtypes_contain_categorical: bool = True
     ):
         """Build mock dataset"""
         numeric_dtype = np.float32
@@ -1676,7 +1676,7 @@ class TestDataAdapter(unittest.TestCase):
             index=pd.date_range("2022-01-01", periods=target_periods, freq=freq),
             columns=["target_numeric_0"]
         )
-
+        
         # known
         known_raw_data = [(i * 10, i * 100) for i in range(known_periods)]
         known_numeric_df = None
@@ -1747,12 +1747,12 @@ class TestDataAdapter(unittest.TestCase):
         )
 
     def _compare_tsdataset_and_sample_dataset(
-            self,
-            tsdataset: TSDataset,
-            sample_ds: MLDataset,
-            param: Dict,
-            lag: bool = False,
-            future_target_is_nan: bool = False
+        self,
+        tsdataset: TSDataset,
+        sample_ds: MLDataset,
+        param: Dict,
+        lag: bool = False,
+        future_target_is_nan: bool = False
     ) -> None:
         """
         功能函数, 给定一个tsdataset数据集, 以及从中构建出来的样本集, 比较其中数据是否匹配
@@ -1777,7 +1777,7 @@ class TestDataAdapter(unittest.TestCase):
         observed_ts = tsdataset.get_observed_cov()
         static_cov = tsdataset.get_static_cov()
 
-        # 验证: 验证每一条样本在bts dataset 和 ml dataset 中的数据是否可以匹配
+        # 验证: 验证每一条样本在paddlets dataset 和 ml dataset 中的数据是否可以匹配
         for sidx in range(len(sample_ds.samples)):
             curr_sample = sample_ds[sidx]
 
@@ -1914,12 +1914,12 @@ class TestDataAdapter(unittest.TestCase):
                 self.assertTrue("static_cov_categorical" not in curr_sample.keys())
 
     def _compare_sample_dataset_and_sample_dataloader(
-            self,
-            sample_ds: MLDataset,
-            sample_dataloader: MLDataLoader,
-            batch_size: int,
-            good_keys: Set[str],
-            lag: bool = False
+        self,
+        sample_ds: MLDataset,
+        sample_dataloader: MLDataLoader,
+        batch_size: int,
+        good_keys: Set[str],
+        lag: bool = False
     ):
         """Check if sample dataset matches batched sample dataloader."""
         all_keys = {
