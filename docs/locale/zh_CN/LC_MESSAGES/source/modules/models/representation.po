@@ -25,12 +25,12 @@ msgstr "表征模型使用教程"
 #: ../../source/modules/models/representation.rst:5
 #: abd881ced8334a62ad29b17617645b05
 msgid ""
-"The representation model (TS2Vect) is one of the self-supervised models, "
+"The representation model (TS2Vec) is one of the self-supervised models, "
 "mainly hoping to learn a general feature expression for downstream tasks."
 " The current mainstream self-supervised learning mainly includes "
-"Generative-based and Contrastive-based methods, TS2Vect is a Self-"
+"Generative-based and Contrastive-based methods, TS2Vec is a Self-"
 "Supervised Model Based on Contrastive Method"
-msgstr "表征模型(TS2Vect)属于自监督模型里的一种，主要是希望能够学习到一种通用的特征表达用于下游任务；当前主流的自监督学习主要有基于生成式和基于对比学习的方法，当前案例使用的TS2Vect模型是一种基于对比学习的自监督模型"
+msgstr "表征模型(TS2Vec)属于自监督模型里的一种，主要是希望能够学习到一种通用的特征表达用于下游任务；当前主流的自监督学习主要有基于生成式和基于对比学习的方法，当前案例使用的TS2Vec模型是一种基于对比学习的自监督模型"
 
 #: ../../source/modules/models/representation.rst:9
 #: 3025ac9aaf0446fc95a211d81437c9ce
@@ -49,8 +49,8 @@ msgstr "使用带标签的数据在下游任务上 Fine-tune"
 
 #: ../../source/modules/models/representation.rst:13
 #: c847d4c3b8aa47fb914da3ecec97be17
-msgid "TS2Vect follows the usage paradigm of self-supervised models:"
-msgstr "TS2Vect结合下游任务的使用同样遵循自监督模型的使用范式，分为2个阶段："
+msgid "TS2Vec follows the usage paradigm of self-supervised models:"
+msgstr "TS2Vec结合下游任务的使用同样遵循自监督模型的使用范式，分为2个阶段："
 
 #: ../../source/modules/models/representation.rst:12
 #: 36866eb1d84442109043c8f4f1b5e07f
@@ -84,7 +84,7 @@ msgid ""
 "Decoupling the representational model and downstream tasks, showing in "
 "detail how the representational model and downstream tasks are used in "
 "combination"
-msgstr "表征模型和下游任务解藕，详细展示表征模型和下游任务如何相结合使用"
+msgstr "表征模型和下游任务解耦，详细展示表征模型和下游任务如何相结合使用"
 
 #: ../../source/modules/models/representation.rst:20
 #: 2d31625f0fdd48609b97bd524cb2e7a5
