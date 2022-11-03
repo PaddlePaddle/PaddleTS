@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 15:04+0800\n"
+"POT-Creation-Date: 2022-11-03 11:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../source/get_started/run_on_gpu.rst:3 186783229ff940aab8349ca3d318fe4e
+#: ../../source/get_started/run_on_gpu.rst:3 734dbbe1dbb94197ae4cc12a003db9fc
 msgid "Run on GPU"
 msgstr "使用GPU计算时序模型"
 
-#: ../../source/get_started/run_on_gpu.rst:5 70df43a75060466c882bf8eeb62ae183
+#: ../../source/get_started/run_on_gpu.rst:5 9205967a98874be2a1ab9ee7b873471b
 msgid ""
 "PaddleTS uses PaddlePaddle framework to build deep time series models. "
 "Since PaddlePaddle provides GPU capability, it is quite easy to fit and "
@@ -30,17 +30,17 @@ msgstr ""
 "PaddleTS 基于 PaddlePaddle "
 "框架构建深度时序模型。由于PaddlePaddle提供GPU能力，因此仅需一些简单的步骤即可在GPU上训练、预测PaddleTS模型。"
 
-#: ../../source/get_started/run_on_gpu.rst:10 9de8abfa7f6c4d889ba815edab11f1c4
+#: ../../source/get_started/run_on_gpu.rst:10 50f7a0c5c8b74222b8031ef81cbadc1b
 msgid "1. Prerequisites"
 msgstr "1. 前置条件"
 
-#: ../../source/get_started/run_on_gpu.rst:12 de3224b1387a44db90e4fd3534c89abc
+#: ../../source/get_started/run_on_gpu.rst:12 783412dadaf440048ffcc5a4c47cae3e
 msgid ""
 "There are few prerequisites before running a PaddleTS time series model "
 "on Nvidia GPU devices:"
 msgstr "在Nvidia GPU设备上运行PaddleTS提供的深度时序模型，需要满足以下前置条件："
 
-#: ../../source/get_started/run_on_gpu.rst:14 d09df4e94c61444aa6080f790562e794
+#: ../../source/get_started/run_on_gpu.rst:14 2d4d793e0cda4be8bea4cd7b8b61c118
 msgid ""
 "Verify the system has Nvidia GPU and relevant Driver(s) installed. See "
 "`Nvidia Installation Guide <https://docs.nvidia.com/cuda/cuda-"
@@ -50,7 +50,7 @@ msgstr ""
 "<https://docs.nvidia.com/cuda/cuda-installation-guide-"
 "linux/index.html>`__ 。"
 
-#: ../../source/get_started/run_on_gpu.rst:17 1f35f79da28448edbcad2a25adc3fe23
+#: ../../source/get_started/run_on_gpu.rst:17 b92ea123edba4c59b2aeead5516e9d5e
 msgid ""
 "Verify the system supported gpu-version of PaddlePaddle installed. See "
 "`PaddlePaddle-gpu Installation Guide "
@@ -61,7 +61,7 @@ msgstr ""
 "<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/pip"
 "/linux-pip.html>`__ 。"
 
-#: ../../source/get_started/run_on_gpu.rst:21 833b4143555248ee9ab160c285d769eb
+#: ../../source/get_started/run_on_gpu.rst:21 81e867fe051c4ea790c80c6037a639d5
 msgid ""
 "In the meantime, for known reason, it is currently not feasible to run "
 "the built-in `NHiTS Model "
@@ -71,37 +71,37 @@ msgstr ""
 "同时需要注意，由于一些已知原因，目前无法在GPU设备上运行PaddleTS的内置 `NHiTS 模型 "
 "<../api/paddlets.models.forecasting.dl.nhits.html>`_ ，后续会修复此问题。"
 
-#: ../../source/get_started/run_on_gpu.rst:26 6d22847d85354ba1b834485fbc374a96
+#: ../../source/get_started/run_on_gpu.rst:26 dafe4dfbb4fd4027babfde058f5b13d9
 msgid "2. Example"
 msgstr "2. 示例"
 
-#: ../../source/get_started/run_on_gpu.rst:28 5013299076e040638788d2fa62ca43f9
+#: ../../source/get_started/run_on_gpu.rst:28 2042067b42de4b7b9ca3724e7ce1877b
 msgid ""
 "Generally, there are three steps to run PaddleTS deep time series models "
 "on GPU:"
 msgstr "通常来说，在GPU设备上运行PaddleTS深度时序模型需要完成以下3步："
 
-#: ../../source/get_started/run_on_gpu.rst:30 d553f791f8cc4a0aa10ecee175e0a42f
+#: ../../source/get_started/run_on_gpu.rst:30 dbc7f89c899749b1a2c3656b031346bf
 msgid "Get available GPU devices in your system."
 msgstr "获取当前系统可用的GPU设备。"
 
-#: ../../source/get_started/run_on_gpu.rst:31 eaf5a8f846ba4d5da88d8fed0d10d95f
+#: ../../source/get_started/run_on_gpu.rst:31 4312fb5d23ec4879b7f4e684dc284a7e
 msgid "Choose a GPU device to use."
 msgstr "选择其中一个GPU设备用于计算。"
 
-#: ../../source/get_started/run_on_gpu.rst:32 24c286ebeb484b63bd06c3abb4991b81
+#: ../../source/get_started/run_on_gpu.rst:32 a91a787fb9454d24955dc6f7d4d22d4b
 msgid "Execute your program to fit and predict model on GPU."
 msgstr "执行你的程序，以便在GPU上完成模型训练、预测。"
 
-#: ../../source/get_started/run_on_gpu.rst:34 00b9b414d4b3428ebc4ca10897fafe76
+#: ../../source/get_started/run_on_gpu.rst:34 05b58924a24f457aae20c9fa9a5e5ade
 msgid "See below step-by-step instructions to get details."
 msgstr "详见下方步骤。"
 
-#: ../../source/get_started/run_on_gpu.rst:37 a60f2db8a67348979cf998093bbec414
+#: ../../source/get_started/run_on_gpu.rst:37 6b5c9d7a92364d51b3ba6f5901ec4ae2
 msgid "2.1 Get available GPU devices"
 msgstr "2.1 获取当前系统可用的GPU设备"
 
-#: ../../source/get_started/run_on_gpu.rst:39 5f84f8c9c31b4fa8b02cc79cbed8c75f
+#: ../../source/get_started/run_on_gpu.rst:39 4373bf59046f457d9fbaaae3aa451a89
 msgid ""
 "Assume the system already have GPU and its driver installed. You may run "
 "`nvidia-smi` command to retrieve a list of the GPU devices containing "
@@ -110,27 +110,27 @@ msgstr ""
 "假设当前系统已安装GPU及其驱动。你可以在Linux Shell运行 `nvidia-smi` "
 "命令来获取一组GPU列表，其包含较详细的GPU设备状态信息。"
 
-#: ../../source/get_started/run_on_gpu.rst:42 14ca061713f0418b915cfb04551f9727
+#: ../../source/get_started/run_on_gpu.rst:42 82ca4ccd3204423a8c30a8ab20df46da
 msgid "Below is a sample output. Briefly, it indicates the following:"
 msgstr "下方是一个返回的输出示例。简单来说，它包含以下信息："
 
-#: ../../source/get_started/run_on_gpu.rst:44 4c90fb6f39504bf09842eb5728915d7a
+#: ../../source/get_started/run_on_gpu.rst:44 962f7f0883b24746a300e9db8a48078d
 msgid "There are 4 Nvidia A30 GPU devices available."
 msgstr "当前系统共有4台Nvidia A30型号的GPU设备可用。"
 
-#: ../../source/get_started/run_on_gpu.rst:45 87670012e0604e4ca207090d469bc8cf
+#: ../../source/get_started/run_on_gpu.rst:45 b620efb010834c0cb1bedef1876c1e3f
 msgid "Each device has 24258MiB free memory to use."
 msgstr "每台可用设备有24258MiB空闲内存可以使用。"
 
-#: ../../source/get_started/run_on_gpu.rst:46 6f4dc7529b884b7584d8384635ad843e
+#: ../../source/get_started/run_on_gpu.rst:46 263cfaaff79f4ef083ec326d9c233824
 msgid "Currently no running process occupying any devices."
 msgstr "目前没有运行中的进程占用任何GPU设备。"
 
-#: ../../source/get_started/run_on_gpu.rst:83 44b0157f7b1c4c7dafbefb889348b71c
+#: ../../source/get_started/run_on_gpu.rst:83 1a8456a8ae724d0891bc18dcfea60276
 msgid "2.2 Explicitly set GPU devices to use"
 msgstr "2.2 显式地设置希望使用的GPU设备"
 
-#: ../../source/get_started/run_on_gpu.rst:85 ae0fca04094141878e8fd3a7727112d3
+#: ../../source/get_started/run_on_gpu.rst:85 e0a1cd9547444d379909bd51842b6d3b
 msgid ""
 "Nvidia provides `CUDA_VISIBLE_DEVICES` environment variable to rearrange "
 "the installed CUDA devices that will be visible to a CUDA application. "
@@ -144,13 +144,13 @@ msgstr ""
 "四台可用GPU设备，并且已知给定场景中仅会用到第0台GPU设备，那么你可以通过运行`export CUDA_VISIBLE_DEVICES=0` "
 "命令来显式地指定设备0对你的CUDA应用程序可见。"
 
-#: ../../source/get_started/run_on_gpu.rst:89 ecd395f9e04044a8853c1ecbdec15463
+#: ../../source/get_started/run_on_gpu.rst:89 39473272f77046728282d51e270c1bde
 msgid ""
 "If you run `echo $CUDA_VISIBLE_DEVICES`, the output `0` indicates that we"
 " choose to use the device 0 to fit and predict time series model."
 msgstr "此时如果你运行 `echo $CUDA_VISIBLE_DEVICES` 命令，则你看到的输出 0 表明你将会使用设备0来训练、预测深度时序模型。"
 
-#: ../../source/get_started/run_on_gpu.rst:91 e7754765043d487ca7284763bb67308f
+#: ../../source/get_started/run_on_gpu.rst:91 9ef8f556f7b242d4a0999b8b3af5938f
 msgid ""
 "See `Nvidia CUDA_VISIBLE_DEVICES <https://docs.nvidia.com/cuda/cuda-c"
 "-best-practices-guide/index.html#cuda-visible-devices>`__ to get more "
@@ -159,27 +159,27 @@ msgstr ""
 "更多细节可参考 `Nvidia CUDA_VISIBLE_DEVICES <https://docs.nvidia.com/cuda/cuda-c"
 "-best-practices-guide/index.html#cuda-visible-devices>`__ 。"
 
-#: ../../source/get_started/run_on_gpu.rst:95 6dceb168a69845daa9f5006738ee270a
+#: ../../source/get_started/run_on_gpu.rst:95 2748f8fa551949ef845871ad4d10e606
 msgid "2.3 Install GPU-capable PaddleTS"
 msgstr "2.3 安装可以运行在GPU上的PaddleTS"
 
-#: ../../source/get_started/run_on_gpu.rst:97 0ea1bbb3996e409383df70aedd5c1309
+#: ../../source/get_started/run_on_gpu.rst:97 f828f2d659f74ce7a0e25732bb85c965
 msgid "There are currently 2 ways to setup environment:"
 msgstr "有两种方法来准备环境："
 
-#: ../../source/get_started/run_on_gpu.rst:99 55fd38c3919d4cca86eaab64b82612b3
+#: ../../source/get_started/run_on_gpu.rst:99 487d6297408148fabbd0a8fb428d113c
 msgid "pip"
 msgstr ""
 
-#: ../../source/get_started/run_on_gpu.rst:100 a4da1fa632654f0694690d79487844d7
+#: ../../source/get_started/run_on_gpu.rst:100 1abe14c4ada049c6ab969a1876202028
 msgid "docker"
 msgstr ""
 
-#: ../../source/get_started/run_on_gpu.rst:104 354cc181b84e472389e66cf1a89dee70
+#: ../../source/get_started/run_on_gpu.rst:104 26b97105c0ec481995a03bc4543c3ac3
 msgid "2.3.1 pip install"
 msgstr "2.3.1 pip 安装"
 
-#: ../../source/get_started/run_on_gpu.rst:106 50bba2ce70be4a18afc30a72d04d8d98
+#: ../../source/get_started/run_on_gpu.rst:106 6c7c0a93201344e7bb361953fbe6361c
 msgid ""
 "Before installing PaddleTS, it is required to first install the `gpu-"
 "capable paddlepaddle "
@@ -190,15 +190,15 @@ msgstr ""
 "<https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/pip"
 "/linux-pip.html#gpu>`__ 。"
 
-#: ../../source/get_started/run_on_gpu.rst:114 5a02fd7d09ce40d288d2d7171c099736
+#: ../../source/get_started/run_on_gpu.rst:114 4e0aa8df626d4e959e2d7cf47f94cbe4
 msgid "Now install the latest version of PaddleTS by running the following:"
 msgstr "现在可以运行以下命令安装最新版本PaddleTS："
 
-#: ../../source/get_started/run_on_gpu.rst:121 6fd84e81115343c2a41f15127712ef5c
+#: ../../source/get_started/run_on_gpu.rst:121 727be352e27545c186dc478b96bf1d5f
 msgid "2.3.2 docker"
 msgstr ""
 
-#: ../../source/get_started/run_on_gpu.rst:123 db1a6311b52d42fe8d5f9e4e08fe3969
+#: ../../source/get_started/run_on_gpu.rst:123 2e0398651b394af9a2f763544e6b8dfe
 msgid ""
 "It is required to follow the `Nvidia Container Toolkit Installation Guide"
 " <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit"
@@ -208,20 +208,20 @@ msgstr ""
 "/cloud-native/container-toolkit/install-guide.html>`__ 。来安装 nvidia-docker"
 " 客户端。"
 
-#: ../../source/get_started/run_on_gpu.rst:127 3ac5906df30246dbb3109aed34cdf364
+#: ../../source/get_started/run_on_gpu.rst:127 d7cb8a958bad43e594611e74b1ccf202
 msgid "Now we can pull the gpu-capable docker image."
 msgstr "现在可以拉取支持GPU的docker镜像。"
 
-#: ../../source/get_started/run_on_gpu.rst:135 84492fec0d7b4afcbf08e0982e548359
+#: ../../source/get_started/run_on_gpu.rst:135 4b0c6f3a638a409398d3c1d174188448
 msgid "2.3 Use GPU device to fit and predict models"
 msgstr "2.3 使用GPU设备进行模型训练、预测"
 
-#: ../../source/get_started/run_on_gpu.rst:137 1f9e3abd22744c0193a7d727865f3277
+#: ../../source/get_started/run_on_gpu.rst:137 34b8fdbe953c47eb86b1a9dd2d7b8f07
 msgid ""
 "After completing the above, the rest steps to fit and predict the model "
 "are identical to the ones on CPU. See `Get Started "
-"<../modules/datasets/overview.html>`_ to get more details."
+"<../get_started/get_started.html>`_ to get more details."
 msgstr ""
 "在完成以上所有步骤，剩余步骤与CPU完全一致，可以参考 `开始使用PaddleTS "
-"<../modules/datasets/overview.html>`_ 了解更多细节。"
+"<../get_started/get_started.html>`_ 了解更多细节。"
 

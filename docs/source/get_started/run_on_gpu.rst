@@ -135,7 +135,7 @@ Now we can pull the gpu-capable docker image.
 ----------------------------------------------
 
 After completing the above, the rest steps to fit and predict the model are identical to the ones on CPU.
-See `Get Started <../modules/datasets/overview.html>`_ to get more details.
+See `Get Started <../get_started/get_started.html>`_ to get more details.
 
 .. code-block:: python
 
