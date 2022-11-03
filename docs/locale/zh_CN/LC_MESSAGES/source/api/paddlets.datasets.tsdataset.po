@@ -692,13 +692,13 @@ msgstr "panas.DataFrame数据对象"
 #: paddlets.datasets.tsdataset.TSDataset.load_from_json:5
 #: paddlets.datasets.tsdataset.TimeSeries.load_from_json:5
 msgid "Optional arguments passed to `json.loads` function"
-msgstr "传入Dataframe.plot()的可选参数"
+msgstr "传json.loads()的可选参数"
 
 #: 02aaad3afbd549baa51b4479ed81a86d f252a834eddf43ffbd62afcbac6a68af of
 #: paddlets.datasets.tsdataset.TSDataset.to_categorical:1
 #: paddlets.datasets.tsdataset.TimeSeries.to_categorical:1
 msgid "Modify col's type to int as categorical."
-msgstr ""
+msgstr "将对应列的属性修改成分类类型的数据，也就是int类型，等同于astype(np.int64)"
 
 #: 39066acfa0a54e44aa9e7f2180bd9190 415f6665bd684829925be3113d9d7b5e
 #: 46f971c1fec848b792db8bf79120c68d e776a466ae924b78ba0ed819eb182444 of
@@ -713,7 +713,7 @@ msgstr "column名称"
 #: paddlets.datasets.tsdataset.TSDataset.to_numeric:1
 #: paddlets.datasets.tsdataset.TimeSeries.to_numeric:1
 msgid "Modify col's type to float as numeric."
-msgstr ""
+msgstr "将对应列的属性修改成数值类型的数据，也就是float类型，等同于astype(np.float32)"
 
 #: 9241baff164946daae95a9530a83ef94 of paddlets.datasets.tsdataset.TSDataset:27
 msgid "Target"
@@ -784,6 +784,9 @@ msgid ""
 "equipment, in which the `ID` column is used to distinguish different "
 "equipment. In this case, the group_id='ID'."
 msgstr ""
+"用于区分不同组的时序数据集，如果只有一个时序数据集，请不要传递此参数或将其设置为常量列的名称。"
+"如果提供了group_id，函数将返回长度等于len(group_id.unique())的TSDataset列表。"
+"例如：设备负载检测样本文件中包含了多个设备的数据，其中ID列用于区分不同的设备。在这种情况下，设置group_id=ID。"
 
 #: 10748597583843d6a227eebe141c58c3 664b135fd14146a7b4e433a5f187381b of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:12
