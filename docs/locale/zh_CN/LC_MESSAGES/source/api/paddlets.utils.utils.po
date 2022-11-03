@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"POT-Creation-Date: 2022-11-03 11:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../source/api/paddlets.utils.utils.rst:2 32d64f13155b4e888316bb72a23f66e0
+#: ../../source/api/paddlets.utils.utils.rst:2 3b266cfd754e401a971d5773a3e50c9f
 msgid "paddlets.utils.utils"
 msgstr ""
 
-#: b3232a11fc5b49c4829d371c84def6ad of
+#: deb75cfb7b7d4b20924b0c54e308b1ab of
 #: paddlets.utils.utils.check_model_fitted:1
 msgid "check if model has fitted, Raise Exception if not fitted"
 msgstr "检查模型是否已拟合，如果未拟合则抛出异常"
 
-#: 14cbc077be58433c9cfc64c62cc3dedb 3334fc3e8da44aa9b91120b23cf71874
-#: 4de70e1ab9cd4b2292467e9241958426 bbff55a99f6649b6bf2449e0f419482a
-#: df39df248e8941049fe7cc0ba3180505 of paddlets.utils.utils.check_model_fitted
+#: 09b0d6fef073494683ed16e05bcb11b8 2ba1bb1633f14526a33200d535e30ef0
+#: 3938a72dc7134efd94d6c5511d91fcb7 821659a62cdb4e248c37aec27c3aa1e2
+#: ab71bf46a27d432a8d329a93f95272f1 cb2a16f6d1154274bdcfc5646c58e90d
+#: eb07e50ec22f4c29a20136e0c807e95b of paddlets.utils.utils.check_model_fitted
 #: paddlets.utils.utils.check_train_valid_continuity
 #: paddlets.utils.utils.get_tsdataset_max_len paddlets.utils.utils.get_uuid
+#: paddlets.utils.utils.plot_anoms
+#: paddlets.utils.utils.repr_results_to_tsdataset
 #: paddlets.utils.utils.split_dataset
 msgid "Parameters"
 msgstr ""
 
-#: a9b91fe90fac4985a8957d12d7d4d1d8 of
+#: aff3d5d618bf4349939a162f3921ab2c of
 #: paddlets.utils.utils.check_model_fitted:3
 msgid "model instance."
 msgstr "模型实例"
 
-#: ae8c49c21cf240239f0fa1d12bbcd1ec of
+#: 663611294f1b49bd9eab641a1a0367ac of
 #: paddlets.utils.utils.check_model_fitted:5
 #, python-format
 msgid ""
@@ -51,94 +54,131 @@ msgid ""
 "\"Estimator, %(name)s, must be fitted before sparsifying\"."
 msgstr "报错消息，不设置即为默认值"
 
-#: 0342f47f2466478381ad7064d64f919f 4aea580017f04bfaac4b902f07c94da4
-#: 85496fd943054b52bf5fb57f6c687620 c138d9bff79247ce8a553ecadcdbb993
-#: d868a25b21b44b9fae13d00dbd699d9b of paddlets.utils.utils.check_model_fitted
+#: 34055b7d9d9446c6bbd977c7db286758 4c445ec47f994542a0a4abeda1e09885
+#: 9a39686938f7487f8c6bfd973a896157 a807ca546fcb4c18b3c783ec4d115b6e
+#: b1f61dcf1a974d1fa43044eabcb272c0 c34a8f0379344015be8b57086b86d9e6 of
+#: paddlets.utils.utils.check_model_fitted
 #: paddlets.utils.utils.check_train_valid_continuity
 #: paddlets.utils.utils.get_tsdataset_max_len paddlets.utils.utils.get_uuid
+#: paddlets.utils.utils.repr_results_to_tsdataset
 #: paddlets.utils.utils.split_dataset
 msgid "Returns"
 msgstr ""
 
-#: 0de9719240304e4aa9377395b7961a2a of
+#: 6aba49127e6a4565983f42b5ac4d3552 of
 #: paddlets.utils.utils.check_model_fitted:14
 msgid "None"
 msgstr ""
 
-#: 34fbcf3932854fd0aa6b9a4711b99c43 of paddlets.utils.utils.check_model_fitted
+#: dddceb5c758640fd8162935d2d2f6993 of paddlets.utils.utils.check_model_fitted
 msgid "Raises"
 msgstr ""
 
-#: 7b671a5e9f8c402ebfbf06cef417f803 of paddlets.utils.utils.get_uuid:1
+#: bbbe84d9612d486eb7544a847ae9e157 of paddlets.utils.utils.get_uuid:1
 msgid "Get a random string of 16 characters."
 msgstr "获取一个16个字符的随机字符串。"
 
-#: d8231b97e74a4597a85f0dc5b60d4d7a of paddlets.utils.utils.get_uuid:3
+#: 643548c8f0e64bd4a666008d85dc4621 of paddlets.utils.utils.get_uuid:3
 msgid "The prefix of the returned string."
 msgstr "返回字符串的前缀。"
 
-#: f78e7ffb4a7a4d81a585ce0546da3333 of paddlets.utils.utils.get_uuid:5
+#: 2273a4d68af54f3eb520cc1da2323f65 of paddlets.utils.utils.get_uuid:5
 msgid "The suffix of the returned string."
 msgstr "返回字符串的后缀。"
 
-#: 603f6fd5368148abbc767d89663cdadf of paddlets.utils.utils.get_uuid:8
+#: 04b00317ffba4d5e9b5568e01334e4df of paddlets.utils.utils.get_uuid:8
 msgid "String of 16 characters."
 msgstr "16个字符的字符串。"
 
-#: 397395ec989941a0a353a0a037c8544c ae3f9abf0c234e138144c9de5e7a2b6d of
+#: 24c1de0d320d417a9567654fb867cf11 b79c0fdae901439096b48de33891429c of
 #: paddlets.utils.utils.check_train_valid_continuity
 #: paddlets.utils.utils.get_uuid
 msgid "Return type"
 msgstr ""
 
-#: 8d154e227d2c41cea24db885f885cdcf of
+#: 10726296b92540909350259bda8e718a of
 #: paddlets.utils.utils.check_train_valid_continuity:1
 msgid "Check if train and test TSDataset are continous"
 msgstr "查看训练集和测试集是否是时间上连续的"
 
-#: 1680c3ed3e964b279e22606786cc1728 of
+#: a82d7352b0b241ff8c1d1227d691bf94 of
 #: paddlets.utils.utils.check_train_valid_continuity:3
 msgid "Train dataset."
 msgstr "训练集"
 
-#: f6cef24bd0214ccfb0393d3201a3edc1 of
+#: d01ec90f35a04469a7c993a1d7c6168e of
 #: paddlets.utils.utils.check_train_valid_continuity:5
 msgid "Test dataset."
 msgstr "测试集"
 
-#: bfe3d26791a64254a0a573d047a6cd66 of
+#: d20ef0bb33874fedbc0c3af2c1ff6f9f of
 #: paddlets.utils.utils.check_train_valid_continuity:8
 msgid "if train and test TSDataset are continous"
 msgstr "训练集和测试集是否连续"
 
-#: 4c72f53486764d8a80ac5378d52a3747 of paddlets.utils.utils.split_dataset:1
+#: 5f451037000b49a1abb0abc098d2a696 of paddlets.utils.utils.split_dataset:1
 msgid "Split dataset (accroding to the max length)"
 msgstr "根据最大长度切割TSDataset"
 
-#: 97e4c247305d4b1e85a88d5c2ab4f3ed of paddlets.utils.utils.split_dataset:3
+#: e8104b9def0c4fd4badb913be76c226f of paddlets.utils.utils.split_dataset:3
 msgid "dataset to be splited."
 msgstr "需要分割的TSDataset"
 
-#: 3e2f26b820014db69870e21d080ed83d of paddlets.utils.utils.split_dataset:5
+#: 5da71fb874ce4b74943a93005ccc98d4 of paddlets.utils.utils.split_dataset:5
 msgid "split point."
 msgstr ""
 
-#: 96f77b03a69c48eba753e9f1f4528c95 of paddlets.utils.utils.split_dataset:8
+#: 5486da11ca87465cbd129c845c795f33 ea9fba0de48a40df8c0233225ad43627 of
+#: paddlets.utils.utils.repr_results_to_tsdataset:8
+#: paddlets.utils.utils.split_dataset:8
 msgid "TSDataset"
 msgstr ""
 
-#: c09fb09105c84cdd83ffae21ef1aed13 of
+#: d3782e05e1ce478aa994c1fbe1f93ce7 of
 #: paddlets.utils.utils.get_tsdataset_max_len:1
 msgid "Get dataset max length"
 msgstr "获得TSDataset的最大长度"
 
-#: f0855b9cfba24545a919726c965cd6c9 of
+#: f97d537acb504312af98339f731b2133 of
 #: paddlets.utils.utils.get_tsdataset_max_len:3
 msgid "dataset use to get length."
 msgstr "需要用到的TSDataset"
 
-#: daa85915a7534aecb5b8ed1174ff9963 of
+#: 5052bca556da4b53910c26d6cecbea35 of
 #: paddlets.utils.utils.get_tsdataset_max_len:6
 msgid "int"
+msgstr ""
+
+#: ae2bcc6cf86a4f8aa42f24aa654138a2 of
+#: paddlets.utils.utils.repr_results_to_tsdataset:1
+msgid "Convert representation model output to a TSDataset"
+msgstr ""
+
+#: ac84f37c5d4a42cc85d584443b7c1bd5 of
+#: paddlets.utils.utils.repr_results_to_tsdataset:3
+msgid "output results of representation model"
+msgstr ""
+
+#: d2c9d2cda298477eb81f32578398ce2d of
+#: paddlets.utils.utils.repr_results_to_tsdataset:5
+msgid "dataset use to get target"
+msgstr "需要用到的TSDataset"
+
+#: 83c753ae2e9f4292b18a4ad77eb85b7b of paddlets.utils.utils.plot_anoms:1
+msgid "Plots anomalies"
+msgstr ""
+
+#: 273b72afb47a47a28fdf7e0f3a92429d of paddlets.utils.utils.plot_anoms:3
+msgid "Data used to print predict anom labels."
+msgstr ""
+
+#: bb1d99a00531495d8085f4c302c0b431 of paddlets.utils.utils.plot_anoms:5
+msgid ""
+"Data used to print features or origin anom labels. only print predict "
+"anom labels if set to None."
+msgstr ""
+
+#: 02a41d61323d4a1caa000af2af805121 of paddlets.utils.utils.plot_anoms:7
+msgid "feature name in origin data to print"
 msgstr ""
 
