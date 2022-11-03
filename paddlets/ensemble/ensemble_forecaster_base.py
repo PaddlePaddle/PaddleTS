@@ -192,7 +192,7 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
 
         Args:
             path(str): Input directory path.
-            ensemble_file_name(str): Name of ensemble object. This file contains meta information of ensemble.
+            ensemble_file_name(str): Name of loaded ensemble object. This file contains meta information of ensemble model.
 
         Returns:
             The loaded ensemble model.
