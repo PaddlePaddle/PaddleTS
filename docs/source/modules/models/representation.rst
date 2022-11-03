@@ -16,13 +16,14 @@ For the sake of accommodating both beginners and experienced developers, there a
     - A pipeline that combines the representation model and downstream tasks, which is very friendly to beginners
     - Decoupling the representational model and downstream tasks, showing in detail how the representational model and downstream tasks are used in combination
 
-Method one
+1. Method one
 =================
 
 A pipeline that combines the representation model and downstream tasks
 
-Prepare the data
-================
+1.1 Prepare the data
+--------------------
+
 .. code-block:: python
 
    import numpy as np
@@ -39,8 +40,9 @@ Prepare the data
    data, _ = data.split('2016-09-22 06:00:00')
    train_data, test_data = data.split('2016-09-21 05:00:00')
 
-Training 
-========
+1.2 Training 
+------------
+
 .. code-block:: python
 
    ts2vec_params = {"segment_size": 200, 
@@ -55,14 +57,16 @@ Training
                            repr_model_params=ts2vec_params)
    model.fit(train_data)
 
-Prediction
-==========
+1.3 Prediction
+--------------
+
 .. code-block:: python
 
    model.predict(train_data)
 
-Backtest
-========
+1.4 Backtest
+------------
+
 .. code-block:: python
 
    from paddlets.utils.backtest import backtest
@@ -75,19 +79,25 @@ Backtest
             return_predicts=True)
 
 
-Method two
+2. Method two
 =================
 
 Decoupling the representational model and downstream tasks. It's divided into two stages, the first stage is representation model training and prediction, and the second stage is the training and prediction of downstream tasks
 
-1. The first stage:
-===================
-    - Training of the representation model
-    - Output of training set and test set representation results
+The first stage:
+
+- Training of the representation model
+- Output of training set and test set representation results
+
+The second stage:
+
+- Build training and test samples for regression models
+- training and prediction
 
 
-1.1 Prepare the data
-====================
+2.1 Prepare the data
+--------------------
+
 .. code-block:: python
 
    import numpy as np
@@ -103,8 +113,9 @@ Decoupling the representational model and downstream tasks. It's divided into tw
    data, _ = data.split('2016-09-22 06:00:00')
    train_data, test_data = data.split('2016-09-21 05:00:00')
 
-1.2 Training of the representation model
-========================================
+2.2 Training of the representation model
+----------------------------------------
+
 .. code-block:: python
 
    # initialize the TS2Vect object
@@ -118,8 +129,9 @@ Decoupling the representational model and downstream tasks. It's divided into tw
    # training
    ts2vec.fit(train_data)
 
-1.3 Output of training set and test set representation results
-==============================================================
+2.3 Output of training set and test set representation results
+--------------------------------------------------------------
+
 .. code-block:: python
 
    sliding_len = 200 # Use past sliding_len length points to infer the representation of the current point in time
@@ -128,13 +140,10 @@ Decoupling the representational model and downstream tasks. It's divided into tw
    train_reprs = all_reprs[:, :split_tag]
    test_reprs = all_reprs[:, split_tag:]
 
-2. The second stage:
-=======================
-    - Build training and test samples for regression models
-    - training and prediction
 
-2.1 Build training and test samples for regression models
-=========================================================
+2.4 Build training and test samples for regression models
+---------------------------------------------------------
+
 .. code-block:: python
 
    # generate samples
@@ -159,8 +168,9 @@ Decoupling the representational model and downstream tasks. It's divided into tw
    test_to_numpy = np.expand_dims(test_to_numpy, 0) 
    test_features, test_labels = generate_pred_samples(test_reprs, test_to_numpy, pre_len) 
 
-2.2 Training and prediction
-===========================
+2.5 Training and prediction
+---------------------------
+
 .. code-block:: python
 
    # training
