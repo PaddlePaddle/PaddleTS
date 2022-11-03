@@ -50,14 +50,14 @@ class TestOptimizeRunner(TestCase):
         tsdataset = get_dataset("UNI_WTH")
         _, tsdataset = tsdataset.split(int(len(tsdataset.get_target())*0.99))
         autots_model = AutoTS(MLPRegressor, 25, 2, sampling_stride=25)
-        autots_model.fit(tsdataset, n_trails=1)
+        autots_model.fit(tsdataset, n_trials=1)
         sp = autots_model.search_space()
         predicted = autots_model.predict(tsdataset)
         predicted = autots_model.recursive_predict(tsdataset, 5)
         best_param = autots_model.best_param
         #test传入valid 的情况
         train, valid = tsdataset.split(int(len(tsdataset.get_target()) * 0.5))
-        autots_model.fit(train, valid, n_trails=1)
+        autots_model.fit(train, valid, n_trials=1)
 
         from ray.tune import uniform, qrandint, choice
         sp = {
@@ -74,7 +74,7 @@ class TestOptimizeRunner(TestCase):
             }
         }
         autots_model = AutoTS([Fill, MLPRegressor], 25, 2, search_space=sp, sampling_stride=25)
-        autots_model.fit(tsdataset, n_trails=1)
+        autots_model.fit(tsdataset, n_trials=1)
         sp = autots_model.search_space()
         predicted = autots_model.predict(tsdataset)
         predicted = autots_model.recursive_predict(tsdataset, 5)
@@ -82,7 +82,7 @@ class TestOptimizeRunner(TestCase):
         #test传入valid 的情况
         train, valid = tsdataset.split(int(len(tsdataset.get_target()) * 0.5))
         autots_model = AutoTS([Fill, MLPRegressor], 25, 2, search_space=sp)
-        autots_model.fit(train, valid, n_trails=1)
+        autots_model.fit(train, valid, n_trials=1)
 
 
 
@@ -110,7 +110,7 @@ class TestOptimizeRunner(TestCase):
             if "max_epochs" in sp:
                 sp['max_epochs'] = qrandint(2, 3, q=1)
             autots_model = AutoTS(e, 15, 2, search_space=sp, sampling_stride=25)
-            autots_model.fit(tsdataset, n_trails=5)
+            autots_model.fit(tsdataset, n_trials=5)
             sp = autots_model.search_space()
             predicted = autots_model.predict(tsdataset)
 
@@ -124,9 +124,9 @@ class TestOptimizeRunner(TestCase):
         tsdatasets = [tsdataset_1, tsdataset_2]
         self.assertEqual(len(tsdatasets), 2)
         autots_model = AutoTS(MLPRegressor, 25, 2, sampling_stride=25)
-        autots_model.fit(tsdatasets, valid_tsdataset, n_trails=1)
-        autots_model.fit(tsdatasets, tsdatasets, n_trails=1)
-        autots_model.fit(valid_tsdataset, tsdatasets, n_trails=1)
+        autots_model.fit(tsdatasets, valid_tsdataset, n_trials=1)
+        autots_model.fit(tsdatasets, tsdatasets, n_trials=1)
+        autots_model.fit(valid_tsdataset, tsdatasets, n_trials=1)
 
 
 if __name__ == "__main__":
