@@ -180,7 +180,7 @@ msgid ""
 msgstr ""
 "skip_chunk_len: 在单条样本中，夹在 in_chunk 和 out_chunk 之间的时间块的长度。 需要注意的是 "
 "skip_chunk_len 既不用做样本的特征(即 X)，也不用做样本的标签(即 "
-"Y)。默认情况下不会跳过任何一个时间点。默认情况下不会跳过任何一个时间步。"
+"Y)。默认情况下不会跳过任何一个时间步。"
 
 #: ../../source/modules/models/overview.rst:113
 #: 79ba366754e847f990a7228c8367b128
