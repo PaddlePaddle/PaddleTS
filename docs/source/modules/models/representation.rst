@@ -2,13 +2,13 @@
 Representation Model Tutorial
 =============================
 
-The representation model (TS2Vect) is one of the self-supervised models, mainly hoping to learn a general feature expression for downstream tasks. The current mainstream self-supervised learning mainly includes Generative-based and Contrastive-based methods, TS2Vect is a Self-Supervised Model Based on Contrastive Method
+The representation model (TS2Vec) is one of the self-supervised models, mainly hoping to learn a general feature expression for downstream tasks. The current mainstream self-supervised learning mainly includes Generative-based and Contrastive-based methods, TS2Vec is a Self-Supervised Model Based on Contrastive Method
 
 The use of self-supervised models is divided into two phases:
     - Pre-training with unlabeled data, independent of downstream tasks
     - Fine-tune on downstream tasks using labeled data
 
-TS2Vect follows the usage paradigm of self-supervised models:
+TS2Vec follows the usage paradigm of self-supervised models:
     - Representational model training
     - Use the output of the representation model for the downstream task (the downstream task of the current case is the prediction task)
 
@@ -31,10 +31,8 @@ Prepare the data
 
    import paddle
    paddle.seed(2022)
-   from paddlets.datasets import TimeSeries, TSDataset
    from paddlets.models.representation.dl.ts2vec import TS2Vec
-   from paddlets.models.common.callbacks.callbacks import Callback
-   from paddlets.datasets.repository import get_dataset, dataset_list
+   from paddlets.datasets.repository import get_dataset
    from paddlets.models.representation.task.repr_forecasting import ReprForecasting
 
    data = get_dataset('ETTh1')
@@ -98,10 +96,8 @@ Decoupling the representational model and downstream tasks. It's divided into tw
 
    import paddle
    paddle.seed(2022)
-   from paddlets.datasets import TimeSeries, TSDataset
    from paddlets.models.representation.dl.ts2vec import TS2Vec
-   from paddlets.models.common.callbacks.callbacks import Callback
-   from paddlets.datasets.repository import get_dataset, dataset_list
+   from paddlets.datasets.repository import get_dataset
 
    data = get_dataset('ETTh1')
    data, _ = data.split('2016-09-22 06:00:00')
