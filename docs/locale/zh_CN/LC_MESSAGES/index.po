@@ -46,7 +46,7 @@ msgstr "第三方以及自定义的数据转换模块自动集成"
 
 #: ../../index.rst:84
 msgid "Overview"
-msgstr "模型"
+msgstr "时序预测模型"
 
 #: ../../index.rst:84
 msgid "Third-party Model"
