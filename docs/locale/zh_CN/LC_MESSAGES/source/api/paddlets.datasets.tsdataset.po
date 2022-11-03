@@ -680,7 +680,7 @@ msgstr ""
 #: 11dbb1689eeb49fda49c29c50e23ff52 of
 #: paddlets.datasets.tsdataset.TimeSeries.load_from_json:1
 msgid "Construct a TimeSeries object from a str json_data"
-msgstr "基于CSV文件构建完整TSDataset"
+msgstr "基于Json数据构建完整TSDataset"
 
 #: ddfa20254a1344e3855fbef91ec57352 e349c190f16f4f77a8566dafc1811f40 of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_json:3
@@ -871,7 +871,7 @@ msgstr ""
 #: f6745f7b4f2945d585173c07bb2e854a of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:1
 msgid "Construct a TSDataset object from a DataFrame"
-msgstr "基于CSV文件构建完整TSDataset"
+msgstr "基于pandas.DataFrame构建完整TSDataset"
 
 #: 9885952538b94a68b6b2d0dc4011800c of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:3
