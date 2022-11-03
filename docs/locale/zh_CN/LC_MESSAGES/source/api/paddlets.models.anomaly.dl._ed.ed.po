@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-24 15:37+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._ed.ed.rst:2
+#: 57589fc0bdb849a687c949569ed85fb7
+msgid "paddlets.models.anomaly.dl._ed.ed"
+msgstr ""
+
+#: c13cbca2c35f4c828a5b9757fffa4ee9 da2f3ee68c0e437a8614ffa677491e68
+#: e85e347dcd0f4082824653231580796d of paddlets.models.anomaly.dl._ed.ed.CNN:1
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:1
+#: paddlets.models.anomaly.dl._ed.ed.MLP:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr ""
+
+#: 40b7cefc1c704a5899dfb6274a05efc9 of paddlets.models.anomaly.dl._ed.ed.MLP:1
+msgid "MLP Network structure used in the encoder and decoder"
+msgstr "编解码使用的MLP网络。"
+
+#: 02e2df03b729429d87e23c01c2606994 2faea5ecf6dc4c3f90818b25aa2fd281
+#: 5f9e43109ccd4b66bf669b83f6867e7f ca29fb3d26a6424aa551975360e9b99d
+#: f4333965fd184db298fea9f6d613e290 fe8c33c2a34447e1b0b818637ba0d939 of
+#: paddlets.models.anomaly.dl._ed.ed.CNN
+#: paddlets.models.anomaly.dl._ed.ed.CNN.forward
+#: paddlets.models.anomaly.dl._ed.ed.LSTM
+#: paddlets.models.anomaly.dl._ed.ed.LSTM.forward
+#: paddlets.models.anomaly.dl._ed.ed.MLP
+#: paddlets.models.anomaly.dl._ed.ed.MLP.forward
+msgid "Parameters"
+msgstr ""
+
+#: 9ee07918f5064b5886a1f76e0720dbfb ccf12716f9b54a32ba7ce5521e720c50
+#: de01883dcfe44f02b33a5ec857af09c4 of paddlets.models.anomaly.dl._ed.ed.CNN:3
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:3
+#: paddlets.models.anomaly.dl._ed.ed.MLP:3
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 783d0ec0f7bc499aa3f3027792291227 of paddlets.models.anomaly.dl._ed.ed.MLP:5
+msgid "The numer of feature."
+msgstr "特征的维度。"
+
+#: 51092f11cd3642d487658a206229e886 5a60d38238f947d3806a7f007bacde2b
+#: d4d040ee3fc04fd59d9901a2656b7646 of paddlets.models.anomaly.dl._ed.ed.CNN:5
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:5
+#: paddlets.models.anomaly.dl._ed.ed.MLP:7
+msgid "The ith element represents the number of neurons in the ith hidden layer."
+msgstr "列表第i个元素表示第i层神经元的个数。"
+
+#: 6d72fd25a92d4d778807e159c10da94b 82d45abc509f458880da7aeca1c13bb4
+#: 8faaf73bbe5b494aa5e4a6794a082122 of paddlets.models.anomaly.dl._ed.ed.CNN:7
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:7
+#: paddlets.models.anomaly.dl._ed.ed.MLP:9
+msgid "The activation function for the hidden layers."
+msgstr "隐层的激活函数。"
+
+#: 02ecc51044c84d248f77381bada135d9 123764ea4d3343fcab09d22f5d19c1c2
+#: 56f8f79110fc4a1994d6014180eb9c3e of paddlets.models.anomaly.dl._ed.ed.CNN:9
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:9
+#: paddlets.models.anomaly.dl._ed.ed.MLP:11
+msgid "The activation function for the last layer."
+msgstr "最后一层使用的激活函数。"
+
+#: 1f156ab7b2a1439d8253773b6d9c77f4 d74b5781f6644a9a8a7eb692bf64aa63
+#: fb335bbf06b648d18de286dedc1a1207 of paddlets.models.anomaly.dl._ed.ed.CNN:15
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:11
+#: paddlets.models.anomaly.dl._ed.ed.MLP:13
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃的比例。"
+
+#: b789bbb7dfbe4084aff3a3ccfdce11b7 e8a8b65c1df941a9945b53e11c03054a of
+#: paddlets.models.anomaly.dl._ed.ed.CNN:17
+#: paddlets.models.anomaly.dl._ed.ed.MLP:15
+msgid "Whether to use batch normalization."
+msgstr "是否开启batch normalization。"
+
+#: 9fed31ea8b814893a43a28f0f3a922fc a4c777574756410b887c3f25e06d2192
+#: d0369d48c2b34dc5ac551b819ee6e905 of paddlets.models.anomaly.dl._ed.ed.CNN:13
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:13
+#: paddlets.models.anomaly.dl._ed.ed.MLP:17
+msgid "Whether to use dropout."
+msgstr "是否使用dropout。"
+
+#: 64cea034d9a84e6ab8556bbcd4f51858 7656c99135e14a12a1d1487d633d9c1a
+#: 97ba7fba979f4f9bb79da2d56061a61d of paddlets.models.anomaly.dl._ed.ed.CNN:26
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:22
+#: paddlets.models.anomaly.dl._ed.ed.MLP:22
+msgid "Dynamic graph LayerList."
+msgstr "动态图网络。"
+
+#: 7b53299c74af40968853bf79f9ce9c63 a324953dd6d649c49782174c73a28aa8
+#: be2825c9b9f746daa27b571efde61825 of paddlets.models.anomaly.dl._ed.ed.CNN
+#: paddlets.models.anomaly.dl._ed.ed.LSTM paddlets.models.anomaly.dl._ed.ed.MLP
+msgid "type"
+msgstr ""
+
+#: 2e7b91ef31464e09bdd5d652deea60ea 8c78eb5425034399a7c26578378482f3
+#: c2603d865e2b4c6291f496b3b1bbb51c of paddlets.models.anomaly.dl._ed.ed.CNN:28
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:24
+#: paddlets.models.anomaly.dl._ed.ed.MLP:24
+msgid "paddle.nn.Sequential"
+msgstr ""
+
+#: 5149b57c42f444ceaf497e40733cdfc7 a2ba9cff23874b84b1068e442c3827ee
+#: c5bc585ff82444b3bcaf38120e78f29a of
+#: paddlets.models.anomaly.dl._ed.ed.CNN.forward:1
+#: paddlets.models.anomaly.dl._ed.ed.LSTM.forward:1
+#: paddlets.models.anomaly.dl._ed.ed.MLP.forward:1
+msgid ""
+"Defines the computation performed at every call. Should be overridden by "
+"all subclasses."
+msgstr "定义前馈网络计算过程。"
+
+#: 0926f2f709e245d2b67393aab30e997b 8061a359f0f64efab84d4b96e6c976c6
+#: fa96a1bf19a148178e4666d2fa655835 of
+#: paddlets.models.anomaly.dl._ed.ed.CNN.forward:4
+#: paddlets.models.anomaly.dl._ed.ed.LSTM.forward:4
+#: paddlets.models.anomaly.dl._ed.ed.MLP.forward:4
+msgid "unpacked tuple arguments"
+msgstr "输入数据。"
+
+#: 14bd622f2dbc4a458401b527324922a6 7696f654d4964c3db42462bf5b3d4a12
+#: d07ef99c1734409eba4b82b149284b85 of
+#: paddlets.models.anomaly.dl._ed.ed.CNN.forward:6
+#: paddlets.models.anomaly.dl._ed.ed.LSTM.forward:6
+#: paddlets.models.anomaly.dl._ed.ed.MLP.forward:6
+msgid "unpacked dict arguments"
+msgstr "其他参数。"
+
+#: 586838f1fde349049cb10972b77ea3f0 of paddlets.models.anomaly.dl._ed.ed.CNN:1
+msgid "CNN Network structure used in the encoder and decoder"
+msgstr "编解码器使用的CNN网络。"
+
+#: e0ff52071bc34fffb4d426d9fa1d5807 of paddlets.models.anomaly.dl._ed.ed.CNN:11
+msgid "Kernel size for Conv1D."
+msgstr "卷积核的大小。"
+
+#: a6dfa953b9814414be6b786370850c1a of paddlets.models.anomaly.dl._ed.ed.CNN:19
+msgid "Encoder or Decoder."
+msgstr "编码或者解码。"
+
+#: f81c9515e42e481f849db1b3572cac6d of paddlets.models.anomaly.dl._ed.ed.CNN:21
+msgid ""
+"Specify the input data format.N is the batch size, C is the number of "
+"channels and L is the characteristic length."
+msgstr "指定输入数据的格式。"
+
+#: 284b6b94137a4815a7a5abfa66228a69 of paddlets.models.anomaly.dl._ed.ed.LSTM:1
+msgid "LSTM Network structure used in the encoder and decoder"
+msgstr "编解码器使用的LSTM网络。"
+
+#: 54f4562a70734b33896fe0a8d39f21b1 of
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:15
+msgid "layers of LSTM."
+msgstr "LSTM的层数。"
+
+#: 157eedbfa2224a658dd721794807ffe6 of
+#: paddlets.models.anomaly.dl._ed.ed.LSTM:17
+msgid "the direction of LSTM."
+msgstr "LSTM网络迭代方向。"
+
