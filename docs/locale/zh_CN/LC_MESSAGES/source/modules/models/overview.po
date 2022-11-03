@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/modules/models/overview.rst:3 1c4dea712a894f4bb62bb534e482f825
 msgid "Models"
-msgstr "模型"
+msgstr "时序预测模型"
 
 #: ../../source/modules/models/overview.rst:5 e46a8f31e0e841b894f08c75e19e1ca9
 msgid ""
