@@ -1,6 +1,6 @@
-=========
-Models
-=========
+===================
+Forecasting Models
+===================
 
 Before reading this document, it is recommended to first read the `TSDataset Document <../datasets/overview.html>`_ to understand the design of `TSDataset`.
 Simply speaking, `TSDataset` is a unified time series data structure throughout the whole modeling lifecycle.

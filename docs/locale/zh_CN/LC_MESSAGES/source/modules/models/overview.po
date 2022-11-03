@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/modules/models/overview.rst:3 1c4dea712a894f4bb62bb534e482f825
-msgid "Models"
+msgid "Forecasting Models"
 msgstr "时序预测模型"
 
 #: ../../source/modules/models/overview.rst:5 e46a8f31e0e841b894f08c75e19e1ca9
@@ -486,35 +486,4 @@ msgstr "以下的代码示例展示了如何持久化保存一个 PaddleBaseMode
 #: eb50a0fffa714afe90efdeeb655076cb
 msgid "Later you can load back the persisted model with:"
 msgstr "在模型保存完成的一段时间之后，您可以通过以下方式加载模型："
-
-#~ msgid ""
-#~ "`Long Short-term Time-series Network "
-#~ "<../../api/paddlets.models.dl.paddlepaddle.lstnet.html>`_"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "`Multilayer Perceptron "
-#~ "<../../api/paddlets.models.dl.paddlepaddle.mlp.html>`_"
-#~ msgstr ""
-
-#~ msgid "`NBEATSModel <../../api/paddlets.models.dl.paddlepaddle.nbeats.html>`_"
-#~ msgstr ""
-
-#~ msgid "`NHiTSModel <../../api/paddlets.models.dl.paddlepaddle.nhits.html>`_"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "`RnnBlockRegressor "
-#~ "<../../api/paddlets.models.dl.paddlepaddle.rnn.html>`_"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "`Temporal Convolution Net Regressor "
-#~ "<../../api/paddlets.models.dl.paddlepaddle.tcn.html>`_"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "`Transformer "
-#~ "<../../api/paddlets.models.dl.paddlepaddle.transformer.html>`_"
-#~ msgstr ""
 
