@@ -103,7 +103,7 @@ msgstr "组装和拟合模型，WeightingEnsembleForecaster 或者 StackingEnsem
 #: ../../source/modules/ensemble/overview.rst:87
 #: 91e8c0c944244f4c9fbbb825f8708a73
 msgid "3.1. Construct and Fitting WeightingEnsembleForecaster"
-msgstr "3.1. 组装或者拟合WeightingEnsembleForecaster"
+msgstr "3.1. 组装和拟合WeightingEnsembleForecaster"
 
 #: ../../source/modules/ensemble/overview.rst:89
 #: ae82bd5a57ca488db2a7984db75dc632
