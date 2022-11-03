@@ -669,7 +669,7 @@ msgstr ""
 #: 0b3fd1e0cf09440aa047defba1fe078a of
 #: paddlets.datasets.tsdataset.TimeSeries.to_json:1
 msgid "Return a str json representation of the TimeSeries object."
-msgstr "TimeSeries转换成DataFrame数据"
+msgstr "TimeSeries转换成json数据"
 
 #: 3305a866d0d9446a994b801fbf1d0c27 53465d9e071b4d5ba5dcf5213bcbacf7 of
 #: paddlets.datasets.tsdataset.TSDataset.to_json:3
@@ -1168,7 +1168,7 @@ msgstr "从文件中获取对象"
 #: fdd0a316fcc94f0086f0c076e3bdc906 of
 #: paddlets.datasets.tsdataset.TSDataset.to_json:1
 msgid "Return a str json representation of the TSDataset object."
-msgstr "TSDataset转换成DataFrame数据"
+msgstr "TSDataset转换成json数据"
 
 #: 93c2c3e1698f46be99c0b5370d3ce954 of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_json:1
