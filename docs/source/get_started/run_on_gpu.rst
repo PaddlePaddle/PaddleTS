@@ -142,14 +142,14 @@ See `Get Started <../get_started/get_started.html>`_ to get more details.
     import numpy as np
 
     from paddlets.datasets.repository import get_dataset
-    from paddlets.transform.normalization import StandardScaler
+    from paddlets.transform.sklearn_transforms import StandardScaler
     from paddlets.models.forecasting import MLPRegressor
 
     np.random.seed(2022)
 
     # prepare data
     tsdataset = get_dataset("WTH")
-    ts_train, ts_val_test = ts.split("2012-03-31 23:00:00")
+    ts_train, ts_val_test = tsdataset.split("2012-03-31 23:00:00")
     ts_val, ts_test = ts_val_test.split("2013-02-28 23:00:00")
 
     # transform
