@@ -48,6 +48,7 @@ class TestMetrics(TestCase):
         ts = TSDataset.load_from_dataframe(df, target_cols="target")
         ts2 = ts.copy()
         ts2["target"] = ts["target"] + 1
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(mse(ts, ts2), {"target": 1.0})
 
         # case3
@@ -84,6 +85,7 @@ class TestMetrics(TestCase):
         ts2 = ts.copy()
         ts2["target"] = ts["target"] + 1
         ts2["target2"] = ts["target"] + 1
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(mae(ts, ts2), {"target": 1., "target2": 0.})
 
     def test_LogLoss(self):
@@ -118,6 +120,7 @@ class TestMetrics(TestCase):
         ts.set_column("target2", 1 - ts["target"], "target")
         ts2 = ts2.copy()
         ts2.set_column("target2", ts2["target"] + 0.1, "target")
+        ts.target.data.index.name = 'diff_name'
         expect_output = {"target": 0.16425, "target2": 10.18854}
         ret = logloss(ts, ts2)
         for schema in ret:
@@ -139,6 +142,7 @@ class TestMetrics(TestCase):
             columns=["target@1", "target@2", "target_2@1", "target_2@2"]
         )
         ts2 = TSDataset.load_from_dataframe(df2)
+        ts1.target.data.index.name = 'diff_name'
         mse_prob = MSE("prob")
         self.assertEqual(mse_prob(ts1, ts2), {"target": 1., "target_2": 1.})
         mae_prob = MAE("prob")
@@ -179,6 +183,7 @@ class TestMetrics(TestCase):
             columns=["label"]
         )
         ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(acc(ts, ts2), {"label": 1.0})
         
         # case5
@@ -264,6 +269,7 @@ class TestMetrics(TestCase):
         )
         ts = TSDataset.load_from_dataframe(df, label_col="label")
         ts2 = ts.copy()
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(precision(ts, ts2), {"label": 1.0})
         
         # case4
