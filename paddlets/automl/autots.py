@@ -180,7 +180,7 @@ class AutoTS(BaseModel):
             self,
             train_tsdataset: Union[TSDataset, List[TSDataset]],
             valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
-            n_trails: int = 20,
+            n_trials: int = 20,
             cpu_resource: float = 1.0,
             gpu_resource: float = 0
     ):
@@ -193,7 +193,7 @@ class AutoTS(BaseModel):
         Args:
             train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
             valid_tsdataset(Union[TSDataset, List[TSDataset]], optional): Valid dataset.
-            n_trails(int): The number of configurations suggested by the search algorithm.
+            n_trials(int): The number of configurations suggested by the search algorithm.
             cpu_resource: CPU resources to allocate per trial.
             gpu_resource: GPU resources to allocate per trial.
 
@@ -217,7 +217,7 @@ class AutoTS(BaseModel):
                                                   resampling_strategy=self._resampling_strategy,
                                                   split_ratio=self._split_ratio,
                                                   k_fold=self._k_fold,  # cv的fold切分数, 默认DEFAULT_K_FOLD折切分
-                                                  n_trials=n_trails,
+                                                  n_trials=n_trials,
                                                   cpu_resource=cpu_resource,
                                                   gpu_resource=gpu_resource,
                                                   local_dir=self._local_dir

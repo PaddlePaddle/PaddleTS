@@ -54,7 +54,7 @@ class TestOptimizeRunner(TestCase):
                                             tsdataset,
                                             n_trials=1
                                             )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
         # index为DatetimeIndex类型
@@ -71,7 +71,7 @@ class TestOptimizeRunner(TestCase):
                                             tsdataset,
                                             n_trials=1
         )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
         # index为DatetimeIndex类型
@@ -88,7 +88,7 @@ class TestOptimizeRunner(TestCase):
                                             tsdataset,
                                             n_trials=1
         )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
         #cv
@@ -106,7 +106,7 @@ class TestOptimizeRunner(TestCase):
                                             resampling_strategy="cv",
                                             n_trials=1
         )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
         #specify valid
@@ -124,7 +124,7 @@ class TestOptimizeRunner(TestCase):
                                             valid_tsdataset= ts2,
                                             n_trials=1
         )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
         # Pipeline
@@ -150,7 +150,7 @@ class TestOptimizeRunner(TestCase):
                                             search_space=sp,
                                             n_trials=1
                                             )
-        best_trail = analysis.best_trial
+        best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 
 if __name__ == "__main__":
