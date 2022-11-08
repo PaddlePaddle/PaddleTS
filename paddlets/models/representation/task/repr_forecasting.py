@@ -48,26 +48,42 @@ class ReprForecasting(EnsembleForecasterBase, metaclass=abc.ABCMeta):
                  downstream_learner: Callable = None,
                  verbose: bool = False
                  ) -> None:
-
-        raise_if(not isinstance(repr_model_params, dict), "model_params should be a params dict")
-        estimator = [(repr_model, repr_model_params)]
-
-        super().__init__(in_chunk_len, out_chunk_len, skip_chunk_len, estimator, verbose)
-
+        
+        if repr_model_params is None:
+            repr_model_params = {}
         if encode_params is None:
             encode_params = {}
+        raise_if(not isinstance(repr_model_params, dict), "model_params should be a params dict")
         raise_if(not isinstance(encode_params, dict), "encode_params should be a params dict")
 
-        # sliding_len decide how many previous time point to use for repr res
-        encode_params["sliding_len"] = self._in_chunk_len
-        if "verbose" not in encode_params:
-            encode_params["verbose"] = False
+        self._repr_model_params = repr_model_params
         self._encode_params = encode_params
+        if repr_model is TS2Vec:
+            if "sliding_len" in self._encode_params:
+                raise_if(self._encode_params["sliding_len"] != in_chunk_len, f" Sliding_len ({self._encode_params['sliding_len']})should \
+                 equal to in_chunk_len{in_chunk_len} when use ts2vec")
+            else:
+                # sliding_len decide how many previous time point to use for repr res in Ts2vec
+                self._encode_params["sliding_len"] = in_chunk_len
+        elif repr_model is CoST:
+            if "segment_size" in self._repr_model_params:
+                raise_if(self._repr_model_params["segment_size"] != in_chunk_len, f"Segment_size ({self._repr_model_params['segment_size']})should \
+                 equal to in_chunk_len{in_chunk_len}.(except ts2vec model)")
+            else:
+                self._repr_model_params["segment_size"] = in_chunk_len
+        else:
+            raise_log(f"Unsupported model type {type(repr_model)}")
+                
+        estimator = [(repr_model, self._repr_model_params)]
+        super().__init__(in_chunk_len, out_chunk_len, skip_chunk_len, estimator, verbose)
+
+        if "verbose" not in self._encode_params:
+            self._encode_params["verbose"] = False
 
         self._sampling_stride = sampling_stride
         downstream_learner = self._check_final_learner(downstream_learner)
         self._final_learner = MultiOutputRegressor(downstream_learner)
-
+        
     def _fit(self,
              tsdataset: TSDataset) -> None:
         """
