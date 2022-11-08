@@ -98,7 +98,7 @@ class MLBaseModel(BaseModel, metaclass=abc.ABCMeta):
         # examples (assume there are 2 models `a` and `b`):
         # a.modelname = "a"
         # a.model_meta_name = "a_model_meta"
-        # b.modelname = "a"
+        # b.modelname = "b"
         # b.model_meta_name = "b_model_meta"
         # given above example, adding name prefix avoids conflicts between a.internal files and b.internal files.
         modelname = os.path.basename(abs_model_path)
