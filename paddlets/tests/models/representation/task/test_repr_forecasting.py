@@ -188,13 +188,14 @@ class TestReprForcaster(TestCase):
  
     
     def test_pipeline_backtest(self):
+        #case1 ts2vec
         ts2vec_params = {"segment_size": 20,  # maximum sequence length
-                         "sampling_stride":20,
+                         "sampling_stride":50,
                          "repr_dims": 10,
                          "batch_size": 4,
                          "max_epochs": 1}
         model = ReprForecasting(in_chunk_len=10,
-                                out_chunk_len=12,
+                                out_chunk_len=1200,
                                 skip_chunk_len=0,
                                 repr_model=TS2Vec,
                                 repr_model_params=ts2vec_params)
@@ -205,13 +206,34 @@ class TestReprForcaster(TestCase):
                            #start="2013-07-01 00:00:00",  # the point after "start" as the first point
                            #start="2013-02-28 23:00:00",  # the point after "start" as the first point
                            metric=MAE(),
-                           predict_window=24,  # respect to out_chunk_len
-                           stride=24,  # respect to sampling_stride
+                           predict_window=1200,  # respect to out_chunk_len
+                           stride=1200,  # respect to sampling_stride
                            return_predicts=True  #
                            )
-        print('repr_mae, ts_pred', repr_mae, ts_pred)
-    
- 
+
+         #case2 CoST
+        cost_params = {#"segment_size": 20,
+                         "sampling_stride":50,
+                         "repr_dims": 10,
+         
+                         "batch_size": 4,
+                         "max_epochs": 1}
+        from paddlets.models.representation import CoST
+        model2 = ReprForecasting(in_chunk_len=10,
+                                out_chunk_len=1200,
+                                skip_chunk_len=0,
+                                repr_model=CoST,
+                                repr_model_params=cost_params)
+        model2.fit(self.ts)
+        #model.fit(self.ts_train_scaled)
+        repr_mae, ts_pred = backtest(data=self.ts,
+                           model=model,
+                           metric=MAE(),
+                           predict_window=1200,  # respect to out_chunk_len
+                           stride=1200,  # respect to sampling_stride
+                           return_predicts=True  #
+                           )
+        
     def test_save_and_load(self):
         ts2vec_params = {"segment_size": 20,  # maximum sequence length
                          "repr_dims": 10,
