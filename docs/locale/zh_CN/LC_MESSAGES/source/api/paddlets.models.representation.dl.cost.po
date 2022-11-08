@@ -39,8 +39,7 @@ msgid ""
 "discriminative trend and seasonal representations, respectively."
 msgstr ""
 "CoST\\[1\\] 是2022年提出的一种时序表征模型(适用于长时序预测的新型时序表征框架), "
-"它使用对比学习方法去学习解耦的季节-趋势表示(包含时域对比损失和频域对比损失, "
-"分别学习可区分的趋势表征和季节表征)"
+"它使用对比学习方法去学习解耦的季节-趋势表示(包含时域对比损失和频域对比损失, 分别学习可区分的趋势表征和季节表征)"
 
 #: adae50cc51f145e9a4eeca37b5f06614 of
 #: paddlets.models.representation.dl.cost.CoST:7
