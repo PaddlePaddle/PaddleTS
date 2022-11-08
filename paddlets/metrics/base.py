@@ -203,7 +203,7 @@ class Metric(ABC):
             logger.warning("Tsdataset true's and pred's time_index do not match, the result will be calculated according to the intersection!")
         index_name = merge_index.columns[0]
         if isinstance(target_true.time_index, pd.RangeIndex):
-            merge_index = pd.RangeIndex(merge_index[index_name].iloc[0], merge_index[index_name].iloc[-1], target_true.freq)
+            merge_index = pd.RangeIndex(merge_index[index_name].iloc[0], merge_index[index_name].iloc[-1] + target_true.freq, target_true.freq)
         else:
             merge_index = pd.DatetimeIndex(merge_index[index_name], freq=target_true.freq)
             
