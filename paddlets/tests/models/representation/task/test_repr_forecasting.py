@@ -297,6 +297,6 @@ class TestReprForcaster(TestCase):
         assert len(x_meta) == 36
         assert len(y_meta) == 36
 
- 
 if __name__ == "__main__":
     unittest.main()
+  
