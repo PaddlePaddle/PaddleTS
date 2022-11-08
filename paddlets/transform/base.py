@@ -9,7 +9,7 @@ from paddlets.utils.utils import get_tsdataset_max_len, split_dataset
 import numpy as np
 import pandas as pd
 
-from paddlets import TSDataset
+from paddlets import TSDataset, TimeSeries
 from paddlets.logger import raise_if_not, raise_if, raise_log
 from paddlets.logger.logger import log_decorator
 
@@ -27,8 +27,56 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         self.need_previous_data = False
         self.n_rows_pre_data_need = 0
 
+    def _check_multi_tsdataset(self, datasets: List[TSDataset]):
+        """
+        Check the validity of multi time series combination transform
+
+        Args:
+            datasets(List[TSDataset]): datasets from which to fit or transform the transformer.
+        """
+        raise_if(
+            len(datasets) == 0,
+            "The Length of datasets cannot be 0!"
+        )
+        columns_set = set(tuple(sorted(dataset.columns.items())) for dataset in datasets)
+        raise_if_not(
+            len(columns_set) == 1,
+            f"Invalid tsdatasets. The given tsdataset column schema ({[ts.columns for ts in datasets]}) must be same."
+        )
+
+    def fit(self, dataset: Union[TSDataset, List[TSDataset]]):
+        """
+        Learn the parameters from the dataset needed by the transformer.
+
+        Any non-abstract class inherited from this class should implement this method.
+
+        The parameters fitted by this method is transformer-specific. For example, the `MinMaxScaler` needs to 
+        compute the MIN and MAX, and the `StandardScaler` needs to compute the MEAN and STD (standard deviation)
+        from the dataset. 
+
+        Args:
+            dataset(Union[TSDataset, List[TSDataset]]): dataset from which to fit the transformer.
+        """
+        if isinstance(dataset, list):
+            self._check_multi_tsdataset(dataset)
+            attr_list = ['target', 'observed_cov', 'known_cov']
+            ts_build_param = {}
+            for attr in attr_list:
+                if getattr(dataset[0], attr) is not None:
+                    ts_build_param[attr] = TimeSeries(
+                        pd.concat([getattr(data, attr).data for data in dataset]).reset_index(drop=True),
+                        1
+                    )
+                else:
+                    ts_build_param[attr] = None
+            #new_dataset is not a standard TSDataset, only use fit
+            new_dataset = TSDataset(**ts_build_param)
+            return self.fit_one(new_dataset) 
+        else:
+            return self.fit_one(dataset)
+
     @abc.abstractmethod
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         Learn the parameters from the dataset needed by the transformer.
 
@@ -43,8 +91,31 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
     def transform(
+        self,
+        dataset: Union[TSDataset, List[TSDataset]],
+        inplace: bool = False
+    ) -> Union[TSDataset, List[TSDataset]]:
+        """
+        Apply the fitted transformer on the dataset
+
+        Any non-abstract class inherited from this class should implement this method.
+
+        Args:
+            dataset(Union[TSDataset, List[TSDataset]): dataset to be transformed.
+            inplace(bool, optional): Set to True to perform inplace transformation. Default is False.
+            
+        Returns:
+            Union[TSDataset, List[TSDataset]]: transformed dataset.
+        """
+        if isinstance(dataset, list):
+            self._check_multi_tsdataset(dataset)
+            return [self.transform_one(data, inplace) for data in dataset]
+        else:
+            return self.transform_one(dataset, inplace)
+
+    @abc.abstractmethod
+    def transform_one(
         self,
         dataset: TSDataset,
         inplace: bool = False
@@ -83,22 +154,21 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         """
         data_len = get_tsdataset_max_len(dataset)
         if not self.need_previous_data or data_len == n_rows:
-            return self.transform(dataset, inplace)
+            return self.transform_one(dataset, inplace)
         if self.n_rows_pre_data_need == -1:
-            transformed_dataset = self.transform(dataset, inplace)
+            transformed_dataset = self.transform_one(dataset, inplace)
             _, res = split_dataset(transformed_dataset , data_len - n_rows)
         else:
             _, dataset = split_dataset(dataset, data_len - n_rows - self.n_rows_pre_data_need)
-            transformed_dataset = self.transform(dataset, inplace)
+            transformed_dataset = self.transform_one(dataset, inplace)
             _, res = split_dataset(transformed_dataset, self.n_rows_pre_data_need)
         return res
 
-    @abc.abstractmethod
     def fit_transform(
         self,
-        dataset: TSDataset,
+        dataset: Union[TSDataset, List[TSDataset]],
         inplace: bool = False
-    ) -> TSDataset:
+    ) -> Union[TSDataset, List[TSDataset]]:
         """
         Combine the above fit and transform into one method, firstly fitting the transformer from the dataset 
         and then applying the fitted transformer on the dataset.
@@ -106,15 +176,49 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         Any non-abstract class inherited from this class should implement this method.
 
         Args:
-            dataset(TSDataset): dataset to process.
+            dataset(Union[TSDataset, List[TSDataset]]): dataset to process.
             inplace(bool, optional): Set to True to perform inplace transformation. Default is False.
 
         Returns:
-            TSDataset: transformed data.
+            Union[TSDataset, List[TSDataset]]: transformed data.
         """
-        pass
+        return self.fit(dataset).transform(dataset, inplace)
 
     def inverse_transform(
+        self,
+        dataset: Union[TSDataset, List[TSDataset]],
+        inplace: bool = False
+    ) -> Union[TSDataset, List[TSDataset]]:
+        """
+        Inversely transform the dataset output by the `transform` method.
+
+        Differ from other abstract methods, this method is not decorated by abc.abstractmethod. The reason is that not
+        all the transformations can be transformed back inversely, thus, it is neither possible nor mandatory
+        for all sub classes inherited from this base class to implement this method.
+
+        In general, other modules such as Pipeline will possibly call this method WITHOUT knowing if the called
+        transform instance has implemented this method. To work around this, instead of simply using `pass`
+        expression as the default placeholder, this method raises a NotImplementedError to enable the callers
+        (e.g. Pipeline) to use try-except mechanism to identify those data transformation operators that do NOT 
+        implement this method.
+
+        Args:
+            dataset(Union[TSDataset, List[TSDataset]]): dataset to be inversely transformed.
+            inplace(bool, optional): Set to True to perform inplace transformation. Default is False.
+
+        Returns:
+            TSDataset: inverserly transformed dataset.
+
+        Raises:
+            NotImplementedError
+        """
+        if isinstance(dataset, list):
+            self._check_multi_tsdataset(dataset)
+            return [self.inverse_transform_one(data, inplace) for data in dataset]
+        else:
+            return self.inverse_transform_one(dataset)
+
+    def inverse_transform_one(
         self,
         dataset: TSDataset,
         inplace: bool = False
@@ -352,7 +456,7 @@ class UdBaseTransform(BaseTransform):
             )
 
     @log_decorator
-    def fit(self, dataset: TSDataset):
+    def fit_one(self, dataset: TSDataset):
         """
         Learn the parameters from the dataset needed by the transformer.
         
@@ -443,7 +547,7 @@ class UdBaseTransform(BaseTransform):
         return dataset
 
     @log_decorator
-    def transform(
+    def transform_one(
         self, 
         dataset: TSDataset, 
         inplace: bool = False
@@ -470,7 +574,7 @@ class UdBaseTransform(BaseTransform):
             return self._transform_logic(new_ts, self._cols, self._transform)
 
     @log_decorator
-    def inverse_transform(
+    def inverse_transform_one(
         self, 
         dataset: TSDataset,
         inplace: bool=False
@@ -495,19 +599,6 @@ class UdBaseTransform(BaseTransform):
             return new_ts
         else:
             return self._transform_logic(dataset, self._cols, self._inverse_transform)
-
-    def fit_transform(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
-        """
-        First fit the transformer, and then transform the dataset.
-        
-        Args:
-            dataset(TSDataset): dataset to be processed.
-            inplace(bool): whether to replace the original data. default=False
-        
-        Returns:
-            TSDataset
-        """
-        return self.fit(dataset).transform(dataset, inplace)
 
     @abc.abstractmethod
     def _fit(self, input: pd.DataFrame):

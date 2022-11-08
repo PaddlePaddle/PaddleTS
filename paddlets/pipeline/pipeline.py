@@ -17,6 +17,7 @@ from paddlets.utils.utils import get_tsdataset_max_len, split_dataset
 
 logger = Logger(__name__)
 
+
 class Pipeline(Trainable):
     """
     The pipeline is designed to build a workflow for time series modeling which may be comprised of a set of
@@ -68,21 +69,27 @@ class Pipeline(Trainable):
     @log_decorator
     def fit(
             self,
-            train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None):
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None):
         """
         Fit transformers and transform the data then fit the model.
 
         Args:
-            train_tsdataset(TSDataset): Train dataset.
-            valid_tsdataset(TSDataset, optional): Valid dataset.
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
+            valid_tsdataset(Union[TSDataset, List[TSDataset]], optional): Valid dataset.
 
         Returns:
             Pipeline: Pipeline with fitted transformers and fitted model.
         """
-        train_tsdataset_copy = train_tsdataset.copy()
+        if isinstance(train_tsdataset, list):
+            train_tsdataset_copy = [data.copy() for data in train_tsdataset]
+        else:
+            train_tsdataset_copy = train_tsdataset.copy()
         if valid_tsdataset:
-            valid_tsdataset_copy = valid_tsdataset.copy()
+            if isinstance(valid_tsdataset, list):
+                valid_tsdataset_copy = [data.copy() for data in valid_tsdataset]
+            else:
+                valid_tsdataset_copy = valid_tsdataset.copy()
         # Transform
         for transform in self._transform_list:
             train_tsdataset_copy = transform.fit_transform(train_tsdataset_copy)
@@ -97,30 +104,40 @@ class Pipeline(Trainable):
         self._fitted = True
         return self
 
-    def transform(self, 
-                tsdataset: TSDataset, 
-                inplace: bool = False, 
-                cache_transform_steps: bool = False, 
-                previous_caches: List[TSDataset] = None) -> Union[TSDataset, Tuple[TSDataset, List[TSDataset]]]:
+    def transform(self,
+                  tsdataset: Union[TSDataset, List[TSDataset]],
+                  inplace: bool = False,
+                  cache_transform_steps: bool = False,
+                  previous_caches: List[TSDataset] = None) -> Union[TSDataset, Tuple[TSDataset, List[TSDataset]]]:
         """
         Transform the `TSDataset` using the fitted transformers in the pipeline.
 
         Args:
-            tsdataset(TSDataset): Data to be transformed.
+            tsdataset(Union[TSDataset, List[TSDataset]]): Data to be transformed.
             inplace(bool): Set to True to perform inplace transform and avoid a data copy. Default is False.
             cache_transform_steps: Cache each transform step's transorm result into a list.
             previous_caches : previous transform results cache
 
         Returns:
-            Tuple[TSDataset,Tuple[List[TSDataset],TSDataset]]: Return transformed results by default, Return Both transformed results 
-                and each transform step's caches if set cache_transform_steps = True.
+            Tuple[TSDataset,Tuple[List[TSDataset],TSDataset]]: Return transformed results by default. Return Both
+                transformed results and each transform step's caches if set cache_transform_steps = True.
         """
         self._check_fitted()
+        raise_if(cache_transform_steps is True and isinstance(tsdataset, list),
+                 "Not implement error. Not support cache when input tsdataset is a list.")
         tsdataset_transformed = tsdataset
         if not inplace:
-            tsdataset_transformed = tsdataset.copy()
+            if isinstance(tsdataset, list):
+                tsdataset_transformed = [data.copy() for data in tsdataset]
+            else:
+                tsdataset_transformed = tsdataset.copy()
+        if cache_transform_steps is False:
+            # normal transform
+            for transform in self._transform_list:
+                tsdataset_transformed = transform.transform(tsdataset_transformed)
+            return tsdataset_transformed
 
-        # Transform
+        # Recursive predict Transform
         tansform_list_length = len(self._transform_list)
         # Init transform copys with same length as tansform list, fill with None
         transform_caches = [None] * tansform_list_length
@@ -130,9 +147,9 @@ class Pipeline(Trainable):
 
         for i in range(tansform_list_length):
             transformed_data_len = get_tsdataset_max_len(tsdataset_transformed)
-            data_pre = previous_caches[i] if previous_caches  else None
+            data_pre = previous_caches[i] if previous_caches else None
             transformer = self._transform_list[i]
-            
+
             if data_pre:
                 tsdataset_transformed = TSDataset.concat([data_pre, tsdataset_transformed])
             tsdataset_transformed = transformer.transform_n_rows(tsdataset_transformed, transformed_data_len)
@@ -151,7 +168,9 @@ class Pipeline(Trainable):
         res = tsdataset_transformed
         return (res, transform_caches) if cache_transform_steps else res
 
-    def inverse_transform(self, tsdataset: TSDataset, inplace: bool=False) -> TSDataset:
+    def inverse_transform(self,
+                          tsdataset: Union[TSDataset, List[TSDataset]],
+                          inplace: bool = False) -> TSDataset:
         """
         The inverse transformation of `self.transform`.
         Apply `inverse_transform` using the fitted transformers in the pipeline.
@@ -159,7 +178,7 @@ class Pipeline(Trainable):
         If a transformer do not implement `inverse_transform`, it would not inversely transform the input data.
 
         Args:
-            tsdataset(TSDataset): Data to apply `inverse_transform`.
+            tsdataset(Union[TSDataset, List[TSDataset]]): Data to apply `inverse_transform`.
             inplace(bool): Set to True to perform inplace transform and avoid a data copy. Default is False.
 
         Returns:
@@ -168,7 +187,10 @@ class Pipeline(Trainable):
         self._check_fitted()
         tsdataset_transformed = tsdataset
         if not inplace:
-            tsdataset_transformed = tsdataset.copy()
+            if isinstance(tsdataset, list):
+                tsdataset_transformed = [data.copy() for data in tsdataset]
+            else:
+                tsdataset_transformed = tsdataset.copy()
         # Transform
         for transform in reversed(self._transform_list):
             try:
@@ -197,7 +219,8 @@ class Pipeline(Trainable):
         self._check_fitted()
         tsdataset_transformed = self.transform(tsdataset)
         predictions = self._model.predict(tsdataset_transformed)
-        predictions = self.inverse_transform(predictions)
+        if "anomaly" not in str(self._model):
+            predictions = self.inverse_transform(predictions)
         return predictions
 
     def predict_proba(self, tsdataset: TSDataset) -> TSDataset:
@@ -218,6 +241,25 @@ class Pipeline(Trainable):
         raise_if_not(hasattr(self._model, "predict_proba"), \
                      "predict_proba is only valid if the final model implements predict_proba")
         return self._model.predict_proba(tsdataset_transformed)
+
+    def predict_score(self, tsdataset: TSDataset) -> TSDataset:
+        """
+        Transform the `TSDataset` using the fitted transformers and perform anomaly detection score prediction with the fitted
+        model in the pipeline, only effective when the model exists in the pipeline.
+
+        Args:
+            tsdataset(TSDataset): Data to be predicted.
+
+        Returns:
+            TSDataset: Predicted results of calling `self.predict_score` on the final model.
+        """
+        self._check_model_exist()
+        self._check_fitted()
+        tsdataset_transformed = self.transform(tsdataset)
+        # Only valid if the final model implements predict_score.
+        raise_if_not(hasattr(self._model, "predict_score"), \
+                     "predict_score is only valid if the final model implements predict_score")
+        return self._model.predict_score(tsdataset_transformed)
 
     def recursive_predict(
             self,
@@ -278,6 +320,10 @@ class Pipeline(Trainable):
         """
         self._check_model_exist()
         self._check_fitted()
+        raise_if(
+            "anomaly" in str(self._model),
+            "The anomaly detection model does not support recursive_predict."
+        )
         self._check_recursive_predict_valid(predict_length, need_proba=need_proba)
         recursive_rounds = math.ceil(predict_length / self._model._out_chunk_len)
         """
@@ -368,18 +414,18 @@ class Pipeline(Trainable):
                 predictions = self._model.predict(data_pre_transformed)
             predictions = self.inverse_transform(predictions)
             results.append(predictions)
-            #break in last round
-            if i == recursive_rounds -1:
+            # break in last round
+            if i == recursive_rounds - 1:
                 break
 
             # predict concat to origindata
             tsdataset_copy = TSDataset.concat([tsdataset_copy, predictions], keep="last")
             target_length = target_length + self._model._out_chunk_len
-            
+
             # split new predict chunk
             _, new_chunk = tsdataset_copy.split(target_length - self._model._out_chunk_len)
             if tsdataset_copy.known_cov:
-                    new_chunk, _ = split_dataset(new_chunk, 2 * self._model._out_chunk_len)
+                new_chunk, _ = split_dataset(new_chunk, 2 * self._model._out_chunk_len)
 
             # transform one chunk
             chunk_transformed, chunk_transformed_caches = self.transform(new_chunk,
@@ -403,7 +449,6 @@ class Pipeline(Trainable):
             TimeSeries(result.get_target().data[0: predict_length], result.freq)
         )
         return result
-        
 
     def save(self, path: str, pipeline_file_name: str = "pipeline-partial.pkl", model_file_name: str = "paddlets_model"):
         """
@@ -508,4 +553,3 @@ class Pipeline(Trainable):
     @property
     def steps(self):
         return self._steps
-

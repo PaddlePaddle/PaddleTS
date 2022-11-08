@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 14:48+0800\n"
+"POT-Creation-Date: 2022-11-03 11:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,56 +18,56 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.utils.validation.rst:2
-#: dddf4538bd1748fe887b1fe46afde06f
+#: b0eb021d1ba84703a3879f508ff4a8d2
 msgid "paddlets.utils.validation"
 msgstr ""
 
-#: 4029e281259f4e15809ea866195c5386 of
+#: 8a1ee5856f414605b75efc6bf81226f8 of
 #: paddlets.utils.validation.cross_validate:1
 msgid "Cross validate Evaluate forecaster using timeseries cross-validation."
 msgstr "时间序列的交叉验证"
 
-#: 29a9decb327042fca2566f49f776c4ae c865031965a34b22a98439f767569bc1 of
+#: afef304c321b4caf8dff8a1c94657078 eac7aa5b33c041a1bbd3d0ef9cd32227 of
 #: paddlets.utils.validation.cross_validate
 #: paddlets.utils.validation.fit_and_score
 msgid "Parameters"
 msgstr ""
 
-#: d9556767d67e4373bd4745c5d506c4b1 of
+#: 3af31291679a4d028bb54f041bf3e5ab of
 #: paddlets.utils.validation.cross_validate:4
 msgid "The  TSdataset to use in cross validate."
 msgstr "待验证的数据"
 
-#: 33a5b2d8565d40db810d7f629de760fb e96d7e88c5e74883b7dee59bf0b98c19 of
+#: 9a143c9a37fb4767982cbe8cfca76c4e a05a7a2377aa4148918531fa1c2ff61a of
 #: paddlets.utils.validation.cross_validate:6
 #: paddlets.utils.validation.fit_and_score:7
 msgid "The  model use in cross validate."
 msgstr "交叉验证所用的模型"
 
-#: 3d8a39ead2d242b097eed62ae0a15eea of
+#: bb97980b98574e74b91c4bbd3bd6c3f5 of
 #: paddlets.utils.validation.cross_validate:8
 msgid "CV splitter, use 5-folds ExpandingWindowSplitter by default."
 msgstr "CV splitter，默认使用5折扩大窗口交叉验证"
 
-#: bfb4c50ab82246b19dc4114728f86ce3 of
+#: 56826b326d5b4efdb1851d207fc90164 of
 #: paddlets.utils.validation.cross_validate:10
 msgid ""
 "Use backtest or not, set to True by default, use recursive predict if "
 "False."
 msgstr "是否使用回测，默认使用回测，如果不使用回测的话默认使用滚动预测"
 
-#: 6771c9b94c9541489fa0c9a1e8d33b97 of
+#: 92f3a99d210e4cbbb1b024cd6b6ab803 of
 #: paddlets.utils.validation.cross_validate:12
 msgid "The size of  predict window for the  prediction."
 msgstr "预测窗口的长度，只有开启回测时需要"
 
-#: 3dac58f664124aee8f9c685def6267c7 4c4dfb342696448091d87b94b921aea2 of
+#: b34ff430ae18464091533405ab3efc5f dd03888db22c40109103bd9babea1184 of
 #: paddlets.utils.validation.cross_validate:14
 #: paddlets.utils.validation.fit_and_score:13
 msgid "The number of time steps between two consecutive predict window."
 msgstr "两个连续预测之间的步长，只有开启回测时需要"
 
-#: 2f668d4b2958451d9fde82cffb04eaf1 f6476e6b90314b60bc91ecd633adc338 of
+#: 23856f7b6f454f08b49dd5f089252a6f 41177623f546429cb1f7787e59d022f9 of
 #: paddlets.utils.validation.cross_validate:16
 #: paddlets.utils.validation.fit_and_score:15
 msgid ""
@@ -75,14 +75,14 @@ msgid ""
 "an error value."
 msgstr "指标计算方法,默认为MAE()"
 
-#: 108208b216714d3b834b5ccbab14ec2d of
+#: 72d6c3d687064423bd2c26d58a0687b8 of
 #: paddlets.utils.validation.cross_validate:18
 msgid ""
 "Compute and return score on test set. Will return a list of dict if set "
 "to False"
 msgstr "如果为True返回score值，如果为false返回一个dict（包括score，预测值，模型等）。"
 
-#: 26edb967c3da4bb8a356345470471b96 83ac493c36ac4029929f2935611b7d63 of
+#: 8debcf6ca8204bb18e9f5ab6c184f9cd d473f0486776477ebf438d64bc7f786c of
 #: paddlets.utils.validation.cross_validate:20
 #: paddlets.utils.validation.fit_and_score:23
 msgid ""
@@ -92,70 +92,73 @@ msgid ""
 "by default."
 msgstr "指标计算公式，默认为 ``np.mean``"
 
-#: 78adcbf5864649bb90f61421f12e7146 of
+#: c245e86239224c149d7ca595ae12a335 of
 #: paddlets.utils.validation.cross_validate:24
 msgid "Verbose mode."
 msgstr "是否开启日志打印，默认开启"
 
-#: ef6410b6e6aa418294a30b38851b056a fc9fb7583a5c412da4bb08f4299a284e of
+#: 6d5e33f5ef854be5afa268f55d3211ee c72bfb936af1480e8f53a7fceaff87f2 of
 #: paddlets.utils.validation.cross_validate
 #: paddlets.utils.validation.fit_and_score
 msgid "Returns"
 msgstr ""
 
-#: 6db5b465ec094816beeadf6b09ac8d33 of
+#: bf2b40311470405cbd51a4e63e83b70b of
 #: paddlets.utils.validation.cross_validate:27
 msgid "float, list[dict]"
 msgstr ""
 
-#: 134d6da5799041eebb9366fbcdd2b46c b84d72af6a8e4354867a68ef0f8386ba of
+#: 69f2822c7d064ae79d550fcd92fd8eac 81af18a801334157be6d1dabb325a941 of
 #: paddlets.utils.validation.cross_validate
 #: paddlets.utils.validation.fit_and_score
 msgid "Raises"
 msgstr ""
 
-#: 48856e4f696045b584381a762c6f1ed0 of
+#: 8b7eef098bd647af8deb8c7949c142b6 of
 #: paddlets.utils.validation.fit_and_score:1
 msgid "Fit and score"
 msgstr "训练并计算score"
 
-#: 2a1f4122150e401fbbe47668d0d1c75e of
+#: 9025fd1799ba4f959f800114dda2779c of
 #: paddlets.utils.validation.fit_and_score:3
 msgid "Train dataset ."
 msgstr "训练集"
 
-#: 6d356721964b40c89c846f7984161748 of
+#: fa1c0264934a4fc29c3e129f74144a13 of
 #: paddlets.utils.validation.fit_and_score:5
-msgid "Test dataset ."
-msgstr "测试集"
+msgid "Valid dataset ."
+msgstr "训练集"
 
-#: 8eca4df9359e4084a74550587aba7f7d of
+#: 3e0f195fa9574dbb9b28b638a32b1552 of
 #: paddlets.utils.validation.fit_and_score:9
 msgid "Use backtest or not."
 msgstr "是否使用回测，默认使用回测，如果不使用回测的话默认使用滚动预测"
 
-#: 5f1d71f274164e73b21476b7bdd71ab3 of
+#: 3e8022a1d3d24ddc9468c5a68c431f10 of
 #: paddlets.utils.validation.fit_and_score:11
 msgid "The predict window for the  prediction."
 msgstr "预测窗口的长度，只有开启回测时需要"
 
-#: 5d196dbf129948de80c3408c13edada0 of
+#: db08581531a94fd39e67c3a58dcfe3e6 of
 #: paddlets.utils.validation.fit_and_score:17
 msgid "verbose mode."
 msgstr "是否开启日志打印，默认开启"
 
-#: ed212a0e057b4f96a28a21e461e6e660 of
+#: 3a5ae87c0d334a5fbb64ae57ea5cdebf of
 #: paddlets.utils.validation.fit_and_score:19
 msgid "Compute and return score on test set."
 msgstr "结果是否返回score"
 
-#: 47e664a7ad384f17afb0fb01e4058cf8 of
+#: aa095f342b3d477ea5d05bf69fb31e6c of
 #: paddlets.utils.validation.fit_and_score:21
 msgid "Whether to return the fitted estimator."
 msgstr "是否返回模型"
 
-#: 48af26c6fb89447cb9c54bc142891c28 of
+#: 6121377a5f7b4a358825a9189bf6c222 of
 #: paddlets.utils.validation.fit_and_score:28
 msgid "dict"
 msgstr ""
+
+#~ msgid "Test dataset ."
+#~ msgstr "测试集"
 

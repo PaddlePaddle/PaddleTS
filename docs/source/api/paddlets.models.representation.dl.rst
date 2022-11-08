@@ -9,4 +9,5 @@ paddlets.models.representation.dl
     :maxdepth: 4
 
     paddlets.models.representation.dl.ts2vec.rst
+    paddlets.models.representation.dl.adapter.rst
 

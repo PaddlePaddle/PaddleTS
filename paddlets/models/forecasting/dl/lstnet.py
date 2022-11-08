@@ -16,7 +16,7 @@ from paddlets.datasets import TSDataset
 PAST_TARGET = "past_target"
 
 
-class _LSTNetBlock(paddle.nn.Layer):
+class _LSTNetModule(paddle.nn.Layer):
     """Network structure.
 
     Args:
@@ -58,7 +58,7 @@ class _LSTNetBlock(paddle.nn.Layer):
         dropout_rate: float,
         output_activation: Optional[str] = None,
     ):
-        super(_LSTNetBlock, self).__init__()
+        super(_LSTNetModule, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._channels = channels
         self._rnn_num_cells = rnn_num_cells
@@ -87,7 +87,7 @@ class _LSTNetBlock(paddle.nn.Layer):
         if output_activation is not None:
             raise_if_not(
                 output_activation in ("sigmoid", "tanh"), 
-                "`output_activation` must be either 'sigmiod' or 'tanh'"
+                "`output_activation` must be either 'sigmoid' or 'tanh'"
             )
 
         self._cnn = paddle.nn.Conv1D(target_dim, channels, kernel_size, data_format="NLC")
@@ -295,29 +295,37 @@ class LSTNetRegressor(PaddleBaseModelImpl):
         Args:
             tsdataset(TSDataset): Data to be checked.
         """
-        for column, dtype in tsdataset.get_target().dtypes.items():
+        target_columns = tsdataset.get_target().dtypes.keys()
+        for column, dtype in tsdataset.dtypes.items():
+            if column in target_columns:
+                raise_if_not(
+                    np.issubdtype(dtype, np.floating),
+                    f"lstnet's target dtype only supports [float16, float32, float64], " \
+                    f"but received {column}: {dtype}."
+                )
+                continue
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
-                f"lstnet's target dtype only supports [float16, float32, float64], " \
+                f"lstnet's cov(observed or known) dtype currently only supports [float16, float32, float64], " \
                 f"but received {column}: {dtype}."
             )
         super(LSTNetRegressor, self)._check_tsdataset(tsdataset)
         
     def _update_fit_params(
         self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdataset: List[TSDataset],
+        valid_tsdataset: Optional[List[TSDataset]] = None
     ) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
-            train_tsdataset(TSDataset): train dataset.
-            valid_tsdataset(TSDataset|None): validation dataset.
+            train_tsdataset(List[TSDataset]): list of train dataset.
+            valid_tsdataset(List[TSDataset]|None): list of validation dataset.
 
         Returns:
             Dict[str, Any]: model parameters.
         """
-        target_dim = train_tsdataset.get_target().data.shape[1]
+        target_dim = train_tsdataset[0].get_target().data.shape[1]
         fit_params = {
             "target_dim": target_dim
         }
@@ -329,7 +337,7 @@ class LSTNetRegressor(PaddleBaseModelImpl):
         Returns:
             paddle.nn.Layer.
         """
-        return _LSTNetBlock(
+        return _LSTNetModule(
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
             target_dim=self._fit_params["target_dim"],

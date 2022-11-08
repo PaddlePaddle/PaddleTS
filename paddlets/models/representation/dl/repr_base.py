@@ -5,6 +5,9 @@ from typing import List, Dict, Any, Callable, Optional, Tuple
 from copy import deepcopy
 import time
 import abc
+import os
+import pickle
+import json
 
 from paddle.optimizer import Optimizer
 import numpy as np
@@ -17,14 +20,14 @@ from paddlets.models.common.callbacks import (
 )
 from paddlets.models.representation.dl.adapter import ReprDataAdapter
 from paddlets.models.utils import check_tsdataset
-from paddlets.logger import raise_if, Logger
+from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 from paddlets.datasets import TSDataset
 
 logger = Logger(__name__)
 
 
 class ReprBaseModel(abc.ABC):
-    """PaddleTS/PaddleTS deep time series representation framework, 
+    """PaddleTS deep time series representation framework, 
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
@@ -336,3 +339,180 @@ class ReprBaseModel(abc.ABC):
             paddle.nn.Layer.
         """
         pass
+
+    def save(self, path: str) -> None:
+        """
+        Saves a ReprBaseModel instance to a disk file.
+
+        1> A ReprBaseModel (or any child classes inherited from ReprBaseModel) instance have a set of member
+        variables, they can be divided into 3 categories:
+        `pickle-serializable members` (e.g. python built-in type such as int, str, dict, etc.),
+        `paddle-related pickle-not-serializable members` (e.g. paddle.nn.Layer, paddle.optimizer.Optimizer),
+        `paddle-not-related pickle-not-serializable members`.
+
+        2> To call this method, self._network and self._optimizer must not be None.
+
+        Args:
+            path(str): A path string containing a model file name.
+
+        Raises:
+            ValueError
+        """
+        abs_model_path = os.path.abspath(path)
+        abs_root_path = os.path.dirname(abs_model_path)
+        raise_if_not(
+            os.path.exists(abs_root_path),
+            "failed to save model, path not exists: %s" % abs_root_path
+        )
+        raise_if(
+            os.path.isdir(abs_model_path),
+            "failed to save model, path must be a file, not directory: %s" % abs_model_path
+        )
+        raise_if(
+            os.path.exists(abs_model_path),
+            "Failed to save model, target file already exists: %s" % abs_model_path
+        )
+
+        raise_if(self._network is None, "failed to save model, model._network must not be None.")
+        # raise_if(self._optimizer is None, "failed to save model, model._optimizer must not be None.")
+
+        # path to save other internal files.
+        # adding modelname as each internal file name prefix to allow multiple models to be saved at same dir.
+        # examples (assume there are 2 models `a` and `b`):
+        # a.modelname = "a"
+        # a.model_meta_name = "a_model_meta"
+        # a.network_statedict = "a_network_statedict"
+        # b.modelname = "b"
+        # b.model_meta_name = "b_model_meta"
+        # b.network_statedict = "b_network_statedict"
+        # given above example, adding name prefix avoids conflicts between a.internal files and b.internal files.
+        modelname = os.path.basename(abs_model_path)
+        internal_filename_map = {
+            "model_meta": "%s_%s" % (modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+
+        # internal files must not conflict with existing files.
+        conflict_files = {*internal_filename_map.values()} - set(os.listdir(abs_root_path))
+        raise_if(
+            len(conflict_files) < len(internal_filename_map),
+            "failed to save model internal files, these files must not exist: %s" % conflict_files
+        )
+
+        # start to save
+        # 1 save optimizer state dict (currently ignore optimizer logic.)
+        # optimizer_state_dict = self._optimizer.state_dict()
+        # try:
+        #     paddle.save(
+        #         obj=optimizer_state_dict,
+        #         path=os.path.join(abs_root_path, internal_filename_map["optimizer_statedict"])
+        #     )
+        # except Exception as e:
+        #     raise_log(
+        #         ValueError(
+        #             "error occurred while saving %s: %s, err: %s" %
+        #             (internal_filename_map["optimizer_statedict"], optimizer_state_dict, str(e))
+        #         )
+        #     )
+
+        # 2 save network state dict
+        network_state_dict = self._network.state_dict()
+        try:
+            paddle.save(
+                obj=network_state_dict,
+                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
+            )
+        except Exception as e:
+            raise_log(
+                ValueError(
+                    "error occurred while saving %s: %s, err: %s" %
+                    (internal_filename_map["network_statedict"], network_state_dict, str(e))
+                )
+            )
+
+        # 3 save model
+        optimizer = self._optimizer
+        network = self._network
+        callback_container = self._callback_container
+
+        # _network is inherited from a paddle-related pickle-not-serializable object, so needs to set to None.
+        self._network = None
+        # _optimizer is inherited from a paddle-related pickle-not-serializable object, so needs to set to None.
+        self._optimizer = None
+        # _callback_container contains ReprBaseModel instances, as ReprBaseModel contains pickle-not-serializable
+        # objects `_network` and `_optimizer`, so also needs to set to None.
+        self._callback_container = None
+        try:
+            with open(abs_model_path, "wb") as f:
+                pickle.dump(self, f)
+        except Exception as e:
+            raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
+
+        # 4 save model meta (e.g. classname)
+        model_meta = {
+            # [ChildModel, ReprBaseModel, ABC, object]
+            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "modulename": self.__module__
+        }
+        try:
+            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+                json.dump(model_meta, f, ensure_ascii=False)
+        except Exception as e:
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
+            )
+
+        # in order to allow a model instance to be saved multiple times, set attrs back.
+        self._optimizer = optimizer
+        self._network = network
+        self._callback_container = callback_container
+        return
+
+    @staticmethod
+    def load(path: str) -> "ReprBaseModel":
+        """
+        Loads a ReprBaseModel from a file.
+
+        As optimizer does not affect the model prediction results, currently optimizer will NOT be loaded.
+
+        Args:
+            path(str): A path string containing a model file name.
+
+        Returns:
+            PaddleBaseModel: the loaded ReprBaseModel instance.
+        """
+        abs_path = os.path.abspath(path)
+        raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
+        raise_if(os.path.isdir(abs_path), "path must be a file path, not a directory: %s" % abs_path)
+
+        # 1.1 model
+        with open(abs_path, "rb") as f:
+            model = pickle.load(f)
+        raise_if_not(
+            isinstance(model, ReprBaseModel),
+            "loaded model type must be inherited from %s, but actual loaded model type: %s" %
+            (ReprBaseModel, model.__class__)
+        )
+
+        # 1.2 - 1.4 model._network
+        model._network = model._init_network()
+        raise_if(model._network is None, "model._network must not be None after calling _init_network()")
+
+        modelname = os.path.basename(abs_path)
+        network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
+        network_statedict_abs_path = os.path.join(os.path.dirname(abs_path), network_statedict_filename)
+        network_statedict = paddle.load(network_statedict_abs_path)
+        model._network.set_state_dict(network_statedict)
+
+        # 1.5 - 1.7 model._optimizer
+        # model._optimizer = model._init_optimizer()
+        # raise_if(model._optimizer is None, "model._optimizer must not be None after calling _init_optimizer()")
+        #
+        # optimizer_statedict_filename = "%s_%s" % (modelname, "optimizer_statedict")
+        # optimizer_statedict_abs_path = os.path.join(os.path.dirname(abs_path), optimizer_statedict_filename)
+        # optimizer_statedict = paddle.load(optimizer_statedict_abs_path)
+        #
+        # model._optimizer.set_state_dict(optimizer_statedict)
+        return model

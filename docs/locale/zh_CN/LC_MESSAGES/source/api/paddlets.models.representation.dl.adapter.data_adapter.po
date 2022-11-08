@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-31 17:38+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.dl.adapter.data_adapter.rst:2
+#: d100b18f39dc4afe8c9d7a2f8a626a15
+msgid "paddlets.models.representation.dl.adapter.data_adapter"
+msgstr ""
+
+#: 79cd57d362294d7f88d7105a42ced171 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 1901192158d143bba17649fb1e734f30 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter:1
+msgid "Data adapter, converts TSDataset to paddle Dataset and paddle DataLoader."
+msgstr "数据转换类，用于将TSDataset数据集转换为paddle Dataset样本数据集和paddle DataLoader样本数据批量加载器。"
+
+#: 2cf2369883264c439806406d28c03ea2 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:1
+msgid "Convert TSDataset to paddle Dataset."
+msgstr "将TSDataset数据集转换为paddle Dataset样本数据集。"
+
+#: 162557568769463eba3d3fbdcad3dd3a 16931dc958614502819207e32b3adf76 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset
+msgid "Parameters"
+msgstr ""
+
+#: 8598028bdfd64345a21ac53e70f03b8a of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:3
+msgid "Raw TSDataset to be converted."
+msgstr "待转换的原始TSDataset数据集。"
+
+#: e12d0386e9be4740bc07987435251448 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:5
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: da1f2ce700fc43f8a336e5edc71765e0 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:7
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 790a421c92ae40b58242585e10359b19 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:12
+msgid ""
+"value to fill in the last sample. Set to None if no need to fill. Note "
+"that isinstance(np.NaN, float) is True."
+msgstr "用于填充最后一条样本的值。如果无需填充最后一条样本，请将该值设置为None。提示：isintance(np.NaN, float)为True。"
+
+#: 8c90d68b6c9247cd95d1ff38e5afa6f6 fd18e1708d3948d0b647f2e64bf5c027 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset
+msgid "Returns"
+msgstr ""
+
+#: b284e50bec434750843625846dd99ff6 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset:16
+msgid "A built PaddleDatasetImpl."
+msgstr "构建完成的paddle Dataset样本数据集。"
+
+#: 9acc06e9080547a795e90f3cba7f9242 fc2a2698fc7e48ab9c523998fb1f4b33 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataset
+msgid "Return type"
+msgstr ""
+
+#: 0e2ddfbec8e34624bb7f85573cb7a039 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:1
+msgid "Converts paddle Dataset to paddle DataLoader."
+msgstr "将paddle Dataset样本数据集转换为DataLoader样本批量加载器。"
+
+#: 53fe587e16ce46f0943a9c8ec06c7726 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:3
+msgid "paddle Dataset to be converted."
+msgstr "待转换的paddle Dataset样本数据集。"
+
+#: e63e7d04310c4d72937001ff5e08f382 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:5
+msgid "The number of samples for a single batch."
+msgstr "单个数据批量中包含的样本条数。"
+
+#: 7293a7e60def4e1f88ab082c185ed050 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:7
+msgid "User-defined collate function for each batch, optional."
+msgstr "用户自定义的单批量样本整合函数，可选参数。"
+
+#: f97b712ad0684c0fb032105691191267 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:9
+msgid ""
+"Whether to shuffle indices order before generating batch indices, default"
+" True."
+msgstr "是否在生成批量样本之前对数据进行洗牌。默认为True。"
+
+#: 570117fb72744cb69fa61d1a2bcd2bd4 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:12
+msgid "A built paddle DataLoader."
+msgstr "一个构建完成的paddle样本批量数据加载器。"
+
+#: ed7b42ddfc064249aaf519ec2eb55cf6 of
+#: paddlets.models.representation.dl.adapter.data_adapter.ReprDataAdapter.to_paddle_dataloader:16
+msgid "Examples"
+msgstr ""
+

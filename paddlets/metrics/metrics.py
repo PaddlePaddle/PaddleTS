@@ -188,6 +188,146 @@ class QuantileLoss(Metric):
                       for i in range(len(quantile_level))]
             losses = 2 * np.stack(losses, axis=-1)
             return losses.mean()
+
+
+class ACC(Metric):
+    """Accuracy_score.
+
+    Args:
+        mode(str): Supported metric modes, only anomaly is valid value.
+
+    Attributes:
+        _NAME(str): Metric name.
+    """
+    _NAME = "acc"
+
+    def __init__(
+        self, 
+        mode: str = "anomaly"
+    ):
+        super(ACC, self).__init__(mode)
+   
+    @ensure_2d
+    def metric_fn(
+        self, 
+        y_true: np.ndarray, 
+        y_score: np.ndarray
+    ) -> float:
+        """Accuracy_score.
+
+        Args:
+            y_true(np.ndarray): Ground truth (correct) target values.
+            y_score(np.ndarray): Estimated target values.
+
+        Returns:
+            float: accuracy_score. A non-negative floating point value (the best value is 1.0).
+        """
+        return metrics.accuracy_score(y_true, y_score)
+
+
+class Precision(Metric):
+    """Precision_score.
+
+    Args:
+        mode(str): Supported metric modes, only anomaly is valid value.
+
+    Attributes:
+        _NAME(str): Metric name.
+    """
+    _NAME = "precision"
+
+    def __init__(
+        self, 
+        mode: str = "anomaly"
+    ):
+        super(Precision, self).__init__(mode)
+   
+    @ensure_2d
+    def metric_fn(
+        self, 
+        y_true: np.ndarray, 
+        y_score: np.ndarray
+    ) -> float:
+        """Precision_score.
+
+        Args:
+            y_true(np.ndarray): Ground truth (correct) target values.
+            y_score(np.ndarray): Estimated target values.
+
+        Returns:
+            float: precision_score. A non-negative floating point value (the best value is 1.0).
+        """
+        return metrics.precision_score(y_true, y_score)
+
+    
+class Recall(Metric):
+    """Recall_score.
+
+    Args:
+        mode(str): Supported metric modes, only anomaly is valid value.
+
+    Attributes:
+        _NAME(str): Metric name.
+    """
+    _NAME = "recall"
+
+    def __init__(
+        self, 
+        mode: str = "anomaly"
+    ):
+        super(Recall, self).__init__(mode)
+   
+    @ensure_2d
+    def metric_fn(
+        self, 
+        y_true: np.ndarray, 
+        y_score: np.ndarray
+    ) -> float:
+        """Recall_score.
+
+        Args:
+            y_true(np.ndarray): Ground truth (correct) target values.
+            y_score(np.ndarray): Estimated target values.
+
+        Returns:
+            float: recall_score. A non-negative floating point value (the best value is 1.0).
+        """
+        return metrics.recall_score(y_true, y_score)
+
+    
+class F1(Metric):
+    """F1_score.
+
+    Args:
+        mode(str): Supported metric modes, only anomaly is valid value.
+
+    Attributes:
+        _NAME(str): Metric name.
+    """
+    _NAME = "f1"
+
+    def __init__(
+        self, 
+        mode: str = "anomaly"
+    ):
+        super(F1, self).__init__(mode)
+   
+    @ensure_2d
+    def metric_fn(
+        self, 
+        y_true: np.ndarray, 
+        y_score: np.ndarray
+    ) -> float:
+        """F1_score.
+
+        Args:
+            y_true(np.ndarray): Ground truth (correct) target values.
+            y_score(np.ndarray): Estimated target values.
+
+        Returns:
+            float: f1_score. A non-negative floating point value (the best value is 1.0).
+        """
+        return metrics.f1_score(y_true, y_score)
     
 
 class MetricContainer(object):

@@ -8,7 +8,7 @@ from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
 import os
 import abc
 import pickle
-from typing import Optional
+from typing import Optional, List, Union
 import json
 
 logger = Logger(__file__)
@@ -39,8 +39,8 @@ class MLBaseModel(BaseModel, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def fit(
         self,
-        train_data: TSDataset,
-        valid_data: Optional[TSDataset] = None
+        train_data: Union[TSDataset, List[TSDataset]],
+        valid_data: Optional[Union[TSDataset, List[TSDataset]]] = None
     ):
         """
         Fit a machine learning model instance.
@@ -48,8 +48,8 @@ class MLBaseModel(BaseModel, metaclass=abc.ABCMeta):
         Any non-abstract classes inherited from this class should implement this method.
 
         Args:
-            train_data(TSDataset): training dataset.
-            valid_data(TSDataset, optional): validation dataset, optional.
+            train_data(Union[TSDataset, List[TSDataset]]): training dataset.
+            valid_data(Optional[Union[TSDataset, List[TSDataset]]]): validation dataset, optional.
         """
         pass
 
@@ -98,7 +98,7 @@ class MLBaseModel(BaseModel, metaclass=abc.ABCMeta):
         # examples (assume there are 2 models `a` and `b`):
         # a.modelname = "a"
         # a.model_meta_name = "a_model_meta"
-        # b.modelname = "a"
+        # b.modelname = "b"
         # b.model_meta_name = "b_model_meta"
         # given above example, adding name prefix avoids conflicts between a.internal files and b.internal files.
         modelname = os.path.basename(abs_model_path)

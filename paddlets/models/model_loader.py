@@ -4,11 +4,10 @@
 import os
 import json
 
-from paddlets.models.base import BaseModel
 from paddlets.logger import raise_if, raise_if_not, raise_log
 
 
-def load(path: str) -> BaseModel:
+def load(path: str):
     """
     Loads a saved model from a file path.
 
@@ -16,7 +15,7 @@ def load(path: str) -> BaseModel:
         path(str): A path string containing a model file name.
 
     Returns:
-        BaseModel: Loaded model.
+        Union[BaseModel, AnomalyBaseModel, StatisticalBase, ReprBaseModel]: Loaded model.
     """
     abs_model_path = os.path.abspath(path)
 
@@ -42,11 +41,30 @@ def load(path: str) -> BaseModel:
         "unable to get meta info %s, file path: %s, content: %s" % (missed_keys, abs_modelmeta_path, model_meta_map)
     )
 
-    # (currently deprecated) if PaddleBaseModel.__name__ in model_meta_map["ancestor_classname_set"]
+    # class name string ("MLBaseModel") vs class.__name__ (MLBaseModel):
+    # str "MLBaseModel": supports lazy import.
+    # class MLBaseModel.__class__: can avoid misspelling issue, etc., but cannot support lazy import.
+    # (currently deprecated) if MLBaseModel.__name__ in model_meta_map["ancestor_classname_set"]
+    if "MLBaseModel" in model_meta_map[modelmeta_key_ancestor_classname_set]:
+        # lazy import
+        from paddlets.models.forecasting.ml.ml_base import MLBaseModel
+        return MLBaseModel.load(abs_model_path)
     if "PaddleBaseModel" in model_meta_map[modelmeta_key_ancestor_classname_set]:
         # lazy import
         from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
         return PaddleBaseModel.load(abs_model_path)
+    if "AnomalyBaseModel" in model_meta_map[modelmeta_key_ancestor_classname_set]:
+        # lazy import
+        from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
+        return AnomalyBaseModel.load(abs_model_path)
+    if "StatisticalBase" in model_meta_map[modelmeta_key_ancestor_classname_set]:
+        # lazy import
+        from paddlets.models.anomaly.ml.statistical_base import StatisticalBase
+        return StatisticalBase.load(abs_model_path)
+    if "ReprBaseModel" in model_meta_map[modelmeta_key_ancestor_classname_set]:
+        # lazy import
+        from paddlets.models.representation.dl.repr_base import ReprBaseModel
+        return ReprBaseModel.load(abs_model_path)
     raise_log(ValueError(
         "The given model class is not supported: %s.%s" %
         (

@@ -67,6 +67,16 @@ class test_MinMaxScaler(TestCase):
         fit_trans1 = test_transform1.fit_transform(input1)
         self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
 
+        test_transform1.fit([input1, input1])
+        transfrom1s = test_transform1.transform([input1, input1])
+        self.assertEqual(len(transfrom1s), 2)
+        inverse1s = test_transform1.inverse_transform(transfrom1s)
+        fit_trans1s = test_transform1.fit_transform([input1, input1])
+        self.assertEqual(len(inverse1s), 2)
+        self.assertEqual(len(fit_trans1s), 2)
+        for inverse1 in inverse1s:
+            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+
     def test_StandardScaler(self):
         """
         unittest function
@@ -111,6 +121,16 @@ class test_MinMaxScaler(TestCase):
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
         self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+
+        test_transform1.fit([input1, input1])
+        transfrom1s = test_transform1.transform([input1, input1])
+        self.assertEqual(len(transfrom1s), 2)
+        inverse1s = test_transform1.inverse_transform(transfrom1s)
+        fit_trans1s = test_transform1.fit_transform([input1, input1])
+        self.assertEqual(len(inverse1s), 2)
+        self.assertEqual(len(fit_trans1s), 2)
+        for inverse1 in inverse1s:
+            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
 
     def test_with_sklearn(self):
         """

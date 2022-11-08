@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 20:39+0800\n"
+"POT-Creation-Date: 2022-11-03 15:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.ensemble.stacking_ensemble_forecaster.rst:2
 #: 11eeafd29845481f8cf486f8c2ca5191
@@ -26,7 +26,7 @@ msgstr ""
 #: paddlets.ensemble.stacking_ensemble_forecaster.StackingEnsembleForecaster:1
 msgid ""
 "Bases: "
-":py:class:`paddlets.ensemble.ensemble_forecaster_base.EnsembleForecasterBase`"
+":py:class:`~paddlets.ensemble.ensemble_forecaster_base.EnsembleForecasterBase`"
 msgstr ""
 
 #: e15bd04f92ed459bb0e7f68489a85be2 of
@@ -66,7 +66,7 @@ msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度�
 #: b2901ff1979f465399118049f159907e of
 #: paddlets.ensemble.stacking_ensemble_forecaster.StackingEnsembleForecaster:11
 msgid "A list of tuple (class,params) consisting of several paddlets models"
-msgstr "一个由paddlts模型组成的 tuple (class,params) 列表"
+msgstr "一个由paddlets模型组成的 tuple (class,params) 列表"
 
 #: edb24af057534b918fee6be4ebaec38f of
 #: paddlets.ensemble.stacking_ensemble_forecaster.StackingEnsembleForecaster:13
@@ -101,11 +101,10 @@ msgstr "底层模型时序交叉验证cv的参数，代表交叉验证的轮数�
 
 #: b1d65596690d431faed04f989f2afe84 of
 #: paddlets.ensemble.stacking_ensemble_forecaster.StackingEnsembleForecaster:23
-msgid "If use backtest on predictions."
+msgid "Whether to use backtest on predictions."
 msgstr "是否开启回测在底层模型，默认为True"
 
 #: 675bd265a4f04b38bb2a99268cdff835 of
 #: paddlets.ensemble.stacking_ensemble_forecaster.StackingEnsembleForecaster.predict:1
 msgid "Dataset to predict."
 msgstr "需要预测的数据集"
-

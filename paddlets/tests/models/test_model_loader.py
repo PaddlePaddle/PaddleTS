@@ -15,6 +15,7 @@ import json
 import paddlets
 from paddlets import TSDataset, TimeSeries
 from paddlets.models.forecasting import RNNBlockRegressor
+from paddlets.models.representation import TS2Vec
 
 
 class _MockNotMLModel(object):
@@ -305,6 +306,20 @@ class TestModelLoader(unittest.TestCase):
             eval_metrics=["mse", "mae"] if eval_metrics is None else eval_metrics
         )
 
+    def _build_ts2vec_model(
+        self,
+        segment_size=300,
+        sampling_stride=300,
+        max_epochs=1
+    ) -> TS2Vec:
+        """
+        Internal-only method, used for building a model. The model is inherited from ReprBaseModel.
+
+        Returns:
+            TS2Vec: the built model instance.
+        """
+        return TS2Vec(segment_size=segment_size, sampling_stride=sampling_stride, max_epochs=max_epochs)
+
     @staticmethod
     def _build_mock_ts_dataset(
         target_periods: int = 200,
@@ -360,5 +375,5 @@ class TestModelLoader(unittest.TestCase):
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1, "static1": 2}
+            static_cov={"static0": 1.0, "static1": 2.0}
         )

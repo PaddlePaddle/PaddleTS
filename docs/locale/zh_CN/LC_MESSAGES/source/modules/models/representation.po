@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:17+0800\n"
+"POT-Creation-Date: 2022-11-03 19:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,116 +18,170 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/modules/models/representation.rst:3
-#: 53dd89bed25844bfadf041aae1adc456
+#: 2129e18757cd45339d97c4e5a75d789d
 msgid "Representation Model Tutorial"
 msgstr "表征模型使用教程"
 
 #: ../../source/modules/models/representation.rst:5
-#: 4916777f97c84538846720e7d786ace2
+#: 5896660fa6c1416ba7b4f5776d48051f
 msgid ""
-"The representation model (TS2Vect) is one of the self-supervised models, "
+"The representation model (TS2Vec) is one of the self-supervised models, "
 "mainly hoping to learn a general feature expression for downstream tasks."
 " The current mainstream self-supervised learning mainly includes "
-"Generative-based and Contrastive-based methods, TS2Vect is a Self-"
+"Generative-based and Contrastive-based methods, TS2Vec is a Self-"
 "Supervised Model Based on Contrastive Method"
-msgstr "表征模型(TS2Vect)属于自监督模型里的一种，主要是希望能够学习到一种通用的特征表达用于下游任务；当前主流的自监督学习主要有基于Generative和基于Contrative的方法，TS2Vect是一种基于Contrative方法的自监督模型"
+msgstr "表征模型(TS2Vec)属于自监督模型里的一种，主要是希望能够学习到一种通用的特征表达用于下游任务；当前主流的自监督学习主要有基于生成式和基于对比学习的方法，当前案例使用的TS2Vec模型是一种基于对比学习的自监督模型"
 
 #: ../../source/modules/models/representation.rst:9
-#: 87ade9a626d64835a83b5a5c1e26d3ca
+#: 09155f9a2ee447c7bb16e3599abba6b9
 msgid "The use of self-supervised models is divided into two phases:"
-msgstr "自监督模型的使用一般分为两个阶段："
+msgstr "自监督模型的使用一般分为两个阶段"
 
 #: ../../source/modules/models/representation.rst:8
-#: 79d5a8e8c96542b894e8ad05e23ce234
+#: 79f6b680fde64c7a81536cfdf190cb88
 msgid "Pre-training with unlabeled data, independent of downstream tasks"
 msgstr "不涉及任何下游任务，使用无标签的数据进行预训练"
 
 #: ../../source/modules/models/representation.rst:9
-#: 2e834781b9cf4a4792e3531d268ee28f
+#: 49fb481f64bb4045809861500e6f6265
 msgid "Fine-tune on downstream tasks using labeled data"
 msgstr "使用带标签的数据在下游任务上 Fine-tune"
 
-#: ../../source/modules/models/representation.rst:14
-#: 2499afe1b0bb43ed9fbd8b527653b5ca
-msgid "TS2Vect follows the usage paradigm of self-supervised models:"
-msgstr "TS2Vect遵循自监督模型的使用范式，分为2个阶段："
+#: ../../source/modules/models/representation.rst:13
+#: 95ca2edf84d247038fa0547759e6c9cb
+msgid "TS2Vec follows the usage paradigm of self-supervised models:"
+msgstr "TS2Vec结合下游任务的使用同样遵循自监督模型的使用范式，分为2个阶段："
 
 #: ../../source/modules/models/representation.rst:12
-#: 4a0988d4d08d4256bace0632610c5548
+#: 765c6f6c9a05406eac590aa81eab9de3
 msgid "Representational model training"
 msgstr "表征模型训练"
 
 #: ../../source/modules/models/representation.rst:13
-#: 2a90c11ce44446f7ae5acb6406a4da45
+#: fec2e8aa03ec49c4b19edb67a882af84
 msgid ""
 "Use the output of the representation model for the downstream task (the "
 "downstream task of the current case is the prediction task)"
 msgstr "将表征模型的输出用于下游任务(当前案例的下游任务为预测任务)"
 
 #: ../../source/modules/models/representation.rst:17
-#: 823dd18d9282426a962230743d013658
-msgid "A minimal example"
-msgstr "一个最小化的示例"
-
-#: ../../source/modules/models/representation.rst:19
-#: ec311c8460294165998087a0f65ac005
+#: 6d77625749df473f8ead84b68e0b31de
 msgid ""
-"Below minimal example uses a built-in `TS2vect` model to illustrate the "
-"basic usage."
-msgstr "下方的最小化示例使用了PaddleTS内置的 TS2Vect 模型来阐述基本的使用方法。"
+"For the sake of accommodating both beginners and experienced developers, "
+"there are two ways to use representation tasks:"
+msgstr "为兼顾初学者和有一定的经验的开发者，本文给出两种表征任务的使用方法:"
+
+#: ../../source/modules/models/representation.rst:16
+#: 42e63162d16042c29c6341bfbfa4b097
+msgid ""
+"A pipeline that combines the representation model and downstream tasks, "
+"which is very friendly to beginners"
+msgstr "表征模型和下游任务相结合的pipeline，初学者容易上手使用"
+
+#: ../../source/modules/models/representation.rst:17
+#: c47fdd248d0d40a5b53b53401284fe94
+msgid ""
+"Decoupling the representational model and downstream tasks, showing in "
+"detail how the representational model and downstream tasks are used in "
+"combination"
+msgstr "表征模型和下游任务解耦，详细展示表征模型和下游任务如何相结合使用"
+
+#: ../../source/modules/models/representation.rst:20
+#: 7795706790b54c6cb6254116d2a288c0
+msgid "1. Method one"
+msgstr "1. 方法一"
 
 #: ../../source/modules/models/representation.rst:22
-#: e1fa9f33f28447489a6e1fcc836d7688
-msgid "1. The first stage:"
-msgstr "第一阶段"
+#: 8a8be0919e1f4431af5cb789ac8da2b3
+msgid "A pipeline that combines the representation model and downstream tasks"
+msgstr "表征模型和下游任务相结合的pipeline"
 
-#: ../../source/modules/models/representation.rst:23
-#: b51289c5dabd41fca296b4f07157855a
-msgid "Training of the representation model"
-msgstr "表征模型训练"
-
-#: ../../source/modules/models/representation.rst:24
-#: 96dbe3b99c2247d29bd307f09e194f24
-msgid "Output of training set and test set representation results"
-msgstr "输出训练集和测试集的表征结果"
-
-#: ../../source/modules/models/representation.rst:28
-#: 0b342b500820415889aec1fd1555fe06
+#: ../../source/modules/models/representation.rst:25
+#: b52cd7e6c4b740929c5cdffa4f1302c5
 msgid "1.1 Prepare the data"
 msgstr "准备数据集"
 
-#: ../../source/modules/models/representation.rst:47
-#: 34992b848ebd496e838cc39ff7c5abb7
-msgid "1.2 Training of the representation model"
+#: ../../source/modules/models/representation.rst:44
+#: a91871d5d4a8494492c5dac6bab66299
+msgid "1.2 Training"
+msgstr "训练"
+
+#: ../../source/modules/models/representation.rst:61
+#: 71db106f238e4055871114df13d66948
+msgid "1.3 Prediction"
+msgstr "预测"
+
+#: ../../source/modules/models/representation.rst:68
+#: 520a95c9594449938c591ae52057a5bc
+msgid "1.4 Backtest"
+msgstr "回测"
+
+#: ../../source/modules/models/representation.rst:83
+#: bc4059a9057b487e9617723ddd54b037
+msgid "2. Method two"
+msgstr "2. 方法二"
+
+#: ../../source/modules/models/representation.rst:85
+#: 9f53fba5287d473abe61e9945e8f88e6
+msgid ""
+"Decoupling the representational model and downstream tasks. It's divided "
+"into two stages, the first stage is representation model training and "
+"prediction, and the second stage is the training and prediction of "
+"downstream tasks"
+msgstr "表征模型和下游回归任务解耦. 分为两个阶段，第一阶段是表征模型的训练和预测，第二阶段是下游任务模型的训练和预测"
+
+#: ../../source/modules/models/representation.rst:87
+#: da94ae067fa54515b66dfd73a0a426df
+msgid "The first stage:"
+msgstr "第一阶段:"
+
+#: ../../source/modules/models/representation.rst:89
+#: a5b0f8777bf64ba6bc19bcc51fb61a89
+msgid "Training of the representation model"
 msgstr "表征模型训练"
 
-#: ../../source/modules/models/representation.rst:62
-#: 9d00b24e9afd4f558642ab9e8b49572b
-msgid "1.3 Output of training set and test set representation results"
+#: ../../source/modules/models/representation.rst:90
+#: 47194a7a5d8d4b23bf90bbad849191be
+msgid "Output of training set and test set representation results"
 msgstr "输出训练集和测试集的表征结果"
 
-#: ../../source/modules/models/representation.rst:76
-#: 463aabe10290403dbf858432e11a164a
-msgid "2. The second stage:"
-msgstr "第二阶段"
+#: ../../source/modules/models/representation.rst:92
+#: 9b8d6802816b4626866c736827d7c88b
+msgid "The second stage:"
+msgstr "第二阶段:"
 
-#: ../../source/modules/models/representation.rst:77
-#: 1738cc50d92e4612a1b55ca416f1e5c7
+#: ../../source/modules/models/representation.rst:94
+#: 78d575ebea984274a3148c6c2dba837f
 msgid "Build training and test samples for regression models"
 msgstr "构建回归模型的训练和测试样本"
 
-#: ../../source/modules/models/representation.rst:78
-#: dd5aa6e8386247c382408adedb60062a
+#: ../../source/modules/models/representation.rst:95
+#: b973d5de54c64be8b5943c319aa34d75
 msgid "training and prediction"
 msgstr "训练和预测"
 
-#: ../../source/modules/models/representation.rst:81
-#: 611393fcf9d1439b937030eebfcc8075
-msgid "2.1 Build training and test samples for regression models"
+#: ../../source/modules/models/representation.rst:99
+#: d9201c888f4a4a14b3a2fc008322b158
+msgid "2.1 Prepare the data"
+msgstr "准备数据集"
+
+#: ../../source/modules/models/representation.rst:117
+#: 262ab9ad28c24431956b37d12996ef0f
+msgid "2.2 Training of the representation model"
+msgstr "表征模型训练"
+
+#: ../../source/modules/models/representation.rst:133
+#: 16eb6ad99a3848fdbe1bc734eecc2e0b
+msgid "2.3 Output of training set and test set representation results"
+msgstr "输出训练集和测试集的表征结果"
+
+#: ../../source/modules/models/representation.rst:145
+#: 2a0b3a5f49c14282a3604b330715115b
+msgid "2.4 Build training and test samples for regression models"
 msgstr "构建回归模型的训练和测试样本"
 
-#: ../../source/modules/models/representation.rst:107
-#: 7c6b16ed496e4443a33dc12218808080
-msgid "2.2 Training and prediction"
+#: ../../source/modules/models/representation.rst:172
+#: ff0a0ac6b9c24b9caf5a1841744766eb
+msgid "2.5 Training and prediction"
 msgstr "训练和预测"
 

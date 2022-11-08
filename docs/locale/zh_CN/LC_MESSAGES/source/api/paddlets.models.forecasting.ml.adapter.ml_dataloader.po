@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-31 17:38+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.ml.adapter.ml_dataloader.rst:2
+#: 6cc5b7d7f1394c2ead3d3e37249f2e1d
+msgid "paddlets.models.forecasting.ml.adapter.ml_dataloader"
+msgstr ""
+
+#: f07af3ceeedf40f4901e0cd1d1a6c4a3 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 91fffc22e97e4a3f9655dc3e237760ae of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:1
+msgid ""
+"Machine learning Data loader, provides an iterable over the given "
+"MLDataset."
+msgstr "机器学习样本数据加载器，为MLDataset样本数据集提供一个可批量迭代能力。"
+
+#: 4c11c56057a243e7b734de82a5503774 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:3
+msgid ""
+"The MLDataLoader supports iterable-style datasets with single-process "
+"loading and optional user defined batch collation."
+msgstr "MLDataLoader支持可迭代类型的数据集，其会使用单进程批量加载样本，如果用户传入自定义的整合函数，则也会应用于每次迭代的小批量样本之上。"
+
+#: f49464feb9bc431ca8bad8156a3db572 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader
+msgid "Parameters"
+msgstr ""
+
+#: 58a919c0a07d47fb9ad69c66642cc435 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:6
+msgid "MLDataset for building MLDataLoader."
+msgstr "用于构建MLDataLoader样本批量加载器的MLDataset样本集。"
+
+#: 206ee56b50dc4e22905248beae5f7a33 of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:8
+msgid "The number of samples for each batch."
+msgstr "单次批量迭代的样本数。"
+
+#: 19bb8c2a54d441ed80596ab7a9313d2b of
+#: paddlets.models.forecasting.ml.adapter.ml_dataloader.MLDataLoader:10
+msgid "A user defined collate function for each batch, optional."
+msgstr "可选参数，用户自定义的应用于每个小批量样本的整合函数。"
+
+

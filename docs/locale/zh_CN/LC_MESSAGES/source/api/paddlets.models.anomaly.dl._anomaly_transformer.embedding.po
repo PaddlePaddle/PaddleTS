@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-03 11:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._anomaly_transformer.embedding.rst:2
+#: be4846fb031e4d7bb2b4f323abf78d5e
+msgid "paddlets.models.anomaly.dl._anomaly_transformer.embedding"
+msgstr "paddlets.models.anomaly.dl._anomaly_transformer.embedding"
+
+#: 8252681aef7c4d0ba296f10b54d559e4 92f8a34b469f47d8b18896285976e3b4
+#: 9c39acd0ead74eb0bf15b795d0c83f44 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:1
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:1
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+
+#: 4fa656b1e70148df8f5f7ae70a08686b of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:1
+msgid "Compute the positional encodings once in log space."
+msgstr "对数空间中计算位置向量编码。"
+
+#: 08c6f6dc116847dc8ccb06bc4557c77f 961fc6a6baa34bc596daa96ef82bea6e
+#: b370ffbcd3c54ef2b103249494029297 d3022fdb91c34dc08f6678caced8fa29
+#: e82d73ee6af34375b7075c2df8a5ab3c ef99971cc5b04cc6868a01a107408806 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward
+msgid "Parameters"
+msgstr "参数。"
+
+#: 6098707237604a5bbd5188372ee658f7 db2b45c2c42444f28724a2fbbf48c0a7
+#: e8bec4f55ae7436e95d605fe6f97de90 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:5
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:3
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:6
+msgid "The expected feature size for the input of the anomaly transformer."
+msgstr "anomaly transformer模型输入数据的特征维度。"
+
+#: 6b06b32ab2e541c9a08a29640cfa12f5 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:5
+msgid "The dimensionality of the computed positional encoding array."
+msgstr "位置编码数组的计算维度。"
+
+#: be73694f7f764aaf970e00a8d791a2c2 e7a83d1aed004dea826f344752675820
+#: f3b4df1ccddc421d841a3bfe20a5df66 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:12
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:10
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:11
+msgid "Dynamic graph LayerList."
+msgstr "动态网络层。"
+
+#: 66cf19e3f7274ae283268584c582d7e2 b8f825ef27154caa9d2dd4a52b4b0638
+#: f98666cb85174abf9639845193f19edf of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding
+msgid "type"
+msgstr ""
+
+#: 318a1678f45f492d9754d5551d6b5be2 8435ead2f3ea47d08cb96d95ae56b540
+#: 8ae1312cc92f4b6bbd2095c70f2735f5 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:14
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding:12
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:13
+msgid "paddle.nn.Sequential"
+msgstr "paddle.nn.Sequential"
+
+#: dd9bdb2cdaf347319e945386bc60fc01 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward:1
+msgid "PositionalEmbedding Forward."
+msgstr "位置向量编码前向网络。"
+
+#: 99466dbc1bc54e2aac2e27a3e92b3f1f d36aa6406b0b4d07b0bb9e5dfb4488a3
+#: f4fc5a459b974e6dbfbbec7a3be047c6 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward:3
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward:3
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward:3
+msgid "Input tensor."
+msgstr "输入张量。"
+
+#: 61c04c9a282742e188eb573673002868 74d95d348ae34bf89050836df3e85f70
+#: 76f81117a1a4462882894351de7bafe9 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward
+msgid "Returns"
+msgstr ""
+
+#: 5c8c7424803c4e32a1f2589e3348116b of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward:6
+msgid "Output of PositionalEmbedding."
+msgstr "输出位置编码向量。"
+
+#: 38432ac3fd1f44e4832a1f41330b532a 46e5c83471e149d9a592411b9295ec59
+#: e97e5dfa4e2f4ebe9b5cfe4327e28e8e of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.PositionalEmbedding.forward
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward
+msgid "Return type"
+msgstr ""
+
+#: 66e4cafecd8b4b8e98327859766e13fb of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:2
+msgid ""
+"Fills the input Tensor with values according to the method described in "
+"Delving deep into rectifiers:"
+msgstr "使用以下方法，对神经网络进行初始化。"
+
+#: 6a558937b42b4bcd930e8ff706b3fbb3 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:2
+msgid ""
+"Surpassing human-level performance on ImageNet classification - He, K. et"
+" al. (2015), using a normal distribution."
+msgstr "这是一种初始化参数分布的并超越人类表现的方法，它源于ImageNet神经网络分类论文。"
+
+#: aeb692df7a7d4037b7e06d1b883662b5 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding:4
+msgid "The Number of channels for Conv1D."
+msgstr "一维卷积通道数。"
+
+#: 7d064c9772fe4693b1ba058f29525ea3 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward:1
+msgid "TokenEmbedding Forward."
+msgstr "TokenEmbedding前向网络。"
+
+#: 67fe221e2e084eb29c30c5165141d347 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.TokenEmbedding.forward:6
+msgid "Output of TokenEmbedding."
+msgstr "TokenEmbedding输出。"
+
+#: 1dd5b6137bfb4fad86b3ca61e401e45d of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:1
+msgid "data embedding = PositionalEmbedding + TokenEmbedding."
+msgstr "data embedding = PositionalEmbedding + TokenEmbedding."
+
+#: fb93f42659524d62938abedfe4e17d1e of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:3
+msgid "The Number of channels for embedding."
+msgstr "嵌入层的通道数。"
+
+#: b1aec94b8cf44d54824ec9b5873a2eb3 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding:7
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃概率。"
+
+#: 58b4372029aa4781a451fba7386b6f77 of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward:1
+msgid "DataEmbedding Forward."
+msgstr "DataEmbedding 前向网络。"
+
+#: 64c94d5053a24d7faf9c3aa7a7a8781a of
+#: paddlets.models.anomaly.dl._anomaly_transformer.embedding.DataEmbedding.forward:6
+msgid "Output of DataEmbedding."
+msgstr "数据嵌入层输出。"
+
