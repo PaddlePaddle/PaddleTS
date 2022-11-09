@@ -50,6 +50,8 @@ The following is an example of a autots pipeline which specifying the search spa
 .. code:: python
 
     from ray.tune import uniform, qrandint, choice
+    from paddlets.transform import Fill
+
     sp = {
         "Fill": {
             "cols": ['WetBulbCelsius'],
@@ -64,7 +66,7 @@ The following is an example of a autots pipeline which specifying the search spa
         }
     }
     autots_model = AutoTS([Fill, MLPRegressor], 25, 2, search_space=sp, sampling_stride=25)
-    autots_model.fit(tsdataset, n_trails=1)
+    autots_model.fit(tsdataset, n_trials=1)
     sp = autots_model.search_space()
     predicted = autots_model.predict(tsdataset)
 

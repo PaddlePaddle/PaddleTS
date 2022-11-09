@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-08 21:49+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.dl.cost.rst:2
+#: 0d020f25376542dbac04ef9cad91d065
+msgid "paddlets.models.representation.dl.cost"
+msgstr ""
+
+#: 9b6f4b295e86447bb3382167a56a309b of
+#: paddlets.models.representation.dl.cost.CoST:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.representation.dl.repr_base.ReprBaseModel`"
+msgstr ""
+
+#: dcec9773557341bc89d519ca06917c77 of
+#: paddlets.models.representation.dl.cost.CoST:1
+msgid ""
+"CoST\\[1\\] is a time series representation model published in ICLR 2022,"
+" It is a new time series representation learning framework for long "
+"sequence time series forecasting, which applies the contrastive learning "
+"method to learn disentangled seasonal-trend representations. CoST "
+"comprises both time domain and frequency domain contrastive losses to "
+"learn discriminative trend and seasonal representations, respectively."
+msgstr ""
+"CoST\\[1\\] 是2022年提出的一种时序表征模型(适用于长时序预测的新型时序表征框架), "
+"它使用对比学习方法去学习解耦的季节-趋势表示(包含时域对比损失和频域对比损失, 分别学习可区分的趋势表征和季节表征)"
+
+#: c3f0cb2c00dc4374a9e0837e0711427f of
+#: paddlets.models.representation.dl.cost.CoST:7
+msgid ""
+"\\[1\\] Woo G, et al. \"CoST: Contrastive Learning of Disentangled "
+"Seasonal-Trend Representations for Time Series Forecasting\", "
+"`<https://arxiv.org/pdf/2202.01575.pdf>`_"
+msgstr ""
+
+#: ac286aec4d5346d79aa99c9b903c5166 of
+#: paddlets.models.representation.dl.cost.CoST
+msgid "Parameters"
+msgstr ""
+
+#: 7ca95ff322ad4cb8830d3cdb61f27616 852a11277f2e492c9ec9ab455f6444d9 of
+#: paddlets.models.representation.dl.cost.CoST:10
+#: paddlets.models.representation.dl.cost.CoST:43
+msgid "The size of time series segment."
+msgstr "时序片段的长度."
+
+#: 23b5436b459b458ea8a4a34251b8486b c547f81d5d7a43a4a46b4341dbc3b1d1 of
+#: paddlets.models.representation.dl.cost.CoST:12
+#: paddlets.models.representation.dl.cost.CoST:49
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔."
+
+#: 4f4015522580442d88d9ef4fccbfa142 ea763ba3335f4615a42bc93112740dbd of
+#: paddlets.models.representation.dl.cost.CoST:14
+#: paddlets.models.representation.dl.cost.CoST:55
+msgid "Optimizer algorithm."
+msgstr "优化算法."
+
+#: 98c6dd67b06f4ef2a1d90f39e7333cba f0ceb6f8034f4061996acda4228d7180 of
+#: paddlets.models.representation.dl.cost.CoST:16
+#: paddlets.models.representation.dl.cost.CoST:61
+msgid "Optimizer parameters."
+msgstr "优化器参数."
+
+#: 124c78e685eb49b3bf8068a1615791f8 e3a82c3feffe45cab17d6ebf808c09e9 of
+#: paddlets.models.representation.dl.cost.CoST:18
+#: paddlets.models.representation.dl.cost.CoST:67
+msgid "Customized callback functions."
+msgstr "自定义callback函数."
+
+#: 659e4b89dad0497cb3fc27b20273230b edb0cf813fdd480ba591764a17b6dd67 of
+#: paddlets.models.representation.dl.cost.CoST:20
+#: paddlets.models.representation.dl.cost.CoST:73
+msgid "Number of samples per batch."
+msgstr "训练数据的批大小."
+
+#: 3645e8666a7a42e1b4b7f8193d895d48 9e499a10be60423e9d92102ca7d5fe68 of
+#: paddlets.models.representation.dl.cost.CoST:22
+#: paddlets.models.representation.dl.cost.CoST:79
+msgid "Max epochs during training."
+msgstr "训练的最大轮数."
+
+#: 8988d1dfa9ef4d0487d1d3b0a6188a7e d1109d00d6f846c580a2d92ccfea7335 of
+#: paddlets.models.representation.dl.cost.CoST:24
+#: paddlets.models.representation.dl.cost.CoST:85
+msgid "Verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔"
+
+#: 82012603e9dc4bcc8969e96100256840 f70af4ab1dce4a59afaa99064dfd536c of
+#: paddlets.models.representation.dl.cost.CoST:26
+#: paddlets.models.representation.dl.cost.CoST:91
+msgid "Global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
+
+#: 0cb3b70c53014b5ea09f3a3436efb326 5b78d70d24be416dbbe075dc973e312e of
+#: paddlets.models.representation.dl.cost.CoST:28
+#: paddlets.models.representation.dl.cost.CoST:97
+msgid "The dimension of representation."
+msgstr "表征向量的维度."
+
+#: abece60ab43445f4bf6dc6bec53e1f10 e937ff3f630141abba4567a19848dd39 of
+#: paddlets.models.representation.dl.cost.CoST:30
+#: paddlets.models.representation.dl.cost.CoST:103
+msgid "The number of channels in the hidden layer."
+msgstr "空洞卷积网络的隐层通道数."
+
+#: 53a2bdcf73674ca8b37180aad2025524 8aece117e763404a802af5dadb554871 of
+#: paddlets.models.representation.dl.cost.CoST:32
+#: paddlets.models.representation.dl.cost.CoST:109
+msgid "The number of `ConvLayer` to be stacked."
+msgstr "空洞卷积网络的层数."
+
+#: 22f0186ad45c4342a203f6e7d2857dc3 87e577b54fd0433d927808d0ec0e0560 of
+#: paddlets.models.representation.dl.cost.CoST:34
+#: paddlets.models.representation.dl.cost.CoST:115
+msgid "The dynamic queue size for saving negative examples."
+msgstr "用于保存负例样本的动态队列大小."
+
+#: a13ca9943df949e48e6f29c9392110fa cbd74d8a13694d3ba5ba31b8225fc55c of
+#: paddlets.models.representation.dl.cost.CoST:36
+#: paddlets.models.representation.dl.cost.CoST:121
+msgid "The temperature coefficient."
+msgstr "时域对比损失中的温度系数."
+
+#: 3eafcbaa109e4113ac50540419720b2a of
+#: paddlets.models.representation.dl.cost.CoST:38
+msgid "The weight of seasonal components in loss."
+msgstr "该参数用于调整损失函数中频域对比损失的占比."
+
+#: 1aefdf35e1f44fa18ebc524984414a5c 1b7568f4b0554d4e9b8079f7b160b0a9
+#: 4d93000db5314400975313d6532e9c44 70910e6b1aee4b26a911feab3e0395b1
+#: 782b55a94f394e938381f34a9af8a1a9 7acea85ed8e442d093a2ed16df656469
+#: 81234d0b413f4d8e89a611a6ecfc1dd7 883e477d45f6476e9237c469eb159dc4
+#: 963cf280faf24c90860780e9c36f876a 9bca0c02f97b47cc969b8ac6c49bae27
+#: a1c3e902df99410e91a2db01f06d4334 a83d09d1debc4b3e8f36bbad5366fb3f
+#: bb7ae6c0d2834345a9dab68129b2cd26 e73946294d4a424caf68e63c5588fc50
+#: f2da72b9112f43e59859b2c080eb8885 of
+#: paddlets.models.representation.dl.cost.CoST
+msgid "type"
+msgstr ""
+
+#: 0dc79c758d7149dca4164317aa0af5d2 113d30bb26f447ea9ab07c10a944076b
+#: 3bd5f728ccee4c2198dd57060823b50d 5c386da57fd94fee80970353a1581c53
+#: 89ef3875bca84e20ac4ddc59c89d6785 a813c41441844e3c808cd1a7b886728d
+#: af356785fff94d9d9474253c0b2faa99 c3da902402f641e981582ef6d789a641
+#: c5fe01cf034d4ebe8cc1d803b96fd330 of
+#: paddlets.models.representation.dl.cost.CoST:45
+#: paddlets.models.representation.dl.cost.CoST:51
+#: paddlets.models.representation.dl.cost.CoST:75
+#: paddlets.models.representation.dl.cost.CoST:81
+#: paddlets.models.representation.dl.cost.CoST:87
+#: paddlets.models.representation.dl.cost.CoST:99
+#: paddlets.models.representation.dl.cost.CoST:105
+#: paddlets.models.representation.dl.cost.CoST:111
+#: paddlets.models.representation.dl.cost.CoST:117
+msgid "int"
+msgstr ""
+
+#: 143042f26d364e6591cc1536d43b289a of
+#: paddlets.models.representation.dl.cost.CoST:57
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 234d9b8fe21a42f28dbade8842f56eb7 of
+#: paddlets.models.representation.dl.cost.CoST:63
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 53d1d67f085a47d89b3bd1906702742a of
+#: paddlets.models.representation.dl.cost.CoST:69
+msgid "List[Callback]"
+msgstr ""
+
+#: 03e54227577742e09cbd1359512de8f4 of
+#: paddlets.models.representation.dl.cost.CoST:93
+msgid "int|None"
+msgstr ""
+
+#: 57803444a4724047a45eb650cc200560 8fa003a33dac4fbf8dcaee81509693f7 of
+#: paddlets.models.representation.dl.cost.CoST:123
+#: paddlets.models.representation.dl.cost.CoST:129
+msgid "float"
+msgstr ""
+
+#: 90a414ad84994cdd9154ad527e453381 of
+#: paddlets.models.representation.dl.cost.CoST:127
+msgid "The parameter control the weightage of seasonal components in loss."
+msgstr "该参数用于调整损失函数中频域对比损失的占比."
+
