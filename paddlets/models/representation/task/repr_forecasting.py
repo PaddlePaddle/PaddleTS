@@ -10,7 +10,7 @@ from sklearn.base import is_regressor, clone
 
 from paddlets.datasets.tsdataset import TSDataset
 from paddlets.models.representation.dl.repr_base import ReprBaseModel
-from bts.models.representation import TS2Vec,CoST
+from paddlets.models.representation import TS2Vec,CoST
 from paddlets.ensemble.ensemble_forecaster_base import EnsembleForecasterBase
 from paddlets.logger.logger import raise_if,Logger
 from paddlets.models.forecasting.dl.adapter import DataAdapter
