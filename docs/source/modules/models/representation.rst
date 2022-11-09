@@ -89,7 +89,7 @@ More infomation about ReprForecasting please check `ReprForecasting API doc <../
 .. code-block:: python
 
    #save model
-   modelsave(path="/tmp/rper_test/")
+   model.save(path="/tmp/rper_test/")
 
    #load model
    model = ReprForecasting.load(path="/tmp/rpr_test/")
