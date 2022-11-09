@@ -194,6 +194,7 @@ class Metric(ABC):
             type(target_true.time_index) != type(target_pred.time_index),
             "The time_index type of true and pred are inconsistent, please check you data!"
         )
+        target_pred.data.index.name = target_true.data.index.name
         merge_index = pd.merge(target_true.time_index.to_frame(index=False), target_pred.time_index.to_frame(index=False))
         raise_if(
             len(merge_index) == 0,
@@ -203,7 +204,7 @@ class Metric(ABC):
             logger.warning("Tsdataset true's and pred's time_index do not match, the result will be calculated according to the intersection!")
         index_name = merge_index.columns[0]
         if isinstance(target_true.time_index, pd.RangeIndex):
-            merge_index = pd.RangeIndex(merge_index[index_name].iloc[0], merge_index[index_name].iloc[-1], target_true.freq)
+            merge_index = pd.RangeIndex(merge_index[index_name].iloc[0], merge_index[index_name].iloc[-1] + target_true.freq, target_true.freq)
         else:
             merge_index = pd.DatetimeIndex(merge_index[index_name], freq=target_true.freq)
             

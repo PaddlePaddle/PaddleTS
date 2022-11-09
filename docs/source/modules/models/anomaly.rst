@@ -90,9 +90,9 @@ Use the trained model for prediction and evaluation.
    
    pred_label = model.predict(test_data_scaled)
    lable_name = pred_label.target.data.columns[0]
-   f1 = F1()(test_tsdata, res)
-   precision = Precision()(test_tsdata, res)
-   recall = Recall()(test_tsdata, res)
+   f1 = F1()(test_tsdata, pred_label)
+   precision = Precision()(test_tsdata, pred_label)
+   recall = Recall()(test_tsdata, pred_label)
    print ('f1: ', f1[lable_name])
    print ('precision: ', precision[lable_name])
    print ('recall: ', recall[lable_name])

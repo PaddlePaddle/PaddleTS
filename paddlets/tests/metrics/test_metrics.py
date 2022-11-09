@@ -48,6 +48,7 @@ class TestMetrics(TestCase):
         ts = TSDataset.load_from_dataframe(df, target_cols="target")
         ts2 = ts.copy()
         ts2["target"] = ts["target"] + 1
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(mse(ts, ts2), {"target": 1.0})
 
         # case3
@@ -84,6 +85,7 @@ class TestMetrics(TestCase):
         ts2 = ts.copy()
         ts2["target"] = ts["target"] + 1
         ts2["target2"] = ts["target"] + 1
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(mae(ts, ts2), {"target": 1., "target2": 0.})
 
     def test_LogLoss(self):
@@ -118,6 +120,7 @@ class TestMetrics(TestCase):
         ts.set_column("target2", 1 - ts["target"], "target")
         ts2 = ts2.copy()
         ts2.set_column("target2", ts2["target"] + 0.1, "target")
+        ts.target.data.index.name = 'diff_name'
         expect_output = {"target": 0.16425, "target2": 10.18854}
         ret = logloss(ts, ts2)
         for schema in ret:
@@ -139,6 +142,7 @@ class TestMetrics(TestCase):
             columns=["target@1", "target@2", "target_2@1", "target_2@2"]
         )
         ts2 = TSDataset.load_from_dataframe(df2)
+        ts1.target.data.index.name = 'diff_name'
         mse_prob = MSE("prob")
         self.assertEqual(mse_prob(ts1, ts2), {"target": 1., "target_2": 1.})
         mae_prob = MAE("prob")
@@ -179,6 +183,7 @@ class TestMetrics(TestCase):
             columns=["label"]
         )
         ts2 = TSDataset.load_from_dataframe(df, label_col="label")
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(acc(ts, ts2), {"label": 1.0})
         
         # case5
@@ -245,7 +250,10 @@ class TestMetrics(TestCase):
         y_true = np.random.randint(0,2,5)
         y_score = y_true.copy()
         res = precision.metric_fn(y_true, y_score)
-        self.assertEqual(res, 1.)
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(res, 1.)
+        else:
+            self.assertEqual(res, 0.)
         
         #case2 
         y_true = np.array([1, 1, 0, 0, 0])
@@ -261,6 +269,7 @@ class TestMetrics(TestCase):
         )
         ts = TSDataset.load_from_dataframe(df, label_col="label")
         ts2 = ts.copy()
+        ts.target.data.index.name = 'diff_name'
         self.assertEqual(precision(ts, ts2), {"label": 1.0})
         
         # case4
@@ -326,7 +335,11 @@ class TestMetrics(TestCase):
         df = df.reset_index(drop=True).reindex(index)
         ts = TSDataset.load_from_dataframe(df, label_col="label")
         ts2 = ts.copy()
-        self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(precision(ts, ts2), {"label": 1.0})
+        else:
+            self.assertEqual(precision(ts, ts2), {"label": 0.0})
+
         
     def test_Recall(self):
         """unittest function
@@ -336,9 +349,12 @@ class TestMetrics(TestCase):
         y_true = np.random.randint(0,2,5)
         y_score = y_true.copy()
         res = recall.metric_fn(y_true, y_score)
-        self.assertEqual(res, 1.)
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(res, 1.)
+        else:
+            self.assertEqual(res, 0.)
         
-        #case2 
+        # case2 
         y_true = np.array([1, 1, 0, 0, 0])
         y_score = np.array([1, 0, 1, 0, 0])
         res = recall.metric_fn(y_true, y_score)
@@ -417,7 +433,11 @@ class TestMetrics(TestCase):
         df = df.reset_index(drop=True).reindex(index)
         ts = TSDataset.load_from_dataframe(df, label_col="label")
         ts2 = ts.copy()
-        self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(recall(ts, ts2), {"label": 1.0})
+        else:
+            self.assertEqual(recall(ts, ts2), {"label": 0.0})
+         
         
     def test_F1(self):
         """unittest function
@@ -427,7 +447,10 @@ class TestMetrics(TestCase):
         y_true = np.random.randint(0,2,5)
         y_score = y_true.copy()
         res = f1.metric_fn(y_true, y_score)
-        self.assertEqual(res, 1.)
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(res, 1.)
+        else:
+            self.assertEqual(res, 0.)
         
         #case2 
         y_true = np.array([1, 1, 0, 0, 0])
@@ -499,6 +522,7 @@ class TestMetrics(TestCase):
 
         # case7
         y_true = np.random.randint(0,2,5)
+        print ('case7 f1:', y_true)
         index = pd.RangeIndex(0, 5, 1)
         periods = 5
         df = pd.DataFrame(
@@ -508,7 +532,11 @@ class TestMetrics(TestCase):
         df = df.reset_index(drop=True).reindex(index)
         ts = TSDataset.load_from_dataframe(df, label_col="label")
         ts2 = ts.copy()
-        self.assertEqual(f1(ts, ts2), {"label": 1.0})
+        if np.sum(y_true==1) > 0:
+            self.assertEqual(f1(ts, ts2), {"label": 1.0})
+        else:
+            self.assertEqual(f1(ts, ts2), {"label": 0.0})
+
 
     def test_get_metrics_by_names(self):
         """unittest function
@@ -554,34 +582,6 @@ class TestMetricContainer(TestCase):
         expect_output = {"val_mse": 1., "val_mae": 1.}
         for schema in ret:
             self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
-
-'''
-class TestCheckMetrics(TestCase):
-    def setUp(self):
-        """unittest function
-        """
-        super().setUp()
-
-    def test_check_metrics(self):
-        """unittest function
-        """
-        # case1
-        fake_input = ["mse", "mae"]
-        expect_output = ["mse", "mae"]
-        ret = check_metrics(fake_input)
-        self.assertEqual(expect_output, ret)
-
-        # case2
-        fake_input = ["mse", MAE()]
-        expect_output = ["mse", "mae"]
-        ret = check_metrics(fake_input)
-        self.assertEqual(expect_output, ret)
-
-        # case3
-        fake_input = ["mse", 5]
-        with self.assertRaises(TypeError):
-            check_metrics(fake_input)
-'''
 
 
 if __name__ == "__main__":
