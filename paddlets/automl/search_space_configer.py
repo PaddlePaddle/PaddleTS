@@ -3,6 +3,7 @@
 
 import copy
 import json
+from typing import Optional
 
 from ray.tune import uniform, quniform, loguniform, randn, randint, qrandint, lograndint, choice
 from ray.tune.sample import Float, Integer, Categorical
@@ -116,7 +117,7 @@ class SearchSpaceConfiger:
         # paddlets_estimator is unknown type
         raise NotImplementedError("Unknown estimator")
 
-    def recommend(self, estimator, verbose=True):
+    def recommend(self, estimator, verbose: Optional[bool]=True):
         """
         Recommend a search space for the PaddleTS estimator.
 

@@ -37,8 +37,8 @@ class WeightingEnsembleForecaster(EnsembleForecasterBase, metaclass=abc.ABCMeta)
                  out_chunk_len: int,
                  skip_chunk_len: int,
                  estimators: List[Tuple[object, dict]],
-                 mode="mean",
-                 verbose: bool = False
+                 mode: Optional[str]="mean",
+                 verbose: Optional[bool] = False
                  ) -> None:
 
         super().__init__(in_chunk_len, out_chunk_len, skip_chunk_len, estimators, verbose)

@@ -32,9 +32,9 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
     def __init__(self,
                  in_chunk_len: int,
                  out_chunk_len: int,
-                 skip_chunk_len: int = 0,
-                 estimators: List[Tuple[object, dict]] = None,
-                 verbose=False
+                 skip_chunk_len: Optional[int] = 0,
+                 estimators: Optional[List[Tuple[object, dict]]] = None,
+                 verbose: Optional[bool]=False
                  ) -> None:
 
         def _check_estimators():
@@ -152,7 +152,7 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
             predictions.append(estimator.predict(tsdataset))
         return predictions
 
-    def save(self, path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> None:
+    def save(self, path: str, ensemble_file_name: Optional[str] = "paddlets-ensemble-partial.pkl") -> None:
         """
         Save the ensemble model to a directory.
 
@@ -186,7 +186,7 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
         self._estimators = model_tmp
 
     @staticmethod
-    def load(path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> "EnsembleForecasterBase":
+    def load(path: str, ensemble_file_name: Optional[str] = "paddlets-ensemble-partial.pkl") -> "EnsembleForecasterBase":
         """
         Load the ensemble model from a directory.
 

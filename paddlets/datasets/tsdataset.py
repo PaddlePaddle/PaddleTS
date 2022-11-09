@@ -86,7 +86,7 @@ class TimeSeries(object):
         time_col: Optional[str] = None,
         value_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
-        drop_tail_nan: bool = False,
+        drop_tail_nan: Optional[bool] = False,
         dtype: Optional[Union[type, Dict[str, type]]] = None
     ) -> "TimeSeries":
         """
@@ -255,7 +255,7 @@ class TimeSeries(object):
         self._data = self._data.astype(dtype)
         return self
 
-    def to_dataframe(self, copy: bool=True) -> pd.DataFrame:
+    def to_dataframe(self, copy: Optional[bool]=True) -> pd.DataFrame:
         """
         Return a pd.DataFrame representation of the TimeSeries object
 
@@ -271,7 +271,7 @@ class TimeSeries(object):
         else:
             return self.data
     
-    def to_numpy(self, copy: bool=True) -> np.ndarray:
+    def to_numpy(self, copy: Optional[bool]=True) -> np.ndarray:
         """
         Return a numpy.ndarray representation of the TimeSeries object
 
@@ -290,7 +290,7 @@ class TimeSeries(object):
     def get_index_at_point(
         self, 
         point: Union[pd.Timestamp, str, float, int], 
-        after=True
+        after: Optional[bool]=True
     ) -> int:
         """
         Convert a point along the time axis into an integer index.
@@ -357,7 +357,7 @@ class TimeSeries(object):
     def split(
         self, 
         split_point: Union[pd.Timestamp, str, float, int], 
-        after=True
+        after: Optional[bool]=True
     ) -> Tuple["TimeSeries", "TimeSeries"]:
         """
         Split the TimeSeries object into two TimeSeries objects according to `split_point`
@@ -691,7 +691,7 @@ class TSDataset(object):
         self._static_cov = static_cov
 
         #The type of freq is str when When time_index is DatetimeIndex, int when time_index is RangeIndex
-        self._freq : Optional[str, int] = None
+        self._freq : Optional[Union[str, int]] = None
         self._check_data()
 
         #Get built-in analysis operators
@@ -769,7 +769,7 @@ class TSDataset(object):
     def load_from_csv(
         cls,
         filepath_or_buffer: str,
-        group_id: str = None,
+        group_id: Optional[str] = None,
         time_col: Optional[str] = None,
         target_cols: Optional[Union[List[str], str]] = None,
         label_col: Optional[Union[List[str], str]] = None,
@@ -778,10 +778,10 @@ class TSDataset(object):
         known_cov_cols: Optional[Union[List[str], str]] = None,
         static_cov_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
-        fill_missing_dates: bool = False,
-        fillna_method: str = "pre",
-        fillna_window_size: int = 10,
-        drop_tail_nan: bool = False,
+        fill_missing_dates: Optional[bool] = False,
+        fillna_method: Optional[str] = "pre",
+        fillna_window_size: Optional[int] = 10,
+        drop_tail_nan: Optional[bool] = False,
         dtype: Optional[Union[type, Dict[str, type]]] = None,
         **kwargs
     ) -> Union["TSDataset", List["TSDataset"]]:
@@ -855,10 +855,10 @@ class TSDataset(object):
         known_cov_cols: Optional[Union[List[str], str]] = None,
         static_cov_cols: Optional[Union[List[str], str]] = None,
         freq: Optional[Union[str, int]] = None,
-        fill_missing_dates: bool = False,
-        fillna_method: str = "pre",
-        fillna_window_size: int = 10,
-        drop_tail_nan: bool = False,
+        fill_missing_dates: Optional[bool] = False,
+        fillna_method: Optional[str] = "pre",
+        fillna_window_size: Optional[int] = 10,
+        drop_tail_nan: Optional[bool] = False,
         dtype: Optional[Union[type, Dict[str, type]]] = None
     ) -> Union["TSDataset", List["TSDataset"]]:
         """
@@ -1482,7 +1482,7 @@ class TSDataset(object):
         self,
         column: Union[str, int],
         value: Union[pd.Series, str, int],
-        type: str = 'known_cov'
+        type: Optional[str] = 'known_cov'
     ):
         """
         Add a new column or update the existing column
@@ -1654,13 +1654,13 @@ class TSDataset(object):
                     self._static_cov = None
 
     def plot(self, 
-             columns:Union[List[str], str] = None, 
-             add_data:Union[List["TSDataset"], "TSDataset"] = None,
-             labels:Union[List[str], str] = None,
-             low_quantile:float = 0.05,
-             high_quantile:float = 0.95,
-             central_quantile:float = 0.5,
-             **kwargs) -> "pyplot":
+             columns: Optional[Union[List[str], str]] = None, 
+             add_data: Optional[Union[List["TSDataset"], "TSDataset"]] = None,
+             labels: Optional[Union[List[str], str]] = None,
+             low_quantile: Optional[float] = 0.05,
+             high_quantile: Optional[float] = 0.95,
+             central_quantile: Optional[float] = 0.5,
+             **kwargs) -> plt:
         """
         plot function, a wrapper for Dataframe.plot()
         
@@ -1800,9 +1800,9 @@ class TSDataset(object):
         return plot
 
     def _fill_between_quantiles(self,
-                                column: str = None,
-                                low_quantile: float = 0.05,
-                                high_quantile: float = 0.95,
+                                column: Optional[str] = None,
+                                low_quantile: Optional[float] = 0.05,
+                                high_quantile: Optional[float] = 0.95,
                                 **kwargs):
         """
         Fill color between quantiles
@@ -1963,7 +1963,7 @@ class TSDataset(object):
         return self._freq
 
     @classmethod
-    def concat(cls, tss: List["TSDataset"], axis: int = 0, drop_duplicates = True, keep = 'first') -> "TSDataset":
+    def concat(cls, tss: List["TSDataset"], axis: Optional[int] = 0, drop_duplicates: Optional[bool]=True, keep: Optional[str]='first') -> "TSDataset":
         """
         Concatenate a list of TSDataset objects along the specified axis
 
@@ -2071,7 +2071,7 @@ class TSDataset(object):
             type_list.append(pd.DataFrame(self._static_cov, index=[0]).dtypes)
         return pd.concat(type_list)
 
-    def sort_columns(self, ascending: bool = True):
+    def sort_columns(self, ascending: Optional[bool] = True):
         """
         Sort the TSDataset object by the index
         

@@ -40,12 +40,12 @@ class StackingEnsembleForecaster(EnsembleForecasterBase, metaclass=abc.ABCMeta):
                  out_chunk_len: int,
                  skip_chunk_len: int,
                  estimators: List[Tuple[object, dict]],
-                 final_learner: Callable = None,
-                 use_backtest: bool = True,
-                 resampling_strategy: str = 'cv',
-                 split_ratio: Union[str, float] = 0.1,
-                 k_fold: Union[str, int] = 3,
-                 verbose: bool = False
+                 final_learner: Optional[Callable] = None,
+                 use_backtest: Optional[bool] = True,
+                 resampling_strategy: Optional[str] = 'cv',
+                 split_ratio: Optional[Union[str, float]] = 0.1,
+                 k_fold: Optional[Union[str, int]] = 3,
+                 verbose: Optional[bool] = False
                  ) -> None:
         super().__init__(in_chunk_len, out_chunk_len, skip_chunk_len, estimators, verbose)
 
