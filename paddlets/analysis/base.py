@@ -6,7 +6,7 @@ from typing import Any, Callable, List, Optional, Sequence, Tuple, Union, Dict
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot 
+import matplotlib.pyplot as plt
 
 from paddlets import TimeSeries, TSDataset
 from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
@@ -30,7 +30,7 @@ class Analyzer(ABC):
 
     def _build_analysis_data(
         self,
-        tsdataset: "TSDataset",
+        tsdataset: TSDataset,
         columns: Optional[Union[str, List[str]]] = None,
         **kwargs
     ) -> Union[pd.Series, pd.DataFrame]:
@@ -103,7 +103,7 @@ class Analyzer(ABC):
         """
         pass
 
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         The plot method of the Analyzer to show figures of Analysis results, optionally override this method.
         If analyzers need to  displays figures in the analysis report, this method needs to be overrided. 
@@ -129,7 +129,7 @@ class Analyzer(ABC):
                 #Implement the plot method by yourself, return need to be matplotlib.pyplot object.
 
         """
-        return None
+        return plt
     
     
     def __call__(

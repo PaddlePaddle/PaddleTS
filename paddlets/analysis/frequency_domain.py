@@ -43,7 +43,7 @@ class FFT(Analyzer):
         None
     """
 
-    def __init__(self, fs: float = 0, norm: bool = True, half: bool = True, **kwargs):
+    def __init__(self, fs: Optional[float] = 0, norm: Optional[bool] = True, half: Optional[bool] = True, **kwargs):
         super(FFT, self).__init__(**kwargs)
         self._fs = fs
         self._norm = norm
@@ -153,7 +153,7 @@ class FFT(Analyzer):
             "report_description": "Frequency domain analysis of signal based on fast Fourier transform."
         }
 
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display fft result.
 
@@ -225,16 +225,16 @@ class STFT(Analyzer):
 
     def __init__(
         self,
-        fs: float = 1.0,
-        window: Union[str, Tuple[str], List[str]] = 'hann',
-        nperseg: int = 256,
-        noverlap: Union[None, int] = None,
-        nfft: Union[None, int] = None,
-        detrend: Union[str, bool] = False,
-        return_onesided: bool = True,
-        boundary: Union[str, None] = 'zeros',
-        padded: bool = True,
-        axis: int = -1,
+        fs: Optional[float] = 1.0,
+        window: Optional[Union[str, Tuple[str], List[str]]] = 'hann',
+        nperseg: Optional[int] = 256,
+        noverlap: Optional[Union[None, int]] = None,
+        nfft: Optional[Union[None, int]] = None,
+        detrend: Optional[Union[str, bool]] = False,
+        return_onesided: Optional[bool] = True,
+        boundary: Optional[Union[str, None]] = 'zeros',
+        padded: Optional[bool] = True,
+        axis: Optional[int] = -1,
         **kwargs
         ):
         super(STFT, self).__init__(**kwargs)
@@ -340,7 +340,7 @@ class STFT(Analyzer):
             "report_description": "Time-frequency analysis of signal based on short-time Fourier transform."
         }
     
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display stft result.
 
@@ -404,11 +404,11 @@ class CWT(Analyzer):
 
     def __init__(
         self,
-        scales: int = 64,
-        wavelet: str = 'cgau8',
-        fs: float = 1.0,
-        method: str = 'conv',
-        axis: int = -1,
+        scales: Optional[int] = 64,
+        wavelet: Optional[str] = 'cgau8',
+        fs: Optional[float] = 1.0,
+        method: Optional[str] = 'conv',
+        axis: Optional[int] = -1,
         **kwargs
         ):
         super(CWT, self).__init__(**kwargs)
@@ -508,7 +508,7 @@ class CWT(Analyzer):
             "report_description": "Time-frequency analysis of signal based on continuous wavelet transform."
         }
     
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display cwt result.
 

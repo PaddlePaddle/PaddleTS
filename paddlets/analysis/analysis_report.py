@@ -54,8 +54,8 @@ class AnalysisReport(object):
     def __init__(
             self,
             dataset: TSDataset,
-            names: Union[str, List[str]] = None,
-            params: Dict = None,
+            names: Optional[Union[str, List[str]]] = None,
+            params: Optional[Dict] = None,
             columns: Optional[Union[str, List[str]]] = None
     ) -> None:
 
@@ -69,7 +69,7 @@ class AnalysisReport(object):
         self._columns = columns
         self._analyzers = self._get_analyzers(names, params)
 
-    def export_docx_report(self, path: str = ".", file_name: str = "analysis_report.docx") -> None:
+    def export_docx_report(self, path: Optional[str] = ".", file_name: Optional[str] = "analysis_report.docx") -> None:
         """
         Export a report in the docx format
         
@@ -139,7 +139,7 @@ class AnalysisReport(object):
         document.save(path)
         logger.info(f"save report succcess, save at {path}")
     
-    def export_json_report(self, log: bool = True) -> Dict:
+    def export_json_report(self, log: Optional[bool] = True) -> Dict:
         """
         Export a report in the Json format
         
@@ -196,7 +196,7 @@ class AnalysisReport(object):
         document.add_paragraph(
             u'summary, max, fft, stft, cwt', style='ListBullet')
 
-    def _get_analyzers(self, names: Union[str, List[str]], params: Dict = None) -> List[Analyzer]:
+    def _get_analyzers(self, names: Union[str, List[str]], params: Optional[Dict] = None) -> List[Analyzer]:
         """
         Get analyzer objects
         
@@ -233,7 +233,7 @@ class AnalysisReport(object):
 
         return analyzers
 
-    def get_all_analyzers_names(self, log: bool = True) -> List[str]:
+    def get_all_analyzers_names(self, log: Optional[bool] = True) -> List[str]:
         """
         Get the names of analyzers
         This method can be called internally or externally, and the parameter log is set to False or True accordingly.
@@ -274,7 +274,7 @@ class AnalysisReport(object):
 
         return analyzers_mapping
 
-    def _validate_analyzers_names(self, names: Union[str, List[str]] = None) -> None:
+    def _validate_analyzers_names(self, names: Optional[Union[str, List[str]]] = None) -> None:
         """
         Validate the names of analyzer input by the user 
         If the analyzer names entered by the user do not exist in the library, an error will be reported

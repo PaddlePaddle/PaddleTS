@@ -29,13 +29,13 @@ class SplitterBase(metaclass=ABCMeta):
     """
 
     def __init__(self,
-                 skip_size: int = 0,
-                 verbose: bool = True) -> None:
+                 skip_size: Optional[int] = 0,
+                 verbose: Optional[bool] = True) -> None:
         self._skip_size = skip_size
         self._verbose = verbose
 
     def split(self, dataset: TSDataset,
-              return_index: bool = False) -> Union[TSDataset, pd.DatetimeIndex, pd.RangeIndex]:
+              return_index: Optional[bool] = False) -> Union[TSDataset, pd.DatetimeIndex, pd.RangeIndex]:
         """
         Split TSdataset.
         
@@ -306,11 +306,11 @@ class ExpandingWindowSplitter(SplitterBase):
         
     """
 
-    def __init__(self, n_splits: int = 5,
-                 test_size: Union[int, None] = None,
-                 skip_size: int = 0,
-                 max_train_size: int = None,
-                 verbose: bool = True) -> None:
+    def __init__(self, n_splits: Optional[int] = 5,
+                 test_size: Optional[Union[int, None]] = None,
+                 skip_size: Optional[int] = 0,
+                 max_train_size: Optional[int] = None,
+                 verbose: Optional[bool] = True) -> None:
 
         super().__init__(skip_size, verbose)
         self._test_size = test_size
@@ -479,9 +479,9 @@ class SlideWindowSplitter(SplitterBase):
     def __init__(self,
                  train_size: int,
                  test_size: int,
-                 step_size: int = None,
-                 skip_size: int = 0,
-                 verbose: bool = True) -> None:
+                 step_size: Optional[int] = None,
+                 skip_size: Optional[int] = 0,
+                 verbose: Optional[bool] = True) -> None:
 
         super().__init__(skip_size, verbose)
         self._test_size = test_size

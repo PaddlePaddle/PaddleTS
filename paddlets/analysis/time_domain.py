@@ -36,10 +36,10 @@ class Seasonality(Analyzer):
     """
     def __init__(self, 
                  period: Optional[int] = None,
-                 nlags: int = 300,
-                 alpha: float = 0.05,
-                 mode: str = 'additive',
-                 order: int = 1,
+                 nlags: Optional[int] = 300,
+                 alpha: Optional[float] = 0.05,
+                 mode: Optional[str] = 'additive',
+                 order: Optional[int] = 1,
                  **kwargs):
         super().__init__(**kwargs)
         if period:
@@ -84,7 +84,7 @@ class Seasonality(Analyzer):
     def _seasonality(
         self, 
         X: pd.DataFrame,
-        period_dict: dict = {},
+        period_dict: Optional[dict] = {},
     ) -> Union[Any, pd.Series]:
         """
         extrack the seasonality values of given columns
@@ -172,7 +172,7 @@ class Seasonality(Analyzer):
             return period_first
         return period_first
     
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display seasonality result.
 
@@ -301,7 +301,7 @@ class Acf(Analyzer):
         interval = [confident[lag][1] - acf_values[lag] for lag in range(1, self.nlags + 1)]
         return (acf_values, interval)
     
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display acf result.
 
@@ -364,8 +364,8 @@ class Correlation(Analyzer):
 
     """
     def __init__(self, 
-                 method: str = 'pearson',
-                 lag: int = 0,
+                 method: Optional[str] = 'pearson',
+                 lag: Optional[int] = 0,
                  lag_cols: Optional[Union[str, List[str]]] = [],
                  **kwargs):
         super().__init__(**kwargs)
@@ -418,7 +418,7 @@ class Correlation(Analyzer):
         corr = X.corr(method=self.method)
         return corr
     
-    def plot(self) -> "pyplot":
+    def plot(self) -> plt:
         """
         display correlation result.
 

@@ -92,20 +92,20 @@ class AutoTS(BaseModel):
             estimator: Union[str, Type[BaseModel], List[Union[str, Type[BaseTransform], Type[BaseModel]]]],
             in_chunk_len: int,
             out_chunk_len: int,
-            skip_chunk_len: int = 0,
-            sampling_stride: int = 1,
-            search_space: Union[str, dict] = 'auto',
-            search_alg: str = 'auto',
-            resampling_strategy: str = 'auto',
-            split_ratio: Union[str, float] = 'auto',
-            k_fold: Union[str, int] = 'auto',
-            metric: str = 'auto',
-            mode: str = 'auto',
-            refit: bool = True,
-            ensemble: bool = False,
+            skip_chunk_len: Optional[int] = 0,
+            sampling_stride: Optional[int] = 1,
+            search_space: Optional[Union[str, dict]] = 'auto',
+            search_alg: Optional[str] = 'auto',
+            resampling_strategy: Optional[str] = 'auto',
+            split_ratio: Optional[Union[str, float]] = 'auto',
+            k_fold: Optional[Union[str, int]] = 'auto',
+            metric: Optional[str] = 'auto',
+            mode: Optional[str] = 'auto',
+            refit: Optional[bool] = True,
+            ensemble: Optional[bool] = False,
             local_dir: Optional[str] = None,
-            n_jobs: int = -1,
-            verbose: int = 4
+            n_jobs: Optional[int] = -1,
+            verbose: Optional[int] = 4
     ):
         np.random.seed(NP_RANDOM_SEED)
         super(AutoTS, self).__init__(
@@ -179,10 +179,10 @@ class AutoTS(BaseModel):
     def fit(
             self,
             train_tsdataset: Union[TSDataset, List[TSDataset]],
-            valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
-            n_trials: int = 20,
-            cpu_resource: float = 1.0,
-            gpu_resource: float = 0
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None,
+            n_trials: Optional[int] = 20,
+            cpu_resource: Optional[float] = 1.0,
+            gpu_resource: Optional[float] = 0
     ):
         """
         Fit the estimator with the given tsdataset.

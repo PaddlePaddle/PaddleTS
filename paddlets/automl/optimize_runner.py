@@ -35,7 +35,7 @@ class OptimizeRunner:
 
     """
 
-    def __init__(self, search_alg: str = "Random"):
+    def __init__(self, search_alg: Optional[str] = "Random"):
         self.search_alg = search_alg
         self.paddlets_configer = SearchSpaceConfiger()
         self.report_metric = "loss"
@@ -109,18 +109,18 @@ class OptimizeRunner:
                  in_chunk_len: int,
                  out_chunk_len: int,
                  train_tsdataset: Union[TSDataset, List[TSDataset]],
-                 valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
-                 sampling_stride: int = 1,
-                 skip_chunk_len: int = 0,
+                 valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None,
+                 sampling_stride: Optional[int] = 1,
+                 skip_chunk_len: Optional[int] = 0,
                  search_space: Optional[dict] = None,
-                 metric: ABCMeta = MAE,
-                 mode: str = "min",
-                 resampling_strategy: str = "holdout",
-                 split_ratio: float = 0.1,
-                 k_fold: int = 3,  # cv的fold切分数, 默认5折切分
-                 n_trials: int = 5,
-                 cpu_resource: float = 1.0,
-                 gpu_resource: float = 0,
+                 metric: Optional[ABCMeta] = MAE,
+                 mode: Optional[str] = "min",
+                 resampling_strategy: Optional[str] = "holdout",
+                 split_ratio: Optional[float] = 0.1,
+                 k_fold: Optional[int] = 3,  # cv的fold切分数, 默认5折切分
+                 n_trials: Optional[int] = 5,
+                 cpu_resource: Optional[float] = 1.0,
+                 gpu_resource: Optional[float] = 0,
                  local_dir: Optional[str] = None,
                  ):
         """
