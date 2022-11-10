@@ -357,7 +357,7 @@ class _NBEATSModule(nn.Layer):
         observed_cov_dim: int,
         generic_architecture: bool,
         num_stacks: int,
-        num_blocks: int,
+        num_blocks: Union[int, List[int]],
         num_layers: int,
         layer_widths: Union[int, List[int]],
         expansion_coefficient_dim: int,
@@ -372,7 +372,7 @@ class _NBEATSModule(nn.Layer):
             observed_cov_dim(int): The number of observed covariates.
             generic_architecture(bool): Boolean value indicating whether the generic architecture of N-BEATS is used. If not, the interpretable architecture outlined in the paper (consisting of one trend and one seasonality stack with appropriate waveform generator functions).
             num_stacks(int): The number of stacks that make up the whole model. Only used if `generic_architecture` is set to `True`.
-            num_blocks(int): The number of blocks making up every stack.
+            num_blocks(Union[int, List[int]]): The number of blocks making up each stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the corresponding stack. If an integer is passed, every stack will have the same number of blocks.
             num_layers(int): The number of fully connected layers preceding the final forking layers in each block of every stack. Only used if `generic_architecture` is set to `True`.
             layer_widths(Union[int, List[int]]): Determines the number of neurons that make up each fully connected layer in each block of every stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the layer width of the corresponding stack. If an integer is passed, every stack will have blocks with FC layers of the same width.
             expansion_coefficient_dim(int): The dimensionality of the waveform generator parameters, also known as expansion coefficients. Only used if `generic_architecture` is set to `True`.
@@ -392,7 +392,7 @@ class _NBEATSModule(nn.Layer):
         if generic_architecture:
             self._stacks_list = [
                 _Stack(
-                    num_blocks,
+                    num_blocks[i],
                     num_layers,
                     layer_widths[i],
                     expansion_coefficient_dim,
@@ -408,7 +408,7 @@ class _NBEATSModule(nn.Layer):
         else:
             num_stacks = 2
             trend_stack = _Stack(
-                num_blocks,
+                num_blocks[0],
                 num_layers,
                 layer_widths[0],
                 trend_polynomial_degree + 1,
@@ -419,7 +419,7 @@ class _NBEATSModule(nn.Layer):
                 _GType.TREND,
             )
             seasonality_stack = _Stack(
-                num_blocks,
+                num_blocks[1],
                 num_layers,
                 layer_widths[1],
                 -1, # no need to set in seasonality stack
@@ -478,7 +478,7 @@ class NBEATSModel(PaddleBaseModelImpl):
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
         generic_architecture(bool, Optional): Boolean value indicating whether the generic architecture of N-BEATS is used. If not, the interpretable architecture outlined in the paper (consisting of one trend and one seasonality stack with appropriate waveform generator functions).
         num_stacks(int, Optional): The number of stacks that make up the whole model. Only used if `generic_architecture` is set to `True`.
-        num_blocks(int, Optional): The number of blocks making up every stack.
+        num_blocks(Union[int, List[int]], Optional): The number of blocks making up each stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the corresponding stack. If an integer is passed, every stack will have the same number of blocks.
         num_layers(int, Optional): The number of fully connected layers preceding the final forking layers in each block of every stack. Only used if `generic_architecture` is set to `True`.
         layer_widths(Union[int, List[int]], Optional): Determines the number of neurons that make up each fully connected layer in each block of every stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the layer width of the corresponding stack. If an integer is passed, every stack will have blocks with FC layers of the same width.
         expansion_coefficient_dim(int, Optional): The dimensionality of the waveform generator parameters, also known as expansion coefficients. Only used if `generic_architecture` is set to `True`.
@@ -502,7 +502,7 @@ class NBEATSModel(PaddleBaseModelImpl):
         out_chunk_len: int,
         generic_architecture: bool = False,
         num_stacks: int = 2,
-        num_blocks: int = 3,
+        num_blocks: Union[int, List[int]] = 3,
         num_layers: int = 4,
         layer_widths: Union[int, List[int]] = 128,
         expansion_coefficient_dim: int = 128,
@@ -530,6 +530,8 @@ class NBEATSModel(PaddleBaseModelImpl):
         # If not using general architecture, for interpretable purpose, number of stacks is forced to be 2, for trend and seasonality implementation
         if not self._generic_architecture:
             self._num_stacks = 2
+        if isinstance(self._num_blocks, int):
+            self._num_blocks = [self._num_blocks] * self._num_stacks
         if isinstance(self._layer_widths, int):
             self._layer_widths = [self._layer_widths] * self._num_stacks
 
@@ -554,6 +556,10 @@ class NBEATSModel(PaddleBaseModelImpl):
         """
         Check validation of parameters.
         """
+        raise_if(
+            isinstance(self._num_blocks, list) and len(self._num_blocks) != self._num_stacks,
+            "Stack number should be equal to the length of the List: num_blocks."
+        )
         raise_if(
             isinstance(self._layer_widths, list) and len(self._layer_widths) != self._num_stacks,
             "Stack number should be equal to the length of the List: layer_widths."
