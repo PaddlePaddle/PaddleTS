@@ -86,6 +86,6 @@ You can specify different algorithms as follows:
 
 .. code:: python
 
-    autots_model = AutoTS(MLPRegressor, 96, 2, search_space="CMAES")
+    autots_model = AutoTS(MLPRegressor, 96, 2, search_alg="CMAES")
 
 If no search algorithm is specified, "TPE" will be used as default.
