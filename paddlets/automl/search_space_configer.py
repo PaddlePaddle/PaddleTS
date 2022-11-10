@@ -345,7 +345,7 @@ class SearchSpaceConfiger:
                             "hidden_config": choice([[64], [64] * 2, [64] * 3, [128] * 2, [128] * 3,
                                                      [8] * 3, [8] * 5, [8] * 7,
                                                      [16] * 3, [16] * 5, [16] * 7]),
-                            "kernel_size": choice([1, 3, 7]),
+                            "kernel_size": choice([3, 5, 7]),
                             "dropout_rate": quniform(0, 1, 0.05),
                             "batch_size": qrandint(8, 128, q=8),
                             "max_epochs": qrandint(300, 1500, q=100),

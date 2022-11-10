@@ -2,13 +2,17 @@
 Representation Model Tutorial
 =============================
 
-The representation model (TS2Vec) is one of the self-supervised models, mainly hoping to learn a general feature expression for downstream tasks. The current mainstream self-supervised learning mainly includes Generative-based and Contrastive-based methods, TS2Vec is a Self-Supervised Model Based on Contrastive Method
+The representation model is one of the self-supervised models, mainly hoping to learn a general feature expression for downstream tasks. The current mainstream self-supervised learning mainly includes Generative-based and Contrastive-based methods, TS2Vec is a Self-Supervised Model Based on Contrastive Method
+
+Currently Supported repr models:
+    - `TS2Vec <../../api/paddlets.models.representation.dl.ts2vec.html>`_ 
+    - `CoST <../../api/paddlets.models.representation.dl.cost.html>`_ 
 
 The use of self-supervised models is divided into two phases:
     - Pre-training with unlabeled data, independent of downstream tasks
     - Fine-tune on downstream tasks using labeled data
 
-TS2Vec follows the usage paradigm of self-supervised models:
+representation model follows the usage paradigm of self-supervised models:
     - Representational model training
     - Use the output of the representation model for the downstream task (the downstream task of the current case is the prediction task)
 
@@ -32,9 +36,9 @@ A pipeline that combines the representation model and downstream tasks
 
    import paddle
    paddle.seed(2022)
-   from paddlets.models.representation.dl.ts2vec import TS2Vec
+   from paddlets.models.representation import TS2Vec
    from paddlets.datasets.repository import get_dataset
-   from paddlets.models.representation.task.repr_forecasting import ReprForecasting
+   from paddlets.models.representation import ReprForecasting
 
    data = get_dataset('ETTh1')
    data, _ = data.split('2016-09-22 06:00:00')
@@ -42,6 +46,7 @@ A pipeline that combines the representation model and downstream tasks
 
 1.2 Training 
 ------------
+More infomation about ReprForecasting please check `ReprForecasting API doc <../../api/paddlets.models.representation.task.repr_forecasting.html>`_ 
 
 .. code-block:: python
 
@@ -78,6 +83,16 @@ A pipeline that combines the representation model and downstream tasks
             stride=24,
             return_predicts=True)
 
+1.5 Save and load
+--------------------------
+
+.. code-block:: python
+
+   #save model
+   model.save(path="/tmp/rper_test/")
+
+   #load model
+   model = ReprForecasting.load(path="/tmp/rpr_test/")
 
 2. Method two
 =================

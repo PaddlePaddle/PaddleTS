@@ -798,13 +798,13 @@ msgstr "时间列，可以是DatetimeIndex或者RangeIndex类型，如果为None
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:14
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:13
 msgid "The names of columns for target"
-msgstr "代表已知协变量列名"
+msgstr "代表目标变量列名"
 
 #: 2f85c43e5323405abed4f4f5b00a8dc2 f6a03864f5a846c29792a107f0df4d36 of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:16
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:15
 msgid "The names of columns for label in anomaly detection"
-msgstr "静态协变量列名，需要同一列中全部数值一致"
+msgstr "代表异常检测场景数据下label的列名，注意，该参数不可以和target_col同时传递"
 
 #: 7aa7085c0bf948b9a535333bac02ca03 8e95a04922f34e08b26e32534cdd2c16 of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:18
@@ -816,7 +816,7 @@ msgstr "代表观测协变量列名"
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:20
 #: paddlets.datasets.tsdataset.TSDataset.load_from_dataframe:19
 msgid "The names of columns for feature in anomaly detection"
-msgstr "静态协变量列名，需要同一列中全部数值一致"
+msgstr "代表异常检测场景数据下特征的列名，注意，该参数不可以和observed_cov_col同时传递"
 
 #: 0dd54411347c4216b3097198550f5461 b90dab577c564543afce5d5a0c97ac85 of
 #: paddlets.datasets.tsdataset.TSDataset.load_from_csv:22
