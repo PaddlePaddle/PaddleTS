@@ -67,12 +67,12 @@ Install PaddleTS with docker
 
 ::
 
-    docker pull registry.baidubce.com/paddlets/paddlets:0.2.0
+    docker pull registry.baidubce.com/paddlets/paddlets:latest
 
 2）Start container
 -----------------------
 
 ::
 
-    docker run --name paddle_docker -it -v $PWD:/paddle registry.baidubce.com/paddlets/paddlets:0.2.0  /bin/bash
+    docker run --name paddle_docker -it -v $PWD:/paddle registry.baidubce.com/paddlets/paddlets:latest  /bin/bash
 

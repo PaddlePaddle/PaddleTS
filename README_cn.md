@@ -24,13 +24,14 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 内置多样化的数据转换算子，支持数据处理与转换，包括缺失值填充、异常值处理、归一化、时间相关的协变量提取等
 * 内置经典的数据分析算子，帮助开发者便捷实现数据探索，包括数据统计量信息及数据摘要等功能
 * 自动模型调优AutoTS，支持多类型HPO(Hyper Parameter Optimization)算法，在多个模型和数据集上展现显著调优效果 
-* 第三方机器学习模型及数据转换模块自动集成，支持包括sklearn等第三方库的时序应用
+* 第三方机器学习模型及数据转换模块自动集成，支持包括sklearn、pyod等第三方库的时序应用
 * 支持在GPU设备上运行基于PaddlePaddle的时序模型
 
 最新更新：
+* 发布时序表征模型 Contrastive Learning of Disentangled Seasonal-trend Representations(CoST)
 * 支持时序异常检测，发布包括AE (Autoencoder)、VAE (Variational Autoencoder)、AnomalyTransformer深度学习模型
 * 支持第三方时序异常检测库[pyod](https://github.com/yzhao062/pyod)自动集成
-* 新增时序模型集成Ensemble功能。目前发布版本支持StackingEnsembleForecaster和WeightingEnsembleForecaster等2种时序预测集成学习方法
+* 新增时序模型集成学习能力。目前发布版本支持StackingEnsembleForecaster和WeightingEnsembleForecaster等2种时序预测集成学习方法
 * RNN模型现在支持使用分类特征和静态协变量
 * 新增基于表征模型的时序预测功能，支持使用时序表征模型解决时序预测任务
 * 支持基于多时序数据集的组合训练
