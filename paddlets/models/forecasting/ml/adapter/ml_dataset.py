@@ -505,7 +505,7 @@ class MLDataset(object):
                         # Note: np.NaN is float, cannot be converted to np.int64, so if the input tsdataset needs to
                         # be lag-transformed, in case if the original lagged column.dtype = int, then after lag
                         # transform, it must be another INT-convertible number rather than a np.NaN.
-                        [0，int_convertible_num, NaN],
+                        [0, int_convertible_num, NaN],
                         [-1, 0, 0.0],
                         [-2, 1, 10.0],
                         [-3, 2, 20.0],
