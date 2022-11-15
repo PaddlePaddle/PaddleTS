@@ -14,20 +14,20 @@ from paddle.optimizer import Optimizer
 import numpy as np
 import paddle
 
-from bts.models.common.callbacks import (
+from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
     Callback,
     History,
 )
-from bts.metrics import (
+from paddlets.metrics import (
     MetricContainer, 
     Metric
 )
-from bts.models.anomaly.dl.adapter import AnomalyDataAdapter
-from bts.models.utils import check_tsdataset, to_tsdataset
-from bts.datasets import TSDataset
-from bts.logger import raise_if, raise_if_not, raise_log, Logger
+from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
+from paddlets.models.utils import check_tsdataset, to_tsdataset
+from paddlets.datasets import TSDataset
+from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
 logger = Logger(__name__)
 
@@ -739,7 +739,7 @@ class AnomalyBaseModel(abc.ABC):
         model_meta = {
             # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
             "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            # bts.models.dl.paddlepaddle.xxx
+            # paddlets.models.dl.paddlepaddle.xxx
             "modulename": self.__module__
         }
         try:

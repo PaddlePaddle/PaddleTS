@@ -7,7 +7,7 @@ import numpy as np
 import paddle
 import paddle.nn.functional as F
 
-from bts.logger import raise_if_not, raise_log, Logger
+from paddlets.logger import raise_if_not, raise_log, Logger
 logger = Logger(__name__)
 
 

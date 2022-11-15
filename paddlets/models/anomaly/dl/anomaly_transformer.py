@@ -22,16 +22,16 @@ import numpy as np
 import paddle
 import time
 
-from bts.models.anomaly.dl.adapter import AnomalyDataAdapter
-from bts.models.anomaly.dl.anomaly_base import AnomalyBaseModel
-from bts.models.common.callbacks import Callback
-from bts.models.utils import to_tsdataset, to_tsdataset2
-from bts.models.anomaly.dl import utils as U
-from bts.datasets import TSDataset
-from bts.logger import raise_if, raise_if_not
-from bts.models.anomaly.dl._anomaly_transformer.encoder import Encoder, EncoderLayer
-from bts.models.anomaly.dl._anomaly_transformer.attention import AttentionLayer, AnomalyAttention
-from bts.models.anomaly.dl._anomaly_transformer.embedding import DataEmbedding
+from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
+from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
+from paddlets.models.common.callbacks import Callback
+from paddlets.models.utils import to_tsdataset, to_tsdataset2
+from paddlets.models.anomaly.dl import utils as U
+from paddlets.datasets import TSDataset
+from paddlets.logger import raise_if, raise_if_not
+from paddlets.models.anomaly.dl._anomaly_transformer.encoder import Encoder, EncoderLayer
+from paddlets.models.anomaly.dl._anomaly_transformer.attention import AttentionLayer, AnomalyAttention
+from paddlets.models.anomaly.dl._anomaly_transformer.embedding import DataEmbedding
 
 
 class _Anomaly(paddle.nn.Layer):
