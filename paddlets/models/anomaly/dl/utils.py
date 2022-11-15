@@ -7,7 +7,7 @@ import numpy as np
 import paddle
 import paddle.nn.functional as F
 
-from paddlets.logger import raise_if_not, raise_log, Logger
+from bts.logger import raise_if_not, raise_log, Logger
 logger = Logger(__name__)
 
 
@@ -22,7 +22,7 @@ def my_kl_loss(p: paddle.Tensor, q: paddle.Tensor):
     Return:
         loss(paddle.Tensor): Got loss.
     """
-    res = paddle.nn.KLDivLoss(reduction='none')(p, q)
+    res = p * (paddle.log(p + 0.0001) - paddle.log(q + 0.0001))
     return paddle.mean(paddle.sum(res, axis=-1), axis=1)
     
     
@@ -115,7 +115,7 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
     return cri
 
 
-def anomaly_get_thresold(model: Callable[..., paddle.Tensor], 
+def anomaly_get_threshold(model: Callable[..., paddle.Tensor], 
                          train_dataloader: paddle.io.DataLoader, 
                          thre_dataloader: paddle.io.DataLoader, 
                          temperature: float= 50,  
@@ -138,7 +138,7 @@ def anomaly_get_thresold(model: Callable[..., paddle.Tensor],
         win_size(int): The size of the loopback window, i.e. the number of time steps feed to the model.
 
     Return:
-        thresold(float|None): The thresold to judge anomaly.
+        threshold(float|None): The threshold to judge anomaly.
     
     """
     model.eval()
@@ -198,8 +198,8 @@ def anomaly_get_thresold(model: Callable[..., paddle.Tensor],
     test_energy = np.array(attens_energy)
     # comb energy
     combined_energy = np.concatenate([train_energy, test_energy], axis=0)
-    thresold = np.percentile(combined_energy, 100 - anormly_ratio)    #分位数
-    return thresold
+    threshold = np.percentile(combined_energy, 100 - anormly_ratio)    #分位数
+    return threshold
 
 
 def result_adjust(pred: np.ndarray, real: np.ndarray):
@@ -238,13 +238,13 @@ def result_adjust(pred: np.ndarray, real: np.ndarray):
     
 def max(anomaly_score: np.ndarray):
     """
-    The max function to get anomaly thresold.
+    The max function to get anomaly threshold.
 
     Args:
         anomaly_score(np.ndarray): Anomaly score.
 
     Return:
-        thresold(float): Anomaly thresold.
+        threshold(float): Anomaly threshold.
     """
     return np.max(anomaly_score)
 

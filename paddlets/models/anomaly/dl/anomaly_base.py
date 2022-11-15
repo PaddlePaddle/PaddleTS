@@ -14,20 +14,20 @@ from paddle.optimizer import Optimizer
 import numpy as np
 import paddle
 
-from paddlets.models.common.callbacks import (
+from bts.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
     Callback,
     History,
 )
-from paddlets.metrics import (
+from bts.metrics import (
     MetricContainer, 
     Metric
 )
-from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
-from paddlets.models.utils import check_tsdataset, to_tsdataset
-from paddlets.datasets import TSDataset
-from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
+from bts.models.anomaly.dl.adapter import AnomalyDataAdapter
+from bts.models.utils import check_tsdataset, to_tsdataset
+from bts.datasets import TSDataset
+from bts.logger import raise_if, raise_if_not, raise_log, Logger
 
 logger = Logger(__name__)
 
@@ -40,9 +40,9 @@ class AnomalyBaseModel(abc.ABC):
         sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
-        thresold(float|None): The thresold to judge anomaly.
-        thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        thresold_coeff(float): The coefficient of thresold.
+        threshold(float|None): The threshold to judge anomaly.
+        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        threshold_coeff(float): The coefficient of threshold.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
@@ -58,9 +58,9 @@ class AnomalyBaseModel(abc.ABC):
         _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
         _anomaly_score_fn(Callable[..., paddle.Tensor]|None): The method to get anomaly score.
-        _thresold(float|None): The thresold to judge anomaly.
-        _thresold_fn(Callable[..., paddle.Tensor]|None): The method to get anomaly thresold.
-        _thresold_coeff(float): The coefficient of thresold.
+        _threshold(float|None): The threshold to judge anomaly.
+        _threshold_fn(Callable[..., paddle.Tensor]|None): The method to get anomaly threshold.
+        _threshold_coeff(float): The coefficient of threshold.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
@@ -86,9 +86,9 @@ class AnomalyBaseModel(abc.ABC):
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = None,
         anomaly_score_fn: Callable[..., List[float]] = None,
-        thresold: Optional[float] = None,
-        thresold_fn: Callable[..., float] = None,
-        thresold_coeff: float = 1.0,
+        threshold: Optional[float] = None,
+        threshold_fn: Callable[..., float] = None,
+        threshold_coeff: float = 1.0,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
         eval_metrics: List[str] = [], 
@@ -104,11 +104,10 @@ class AnomalyBaseModel(abc.ABC):
         self._sampling_stride = sampling_stride
         self._loss_fn = loss_fn
         self._anomaly_score_fn = anomaly_score_fn
-        self._thresold = thresold
-        self._thresold_fn = thresold_fn
-        self._thresold_coeff = thresold_coeff
+        self._threshold = threshold
+        self._threshold_fn = threshold_fn
+        self._threshold_coeff = threshold_coeff
         self._optimizer_fn = optimizer_fn
-        self._thresold_fn = thresold_fn
         self._optimizer_params = deepcopy(optimizer_params)
         self._eval_metrics = deepcopy(eval_metrics)
         self._callbacks = deepcopy(callbacks)
@@ -320,11 +319,11 @@ class AnomalyBaseModel(abc.ABC):
         train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
         self._fit(train_dataloader, valid_dataloaders)
         
-        # Get thresold
-        if self._thresold is None:
+        # Get threshold
+        if self._threshold is None:
             dataloader, _ = self._init_fit_dataloaders(train_tsdataset, shuffle=False)
             anomaly_score = self._get_anomaly_score(dataloader)
-            self._thresold = self._thresold_coeff * self._get_thresold(anomaly_score)
+            self._threshold = self._threshold_coeff * self._get_threshold(anomaly_score)
         
     def _fit(
         self, 
@@ -402,7 +401,7 @@ class AnomalyBaseModel(abc.ABC):
         anomaly_score = self._get_anomaly_score(dataloader)
         anomaly_label = []
         for score in anomaly_score:
-            label = 0 if score < self._thresold else 1
+            label = 0 if score < self._threshold else 1
             anomaly_label.append(label)
         return np.array(anomaly_label)
     
@@ -583,11 +582,11 @@ class AnomalyBaseModel(abc.ABC):
         """
         return self._loss_fn(y_score, y_true)
     
-    def _get_thresold(
+    def _get_threshold(
         self,
         anomaly_score: np.ndarray
     ) -> float:
-        """Get the thresold value to judge anomaly.
+        """Get the threshold value to judge anomaly.
         
         Note:
             This function could be overrided by the subclass if necessary.
@@ -598,7 +597,7 @@ class AnomalyBaseModel(abc.ABC):
         Returns:
             float: Thresold value.
         """
-        return self._thresold_fn(anomaly_score)
+        return self._threshold_fn(anomaly_score)
 
     @abc.abstractmethod
     def _update_fit_params(
@@ -740,7 +739,7 @@ class AnomalyBaseModel(abc.ABC):
         model_meta = {
             # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
             "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            # paddlets.models.dl.paddlepaddle.xxx
+            # bts.models.dl.paddlepaddle.xxx
             "modulename": self.__module__
         }
         try:

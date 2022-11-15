@@ -8,12 +8,12 @@ import paddle.nn.functional as F
 import numpy as np
 import paddle
 
-from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
-from paddlets.models.anomaly.dl._ed.ed import MLP, CNN, LSTM
-from paddlets.models.common.callbacks import Callback
-from paddlets.models.anomaly.dl import utils as U
-from paddlets.datasets import TSDataset
-from paddlets.logger import raise_if, raise_if_not
+from bts.models.anomaly.dl.anomaly_base import AnomalyBaseModel
+from bts.models.anomaly.dl._ed.ed import MLP, CNN, LSTM
+from bts.models.common.callbacks import Callback
+from bts.models.anomaly.dl import utils as U
+from bts.datasets import TSDataset
+from bts.logger import raise_if, raise_if_not
 
 
 class stack(paddle.nn.Layer):
@@ -198,9 +198,9 @@ class VAE(AnomalyBaseModel):
         sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        thresold_coeff(float): The coefficient of thresold.
-        thresold(float|None): The thresold to judge anomaly.
+        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        threshold_coeff(float): The coefficient of threshold.
+        threshold(float|None): The threshold to judge anomaly.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
@@ -228,9 +228,9 @@ class VAE(AnomalyBaseModel):
         _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]): Loss function.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        _thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        _thresold_coeff(float): The coefficient of thresold.
-        _thresold(float|None): The thresold to judge anomaly.
+        _threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        _threshold_coeff(float): The coefficient of threshold.
+        _threshold(float|None): The threshold to judge anomaly.
         _anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
@@ -260,9 +260,9 @@ class VAE(AnomalyBaseModel):
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = U.smooth_l1_loss_vae,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        thresold_fn: Callable[..., float] = U.max,
-        thresold: Optional[float] = None,
-        thresold_coeff: float = 1.0,
+        threshold_fn: Callable[..., float] = U.max,
+        threshold: Optional[float] = None,
+        threshold_coeff: float = 1.0,
         anomaly_score_fn: Callable[..., List[float]] = None,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
         eval_metrics: List[str] = [], 
@@ -304,9 +304,9 @@ class VAE(AnomalyBaseModel):
             sampling_stride=sampling_stride,
             loss_fn=loss_fn, 
             optimizer_fn=optimizer_fn, 
-            thresold=thresold,
-            thresold_coeff=thresold_coeff,
-            thresold_fn=thresold_fn,
+            threshold=threshold,
+            threshold_coeff=threshold_coeff,
+            threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
             optimizer_params=optimizer_params, 
             eval_metrics=eval_metrics, 

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-03 11:55+0800\n"
+"POT-Creation-Date: 2022-11-11 12:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,25 +17,25 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.dl.anomaly_base.rst:2
-#: 05d1dbd5a9204bd1a2cc0977c26b2fa5
+#: 923303c2258546ef9729659a017a50e3
 msgid "paddlets.models.anomaly.dl.anomaly_base"
 msgstr ""
 
-#: e7e36867980842c0a7e5504671e9b3d1 of
+#: 95904a1ea00d4fec8107f342c3a15e60 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:1
 msgid "Bases: :py:class:`~abc.ABC`"
 msgstr ""
 
-#: b9e7e87f4f37485e9c6a92489a7d1591 of
+#: 6fb71fb44bf143eebd75205ad7540dc9 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:1
 msgid ""
 "PaddleTS deep time series anomaly detection framework, all time series "
 "models based on paddlepaddle implementation need to inherit this class."
 msgstr "所有基于paddle的深度学习异常检测模型的基类"
 
-#: 05af9b9320ad4dfbbed8959ef54cf81e 1da5dd316d31482882346570775ce77f
-#: 281bd5969dda40f8aea9c86268a162a2 38af628df8bb455086b759ee26c9835b
-#: 7d72cfc870774dd185c5adc51b7d39f4 b8afec29f3394d77b2972198a96754cd of
+#: 2bc7889af0cb4941b484bbb818149582 36d4daf55e554a2b9cbf78f47c50931c
+#: 5dd9edc1516841649e5d507d26380970 92b53117b21c4a078a1fe998e4a41a49
+#: ba2896c755c748058a46724f3c9f0df0 ebae8cf965134e21bc12dcf7515f610a of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.fit
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load
@@ -46,7 +45,7 @@ msgstr "所有基于paddle的深度学习异常检测模型的基类"
 msgid "Parameters"
 msgstr ""
 
-#: 8b1c7d84a7454052be194ea0454d829d c17c900396bf4d27af0c34a015d9b58c of
+#: 2b2c1e0f5f344386aa1a6cd8c9f2221b fea209c359f647849fda88de8ad25cd1 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:3
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:38
 msgid ""
@@ -54,116 +53,116 @@ msgid ""
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 6ad6864668694e5eaead24d4ee3d89b8 a5b53fc4e1cd4df89c9b7b1a8501106f of
+#: 3caeb81f773144c6808c1ccd09b53019 cba4bc01801344b98747b2de86529a84 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:5
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:44
 msgid "Sampling intervals between two adjacent samples."
 msgstr "相邻样本间的采样间隔。"
 
-#: 7f3ac79bb8fb4a6987be3cd7c3c6a86e dabf13d458be4f9d88617d10948c2784 of
+#: 88be3d327b2c47f4ae2e393cf2c8f4a7 9338cff8ce124c8f84a9a3d53d80d065 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:7
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:50
 msgid "Loss function."
 msgstr "损失函数。"
 
-#: 7b1809c4ad5842fea616a6d0e6fef987 f32cfbb850e14a3fb44746482b9abcad of
+#: cbb9d464ef934d16845b8b52ecd877a3 f8d92d8332c04beca1ea475b4026d910 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:9
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:56
 msgid "The method to get anomaly score."
 msgstr "获取异常分数的方法。"
 
-#: 43668f7748f94bf197a0d3f373d4cb9c faac9f13a4e44d9598ae9fad5b81267b of
+#: 70b08fd4cac544fb9163ebaadab12cd8 c8d75f7cfe8d496ca00d1b25df5a128b of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:11
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:62
-msgid "The thresold to judge anomaly."
+msgid "The threshold to judge anomaly."
 msgstr "判断异常的阈值。"
 
-#: 2dc92e6c32b64048ab5d6e10b880c5a0 cd14575aec354212bad4ed4b264ace69 of
+#: 30acec9958884a4f9a0706e4177df84f 79c6d253c0f64ac4838ad8810872b120 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:13
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:68
-msgid "The method to get anomaly thresold."
+msgid "The method to get anomaly threshold."
 msgstr "获取异常阈值的方法。"
 
-#: 57ee53f884974df2a143f168988637e6 7ef4b6532c3c4d9f99ac4ce31bf452c1 of
+#: 90bce0883a8c4599b7556ed4bf3ff408 d1bd08fb2ee24be38d2185b4f536a4c5 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:15
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:74
-msgid "The coefficient of thresold."
+msgid "The coefficient of threshold."
 msgstr "异常阈值的系数。"
 
-#: 100de82e4d014e4d89daf8ad84f53c85 1f648931b33244f498984a4ceba1488b of
+#: 3d6683f8c59f457e9c401864de857219 f424e1a3c09248c8800348cb9e402259 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:17
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:80
 msgid "Optimizer algorithm."
 msgstr "优化器算法。"
 
-#: 163b5137b0424a1f823c5cd9d2bd138c c00298eb6d00471481f75066c1cbbcd8 of
+#: 16c4b161257f47ab893245def1e12cd4 c2e8859e49ee434ba733156fe9726597 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:19
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:86
 msgid "Optimizer parameters."
 msgstr "优化器参数。"
 
-#: 53c0415831694e3bbfdf53778d639f6c cb84f9203ada4802b84f88f79e1c97d0 of
+#: a6786fe65ef74fcd915b38f530cff71b f1b77697c3464663a824f195dab05db3 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:21
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:92
 msgid "Evaluation metrics of model."
 msgstr "模型的评估指标。"
 
-#: 8217d05ceed3423b834cee9109700c49 d8d9b1b020f14e1a88216a5ac5146493 of
+#: 77a09f5a4e1f402fa8f76d8f5c674929 db00ad4026404b41b087bcc093e8413f of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:23
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:98
 msgid "Customized callback functions."
 msgstr "自定义的callback函数。"
 
-#: 6bcdf635c7204ed4b1ea6565cf5b2a05 71ebf54b6d5c49518a6c5e06e5d0bb44 of
+#: 011e38255b8d4c4aaae03b097134543d 4ea846254cac451b850a706aa067068a of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:25
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:104
 msgid "Number of samples per batch."
 msgstr "每个批次中的样本数量。"
 
-#: 3c1276a91fb74e5b97dda2865aeb3a5f a68b3317c2624ebebae90481b164ae84 of
+#: c16a0c4ba61b45ed903133b7fc8dc0ff eddc9bc0996c46149143dca8178ca494 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:27
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:110
 msgid "Max epochs during training."
 msgstr "训练过程中最大迭代轮数。"
 
-#: bbc2397a1cee41c19316a6dec7b3b88e cc037777f5064916ab72a31dfb47f74d of
+#: 4d478eef93004d1ea23dccec5ddc02a3 745621fbcb8841cca8f528e4c0c7ecb8 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:29
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:116
 msgid "Verbosity mode."
 msgstr "模型日志模式。"
 
-#: f5b602458bc64fa9af6c8bb466c061d4 f8234f38258741adb6193bfa45eb7a8b of
+#: 4f9419844eec4d97b32dee29fa1720aa b573091371fe45ada4e053ae66ca7513 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:31
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:122
 msgid "Number of epochs to wait for improvement before terminating."
 msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
 
-#: 0a81cf195bbb4dbb8a2463abd30c54d7 2c0d20e334cc47dba01462e88aa2b864 of
+#: c26fe75715aa41f498a55a6d2f1914e8 c43bb3fffe5c40ce97510fd4b651a40e of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:33
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:128
 msgid "Global random seed."
 msgstr "全局随机种子， 注: 保证每次模型参数初始化一致。"
 
-#: 00a5f259c25d470b86da4e9a38b81a52 12bd841f61034851b75aab509d58dc78
-#: 1e37970ebc294d7f979e2505a37985c6 42ff63e321174c73b44f39af333bf624
-#: 565fb0c785ee4b4299c64fb2c5c810ae 682c50faa9ae46b98c2470972555e4d8
-#: 7090b32970e04febba1b4098ec34a0fd 78f0e1c1f30e4e64965b81e79dd6f71c
-#: 7c5d4f06394e49cd8ed20775a8801b5e 82ad2f4526774d5c8e6925c9840c361f
-#: 84d7c195f79243339f6947ea3e3a16dd 856d4bb4566e4b4b8f6f09efe91b9744
-#: 8d88530f51274c12b8153b43cdf1c3bc 91bd26d72ac142e09397fe34a2d70441
-#: 92d393164b034e9fa1ca0cf68342d5fc a10a556401104bbb8fd870a2ded2bb68
-#: a25f0df819e7447a80145eb86e148ebf b2f1cd81a07f4df0a40f4e5f990ffbc5
-#: b4c16540e0dd4c7cbae8087741760afb b78241d9dbb74bec8e88b553ff8b5a93
-#: bbaada2ba3f14c5b9ea91233f7da8131 c4b24a45de79438cbdc3e06c117cf0be
-#: e29e53c12d3c40339b1214ab532fb124 f18dc859c823460d9e4b6dafa20d49f4
-#: fc7e7696645a43a19e6bc15419b97b70 of
+#: 01cbbea174b94284ad3ac149bf23b206 0379a7ba124a45899d9d0648d1c40bae
+#: 0569d518ffde4e0c986c4bda7a97e243 10d47e26dc9e46e9be45692452ba68e6
+#: 2855c21174da413994fba4cf1a9394b4 3bfad32e55584b9db767134a577d08be
+#: 3fcdb9f3e4434272ac629b1f65b34e81 5e1b69a36f7246cb9ea8fe212091dc69
+#: 63d8f62f312f4014a6f8cd6769b95400 6b8ea8d2c01048ae97717889a000224b
+#: 6bf4e22b0a5948798c15f299e8c12523 6f9c4fdcc8ee406e8d9aa6acbe8e93c9
+#: 75f620b5c6ed457cbf0ad2a171e1a2b7 86c7bfb386a447ca8c228fe8cbffac31
+#: 920be1f27257462690c7a4771a0e403e 9b13a39f2acd4877b5c1fe9ee77d2a15
+#: abbcfcccd2fc425189e1a06677092ae3 aee664a30e4a4ff69b2c4db2ac27a7ed
+#: afa197d338a94d89a92d087f2055afac b68a79eb6c2e46598a39de23af40d7f8
+#: c298f292664f4232b1485177d8e6c260 c4825d5f89e1494c933b0a07f359bcd1
+#: e2e5af00a9614d59934b17a023466035 ed23773fd08548718656cbd71671dc7b
+#: f629fdd9b4cd406793f678e75befdfde of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel
 msgid "type"
 msgstr ""
 
-#: 24d757513cd4427d8ca282f8afd102f0 2b8bec5ddcdd4251b0be51a03f6480fd
-#: 71ba72b0a9ad4ec88c0b4bbc3606b5e4 72155da821db43bb835696081190ac40
-#: c26582eb0f34443c9950d66df387dd10 e10a1199dc11467c8ce42d98e0b23195 of
+#: 2758d66890f34d4b937173da1c167d42 4bdf182c6f8344058e8852a0e9811cca
+#: 7056d22e09ab477a88d994e9505e8cdd 981f8b28744e468aaba4f74e36f69639
+#: 988d0eb7394548ef9416d1aec0e22838 bdc31ae0a7694d409481cff59e2e8274 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:40
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:46
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:106
@@ -173,184 +172,184 @@ msgstr ""
 msgid "int"
 msgstr ""
 
-#: 2252ccbce06e405db4df900c1c3e8aee ae24a82700f9411b8a7114dcb888128d
-#: fd377b2099aa49748ba4c8246e227e70 of
+#: 83ce36128b5b4d0fa0872649bc189c8a 8dbbf5682e2d41e3bb22dde0a030c3a9
+#: 9e7f3d32f59f4251a0d442666c1825f3 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:52
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:58
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:70
 msgid "Callable[..., paddle.Tensor]|None"
 msgstr ""
 
-#: a1c4ef3bca2a4f5e8bbbb4665a68b689 of
+#: f2d435c8da924b78aa1282d9cdaa1ec3 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:64
 msgid "float|None"
 msgstr ""
 
-#: 5f27ea18fc7d4e49a1c9afdb64cfdaaa of
+#: d250fe3b389d4fd0a769979a4c2ebe4f of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:76
 msgid "float"
 msgstr ""
 
-#: 7b92cbdfe4fb41f2aba8b0121126ddff of
+#: 62fcd98c194540688da8cc65f3b3c0c9 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:82
 msgid "Callable[..., Optimizer]"
 msgstr ""
 
-#: 5f56a1374e0b4b3aa20581f3a131de30 ee749773193447118226c481c1af0914 of
+#: 9e261c3696304492bfa7ae7b54245096 a0c8737f15f54893a4f6d0f9b4e93324 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:88
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:142
 msgid "Dict[str, Any]"
 msgstr ""
 
-#: 20911e2edf3c4eebaaeca7b453551f7a dca4cc74c67243ca8c78f7874e597cef of
+#: 8f1c7ec12e8c4041ba49aadb9b55e4ba ea8ecde0773c40598f1c7a3c1b71a115 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:94
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:166
 msgid "List[str]"
 msgstr ""
 
-#: 7751400d330a4042804e07229630b478 of
+#: 982e35ab80044f1ebab8e67dc9c2b054 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:100
 msgid "List[Callback]"
 msgstr ""
 
-#: 7835ef47f0ba4acdb6f9a448fb7936e9 of
+#: fb537fd7d81f45c8b96ab94f1c31f752 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:130
 msgid "int|None"
 msgstr ""
 
-#: 9a0b151ffa594f6687f415555878aede of
+#: 97098ba06193463583d4291d9512071e of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:136
 msgid "bool"
 msgstr ""
 
-#: 8abb07015c144f619a5e336092a802b1 of
+#: 8e916f24415b4458aa9936a20d5cb9a4 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:140
 msgid "Infer parameters by TSdataset automatically."
-msgstr ""
+msgstr "根据TSDataset自动推断各种参数。"
 
-#: b2f9e028b96d4303b988d1d684c76af7 of
+#: bf3e790c854a4ca7bb0ef80a7d8d81de of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:146
 msgid "Network structure."
-msgstr ""
+msgstr "网络结构。"
 
-#: dd3a7602dd1d4fa8891f4854c01e439a of
+#: e48508510de4456d916f5fff595fb42c of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:148
 msgid "paddle.nn.Layer"
 msgstr ""
 
-#: f2c9d1265c9b4b43bc8aff87ae8cf753 of
+#: 1d2213d9c71f42ca9dd7c11a9b568171 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:152
 msgid "Optimizer."
-msgstr ""
+msgstr "优化器。"
 
-#: 1a44546698f747d3bac02d01953de662 of
+#: a03ac00ce4e84fbaadb66c758964f740 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:154
 msgid "Optimizer"
 msgstr ""
 
-#: 62e075bbebda4d94b063ec885e115e2f of
+#: 9ab5da6ed70b46e1a9c9a0ed2f29297d of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:158
 msgid "List of metric instance."
-msgstr ""
+msgstr "评估方法实例列表。"
 
-#: d67c1537c5774681a06089a8ee45ae8f of
+#: 142771ee7a784aa8999eaf1a2b199ea6 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:160
 msgid "List[Metric]"
 msgstr ""
 
-#: feb167bb539c4491ba1867a295cc37ef of
+#: fdc60f6686c34a828ce5122ba6ffb055 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:164
 msgid "List of metric names."
-msgstr ""
+msgstr "评估方法名称列表。"
 
-#: a8a0b70345864491bc6709bf3bc41551 of
+#: ea87c9523f824ad2aae359bededa1b41 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:170
 msgid "Dict of metric container."
-msgstr ""
+msgstr "评估方法的容器。"
 
-#: 915e792ca5cf424190a396ba3c646f78 of
+#: 718854b2018348838df7b3c84096d594 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:172
 msgid "Dict[str, MetricContainer]"
 msgstr ""
 
-#: 926150724d8f4d5a9de8406f4e605ce4 of
+#: 7914ef704ce64791a17c51c4dd2b931f of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:176
 msgid "Callback that records events into a `History` object."
-msgstr ""
+msgstr "历史信息。"
 
-#: 5023841cc92242b2bd1831164a4cfa6f of
+#: b5a67a067743436bbd8085d2ccd01145 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:178
 msgid "History"
 msgstr ""
 
-#: 07a9debf7d2a483c9ddf12beea35d528 of
+#: c31e34e469ac4b869c208e86bd6a9d22 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:182
 msgid "Container holding a list of callbacks."
-msgstr ""
+msgstr "一个包含回调实例的容器。"
 
-#: e5b28acd8e2b41a6994e7bca45fb0f1e of
+#: 45c90940c3a84c9592a2942f08641de8 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel:184
 msgid "CallbackContainer"
 msgstr ""
 
-#: 7d7e13e5c9d348ad8cebec94dc2821e5 of
+#: eca7f655665f4b62ad0ff86d0eacfa0f of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.fit:2
 msgid "Train a neural network stored in self._network,"
 msgstr "训练过程"
 
-#: e485653090d449c29e816dcd3ec66e71 of
+#: aa125cef5656447fb7544a2a77188b75 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.fit:2
 msgid ""
 "Using train_dataloader for training data and valid_dataloader for "
 "validation."
 msgstr "，使用训练集进行训练，验证集进行评估。"
 
-#: af95d299c32644f5925bafa2c72e9a05 of
+#: dc3f06f55b9944b6abfb90151771b5da of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.fit:4
 msgid "Train set."
 msgstr "训练集。"
 
-#: a5f114dd39444c29820c52e4ed7318c5 of
+#: f4e306e7160346ef826b5b1219d2bc1a of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.fit:6
 msgid "Eval set, used for early stopping."
 msgstr "用于早停的验证集。"
 
-#: 044f00899601451597d622bea6c5274f of
+#: fdb2e72ed8034c148d8ca8ea8894e6b3 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict:1
 msgid "Get anomaly label on a batch. the result are output as tsdataset."
 msgstr "获取数据的异常标签，输出格式为TSDataset。"
 
-#: ad46c78e6aa44bcda8d10ea1a21eedf5 d48a8d5b7c314eddabb2c2f3bfbd1427 of
+#: 66a18bc278b34ae886d28663e99f59c0 890a7e95fcf14752b87f4844cd14f908 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict:3
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict_score:3
 msgid "Data to be predicted."
 msgstr "用于预测的数。"
 
-#: 8c15aaafadca459fbb01d9def1631bf8 ddd0870ba09f4edb94e43c2fc21423bd
-#: ff1bab48fb164228b255e294d3a15026 of
+#: 4e68f6214d454f4f95e06de75c951b4a cd0c14657a43410ab3d2cacddfea45e6
+#: d0a9f7e49ef14b798040c72df81807ee of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict_score
 msgid "Returns"
 msgstr ""
 
-#: d1ae2501b6a746bbaad4c45d01bad937 f1f316887eed4aad80a748788f4eb049 of
+#: 48bda26d70e448a3805ec34e5b069539 a9f8e4280cc8437890291df0c79dd597 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict:6
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict_score:6
 msgid "TSDataset."
 msgstr ""
 
-#: 48d350789eff48c4a57e56460745c1a7 of
+#: 8eff891941f0482abfbf8d160fcf48ce of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict_score:1
 msgid "Get anomaly score on a batch. the result are output as tsdataset."
 msgstr "获取数据的异常分数，输出格式为TSdataset。"
 
-#: f034462879df4127959e04b670c2e134 of
+#: e826a09a83d642faafb116da0efdf6f2 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.save:1
 msgid "Saves a AnomalyBaseModel instance to a disk file."
 msgstr "将一个AnomalyBaseModel模型实例保存在磁盘文件中。"
 
-#: 3a1cbf7cce324a94b9cde8e14d458d07 of
+#: dd91e8e508c74121a26ebc67f81ec4e7 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.save:3
 msgid ""
 "1> A AnomalyBaseModel (or any child classes inherited from "
@@ -366,42 +365,42 @@ msgstr ""
 "paddle相关的，并且无法被pickle序列化的成员（例如：paddle.nn.Layer, "
 "paddle.optimizer.Optimizer）， 以及与paddle不相关的，并且无法被pickle序列化的成员。"
 
-#: 2e6a0da60dec4eb983a186f683e38de9 of
+#: 48244ad20bdd49978a818df11d3f4288 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.save:9
 msgid ""
 "2> To call this method, self._network and self._optimizer must not be "
 "None."
 msgstr "2> 调用此方法前需保证self._network 和 self._optimizer成员不为None。"
 
-#: 8b55f7a238d44f079e9ac9138abcbb79 ad05673f48e4469eacbf6cc6df86b59b of
+#: 80d8b8084e454406909f42e125be85aa c629b057ac0e4c7a8fbf0a5ddc6b7932 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load:5
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.save:11
 msgid "A path string containing a model file name."
 msgstr "一个包含模型文件名的字符串格式的路径。"
 
-#: 420002364d9e4f919d91ad8dc21b65cb of
+#: 8e67e7bda2624f9f88b450d1f5b06fc6 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.save
 msgid "Raises"
 msgstr "抛出异常"
 
-#: 0cd964c71009424ab8d1000e4e6b3ade of
+#: 1d9e101503c94196bf6d6e345b1de4ce of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load:1
 msgid "Loads a AnomalyBaseModel from a file."
 msgstr "从给定的文件路径加载一个AnomalyBaseModel模型。"
 
-#: ef1b258e0da24473a78462f5f59f75a4 of
+#: 9ebf627ca12647c3b8fe5098d40a146b of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load:3
 msgid ""
 "As optimizer does not affect the model prediction results, currently "
 "optimizer will NOT be loaded."
 msgstr "由于预测期间optimizer并不影响模型的预测效果，因此当前暂不加载optimizer。"
 
-#: 5b58c1a606c042c78e46ea86c9305ec7 of
+#: 8e93f147d16445e2b14992bd945de533 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load:8
 msgid "the loaded AnomalyBaseModel instance."
 msgstr "加载得到的AnomalyBaseModel模型实例。"
 
-#: fd7d4e5c0057453a939235ea9f0586a5 of
+#: a657ab7da9364e17bde37ed038fb7dd6 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load
 msgid "Return type"
 msgstr ""
