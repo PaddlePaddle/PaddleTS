@@ -169,13 +169,15 @@ msgid ""
 "A set of state-of-the-art deep learning models containing NBEATS, NHiTS, "
 "LSTNet, TCN, Transformer, DeepAR(Probabilistic), Informer, etc. for "
 "forecasting, TS2Vec for representation"
-msgstr "内置业界领先的深度学习模型，包括NBEATS、NHiTS、LSTNet、TCN、Transformer, DeepAR（概率预测）、Informer等时序预测模型，以及TS2Vec等时序表征模型"
+msgstr ""
+"内置业界领先的深度学习模型，包括NBEATS、NHiTS、LSTNet、TCN、Transformer, "
+"DeepAR（概率预测）、Informer等时序预测模型，以及TS2Vec等时序表征模型"
 
 #: ../../index.rst:21 d627feda307443f09fd6ebbb77738339
 msgid ""
 "A set of transformation operators for data preprocessing (e.g. missing "
 "values/outliers handling, one-hot encoding, normalization, and automatic "
-"date/time-related covariate generation, etc.)"
+"date/time-related covariates generation, etc.)"
 msgstr "内置经典数据转换算子，支持数据处理与转换，包括缺失值填充、异常值处理、归一化、时间相关的协变量提取等"
 
 #: ../../index.rst:24 32b1d8e2b6534c52abe4bb7f117fd98a
@@ -203,15 +205,24 @@ msgstr "最新更新："
 
 #: ../../index.rst:32 a7ada1f13f324fc6872132310229ae9d
 msgid ""
-"Time series anomaly detection model supported, with deep learning models "
-"AutoEncoder / VAE / AnomalyTransformer released"
-msgstr "支持时序异常检测，发布包括AE (Autoencoder)、VAE (Variational Autoencoder)、AnomalyTransformer深度学习模型"
+"Released a new time series representation model, i.e. Contrastive "
+"Learning of Disentangled Seasonal-trend Representations(CoST)"
+msgstr "发布时序表征模型 Contrastive Learning of Disentangled Seasonal-trend Representations(CoST)"
+
+#: ../../index.rst:32 a7ada1f13f324fc6872132310229ae9d
+msgid ""
+"Time series anomaly detection model supported, with three deep models "
+"released, including AE(AutoEncoder), VAE(Variational AutoEncoder), and "
+"AnomalyTransformer"
+msgstr ""
+"支持时序异常检测，发布包括AE (Autoencoder)、VAE (Variational "
+"Autoencoder)、AnomalyTransformer深度学习模型"
 
 #: ../../index.rst:34 ff05514ada25437ab4c122252c92eaf3
 msgid ""
-"Third-party [pyod](https://github.com/yzhao062/pyod) ML models "
+"Third-party `pyod <https://github.com/yzhao062/pyod>`_ ML models "
 "integration supported"
-msgstr "支持第三方时序异常检测库[pyod](https://github.com/yzhao062/pyod)自动集成"
+msgstr "支持第三方时序异常检测库 `pyod <https://github.com/yzhao062/pyod>`_ 自动集成"
 
 #: ../../index.rst:36 ad49c424e2a1456ebdd63d86f1377634
 msgid ""

@@ -197,7 +197,7 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         embedding_size: int = 128,
         num_layers_recurrent: int = 1,
         dropout: float = 0.0,
-        pooling: bool = False,
+        pooling: bool = True,
         skip_chunk_len: int = 0,
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
@@ -216,7 +216,7 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         self._hidden_size = hidden_size
         self._embedding_size = embedding_size
         self._num_layers_recurrent = num_layers_recurrent
-        self._pooling = True
+        self._pooling = pooling
         self._dropout = dropout
 
         #check parameters validation

@@ -135,7 +135,7 @@ class AnomalyPaddleDatasetImpl(PaddleDataset):
                     "target": None,
                     "known_cov": None,
                     "observed_cov": [
-                        [0， 0.0, 0],
+                        [0, 0.0, 0],
                         [1, 10.0, 100],
                         [2, 20.0, 200],
                         [3, 30.0, 300],
