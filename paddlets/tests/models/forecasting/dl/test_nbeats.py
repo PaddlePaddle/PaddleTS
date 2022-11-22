@@ -174,6 +174,8 @@ class TestNBeatsModel(TestCase):
         reg = NBEATSModel(
             in_chunk_len = 7 * 96 + 9 * 4,
             out_chunk_len = 96,
+            generic_architecture = False,
+            num_blocks = [2, 4],
             skip_chunk_len = 15 * 4,
             eval_metrics = ["mse", "mae"],
             layer_widths = [64, 64]

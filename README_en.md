@@ -34,14 +34,15 @@ PaddleTS is an easy-to-use Python library for deep time series modeling,
 * A set of state-of-the-art deep learning models containing
     NBEATS, NHiTS, LSTNet, TCN, Transformer, DeepAR(Probabilistic), Informer, etc. for forecasting, TS2Vec for representation
 * A set of transformation operators for data preprocessing (e.g. missing values/outliers handling, 
-    one-hot encoding, normalization, and automatic date/time-related covariate generation, etc.)
+    one-hot encoding, normalization, and automatic date/time-related covariates generation, etc.)
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary)
 * Automatic time series modeling module (AutoTS) which supports mainstream Hyper Parameter Optimization algorithms and shows significant improvement on multiple models and datasets
 * Third-party (e.g. scikit-learn) ML models & data transformations integration
 
 Recently updated:
 
-* Time series anomaly detection model supported, with deep learning models AutoEncoder / VAE / AnomalyTransformer released
+* Released a new time series representation model, i.e. Contrastive Learning of Disentangled Seasonal-trend Representations(CoST)
+* Time series anomaly detection model supported, with three deep models released, including AE(AutoEncoder), VAE(Variational AutoEncoder), and AnomalyTransformer
 * Third-party [pyod](https://github.com/yzhao062/pyod) ML models integration supported
 * Support time series model ensemble with two types of ensemble forecaster, StackingEnsembleForecaster and WeightingEnsembleForecaster proposed
 * RNN time series forecasting model supports categorical features and static covariates

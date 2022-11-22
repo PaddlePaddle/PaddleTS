@@ -714,7 +714,7 @@ class TSDataset(object):
         (Only analysis operators are currently integrated, and other types of operators may be integrated in the future)
 
         Args:
-            name(str): operator name， eg: summary、max、min
+            name(str): operator name, eg: summary、max、min
 
         Returns:
             Callable: operator funtion
@@ -1582,7 +1582,7 @@ class TSDataset(object):
         
         Args:   
             column(str|int): column name
-            value(pd.Series|str|int): columns object，Its index must be the same as the index of the target property,
+            value(pd.Series|str|int): columns object, Its index must be the same as the index of the target property,
                 the value can only be int or str when updating a column in static_cov
 
         Returns:

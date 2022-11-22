@@ -113,10 +113,10 @@ class AnomalyTransformer(AnomalyBaseModel):
         sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
+        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
         criterion(Callable[..., paddle.Tensor]): Loss function for for the reconstruction loss.
-        thresold(float|None): The thresold to judge anomaly.
-        thresold_coeff(float): The coefficient of thresold.
+        threshold(float|None): The threshold to judge anomaly.
+        threshold_coeff(float): The coefficient of threshold.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
@@ -142,10 +142,10 @@ class AnomalyTransformer(AnomalyBaseModel):
         _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]): Loss function.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        _thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
+        _threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
         _criterion(Callable[..., paddle.Tensor]): Loss function for for the reconstruction loss.
-        _thresold(float|None): The thresold to judge anomaly.
-        _thresold_coeff(float): The coefficient of thresold.
+        _threshold(float|None): The threshold to judge anomaly.
+        _threshold_coeff(float): The coefficient of threshold.
         _anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
@@ -173,10 +173,10 @@ class AnomalyTransformer(AnomalyBaseModel):
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = U.series_prior_loss,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        thresold_fn: Callable[..., float] = U.anomaly_get_thresold,
+        threshold_fn: Callable[..., float] = U.anomaly_get_threshold,
         criterion: Callable[..., paddle.Tensor] = paddle.nn.MSELoss(),
-        thresold: Optional[float] = None,
-        thresold_coeff: float = 1.0,
+        threshold: Optional[float] = None,
+        threshold_coeff: float = 1.0,
         anomaly_score_fn: Callable[..., List[float]] = None,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
         eval_metrics: List[str] = [], 
@@ -206,7 +206,7 @@ class AnomalyTransformer(AnomalyBaseModel):
         self._activation = activation
         self._output_attention = output_attention 
         self._adjust_lr = U.adjust_learning_rate
-        self._thresold_fn = thresold_fn
+        self._threshold_fn = threshold_fn
         self._criterion = criterion
         self._temperature = temperature
         self._k = k
@@ -217,9 +217,9 @@ class AnomalyTransformer(AnomalyBaseModel):
             sampling_stride=sampling_stride,
             loss_fn=loss_fn, 
             optimizer_fn=optimizer_fn, 
-            thresold=thresold,
-            thresold_coeff=thresold_coeff,
-            thresold_fn=thresold_fn,
+            threshold=threshold,
+            threshold_coeff=threshold_coeff,
+            threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
             optimizer_params=optimizer_params, 
             eval_metrics=eval_metrics, 
@@ -305,7 +305,7 @@ class AnomalyTransformer(AnomalyBaseModel):
         train_dataloader = self._init_predict_dataloader(train_Dataset)
         test_dataloader  = self._init_predict_dataloader(test_Dataset) 
         thre_dataloader  = self._init_predict_dataloader(test_Dataset, sampling_stride=self.in_chunk_len)
-        self._thresold = self._thresold_fn(self._network, 
+        self._threshold = self._threshold_fn(self._network, 
                                         train_dataloader, test_dataloader, 
                                         temperature=self._temperature,  
                                         anormly_ratio=self._anormly_ratio,
@@ -316,7 +316,7 @@ class AnomalyTransformer(AnomalyBaseModel):
         anomaly_score = self._get_anomaly_score(thre_dataloader)
         anomaly_label = []
         for score in anomaly_score: 
-            label = 0 if score < self._thresold else 1
+            label = 0 if score < self._threshold else 1
             anomaly_label.append(label)
         if test_Dataset.target is None: 
             res_adjust = False
