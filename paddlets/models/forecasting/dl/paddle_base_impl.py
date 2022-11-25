@@ -31,8 +31,7 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """PaddleTS deep time series framework,
-        all time series models based on paddlepaddle implementation need to inherit this class.
+    """PaddleTS deep time series framework, all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -520,8 +519,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             X(Dict[str, paddle.Tensor]): Dict of feature tensor. 
             y(paddle.Tensor): Target tensor.
         """
-        y = X.pop("future_target")
-        return X, y
+        if "future_target" in X:
+            y = X.pop("future_target")
+            return X, y
+        return X, None
 
     def _compute_loss(
         self, 
