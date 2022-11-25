@@ -21,7 +21,7 @@ from paddlets.models.representation.dl._ts2vec.losses import hierarchical_contra
 from paddlets.models.representation.dl._ts2vec.encoder import TSEncoder
 from paddlets.models.representation.dl._ts2vec.swa import AveragedModel
 from paddlets.models.representation.dl.repr_base import ReprBaseModel
-from paddlets.models.representation.dl.adapter import ReprDataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.common.callbacks import Callback
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if_not
@@ -222,14 +222,15 @@ class TS2Vec(ReprBaseModel):
             paddle.io.DataLoader: Training dataloader.
         """
         self._check_tsdataset(train_tsdataset)
-        data_adapter = ReprDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdataset,
-            segment_size=self._segment_size,
+        data_adapter = DataAdapter()
+        train_dataset = data_adapter.to_sample_dataset(
+            rawdataset=train_tsdataset,
+            in_chunk_len=self._segment_size,
             sampling_stride=self._sampling_stride,
+            fill_last_value=np.nan
         )
         # In order to align with the paper of TS2Vec, a customized data organization is required.
-        train_dataset._samples = custom_collate_fn(train_dataset._samples)
+        train_dataset.samples = custom_collate_fn(train_dataset.samples)
         return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
     
     def _init_network(self) -> paddle.nn.Layer:
