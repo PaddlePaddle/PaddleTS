@@ -525,7 +525,7 @@ class DeepARModel(PaddleBaseModelImpl):
             X(Dict[str, paddle.Tensor]): Dict of feature tensor.
             y(paddle.Tensor): Target tensor.
         """
-        y = X["future_target"]
+        y = X.get("future_target", None)
         return X, y
     
     def _predict(
