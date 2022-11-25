@@ -24,7 +24,7 @@ from paddlets.metrics import (
     MetricContainer, 
     Metric
 )
-from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import check_tsdataset, to_tsdataset
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
@@ -203,8 +203,8 @@ class AnomalyBaseModel(abc.ABC):
             List[paddle.io.DataLoader]: List of validation dataloaders..
         """
         self._check_tsdataset(train_tsdataset)
-        data_adapter = AnomalyDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
+        data_adapter = DataAdapter()
+        train_dataset = data_adapter.to_sample_dataset(
             train_tsdataset,
             in_chunk_len=self._in_chunk_len,
             sampling_stride=self._sampling_stride,
@@ -214,7 +214,7 @@ class AnomalyBaseModel(abc.ABC):
         valid_dataloaders = []
         if valid_tsdataset is not None:
             self._check_tsdataset(valid_tsdataset)
-            valid_dataset = data_adapter.to_paddle_dataset(
+            valid_dataset = data_adapter.to_sample_dataset(
                 valid_tsdataset,
                 in_chunk_len=self._in_chunk_len,
                 sampling_stride=self._sampling_stride,
@@ -238,8 +238,8 @@ class AnomalyBaseModel(abc.ABC):
             paddle.io.DataLoader: dataloader. 
         """
         self._check_tsdataset(tsdataset)
-        data_adapter = AnomalyDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(
+        data_adapter = DataAdapter()
+        dataset = data_adapter.to_sample_dataset(
             tsdataset,
             in_chunk_len=self._in_chunk_len,
             sampling_stride=sampling_stride,
