@@ -97,6 +97,39 @@ def get_uuid(prefix: str = "", suffix: str = ""):
     res = prefix + suffix if suffix is not None else prefix
     return res
 
+def month_delta(start_date, end_date):
+    """
+    Month delta
+
+    Args:
+        start_date(datetime):start date
+        end_date(datetime):end date
+    """
+    flag = True
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
+        flag = False
+    year_diff = end_date.year - start_date.year
+    end_month = year_diff * 12 + end_date.month
+    delta = end_month - start_date.month
+    return -delta if flag is False else delta
+ 
+def week_delta(start_date, end_date):
+    """
+    Week_delta
+
+    Args:
+        start_date(datetime):start date
+        end_date(datetime):end date
+    """
+    flag = True
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
+        flag = False
+    start_year, start_week, start_dayofweek = start_date.isocalendar()
+    end_year, end_week, end_dayofweek = end_date.isocalendar()
+    delta = ((end_year - start_year) * 52) - start_week + end_week
+    return -delta if flag is False else delta
 
 def check_train_valid_continuity(train_data: TSDataset, valid_data: TSDataset)-> bool:
     """
@@ -116,7 +149,12 @@ def check_train_valid_continuity(train_data: TSDataset, valid_data: TSDataset)->
     continuious = False
     if isinstance(train_index, pd.DatetimeIndex):
         if isinstance(valid_index, pd.DatetimeIndex):
-            continuious = (valid_index[0] - train_index[-1] == pd.to_timedelta(train_index.freq))
+            if isinstance(train_index.freq, pd.offsets.MonthEnd):
+                continuious = pd.offsets.MonthEnd(month_delta(train_index[-1],valid_index[0])).freqstr  in train_index.freq.freqstr 
+            elif isinstance(train_index.freq, pd.offsets.Week):   
+                continuious = pd.offsets.Week(week_delta(train_index[-1],valid_index[0])).freqstr  in train_index.freq.freqstr                         
+            else: 
+                continuious = (valid_index[0] - train_index[-1] == pd.to_timedelta(train_index.freq))
     elif isinstance(train_index, pd.RangeIndex):
         if isinstance(valid_index, pd.RangeIndex):
             continuious = (valid_index[0] - train_index[-1] == train_index.step)
@@ -124,7 +162,6 @@ def check_train_valid_continuity(train_data: TSDataset, valid_data: TSDataset)->
         raise_log("Unsupport data index format")
 
     return continuious
-
 
 def split_dataset(dataset: TSDataset, split_point: int) ->  TSDataset:
     """
