@@ -757,21 +757,22 @@ class SampleDataset(paddle.io.Dataset):
 
             # target (future_target + past_target)
             if target_ts is not None:
-                # future target
-                if (self._time_window[1] <= len(self._std_timeindex) - 1) and (self._out_chunk_len > 0):
-                    # The `if` indicates that ONLY fit api needs future_target, predict api does not need future_target.
-                    sample["future_target"] = self._build_future_target_for_single_sample(
+                if 0 not in target_ndarray.shape:
+                    # future target
+                    if (self._time_window[1] <= len(self._std_timeindex) - 1) and (self._out_chunk_len > 0):
+                        # ONLY fit api needs future_target, predict api does not need it.
+                        sample["future_target"] = self._build_future_target_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=target_timeindex_offset,
+                            target_ndarray=target_ndarray
+                        )
+
+                    # past target
+                    sample["past_target"] = self._build_past_target_for_single_sample(
                         curr_sample_tail=curr_sample_tail,
                         timeindex_offset=target_timeindex_offset,
                         target_ndarray=target_ndarray
                     )
-
-                # past target
-                sample["past_target"] = self._build_past_target_for_single_sample(
-                    curr_sample_tail=curr_sample_tail,
-                    timeindex_offset=target_timeindex_offset,
-                    target_ndarray=target_ndarray
-                )
 
             # known_cov
             if known_cov_ts is not None:
