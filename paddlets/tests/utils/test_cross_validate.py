@@ -178,30 +178,37 @@ class TestCV(TestCase):
 
     def test_check_train_valid_continuity(self):
         #DateTimeIndex
-        target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(400).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=400, freq="15T"),
-                      name="a"
-                      ))
-        observed_cov = TimeSeries.load_from_dataframe(
-            pd.DataFrame(
-                np.random.randn(400, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=400, freq="15T"),
-                columns=["b", "c"]
-            ))
-        known_cov = TimeSeries.load_from_dataframe(
-            pd.DataFrame(
-                np.random.randn(500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
-        static_cov = {"f": 1.0, "g": 2.0}
-        dataset = TSDataset(target, observed_cov, known_cov, static_cov)
+        def check(str):
+            target = TimeSeries.load_from_dataframe(
+                pd.Series(np.random.randn(400).astype(np.float32),
+                        index=pd.date_range("2022-01-01", periods=400, freq=str),
+                        name="a"
+                        ))
+            observed_cov = TimeSeries.load_from_dataframe(
+                pd.DataFrame(
+                    np.random.randn(400, 2).astype(np.float32),
+                    index=pd.date_range("2022-01-01", periods=400, freq=str),
+                    columns=["b", "c"]
+                ))
+            known_cov = TimeSeries.load_from_dataframe(
+                pd.DataFrame(
+                    np.random.randn(500, 2).astype(np.float32),
+                    index=pd.date_range("2022-01-01", periods=500, freq=str),
+                    columns=["b1", "c1"]
+                ))
+            static_cov = {"f": 1.0, "g": 2.0}
+            dataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
-        ts1,ts2 = dataset.split(0.5)
-        ts3,ts4 = dataset.split(0.6)
-        assert check_train_valid_continuity(ts1, ts2) == True
-        assert check_train_valid_continuity(ts1, ts4) == False
+            ts1,ts2 = dataset.split(0.5)
+            ts3,ts4 = dataset.split(0.6)
+            assert check_train_valid_continuity(ts1, ts2) == True
+            assert check_train_valid_continuity(ts1, ts4) == False
+        
+        FREQ_STR_LIST =  ["L","S","T","H","D","W","M"]
+
+        for freq in FREQ_STR_LIST:
+            check(freq)
+
 
         #RangeIndex
         index = pd.RangeIndex(0, 2000, 2)
