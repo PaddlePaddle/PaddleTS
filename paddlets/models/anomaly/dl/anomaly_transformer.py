@@ -22,7 +22,6 @@ import numpy as np
 import paddle
 import time
 
-from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.utils import to_tsdataset, to_tsdataset2

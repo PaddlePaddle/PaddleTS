@@ -11,9 +11,7 @@ from itertools import product
 
 from paddlets.models.base import BaseModel
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
-from paddlets.models.forecasting.ml.adapter.data_adapter import DataAdapter as MLForecastingDataAdapter
-from paddlets.models.forecasting.ml.adapter.ml_dataset import MLDataset as MLForecastingDataset
-from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
+from paddlets.models.data_adapter import SampleDataset, MLDataLoader, DataAdapter
 from paddlets.models.utils import to_tsdataset, check_tsdataset
 from paddlets.datasets import TSDataset
 from paddlets.logger import Logger, raise_log, raise_if, raise_if_not
@@ -256,27 +254,27 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         )
         return model
 
-    def _init_data_adapter(self) -> MLForecastingDataAdapter:
+    def _init_data_adapter(self) -> DataAdapter:
         """
         Internal method, initialize data adapter.
 
         Returns:
             DataAdapter: Initialized data adapter object.
         """
-        return MLForecastingDataAdapter()
+        return DataAdapter()
 
     def _tsdataset_to_ml_dataset(
         self,
         tsdataset: TSDataset,
         time_window: Optional[Tuple[int, int]] = None
-    ) -> MLForecastingDataset:
+    ) -> SampleDataset:
         """
         Internal method, convert TSDataset to MLDataset.
 
         Returns:
             MLDataset: Converted MLDataset object.
         """
-        return self._data_adapter.to_ml_dataset(
+        return self._data_adapter.to_sample_dataset(
             rawdataset=tsdataset,
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
@@ -285,7 +283,7 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             time_window=time_window
         )
 
-    def _ml_dataset_to_ml_dataloader(self, ml_dataset: MLForecastingDataset) -> MLDataLoader:
+    def _ml_dataset_to_ml_dataloader(self, ml_dataset: SampleDataset) -> MLDataLoader:
         """
         Internal method, convert MLDataset to MLDataLoader.
 
@@ -711,42 +709,36 @@ class PyodModelWrapper(MLModelBaseWrapper):
                 )
             )
 
-    def _init_data_adapter(self) -> "MLAnomalyDataAdapter":
+    def _init_data_adapter(self) -> DataAdapter:
         """
         Internal method, initialize data adapter for pyod anomaly models.
 
         Returns:
             DataAdapter: Initialized data adapter object.
         """
-        from paddlets.models.anomaly.ml.adapter.data_adapter import DataAdapter
         return DataAdapter()
 
-    def _tsdataset_to_ml_dataset(self, tsdataset: TSDataset) -> MLForecastingDataset:
+    def _tsdataset_to_ml_dataset(self, tsdataset: TSDataset) -> SampleDataset:
         """
         Internal method, convert TSDataset to MLDataset.
 
         Returns:
             MLDataset: Converted MLDataset object.
         """
-        return self._data_adapter.to_ml_dataset(
+        return self._data_adapter.to_sample_dataset(
             rawdataset=tsdataset,
             in_chunk_len=self._in_chunk_len,
             sampling_stride=self._sampling_stride
         )
 
-    def _ml_dataset_to_ml_dataloader(self, ml_dataset: "MLAnomalyDataset") -> "MLDataLoader":
+    def _ml_dataset_to_ml_dataloader(self, ml_dataset: SampleDataset) -> MLDataLoader:
         """
         Internal method, convert MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
         """
-        from paddlets.models.anomaly.ml.adapter.data_adapter import anomaly_collate_fn
-        return self._data_adapter.to_ml_dataloader(
-            ml_dataset=ml_dataset,
-            batch_size=len(ml_dataset),
-            collate_fn=anomaly_collate_fn
-        )
+        return self._data_adapter.to_ml_dataloader(sample_dataset=ml_dataset, batch_size=len(ml_dataset))
 
     def _validate_train_data(self, train_data: TSDataset) -> None:
         """

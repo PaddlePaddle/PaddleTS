@@ -144,7 +144,7 @@ from sklearn.cluster import (
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
 from paddlets.models.ml_model_wrapper import SklearnModelWrapper, make_ml_model
 from paddlets.datasets import TSDataset, TimeSeries
-from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
+from paddlets.models.data_adapter import MLDataLoader
 
 
 class MockNotSklearnModel(object):
