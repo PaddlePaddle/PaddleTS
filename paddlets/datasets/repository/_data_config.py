@@ -24,7 +24,8 @@ ETTh1Dataset = DatasetConfig(
         "target_cols": "OT",
         "time_col": "date",
         "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
-        "freq": "1h"
+        "freq": "1h",
+        "dtype": "float32"
     }
 )
 
@@ -37,7 +38,8 @@ ETTm1Dataset = DatasetConfig(
         "target_cols": "OT",
         "time_col": "date",
         "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
-        "freq": "15T"
+        "freq": "15T",
+        "dtype": "float32"
     }
 )
 
@@ -50,7 +52,8 @@ ECLDataset = DatasetConfig(
         "target_cols": "MT_320",
         "time_col": "date",
         "observed_cov_cols": ["MT_{:0>3}".format(x) for x in range(320)],
-        "freq": "1h"
+        "freq": "1h",
+        "dtype": "float32"
     }
 )
 
@@ -65,7 +68,8 @@ WTHDataset = DatasetConfig(
         "observed_cov_cols": ["Visibility", "DryBulbFarenheit", "DryBulbCelsius", "WetBulbFarenheit", \
                               "DewPointFarenheit", "DewPointCelsius", "RelativeHumidity", "WindSpeed", \
                               "WindDirection", "StationPressure", "Altimeter"],
-        "freq": "1h"
+        "freq": "1h",
+        "dtype": "float32"
     }
 )
 
@@ -76,24 +80,12 @@ UNIWTHDataset = DatasetConfig(
     load_param = {
         "target_cols": "WetBulbCelsius",
         "time_col": "date",
-        "freq": "1h"
+        "freq": "1h",
+        "dtype": "float32"
     }  
 )
 
-UnivariateOriginDemoDataset = DatasetConfig(
-    name = "univariate_demo",
-    type = "origin", #local代表本地文件，origin代表远程文件
-    path = "http://10.182.62.13:8009/univariate_demo.csv",
-    load_param = {
-        "target_cols": "load",
-        "time_col": "DATE_TIME",
-        "freq": "15Min",
-        "fill_missing_dates": True,
-        "fillna_method": 'pre'
-    }  
-)
-
-# 7> nab machine temperature data, https://github.com/numenta/NAB/blob/master/data/realKnownCause/machine_temperature_system_failure.csv
+# 6> nab machine temperature data, https://github.com/numenta/NAB/blob/master/data/realKnownCause/machine_temperature_system_failure.csv
 NABTEMPDataset = DatasetConfig(
     name = "NAB_TEMP",
     type = "origin",
@@ -106,7 +98,7 @@ NABTEMPDataset = DatasetConfig(
     }
 )
 
-# 8> psm train data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftrain.csv
+# 7> psm train data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftrain.csv
 PSMTRAINDataset = DatasetConfig(
     name = "psm_train",
     type = "origin",
@@ -118,7 +110,7 @@ PSMTRAINDataset = DatasetConfig(
     }
 )
 
-# 9> psm test data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftest.csv
+# 8> psm test data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftest.csv
 PSMTESTDataset = DatasetConfig(
     name = "psm_test",
     type = "origin",

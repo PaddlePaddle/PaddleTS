@@ -433,6 +433,97 @@ class TestPaddleBaseModel(unittest.TestCase):
         self.assertFalse(succeed)
         shutil.rmtree(path)
 
+        ############################################
+        # case 8 (good case)                       #
+        # 1) network_model == True
+        # 2) dygraph_to_static == True
+        ############################################
+        model = self._build_rnn_model()
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # no validation dataset
+        model.fit(train_tsdataset=paddlets_ds)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, self.default_modelname), network_model=True, dygraph_to_static=True)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        files = set(os.listdir(path))
+        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+
+        # mode type AutoEncoder
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # RNNBlockRegressor,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
+        self.assertTrue(RNNBlockRegressor.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.dl.paddlepaddle.rnn
+        self.assertEqual(RNNBlockRegressor.__module__, model_meta["modulename"])
+        self.assertEqual("forecasting", model_meta['model_type'])
+        self.assertEqual({"in_chunk_len": 10, "out_chunk_len": 5, "skip_chunk_len": 16}, model_meta["size"])
+        self.assertEqual({"past_target": [None, 10, 1], "known_cov_numeric": [None, 15, 2], "observed_cov_numeric": [None, 10, 2], "static_cov_numeric": [None, 1, 2]}, model_meta["input_data"])
+        shutil.rmtree(path)
+
+        ############################################
+        # case 9 (good case)                       #
+        # 1) network_model == True
+        # 2) dygraph_to_static == False
+        ############################################
+        model = self._build_rnn_model()
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # no validation dataset
+        model.fit(train_tsdataset=paddlets_ds)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, self.default_modelname), network_model=True, dygraph_to_static=False)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        files = set(os.listdir(path))
+        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+
+        # mode type AutoEncoder
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # RNNBlockRegressor,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
+        self.assertTrue(RNNBlockRegressor.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.dl.paddlepaddle.rnn
+        self.assertEqual(RNNBlockRegressor.__module__, model_meta["modulename"])
+        self.assertEqual("forecasting", model_meta['model_type'])
+        self.assertEqual({"in_chunk_len": 10, "out_chunk_len": 5, "skip_chunk_len": 16}, model_meta["size"])
+        self.assertEqual({"past_target": [None, 10, 1], "known_cov_numeric": [None, 15, 2], "observed_cov_numeric": [None, 10, 2], "static_cov_numeric": [None, 1, 2]}, model_meta["input_data"])
+        shutil.rmtree(path)
+
+
     def test_load(self):
         """Test PaddleBaseModel.load()"""
         ###################################
@@ -667,6 +758,170 @@ class TestPaddleBaseModel(unittest.TestCase):
         self.assertFalse(succeed)
         shutil.rmtree(path)
 
+        ###############################
+        # case 6 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == True
+        ###############################
+        # build + fit + save an AE Model.
+        in_chunk_len = 10
+        model = self._build_rnn_model(in_chunk_len=in_chunk_len)
+
+        train_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        valid_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        model.fit(train_tsdataset=train_paddlets_ds, valid_tsdataset=valid_paddlets_ds)
+
+        predicted_paddlets_ds = model.predict(paddlets_ds)
+        self.assertEqual(
+            (out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            predicted_paddlets_ds.get_target().data.shape
+        )
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path, network_model=True, dygraph_to_static=True)
+
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_path + ".pdmodel", abs_model_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        input_names.sort()
+        model_meta_name_list = list(model_meta['input_data'].keys())
+        model_meta_name_list.sort()
+        self.assertEqual(input_names, model_meta_name_list)
+        
+        for i, name in enumerate(list(model_meta['input_data'].keys())):
+            input_handle = predictor.get_input_handle(name)
+            input_handle.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]])
+            if 'target' in name:
+                _, input_data_ts = paddlets_ds.target.split(len(paddlets_ds.target) - model_meta['size']['in_chunk_len'])
+                input_data = input_data_ts.to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            elif 'known' in name:
+                data = paddlets_ds.known_cov.data
+                input_data = pd.concat([data.iloc[190:200, :], data.iloc[215:220, :]]).to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            elif 'observed' in name:
+                _, input_data_ts = paddlets_ds.observed_cov.split(len(paddlets_ds.observed_cov) - model_meta['size']['in_chunk_len'])
+                input_data = input_data_ts.to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            else:
+                input_data = np.array([1.0, 2.0]).reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (1, model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
+        res1 = predicted_paddlets_ds.target.data.to_numpy().tolist()
+        res2 = output_data.reshape(model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]).tolist()
+        for i, key in enumerate(res1):
+            self.assertAlmostEqual(key, res2[i], places=5)
+        shutil.rmtree(path)
+
+       ###############################
+        # case 7 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == False
+        ###############################
+        # build + fit + save an AE Model.
+        in_chunk_len = 10
+        model = self._build_rnn_model(in_chunk_len=in_chunk_len)
+
+        train_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        valid_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        model.fit(train_tsdataset=train_paddlets_ds, valid_tsdataset=valid_paddlets_ds)
+
+        predicted_paddlets_ds = model.predict(paddlets_ds)
+        self.assertEqual(
+            (out_chunk_len, len(paddlets_ds.get_target().data.columns)),
+            predicted_paddlets_ds.get_target().data.shape
+        )
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path, network_model=True, dygraph_to_static=False)
+
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_path + ".pdmodel", abs_model_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        input_names.sort()
+        model_meta_name_list = list(model_meta['input_data'].keys())
+        model_meta_name_list.sort()
+        self.assertEqual(input_names, model_meta_name_list)
+        
+        for i, name in enumerate(list(model_meta['input_data'].keys())):
+            input_handle = predictor.get_input_handle(name)
+            input_handle.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]])
+            if 'target' in name:
+                _, input_data_ts = paddlets_ds.target.split(len(paddlets_ds.target) - model_meta['size']['in_chunk_len'])
+                input_data = input_data_ts.to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            elif 'known' in name:
+                data = paddlets_ds.known_cov.data
+                input_data = pd.concat([data.iloc[190:200, :], data.iloc[215:220, :]]).to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            elif 'observed' in name:
+                _, input_data_ts = paddlets_ds.observed_cov.split(len(paddlets_ds.observed_cov) - model_meta['size']['in_chunk_len'])
+                input_data = input_data_ts.to_numpy()
+                input_data = input_data.reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+            else:
+                input_data = np.array([1.0, 2.0]).reshape([1, list(model_meta['input_data'].values())[i][-2], list(model_meta['input_data'].values())[i][-1]]).astype("float32")
+                input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (1, model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
+        res1 = predicted_paddlets_ds.target.data.to_numpy().tolist()
+        res2 = output_data.reshape(model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]).tolist()
+        for i, key in enumerate(res1):
+            self.assertAlmostEqual(key, res2[i], places=5)
+        shutil.rmtree(path)
+
     def _build_rnn_model(
         self,
         in_chunk_len: int = 10,
@@ -674,7 +929,8 @@ class TestPaddleBaseModel(unittest.TestCase):
         skip_chunk_len: int = 16,
         rnn_type_or_module: str = "SimpleRNN",
         fcn_out_config: List = None,
-        eval_metrics: List[str] = None
+        eval_metrics: List[str] = None,
+        max_epochs: int = 1,
     ) -> RNNBlockRegressor:
         """
         Internal-only method, used for building an RNN model. The model is inherited from PaddleBaseModel.
@@ -754,5 +1010,5 @@ class TestPaddleBaseModel(unittest.TestCase):
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1., "static1": 2.}
+            static_cov={"static0": 1.0, "static1": 2.0}
         )
