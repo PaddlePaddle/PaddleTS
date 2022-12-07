@@ -22,7 +22,7 @@ from paddlets.metrics import (
     Metric
 )
 from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
-from paddlets.models.forecasting.dl.adapter import DataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import to_tsdataset, check_tsdataset
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, Logger
@@ -31,8 +31,7 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """PaddleTS deep time series framework,
-        all time series models based on paddlepaddle implementation need to inherit this class.
+    """PaddleTS deep time series framework, all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -202,12 +201,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             train_tsdataset = [train_tsdataset]
         for dataset in train_tsdataset:
             self._check_tsdataset(dataset)
-            dataset = data_adapter.to_paddle_dataset(
+            dataset = data_adapter.to_sample_dataset(
                 dataset,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
                 skip_chunk_len=self._skip_chunk_len,
-                sampling_stride=self._sampling_stride,
+                sampling_stride=self._sampling_stride
             )
             if train_dataset is None:
                 train_dataset = dataset
@@ -222,12 +221,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 valid_tsdataset = [valid_tsdataset]
             for dataset in valid_tsdataset:
                 self._check_tsdataset(dataset)
-                dataset = data_adapter.to_paddle_dataset(
+                dataset = data_adapter.to_sample_dataset(
                     dataset,
                     in_chunk_len=self._in_chunk_len,
                     out_chunk_len=self._out_chunk_len,
                     skip_chunk_len=self._skip_chunk_len,
-                    sampling_stride=self._sampling_stride,
+                    sampling_stride=self._sampling_stride
                 )
                 if valid_dataset is None:
                     valid_dataset = dataset
@@ -254,7 +253,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             len(tsdataset.get_target().data) - 1 + self._skip_chunk_len + self._out_chunk_len
         )
         data_adapter = DataAdapter()
-        dataset = data_adapter.to_paddle_dataset(
+        dataset = data_adapter.to_sample_dataset(
             tsdataset,
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
@@ -520,8 +519,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             X(Dict[str, paddle.Tensor]): Dict of feature tensor. 
             y(paddle.Tensor): Target tensor.
         """
-        y = X.pop("future_target")
-        return X, y
+        if "future_target" in X:
+            y = X.pop("future_target")
+            return X, y
+        return X, None
 
     def _compute_loss(
         self, 

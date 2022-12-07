@@ -56,7 +56,7 @@ from pyod.models.sos import SOS
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
 from paddlets.models.ml_model_wrapper import PyodModelWrapper, make_ml_model
 from paddlets.datasets import TSDataset, TimeSeries
-from paddlets.models.forecasting.ml.adapter.ml_dataloader import MLDataLoader
+from paddlets.models.data_adapter import MLDataLoader
 
 
 class MockNotPyodModel(object):

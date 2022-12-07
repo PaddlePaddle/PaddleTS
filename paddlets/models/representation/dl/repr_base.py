@@ -18,7 +18,7 @@ from paddlets.models.common.callbacks import (
     Callback,
     History,
 )
-from paddlets.models.representation.dl.adapter import ReprDataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import check_tsdataset
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 from paddlets.datasets import TSDataset
@@ -144,11 +144,12 @@ class ReprBaseModel(abc.ABC):
             paddle.io.DataLoader: Training dataloader.
         """
         self._check_tsdataset(train_tsdataset)
-        data_adapter = ReprDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdataset,
-            segment_size=self._segment_size,
+        data_adapter = DataAdapter()
+        train_dataset = data_adapter.to_sample_dataset(
+            rawdataset=train_tsdataset,
+            in_chunk_len=self._segment_size,
             sampling_stride=self._sampling_stride,
+            fill_last_value=np.nan
         )
         return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
 
@@ -165,11 +166,12 @@ class ReprBaseModel(abc.ABC):
             paddle.io.DataLoader: dataloader.
         """
         self._check_tsdataset(tsdataset)
-        data_adapter = ReprDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(
-            tsdataset, 
-            segment_size=len(tsdataset.get_target().data),
+        data_adapter = DataAdapter()
+        dataset = data_adapter.to_sample_dataset(
+            rawdataset=tsdataset,
+            in_chunk_len=len(tsdataset.get_target().data),
             sampling_stride=self._sampling_stride,
+            fill_last_value=np.nan
         )
         return data_adapter.to_paddle_dataloader(dataset, self._batch_size)
 
