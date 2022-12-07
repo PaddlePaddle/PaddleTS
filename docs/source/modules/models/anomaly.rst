@@ -60,7 +60,7 @@ Set up training set (top 15%), and standardize the data.
    train_tsdata, test_tsdata = ts_data.split(0.15)
 
    #standardize
-   scaler = StandardScaler()
+   scaler = StandardScaler("value")
    scaler.fit(train_tsdata)
    train_tsdata_scaled = scaler.transform(train_tsdata)
    test_tsdata_scaled = scaler.transform(test_tsdata)

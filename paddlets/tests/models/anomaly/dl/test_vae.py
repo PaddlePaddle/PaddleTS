@@ -27,17 +27,17 @@ class TestVAE(TestCase):
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
                 name="label")
         feature = pd.DataFrame(
-                np.random.randn(200, 2).astype(np.float32),
+                np.random.randn(200, 3).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
-                columns=["a", "b"])
+                columns=["a", "b", "c"])
 
         # index is DatetimeIndex
         self.tsdataset1 = TSDataset.load_from_dataframe(pd.concat([label, feature], axis=1), 
-                target_cols='label', feature_cols='a')
+                target_cols='label', feature_cols=['a', 'b'])
 
         # There is no target in tsdataset
         self.tsdataset2 = TSDataset.load_from_dataframe(pd.concat([label, feature], axis=1), 
-                feature_cols=['a', 'b'])     
+                feature_cols=['a', 'b', 'c'])     
 
         # index is RangeIndex
         index = pd.RangeIndex(0, 200, 1)
@@ -258,7 +258,7 @@ class TestVAE(TestCase):
         #case 3 (The training set contains illegal data types, such as string type)
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"a": "O"})
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             vae.fit(tsdataset, tsdataset)
 
     def test_init_metrics(self):

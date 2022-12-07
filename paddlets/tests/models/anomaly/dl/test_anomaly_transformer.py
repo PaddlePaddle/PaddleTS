@@ -24,17 +24,17 @@ class TestAnomalyTransformer(TestCase):
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
                 name="label")
         feature = pd.DataFrame(
-                np.random.randn(200, 2).astype(np.float32),
+                np.random.randn(200, 3).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
-                columns=["a", "b"])
+                columns=["a", "b", "c"])
         
         # index is DatetimeIndex
         self.tsdataset1 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                target_cols='label', feature_cols='a')
+                target_cols='label', feature_cols=['a', 'b'])
         
         # There is no target in tsdataset
         self.tsdataset2 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                feature_cols=['a', 'b'])     
+                feature_cols=['a', 'b', 'c'])     
         
         # index is RangeIndex
         index = pd.RangeIndex(0, 200, 1)
@@ -133,7 +133,7 @@ class TestAnomalyTransformer(TestCase):
         #case 3 (The training set contains illegal data types, such as string type)
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"a": "O"})
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
              model.fit(tsdataset, tsdataset)
             
     def test_init_metrics(self):
@@ -201,17 +201,16 @@ class TestAnomalyTransformer(TestCase):
         model = AnomalyTransformer(
             in_chunk_len=20,
             optimizer_params=dict(learning_rate=1e-1),
-            batch_size=16,
-            max_epochs=10,
-            patience=1
+            batch_size=64,
+            max_epochs=1
         )
-        model.fit(self.tsdataset1, self.tsdataset1)
+        model.fit(self.tsdataset1)
         
         #case 2 (The user inputs the training set and valid set, early_stopping works)
         model = AnomalyTransformer(
             in_chunk_len=20,
             optimizer_params=dict(learning_rate=1e-1),
-            batch_size=16,
+            batch_size=64,
             max_epochs=20,
             patience=1
         )
@@ -226,7 +225,7 @@ class TestAnomalyTransformer(TestCase):
             patience=1,
         )
         model.fit(self.tsdataset1, self.tsdataset1)
-        res = model.predict(self.tsdataset1, self.tsdataset1, res_adjust=True)
+        res = model.predict(self.tsdataset1, self.tsdataset1)
         self.assertIsInstance(res, TSDataset)
         self.assertIsInstance(res.get_target().data.index, pd.DatetimeIndex)
         self.assertEqual(res.get_target().data.shape, (200, 1))
@@ -237,9 +236,10 @@ class TestAnomalyTransformer(TestCase):
             in_chunk_len=10,
             max_epochs=1,
             patience=1,
+            pred_adjust=False
         )
         model.fit(self.tsdataset2, self.tsdataset2)
-        res = model.predict(self.tsdataset2, self.tsdataset2, res_adjust=False)
+        res = model.predict(self.tsdataset2, self.tsdataset2)
         self.assertIsInstance(res, TSDataset)
         self.assertIsInstance(res.get_target().data.index, pd.DatetimeIndex)
         self.assertEqual(res.get_target().data.shape, (200, 1))
@@ -252,7 +252,7 @@ class TestAnomalyTransformer(TestCase):
             patience=1
         )
         model.fit(self.tsdataset3, self.tsdataset3)
-        res = model.predict(self.tsdataset3, self.tsdataset3, res_adjust=True)
+        res = model.predict(self.tsdataset3, self.tsdataset3)
         self.assertIsInstance(res, TSDataset)
         self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
         self.assertEqual(res.get_target().data.shape, (200, 1))
@@ -262,10 +262,11 @@ class TestAnomalyTransformer(TestCase):
         model = AnomalyTransformer(
             in_chunk_len=20,
             max_epochs=1,
-            patience=1
+            patience=1,
+            pred_adjust=False
         )
         model.fit(self.tsdataset4, self.tsdataset4)
-        res = model.predict(self.tsdataset4, self.tsdataset4, res_adjust=False)
+        res = model.predict(self.tsdataset4, self.tsdataset4)
         self.assertIsInstance(res, TSDataset)
         self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
         self.assertEqual(res.get_target().data.shape, (200, 1))
