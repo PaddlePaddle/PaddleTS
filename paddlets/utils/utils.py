@@ -167,7 +167,6 @@ def check_train_valid_continuity(train_data: TSDataset, valid_data: TSDataset)->
 
     return continuious
 
-
 def split_dataset(dataset: TSDataset, split_point: int) ->  TSDataset:
     """
     Split dataset (accroding to the max length)
