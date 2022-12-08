@@ -105,6 +105,8 @@ class TestPipeline(TestCase):
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
         transform_params_1 = {"cols": ['c1'], "k": 0.7}
+        transform_params_2 = {"cols": ['b', 'c']}
+
         nn_params = {
             'in_chunk_len': 7 * 96 + 20 * 4,
             'out_chunk_len': 96,
@@ -123,15 +125,17 @@ class TestPipeline(TestCase):
             'in_chunk_len': 10,
             'max_epochs': 3,
         }
-        anomaly_pipe = Pipeline([(KSigma, transform_params), (StandardScaler, {}), (AutoEncoder, nn_params)])
-        anomaly_pipe.fit(tsdataset)
-        res = anomaly_pipe.predict(tsdataset)
+        anomaly_pipe = Pipeline([(KSigma, transform_params), (StandardScaler, transform_params_2), (AutoEncoder, nn_params)])
+        anomaly_tsdataset = tsdataset.copy()
+        anomaly_tsdataset['a'] = anomaly_tsdataset['a'].astype(int)
+        anomaly_pipe.fit(anomaly_tsdataset)
+        res = anomaly_pipe.predict(anomaly_tsdataset)
         self.assertIsInstance(res, TSDataset)
         self.assertEqual(res.get_target().data.shape, (1991, 1))
         self.assertEqual(res.get_target().data.columns[0], 'a')
         
         with self.assertRaises(ValueError):
-            res = anomaly_pipe.recursive_predict(tsdataset, 10)
+            res = anomaly_pipe.recursive_predict(anomaly_tsdataset, 10)
         
     def test_transform(self):
         """
@@ -458,14 +462,16 @@ class TestPipeline(TestCase):
                 columns=["a", "b"])
         
         tsdataset = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                target_cols='label', feature_cols='a')
+                target_cols='label', feature_cols=['a', 'b'])
        
         transform_params = {"cols": ['a'], "k": 0.5}
+        transform_params_1 = {"cols": ['a', 'b']}
+
         nn_params = {
             'in_chunk_len': 10,
             'max_epochs': 3
         }
-        pipe = Pipeline([(KSigma, transform_params), (StandardScaler, {}), (AutoEncoder, nn_params)])
+        pipe = Pipeline([(KSigma, transform_params), (StandardScaler, transform_params_1), (AutoEncoder, nn_params)])
         pipe.fit(tsdataset)
         res = pipe.predict_score(tsdataset)
         self.assertIsInstance(res, TSDataset)
@@ -500,6 +506,8 @@ class TestPipeline(TestCase):
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
         transform_params_1 = {"cols": ['c1'], "k": 0.7}
+        transform_params_2 = {"cols": ['b', 'c']}
+
         nn_params = {
             'in_chunk_len': 7 * 96 + 20 * 4,
             'out_chunk_len': 96,
@@ -538,9 +546,11 @@ class TestPipeline(TestCase):
             'in_chunk_len': 10,
             'max_epochs': 3
         }
-        anomaly_pipe = Pipeline([(KSigma, transform_params), (StandardScaler, {}), (AutoEncoder, nn_params)])
-        anomaly_pipe.fit(tsdataset)
-        res_before_save_load = anomaly_pipe.predict(tsdataset)
+        anomaly_pipe = Pipeline([(KSigma, transform_params), (StandardScaler, transform_params_2), (AutoEncoder, nn_params)])
+        anomaly_tsdataset = tsdataset.copy()
+        anomaly_tsdataset['a'] = anomaly_tsdataset['a'].astype(int)
+        anomaly_pipe.fit(anomaly_tsdataset)
+        res_before_save_load = anomaly_pipe.predict(anomaly_tsdataset)
         shutil.rmtree(self.tmp_dir)
         anomaly_pipe.save(self.tmp_dir)
         # save again
@@ -555,12 +565,12 @@ class TestPipeline(TestCase):
         # load pipeline
         pipeline_after_save_load = Pipeline.load(self.tmp_dir)
         # test predict
-        res_after_save_load = pipeline_after_save_load.predict(tsdataset)
+        res_after_save_load = pipeline_after_save_load.predict(anomaly_tsdataset)
         # clear file
         # shutil.rmtree(self.tmp_dir)
         self.assertTrue(res_before_save_load.get_target().to_dataframe() \
                         .equals(res_after_save_load.get_target().to_dataframe()))
-        
+
     def test_multiple_datasets_fit(self):
 
         # load multi time series

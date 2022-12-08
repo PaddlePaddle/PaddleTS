@@ -17,6 +17,8 @@ from paddle import nn
 from paddle.optimizer import Optimizer
 
 from paddlets.datasets import TSDataset
+from paddlets.metrics import QuantileLoss
+from paddlets.metrics.base import Metric
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.forecasting.dl.distributions import Likelihood, GaussianLikelihood
@@ -25,6 +27,7 @@ from paddlets.logger import raise_if, raise_if_not, Logger
 
 logger = Logger(__name__)
 
+OUTPUT_QUANTILE_NUM = 101
 
 class _DeepAR(nn.Layer):
     """
@@ -173,7 +176,7 @@ class _DeepAR(nn.Layer):
         # to shape: [batch_size, num_steps, target_dim, num_samples], and sort the last dim to generate quantiles
         quantiles_output = paddle.stack(quantiles_output, 2)
         quantiles_output = paddle.quantile(quantiles_output, 
-                                           list(np.linspace(0, 1, 101, endpoint=True)), 
+                                           list(np.linspace(0, 1, OUTPUT_QUANTILE_NUM, endpoint=True)), 
                                            axis=0).transpose([1,2,3,0])        
         # predictions mode
         prediction_output = paddle.stack(prediction_output, 1)
@@ -236,7 +239,7 @@ class _DeepAR(nn.Layer):
         quantiles_output = paddle.stack(quantiles_output).reshape([num_steps, -1, self._num_samples, self._target_dim])
         quantiles_output = quantiles_output.transpose([1, 0, 3, 2]) # to shape: [batch_size, num_steps, target_dim, num_samples]
         quantiles_output = paddle.quantile(quantiles_output, 
-                                           list(np.linspace(0, 1, 101, endpoint=True)), 
+                                           list(np.linspace(0, 1, OUTPUT_QUANTILE_NUM, endpoint=True)), 
                                            axis=-1).transpose([1,2,3,0])
         # predictions mode
         prediction_output = paddle.stack(prediction_output, 1)
@@ -331,7 +334,7 @@ class _DeepAR(nn.Layer):
         #encode
         hidden_state = self._encoder(x)
         #decode
-        if self.predicting:
+        if not self.training:
             x["future_target"] = paddle.rand([x["past_target"].shape[0], self._out_chunk_len, self._target_dim])
         output = self._decoder(x, hidden_state)
         return output
@@ -378,13 +381,14 @@ class DeepARModel(PaddleBaseModelImpl):
         skip_chunk_len: int = 0,
         sampling_stride: int = 1,
         likelihood_model: Likelihood = GaussianLikelihood(),
-        num_samples: int = 100,
+        num_samples: int = 101,
         loss_fn: Callable[..., paddle.Tensor] = GaussianLikelihood().loss,
         regression_mode: str = "mean",
         output_mode: str = "quantiles",
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
-        eval_metrics: List[str] = ["quantile_loss"],
+        eval_quantiles: List[float] = [0.1, 0.5, 0.9],
+        eval_metrics:List[Metric] = [QuantileLoss()],
         callbacks: List[Callback] = [],
         batch_size: int = 128,
         max_epochs: int = 10,
@@ -400,6 +404,8 @@ class DeepARModel(PaddleBaseModelImpl):
         self._num_samples = num_samples
         self._output_mode = output_mode
         self._regression_mode = regression_mode
+        self._eval_quantiles = eval_quantiles
+        self._q_points = [float(x) for x in list(range(OUTPUT_QUANTILE_NUM))]
 
         #check parameters validation
         raise_if_not(
@@ -415,7 +421,7 @@ class DeepARModel(PaddleBaseModelImpl):
             loss_fn=likelihood_model.loss,
             optimizer_fn=optimizer_fn,
             optimizer_params=optimizer_params,
-            eval_metrics=eval_metrics,
+            eval_metrics=[QuantileLoss(eval_quantiles)],
             callbacks=callbacks,
             batch_size=batch_size,
             max_epochs=max_epochs,
@@ -444,10 +450,12 @@ class DeepARModel(PaddleBaseModelImpl):
                  f"regression mode must be one of {{`mean`, `sampling`}}, got `{self._regression_mode}`.")        
         
         # If user does not specify an evaluation metric, a metric is provided by default.
-        # Currently, only support quantile_loss. TODO: construct more metrics: NLLLoss
-        if self._eval_metrics != ["quantile_loss"]:
-            logger.warning(f"Evaluation metric is transformed to ['quantile_loss'], got {self._eval_metrics}.")
-            self._eval_metrics = ["quantile_loss"]
+        # Currently, only support quantile_loss
+        for metric in self._eval_metrics:
+            if metric != "quantile_loss" and not isinstance(metric, QuantileLoss):
+                logger.warning(f"Evaluation metric is transformed to [QuantileLoss()], got {self._eval_metrics}.")
+                self._eval_metrics = [QuantileLoss()]
+                break
         
     def _check_tsdataset(
         self,
@@ -487,8 +495,6 @@ class DeepARModel(PaddleBaseModelImpl):
                 }
         if train_tsdataset[0].get_known_cov() is not None:
             fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov().data.shape[1]
-        if train_tsdataset[0].get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_tsdataset[0].get_observed_cov().data.shape[1]
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:

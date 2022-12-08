@@ -45,8 +45,8 @@ class Metric(ABC):
         Raises:
             ValueError.
         """
-        target_true = tsdataset_true.get_target().sort_columns()
-        target_pred = tsdataset_pred.get_target().sort_columns()
+        target_true = tsdataset_true.get_target()
+        target_pred = tsdataset_pred.get_target()
         raise_if(
             target_true is None or target_pred is None,
             "TSDataset target is None!"
@@ -89,8 +89,8 @@ class Metric(ABC):
         Raises:
             ValueError.
         """
-        target_true = tsdataset_true.get_target().sort_columns()
-        target_pred = tsdataset_pred.get_target().sort_columns()
+        target_true = tsdataset_true.get_target()
+        target_pred = tsdataset_pred.get_target()
         # check validation
         raise_if(
             target_true is None or target_pred is None,
@@ -135,8 +135,8 @@ class Metric(ABC):
         Raises:
             ValueError.
         """
-        target_true = tsdataset_true.get_target().sort_columns()
-        target_pred = tsdataset_pred.get_target().sort_columns()
+        target_true = tsdataset_true.get_target()
+        target_pred = tsdataset_pred.get_target()
         raise_if(
             target_true is None or target_pred is None,
             "TSDataset label is None!"
