@@ -13,6 +13,9 @@ from paddlets.metrics.utils import ensure_2d
 from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
 
 
+logger = Logger(__name__)
+
+
 class MSE(Metric):
     """Mean Squared Error.
 
@@ -139,8 +142,6 @@ class QuantileLoss(Metric):
         q_points(List[float]): The quantile points of interest, the default value is None. 
             In the evaluation of the prediction, while q_points is specified, 
             output a dict which contains each quantile result respect to quantile points.
-        quantile_level(np.ndarray, List[float]): The quantile level of interest. In validation phase, 
-            it is used to measure validation loss. 
         mode(str): Supported metric modes, only normal and prob are valid values. 
             Set to normal for non-probability use cases, set to prob for probability use cases.
     """
@@ -150,12 +151,34 @@ class QuantileLoss(Metric):
 
     def __init__(
         self,
-        q_points: List[float]=None,
-        quantile_level: Union[np.ndarray, List[float]] = np.arange(0, 1.01, 0.01),
+        q_points: List[float]=[0.1, 0.5, 0.9],
+        quantile_level: Union[np.ndarray, List[float], None] = None,
         mode: str="prob",
     ):
+        self._train = True
+        self._q_points = q_points
         raise_if_not(mode=="prob", "QuantileLoss metric only support `prob` mode")
-        super(QuantileLoss, self).__init__(mode=mode, q_points=q_points, quantile_level=quantile_level)
+        if quantile_level is not None:
+            logger.warning(f"The parameter `quantile_level` has been deprecated and will be removed in future update.")
+        super(QuantileLoss, self).__init__(mode=mode, q_points=q_points)
+        
+    def __call__(
+        self,
+        tsdataset_true: "TSDataset",
+        tsdataset_pred: "TSDataset",
+    )-> Dict[str, float]:
+        """
+        Compute metric's value from TSDataset, overwrite `__call__` in base class.
+        
+        Args:
+            tsdataset_true(TSDataset): TSDataset containing ground truth (correct) target values.
+            tsdataset_pred(TSDataset): TSDataset containing estimated target values.
+
+        Returns:
+            Dict[str, float]: Dict of metrics. key is the name of target, and value is specific metric value. 
+        """
+        self._train = False
+        return super(QuantileLoss, self).__call__(tsdataset_true, tsdataset_pred)
         
     def metric_fn(
         self,
@@ -173,22 +196,19 @@ class QuantileLoss(Metric):
             float: Quantile loss.
         """
         q_points = self._kwargs["q_points"]
-        quantile_level = self._kwargs["quantile_level"]
-        if q_points: # specified quantile points, output a dict.
-            quantiles = np.quantile(y_pred_sample, q_points, axis=-1)
-            errors = [y_true - quantiles[i] for i in range(len(q_points))]
-            losses = [2 * np.max(np.stack([(q_points[i] - 1) * errors[i], q_points[i] * errors[i]], axis=-1), axis=-1).mean()
-                      for i in range(len(q_points))]
-            return dict(zip(q_points, losses))
-        else: # no quantile points specified, sum all quantile loss and output.
-            quantiles = np.quantile(y_pred_sample, quantile_level, axis=-1)
-            errors = [y_true - quantiles[i] for i in range(len(quantile_level))]
-            losses = [np.max(np.stack([(quantile_level[i] - 1) * errors[i], \
-                                       quantile_level[i] * errors[i]], axis=-1), axis=-1) \
-                      for i in range(len(quantile_level))]
-            losses = 2 * np.stack(losses, axis=-1)
-            return losses.mean()
-
+        quantiles = np.quantile(y_pred_sample, q_points, axis=-1, interpolation="nearest")
+        errors = [y_true - quantiles[i] for i in range(len(q_points))]
+        losses = [np.max(np.stack([(q_points[i] - 1) * errors[i], q_points[i] * errors[i]], axis=-1), axis=-1)
+                  for i in range(len(q_points))]
+        losses_array = np.stack(losses, axis=-1)
+        if self._train:
+            # sum losses over quantiles and average across time and observations, for training scenario
+            return np.sum(losses_array, axis=-1).mean(axis=-1).mean()  # a scalar (shapeless)
+        else:
+            # compute q_risk for each quantile, for eval scenario
+            q_risk = 2 * [losses_array[..., i].sum() for i in range(losses_array.shape[-1])] / np.abs(y_true).sum()
+            return dict(zip(q_points, q_risk))
+        
 
 class ACC(Metric):
     """Accuracy_score.
@@ -344,13 +364,15 @@ class MetricContainer(object):
     """
     def __init__(
         self,
-        metric_names: List[str],
+        metrics: Union[List[str],List[Metric]],
         prefix: str = ""
     ):
         self._prefix = prefix
-        self._metrics = Metric.get_metrics_by_names(metric_names)
-        self._names = [prefix + name for name in metric_names]
-
+        self._metrics = (
+            metrics if (metrics and isinstance(metrics[-1], Metric))
+            else Metric.get_metrics_by_names(metrics)
+        )
+        self._names = [prefix + metric._NAME for metric in self._metrics]
     def __call__(
         self, 
         y_true: np.ndarray, 

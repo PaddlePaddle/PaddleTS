@@ -885,7 +885,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         self.assertEqual(output_data.shape, (1, model_meta['size']['in_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
         loss = model._get_loss(paddle.to_tensor(output_data), paddle.to_tensor(input_data))
-        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], places=5)
+        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], delta=0.001)
 
         shutil.rmtree(path)
 
@@ -951,7 +951,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         self.assertEqual(output_data.shape, (1, model_meta['size']['in_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
         loss = model._get_loss(paddle.to_tensor(output_data), paddle.to_tensor(input_data))
-        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], places=5)
+        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], delta=0.001)
 
         shutil.rmtree(path)
 

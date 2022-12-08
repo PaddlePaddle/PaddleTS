@@ -36,7 +36,7 @@ Display the dataset and anomaly windows through the visual interface provided by
 
    from paddlets.utils.utils import plot_anoms
 
-   plot_anoms(origin_data=ts_data, feature_name="value")
+   plot_anoms(origin_data=ts_data, feature_name='value')
 
 .. image:: ../../../static/images/modules_models_anomaly_figure1.png
    :alt: Anomaly Windows
@@ -60,7 +60,7 @@ Set up training set (top 15%), and standardize the data.
    train_tsdata, test_tsdata = ts_data.split(0.15)
 
    #standardize
-   scaler = StandardScaler()
+   scaler = StandardScaler('value')
    scaler.fit(train_tsdata)
    train_tsdata_scaled = scaler.transform(train_tsdata)
    test_tsdata_scaled = scaler.transform(test_tsdata)
