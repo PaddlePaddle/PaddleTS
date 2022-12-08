@@ -41,8 +41,7 @@ def check_model_fitted(model: Trainable, msg: str = None):
     from paddlets.pipeline import Pipeline
     from paddlets.models.forecasting.ml.ml_base import MLBaseModel
     from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
-    from paddlets.models import BaseModel
-    from paddlets.ensemble.base import EnsembleBase
+    from paddlets.ensemble.ensemble_forecaster_base import EnsembleForecasterBase
 
     try:
         from paddlets.automl import AutoTS
@@ -72,10 +71,10 @@ def check_model_fitted(model: Trainable, msg: str = None):
         fitted = True if model._network else False
     # ML 模型
     elif isinstance(model, MLBaseModel):
-       #TODO:后续如果将 self._models 提到 MLBaseModel后，这里需要同步修改为判断 self._models ，而不是 "_models" 字符串。
-       fitted = True if "model" in vars(model) or "_model" in vars(model) else False
-    elif isinstance(model, EnsembleBase) and isinstance(model, BaseModel) :
-        fitted = True if model._fitted else False
+        #TODO:后续如果将 self._models 提到 MLBaseModel后，这里需要同步修改为判断 self._models ，而不是 "_models" 字符串。
+        fitted = True if "model" in vars(model) or "_model" in vars(model) else False
+    elif isinstance(model, EnsembleForecasterBase):
+        fitted = True if model.fitted else False
     elif AutoTS is not None and isinstance(model, AutoTS):
         fitted = model.is_refitted()
 
