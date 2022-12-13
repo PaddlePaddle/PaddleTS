@@ -837,7 +837,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         res1 = predicted_paddlets_ds.target.data.to_numpy().tolist()
         res2 = output_data.reshape(model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]).tolist()
         for i, key in enumerate(res1):
-            self.assertAlmostEqual(key, res2[i], places=5)
+            self.assertAlmostEqual(key[0], res2[i][0], places=3)
         shutil.rmtree(path)
 
        ###############################
@@ -919,7 +919,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         res1 = predicted_paddlets_ds.target.data.to_numpy().tolist()
         res2 = output_data.reshape(model_meta['size']['out_chunk_len'], list(model_meta['input_data'].values())[0][-1]).tolist()
         for i, key in enumerate(res1):
-            self.assertAlmostEqual(key, res2[i], places=5)
+            self.assertAlmostEqual(key[0], res2[i][0], places=3)
         shutil.rmtree(path)
 
     def _build_rnn_model(
