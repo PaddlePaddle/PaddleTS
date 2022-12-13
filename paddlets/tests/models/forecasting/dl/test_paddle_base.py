@@ -840,6 +840,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             self.assertAlmostEqual(key[0], res2[i][0], places=3)
         shutil.rmtree(path)
 
+
        ###############################
         # case 7 (good case)          
         # 1) paddle inference.
