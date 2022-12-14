@@ -9,7 +9,7 @@ from unittest import TestCase
 
 from paddlets import TSDataset
 from paddlets.models.forecasting import NBEATSModel, RNNBlockRegressor, MLPRegressor, LSTNetRegressor, TCNRegressor, \
-                                   Seq2SeqModel, NHiTSModel, DeepARModel
+                                   NHiTSModel, DeepARModel
 from paddlets.transform import StandardScaler
 from paddlets.pipeline.pipeline import Pipeline
 from paddlets.datasets.repository import dataset_list, get_dataset, DATASETS
@@ -508,7 +508,6 @@ class TestShapExplainer(TestCase):
         value = se.get_explanation(1, 0)
         self.assertEqual(value.shape, (32, ))
         ###########################################################################################################
-        # Seq2seq
         # Parameters
         in_chunk_len = 4
         out_chunk_len = 4
@@ -516,29 +515,6 @@ class TestShapExplainer(TestCase):
         sampling_stride = 24
         max_epochs = 1
         patience = 5
-        df = self.data.to_dataframe()
-        data = TSDataset.load_from_dataframe(df, target_cols=['MT_320'], observed_cov_cols=['MT_000'], 
-                                            known_cov_cols=['MT_001', ])
-        # Sample
-        data, _ = data.split('2014-06-30')
-        train_data, test_data = data.split('2014-06-15')
-        train_data, val_data = train_data.split('2014-06-01')
-        # Pipeline
-        pipeline_list = [(StandardScaler, {}), 
-                 (Seq2SeqModel, {'in_chunk_len': in_chunk_len, 
-                                'out_chunk_len': out_chunk_len, 
-                                'skip_chunk_len': skip_chunk_len, 
-                                'max_epochs': max_epochs, 
-                                'patience': patience})
-                ]
-        # Fit
-        pipe = Pipeline(pipeline_list)
-        pipe.fit(train_data, val_data)
-        # Explainer
-        se = ShapExplainer(pipe, train_data, background_sample_number=5, keep_index=True, use_paddleloader=False)
-        shap_value = se.explain(test_data, nsamples=20) #default the latest sample
-        value = se.get_explanation(1, 0)
-        self.assertEqual(value.shape, (16, ))
         ###########################################################################################################
         # Nhits
         df = self.data.to_dataframe()
