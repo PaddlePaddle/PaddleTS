@@ -10,6 +10,7 @@ import paddle
 
 from paddlets.models.forecasting.dl._informer import MixedEmbedding, Informer
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
+from paddlets.models.forecasting.dl.revin import revin_norm
 from paddlets.models.common.callbacks import Callback
 from paddlets.logger import raise_if_not
 from paddlets.datasets import TSDataset
@@ -225,6 +226,8 @@ class InformerModel(PaddleBaseModelImpl):
         num_decoder_layers: int = 1,
         activation: str = "relu",
         dropout_rate: float = 0.1,
+        use_revin: bool = False,
+        revin_params: Dict[str, Any] = dict(eps=1e-5, affine=True),
     ):
         self._start_token_len = start_token_len
         self._d_model = d_model
@@ -234,6 +237,9 @@ class InformerModel(PaddleBaseModelImpl):
         self._num_decoder_layers = num_decoder_layers
         self._activation = activation
         self._dropout_rate = dropout_rate
+        self._use_revin = use_revin
+        self._revin_params = revin_params
+
         super(InformerModel, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -305,6 +311,7 @@ class InformerModel(PaddleBaseModelImpl):
         }
         return fit_params
         
+    @revin_norm
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 

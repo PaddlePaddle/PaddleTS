@@ -29,6 +29,7 @@ import paddle.nn.functional as F
 
 from paddlets.datasets import TSDataset
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
+from paddlets.models.forecasting.dl.revin import revin_norm
 from paddlets.models.common.callbacks import Callback
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
@@ -512,6 +513,8 @@ class NBEATSModel(PaddleBaseModelImpl):
         loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4), 
+        use_revin: bool = False,
+        revin_params: Dict[str, Any] = dict(eps=1e-5, affine=True),
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
         batch_size: int = 32,
@@ -527,6 +530,8 @@ class NBEATSModel(PaddleBaseModelImpl):
         self._layer_widths = layer_widths
         self._expansion_coefficient_dim = expansion_coefficient_dim
         self._trend_polynomial_degree = trend_polynomial_degree
+        self._use_revin = use_revin
+        self._revin_params = revin_params
         # If not using general architecture, for interpretable purpose, number of stacks is forced to be 2, for trend and seasonality implementation
         if not self._generic_architecture:
             self._num_stacks = 2
@@ -608,6 +613,7 @@ class NBEATSModel(PaddleBaseModelImpl):
             fit_params["observed_cov_dim"] = train_tsdataset[0].get_observed_cov().data.shape[1]
         return fit_params
 
+    @revin_norm
     def _init_network(self) -> paddle.nn.Layer:
         """
         Init network.
