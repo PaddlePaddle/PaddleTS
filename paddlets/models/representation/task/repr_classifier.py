@@ -11,7 +11,6 @@ from paddlets.ensemble.stacking_ensemble import StackingEnsembleBase
 from paddlets.models.representation.dl.repr_base import ReprBaseModel
 from paddlets.models.representation import TS2Vec
 from paddlets.ensemble.base import EnsembleBase
-from paddlets.models.classify.base import BaseClassifier
 from paddlets.logger.logger import raise_if, Logger, raise_log, raise_if_not
 
 logger = Logger(__name__)
