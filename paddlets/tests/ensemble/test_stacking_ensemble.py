@@ -11,6 +11,7 @@ import unittest
 from unittest import TestCase
 
 from paddlets.models.forecasting import MLPRegressor
+from paddlets.models.forecasting import NHiTSModel
 from paddlets import TimeSeries, TSDataset
 from paddlets.ensemble import StackingEnsembleForecaster
 
@@ -43,12 +44,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
 
         model2 = StackingEnsembleForecaster(
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
         assert model2 is not None
 
         # case3
@@ -60,12 +64,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
 
         model2 = StackingEnsembleForecaster(
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)],
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)],
             final_learner=LinearRegression())
         assert model2 is not None
 
@@ -79,13 +86,17 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
+
         with self.assertRaises(ValueError):
             model2 = StackingEnsembleForecaster(
                 in_chunk_len=7 * 96 + 20 * 4,
                 out_chunk_len=96,
                 skip_chunk_len=4 * 4,
-                estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)],
-                final_learner=MLPRegressor)
+                estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)],
+                final_learner=NHiTSModel)
 
     def test_fit(self):
         np.random.seed(2022)
@@ -120,11 +131,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
+
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(tsdataset)
 
@@ -137,12 +152,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
 
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)],
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)],
             final_learner=LinearRegression())
 
         model1.fit(tsdataset)
@@ -180,12 +198,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
 
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -222,12 +243,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"]
+        }
 
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=0,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -241,7 +265,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=0,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(tsdataset,tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -256,7 +280,7 @@ class TestEnsembleBase(TestCase):
             out_chunk_len=16,
             skip_chunk_len=0,
             resampling_strategy="holdout",
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         test,val = tsdataset.split(0.2)
         model1.fit(test,val)
@@ -268,7 +292,7 @@ class TestEnsembleBase(TestCase):
 
         #case5 pipeline
         pipe_params = {
-            "steps":[(Fill,{"cols":"a1"}),(MLPRegressor, mlp1_params)]
+            "steps":[(Fill,{"cols":"a1"}),(NHiTSModel,nhits_params)]
         }
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
@@ -317,12 +341,15 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"],
+        }
 
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(tsdataset)
         model1.save(path="/tmp/ensemble_test2/")

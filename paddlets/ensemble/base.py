@@ -4,109 +4,83 @@
 import abc
 import os
 import pickle
-
 from typing import List, Optional, Tuple
 
-from paddlets.models.base import BaseModel
 from paddlets.datasets.tsdataset import TSDataset
 from paddlets.logger import raise_log
 from paddlets.models.model_loader import load as paddlets_model_load
-from paddlets.pipeline.pipeline import Pipeline
 
 
-class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
-    """
-    The EnsembleBase Class.
-
-    Args:
-
-        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
-            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
-            default, it will NOT skip any time steps.
-        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets forecasters.
-        verbose(bool): Turn on Verbose mode,set to true by default.
-
-    """
+class EnsembleBase(metaclass=abc.ABCMeta):
     def __init__(self,
-                 in_chunk_len: int,
-                 out_chunk_len: int,
-                 skip_chunk_len: int = 0,
                  estimators: List[Tuple[object, dict]] = None,
-                 verbose=False
+                 verbose: bool = False
                  ) -> None:
+        """
+        The EnsembleBase Class.
 
-        def _check_estimators():
-            # when estimator is type of int, skip check, use for model save and load
-            if isinstance(estimators, int):
-                return
-            if (
-                    estimators is None
-                    or len(estimators) == 0
-                    or not isinstance(estimators, list)
-                    or not all([len(estimator) == 2 for estimator in estimators])
-            ):
-                raise ValueError(
-                    "Invalid 'estimators' attribute, 'estimators' should be a list"
-                    " of (class,params) tuples."
-                )
+        Args:
 
-            from paddlets.models.representation.dl.repr_base import ReprBaseModel
-            if all([issubclass(e[0], BaseModel) or issubclass(e[0], Pipeline) for e in estimators]):
-                pass
-            elif all([issubclass(e[0], ReprBaseModel) for e in estimators]):
-                pass
-            else:
-                raise ValueError("Estimators have unsupported or uncompatible models")
+            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models.
+            verbose(bool): Turn on Verbose mode,set to False by default.
 
-        _check_estimators()
-        self._in_chunk_len = in_chunk_len
-        self._out_chunk_len = out_chunk_len
-        self._skip_chunk_len = skip_chunk_len
+        """
+        self._check_estimators(estimators)
+        self._set_params(estimators)
         self._verbose = verbose
-        self.fitted = False
 
+    def _check_estimators(self, estimators: List[Tuple[object, dict]]) -> None:
+        """
+        Check estimators
+
+        Check and valid estimators
+
+        Args:
+
+            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models.
+
+        """
+        # when estimator is type of int, skip check, use for model save and load
+        if isinstance(estimators, int):
+            return
+        if (
+                estimators is None
+                or len(estimators) == 0
+                or not isinstance(estimators, list)
+                or not all([len(estimator) == 2 for estimator in estimators])
+        ):
+            raise ValueError(
+                "Invalid 'estimators' attribute, 'estimators' should be a list"
+                " of (model_class,model_params) tuples."
+            )
+
+    def _set_params(self, estimators: List[Tuple[object, dict]]) -> List:
+        """
+        Set estimators params
+
+        Set params and initial estimators.
+
+        Args:
+
+            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models.
+
+        """
         self._estimators = []
         for index in range(len(estimators)):
             e = estimators[index]
             model_params = e[-1]
-            if issubclass(e[0], BaseModel):
-                model_params["in_chunk_len"] = self._in_chunk_len
-                model_params["out_chunk_len"] = self._out_chunk_len
-                model_params["skip_chunk_len"] = self._skip_chunk_len
-            elif issubclass(e[0], Pipeline):
-                e[1]["steps"][-1][1]["in_chunk_len"] = self._in_chunk_len
-                e[1]["steps"][-1][1]["out_chunk_len"] = self._out_chunk_len
-                e[1]["steps"][-1][1]["skip_chunk_len"] = self._skip_chunk_len
             try:
                 estimator = e[0](**model_params)
             except Exception as e:
                 raise_log(ValueError("init error: %s" % (str(e))))
             self._estimators.append(estimator)
 
+    @abc.abstractmethod
     def fit(self,
             train_tsdataset: TSDataset,
             valid_tsdataset: Optional[TSDataset] = None) -> None:
         """
-        Fit 
-
-        Args:
-            train_tsdataset(TSDataset): Train dataset.
-            valid_tsdataset(TSDataset, optional): Valid dataset.
-        """
-        if valid_tsdataset:
-            self._fit(train_tsdataset, valid_tsdataset)
-        else:
-            self._fit(train_tsdataset)
-        self.fitted = True
-
-    @abc.abstractmethod
-    def _fit(self,
-            train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None) -> None:
-        """
-        Fit 
+        Fit
 
         Args:
             train_tsdataset(TSDataset): Train dataset.
@@ -130,14 +104,14 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def predict(self, tsdataset: TSDataset) -> None:
         """
-        Predict 
+        Predict
 
         Args:
             tsdataset(TSDataset): Dataset to predict.
 
         """
         pass
-    
+
     def _predict_estimators(self,
                             tsdataset: TSDataset) -> List[TSDataset]:
         """
@@ -186,13 +160,13 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
         self._estimators = model_tmp
 
     @staticmethod
-    def load(path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> "EnsembleForecasterBase":
+    def load(path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> "EnsembleBase":
         """
         Load the ensemble model from a directory.
 
         Args:
             path(str): Input directory path.
-            ensemble_file_name(str): Name of loaded ensemble object. This file contains meta information of ensemble model.
+            ensemble_file_name(str): Name of ensemble object. This file contains meta information of ensemble.
 
         Returns:
             The loaded ensemble model.
@@ -221,3 +195,5 @@ class EnsembleForecasterBase(BaseModel, metaclass=abc.ABCMeta):
         # Add model to ensemble
         ensemble._estimators = estimators
         return ensemble
+
+        

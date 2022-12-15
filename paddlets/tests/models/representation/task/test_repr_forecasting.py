@@ -49,15 +49,7 @@ class TestReprForcaster(TestCase):
         static_cov = {"f": 1., "g": 2.}
         # multi target
         self.tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
-        self.ts = get_dataset('ECL')
-        self.ts, _ = self.ts.split("2013-10-31 23:00:00")
-        # split
-        self.ts_train, self.ts_val_test = self.ts.split("2013-03-31 23:00:00")
-        scaler = StandardScaler()
-        scaler.fit(self.ts_train)
-        self.ts = scaler.transform(self.ts)
-        self.ts_train_scaled = scaler.transform(self.ts_train)
-        self.ts_val_test_scaled = scaler.transform(self.ts_val_test)
+        self.ts = self.tsdataset
  
     def test_repr_forecasting(self):
         # case1
@@ -75,6 +67,7 @@ class TestReprForcaster(TestCase):
         predictions = model.predict(self.tsdataset)
         assert predictions.target.data.shape[0] == 1
         assert predictions.target.data.shape[1] == 2
+        
         # case2 skip != 0
         ts2vec_params = {"segment_size": 20,  # maximum sequence length
                          "repr_dims": 10,
@@ -195,7 +188,7 @@ class TestReprForcaster(TestCase):
                          "batch_size": 4,
                          "max_epochs": 1}
         model = ReprForecasting(in_chunk_len=10,
-                                out_chunk_len=1200,
+                                out_chunk_len=100,
                                 skip_chunk_len=0,
                                 repr_model=TS2Vec,
                                 repr_model_params=ts2vec_params)
@@ -206,8 +199,8 @@ class TestReprForcaster(TestCase):
                            #start="2013-07-01 00:00:00",  # the point after "start" as the first point
                            #start="2013-02-28 23:00:00",  # the point after "start" as the first point
                            metric=MAE(),
-                           predict_window=1200,  # respect to out_chunk_len
-                           stride=1200,  # respect to sampling_stride
+                           predict_window=100,  # respect to out_chunk_len
+                           stride=100,  # respect to sampling_stride
                            return_predicts=True  #
                            )
 
@@ -215,12 +208,11 @@ class TestReprForcaster(TestCase):
         cost_params = {#"segment_size": 20,
                          "sampling_stride":50,
                          "repr_dims": 10,
-         
                          "batch_size": 4,
                          "max_epochs": 1}
         from paddlets.models.representation import CoST
         model2 = ReprForecasting(in_chunk_len=10,
-                                out_chunk_len=1200,
+                                out_chunk_len=100,
                                 skip_chunk_len=0,
                                 repr_model=CoST,
                                 repr_model_params=cost_params)
@@ -229,8 +221,8 @@ class TestReprForcaster(TestCase):
         repr_mae, ts_pred = backtest(data=self.ts,
                            model=model,
                            metric=MAE(),
-                           predict_window=1200,  # respect to out_chunk_len
-                           stride=1200,  # respect to sampling_stride
+                           predict_window=100,  # respect to out_chunk_len
+                           stride=100,  # respect to sampling_stride
                            return_predicts=True  #
                            )
         
@@ -264,7 +256,7 @@ class TestReprForcaster(TestCase):
                                 repr_model=TS2Vec,
                                 repr_model_params=ts2vec_params)
  
-        x_meta, y_meta = model._generate_meta_data(self.tsdataset)
+        x_meta, y_meta = model._generate_fit_meta_data(self.tsdataset)
         assert len(x_meta) == 199
         assert len(y_meta) == 199
  
@@ -278,7 +270,7 @@ class TestReprForcaster(TestCase):
                                 repr_model=TS2Vec,
                                 repr_model_params=ts2vec_params)
  
-        x_meta, y_meta = model._generate_meta_data(self.tsdataset)
+        x_meta, y_meta = model._generate_fit_meta_data(self.tsdataset)
         assert len(x_meta) == 180
         assert len(y_meta) == 180
  
@@ -293,10 +285,10 @@ class TestReprForcaster(TestCase):
                                 repr_model=TS2Vec,
                                 repr_model_params=ts2vec_params)
  
-        x_meta, y_meta = model._generate_meta_data(self.tsdataset)
+        x_meta, y_meta = model._generate_fit_meta_data(self.tsdataset)
         assert len(x_meta) == 36
         assert len(y_meta) == 36
 
+ 
 if __name__ == "__main__":
     unittest.main()
-  
