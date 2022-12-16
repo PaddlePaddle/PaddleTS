@@ -155,6 +155,75 @@ class TestAnomalyBaseModel(unittest.TestCase):
         """
         self.default_modelname = "model"
         super().setUp()
+        
+    def test_check_tsdataset(self):
+        """Test check_tsdataset"""
+        ############################################
+        # case 1 (bad case)                        #
+        # target is float.                         #
+        ############################################
+        model = self._build_ae_model()
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        paddlets_ds['label'] = paddlets_ds['label'].astype(float)
+        with self.assertRaises(ValueError):
+            model.fit(paddlets_ds)
+            
+        ############################################
+        # case 2 (bad case)                        #
+        # known is not None.                       #
+        ############################################
+        model = self._build_ae_model()
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        known_df = pd.DataFrame(
+            np.random.randn(200, 2), 
+            index=pd.date_range('2022-01-01', periods=200, freq='1D')
+        )
+        known_ts = TimeSeries.load_from_dataframe(data=known_df)
+        paddlets_ds.known_cov = known_ts
+        with self.assertLogs("paddlets", level="WARNING") as captured:
+            model.fit(paddlets_ds)
+            self.assertEqual(
+                captured.records[0].getMessage(),
+                "Input tsdataset contains known cov `0,1` which will be ignored in anomaly detection scenario."
+            )
+            
+        ############################################
+        # case 3 (bad case)                        #
+        # static is not None.                      #
+        ############################################
+        model = self._build_ae_model()
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        static_dict = {'static': 1}
+        paddlets_ds.static_cov = static_dict
+        with self.assertLogs("paddlets", level="WARNING") as captured:
+            model.fit(paddlets_ds)
+            self.assertEqual(
+                captured.records[0].getMessage(),
+                "Input tsdataset contains static cov `static` which will be ignored in anomaly detection scenario."
+            )
+            
+        ######################################################
+        # case 4 (bad case)                                  #
+        # There are non numerical types in the observed.     #
+        ######################################################
+        model = self._build_ae_model()
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        paddlets_ds['a'] = paddlets_ds['a'].astype(object)
+        with self.assertRaises(ValueError):
+            model.fit(paddlets_ds)
+            
+        ############################################
+        # case 5 (bad case)                        #
+        # The observed are all integers.           #
+        ############################################
+        model = self._build_ae_model()
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        observed = paddlets_ds.get_observed_cov()
+        for col, dtype in observed.dtypes.items():
+            paddlets_ds[col] = paddlets_ds[col].astype(int)
+        with self.assertRaises(ValueError):
+            model.fit(paddlets_ds)
+        
 
     def test_save(self):
         """Test AnomalyBaseModel.save()"""
@@ -431,6 +500,98 @@ class TestAnomalyBaseModel(unittest.TestCase):
         self.assertFalse(succeed)
         shutil.rmtree(path)
 
+        ############################################
+        # case 8 (good case)                       
+        # 1) network_model == True
+        # 2) dygraph_to_static == True
+        ############################################
+        model = self._build_ae_model()
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # no validation dataset
+        model.fit(train_tsdataset=paddlets_ds)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, self.default_modelname), network_model=True, dygraph_to_static=True)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        files = set(os.listdir(path))
+        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+
+        # mode type AutoEncoder
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
+        self.assertTrue(AutoEncoder.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(AnomalyBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.anomaly.dl.autoencoder
+        self.assertEqual(AutoEncoder.__module__, model_meta["modulename"])
+        self.assertEqual("anomaly", model_meta['model_type'])
+        self.assertTrue("model_threshold" in model_meta)
+        self.assertEqual({"in_chunk_len": 10}, model_meta["size"])
+        self.assertEqual({"observed_cov_numeric": [None, 10, 2]}, model_meta["input_data"])
+        shutil.rmtree(path)
+
+        ############################################
+        # case 9 (good case)                       
+        # 1) network_model == True
+        # 2) dygraph_to_static == False
+        ############################################
+        model = self._build_ae_model()
+
+        paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        # no validation dataset
+        model.fit(train_tsdataset=paddlets_ds)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, self.default_modelname), network_model=True, dygraph_to_static=False)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        files = set(os.listdir(path))
+        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+
+        # mode type AutoEncoder
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
+        self.assertTrue(AutoEncoder.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(AnomalyBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.anomaly.dl.autoencoder
+        self.assertEqual(AutoEncoder.__module__, model_meta["modulename"])
+        self.assertEqual("anomaly", model_meta['model_type'])
+        self.assertTrue("model_threshold" in model_meta)
+        self.assertEqual({"in_chunk_len": 10}, model_meta["size"])
+        self.assertEqual({"observed_cov_numeric": [None, 10, 2]}, model_meta["input_data"])
+        shutil.rmtree(path)
+
     def test_load(self):
         """Test AnomalyBaseModel.load()"""
         ###################################
@@ -662,10 +823,142 @@ class TestAnomalyBaseModel(unittest.TestCase):
         self.assertFalse(succeed)
         shutil.rmtree(path)
 
+        ###############################
+        # case 6 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == True
+        ###############################
+        # build + fit + save an AE Model.
+        in_chunk_len = 10
+        model = self._build_ae_model(in_chunk_len=in_chunk_len)
+
+        train_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        valid_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        model.fit(train_tsdataset=train_paddlets_ds, valid_tsdataset=valid_paddlets_ds)
+        model_network = model._network
+
+        predicted_paddlets_ds = model.predict(paddlets_ds)
+        self.assertEqual(
+            ((len(paddlets_ds.get_observed_cov())-in_chunk_len+1), len(paddlets_ds.get_target().data.columns)),
+            predicted_paddlets_ds.get_target().data.shape
+        )
+        _, input_data_ts = paddlets_ds.split(len(paddlets_ds.observed_cov) - 10)
+        input_data_ts_score = model.predict_score(input_data_ts)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path, network_model=True, dygraph_to_static=True)
+
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_path + ".pdmodel", abs_model_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+
+        input_handle = predictor.get_input_handle(input_names[0])
+        input_handle.reshape([1, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+
+        input_data = input_data_ts.observed_cov.to_numpy()
+        input_data = input_data.reshape([1, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]]).astype("float32")
+        input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (1, model_meta['size']['in_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
+        loss = model._get_loss(paddle.to_tensor(output_data), paddle.to_tensor(input_data))
+        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], delta=0.001)
+
+        shutil.rmtree(path)
+
+        ###############################
+        # case 6 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == False
+        ###############################
+        # build + fit + save an AE Model.
+        in_chunk_len = 10
+        model = self._build_ae_model(in_chunk_len=in_chunk_len)
+
+        train_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        valid_paddlets_ds = self._build_mock_ts_dataset(random_data=True)
+        model.fit(train_tsdataset=train_paddlets_ds, valid_tsdataset=valid_paddlets_ds)
+        model_network = model._network
+
+        predicted_paddlets_ds = model.predict(paddlets_ds)
+        self.assertEqual(
+            ((len(paddlets_ds.get_observed_cov())-in_chunk_len+1), len(paddlets_ds.get_target().data.columns)),
+            predicted_paddlets_ds.get_target().data.shape
+        )
+        _, input_data_ts = paddlets_ds.split(len(paddlets_ds.observed_cov) - 10)
+        input_data_ts_score = model.predict_score(input_data_ts)
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        internal_filename_map = {
+            "network_model":"%s.pdmodel" % (self.default_modelname),
+            "network_model_params":"%s.pdiparams" % (self.default_modelname),
+            "network_model_params_info":"%s.pdiparams.info" % (self.default_modelname),
+            "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
+            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+        }
+
+        abs_model_path = os.path.join(path, self.default_modelname)
+        model.save(abs_model_path, network_model=True, dygraph_to_static=False)
+
+        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_path + ".pdmodel", abs_model_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+
+        input_handle = predictor.get_input_handle(input_names[0])
+        input_handle.reshape([1, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+
+        input_data = input_data_ts.observed_cov.to_numpy()
+        input_data = input_data.reshape([1, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]]).astype("float32")
+        input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (1, model_meta['size']['in_chunk_len'], list(model_meta['input_data'].values())[0][-1]))
+        loss = model._get_loss(paddle.to_tensor(output_data), paddle.to_tensor(input_data))
+        self.assertAlmostEqual(input_data_ts_score.target.data.iloc[0, 0], loss[0], delta=0.001)
+
+        shutil.rmtree(path)
+
     def _build_ae_model(
         self,
         in_chunk_len: int = 10,
-        max_epochs: int = 5,
+        max_epochs: int = 1,
     ) -> AutoEncoder:
         """
         Internal-only method, used for building an AutoEncoder model. The model is inherited from AnomalyBaseModel.

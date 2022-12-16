@@ -19,7 +19,7 @@ and excellent user experiences for practitioners and professionals. It’s featu
   NBEATS, NHiTS, LSTNet, TCN, Transformer, DeepAR(Probabilistic), Informer, etc. for forecasting, TS2Vec for representation
 
 * A set of transformation operators for data preprocessing (e.g. missing values/outliers handling,
-  one-hot encoding, normalization, and automatic date/time-related covariate generation, etc.)
+  one-hot encoding, normalization, and automatic date/time-related covariates generation, etc.)
 
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary)
 
@@ -29,9 +29,10 @@ and excellent user experiences for practitioners and professionals. It’s featu
 
 Recently updated:
 
-* Time series anomaly detection model supported, with deep learning models AutoEncoder / VAE / AnomalyTransformer released
+* Released a new time series representation model, i.e. Contrastive Learning of Disentangled Seasonal-trend Representations(CoST)
 
-* Third-party [pyod](https://github.com/yzhao062/pyod) ML models integration supported
+* Time series anomaly detection model supported, with three deep models released, including AE(AutoEncoder), VAE(Variational AutoEncoder), and AnomalyTransformer
+* Third-party `pyod <https://github.com/yzhao062/pyod>`_ ML models integration supported
 
 * Support time series model ensemble with two types of ensemble forecaster, StackingEnsembleForecaster and WeightingEnsembleForecaster proposed
 

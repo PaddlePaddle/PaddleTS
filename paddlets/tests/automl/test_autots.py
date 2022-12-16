@@ -97,8 +97,8 @@ class TestOptimizeRunner(TestCase):
         from ray.tune import qrandint
         paddlets_configer = SearchSpaceConfiger()
         dl = [RNNBlockRegressor, NHiTSModel, TransformerModel, MLPRegressor, LSTNetRegressor]
-        tsdataset = get_dataset("UNI_WTH")
-        _, tsdataset = tsdataset.split(int(len(tsdataset.get_target())*0.99))
+        tsdataset = get_dataset("WTH")
+        _, tsdataset = tsdataset.split(int(len(tsdataset.get_target())*0.97))
         #数据归一化，若不归一化，可能出现模型训练梯度消失，或者爆炸问题。
         from paddlets.transform import StandardScaler
         scaler = StandardScaler()

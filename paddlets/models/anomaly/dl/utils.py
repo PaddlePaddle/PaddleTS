@@ -1,14 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 from typing import List, Dict, Any, Callable, Optional
+import functools
 
 from paddle.optimizer import Optimizer
 import numpy as np
+import pandas as pd
 import paddle
 import paddle.nn.functional as F
 
-from paddlets.logger import raise_if_not, raise_log, Logger
+from paddlets.logger import raise_if_not, raise_if, raise_log, Logger
+from paddlets.datasets import TSDataset
+from paddlets.models import BaseModel
+
 logger = Logger(__name__)
+
+
+def percentile(anomaly_score: np.ndarray, q: float=100):
+    """
+    The percentile function to get anomaly threshold.
+
+    Args:
+        anomaly_score(np.ndarray): Anomaly score.
+        q(float): The parameter used to calculate the quantile, range is [0, 100].
+
+    Return:
+        threshold(float): Anomaly threshold.
+    """
+    return np.percentile(anomaly_score, q)
 
 
 def my_kl_loss(p: paddle.Tensor, q: paddle.Tensor):
@@ -22,7 +41,7 @@ def my_kl_loss(p: paddle.Tensor, q: paddle.Tensor):
     Return:
         loss(paddle.Tensor): Got loss.
     """
-    res = paddle.nn.KLDivLoss(reduction='none')(p, q)
+    res = p * (paddle.log(p + 0.0001) - paddle.log(q + 0.0001))
     return paddle.mean(paddle.sum(res, axis=-1), axis=1)
     
     
@@ -115,7 +134,7 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
     return cri
 
 
-def anomaly_get_thresold(model: Callable[..., paddle.Tensor], 
+def anomaly_get_threshold(model: Callable[..., paddle.Tensor], 
                          train_dataloader: paddle.io.DataLoader, 
                          thre_dataloader: paddle.io.DataLoader, 
                          temperature: float= 50,  
@@ -125,7 +144,7 @@ def anomaly_get_thresold(model: Callable[..., paddle.Tensor],
                          win_size: int=100, 
                          ):
     """
-    Threshold are calculated based on Association-based Anomaly Criterion.
+    Threshold is calculated based on Association-based Anomaly Criterion.
     
     Args:
         model(Callable[..., paddle.Tensor]): Anomaly transformer model.
@@ -138,7 +157,7 @@ def anomaly_get_thresold(model: Callable[..., paddle.Tensor],
         win_size(int): The size of the loopback window, i.e. the number of time steps feed to the model.
 
     Return:
-        thresold(float|None): The thresold to judge anomaly.
+        threshold(float|None): The threshold to judge anomaly.
     
     """
     model.eval()
@@ -198,8 +217,8 @@ def anomaly_get_thresold(model: Callable[..., paddle.Tensor],
     test_energy = np.array(attens_energy)
     # comb energy
     combined_energy = np.concatenate([train_energy, test_energy], axis=0)
-    thresold = np.percentile(combined_energy, 100 - anormly_ratio)    #分位数
-    return thresold
+    threshold = np.percentile(combined_energy, 100 - anormly_ratio)
+    return threshold
 
 
 def result_adjust(pred: np.ndarray, real: np.ndarray):
@@ -235,29 +254,14 @@ def result_adjust(pred: np.ndarray, real: np.ndarray):
             pred[i] = 1
     return np.array(pred)
 
-    
-def max(anomaly_score: np.ndarray):
-    """
-    The max function to get anomaly thresold.
-
-    Args:
-        anomaly_score(np.ndarray): Anomaly score.
-
-    Return:
-        thresold(float): Anomaly thresold.
-    """
-    return np.max(anomaly_score)
-
 
 def smooth_l1_loss_vae(output_tensor_list: List[paddle.Tensor], 
-                       y_true: paddle.Tensor, 
                        kld_beta: float=0.2):
     """ 
     smooth l1 loss.
     
     Args:
         output_tensor_list(list[paddle.Tensor]): Model ouput.
-        y_true(paddle.Tensor): Ground truth (correct) target values, keep style.
         kld_beta(float): Kld beta in 0~1.
 
     Return:
@@ -268,3 +272,62 @@ def smooth_l1_loss_vae(output_tensor_list: List[paddle.Tensor],
     kld = -0.5 * paddle.sum(1 + logvar - mu ** 2 - logvar.exp())
     loss = recon_loss + kld_beta * kld
     return loss
+
+
+def to_tsdataset(
+    scenario: str = "anomaly_label"
+    ) -> Callable[..., Callable[..., TSDataset]]:
+    """A decorator, used for converting ndarray to tsdataset in anomaly dl models. 
+
+    Args:
+        scenario(str): The task type. ["anomaly_label", "anomaly_score"] is optional.
+    Returns:
+        Callable[..., Callable[..., TSDataset]]: Wrapped core function.
+    """
+    def decorate(func) -> Callable[..., TSDataset]:
+        @functools.wraps(func)
+        def wrapper(
+            obj: BaseModel,
+            test_data: TSDataset,
+            train_data: TSDataset,
+        ) -> TSDataset:
+            """Core processing logic.
+
+            Args:
+                obj(BaseModel): BaseModel instance.
+                test_data(TSDataset): Test tsdataset.
+                train_data(TSDataset): Train tsdataset.
+                
+            Returns:
+                TSDataset: Predict results.
+            """
+            raise_if_not(
+                scenario in ("anomaly_label", "anomaly_score"),
+                f"{scenario} not supported, ['anomaly_label', 'anomaly_score'] is optional."
+            )
+            
+            results = func(obj, test_data, train_data)
+            # Generate target cols
+            target_cols = test_data.get_target()
+            if target_cols is None:
+                target_cols = [scenario]
+            else:
+                target_cols = target_cols.data.columns
+                if scenario == "anomaly_score":
+                    target_cols = target_cols + '_score'
+            # Generate target index freq
+            target_index = test_data.get_observed_cov().data.index
+            if isinstance(target_index, pd.RangeIndex):
+                freq = target_index.step
+            else:
+                freq = target_index.freqstr
+            results_size = results.size
+            raise_if(
+                results_size == 0,
+                f"There is something wrong, anomaly predict size is 0, you'd better check the tsdataset or the predict logic."
+            )
+            target_index = target_index[:results_size]
+            anomaly_target = pd.DataFrame(results, index=target_index, columns=target_cols)
+            return TSDataset.load_from_dataframe(anomaly_target, freq=freq)
+        return wrapper
+    return decorate

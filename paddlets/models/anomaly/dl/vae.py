@@ -198,10 +198,12 @@ class VAE(AnomalyBaseModel):
         sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        thresold_coeff(float): The coefficient of thresold.
-        thresold(float|None): The thresold to judge anomaly.
+        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        threshold_coeff(float): The coefficient of threshold.
+        threshold(float|None): The threshold to judge anomaly.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
         callbacks(List[Callback]): Customized callback functions.
@@ -228,10 +230,12 @@ class VAE(AnomalyBaseModel):
         _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]): Loss function.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        _thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        _thresold_coeff(float): The coefficient of thresold.
-        _thresold(float|None): The thresold to judge anomaly.
+        _threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        _threshold_coeff(float): The coefficient of threshold.
+        _threshold(float|None): The threshold to judge anomaly.
         _anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        _pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        _pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
         _callbacks(List[Callback]): Customized callback functions.
@@ -260,10 +264,12 @@ class VAE(AnomalyBaseModel):
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = U.smooth_l1_loss_vae,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        thresold_fn: Callable[..., float] = U.max,
-        thresold: Optional[float] = None,
-        thresold_coeff: float = 1.0,
+        threshold_fn: Callable[..., float] = U.percentile,
+        threshold: Optional[float] = None,
+        threshold_coeff: float = 1.0,
         anomaly_score_fn: Callable[..., List[float]] = None,
+        pred_adjust: bool = False,
+        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
@@ -304,10 +310,12 @@ class VAE(AnomalyBaseModel):
             sampling_stride=sampling_stride,
             loss_fn=loss_fn, 
             optimizer_fn=optimizer_fn, 
-            thresold=thresold,
-            thresold_coeff=thresold_coeff,
-            thresold_fn=thresold_fn,
+            threshold=threshold,
+            threshold_coeff=threshold_coeff,
+            threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
+            pred_adjust=pred_adjust,
+            pred_adjust_fn=pred_adjust_fn,
             optimizer_params=optimizer_params, 
             eval_metrics=eval_metrics, 
             callbacks=callbacks, 
@@ -359,6 +367,30 @@ class VAE(AnomalyBaseModel):
         self._last_layer_activation,
         self._stdev
         )
+    
+    def _train_batch(
+        self, 
+        X: Dict[str, paddle.Tensor]
+    ) -> Dict[str, Any]:
+        """Trains one batch of data.
+
+        Args:
+            X(Dict[str, paddle.Tensor]): Dict of feature tensor.
+            y(paddle.Tensor): Target tensor.
+
+        Returns:
+            Dict[str, Any]: Dict of logs.
+        """
+        output = self._network(X)
+        loss = self._compute_loss(output)
+        loss.backward()
+        self._optimizer.step()
+        self._optimizer.clear_grad()
+        batch_logs = {
+            "batch_size": output[-1].shape[0],
+            "loss": loss.item()
+        }
+        return batch_logs
 
     def _predict_batch(
         self, 
@@ -372,8 +404,8 @@ class VAE(AnomalyBaseModel):
         Returns:
             np.ndarray: Prediction results.
         """
-        scores = self._network(X)[0]
-        return scores.numpy()
+        recon, mu_, logvar_, x = self._network(X)
+        return x.numpy(), recon.numpy()
 
     def _predict(
         self, 
@@ -390,9 +422,22 @@ class VAE(AnomalyBaseModel):
         self._network.eval()
         loss_list = []
         for batch_nb, data in enumerate(dataloader):
-            X, y = self._prepare_X_y(data)
-            output = self._network(X)[0]
-            loss = self._get_loss(output, y)
+            recon, mu_, logvar_, x = self._network(data)
+            loss = self._get_loss(recon, x)
             loss_list.extend(loss)
 
         return np.array(loss_list)
+    
+    def _compute_loss(
+        self, 
+        output: List[paddle.Tensor], 
+    ) -> paddle.Tensor:
+        """Compute the loss.
+
+        Args:
+            output(list[paddle.Tensor]): Model ouput.
+
+        Returns:
+            paddle.Tensor: Loss value.
+        """
+        return self._loss_fn(output)

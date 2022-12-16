@@ -22,7 +22,7 @@ from paddlets.metrics import (
     Metric
 )
 from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
-from paddlets.models.forecasting.dl.adapter import DataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import to_tsdataset, check_tsdataset
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, Logger
@@ -31,7 +31,7 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """PaddleTS deep time series framework,
+    """PaddleTS/PaddleTS deep time series framework, 
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
@@ -44,7 +44,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
-        eval_metrics(List[str]): Evaluation metrics of model.
+        eval_metrics(List[str]|List[Metric]): Evaluation metrics of model.
         callbacks(List[Callback]): Customized callback functions.
         batch_size(int): Number of samples per batch.
         max_epochs(int): Max epochs during training.
@@ -88,7 +88,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss_fn: Callable[..., paddle.Tensor] = None,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
+        eval_metrics: Union[List[str], List[Metric]] = [], 
         callbacks: List[Callback] = [], 
         batch_size: int = 128,
         max_epochs: int = 10,
@@ -202,12 +202,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             train_tsdataset = [train_tsdataset]
         for dataset in train_tsdataset:
             self._check_tsdataset(dataset)
-            dataset = data_adapter.to_paddle_dataset(
+            dataset = data_adapter.to_sample_dataset(
                 dataset,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
                 skip_chunk_len=self._skip_chunk_len,
-                sampling_stride=self._sampling_stride,
+                sampling_stride=self._sampling_stride
             )
             if train_dataset is None:
                 train_dataset = dataset
@@ -222,12 +222,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 valid_tsdataset = [valid_tsdataset]
             for dataset in valid_tsdataset:
                 self._check_tsdataset(dataset)
-                dataset = data_adapter.to_paddle_dataset(
+                dataset = data_adapter.to_sample_dataset(
                     dataset,
                     in_chunk_len=self._in_chunk_len,
                     out_chunk_len=self._out_chunk_len,
                     skip_chunk_len=self._skip_chunk_len,
-                    sampling_stride=self._sampling_stride,
+                    sampling_stride=self._sampling_stride
                 )
                 if valid_dataset is None:
                     valid_dataset = dataset
@@ -254,7 +254,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             len(tsdataset.get_target().data) - 1 + self._skip_chunk_len + self._out_chunk_len
         )
         data_adapter = DataAdapter()
-        dataset = data_adapter.to_paddle_dataset(
+        dataset = data_adapter.to_sample_dataset(
             tsdataset,
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
@@ -520,8 +520,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             X(Dict[str, paddle.Tensor]): Dict of feature tensor. 
             y(paddle.Tensor): Target tensor.
         """
-        y = X.pop("future_target")
-        return X, y
+        if "future_target" in X:
+            y = X.pop("future_target")
+            return X, y
+        return X, None
 
     def _compute_loss(
         self, 
@@ -567,3 +569,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             paddle.nn.Layer.
         """
         pass
+
+    def _build_meta(self):
+        res = super()._build_meta()
+        for key, value in self._fit_params.items():
+            if not isinstance(value, int):
+                continue 
+            if value != 0:
+                res['input_data'][key] = value
+        return res
+

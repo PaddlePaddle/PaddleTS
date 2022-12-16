@@ -13,7 +13,7 @@ from paddlets.models.representation.dl.repr_base import ReprBaseModel
 from paddlets.models.representation import TS2Vec,CoST
 from paddlets.ensemble.ensemble_forecaster_base import EnsembleForecasterBase
 from paddlets.logger.logger import raise_if,Logger
-from paddlets.models.forecasting.dl.adapter import DataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import to_tsdataset
 from paddlets.utils.utils import repr_results_to_tsdataset
 
@@ -126,7 +126,7 @@ class ReprForecasting(EnsembleForecasterBase, metaclass=abc.ABCMeta):
         # repr res to tsdataset
         encode_tsdataset = repr_results_to_tsdataset(encode, tsdataset)
         # get samples
-        samples = DataAdapter().to_paddle_dataset(encode_tsdataset,
+        samples = DataAdapter().to_sample_dataset(encode_tsdataset,
                                                   in_chunk_len=1,
                                                   out_chunk_len=self._out_chunk_len,
                                                   skip_chunk_len=self._skip_chunk_len,

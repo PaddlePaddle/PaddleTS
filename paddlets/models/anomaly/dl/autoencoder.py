@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from typing import List, Dict, Any, Callable, Optional
+import collections
 
 from paddle.optimizer import Optimizer
 import paddle.nn.functional as F
@@ -21,7 +22,7 @@ class _AEBlock(paddle.nn.Layer):
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
-        feature_dim(int): The numer of feature.
+        fit_params(dict): The parameters for fitting, including dimensions and dict sizes of variables.
         mlp_hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer for mlp.
         cnn_hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer for cnn.
         activation(Callable[..., paddle.Tensor]): The activation function for the hidden layers.
@@ -29,6 +30,8 @@ class _AEBlock(paddle.nn.Layer):
         kernel_size(int): Kernel size for Conv1D.
         dropout_rate(float): Dropout regularization parameter.
         use_bn(bool): Whether to use batch normalization.
+        embedding_size(int): The size of each one-dimension embedding vector.
+        pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
         
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
@@ -37,13 +40,15 @@ class _AEBlock(paddle.nn.Layer):
         self,
         in_chunk_len: int,
         ed_type: str,
-        feature_dim: int,
+        fit_params: Dict[str, Any],
         hidden_config: List[int],
         activation: Callable[..., paddle.Tensor],
         last_layer_activation: Callable[..., paddle.Tensor],
         kernel_size: int,
         dropout_rate: float,
-        use_bn: bool
+        use_bn: bool,
+        embedding_size: int,
+        pooling: bool,
     ):
         super(_AEBlock, self).__init__()
         raise_if_not(
@@ -54,6 +59,22 @@ class _AEBlock(paddle.nn.Layer):
             np.any(np.array(hidden_config) <= 0),
             f"hidden_config must be > 0, got {hidden_config}."
         )
+        # embedding cate feature
+        self._pooling = pooling
+        self._cat_size = len(fit_params['observed_cat_cols'])
+        self._cat_dim = 0
+        self._num_dim = fit_params['observed_num_dim']
+        if fit_params['observed_cat_cols']:
+            observed_cat_cols = fit_params['observed_cat_cols']
+            self._observed_cat_emb = []
+            for col, col_size in observed_cat_cols.items():
+                self._observed_cat_emb.append(paddle.nn.Embedding(col_size, embedding_size))
+            if pooling:
+                self._cat_dim = embedding_size
+            else:
+                self._cat_dim = embedding_size * len(observed_cat_cols)
+                
+        feature_dim = self._num_dim + self._cat_dim
         if ed_type == 'MLP':
             self._encoder = MLP(in_chunk_len, feature_dim, hidden_config, \
                                activation, last_layer_activation, dropout_rate, use_bn)
@@ -84,11 +105,23 @@ class _AEBlock(paddle.nn.Layer):
         Returns:
             paddle.Tensor: Output of model.
         """        
-        X = paddle.transpose(X["observed_cov_numeric"], perm=[0, 2, 1])
-        X = self._encoder(X)
-        X = self._decoder(X)
+        x = paddle.transpose(X["observed_cov_numeric"], perm=[0, 2, 1])
+        if self._cat_size > 0:
+            feature_cat = []
+            observed_cat = paddle.transpose(X["observed_cov_categorical"], perm=[0, 2, 1])
+            for i in range(self._cat_size):
+                feature_cat.append(self._observed_cat_emb[i](observed_cat[:, i]))
+            if self._pooling:
+                feature_cat = paddle.stack(feature_cat, axis=-1).mean(axis=-1)
+            else:
+                feature_cat = paddle.concat(feature_cat, axis=-1)
+            feature_cat = paddle.transpose(feature_cat, perm=[0, 2, 1])
+            x = paddle.concat([x, feature_cat], axis=-2)
+            
+        h = self._encoder(x)
+        recon = self._decoder(h)
         
-        return paddle.transpose(X, perm=[0, 2, 1])
+        return paddle.transpose(recon, perm=[0, 2, 1]), paddle.transpose(x, perm=[0, 2, 1])
         
 
 class AutoEncoder(AnomalyBaseModel):
@@ -99,9 +132,12 @@ class AutoEncoder(AnomalyBaseModel):
         sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        thresold_fn(Callable[..., float]|None): The method to get anomaly thresold.
-        thresold(float|None): The thresold to judge anomaly.
+        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
+        q(float): The parameter used to calculate the quantile which range is [0, 100].
+        threshold(float|None): The threshold to judge anomaly.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
         callbacks(List[Callback]): Customized callback functions.
@@ -118,15 +154,20 @@ class AutoEncoder(AnomalyBaseModel):
         kernel_size(int): Kernel size for Conv1D.
         dropout_rate(float): Dropout regularization parameter.
         use_bn(bool): Whether to use batch normalization.
+        embedding_size(int): The size of each embedding vector.
+        pooling: Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
 
     Attributes:
         _in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
         _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]): Loss function.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
-        _thresold_fn(Callable[..., float]|None)): The method to get anomaly thresold.
-        _thresold(float|None): The thresold to judge anomaly.
+        _threshold_fn(Callable[..., float]|None)): The method to get anomaly threshold.
+        _q(float): The parameter used to calculate the quantile which range is [0, 100].
+        _threshold(float|None): The threshold to judge anomaly.
         _anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        _pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        _pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
         _callbacks(List[Callback]): Customized callback functions.
@@ -143,6 +184,8 @@ class AutoEncoder(AnomalyBaseModel):
         _kernel_size(int): Kernel size for Conv1D.
         _dropout_rate(float): Dropout regularization parameter.
         _use_bn(bool): Whether to use batch normalization.
+        _embedding_size(int): The size of each embedding vector.
+        _pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
     """
     def __init__(
         self,
@@ -150,10 +193,13 @@ class AutoEncoder(AnomalyBaseModel):
         sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        thresold_fn: Callable[..., float] = U.max,
-        thresold: Optional[float] = None,
-        thresold_coeff: float = 1.0,
+        threshold_fn: Callable[..., float] = U.percentile,
+        q: float = 100,
+        threshold: Optional[float] = None,
+        threshold_coeff: float = 1.0,
         anomaly_score_fn: Callable[..., List[float]] = None,
+        pred_adjust: bool = False,
+        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
@@ -170,7 +216,8 @@ class AutoEncoder(AnomalyBaseModel):
         hidden_config: List[int] = None,
         kernel_size: int = 3,
         dropout_rate: float = 0.2,
-
+        embedding_size: int = 16,
+        pooling: bool = False,
     ):
         self._hidden_config = (
             hidden_config if hidden_config else [32, 16]
@@ -181,16 +228,21 @@ class AutoEncoder(AnomalyBaseModel):
         self._activation = activation
         self._last_layer_activation = last_layer_activation
         self._dropout_rate = dropout_rate
+        self._embedding_size = embedding_size
+        self._pooling = pooling
+        self._q = q
 
         super(AutoEncoder, self).__init__(
             in_chunk_len=in_chunk_len, 
             sampling_stride=sampling_stride,
             loss_fn=loss_fn, 
             optimizer_fn=optimizer_fn,
-            thresold=thresold,
-            thresold_coeff=thresold_coeff,
-            thresold_fn=thresold_fn,
+            threshold=threshold,
+            threshold_coeff=threshold_coeff,
+            threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
+            pred_adjust=pred_adjust,
+            pred_adjust_fn=pred_adjust_fn,
             optimizer_params=optimizer_params, 
             eval_metrics=eval_metrics, 
             callbacks=callbacks, 
@@ -215,8 +267,21 @@ class AutoEncoder(AnomalyBaseModel):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        train_df = train_tsdataset.to_dataframe()
+        observed_cat_cols = collections.OrderedDict()
+        observed_num_cols = []
+        observed_train_tsdataset = train_tsdataset.get_observed_cov()
+        observed_dtypes = dict(observed_train_tsdataset.dtypes)
+        for col in observed_train_tsdataset.columns:
+            if np.issubdtype(observed_dtypes[col], np.integer):
+                observed_cat_cols[col] = len(train_df[col].unique())
+            else:
+                observed_num_cols.append(col)
+        
         fit_params = {
-            "observed_dim": train_tsdataset.get_observed_cov().data.shape[1]
+            "observed_cat_cols": observed_cat_cols,
+            "observed_num_dim": len(observed_num_cols),
+            "observed_cat_dim": len(observed_cat_cols),
         }
         return fit_params
         
@@ -229,11 +294,27 @@ class AutoEncoder(AnomalyBaseModel):
         return _AEBlock(
             self._in_chunk_len,
             self._ed_type,
-            self._fit_params["observed_dim"],
+            self._fit_params,
             self._hidden_config,
             self._activation,
             self._last_layer_activation,
             self._kernel_size,
             self._dropout_rate,
-            self._use_bn
+            self._use_bn,
+            self._embedding_size,
+            self._pooling
         )
+    
+    def _get_threshold(
+        self,
+        anomaly_score: np.ndarray
+    ) -> float:
+        """Get the threshold value to judge anomaly.
+        
+        Args:
+            anomaly_score(np.ndarray): 
+            
+        Returns:
+            float: Thresold value.
+        """
+        return self._threshold_fn(anomaly_score, self._q)

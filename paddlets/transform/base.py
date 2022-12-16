@@ -216,7 +216,7 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
             self._check_multi_tsdataset(dataset)
             return [self.inverse_transform_one(data, inplace) for data in dataset]
         else:
-            return self.inverse_transform_one(dataset)
+            return self.inverse_transform_one(dataset, inplace)
 
     def inverse_transform_one(
         self,

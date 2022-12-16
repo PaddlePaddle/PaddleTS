@@ -24,17 +24,18 @@ class TestAutoEncoder(TestCase):
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
                 name="label")
         feature = pd.DataFrame(
-                np.random.randn(200, 2).astype(np.float32),
+                np.random.randn(200, 3).astype(np.float32),
                 index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
-                columns=["a", "b"])
+                columns=["a", "b", "c"])
+        feature['d'] = np.random.randint(0,5,200)
         
         # index is DatetimeIndex
         self.tsdataset1 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                target_cols='label', feature_cols='a')
+                target_cols='label', feature_cols=['a', 'b'])
         
         # There is no target in tsdataset
         self.tsdataset2 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                feature_cols=['a', 'b'])     
+                feature_cols=['a', 'b', 'c'])     
         
         # index is RangeIndex
         index = pd.RangeIndex(0, 200, 1)
@@ -44,7 +45,10 @@ class TestAutoEncoder(TestCase):
                 label_col='label', feature_cols='a')
         # There is no target in tsdataset
         self.tsdataset4 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
-                feature_cols=['a', 'b'])      
+                feature_cols=['a', 'b', 'c'])
+        # There is cate feature in tsdataset
+        self.tsdataset5 = TSDataset.load_from_dataframe(pd.concat([label,feature],axis=1), 
+                target_cols='label', feature_cols=['a', 'b', 'c', 'd'])
         super().setUp()
 
     def test_init(self):
@@ -192,7 +196,7 @@ class TestAutoEncoder(TestCase):
         #case 3 (The training set contains illegal data types, such as string type)
         tsdataset = self.tsdataset1.copy()
         tsdataset.astype({"a": "O"})
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
              ae.fit(tsdataset, tsdataset)
         
     def test_init_metrics(self):
@@ -338,6 +342,21 @@ class TestAutoEncoder(TestCase):
         self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
         self.assertEqual(res.get_target().data.shape, (169, 1))
         self.assertEqual(res.get_target().data.columns[0], 'anomaly_label')
+
+        # case5 (there is cate feature in tsdataset )
+        ae = AutoEncoder(
+            in_chunk_len=16,
+            eval_metrics=["mse", "mae"],
+            max_epochs=1,
+            patience=1,
+            embedding_size=16,
+        )
+        ae.fit(self.tsdataset5, self.tsdataset5)
+        res = ae.predict(self.tsdataset5)
+        self.assertIsInstance(res, TSDataset)
+        self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
+        self.assertEqual(res.get_target().data.shape, (185, 1))
+        self.assertEqual(res.get_target().data.columns[0], 'label')
             
     def test_predict_score(self):
         """unittest function for predict_score
@@ -415,6 +434,21 @@ class TestAutoEncoder(TestCase):
         self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
         self.assertEqual(res.get_target().data.shape, (2, 1))
         self.assertEqual(res.get_target().data.columns[0], 'anomaly_score')
+
+        # case6 (there is cate feature in tsdataset )
+        ae = AutoEncoder(
+            in_chunk_len=16,
+            eval_metrics=["mse", "mae"],
+            max_epochs=1,
+            patience=1,
+            embedding_size=16,
+        )
+        ae.fit(self.tsdataset5, self.tsdataset5)
+        res = ae.predict_score(self.tsdataset5)
+        self.assertIsInstance(res, TSDataset)
+        self.assertIsInstance(res.get_target().data.index, pd.RangeIndex)
+        self.assertEqual(res.get_target().data.shape, (185, 1))
+        self.assertEqual(res.get_target().data.columns[0], 'label_score')
 
 if __name__ == "__main__":
     unittest.main()

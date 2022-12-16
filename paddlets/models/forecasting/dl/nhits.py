@@ -142,7 +142,7 @@ class _Block(nn.Layer):
             y_hat: tensor containing the forward forecast of the block, shape [batch_size, out_chunk_len, target_dim]
         """
         # compose feature x
-        batch_size = backcast.shape[0]
+        batch_size = paddle.shape(backcast)[0]
         # concat backcast, known_cov, observed_cov if any;
         past_feature = [backcast]
         future_feature = None
