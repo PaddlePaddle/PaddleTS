@@ -169,9 +169,12 @@ class TestTS2Vec(TestCase):
         ts2vec = TS2Vec(
             segment_size=300,
             sampling_stride=300,
-            max_epochs=10,
+            max_epochs=1,
         )
         ts2vec.fit(self.tsdataset1)
+        
+        # case2 (用户传入多组时序数据用于多实例训练)
+        ts2vec.fit([self.tsdataset1, self.tsdataset1])
 
     def test_encode(self):
         """unittest function
@@ -191,31 +194,26 @@ class TestTS2Vec(TestCase):
         ts2vec.fit(self.tsdataset2)
         res = ts2vec.encode(self.tsdataset2)
         self.assertIsInstance(res, np.ndarray)
-        # self.assertEqual(res.shape, (2, 800, 320))
         self.assertEqual(res.shape, (1, 800, 320))
 
         # case3 (index为DatetimeIndex的多变量/非sliding+mask_last)
         res = ts2vec.encode(self.tsdataset2, mask="mask_last")
         self.assertIsInstance(res, np.ndarray)
-        # self.assertEqual(res.shape, (2, 800, 320))
         self.assertEqual(res.shape, (1, 800, 320))
 
         # case4 (index为DatetimeIndex的多变量/instance level encoding)
         res = ts2vec.encode(self.tsdataset2, encoding_type="full_series")
         self.assertIsInstance(res, np.ndarray)
-        # self.assertEqual(res.shape, (2, 320))
         self.assertEqual(res.shape, (1, 320))
 
         # case5 (index为DatetimeIndex的多变量/sliding+full_series)
         res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="full_series")
         self.assertIsInstance(res, np.ndarray)
-        # self.assertEqual(res.shape, (2, 320))
         self.assertEqual(res.shape, (1, 320))
 
         # case6 (index为DatetimeIndex的多变量/sliding+multiscale)
         res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="multiscale")
         self.assertIsInstance(res, np.ndarray)
-        # self.assertEqual(res.shape, (2, 800, 1920))
         self.assertEqual(res.shape, (1, 800, 1920))
 
         # case7 (mask 不合法)
