@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from paddlets.models.base import BaseModel
+from paddlets.models.utils import build_network_input_spec
 from paddlets import TSDataset
 from paddlets.logger import raise_if, raise_if_not, raise_log
 
@@ -89,7 +90,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         """
         pass
 
-    def save(self, path: str) -> None:
+    def save(self, path: str, network_model: bool = False, dygraph_to_static = True, batch_size: Optional[int] = None) -> None:
         """
         Saves a PaddleBaseModel instance to a disk file.
 
@@ -103,6 +104,9 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
 
         Args:
             path(str): A path string containing a model file name.
+            network_model(bool): Save network model structure and parameters separately for Paddle Inference or not, default False.
+            dygraph_to_static(bool): Change network from dygraph to static or not, it works when network_model==True, default True.
+            batch_size(int): The fixed batch size for the param `input_spec` of network_model save, it works when network_model==True, default None.
 
         Raises:
             ValueError
@@ -139,6 +143,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
             "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_model": modelname,
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -151,7 +156,37 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         )
 
         # start to save
-        # 1 save optimizer state dict (currently ignore optimizer logic.)
+        # 1 save network model and params for paddle inference
+        model_meta = self._build_meta()
+        if batch_size is not None:
+            model_meta['batch_size'] = batch_size
+        if network_model:
+            self._network.eval()
+            input_spec = build_network_input_spec(model_meta)
+            try:
+                if dygraph_to_static:
+                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
+                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
+                else:
+                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
+            except Exception as e:
+                raise_log(
+                    ValueError(
+                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
+                        (internal_filename_map["network_model"], str(e))
+                    )
+                )
+
+        # 2 save model meta (e.g. classname)
+        try:
+            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+                json.dump(model_meta, f, ensure_ascii=False)
+        except Exception as e:
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
+            )
+
+        # 3 save optimizer state dict (currently ignore optimizer logic.)
         # optimizer_state_dict = self._optimizer.state_dict()
         # try:
         #     paddle.save(
@@ -166,12 +201,12 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         #         )
         #     )
 
-        # 2 save network state dict
+        # 4 save network state dict
         network_state_dict = self._network.state_dict()
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
+                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"]),
             )
         except Exception as e:
             raise_log(
@@ -181,7 +216,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
                 )
             )
 
-        # 3 save model
+        # 5 save model
         optimizer = self._optimizer
         network = self._network
         callback_container = self._callback_container
@@ -199,25 +234,11 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         except Exception as e:
             raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
 
-        # 4 save model meta (e.g. classname)
-        model_meta = {
-            # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            # paddlets.models.dl.paddlepaddle.xxx
-            "modulename": self.__module__
-        }
-        try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
-                json.dump(model_meta, f, ensure_ascii=False)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
-
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
         self._network = network
         self._callback_container = callback_container
+
         return
 
     @staticmethod
@@ -266,3 +287,17 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         #
         # model._optimizer.set_state_dict(optimizer_statedict)
         return model
+
+    def _build_meta(self):
+        res = {
+            "model_type": "forecasting",
+            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "modulename": self.__module__,
+            "size": {
+                "in_chunk_len": self._in_chunk_len,
+                "out_chunk_len": self._out_chunk_len,
+                "skip_chunk_len": self._skip_chunk_len,
+            },
+            "input_data": {},
+        }
+        return res

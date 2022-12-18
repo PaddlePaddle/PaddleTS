@@ -114,7 +114,7 @@ class TestMetrics(TestCase):
         expect_output = {"target": 0.16425}
         ret = logloss(ts, ts2)
         for schema in ret:
-            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
+            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1.)
 
         # case3
         ts.set_column("target2", 1 - ts["target"], "target")
@@ -124,7 +124,7 @@ class TestMetrics(TestCase):
         expect_output = {"target": 0.16425, "target2": 10.18854}
         ret = logloss(ts, ts2)
         for schema in ret:
-            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
+            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1.)
 
     def test_prob(self):
         periods = 100
@@ -148,7 +148,11 @@ class TestMetrics(TestCase):
         mae_prob = MAE("prob")
         self.assertEqual(mae_prob(ts1, ts2), {"target": 1., "target_2": 1.})
         q_loss = QuantileLoss()
-        self.assertEqual(q_loss(ts1, ts2), {"target": 1., "target_2": 1.})
+        q_loss_ret = q_loss(ts1, ts2)
+        expect_q_loss_ret = {'target': {0.1: 0.1, 0.5: 0.5, 0.9: 0.9}, 'target_2': {0.1: 0.1, 0.5: 0.5, 0.9: 0.9}}
+        for tgt in ["target", "target_2"]:
+            for q in [0.1, 0.5, 0.9]:
+                self.assertAlmostEqual(q_loss_ret[tgt][q], expect_q_loss_ret[tgt][q])
         
     def test_ACC(self):
         """unittest function
@@ -566,7 +570,7 @@ class TestMetricContainer(TestCase):
         """
         # case1
         contrainer = MetricContainer(
-            metric_names=["mse", "mae"],
+            metrics=["mse", "mae"],
             prefix="val_"
         )
         fake_y_true = np.random.randn(5)

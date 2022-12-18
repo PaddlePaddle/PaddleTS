@@ -22,10 +22,9 @@ import numpy as np
 import paddle
 import time
 
-from paddlets.models.anomaly.dl.adapter import AnomalyDataAdapter
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.common.callbacks import Callback
-from paddlets.models.utils import to_tsdataset, to_tsdataset2
+from paddlets.models.anomaly.dl.utils import to_tsdataset
 from paddlets.models.anomaly.dl import utils as U
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
@@ -118,6 +117,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         threshold(float|None): The threshold to judge anomaly.
         threshold_coeff(float): The coefficient of threshold.
         anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
         callbacks(List[Callback]): Customized callback functions.
@@ -147,6 +148,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         _threshold(float|None): The threshold to judge anomaly.
         _threshold_coeff(float): The coefficient of threshold.
         _anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
+        _pred_adjust(bool): Whether to adjust the pred label according to the real label.
+        _pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
         _callbacks(List[Callback]): Customized callback functions.
@@ -178,6 +181,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         threshold: Optional[float] = None,
         threshold_coeff: float = 1.0,
         anomaly_score_fn: Callable[..., List[float]] = None,
+        pred_adjust: bool = True,
+        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
@@ -221,6 +226,8 @@ class AnomalyTransformer(AnomalyBaseModel):
             threshold_coeff=threshold_coeff,
             threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
+            pred_adjust=pred_adjust,
+            pred_adjust_fn=pred_adjust_fn,
             optimizer_params=optimizer_params, 
             eval_metrics=eval_metrics, 
             callbacks=callbacks, 
@@ -282,29 +289,28 @@ class AnomalyTransformer(AnomalyBaseModel):
             np.ndarray: Prediction results.
         """
         scores = self._network(X)[0]
-        return scores.numpy()
+        y = X['observed_cov_numeric']
+        return y.numpy(), scores.numpy()
     
-    @to_tsdataset2(scenario="anomaly_label")
+    @to_tsdataset(scenario="anomaly_label")
     def predict(
         self,
-        test_Dataset: TSDataset,
-        train_Dataset: TSDataset = None,
-        res_adjust: bool = True,
+        test_dataset: TSDataset,
+        train_dataset: TSDataset = None,
     ) -> TSDataset:
         """Get anomaly label on a batch. the result are output as tsdataset.
 
         Args:
-            train_Dataset(TSDataset): Train set.
-            test_Dataset(TSDataset): Data to be predicted.
-            res_adjust(bool): Use result_adjust function to optimize prediction, Default: True.
+            train_dataset(TSDataset): Train set.
+            test_dataset(TSDataset): Data to be predicted.
 
         Returns:
             TSDataset.
         """
-        raise_if(train_Dataset is None, f" Please pass in train_tsdataset to calculate the threshold.")
-        train_dataloader = self._init_predict_dataloader(train_Dataset)
-        test_dataloader  = self._init_predict_dataloader(test_Dataset) 
-        thre_dataloader  = self._init_predict_dataloader(test_Dataset, sampling_stride=self.in_chunk_len)
+        raise_if(train_dataset is None, f" Please pass in train_tsdataset to calculate the threshold.")
+        train_dataloader = self._init_predict_dataloader(train_dataset)
+        test_dataloader  = self._init_predict_dataloader(test_dataset) 
+        thre_dataloader  = self._init_predict_dataloader(test_dataset, sampling_stride=self.in_chunk_len)
         self._threshold = self._threshold_fn(self._network, 
                                         train_dataloader, test_dataloader, 
                                         temperature=self._temperature,  
@@ -318,10 +324,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         for score in anomaly_score: 
             label = 0 if score < self._threshold else 1
             anomaly_label.append(label)
-        if test_Dataset.target is None: 
-            res_adjust = False
-        if res_adjust:
-            anomaly_label = U.result_adjust(anomaly_label, test_Dataset.target.to_numpy())
+        if test_dataset.target is not None and self._pred_adjust:
+            anomaly_label = self._pred_adjust_fn(anomaly_label, test_dataset.target.to_numpy())
         return np.array(anomaly_label)
 
     def _predict(
@@ -339,9 +343,9 @@ class AnomalyTransformer(AnomalyBaseModel):
         self._network.eval()
         attens_energy = []
         for batch_nb, data in enumerate(dataloader):
-            X, y = self._prepare_X_y(data)
-            output, series, prior, _ = self._network(X)
-            loss = paddle.mean(self._criterion(X['observed_cov_numeric'], output), axis=-1)
+            y = data['observed_cov_numeric']
+            output, series, prior, _ = self._network(data)
+            loss = paddle.mean(self._criterion(y, output), axis=-1)
             cri = U.series_prios_energy([output, series, prior, _], loss, 
                                         temperature=self._temperature, win_size=self.in_chunk_len)
             attens_energy.append(cri)
@@ -454,8 +458,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         loss1_list = [] 
         for batch_idx, data in enumerate(train_loader):
             self._callback_container.on_batch_begin(batch_idx)
-            X, y = self._prepare_X_y(data)
-            batch_logs = self._train_batch(X, y, batch_idx)
+            y = data['observed_cov_numeric']
+            batch_logs = self._train_batch(data, y, batch_idx)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)

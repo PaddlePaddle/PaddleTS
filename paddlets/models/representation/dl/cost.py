@@ -23,7 +23,7 @@ from paddlets.models.representation.dl._cost.losses import (
 from paddlets.models.representation.dl._cost.encoder import TSEncoder
 from paddlets.models.representation.dl._cost.swa import AveragedModel
 from paddlets.models.representation.dl.repr_base import ReprBaseModel
-from paddlets.models.representation.dl.adapter import ReprDataAdapter
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.common.callbacks import Callback
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if_not
@@ -293,7 +293,7 @@ class CoST(ReprBaseModel):
 
     def _update_fit_params(
         self,
-        train_tsdataset: TSDataset,
+        train_tsdataset: List[TSDataset],
     ) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
@@ -303,6 +303,7 @@ class CoST(ReprBaseModel):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        train_tsdataset = train_tsdataset[0]
         input_dim = train_tsdataset.get_target().data.shape[1]
         if train_tsdataset.get_observed_cov():
             input_dim += train_tsdataset.get_observed_cov().data.shape[1]
@@ -315,31 +316,32 @@ class CoST(ReprBaseModel):
 
     def _init_fit_dataloader(
         self,
-        train_tsdataset: TSDataset
+        train_tsdataset: List[TSDataset]
     ) -> paddle.io.DataLoader:
         """Generate dataloader for train set.
 
         Args:
-            train_tsdataset(TSDataset): Train set.
+            train_tsdataset(List[TSDataset]): Train set.
 
         Returns:
             paddle.io.DataLoader: Training dataloader.
         """
-        self._check_tsdataset(train_tsdataset)
-        data_adapter = ReprDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdataset,
-            segment_size=self._segment_size,
-            sampling_stride=self._sampling_stride,
-        )
+        data_adapter, samples = DataAdapter(), []
+        for tsdataset in train_tsdataset:
+            self._check_tsdataset(tsdataset)
+            dataset = data_adapter.to_sample_dataset(
+                rawdataset=tsdataset,
+                in_chunk_len=self._segment_size,
+                sampling_stride=self._sampling_stride,
+                fill_last_value=np.nan
+            )
+            samples.extend(dataset.samples)
         # In order to align with the paper of CoST, a customized data organization is required.
-        train_dataset._samples = custom_collate_fn(train_dataset._samples)
-        num_samples = len(train_dataset._samples)
-        multiplier = (
-            1 if num_samples >= self._batch_size else int(np.ceil(self._batch_size / num_samples))
+        samples = custom_collate_fn(samples)
+        dataset.samples = samples * (
+            1 if len(samples) >= self._batch_size else int(np.ceil(self._batch_size / len(samples)))
         )
-        train_dataset._samples = train_dataset._samples * multiplier
-        return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size, drop_last=True)
+        return data_adapter.to_paddle_dataloader(dataset, self._batch_size, drop_last=True)
     
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.

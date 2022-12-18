@@ -30,7 +30,7 @@ import paddle.nn.functional as F
 from paddlets.datasets import TSDataset
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.common.callbacks import Callback
-from paddlets.logger import raise_if, raise_if_not, Logger
+from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
 logger = Logger(__name__)
 
@@ -215,7 +215,7 @@ class _Block(nn.Layer):
             x_hat: approximation of backcast, shape [batch_size, in_chunk_len, target_dim]
             y_hat: tensor containing the forward forecast of the block, shape [batch_size, out_chunk_len, target_dim]
         """
-        batch_size = backcast.shape[0]
+        batch_size = paddle.shape(backcast)[0]
         # concat backcast, known_cov, observed_cov if any
         feature = [backcast.reshape((batch_size, -1))]
         if known_cov is not None:
@@ -500,7 +500,7 @@ class NBEATSModel(PaddleBaseModelImpl):
         self,
         in_chunk_len: int,
         out_chunk_len: int,
-        generic_architecture: bool = False,
+        generic_architecture: bool = True,
         num_stacks: int = 2,
         num_blocks: Union[int, List[int]] = 3,
         num_layers: int = 4,
@@ -514,10 +514,10 @@ class NBEATSModel(PaddleBaseModelImpl):
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4), 
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
-        batch_size: int = 256,
+        batch_size: int = 32,
         max_epochs: int = 10,
         verbose: int = 1,
-        patience: int = 4,
+        patience: int = 10,
         seed: int = 0 
     ):
         self._generic_architecture = generic_architecture
