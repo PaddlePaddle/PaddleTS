@@ -18,6 +18,7 @@ paddlets.models.forecasting.dl
     paddlets.models.forecasting.dl.tcn.rst
     paddlets.models.forecasting.dl.transformer.rst
     paddlets.models.forecasting.dl.informer.rst
+    paddlets.models.forecasting.dl.tft.rst
     paddlets.models.forecasting.dl.adapter.rst
     paddlets.models.forecasting.dl.distributions.rst
 

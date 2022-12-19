@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-19 13:37+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/api/paddlets.xai.ante_hoc.tft_exp.rst:2
+#: cc9d7cf7aee2442092aab95da2f81f74
+msgid "paddlets.xai.ante_hoc.tft_exp"
+msgstr ""
+
+#: 966f272a4315401e89145c6492a9a19a of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer:1
+msgid "Bases: :py:class:`~paddlets.models.forecasting.dl.tft.TFTModel`"
+msgstr ""
+
+#: dbafa889275a40efb5ec3190df37f038 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer:1
+msgid ""
+"Inherit TFT, and implement an explainer, which provides display of the "
+"explanation result."
+msgstr "继承自TFT模型并实现一个解释器，提供可解释性结果的可视化展示。"
+
+#: 76b47e05f9f5485e82e5e5b8b2d750b4 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:1
+msgid ""
+"Explain backtest data, the backtest logic is a simplied version of "
+"`utils.backtest` by setting `predict_window` and `stride` as "
+"`out_chunk_len`."
+msgstr "解释回测数据，通过设置`predict_window`与`stride`为`out_chunk_len`,回测逻辑为`utils.backtest`的简化版本。"
+
+#: c5c724ba663a41d0808d907b0c91b013 f17054065da540d599e35eefcad706c9 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction
+msgid "Parameters"
+msgstr "参数"
+
+#: b3f10bbc254140398123081e08387c46 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:3
+msgid ""
+"The TSdataset used for successively generating explanation result and "
+"visualizing."
+msgstr "需要被迭代回测生成可解释性结果与可视化的数据。"
+
+#: 49eec065b96047f8803088525acf30ad of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:5
+msgid ""
+"The first prediction time, at which a prediction is computed for a future"
+" time."
+msgstr "首次对未来进行预测的时间。"
+
+#: 7b9599420daa4aa0bcc7094f75c890c2 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:7
+msgid ""
+"The index with the dataset, corresponding to the observation for which "
+"the visualization will be generated."
+msgstr "数据集序号，对应于需要被可视化的样本。"
+
+#: 9e3f4b4962874086af5baafe62f619ec of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:9
+msgid ""
+"A list horizon, specified in time-steps units, for which the statistics "
+"will be computed."
+msgstr "用于进行统计的时间步长的列表。"
+
+#: 2a5060e8a38f4e0595b8ed665cf8e6a5 93f8b6c7239f44f985d50f3727f4d9f0 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:11
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:7
+msgid ""
+"The units associated with the time-steps. This variable is used for "
+"labeling the corresponding axes."
+msgstr "时间步单位。"
+
+#: 00d6f073af564b249bc24feb316b395f 9864a158fe6c4d288bd737d676389262 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:13
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:9
+msgid "Whether to display the explanation results."
+msgstr "是否对可解释性结果进行可视化。"
+
+#: bc074c6b47cf4d43ae05892465a09700 fee962a35453466698c724c9130a26b2 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction
+msgid "Returns"
+msgstr "返回值"
+
+#: 812f5ecd4a5b43b3a85d4ac097ab95b6 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest:16
+msgid "Aggregated explanation data predicted by the model."
+msgstr "聚合的可解释性数据。"
+
+#: 32c9d2328ef64299b2ea0f2d1e66069e 3a38ff601bb6411b98b9b7029d928bb9 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_backtest
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction
+msgid "Return type"
+msgstr "返回类型。"
+
+#: 392da4ebbbda47ce8b21960229c645b3 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:1
+msgid "Explain prediction data, in cases of single sample prediction."
+msgstr "解释预测数据，用于单步预测的场景。"
+
+#: 620bb31584d74b6d9f2f7b1235d2e356 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:3
+msgid "The TSdataset used for predicting explanation result and visualizing."
+msgstr "需要被预测生成可解释性结果与可视化的数据。"
+
+#: 669e1b5b8bb4402eb76eb904951f3a7a of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:5
+msgid ""
+"A list or a single horizon, specified in time-steps units, for which the "
+"statistics will be computed."
+msgstr "用于进行统计的时间步长的列表。"
+
+#: 72b8059b16ca4d56a3181d5aa070f415 of
+#: paddlets.xai.ante_hoc.tft_exp.TFTExplainer.explain_prediction:12
+msgid "Explanation data predicted by the model."
+msgstr "模型生成的可解释性数据。"
+
