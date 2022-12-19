@@ -307,7 +307,7 @@ class TestWeightingEnsembleAnomly(TestCase):
 
 
         # case2
-        from paddlets.models.anomaly import IForest, PCA, LOF, KNN, OCSVM
+        #from paddlets.models.anomaly import IForest, PCA, LOF, KNN, OCSVM
         param = { 
                 "sampling_stride" : 1,
                 "contamination" : 0.2}
