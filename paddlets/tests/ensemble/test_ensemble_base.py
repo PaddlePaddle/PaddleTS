@@ -78,7 +78,7 @@ class TestEnsembleBase(TestCase):
         }
 
         model2 = MockEnsemble(
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
         assert model2 is not None
 
 
@@ -129,7 +129,7 @@ class TestEnsembleBase(TestCase):
         }
 
         model1 = MockEnsemble(
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
 
@@ -179,7 +179,7 @@ class TestEnsembleBase(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
         model1 = MockEnsemble(
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
         model1._predict_estimators(tsdataset)
@@ -231,7 +231,7 @@ class TestEnsembleBase(TestCase):
         }
 
         model1 = MockEnsemble(
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
         model1.save(path="/tmp/ensemble_test1/")
