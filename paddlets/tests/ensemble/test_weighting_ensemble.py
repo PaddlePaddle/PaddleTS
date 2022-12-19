@@ -8,7 +8,6 @@ import unittest
 from unittest import TestCase
 
 from paddlets.models.forecasting import MLPRegressor
-from paddlets.models.forecasting import NHiTSModel
 from paddlets import TimeSeries, TSDataset
 from paddlets.ensemble import WeightingEnsembleForecaster, WeightingEnsembleAnomaly
 
@@ -64,7 +63,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
         assert model2 is not None
 
     def test_fit(self):
@@ -108,7 +107,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1.fit(tsdataset)
 
@@ -153,7 +152,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -198,7 +197,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -245,7 +244,7 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1.fit(tsdataset)
         model1.save(path="/tmp/ensemble_test3/")
@@ -312,28 +311,28 @@ class TestWeightingEnsembleAnomly(TestCase):
         param = { 
                 "sampling_stride" : 1,
                 "contamination" : 0.2}
-        estimators = [(AutoEncoder, ae_param),(PCA, param)]
+        estimators = [(AutoEncoder, ae_param),(AutoEncoder, ae_param)]
         self._model2 = WeightingEnsembleAnomaly(1,estimators)
 
         # case3
         param = { 
                 "sampling_stride" : 1,
                 "contamination" : 0.2}
-        estimators = [(OCSVM, param),(PCA, param)]
+        estimators = [(AutoEncoder, ae_param)]
         self._model3 = WeightingEnsembleAnomaly(1,estimators,mode="voting")
 
         # case4
         param = { 
                 "sampling_stride" : 1,
                 "contamination" : 0.2}
-        estimators = [(OCSVM, param),(PCA, param),(AutoEncoder, ae_param)]
+        estimators = [(AutoEncoder, ae_param),(AutoEncoder, ae_param)]
         self._model4 = WeightingEnsembleAnomaly(1,estimators,standardization=False)
 
         # case5
         param = { 
                 "sampling_stride" : 1,
                 "contamination" : 0.2}
-        estimators = [(LOF, param),(PCA, param)]
+        estimators = [(AutoEncoder, ae_param)]
         self._model5 = WeightingEnsembleAnomaly(1,estimators,contamination=0.2)
 
     def test_fit(self):
