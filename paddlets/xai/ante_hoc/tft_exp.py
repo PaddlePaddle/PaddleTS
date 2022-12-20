@@ -87,22 +87,22 @@ class TFTExplainer(TFTModel):
         # ========================
         # Selection Weights
         # ========================
-        self.display_selection_weights_stats(outputs_dict=explain_data,
+        self._display_selection_weights_stats(outputs_dict=explain_data,
                                              prctiles=weights_prctile,
                                              mapping=self.mapping
                                             )
-        self.display_sample_wise_selection_stats(weights_arr=explain_data['static_weights'],
+        self._display_sample_wise_selection_stats(weights_arr=explain_data['static_weights'],
                                                observation_index=observation_index,
                                                feature_names=self.static_cols,
                                                top_n=top_feature_num,
                                                title='Static Features')
-        self.display_sample_wise_selection_stats(weights_arr=explain_data['historical_selection_weights'],
+        self._display_sample_wise_selection_stats(weights_arr=explain_data['historical_selection_weights'],
                                            observation_index=observation_index,
                                            feature_names=self.history_cols,
                                            top_n=top_feature_num,
                                            title='Historical Features',
                                            rank_stepwise=True)
-        self.display_sample_wise_selection_stats(weights_arr=explain_data['future_selection_weights'],
+        self._display_sample_wise_selection_stats(weights_arr=explain_data['future_selection_weights'],
                                            observation_index=observation_index,
                                            feature_names=self.future_cols,
                                            top_n=top_feature_num,
@@ -118,20 +118,20 @@ class TFTExplainer(TFTModel):
         # One step ahead
         if len(weights_prctile) > 1: # only for backtest scenario 
             for horizon in horizons:
-                self.display_attention_scores(attention_scores=explain_data['attention_scores'],
+                self._display_attention_scores(attention_scores=explain_data['attention_scores'],
                                           horizons=horizon,
                                           prctiles=weights_prctile,
                                           unit=unit)
         # Multihorizon Attention
         # for prediction scenario and backtest scenario
         for prctile in weights_prctile:
-            self.display_attention_scores(attention_scores=explain_data['attention_scores'],
+            self._display_attention_scores(attention_scores=explain_data['attention_scores'],
                                           horizons=horizons,
                                           prctiles=prctile,
                                           unit=unit)
         # Single specific sample
         if explain_data['attention_scores'].shape[0] > 1:
-            self.display_sample_wise_attention_scores(attention_scores=explain_data['attention_scores'],
+            self._display_sample_wise_attention_scores(attention_scores=explain_data['attention_scores'],
                                                       observation_index=observation_index,
                                                       horizons=horizons,
                                                       unit=unit)
