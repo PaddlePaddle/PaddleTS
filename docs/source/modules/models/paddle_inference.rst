@@ -45,6 +45,7 @@ For more information, please refer to `dygraph_to_static <https://www.paddlepadd
 
 
 .. code-block:: python
+    
     rnn.save("./rnn", network_model=True, dygraph_to_static=True)
 
     # dump file names
