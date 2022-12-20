@@ -144,4 +144,5 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     paddlets.transform <source/api/paddlets.transform.rst>
     paddlets.ensemble <source/api/paddlets.ensemble.rst>
     paddlets.utils <source/api/paddlets.utils.rst>
+    paddlets.xai <source/api/paddlets.xai.rst>
 
