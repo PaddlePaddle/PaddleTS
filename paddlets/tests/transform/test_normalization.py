@@ -47,7 +47,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         # test -- MinMaxScaler 2
         params2 = {'cols': ['X', 'Y'], 'f_range': (0, 1), 'clip': False} 
@@ -56,7 +56,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         # test -- MinMaxScaler 3
         params2 = {'cols': ['X1', 'Y1'], 'f_range': (0, 1), 'clip': False} 
@@ -65,7 +65,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         test_transform1.fit([input1, input1])
         transfrom1s = test_transform1.transform([input1, input1])
@@ -75,7 +75,7 @@ class test_MinMaxScaler(TestCase):
         self.assertEqual(len(inverse1s), 2)
         self.assertEqual(len(fit_trans1s), 2)
         for inverse1 in inverse1s:
-            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
     def test_StandardScaler(self):
         """
@@ -102,7 +102,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         # test -- StandardScaler  2
         params1 = {'cols': ['X', 'Y'], 'with_mean': True, 'with_std': True}  
@@ -111,7 +111,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         # test -- StandardScaler  3
         params1 = {'cols': ['X1', 'Y1'], 'with_mean': True, 'with_std': True}  
@@ -120,7 +120,7 @@ class test_MinMaxScaler(TestCase):
         transfrom1 = test_transform1.transform(input1)
         inverse1 = test_transform1.inverse_transform(transfrom1)
         fit_trans1 = test_transform1.fit_transform(input1)
-        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+        self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
         test_transform1.fit([input1, input1])
         transfrom1s = test_transform1.transform([input1, input1])
@@ -130,7 +130,7 @@ class test_MinMaxScaler(TestCase):
         self.assertEqual(len(inverse1s), 2)
         self.assertEqual(len(fit_trans1s), 2)
         for inverse1 in inverse1s:
-            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data))
+            self.assertTrue(inverse1.get_known_cov().data.astype('int').equals(input1.get_known_cov().data.astype('int')))
 
     def test_with_sklearn(self):
         """
