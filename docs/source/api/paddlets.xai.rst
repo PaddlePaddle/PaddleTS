@@ -9,3 +9,4 @@ paddlets.xai
     :maxdepth: 4
 
     paddlets.xai.ante_hoc.rst
+    paddlets.xai.post_hoc.rst
