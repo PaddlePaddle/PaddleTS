@@ -1,0 +1,109 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-22 16:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.classify.dl.adapter.data_adapter.rst:2
+#: 8ff71268a4d143b7bf41ba6bfe36d27e
+msgid "paddlets.models.classify.dl.adapter.data_adapter"
+msgstr ""
+
+#: a8e339a1ebe146d7a86528951222e6b0 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: e7eb7d0688a147d9a6a8d1fac6fb07ae of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter:1
+msgid ""
+#~ "Data adapter, converts `TSDataset` to `paddle.io.Dataset` "
+#~ "and `paddle.io.DataLoader`."
+msgstr ""
+#~ "数据转换类，用于将TSDataset数据集转换为paddle Dataset样本数据集"
+#~ "和paddle DataLoader样本数据批量加载器。"
+
+#: 8319dccaf4e84623afea1a61cfcf71fb of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset:1
+msgid "Converts :class:`TSDataset` to :class:`paddle.io.Dataset`."
+msgstr "将TSDataset数据集转换为paddle Dataset样本数据集。"
+
+#: 31fd785d6bf940d2bd5a9c4310b9d949 9177fe298f8b4767afb45b3580e0c2d3 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset
+msgid "Parameters"
+msgstr "参数"
+
+#: c9bbd337c0004dcf81d996dee4b19a87 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset:3
+msgid "Raw TSDataset for converting to :class:`paddle.io.Dataset`."
+msgstr "待转换的原始TSDataset数据集。"
+
+#: 2628f194f4f24129b72bbe383760070a of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset:5
+msgid "(np.ndarray) : The data class labels"
+msgstr "数据分类标签"
+
+#: 6d1c96bfd4af46dab09b80ee3340bf02 95c9996743094065b2f67ed5a46a7d25 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset
+msgid "Returns"
+msgstr "返回值"
+
+#: 133bae93719245c0a2306997fae1ae98 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset:7
+msgid "A built PaddleDatasetImpl."
+msgstr "一个构建完成的用于分类模型的paddle Dataset样本数据集。"
+
+#: 0d551981be344439b263d8cdcc39bd58 8d83d376ccb64c77be4dfb569f3cffce of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset
+msgid "Return type"
+msgstr ""
+
+#: d6700139bf7f40dda36514273e7bd3cf of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:1
+msgid "Converts :class:`paddle.io.Dataset` to :class:`paddle.io.DataLoader`."
+msgstr "将paddle Dataset样本数据集转换为DataLoader样本批量加载器。"
+
+#: afbccb078d484d85983df61a2dedf8b6 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:3
+msgid "Raw :class:`TSDataset` for building :class:`paddle.io.DataLoader`."
+msgstr "待转换的paddle Dataset样本数据集。"
+
+#: 3d0964efc8e84563b8836e487c4b5924 of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:5
+msgid "The number of samples for a single batch."
+msgstr "单个数据批量中包含的样本条数。"
+
+#: 69b54e4b5e324fabbbc78d1d513922fc of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:7
+msgid "User-defined collate function for each batch, optional."
+msgstr "用户自定义的单批量样本整合函数，可选参数。"
+
+#: 9865917a292c485ba8e8f44e7e5f937d of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:9
+msgid ""
+"Whether to shuffle indices order before generating batch indices, default"
+" True. TODO: add this argument to __init__ construct method allow caller "
+"to set its value."
+msgstr "是否在生成批量样本之前对数据进行洗牌。默认为True。"
+
+#: e553baefafb44b778d2eb410b20d576e of
+#: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:13
+msgid "A built paddle DataLoader."
+msgstr "一个构建完成的paddle样本批量数据加载器。"
+
