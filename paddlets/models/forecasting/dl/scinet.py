@@ -17,13 +17,13 @@ from paddlets.models.common.callbacks import Callback
 logger = Logger(__name__)
 
 
-class _Spliter(paddle.nn.Layer):
+class _Splitter(paddle.nn.Layer):
     """
     Time series split module, split raw sequence to even and odd sub-sequences.
     """
 
     def __init__(self):
-        super(_Spliter, self).__init__()
+        super(_Splitter, self).__init__()
 
     def _even(self, x: paddle.Tensor) -> paddle.Tensor:
         """
@@ -94,7 +94,7 @@ class _Interactor(paddle.nn.Layer):
         self._num_group = num_group
 
         self._dilation = 1
-        self._split_layer = _Spliter()
+        self._split_layer = _Splitter()
 
         # psi(ψ) / phi(Φ) / eta(η) / rho(ρ)
         self._psi = self._build_single_internal_module()
