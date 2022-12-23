@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 12:30+0800\n"
+"POT-Creation-Date: 2022-12-23 11:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,330 +17,347 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.dl.vae.rst:2
-#: 4239442fa9ca4cacbad333377b6145fd
+#: cea284bdd9cb436ba7f40861ab08af1b
 msgid "paddlets.models.anomaly.dl.vae"
 msgstr "paddlets.models.anomaly.dl.vae"
 
-#: 7d0fd83e642b46ba8dbf8ce42f8aecdf of paddlets.models.anomaly.dl.vae.stack:1
+#: 593e01535791403883a1f50f4b57effa of paddlets.models.anomaly.dl.vae.stack:1
 msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
 msgstr "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
 
-#: 7bfd95444d2a452c907a74fca981b479 of paddlets.models.anomaly.dl.vae.stack:1
+#: 585306b43e794fdf84eccdae960c6a1a of paddlets.models.anomaly.dl.vae.stack:1
 msgid "stack structure."
 msgstr "堆积网络架构。"
 
-#: 10e9f6d280f94a90b9179369394a7605 277cf265a73746ed9ff6d661c0eaf571
-#: 7b2c137b102e4dc8a8cda31ffa624261 of paddlets.models.anomaly.dl.vae.VAE
+#: 2ef78f5a3a6e49119d721148b82a29cb 4865c086fdc647f38c2a50f22d329da4
+#: ecf6fb4fea2048c4a60a84632f1d963a of paddlets.models.anomaly.dl.vae.VAE
 #: paddlets.models.anomaly.dl.vae.stack
 #: paddlets.models.anomaly.dl.vae.stack.forward
 msgid "Parameters"
 msgstr "参数。"
 
-#: 0bdbf2ae30484d2caec007474bac29b2 5d304e9d55724a8cbfb7c8cd5a5fbbb2
-#: 6931ae2fb52b42889c0a99bcd3375c59 of paddlets.models.anomaly.dl.vae.VAE:3
-#: paddlets.models.anomaly.dl.vae.VAE:60 paddlets.models.anomaly.dl.vae.stack:3
+#: 29657ea1f89b4f0784e057c0b59246e4 95f4203f737048ca8bdf34327f6fa84d
+#: eae922823bcc4031a760f60176955588 of paddlets.models.anomaly.dl.vae.VAE:3
+#: paddlets.models.anomaly.dl.vae.VAE:64 paddlets.models.anomaly.dl.vae.stack:3
 msgid ""
 "The size of the loopback window, i.e. the number of time steps feed to "
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 109ed56ae56e404b9e9071a9e1fe201f 93b290c74bbd46b58781c5b63baca784
-#: 9b6af69659d6435e894c2b9f0c0139ff of paddlets.models.anomaly.dl.vae.VAE:35
-#: paddlets.models.anomaly.dl.vae.VAE:162
+#: 47592fa7865b4033a708da652469fcb7 6ab2d99809be46ffb9bb78d0b965c5a6
+#: f204d2b8d1634719a08b97756723f2f4 of paddlets.models.anomaly.dl.vae.VAE:39
+#: paddlets.models.anomaly.dl.vae.VAE:178
 #: paddlets.models.anomaly.dl.vae.stack:5
 msgid "The ith element represents the number of neurons in the ith hidden layer."
 msgstr "第i个元素表示第i个隐藏层神经元的数量。"
 
-#: 56cb3fd365ac4844b953e18b552b3f3c of paddlets.models.anomaly.dl.vae.stack:7
+#: 4abe4d201db148a980c73df2f877f58e of paddlets.models.anomaly.dl.vae.stack:7
 msgid "The numer of feature."
 msgstr "特征数量。"
 
-#: bfecfb3e39a14143a6f6b89086acab9e of paddlets.models.anomaly.dl.vae.stack:9
+#: 9f498caf126f4670a6f61666e0b6d926 of paddlets.models.anomaly.dl.vae.stack:9
 msgid "Encoder or Decoder."
 msgstr "编码层或者解码层。"
 
-#: 6034233c7bfe430c92cc7b663434d818 of paddlets.models.anomaly.dl.vae.stack:11
+#: 5876192649114e13992079606a391913 of paddlets.models.anomaly.dl.vae.stack:11
 msgid "base network for stack."
 msgstr "用于堆积的基础网络。"
 
-#: cfc1b02edb1a418ab6bb506f9233d3c5 d4063ba1d98f42e0b277471dab6a8a39
-#: dec424ee7be04f5cad415985feb3dfab of paddlets.models.anomaly.dl.vae.VAE:41
-#: paddlets.models.anomaly.dl.vae.VAE:180
+#: 45c6bf95215143ef99ac29532e6ad8ed 90122b392b264576b25d02076738bf34
+#: baa8f8a914194aa9850161d869ca12af of paddlets.models.anomaly.dl.vae.VAE:45
+#: paddlets.models.anomaly.dl.vae.VAE:196
 #: paddlets.models.anomaly.dl.vae.stack:13
 msgid "Whether to use batch normalization."
 msgstr "是否使用批次归一化。"
 
-#: 20250bdc502746f88879dd2f549955cd a66dd7caaa324c4aa70823295bee27c7
-#: b6760ec9c26b4f11bc1a4502951cc3d8 of paddlets.models.anomaly.dl.vae.VAE:42
-#: paddlets.models.anomaly.dl.vae.VAE:186
+#: 48fad05d3e7f45fdac173e1a3a931cfa 8a6c54b1d9064c4c9e981a39886f886a
+#: f301fe4ad23143b2ab123409dad9a0ed of paddlets.models.anomaly.dl.vae.VAE:46
+#: paddlets.models.anomaly.dl.vae.VAE:202
 #: paddlets.models.anomaly.dl.vae.stack:15
 msgid "Whether to use dropout."
 msgstr "是否使用dropout。"
 
-#: 1e2ed4a0288a47b9ae1b6141b09f4074 2bf7f972d81c4d88be0f017ba6e8a7d4
-#: 8872a7d854ba461f9e177711cb9358ba of paddlets.models.anomaly.dl.vae.VAE:43
-#: paddlets.models.anomaly.dl.vae.VAE:192
+#: 7a657aa73697449dbd281715e27de291 91a6b29528dd46c2ab4b648f73c6d7d7
+#: 9d6d337cb122482994270da68d57b7f8 of paddlets.models.anomaly.dl.vae.VAE:47
+#: paddlets.models.anomaly.dl.vae.VAE:208
 #: paddlets.models.anomaly.dl.vae.stack:17
 msgid "probability of an element to be zeroed."
 msgstr "元素为0的概率。"
 
-#: 2aed4eeb430641708a4af53a17bbd13b b42889feddad44ca8c16b20bec064b59
-#: c16ec4cfed3549f4943e2c1d0980af34 of paddlets.models.anomaly.dl.vae.VAE:45
-#: paddlets.models.anomaly.dl.vae.VAE:198
+#: 91507f0c6b95437795100e401f05faaa ddef031c46134595a6c797798097621f
+#: e5619fae30b44666a1a661eda106abcb of paddlets.models.anomaly.dl.vae.VAE:49
+#: paddlets.models.anomaly.dl.vae.VAE:214
 #: paddlets.models.anomaly.dl.vae.stack:19
 msgid "Size of the convolving kernel."
 msgstr "卷积核大小。"
 
-#: 1a1facdc1d6e4e1ab80f5c527a056baa 7b6dce47aa5a441f996fc2ca3640ea6d
-#: 8d260e6b8e494f6a95bb7028927f4d16 of paddlets.models.anomaly.dl.vae.VAE:47
-#: paddlets.models.anomaly.dl.vae.VAE:204
+#: 111b7592af2944b689181d821a2d7e54 19e5bec293bc490790844d2b04a6c1b7
+#: f0200e491363470699701df882fe7074 of paddlets.models.anomaly.dl.vae.VAE:51
+#: paddlets.models.anomaly.dl.vae.VAE:220
 #: paddlets.models.anomaly.dl.vae.stack:21
 msgid "Number of recurrent layers."
 msgstr "递归网络层数量。"
 
-#: 05e01d2e3bed40008be1d63e0c934896 c123e7975bba42c89dabbf1b34f494c4
-#: fbc7b5ff03734a629d9db66722d6fc24 of paddlets.models.anomaly.dl.vae.VAE:49
-#: paddlets.models.anomaly.dl.vae.VAE:210
+#: 3e1c0fa5616049cba43f15192c013ca0 80e19b6287294690ac78a57d221d8683
+#: e5af59d7435c40ee921ab601950fbd32 of paddlets.models.anomaly.dl.vae.VAE:53
+#: paddlets.models.anomaly.dl.vae.VAE:226
 #: paddlets.models.anomaly.dl.vae.stack:23
 msgid "If True, becomes a bidirectional LSTM. Default: False."
 msgstr "如果为True，则为双向LSTM网络，默认为：False。"
 
-#: 6b4ff037ff5f403fb90b010347184f8a 74d6789132e045f782de9921f7a5aef1
-#: 8608e3ec02a340789404ebe809c1e129 of paddlets.models.anomaly.dl.vae.VAE:51
-#: paddlets.models.anomaly.dl.vae.VAE:216
+#: 6be8169ce73c4a33a8ec893bbe0ad96f 761e1065b13648abbe3d4cfb55fdb86c
+#: db7658dad3ba4c229e652fc6ce2ea980 of paddlets.models.anomaly.dl.vae.VAE:55
+#: paddlets.models.anomaly.dl.vae.VAE:232
 #: paddlets.models.anomaly.dl.vae.stack:25
 msgid "The activation function for the hidden layers."
 msgstr "隐藏层网络的激活函数。"
 
-#: 133cdb8696de4c749981436546cc3ef0 bad7b23947d941599a611c84756eb7c3
-#: dcabf081f238435694773205b4751417 of paddlets.models.anomaly.dl.vae.VAE:53
-#: paddlets.models.anomaly.dl.vae.VAE:222
+#: a88e1e0409024551a8e978df06984061 b473d00e0bc2447dadfab49be24088cb
+#: ba5ceaa4f53e4b8b9bff4cef36ee4b7d of paddlets.models.anomaly.dl.vae.VAE:57
+#: paddlets.models.anomaly.dl.vae.VAE:238
 #: paddlets.models.anomaly.dl.vae.stack:27
 msgid "The activation function for the last layers."
 msgstr "最后一层网络的激活函数。"
 
-#: f250ed311e3242108ad314d6db36c1a9 of paddlets.models.anomaly.dl.vae.stack:32
+#: 86956b9c5d984da8b13fb4a8bd6c8e45 of paddlets.models.anomaly.dl.vae.stack:32
 msgid "Dynamic graph LayerList."
 msgstr "动态网络图层结构。"
 
-#: 02c5ce6a5a8c462397b2438e75389f4e 1bfe9c6cce804bfc82f262f79b732d28
-#: 2625d1e4fb4146849f314001c518a4d0 2c5ded6204764af19928c3090dfbf6b3
-#: 30801187fed54bd6bf0bbcd1c1708de7 331cd41e45d64cbfabfbf7a4cfcbbe63
-#: 34d9af6289614364a0a63cae24696b75 3ba3e9e9898e4f54be99c723531a1661
-#: 4202c0c0193d4f0db4de8a5da46537b6 4a4d81872d0c4b3391cfa5686405a79b
-#: 5ab671fac1ec4da09a6530e94122c395 6546740d23e744a8aa49fa13dd8b8d74
-#: 669f6b5fb86f40cd94ed0f0267ed05c8 679cacffe4af433ca4346fbf61d4bd73
-#: 69dac92444074d938007801a728c3129 6b280e462bae40d7a61cc8c65f2306a2
-#: 75f6c48224834444846e180496776f79 7b7bc6ca59614a629a0ac1604197f5da
-#: 7ddb7e3db8b24f22ada018c12cb3cb7d 862811fff96d44ffa8fc069791ced078
-#: 96749412abae4e95a15ef0f7f474d649 98721bdbe7504f06ab225129f0755a9a
-#: 9c1ab0cc4579415ab170b2a854292545 9c80a9ad93ab40d29c902eca2ba4d1d8
-#: bcd4b37db4414d6cab8f6ce30fe07967 ccd60a33777d4a0ea3429240b1fa256b
-#: e4d242a6df76404e96d4258565896240 f09999d1a4614761a660189af8b49673
-#: f620d852302b4e299572bdf9e7cb4455 fa9199767dd143198c95967bf64df460 of
+#: 01eb8574a4e5450d8973db9647fad126 065c554254724671b74c79b3c6924327
+#: 0e793aae93e848a1915c6aae1efe37d8 11d99f73c73c41d7bded0d309521ce14
+#: 137ae077ccf44f8288100763c085733e 1d8169d13d854cf1884d7efb526b0d10
+#: 238efcdc2a61456db2ec38c569a11958 2984410e9c0a4f83b203603c006a68c6
+#: 2e60ec2709a149a38a11e07be11b5ff9 30bf0f09d1ef497a8300974645b01106
+#: 3319a4cd601c44f69f41e6ffab86a9df 389634f3711243fc98bf790490ad6a66
+#: 40d5c3c6b5544761aa7fd6cc26f7657c 431f4b3efb354970a5c2dba05c7c8299
+#: 47dfe4bc8efe41ad8d57442a353b8958 480ddd6a98e6430b84efc073bf1a320b
+#: 54c3947d43f344948b2c76594960ac0c 605b165cc5f241b385e42528d27f81fe
+#: 6e5b19e01f7c4f9bb095352cef0e101b 8312e10e61cd46c28b98c9f3f7e77892
+#: 94ebaa57200944a287b0b1ade2c2e163 99ceb75cb7fe4ad29e7181bc048fb2c8
+#: 9a32da6e48a2473da25c85cb4b412637 acdd2bc79b914cf99c60f96e4795b0bc
+#: aeaa231acc82411d92cb498e2c8f3e55 c078ed8f82e54622bacf692e0d7cf632
+#: cb51335b916b473a925f5bbe34ce9bd0 dcecad1d8f414527bd694ce7f8efc1f2
+#: e09fa68c75d541379ad0008c08f069dd f0a2b1438f5c4e49b73463403b435db9
+#: f1b50f6fb58e4c569689fada6e306f11 f91dd9eb9dfb41d7879e6b21a5211643 of
 #: paddlets.models.anomaly.dl.vae.VAE paddlets.models.anomaly.dl.vae.stack
 msgid "type"
 msgstr "类型"
 
-#: 5c3112705f6041538717247c5b5518eb of paddlets.models.anomaly.dl.vae.stack:34
+#: 025d1f8483ff4546a4fe0c0f67fc82b4 of paddlets.models.anomaly.dl.vae.stack:34
 msgid "paddle.nn.Sequential"
 msgstr "paddle.nn.Sequential"
 
-#: 313c366777f341f7a00a0bbce5a9543c of
+#: b3ac259409a244da911c9983e06ac141 of
 #: paddlets.models.anomaly.dl.vae.stack.forward:1
 msgid ""
 "Defines the computation performed at every call. Should be overridden by "
 "all subclasses."
 msgstr "每次调用定义好的计算。在所有子类覆盖。"
 
-#: d066faa1e1dd4409adf43d0d8fead9a8 of
+#: ea356c81a32b4a109d3f3c3141120beb of
 #: paddlets.models.anomaly.dl.vae.stack.forward:4
 msgid "unpacked tuple arguments"
 msgstr "解包元祖参数。"
 
-#: 6fff2bcc2bc34565aff9b4d43156be58 of
+#: ba41b0a583274b9090531d57f83c74f7 of
 #: paddlets.models.anomaly.dl.vae.stack.forward:6
 msgid "unpacked dict arguments"
 msgstr "解包字典参数。"
 
-#: 52d5ad4e20a6448890da4e6fab1d667e of paddlets.models.anomaly.dl.vae.VAE:1
+#: 6ea5d6bd481b4a83b0afb7137f6463f2 of paddlets.models.anomaly.dl.vae.VAE:1
 msgid ""
 "Bases: "
 ":py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
 msgstr "py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
 
-#: 6f09ca1944934629a34516a15b204a79 of paddlets.models.anomaly.dl.vae.VAE:1
+#: 1a0a31decf104600b3fda59e423a1225 of paddlets.models.anomaly.dl.vae.VAE:1
 msgid "VAE network for anomaly detection."
 msgstr "异常检测VAE网络模型。"
 
-#: 4ad6db3d364d49d49cb524f009936e9d bded96d77a6e4d1aa2f843f4a791503b of
-#: paddlets.models.anomaly.dl.vae.VAE:5 paddlets.models.anomaly.dl.vae.VAE:66
+#: c0bad6b673344a249367609286b8dcba cfd487b5865a4de5b2306fa28095a093 of
+#: paddlets.models.anomaly.dl.vae.VAE:5 paddlets.models.anomaly.dl.vae.VAE:70
 msgid "Sampling intervals between two adjacent samples."
 msgstr "两个相邻样本之间的数据采集间隔。"
 
-#: 56d6cb83f8b24cb29cbd2c72f19be7d1 5c7749b268794d988a1d66f2a752f681 of
-#: paddlets.models.anomaly.dl.vae.VAE:7 paddlets.models.anomaly.dl.vae.VAE:72
+#: 4c58e5c7690942569194432191fea7e2 d7fcbe402bba403a9230f6b38ad886a2 of
+#: paddlets.models.anomaly.dl.vae.VAE:7 paddlets.models.anomaly.dl.vae.VAE:76
 msgid "Loss function."
 msgstr "损失函数。"
 
-#: 45c5bec2f91e49c48ad1e54b625e7a90 d9a894e1cbf548e99fa7bc989cff3a1b of
-#: paddlets.models.anomaly.dl.vae.VAE:9 paddlets.models.anomaly.dl.vae.VAE:78
+#: 316af451c0354c07ab9e2f669f0b83a9 87c1fd53803b4f468a70a877111f7c1d of
+#: paddlets.models.anomaly.dl.vae.VAE:9 paddlets.models.anomaly.dl.vae.VAE:82
 msgid "Optimizer algorithm."
 msgstr "优化算法。"
 
-#: 5cbdaeb50e5348e38ad641c1abab614f 98f55d8fc8dc42798ec80abd5689585d of
-#: paddlets.models.anomaly.dl.vae.VAE:11 paddlets.models.anomaly.dl.vae.VAE:84
+#: 88d029989a4445c58af7f9badc202932 93696f6aafce4a4daa017ea8ad68af47 of
+#: paddlets.models.anomaly.dl.vae.VAE:11 paddlets.models.anomaly.dl.vae.VAE:88
 msgid "The method to get anomaly threshold."
 msgstr "计算阈值点的方法。"
 
-#: 024f171e72734603b9852510778ba61d cabb888c97da41f19b3d288e864702d7 of
-#: paddlets.models.anomaly.dl.vae.VAE:13 paddlets.models.anomaly.dl.vae.VAE:90
+#: 0cb46b4d802f4277840bda0cea4581d3 ae03d63e16a246e4a77ab6117c534015 of
+#: paddlets.models.anomaly.dl.vae.VAE:13 paddlets.models.anomaly.dl.vae.VAE:94
 msgid "The coefficient of threshold."
 msgstr "阈值系数。"
 
-#: 306f78690d24416f8cd5d3f2e973ad6b e16a6ef7f9db4b8fa45b4040ec653cf6 of
-#: paddlets.models.anomaly.dl.vae.VAE:15 paddlets.models.anomaly.dl.vae.VAE:96
+#: 435f4e9e7c574af098cda297be367a55 61c6fdc57c3443a68d6aba4e3da0b1b1 of
+#: paddlets.models.anomaly.dl.vae.VAE:15 paddlets.models.anomaly.dl.vae.VAE:100
 msgid "The threshold to judge anomaly."
 msgstr "阈值，用于判别是否异常。"
 
-#: 537c7dd4bd5e41ee9df1bbd7e8d317d3 d10954f045de481098ceb341188177fd of
-#: paddlets.models.anomaly.dl.vae.VAE:17 paddlets.models.anomaly.dl.vae.VAE:102
+#: 23ccf8f2219c4126ad5f52bffa040475 7a291cc7b4a9446fb1e44baebae6ec94 of
+#: paddlets.models.anomaly.dl.vae.VAE:17 paddlets.models.anomaly.dl.vae.VAE:106
 msgid "The method to get anomaly score."
 msgstr "计算异常分数的方法。"
 
-#: 4cd9e1296ad44764b0070a81ae741a76 ea92bc3d8b7e433bb74d8adff636fc46 of
-#: paddlets.models.anomaly.dl.vae.VAE:19 paddlets.models.anomaly.dl.vae.VAE:108
+#: 37f4401fb8574b7d8e9dbf24560b9b11 8de79a7583d84275b85ce94fdd4cafc8 of
+#: paddlets.models.anomaly.dl.vae.VAE:19 paddlets.models.anomaly.dl.vae.VAE:112
+msgid "Whether to adjust the pred label according to the real label."
+msgstr "是否根据实际标签调整预测结果。"
+
+#: 4d89ae2545f045be94beb7bc50bb69b2 8dc9f85f79f443a29eb3b2c903719f5a of
+#: paddlets.models.anomaly.dl.vae.VAE:21 paddlets.models.anomaly.dl.vae.VAE:118
+msgid "The method to adjust pred label."
+msgstr "调整预测结果的方法。"
+
+#: 3990520b08d7408382a317e7f491430c bc68b8e005ae4c7d9e1f895e1d9a24ff of
+#: paddlets.models.anomaly.dl.vae.VAE:23 paddlets.models.anomaly.dl.vae.VAE:124
 msgid "Optimizer parameters."
 msgstr "优化器参数。"
 
-#: 163aa7a684d14b52a8ba0b7ed3a2e2f3 e165d8482b2f4d96a7a1bdd88b617079 of
-#: paddlets.models.anomaly.dl.vae.VAE:21 paddlets.models.anomaly.dl.vae.VAE:114
+#: 67319dc6a6f4416f94b5fe3d16f4e31e afe4c90381524059beb5a1fb31a10110 of
+#: paddlets.models.anomaly.dl.vae.VAE:25 paddlets.models.anomaly.dl.vae.VAE:130
 msgid "Evaluation metrics of model."
 msgstr "模型评估指标。"
 
-#: d24540be0ed141edb0f183d5f98a2245 f1b29520140a486ab96f93fc22f04c81 of
-#: paddlets.models.anomaly.dl.vae.VAE:23 paddlets.models.anomaly.dl.vae.VAE:120
+#: 5402899f923544dd97ecd1c13282c8d9 9bec97b21bac468a8efe5171551a1e7c of
+#: paddlets.models.anomaly.dl.vae.VAE:27 paddlets.models.anomaly.dl.vae.VAE:136
 msgid "Customized callback functions."
 msgstr "自定义回调函数。"
 
-#: 0e43d63b0f6c4fcd9843ef218aceb2c1 883ffc53ecbd444392ff97dca9cac4db of
-#: paddlets.models.anomaly.dl.vae.VAE:25 paddlets.models.anomaly.dl.vae.VAE:126
+#: 4c74628b519c42caa0872a2ac2dbfe9d 63abd6b7495b4f04a869ee6bf733af26 of
+#: paddlets.models.anomaly.dl.vae.VAE:29 paddlets.models.anomaly.dl.vae.VAE:142
 msgid "Number of samples per batch."
 msgstr "每个批次的样本数量。"
 
-#: 02e5991d423f4bbaa42fd78e60792248 8a88fc878ee645e1b7ae2d854d90df38 of
-#: paddlets.models.anomaly.dl.vae.VAE:27 paddlets.models.anomaly.dl.vae.VAE:132
+#: 4acd13c32f304678ba4b32ce7a45f63d ec60cfd8ab314be89890a38ac5f8c3f4 of
+#: paddlets.models.anomaly.dl.vae.VAE:31 paddlets.models.anomaly.dl.vae.VAE:148
 msgid "Max epochs during training."
 msgstr "训练过程中的最大迭代次数。"
 
-#: 1a0d093e24e8430091febe3932e0a370 dc47556c4cfd457bbe6b59bb3fb31fe8 of
-#: paddlets.models.anomaly.dl.vae.VAE:29 paddlets.models.anomaly.dl.vae.VAE:138
+#: 343c1ab82a61430ab473512d7d56aa0f bc88d4ff46a5474da8e6a2917d0ae433 of
+#: paddlets.models.anomaly.dl.vae.VAE:33 paddlets.models.anomaly.dl.vae.VAE:154
 msgid "Verbosity mode."
 msgstr "详细模式。"
 
-#: 1fd10828aa6344889349dbb9a758639a 2476d8bdd16244f2a53d2d243f4107bf of
-#: paddlets.models.anomaly.dl.vae.VAE:31 paddlets.models.anomaly.dl.vae.VAE:144
+#: 4e4a93a2fe7b473aa68c8d202d076f47 81982ee9c78b461388dfd29d0cbdec15 of
+#: paddlets.models.anomaly.dl.vae.VAE:35 paddlets.models.anomaly.dl.vae.VAE:160
 msgid "Number of epochs to wait for improvement before terminating."
 msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
 
-#: 06f82fb46ef742a892aac3b2b7985f95 53131693be014707bcc43324068913ae of
-#: paddlets.models.anomaly.dl.vae.VAE:33 paddlets.models.anomaly.dl.vae.VAE:150
+#: 0d3e0bec0fe54e418a8de6c91e88b9a2 257532c1a01947aabe8b4f5e582ec99b of
+#: paddlets.models.anomaly.dl.vae.VAE:37 paddlets.models.anomaly.dl.vae.VAE:166
 msgid "Global random seed."
 msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致。"
 
-#: 7cbe9e2f99a045dbbd935d7eacff9b3c fed3722b165b4a3293b1cbf7c49ec619 of
-#: paddlets.models.anomaly.dl.vae.VAE:37 paddlets.models.anomaly.dl.vae.VAE:168
+#: 4d5ca951a8ad45638b60901265cfa94f b665a79cef46460daa392c62554eec55 of
+#: paddlets.models.anomaly.dl.vae.VAE:41 paddlets.models.anomaly.dl.vae.VAE:184
 msgid "The type of encoder."
 msgstr "编解码器的类型。"
 
-#: 43a42ab8b2e347bba6be8be1630ee2f4 58bbcc65e6c5463e94531ed196e60999 of
-#: paddlets.models.anomaly.dl.vae.VAE:39 paddlets.models.anomaly.dl.vae.VAE:174
+#: 84416635668446cfb0721a591fb53fb2 fe772ce877e04abea945094ddef43302 of
+#: paddlets.models.anomaly.dl.vae.VAE:43 paddlets.models.anomaly.dl.vae.VAE:190
 msgid "The type of decoder."
 msgstr "解码器的类型。"
 
-#: a49d9dc09dd44977a3593ba885b2dbd0 bd1ee3ee1cf9403ebfd054d0f8047481 of
-#: paddlets.models.anomaly.dl.vae.VAE:55 paddlets.models.anomaly.dl.vae.VAE:228
+#: 2884324b49b24b138654e25678952aae f032b168526d4828b2d0dce65ad8881a of
+#: paddlets.models.anomaly.dl.vae.VAE:59 paddlets.models.anomaly.dl.vae.VAE:244
 msgid "param for reparameterize."
 msgstr "参数分布。"
 
-#: 01bef57f4f8d45c8a5f0e1ca613d49c6 1ab8ca4cb69747bf8aeef0c407821ecb
-#: 28b6256ec9ac4de3b421f3779be523d8 3a8289c0529045df86e6d80c4a5b581a
-#: 3c091bb4c1ce480eb8c14bbf926d9120 6dc7b3d9e52c46f2a9b5b5dc7af064dc
-#: 76cfada9073a4fde960f803a55788ee7 d6035c617639408c85305237cabdbb33
-#: edef080b984744af82e333bf76da5fac of paddlets.models.anomaly.dl.vae.VAE:62
-#: paddlets.models.anomaly.dl.vae.VAE:68 paddlets.models.anomaly.dl.vae.VAE:128
-#: paddlets.models.anomaly.dl.vae.VAE:134
-#: paddlets.models.anomaly.dl.vae.VAE:140
-#: paddlets.models.anomaly.dl.vae.VAE:146
-#: paddlets.models.anomaly.dl.vae.VAE:200
-#: paddlets.models.anomaly.dl.vae.VAE:206
-#: paddlets.models.anomaly.dl.vae.VAE:230
+#: 0599fd3e678841a08b50bd2b51887353 0cef224436ff4be49c1f6764f2c72026
+#: 1adc4d71e5584ed5ae0915ceb946238b 33329c7ade8c4454aad978639c73bd39
+#: 39177e6c363a4d1bb9683bf9d90ee429 3ddce0ff17a14c228964c229119ca45d
+#: c343e8da3b8b4ddbab3305a5a9db7a23 c408fbd92dd34dbab01e1f1c56941b3f
+#: d908aa34b69545bc925e6a0f7807f956 of paddlets.models.anomaly.dl.vae.VAE:66
+#: paddlets.models.anomaly.dl.vae.VAE:72 paddlets.models.anomaly.dl.vae.VAE:144
+#: paddlets.models.anomaly.dl.vae.VAE:150
+#: paddlets.models.anomaly.dl.vae.VAE:156
+#: paddlets.models.anomaly.dl.vae.VAE:162
+#: paddlets.models.anomaly.dl.vae.VAE:216
+#: paddlets.models.anomaly.dl.vae.VAE:222
+#: paddlets.models.anomaly.dl.vae.VAE:246
 msgid "int"
 msgstr ""
 
-#: 3115655cc5ba4ebd9946f9864e047ffe 42fb7aaaf676452c9a5450b4c78a9e19
-#: acfa3c3f15f743ff929c60e2a1da6697 of paddlets.models.anomaly.dl.vae.VAE:74
-#: paddlets.models.anomaly.dl.vae.VAE:218
-#: paddlets.models.anomaly.dl.vae.VAE:224
+#: 48c2944bd40540b3960cfcedfd1afe64 7f536a53d92c4769a17a09ccffadd2f7
+#: e23f85685b074c35b4c6bad2ccd2c8ee of paddlets.models.anomaly.dl.vae.VAE:78
+#: paddlets.models.anomaly.dl.vae.VAE:234
+#: paddlets.models.anomaly.dl.vae.VAE:240
 msgid "Callable[..., paddle.Tensor]"
 msgstr ""
 
-#: 6d2b4972eec54919834123468f07c08c of paddlets.models.anomaly.dl.vae.VAE:80
+#: 1667056bdfee4d93ae495a8e514abd18 of paddlets.models.anomaly.dl.vae.VAE:84
 msgid "Callable[..., Optimizer]"
 msgstr ""
 
-#: aced7f9a47bb480e96f0f423e0254d05 of paddlets.models.anomaly.dl.vae.VAE:86
+#: 84cac2ebf660431b9d08a97e06851d54 of paddlets.models.anomaly.dl.vae.VAE:90
 msgid "Callable[..., float]|None"
 msgstr ""
 
-#: 30f3c55b9275427f955010b6a52abed6 3e797baa6721447c899bbe17bf8ffb8a of
-#: paddlets.models.anomaly.dl.vae.VAE:92 paddlets.models.anomaly.dl.vae.VAE:194
+#: 07bdf607840f4789ae56e1c1087e4a64 d5f03c3ee6134478b4cd7be3b1575f5f of
+#: paddlets.models.anomaly.dl.vae.VAE:96 paddlets.models.anomaly.dl.vae.VAE:210
 msgid "float"
 msgstr ""
 
-#: 106dd0adbb534c6d9de0731025949b12 of paddlets.models.anomaly.dl.vae.VAE:98
+#: bc0cf35c953c47cf9be915546476c014 of paddlets.models.anomaly.dl.vae.VAE:102
 msgid "float|None"
 msgstr ""
 
-#: 664cf8a137674253a41c8d65044fe243 of paddlets.models.anomaly.dl.vae.VAE:104
+#: c93a26df6b1e48f68535b60b96574673 of paddlets.models.anomaly.dl.vae.VAE:108
 msgid "Callable[..., List[float]]|None"
 msgstr ""
 
-#: 07f443d4aae14d458932232db960d985 of paddlets.models.anomaly.dl.vae.VAE:110
-msgid "Dict[str, Any]"
-msgstr ""
-
-#: 417dfd32ceca419488b3f2b85504abb5 of paddlets.models.anomaly.dl.vae.VAE:116
-msgid "List[str]"
-msgstr ""
-
-#: fc6dfca7d7ab4b03a1cecf0ffcf7af42 of paddlets.models.anomaly.dl.vae.VAE:122
-msgid "List[Callback]"
-msgstr ""
-
-#: bf98fb71dd364dc4bece2d1b733a886e of paddlets.models.anomaly.dl.vae.VAE:152
-msgid "int|None"
-msgstr ""
-
-#: d9932f0f2209459589c72ab66889fdf3 of paddlets.models.anomaly.dl.vae.VAE:156
-msgid "Training status."
-msgstr ""
-
-#: 38d2e78624c64f6387db63d91f016e45 40580ee209d0449da6436d76504d9cd6
-#: f83a403a87e14ee9a294c5aeb171df7e of paddlets.models.anomaly.dl.vae.VAE:158
-#: paddlets.models.anomaly.dl.vae.VAE:182
-#: paddlets.models.anomaly.dl.vae.VAE:188
+#: bc4aba34aada4ee0a01ecc0c866dfc74 d9515d314f1348d397e92843bd389c5f
+#: fc2bea9e31a4422bb40208bb3b81a7d9 fefb7d297df546c6bcf104b20c672d26 of
+#: paddlets.models.anomaly.dl.vae.VAE:114
+#: paddlets.models.anomaly.dl.vae.VAE:174
+#: paddlets.models.anomaly.dl.vae.VAE:198
+#: paddlets.models.anomaly.dl.vae.VAE:204
 msgid "bool"
 msgstr ""
 
-#: 1571970e9c514d3382bc48c202a58777 of paddlets.models.anomaly.dl.vae.VAE:164
+#: 7ec06d25d9234211accaff80ad1d35c9 of paddlets.models.anomaly.dl.vae.VAE:120
+msgid "Callable[..., np.ndarray]|None"
+msgstr ""
+
+#: b2d5503178374aeaa776543fdffd9925 of paddlets.models.anomaly.dl.vae.VAE:126
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 62da8cc364f040ad89f92902f5d998a6 of paddlets.models.anomaly.dl.vae.VAE:132
+msgid "List[str]"
+msgstr ""
+
+#: 18ed82e6386b4072b3e8391817749294 of paddlets.models.anomaly.dl.vae.VAE:138
+msgid "List[Callback]"
+msgstr ""
+
+#: f53af2ceefa047fdbef89998c0ea2398 of paddlets.models.anomaly.dl.vae.VAE:168
+msgid "int|None"
+msgstr ""
+
+#: 2160e8f4210f43309bd902f5ccc2dfaa of paddlets.models.anomaly.dl.vae.VAE:172
+msgid "Training status."
+msgstr ""
+
+#: 51af34a51b7e49bcb907b1d902665e6f of paddlets.models.anomaly.dl.vae.VAE:180
 msgid "List[int]|None"
 msgstr ""
 
-#: 0d073421a0514b8c812a2d6e1a089971 817b2240e82f4cdfb19b00d7df404911
-#: c0226d2c58794c86a80307ebba51dde6 of paddlets.models.anomaly.dl.vae.VAE:170
-#: paddlets.models.anomaly.dl.vae.VAE:176
-#: paddlets.models.anomaly.dl.vae.VAE:212
+#: 5d758fde704c40789f8c701bcbdfe50a 7f530238f24d447bb495c756cf51f204
+#: 8bf3288e69224241921d76bc4c1b22e2 of paddlets.models.anomaly.dl.vae.VAE:186
+#: paddlets.models.anomaly.dl.vae.VAE:192
+#: paddlets.models.anomaly.dl.vae.VAE:228
 msgid "str"
 msgstr ""
 
