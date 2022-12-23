@@ -126,7 +126,7 @@ PSMTESTDataset = DatasetConfig(
 # 9> BasicMotions_Test.csv
 BasicMotionsTestDataset = DatasetConfig(
     name = "BasicMotions_Test",
-    type = "classify",
+    type = "classification",
     path = "https://bj.bcebos.com/paddlets/BasicMotions_Test.csv",
     load_param = {
         "time_col": "index",
@@ -139,7 +139,7 @@ BasicMotionsTestDataset = DatasetConfig(
 # 10> BasicMotions_Train.csv
 BasicMotionsTrainTDataset = DatasetConfig(
     name = "BasicMotions_Train",
-    type = "classify",
+    type = "classification",
     path = "https://bj.bcebos.com/paddlets/BasicMotions_Train.csv",
     load_param = {
         "time_col": "index",
