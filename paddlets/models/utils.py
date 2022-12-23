@@ -95,7 +95,8 @@ def to_tsdataset(
         @functools.wraps(func)
         def wrapper(
             obj: BaseModel,
-            tsdataset: TSDataset
+            tsdataset: TSDataset,
+            **kwargs
         ) -> TSDataset:
             """Core processing logic.
 
@@ -111,7 +112,7 @@ def to_tsdataset(
                 f"{scenario} not supported, ['forecasting', 'anomaly_label', 'anomaly_score'] is optional."
             )
             
-            results = func(obj, tsdataset)
+            results = func(obj, tsdataset, **kwargs)
             if scenario == "anomaly_label" or scenario == "anomaly_score":
                 # Generate target cols
                 target_cols = tsdataset.get_target()
