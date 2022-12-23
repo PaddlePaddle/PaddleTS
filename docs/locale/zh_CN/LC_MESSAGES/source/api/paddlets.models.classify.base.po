@@ -1,0 +1,140 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-22 10:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.classify.base.rst:2
+#: 20afd3e0507940808206bece8c299165
+msgid "paddlets.models.classify.base"
+msgstr ""
+
+#: 4f8e6b19cd344d1c975837b07cf6cb8d of
+#: paddlets.models.classify.base.BaseClassifier:1
+msgid "Bases: :py:class:`~abc.ABC`"
+msgstr ""
+
+#: a8d323978d634b61b2a1aa76834415bf of
+#: paddlets.models.classify.base.BaseClassifier:1
+msgid "Base class for all classifier."
+msgstr "所有分类模型的基类"
+
+#: d6bbc8f349564252bf2ad0f07f8c95aa of
+#: paddlets.models.classify.base.BaseClassifier.fit:1
+msgid "Fit a BaseClassifier instance."
+msgstr "训练一个分类模型基类的实例"
+
+#: 00b8933aca354a38bb194646a46bfd1d 1f5adc18997147a0a89c4835ea4bf7bb
+#: 56f57d0af05e4e54a39101b43fb5d539 of
+#: paddlets.models.classify.base.BaseClassifier.fit:3
+#: paddlets.models.classify.base.BaseClassifier.load:3
+#: paddlets.models.classify.base.BaseClassifier.save:3
+msgid ""
+"Any non-abstract classes inherited from this class should implement this "
+"method."
+msgstr "任何继承自此类的非抽象子类均需实现此方法。"
+
+#: 12bfae7abd80404386f5fcef7139f731 183f60c8088a43f38af16c4a881b9aad
+#: 30453ff533fc4332a8d487a8928d0a8c 795f4dff92c04f039b9abb785c1e67a7
+#: 97c4f038f08d4f80aa7642ebc5967d0a of
+#: paddlets.models.classify.base.BaseClassifier.fit
+#: paddlets.models.classify.base.BaseClassifier.load
+#: paddlets.models.classify.base.BaseClassifier.predict
+#: paddlets.models.classify.base.BaseClassifier.predict_proba
+#: paddlets.models.classify.base.BaseClassifier.save
+msgid "Parameters"
+msgstr "参数"
+
+#: 541e9d5aa05d44b7a7e71d7a545ff1c7 of
+#: paddlets.models.classify.base.BaseClassifier.fit:5
+msgid "Train set."
+msgstr "训练集。"
+
+#: db588043f23f4011b13591711895904b of
+#: paddlets.models.classify.base.BaseClassifier.fit:7
+msgid "(np.ndarray) : The train data class labels"
+msgstr "训练数据的标签"
+
+#: 269dda750ac343169d391eb0795be61b of
+#: paddlets.models.classify.base.BaseClassifier.fit:8
+msgid "Eval set, used for early stopping."
+msgstr "验证集，用于早停"
+
+#: e4612a5880604f36980c2ce19a19546c of
+#: paddlets.models.classify.base.BaseClassifier.fit:10
+msgid "(np.ndarray) : The valid data class labels"
+msgstr "验证数据的标签"
+
+#: 7776dd0bfcd64fdea72885a5d41de829 of
+#: paddlets.models.classify.base.BaseClassifier.predict:1
+msgid "Predict labels. Results are output as ndarray."
+msgstr "预测结果。以数组方式返回"
+
+#: 32b203f12ce4443a8e18ce8b309c6cd6 888be45992f54e04ba05e06540af2dad of
+#: paddlets.models.classify.base.BaseClassifier.predict:3
+#: paddlets.models.classify.base.BaseClassifier.predict_proba:4
+msgid "Data to be predicted."
+msgstr "被预测数据"
+
+#: 54d0ba49c72949d5b658583f0b5a3ec4 90eb61b5ee52414a95c9c8d1112b56f6
+#: d4bb8b3fb29749dabb9ca33ad6ebaf2a of
+#: paddlets.models.classify.base.BaseClassifier.load
+#: paddlets.models.classify.base.BaseClassifier.predict
+#: paddlets.models.classify.base.BaseClassifier.predict_proba
+msgid "Returns"
+msgstr "返回"
+
+#: 124a7b0dc1984b5d93c3acb7780e03ed 2f118895515044249bb086c6556c43e4 of
+#: paddlets.models.classify.base.BaseClassifier.predict:6
+#: paddlets.models.classify.base.BaseClassifier.predict_proba:7
+msgid "np.ndarray."
+msgstr "多维数组"
+
+#: dd50029dcb2f406b98aa3eb64892c204 of
+#: paddlets.models.classify.base.BaseClassifier.predict_proba:1
+msgid ""
+"Find probability estimates for each class for all cases. Results are "
+"output as ndarray."
+msgstr "获取每条样本在每个类别上的概率。以多维数组方式返回"
+
+#: 7ef350e912854d43a96c10abb5044c50 of
+#: paddlets.models.classify.base.BaseClassifier.save:1
+msgid "Saves a BaseClassifier instance to a disk file."
+msgstr "将一个分类模型基类实例保存在磁盘文件中。"
+
+#: 3c4c3601b20e4b528b5dded84500ebbe cec8d4b52aac49609aa871322af1d2f7 of
+#: paddlets.models.classify.base.BaseClassifier.load:5
+#: paddlets.models.classify.base.BaseClassifier.save:5
+msgid "A path string containing a model file name."
+msgstr "一个包含模型文件名的字符串格式的路径。"
+
+#: 50b3d6e6aba04a75a70b963915784e71 of
+#: paddlets.models.classify.base.BaseClassifier.load:1
+msgid ""
+"Loads a :class:`~/paddlets.models.classify.base.BaseClassifier` instance from "
+"a file."
+msgstr "从给定的文件中加载 :class:`~/paddlets.models.classify.base.BaseClassifier` 模型实例。"
+
+#: a4b4dcda116849ab899ac28829fde9fa of
+#: paddlets.models.classify.base.BaseClassifier.load:8
+msgid "A loaded model."
+msgstr "加载完成的模型。"
+
+#: ed778a521d9a4109b2f0c60ea0775b05 of
+#: paddlets.models.classify.base.BaseClassifier.load
+msgid "Return type"
+msgstr "返回类型"
+
