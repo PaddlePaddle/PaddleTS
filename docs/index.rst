@@ -91,6 +91,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     Probability Forecasting <source/modules/models/probability_forecasting.rst>
     Representation  <source/modules/models/representation.rst>
     Anomaly Detection <source/modules/models/anomaly.rst>
+    Paddle Inference <source/modules/models/paddle_inference.rst>
 
 
 .. toctree::
@@ -143,4 +144,5 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     paddlets.transform <source/api/paddlets.transform.rst>
     paddlets.ensemble <source/api/paddlets.ensemble.rst>
     paddlets.utils <source/api/paddlets.utils.rst>
+    paddlets.xai <source/api/paddlets.xai.rst>
 

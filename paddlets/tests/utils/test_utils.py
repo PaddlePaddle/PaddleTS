@@ -1,19 +1,23 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import sys
+import os
 sys.path.append(".")
 from unittest import TestCase
 import unittest
+import json
 
 import pandas as pd
 import numpy as np
 
 from paddlets.models.forecasting import LSTNetRegressor
 from paddlets.datasets import TimeSeries, TSDataset
-from paddlets.utils.utils import check_model_fitted, repr_results_to_tsdataset
+from paddlets.datasets.repository import get_dataset
+from paddlets.utils.utils import check_model_fitted, repr_results_to_tsdataset, build_ts_infer_input
 from paddlets.pipeline.pipeline import Pipeline
 from paddlets.utils import get_uuid, plot_anoms
 from paddlets.models.forecasting import MLPRegressor
+from paddlets.models.forecasting import NHiTSModel
 from paddlets.ensemble import StackingEnsembleForecaster
 
 class TestUtils(TestCase):
@@ -99,11 +103,15 @@ class TestUtils(TestCase):
             'eval_metrics': ["mse", "mae"]
         }
 
+        nhits_params = {
+            'eval_metrics': ["mse", "mae"],
+        }
+
         model1 = StackingEnsembleForecaster(
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
         model1.fit(self.tsdataset1)
         check_model_fitted(model1)
@@ -158,6 +166,78 @@ class TestUtils(TestCase):
         plot_anoms(predict,tsdataset,"a")
         plot_anoms(predict,tsdataset)
         plot_anoms(predict)
+
+    def test_build_ts_infer_input(self):
+        dataset = get_dataset('WTH')
+
+        #case1: good case for forecasting
+        meta_data = {
+            "model_type": "forecasting",
+            "size": {
+                "in_chunk_len": 100,
+                "out_chunk_len": 20,
+                "skip_chunk_len": 1,
+            },
+            "input_data": {
+                "past_target": [None, 100, 1],
+                "observed_cov_numeric": [None, 100, 11]
+            },
+        }
+        file_name = f"/tmp/test_meta_file_{np.random.randint(1000, 200000)}"
+        with open(file_name, mode='w') as f:
+            json.dump(meta_data, f)
+        res = build_ts_infer_input(dataset, file_name)
+        self.assertEqual(res['past_target'].shape, (1, 100, 1))
+        self.assertTrue((res['past_target'] == dataset.target.to_numpy()[-100:].reshape(1, 100, 1)).all())
+        self.assertEqual(res['observed_cov_numeric'].shape, (1, 100, 11))
+        self.assertTrue((res['observed_cov_numeric'] == dataset.observed_cov.to_numpy()[-100:].reshape(1, 100, 11)).all())
+
+        #case2: good case for anomaly
+        meta_data = {
+            "model_type": "anomaly",
+            "size": {
+                "in_chunk_len": 100,
+            },
+            "input_data": {
+                "observed_cov_numeric": [None, 100, 11]
+            },
+        }
+        file_name = f"/tmp/test_meta_file_{np.random.randint(1000, 200000)}"
+        with open(file_name, mode='w') as f:
+            json.dump(meta_data, f)
+        res = build_ts_infer_input(dataset, file_name)
+        self.assertEqual(res['observed_cov_numeric'].shape, (len(dataset.observed_cov) - 100 + 1, 100, 11))
+
+        #case3: bad case, dataset and meta_file not match
+        meta_data = {
+            "model_type": "forecasting",
+            "size": {
+                "in_chunk_len": 100,
+                "out_chunk_len": 20,
+                "skip_chunk_len": 1,
+            },
+            "input_data": {
+                "past_target": [None, 100, 1],
+                "observed_cov_numeric": [None, 100, 11],
+                "known_cov_numeric": [None, 120, 11],
+            },
+        }
+        file_name = f"/tmp/test_meta_file_{np.random.randint(1000, 200000)}"
+        with open(file_name, mode='w') as f:
+            json.dump(meta_data, f)
+        with self.assertRaises(ValueError):
+            res = build_ts_infer_input(dataset, file_name)
+
+        #case4: bad case, meta_file is not right
+        meta_data = {
+            "model_type": "forecasting",
+        }
+        file_name = f"/tmp/test_meta_file_{np.random.randint(1000, 200000)}"
+        with open(file_name, mode='w') as f:
+            json.dump(meta_data, f)
+        with self.assertRaises(ValueError):
+            res = build_ts_infer_input(dataset, file_name)
+
 
 if __name__ == "__main__":
     unittest.main()

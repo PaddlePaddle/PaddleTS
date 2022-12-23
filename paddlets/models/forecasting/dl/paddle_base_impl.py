@@ -31,7 +31,8 @@ logger = Logger(__name__)
 
 
 class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
-    """PaddleTS deep time series framework, all time series models based on paddlepaddle implementation need to inherit this class.
+    """PaddleTS/PaddleTS deep time series framework, 
+        all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
@@ -43,7 +44,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
-        eval_metrics(List[str]): Evaluation metrics of model.
+        eval_metrics(List[str]|List[Metric]): Evaluation metrics of model.
         callbacks(List[Callback]): Customized callback functions.
         batch_size(int): Number of samples per batch.
         max_epochs(int): Max epochs during training.
@@ -87,7 +88,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss_fn: Callable[..., paddle.Tensor] = None,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
+        eval_metrics: Union[List[str], List[Metric]] = [], 
         callbacks: List[Callback] = [], 
         batch_size: int = 128,
         max_epochs: int = 10,
@@ -568,3 +569,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             paddle.nn.Layer.
         """
         pass
+
+    def _build_meta(self):
+        res = super()._build_meta()
+        for key, value in self._fit_params.items():
+            if not isinstance(value, int):
+                continue 
+            if value != 0:
+                res['input_data'][key] = value
+        return res
+

@@ -380,14 +380,20 @@ class TransformerModel(PaddleBaseModelImpl):
         Returns:
             Dict[str, Any]: model parameters.
         """
+        known_num_dim = 0
+        observed_num_dim = 0
         input_dim = target_dim = train_tsdataset[0].get_target().data.shape[1]
         if train_tsdataset[0].get_observed_cov():
-            input_dim += train_tsdataset[0].get_observed_cov().data.shape[1]
+            observed_num_dim = train_tsdataset[0].get_observed_cov().data.shape[1]
+            input_dim += observed_num_dim
         if train_tsdataset[0].get_known_cov():
-            input_dim += train_tsdataset[0].get_known_cov().data.shape[1]
+            known_num_dim = train_tsdataset[0].get_known_cov().data.shape[1]
+            input_dim += known_num_dim
         fit_params = {
             "target_dim": target_dim,
-            "input_dim": input_dim
+            "input_dim": input_dim,
+            "known_num_dim": known_num_dim,
+            "observed_num_dim": observed_num_dim,
         }
         return fit_params
         

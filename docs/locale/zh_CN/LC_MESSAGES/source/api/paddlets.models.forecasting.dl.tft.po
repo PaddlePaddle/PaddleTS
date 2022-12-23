@@ -1,0 +1,173 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-18 16:14+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.tft.rst:2
+#: b2b8be3eaa794913b1eff785c3ddbaf3
+msgid "paddlets.models.forecasting.dl.tft"
+msgstr ""
+
+#: d72c27db43004215b8960396de453ae5 of paddlets.models.forecasting.dl.tft:1
+msgid ""
+"This implementation is based on the article `Temporal Fusion Transformers"
+" for Interpretable Multi-horizon Time Series Forecasting "
+"<https://arxiv.org/abs/1912.09363>`_."
+msgstr ""
+
+#: 90432b6f8c204895ad35969781826ed4 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 912b47a945074d928adae6ffdcf0a083 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:1
+msgid "Implementation of TFT model."
+msgstr "TFT模型实现。"
+
+#: 6e852730426e49b892677bd9f3e67c72 85e05df67cd644e585aa2c11ebb07f83 of
+#: paddlets.models.forecasting.dl.tft.TFTModel
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable
+msgid "Parameters"
+msgstr "模型参数"
+
+#: 46520bce5646469daa582f6e4dc2c6d3 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:3
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 59c249a7bd3e4a508a43c8845594bf83 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: 4f6bb739be5b4bbbb9b4c643d8aa1c98 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:7
+msgid "The number of features in the hidden state of the TFT module."
+msgstr "TFT模型隐藏状态h大小。"
+
+#: 29782e9ea86642d1ac5a12d7e507a1ad of
+#: paddlets.models.forecasting.dl.tft.TFTModel:9
+msgid "The number of LSTM layers."
+msgstr "LSTM网络的层数。"
+
+#: b00b1b78211a49518b305bd3b1683b3d of
+#: paddlets.models.forecasting.dl.tft.TFTModel:11
+msgid "The number of heads of self-attention module."
+msgstr "多头注意力模块的数量。"
+
+#: d92c40e10f0b4f04859547f2351a6d03 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:13
+msgid "The output quantiles of the model."
+msgstr "模型输出的分位数。"
+
+#: 3af252e47c464495bdd8435bd9e907aa of
+#: paddlets.models.forecasting.dl.tft.TFTModel:15
+msgid "The fraction of neurons that are dropped in all-but-last RNN layers."
+msgstr "除了最后一层RNN，神经元随机丢弃的比例。"
+
+#: 3004221ce40d4fd78c8cb555b8f2ab4b of
+#: paddlets.models.forecasting.dl.tft.TFTModel:17
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default it will NOT skip any time"
+" steps."
+msgstr "可选变量, 输入序列与输出序列之间跳过的序列长度, 既不作为特征也不作为序测目标使用, 默认值为0。"
+
+#: aff392dff093482faa42a146422c53e6 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:19
+msgid "sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔。"
+
+#: e4415011876b4d3b98b3b158b74052e4 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:21
+msgid "loss function."
+msgstr "损失函数。"
+
+#: 9784c96317314827ad3270f809be73c5 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:23
+msgid "optimizer algorithm."
+msgstr "优化算法"
+
+#: 48bea728a6c7473c94310d90e67ad47b of
+#: paddlets.models.forecasting.dl.tft.TFTModel:25
+msgid "optimizer parameters."
+msgstr "优化器参数。"
+
+#: 7430c13b95794f0faf94ee5daae7f86c of
+#: paddlets.models.forecasting.dl.tft.TFTModel:27
+msgid "customized callback functions."
+msgstr "自定义callback函数。"
+
+#: b6e18c73cc85428a8117a4b4e2046b8a of
+#: paddlets.models.forecasting.dl.tft.TFTModel:29
+msgid "number of samples per batch."
+msgstr "训练数据或评估数据的批大小。"
+
+#: db3c35d9e865414ea6276d9091cc1f8b of
+#: paddlets.models.forecasting.dl.tft.TFTModel:31
+msgid "max epochs during training."
+msgstr "训练的最大轮数。"
+
+#: 568dca399993473580739ef62b57df6e of
+#: paddlets.models.forecasting.dl.tft.TFTModel:33
+msgid "verbosity mode."
+msgstr "模型训练过程中打印日志信息的间隔。"
+
+#: ab0a1eeef33e43be91b32f634fef4192 of
+#: paddlets.models.forecasting.dl.tft.TFTModel:35
+msgid ""
+"number of epochs with no improvement after which learning rate wil be "
+"reduced."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
+
+#: 6d79a6dbf385488da7366947b4b240be of
+#: paddlets.models.forecasting.dl.tft.TFTModel:37
+msgid "global random seed."
+msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致。"
+
+#: 7f9166aba9a740cfbcc4708866131474 of
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable:1
+msgid "For interpretable use."
+msgstr "输出可解释性结果。"
+
+#: e0748519e9f04fcc8d57e63d1dc53456 of
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable:3
+msgid "The TSDataset to be predict for interpretable results."
+msgstr "需要预测的数据。"
+
+#: 938a32102d75434cb9f56bdc28159c45 of
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable
+msgid "Returns"
+msgstr "返回值"
+
+#: a61858eb60b4460f9e9aa2bf3e22095c of
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable:6
+msgid "The interpretable results."
+msgstr "可解释性结果"
+
+#: 630cb60f7cd54e82972b277bf803d220 of
+#: paddlets.models.forecasting.dl.tft.TFTModel.predict_interpretable
+msgid "Return type"
+msgstr "返回类型"
+
