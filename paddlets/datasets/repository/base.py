@@ -65,7 +65,7 @@ def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List["
     dataset = DATASETS[name]
     path = dataset.path
     df = pd.read_csv(path)
-    if dataset.type == 'classify':
+    if dataset.type == 'classification':
         data_list = TSDataset.load_from_dataframe(df, **dataset.load_param)
         y_label = []
         for dataset in data_list:
