@@ -426,17 +426,19 @@ class AnomalyBaseModel(abc.ABC):
 
     def _get_anomaly_score(
         self,
-        dataloader: paddle.io.DataLoader
+        dataloader: paddle.io.DataLoader,
+        **predict_kwargs
     ) -> np.ndarray:
         """Get anomaly score on a batch.
 
         Args:
             dataloader(paddle.io.DataLoader): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
 
         Returns:
             np.ndarray.
         """
-        anomaly_score = self._predict(dataloader)
+        anomaly_score = self._predict(dataloader, **predict_kwargs)
         # Get anomaly score based on predicted loss
         if self._anomaly_score_fn is not None:
             anomaly_score = self._anomaly_score_fn(anomaly_score)
@@ -445,23 +447,21 @@ class AnomalyBaseModel(abc.ABC):
     @to_tsdataset(scenario="anomaly_label")
     def predict(
         self,
-        tsdataset: TSDataset
+        tsdataset: TSDataset,
+        **predict_kwargs
     ) -> TSDataset:
         """Get anomaly label on a batch. the result are output as tsdataset.
 
         Args:
             tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
 
         Returns:
             TSDataset.
         """
         dataloader = self._init_predict_dataloader(tsdataset)
-        anomaly_score = self._get_anomaly_score(dataloader)
-        anomaly_label = []
-        for score in anomaly_score:
-            label = 0 if score < self._threshold else 1
-            anomaly_label.append(label)
-        anomaly_label = np.array(anomaly_label)
+        anomaly_score = self._get_anomaly_score(dataloader, **predict_kwargs)
+        anomaly_label = (anomaly_score >= self._threshold) + 0 
         # adjust pred 
         target = tsdataset.get_target()
         if self._pred_adjust and target is not None:
@@ -472,34 +472,38 @@ class AnomalyBaseModel(abc.ABC):
     @to_tsdataset(scenario="anomaly_score")
     def predict_score(
         self,
-        tsdataset: TSDataset
+        tsdataset: TSDataset,
+        **predict_kwargs
     ) -> TSDataset:
         """Get anomaly score on a batch. the result are output as tsdataset.
 
         Args:
             tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
 
         Returns:
             TSDataset.
         """
         dataloader = self._init_predict_dataloader(tsdataset)
-        return self._get_anomaly_score(dataloader)
+        return self._get_anomaly_score(dataloader, **predict_kwargs)
     
     def _predict(
         self, 
-        dataloader: paddle.io.DataLoader
+        dataloader: paddle.io.DataLoader,
+        **predict_kwargs
     ) -> np.ndarray:
         """Predict function core logic.
 
         Args:
             dataloader(paddle.io.DataLoader): Data to be predicted.
+            **predict_kwargs: Additional arguments for for possible use by subclasses.
 
         Returns:
             np.ndarray.
         """
         self._network.eval()
         loss_list = []
-        for batch_nb, data in enumerate(dataloader):
+        for _, data in enumerate(dataloader):
             y_pred, y_true = self._network(data)
             loss = self._get_loss(y_pred, y_true)
             loss_list.extend(loss)
