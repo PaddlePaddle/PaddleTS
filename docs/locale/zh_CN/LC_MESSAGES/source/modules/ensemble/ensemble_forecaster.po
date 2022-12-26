@@ -1,0 +1,188 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:47+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:3
+#: 10e8efe6d8e345ceb9f7aea06149db68
+msgid "Ensemble"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:5
+#: 1a887842545246d28ba3b1f0e1391ec8
+msgid ""
+"Ensemble Forecaster following methods of ensemble learning to aggragate "
+"multiple PaddleTS forecaster to one ensemble model. Currently we propose "
+"two types of ensemble forecaster, StackingEnsembleForecaster and "
+"WeightingEnsembleForecaster."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:9
+#: 8054a7e55ba5401785e7fcd1656ba886
+msgid "1. Prepare Data"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:11
+#: 735c160ecd1544e5ba28adbcd53af974
+msgid "1.1. Get Data"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:12
+#: efc6ec46041f4f0fbd65905c71a8f36e
+msgid "Get PaddleTS inner-build datasets."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:20
+#: 03409c3563c94da79ffaac8d083fcb75
+msgid "1.2. Split Data"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:21
+#: d1a3c1fbcd1a4e8c8bcb2d2bf98c1d80
+msgid "Split dataset into train/test/valid."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:29
+#: 24614ae540214ad0a791193a661c054e
+msgid "1.3. Preprocess (Optional)"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:30
+#: 4ec4cc1c556441c1bddd26c805af3460
+msgid "Use StandardScaler to nomalize data.(Optional)"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:43
+#: 8c7ba7a220b04d3092687cfd83bcd4da
+msgid "2. Prepare Models"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:44
+#: d70f959daccb40e09aefba327c14b811
+msgid "Prepare base models for ensemble model."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:46
+#: 067fd93fa9d347a3a79edb7ded211c4e
+msgid ""
+"Please notice that, to keep the consistancy of models fit and predict, "
+"params  ``in_chunk_len``, ``out_chun_len``, ``skip_chunk_len`` was "
+"extracted into Ensemble models, you can ignore this three params for "
+"model."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:83
+#: 7567808369654361acf6211d8b027da7
+msgid "3. Construct and Fitting"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:84
+#: 7ba656a794b44d5ea544e1303a638542
+msgid ""
+"Construct and fitting ensemble forecaster, WeightingEnsembleForecaster or"
+" StackingEnsembleForecaster."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:87
+#: f2d2c32416264cb1ac02e07a1bb83d73
+msgid "3.1. Construct and Fitting WeightingEnsembleForecaster"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:89
+#: 4346cf425be14e7683455e8d1d4c5172
+msgid "|fig_1|"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:191
+#: 7e0308db692f4f85adb29755a50fb731 f3c4e46db4fb438dbacf6b2e6e8e6a74
+msgid "fig_1"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:91
+#: f8dc476c6a5c48218b99796c109cea50
+msgid ""
+"WeightingEnsembleForecaster use a aggragate function to aggragate base "
+"model predictions, use \"mean\" mode by default. More infomation about "
+"WeightingEnsembleForecaster please read `WeightingEnsembleForecaster doc "
+"<../../api/paddlets.ensemble.weighting_ensemble_forecaster.html>`_ ."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:94
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:141
+#: b7d05214fb434e41a1c51ad3f2b7dbeb c325a6be789f49b491a3a209a0fad6db
+msgid "Example1"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:96
+#: 19190ac7ba4940a28d313bbe8b3b6cbe
+msgid "Use default mode by default (default mode is \"mean\")"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:110
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:157
+#: 30f4dc210df04036b2ef6e1ec9685f79 af436eb64b1443749b30ecacac11bad7
+msgid "Example2"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:112
+#: 06b655745f844a58bb6a6014ad2f2cf3
+msgid "Use selected weighting mode"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:133
+#: fbd7fe413b43410d8f71de1cf4297bb7
+msgid "3.2. Construct and Fitting StackingEnsembleForecaster"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:135
+#: ee5b522089994747954c9230214d7e05
+msgid "|fig_2|"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:192
+#: d697117a86504222a7898255e38d372c f696a27929da4dd9a05d004c4a3d8eea
+msgid "fig_2"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:137
+#: a7927f0c6b374e68b3f4b0915fd64822
+msgid ""
+"StackingEnsembleForecaster use a final learner to fit the base model "
+"predictions,  use GradientBoostingRegressor(max_depth=5) by default. It "
+"has been verified that stacking ensemble can achieve better results than "
+"the underlying model in many cases. More infomation about "
+"StackingEnsembleForecaster please read `StackingEnsembleForecaster doc "
+"<../../api/paddlets.ensemble.stacking_ensemble_forecaster.html>`_ ."
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:143
+#: 5a6f2fa55cb84a5abacd0609627e2616
+msgid ""
+"Use default final_learner by default (default learner is "
+"GradientBoostingRegressor(max_depth=5))"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:159
+#: 9a6a5528e41549bf9086fda7f7572354
+msgid "Use self defined final learner"
+msgstr ""
+
+#: ../../source/modules/ensemble/ensemble_forecaster.rst:176
+#: 1e3b87640472422b9d98d83a28e5c637
+msgid "4. Backtest on Ensemble Forecaster"
+msgstr ""
+
