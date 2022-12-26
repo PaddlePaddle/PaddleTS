@@ -5,5 +5,7 @@
 distributions
 """
 
-from paddlets.models.forecasting.dl.distributions.likelihood import Likelihood, GaussianLikelihood
+from paddlets.models.forecasting.dl.distributions.likelihood import Likelihood
+from paddlets.models.forecasting.dl.distributions.likelihood import GaussianLikelihood
+from paddlets.models.forecasting.dl.distributions.likelihood import QuantileRegression
 

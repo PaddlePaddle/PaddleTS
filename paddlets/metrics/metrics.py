@@ -354,7 +354,7 @@ class MetricContainer(object):
     """Container holding a list of metrics.
 
     Args:
-        metric_names(List[str]): List of metric names.
+        metrics(List[str]|List[Metric]): List of metric or metric names.
         prefix(str): Prefix of metric names.
 
     Attributes:

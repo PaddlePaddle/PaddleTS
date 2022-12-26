@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-22 14:25+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.classify.dl.adapter.paddle_dataset_impl.rst:2
+#: 4d1c453899cd49d3b80956006dda9c4b
+msgid "paddlets.models.classify.dl.adapter.paddle_dataset_impl"
+msgstr ""
+
+#: e37da2eeb3b74b9b8db163c6c55411b8 of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl:1
+msgid "Bases: :py:class:`~paddle.fluid.dataloader.dataset.Dataset`"
+msgstr ""
+
+#: 31597dea7e5547368d127d4d36513555 of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl:1
+msgid "An implementation of :class:`paddle.io.Dataset`."
+msgstr "一个paddle Dataset数据集接口的实现。"
+
+#: 9d30f2547153420884d8360f4950aa4f of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl
+msgid "Parameters"
+msgstr "参数"
+
+#: 2e122297dc774a918015bbe18e35cf32 of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl:3
+msgid "List[TSDataset] for building :class:`paddle.io.Dataset`."
+msgstr ""
+
+#: da5938c200d9418d942377e3ff2eeb08 of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl:5
+msgid "(np.ndarray) : The data class labels"
+msgstr "数据分类标签"
+
+#: 92b90a62d77f473ea36868d3febda9d0 of
+#: paddlets.models.classify.dl.adapter.paddle_dataset_impl.ClassifyPaddleDatasetImpl.format_labels:1
+msgid "Convert label to required format."
+msgstr "将标签转化为要求的格式"
+

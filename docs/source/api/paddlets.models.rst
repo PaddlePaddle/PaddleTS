@@ -11,6 +11,7 @@ paddlets.models
     paddlets.models.base.rst
     paddlets.models.forecasting.rst
     paddlets.models.representation.rst
+    paddlets.models.classify.rst
     paddlets.models.common.rst
     paddlets.models.model_loader.rst
     paddlets.models.utils.rst
