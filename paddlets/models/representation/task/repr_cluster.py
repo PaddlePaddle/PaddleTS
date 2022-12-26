@@ -21,10 +21,10 @@ class ReprCluster(StackingEnsembleBase):
     The ReprCluster Class.
 
     Args:
-        repr_model(ReprBasemodel): Representation model to use for forcast.
+        repr_model(ReprBasemodel): Representation model to use for cluster.
         repr_model_params(dict):params for reprmodel init.
-        encode_params(dict):params for reprmodel encode, "slide_len" will set to in_chunk_len by force.
-        downstream_learner(Callable): The downstream learner, should be a sklearn-like cluster, set to Ridge(alpha=0.5) by default.
+        encode_params(dict):params for reprmodel encode.
+        downstream_learner(Callable): The downstream learner, should be a sklearn-like cluster, set to KMeans() by default.
         verbose(bool): Turn on Verbose mode,set to true by default.
 
     """
@@ -102,7 +102,7 @@ class ReprCluster(StackingEnsembleBase):
 
         Args:
             tsdataset_list(TSDataset): train data.
-            labels: labels, length equal to length of tsdataset_list
+
         """
         self._check_tsdataset_list(train_datasets)
         X_meta = self._generate_fit_meta_data(train_datasets)

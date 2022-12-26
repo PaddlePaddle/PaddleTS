@@ -12,19 +12,19 @@ from paddlets.models.model_loader import load as paddlets_model_load
 
 
 class EnsembleBase(metaclass=abc.ABCMeta):
+    """
+    The EnsembleBase Class.
+
+    Args:
+
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models.
+        verbose(bool): Turn on Verbose mode,set to False by default.
+
+    """
     def __init__(self,
                  estimators: List[Tuple[object, dict]] = None,
                  verbose: bool = False
                  ) -> None:
-        """
-        The EnsembleBase Class.
-
-        Args:
-
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models.
-            verbose(bool): Turn on Verbose mode,set to False by default.
-
-        """
         self._check_estimators(estimators)
         self._set_params(estimators)
         self._verbose = verbose

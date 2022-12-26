@@ -8,6 +8,6 @@ paddlets.ensemble
 .. toctree::
     :maxdepth: 4
 
-    paddlets.ensemble.ensemble_forecaster_base.rst
-    paddlets.ensemble.stacking_ensemble_forecaster.rst
-    paddlets.ensemble.weighting_ensemble_forecaster.rst
+    paddlets.ensemble.base.rst
+    paddlets.ensemble.stacking_ensemble.rst
+    paddlets.ensemble.weighting_ensemble.rst

@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-15 21:52+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.ensemble.base.rst:2
+#: 5ee69cde240047169094b7f0089b5cd3
+msgid "paddlets.ensemble.base"
+msgstr ""
+
+#: 0ca9a3ac593d4f91b4f8a0333bdbb70f of paddlets.ensemble.base.EnsembleBase:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: ec4b4da821814939a64930dc46b49271 of paddlets.ensemble.base.EnsembleBase:1
+msgid "The EnsembleBase Class."
+msgstr ""
+
+#: 0f502b563ff24fd68b778d2846e38727 236799586ca447e1b62002b00131ae6e
+#: c7b838e467d4433e9ac952e2ab959b9b d938fd79a7ff4e9287752713f5c40d24
+#: e6362624146b4cc792520700d2aa5943 of paddlets.ensemble.base.EnsembleBase
+#: paddlets.ensemble.base.EnsembleBase.fit
+#: paddlets.ensemble.base.EnsembleBase.load
+#: paddlets.ensemble.base.EnsembleBase.predict
+#: paddlets.ensemble.base.EnsembleBase.save
+msgid "Parameters"
+msgstr ""
+
+#: 50fbeee44ff145898ef130c764e0716b of paddlets.ensemble.base.EnsembleBase:3
+msgid "A list of tuple (class,params) consisting of several paddlets models."
+msgstr "一个由paddlets模型组成的 tuple (模型类名,模型参数) 列表,]"
+
+#: 734f0226393c41958a93569601b256b5 of paddlets.ensemble.base.EnsembleBase:5
+msgid "Turn on Verbose mode,set to False by default."
+msgstr "是否开启日志，默认开启"
+
+#: 3a63c8a170fb4c7495315eb68ef22e2e of
+#: paddlets.ensemble.base.EnsembleBase.fit:1
+msgid "Fit"
+msgstr ""
+
+#: 57309851f4b04b3c8b92ce45f8923cb5 of
+#: paddlets.ensemble.base.EnsembleBase.fit:3
+msgid "Train dataset."
+msgstr "训练集"
+
+#: c21125a748924018a09c7245159ee5ed of
+#: paddlets.ensemble.base.EnsembleBase.fit:5
+msgid "Valid dataset."
+msgstr "验证集"
+
+#: 74e2aa8546e64cfa85bbc14268525a99 of
+#: paddlets.ensemble.base.EnsembleBase.predict:1
+msgid "Predict"
+msgstr ""
+
+#: 3c3337363ff44c14bbbe84f4967c520f of
+#: paddlets.ensemble.base.EnsembleBase.predict:3
+msgid "Dataset to predict."
+msgstr "预测数据"
+
+#: 01d5363d4fe149b59efa922064e2d617 of
+#: paddlets.ensemble.base.EnsembleBase.save:1
+msgid "Save the ensemble model to a directory."
+msgstr "保存模型"
+
+#: 5a2abd0c8113468887a22785934875a1 of
+#: paddlets.ensemble.base.EnsembleBase.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: 2cf91e5007e6419ebc511055c6cc578a of
+#: paddlets.ensemble.base.EnsembleBase.save:5
+msgid ""
+"Name of ensemble object. This file contains meta information of ensemble "
+"model."
+msgstr "模型文件名"
+
+#: 1951b35fa8d4415c9db4a5d5048880ec of
+#: paddlets.ensemble.base.EnsembleBase.load:1
+msgid "Load the ensemble model from a directory."
+msgstr "加载模型"
+
+#: 11544276c228475596b780d90c6ba8ae of
+#: paddlets.ensemble.base.EnsembleBase.load:3
+msgid "Input directory path."
+msgstr "加载路径"
+
+#: 60259059bc6647bfb64f48be10a38d33 of
+#: paddlets.ensemble.base.EnsembleBase.load:5
+msgid "Name of ensemble object. This file contains meta information of ensemble."
+msgstr "模型文件名"
+
+#: 169c3fe27e93499aacb1ae92061fb18b of paddlets.ensemble.base.EnsembleBase.load
+msgid "Returns"
+msgstr ""
+
+#: 7d78226bf18045eab47e995870aea8cb of
+#: paddlets.ensemble.base.EnsembleBase.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+

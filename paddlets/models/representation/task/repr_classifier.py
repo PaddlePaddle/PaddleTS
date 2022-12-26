@@ -24,7 +24,7 @@ class ReprClassifier(StackingEnsembleBase):
         repr_model(ReprBasemodel): Representation model to use for forcast.
         repr_model_params(dict):params for reprmodel init.
         encode_params(dict):params for reprmodel encode, "slide_len" will set to in_chunk_len by force.
-        downstream_learner(Callable): The downstream learner, should be a sklearn-like classifier, set to Ridge(alpha=0.5) by default.
+        downstream_learner(Callable): The downstream learner, should be a sklearn-like classifier, set to GradientBoostingClassifier() by default.
         verbose(bool): Turn on Verbose mode,set to true by default.
 
     """

@@ -1,6 +1,6 @@
-paddlets.ensemble.stacking_ensemble_forecaster
+paddlets.ensemble.stacking_ensemble
 ===============================================================
-.. automodule:: paddlets.ensemble.stacking_ensemble_forecaster
+.. automodule:: paddlets.ensemble.stacking_ensemble
     :members:
     :no-undoc-members:
     :show-inheritance:
