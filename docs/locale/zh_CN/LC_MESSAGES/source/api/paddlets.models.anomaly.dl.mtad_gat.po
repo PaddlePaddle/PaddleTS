@@ -201,7 +201,7 @@ msgstr "全局随机种子，注: 保证每次模型参数初始化一致。"
 #: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:39
 #: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:184
 msgid "The target dim index for forecasting and reconstruction model."
-msgstr "用于预测和重建模型的目录列。"
+msgstr "用于预测和重建模型的目标列。"
 
 #: 6ca9e7e9a8ee42819860defbaa60d584 7263e0b5312c4f0fa5043fdce45fe954 of
 #: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:41
