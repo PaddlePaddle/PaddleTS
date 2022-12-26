@@ -11,9 +11,12 @@ import pickle
 import json
 
 from paddle.optimizer import Optimizer
+from paddle.nn import CrossEntropyLoss
+from sklearn.utils import check_random_state
 import numpy as np
 import paddle
 
+# from bts.models.utils import format_labels
 from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
@@ -24,27 +27,19 @@ from paddlets.metrics import (
     MetricContainer, 
     Metric
 )
-from paddlets.models.data_adapter import DataAdapter
-from paddlets.models.utils import check_tsdataset, to_tsdataset, build_network_input_spec
+from paddlets.models.classify.dl.adapter.data_adapter import ClassifyDataAdapter
+from paddlets.models.classify.base import BaseClassifier
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
 logger = Logger(__name__)
 
 
-class AnomalyBaseModel(abc.ABC):
-    """PaddleTS deep time series anomaly detection framework, all time series models based on paddlepaddle implementation need to inherit this class.
+class PaddleBaseClassifier(BaseClassifier):
+    """Base class for all paddle deep time series classify models.
 
     Args:
-        in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
-        sampling_stride(int): Sampling intervals between two adjacent samples.
         loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
-        anomaly_score_fn(Callable[..., List[float]]|None): The method to get anomaly score.
-        threshold(float|None): The threshold to judge anomaly.
-        threshold_fn(Callable[..., float]|None): The method to get anomaly threshold.
-        threshold_coeff(float): The coefficient of threshold.
-        pred_adjust(bool): Whether to adjust the pred label according to the real label.
-        pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         optimizer_params(Dict[str, Any]): Optimizer parameters.
         eval_metrics(List[str]): Evaluation metrics of model.
@@ -56,15 +51,7 @@ class AnomalyBaseModel(abc.ABC):
         seed(int|None): Global random seed.
 
     Attributes:
-        _in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
-        _sampling_stride(int): Sampling intervals between two adjacent samples.
         _loss_fn(Callable[..., paddle.Tensor]|None): Loss function.
-        _anomaly_score_fn(Callable[..., paddle.Tensor]|None): The method to get anomaly score.
-        _threshold(float|None): The threshold to judge anomaly.
-        _threshold_fn(Callable[..., paddle.Tensor]|None): The method to get anomaly threshold.
-        _threshold_coeff(float): The coefficient of threshold.
-        _pred_adjust(float): Whether to adjust the pred label according to the real label.
-        _pred_adjust_fn(Callable[..., np.ndarray]|None): The method to adjust pred label.
         _optimizer_fn(Callable[..., Optimizer]): Optimizer algorithm.
         _optimizer_params(Dict[str, Any]): Optimizer parameters.
         _eval_metrics(List[str]): Evaluation metrics of model.
@@ -74,6 +61,8 @@ class AnomalyBaseModel(abc.ABC):
         _verbose(int): Verbosity mode.
         _patience(int): Number of epochs to wait for improvement before terminating.
         _seed(int|None): Global random seed.
+        _classes_（ndarray）: ndarray of class labels, possibly strings
+        _n_class(int) : number of unique labels
         _stop_training(bool) Training status.
         _fit_params(Dict[str, Any]): Infer parameters by TSdataset automatically.
         _network(paddle.nn.Layer): Network structure.
@@ -86,35 +75,19 @@ class AnomalyBaseModel(abc.ABC):
     """
     def __init__(
         self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
         loss_fn: Callable[..., paddle.Tensor] = None,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        threshold: Optional[float] = None,
-        threshold_fn: Callable[..., float] = None,
-        threshold_coeff: float = 1.0,
-        pred_adjust: bool = False,
-        pred_adjust_fn: Callable[..., np.ndarray] = None,
         optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
         optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
         eval_metrics: List[str] = [], 
         callbacks: List[Callback] = [], 
-        batch_size: int = 128,
+        batch_size: int = 32,
         max_epochs: int = 10,
         verbose: int = 1,
         patience: int = 4,
         seed: Optional[int] = None,
     ):
-        super(AnomalyBaseModel, self).__init__()
-        self._in_chunk_len = in_chunk_len
-        self._sampling_stride = sampling_stride
+        super(PaddleBaseClassifier, self).__init__()
         self._loss_fn = loss_fn
-        self._anomaly_score_fn = anomaly_score_fn
-        self._threshold = threshold
-        self._threshold_fn = threshold_fn
-        self._threshold_coeff = threshold_coeff
-        self._pred_adjust = pred_adjust
-        self._pred_adjust_fn = pred_adjust_fn
         self._optimizer_fn = optimizer_fn
         self._optimizer_params = deepcopy(optimizer_params)
         self._eval_metrics = deepcopy(eval_metrics)
@@ -123,6 +96,7 @@ class AnomalyBaseModel(abc.ABC):
         self._max_epochs = max_epochs
         self._verbose = verbose
         self._patience = patience
+        self._seed = seed
         self._stop_training = False
         
         self._fit_params = None
@@ -133,6 +107,8 @@ class AnomalyBaseModel(abc.ABC):
         self._metric_container_dict = None
         self._history = None
         self._callback_container = None
+        self._classes_ = []
+        self._n_class = 0
 
         # Parameter check.
         self._check_params()
@@ -160,76 +136,60 @@ class AnomalyBaseModel(abc.ABC):
         if not self._eval_metrics: 
             self._eval_metrics = ["mse"]
 
-    def _check_tsdataset(
+    def _check_tsdatasets(
         self, 
-        tsdataset: TSDataset
+        tsdatasets: List[TSDataset],
+        labels: np.ndarray
     ):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
 
         Processing logic:
 
-            1> Check whether the target column is legal.
+            1> Floating: Convert to np.float32.
 
-            2> Prompt that the "know" and "static" will be ignored.
-            
-            3> Check whether the observed column is legal.
+            2> Missing value: Warning.
 
-            4> Integer: Convert to np.int64.
+            3> Other: Illegal.
 
-            5> Floating: Convert to np.float32.
+        Args:
+            tsdataset(TSDataset): Data to be checked.
+            labels:(np.ndarray) : The data class labels
 
-            6> Missing value: Warning.
+        """
+        for i in range(len(tsdatasets)):
+            self.check_tsdataset(tsdatasets[i])
 
-            7> Other: Illegal.
+    def check_tsdataset(self, tsdataset: TSDataset):
+        """Ensure the robustness of input data (consistent feature order), at the same time,
+        check whether the data types are compatible. If not, the processing logic is as follows.
+
+            1> Floating: Convert to np.float32.
+
+            2> Missing value: Warning.
+
+            3> Other: Illegal.
 
         Args:
             tsdataset(TSDataset): Data to be checked.
         """
-        target = tsdataset.get_target()
-        if target is not None:
-            target_dtype = target.dtypes
-            raise_if_not(
-                np.issubdtype(target_dtype[0], np.integer),
-                f"In anomaly detection scenario, the dtype of label must be integer, but recevid {target_dtype[0]}"
-            )
-        known = tsdataset.get_known_cov()
-        if known is not None:
-            known_cols = [str(i) for i in known.columns.tolist()]
-            msg = f"Input tsdataset contains known cov `{','.join(known_cols)}` " \
-                + "which will be ignored in anomaly detection scenario."
-            logger.warning(msg)
-        static = tsdataset.get_static_cov()
-        if static is not None and len(static) != 0:
-            static_cols = [str(i) for i in list(static.keys())]
-            msg = f"Input tsdataset contains static cov `{','.join(static_cols)}` " \
-                + "which will be ignored in anomaly detection scenario."
-            logger.warning(msg)
-        observed = tsdataset.get_observed_cov()
-        raise_if(
-            observed is None,
-            f"The feature col is empty, please set at least one feature col in anomaly detection scenario."
-        )
-        illegal_cols = []
-        for col, dtype in observed.dtypes.items():
-            if not (np.issubdtype(dtype, np.floating) or np.issubdtype(dtype, np.integer)):
-                illegal_cols.append(col)
-        raise_if(
-            len(illegal_cols) > 0,
-            f"In anomaly detection scenario, feature dtype only supports [int, float], " \
-            f"illegal feature columns: {illegal_cols}"
-        )
-        valid = False
-        for dtype in observed.dtypes:
+        new_dtypes = {}
+        for column, dtype in tsdataset.dtypes.items():
             if np.issubdtype(dtype, np.floating):
-                valid = True
-                break
-        raise_if(
-            not valid,
-            f"All the feature dtypes are int, please set at least one float feature col in anomaly detection scenario."
-        )
+                new_dtypes.update({column: "float32"})
+            else:
+                msg = f"{dtype} data type not supported, the illegal columns contains: " \
+                      + f"{tsdataset.dtypes.index[tsdataset.dtypes == dtype].tolist()}"
+                raise_log(TypeError(msg))
 
-        check_tsdataset(tsdataset)
+            # Check whether the data contains NaN.
+            if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[column]).any():
+                msg = f"np.inf or np.NaN, which may lead to unexpected results from the model"
+                msg = f"Input `{column}` contains {msg}."
+                logger.warning(msg)
+
+        if new_dtypes:
+            tsdataset.astype(new_dtypes)
 
     def _init_optimizer(self) -> Optimizer:
         """Setup optimizer.
@@ -244,67 +204,73 @@ class AnomalyBaseModel(abc.ABC):
 
     def _init_fit_dataloaders(
         self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None,
+        train_tsdatasets: List[TSDataset],
+        train_labels: np.ndarray,
+        valid_tsdatasets: List[TSDataset] = None,
+        valid_labels: np.ndarray = None,
         shuffle: bool = True
     ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
         """Generate dataloaders for train and eval set.
 
         Args: 
-            train_tsdataset(TSDataset): Train set.
-            valid_tsdataset(TSDataset|None): Eval set.
+            train_tsdatasets(TSDataset): Train set.
+            train_labels:(np.ndarray) : The train data class labels
+            valid_tsdatasets(TSDataset|None): Eval set.
+            valid_labels:(np.ndarray) : The valid data class labels
             shuffle(bool): Shuffle or not.
 
         Returns:
             paddle.io.DataLoader: Training dataloader.
             List[paddle.io.DataLoader]: List of validation dataloaders..
         """
-        data_adapter = DataAdapter()
-        train_dataset = data_adapter.to_sample_dataset(
-            train_tsdataset,
-            in_chunk_len=self._in_chunk_len,
-            sampling_stride=self._sampling_stride,
+        self._check_tsdatasets(train_tsdatasets, train_labels)
+        data_adapter = ClassifyDataAdapter()
+        train_dataset = data_adapter.to_paddle_dataset(
+            train_tsdatasets,
+            train_labels,
         )
+        self._n_classes = train_dataset.n_classes_
+        self._classes_ = train_dataset.classes_
         train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size, shuffle=shuffle)
-       
-        valid_dataloaders = []
-        if valid_tsdataset is not None:
-            valid_dataset = data_adapter.to_sample_dataset(
-                valid_tsdataset,
-                in_chunk_len=self._in_chunk_len,
-                sampling_stride=self._sampling_stride,
+
+        if valid_tsdatasets is None:
+            valid_dataloader = None
+        else:
+            self._check_tsdatasets(valid_tsdatasets, valid_labels)
+            valid_dataset = data_adapter.to_paddle_dataset(
+                valid_tsdatasets,
+                valid_labels,
             )
             valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size, shuffle=shuffle)
-            valid_dataloaders.append(valid_dataloader)
-        return train_dataloader, valid_dataloaders
+
+        return train_dataloader, valid_dataloader
 
     def _init_predict_dataloader(
         self, 
-        tsdataset: TSDataset,
-        sampling_stride: int = 1,
+        tsdatasets: List[TSDataset],
+        labels: np.ndarray = None
     ) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
         Args: 
             tsdataset(TSDataset): Data to be predicted.
-            sampling_stride(int): Sampling intervals between two adjacent samples.
+            labels:(np.ndarray) : The predicted data class labels
 
         Returns:
             paddle.io.DataLoader: dataloader. 
         """
-        self._check_tsdataset(tsdataset)
-        data_adapter = DataAdapter()
-        dataset = data_adapter.to_sample_dataset(
-            tsdataset,
-            in_chunk_len=self._in_chunk_len,
-            sampling_stride=sampling_stride,
+        self._check_tsdatasets(tsdatasets, labels)
+        data_adapter = ClassifyDataAdapter()
+        dataset = data_adapter.to_paddle_dataset(
+            tsdatasets,
+            labels,
         )
         dataloader = data_adapter.to_paddle_dataloader(dataset, self._batch_size, shuffle=False)
         return dataloader
 
     def _init_metrics(
-        self, 
-        eval_names: List[str] 
+        self,
+        eval_names: List[str]
     ) -> Tuple[List[Metric], List[str], Dict[str, MetricContainer]]:
         """Set attributes relative to the metrics.
 
@@ -360,46 +326,42 @@ class AnomalyBaseModel(abc.ABC):
     
     def fit(
         self,
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
+        train_tsdatasets: List[TSDataset],
+        train_labels: np.ndarray,
+        valid_tsdatasets: List[TSDataset] = None,
+        valid_labels: np.ndarray = None
     ):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data and valid_dataloader for validation.
 
         Args: 
-            train_tsdataset(TSDataset): Train set. 
+            train_tsdataset(TSDataset): Train set.
+            train_labels:(np.ndarray) : The train data class labels
             valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
+            valid_labels:(np.ndarray) : The valid data class labels
         """
-        self._check_tsdataset(train_tsdataset)
-        if valid_tsdataset is not None:
-            self._check_tsdataset(valid_tsdataset)
-        self._fit_params = self._update_fit_params(train_tsdataset, valid_tsdataset)
-        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
-        self._fit(train_dataloader, valid_dataloaders)
-        
-        # Get threshold
-        if self._threshold is None:
-            dataloader, _ = self._init_fit_dataloaders(train_tsdataset, shuffle=False)
-            anomaly_score = self._get_anomaly_score(dataloader)
-            self._threshold = self._threshold_coeff * self._get_threshold(anomaly_score)
+        self._fit_params = self._update_fit_params(train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
+        train_dataloader, valid_dataloader = self._init_fit_dataloaders(train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
+        self._fit(train_dataloader, valid_dataloader)
         
     def _fit(
         self, 
         train_dataloader: paddle.io.DataLoader,
-        valid_dataloaders: List[paddle.io.DataLoader] = None
+        valid_dataloader: List[paddle.io.DataLoader] = None
     ):
         """Fit function core logic. 
 
         Args: 
             train_dataloader(paddle.io.DataLoader): Train set. 
-            valid_dataloaders(List[paddle.io.DataLoader]|None): Eval set.
+            valid_dataloader(paddle.io.DataLoader|None): Eval set.
         """
-        valid_names = [f"val_{k}" for k in range(len(valid_dataloaders))]
+        valid_names = [] if valid_dataloader is None else ["val_0"]
         self._metrics, self._metrics_names, \
             self._metric_container_dict =  self._init_metrics(valid_names)
         self._history, self._callback_container = self._init_callbacks()
         self._network = self._init_network()
         self._optimizer = self._init_optimizer()
+        check_random_state(self._seed)
 
         # Call the `on_train_begin` method of each callback before the training starts.
         self._callback_container.on_train_begin({"start_time": time.time()})
@@ -409,9 +371,8 @@ class AnomalyBaseModel(abc.ABC):
             self._callback_container.on_epoch_begin(epoch_idx)
             self._train_epoch(train_dataloader)
 
-            # Predict for each eval set.
-            for eval_name, valid_dataloader in zip(valid_names, valid_dataloaders):
-                self._predict_epoch(eval_name, valid_dataloader)
+            if len(valid_names) > 0:
+                self._predict_epoch(valid_names[0], valid_dataloader)
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
@@ -424,112 +385,71 @@ class AnomalyBaseModel(abc.ABC):
         self._callback_container.on_train_end()
         self._network.eval()
 
-    def _get_anomaly_score(
+    def predict(
         self,
-        dataloader: paddle.io.DataLoader,
-        **predict_kwargs
+        tsdatasets: List[TSDataset],
     ) -> np.ndarray:
-        """Get anomaly score on a batch.
+        """Predict labels. the result are output as ndarray.
 
         Args:
-            dataloader(paddle.io.DataLoader): Data to be predicted.
-            **predict_kwargs: Additional arguments for `_predict`.
-
+            tsdataset(List[TSDataset]) : Data to be predicted.
         Returns:
             np.ndarray.
         """
-        anomaly_score = self._predict(dataloader, **predict_kwargs)
-        # Get anomaly score based on predicted loss
-        if self._anomaly_score_fn is not None:
-            anomaly_score = self._anomaly_score_fn(anomaly_score)
-        return anomaly_score
+        dataloader = self._init_predict_dataloader(tsdatasets)
+        probs = self._predict(dataloader)
+        # np.save('probs',probs)
+        rng = check_random_state(self._seed)
+        return np.array(
+            [
+                self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
+                for prob in probs
+            ]
+        )
     
-    @to_tsdataset(scenario="anomaly_label")
-    def predict(
+    def predict_proba(
         self,
-        tsdataset: TSDataset,
-        **predict_kwargs
-    ) -> TSDataset:
-        """Get anomaly label on a batch. the result are output as tsdataset.
+        tsdatasets: List[TSDataset]
+    ) -> np.ndarray:
+        """Find probability estimates for each class for all cases.
 
         Args:
-            tsdataset(TSDataset): Data to be predicted.
-            **predict_kwargs: Additional arguments for `_predict`.
-
+            tsdataset(List[TSDataset]) : Data to be predicted.
+            labels:(np.ndarray) : The predicted data class labels
         Returns:
-            TSDataset.
+            np.ndarray.
         """
-        dataloader = self._init_predict_dataloader(tsdataset)
-        anomaly_score = self._get_anomaly_score(dataloader, **predict_kwargs)
-        anomaly_label = (anomaly_score >= self._threshold) + 0 
-        # adjust pred 
-        target = tsdataset.get_target()
-        if self._pred_adjust and target is not None:
-            true_label = np.squeeze(tsdataset.get_target().to_numpy())
-            anomaly_label = self._pred_adjust_fn(anomaly_label, true_label[-len(anomaly_label):])
-        return anomaly_label
-    
-    @to_tsdataset(scenario="anomaly_score")
-    def predict_score(
-        self,
-        tsdataset: TSDataset,
-        **predict_kwargs
-    ) -> TSDataset:
-        """Get anomaly score on a batch. the result are output as tsdataset.
+        dataloader = self._init_predict_dataloader(tsdatasets)
+        return self._predict(dataloader)
 
-        Args:
-            tsdataset(TSDataset): Data to be predicted.
-            **predict_kwargs: Additional arguments for `_predict`.
-
-        Returns:
-            TSDataset.
-        """
-        dataloader = self._init_predict_dataloader(tsdataset)
-        return self._get_anomaly_score(dataloader, **predict_kwargs)
-    
     def _predict(
         self, 
-        dataloader: paddle.io.DataLoader,
-        **predict_kwargs
+        dataloader: paddle.io.DataLoader
     ) -> np.ndarray:
         """Predict function core logic.
 
         Args:
             dataloader(paddle.io.DataLoader): Data to be predicted.
-            **predict_kwargs: Additional arguments for for possible use by subclasses.
 
         Returns:
             np.ndarray.
         """
         self._network.eval()
-        loss_list = []
-        for _, data in enumerate(dataloader):
-            y_pred, y_true = self._network(data)
-            loss = self._get_loss(y_pred, y_true)
-            loss_list.extend(loss)
-            
-        return np.array(loss_list)
-    
-    def _get_loss(
-        self,
-        y_pred: paddle.Tensor,
-        y_true: paddle.Tensor
-    ) -> np.ndarray:
-        """Get the loss for anomaly label and anomaly score.
+        results = []
+        for batch_nb, data in enumerate(dataloader):
+            X, _ = self._prepare_X_y(data)
+            output = self._network(X)
+            predictions = output.numpy()
+            results.append(predictions)
+        results = np.vstack(results)
 
-        Note:
-            This function could be overrided by the subclass if necessary.
+        # check if binary classification
+        if results.shape[1] == 1:
+            # first column is probability of class 0 and second is of class 1
+            probs = np.hstack([1 - results, results])
+        results = results / results.sum(axis=1, keepdims=1)
 
-        Args:
-            y_pred(paddle.Tensor): Estimated feature values.
-            y_true(paddle.Tensor): Ground truth (correct) feature values.
-
-        Returns:
-            np.ndarray.
-
-        """
-        loss = paddle.mean(paddle.square(paddle.subtract(y_pred, y_true)), axis=[1, 2], keepdim=False)
-        return loss.numpy()
+        return results
 
     def _train_epoch(
         self, 
@@ -543,14 +463,16 @@ class AnomalyBaseModel(abc.ABC):
         self._network.train()
         for batch_idx, data in enumerate(train_loader):
             self._callback_container.on_batch_begin(batch_idx)
-            batch_logs = self._train_batch(data)
+            X, y = self._prepare_X_y(data)
+            batch_logs = self._train_batch(X, y)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
     
     def _train_batch(
         self, 
-        X: Dict[str, paddle.Tensor]
+        X: Dict[str, paddle.Tensor], 
+        y: paddle.Tensor
     ) -> Dict[str, Any]:
         """Trains one batch of data.
 
@@ -561,13 +483,13 @@ class AnomalyBaseModel(abc.ABC):
         Returns:
             Dict[str, Any]: Dict of logs.
         """
-        y_pred, y_true = self._network(X)
-        loss = self._compute_loss(y_pred, y_true)
+        output = self._network(X)
+        loss = self._compute_loss(output, y)
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
         batch_logs = {
-            "batch_size": y_true.shape[0],
+            "batch_size": y.shape[0],
             "loss": loss.item()
         }
         return batch_logs
@@ -584,19 +506,20 @@ class AnomalyBaseModel(abc.ABC):
             loader(paddle.io.DataLoader): DataLoader with validation set.
         """
         self._network.eval()
-        list_y_pred, list_y_true = [], []
+        list_y_true, list_y_score = [], []
         for batch_idx, data in enumerate(loader):
-            y_pred, y_true = self._predict_batch(data)
-            list_y_pred.append(y_pred)
-            list_y_true.append(y_true)
-        y_pred, y_true = np.vstack(list_y_pred), np.vstack(list_y_true)
-        metrics_logs = self._metric_container_dict[name](y_pred, y_true)
+            X, y = self._prepare_X_y(data)
+            scores = self._predict_batch(X)
+            list_y_true.append(y)
+            list_y_score.append(scores)
+        y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
+        metrics_logs = self._metric_container_dict[name](y_true, scores)
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
     
     def _predict_batch(
         self, 
-        X: Dict[str, paddle.Tensor]
+        X: paddle.Tensor
     ) -> np.ndarray:
         """Predict one batch of data.
 
@@ -604,15 +527,32 @@ class AnomalyBaseModel(abc.ABC):
             X(paddle.Tensor): Feature tensor.
 
         Returns:
-            y_pred(np.ndarray): Prediction results.
-            y_true(np.ndarray): Origin data(features).
+            np.ndarray: Prediction results.
         """
-        y_pred, y_true = self._network(X)
-        return y_pred.numpy(), y_true.numpy()
+        scores = self._network(X)
+        return scores.numpy()
+
+    def _prepare_X_y(self, 
+        X: Dict[str, paddle.Tensor]
+    ) -> Tuple[Dict[str, paddle.Tensor], paddle.Tensor]:
+        """Split the packet into X, y.
+
+        Note:
+            This function could be overrided by the subclass if necessary.
+
+        Args:
+            X(Dict[str, paddle.Tensor]): Dict of feature tensor.
+
+        Returns:
+            X(Dict[str, paddle.Tensor]): Dict of feature tensor. 
+            y(paddle.Tensor): feature tensor.
+        """
+        y = X['label']
+        return X, y
 
     def _compute_loss(
         self, 
-        y_pred: paddle.Tensor, 
+        y_score: paddle.Tensor, 
         y_true: paddle.Tensor
     ) -> paddle.Tensor:
         """Compute the loss.
@@ -621,43 +561,49 @@ class AnomalyBaseModel(abc.ABC):
             This function could be overrided by the subclass if necessary.
 
         Args:
-            y_pred(paddle.Tensor): Estimated target values.
+            y_score(paddle.Tensor): Estimated target values.
             y_true(paddle.Tensor): Ground truth (correct) target values.
 
         Returns:
             paddle.Tensor: Loss value.
         """
-        return self._loss_fn(y_pred, y_true)
-    
-    def _get_threshold(
+        if self._loss_fn == paddle.nn.functional.cross_entropy:
+            return paddle.nn.functional.cross_entropy(y_score, y_true, soft_label=True)
+        else:
+            return self._loss_fn(y_score, y_true)
+
+    def score(
         self,
-        anomaly_score: np.ndarray
+        tsdatasets: List[TSDataset],
+        labels: np.ndarray
     ) -> float:
-        """Get the threshold value to judge anomaly.
-        
-        Note:
-            This function could be overrided by the subclass if necessary.
-            
+        """Scores predicted labels against ground truth labels on X.
+
         Args:
-            anomaly_score(np.ndarray): 
-            
+            tsdataset(List[TSDataset]) : Data to be predicted.
+            labels:(np.ndarray) : The predicted data class labels
         Returns:
-            float: Thresold value.
+            float, accuracy score of predict(X) vs y
         """
-        return self._threshold_fn(anomaly_score)
+        from sklearn.metrics import accuracy_score
+        preds = self.predict(tsdatasets)
+        return accuracy_score(labels, preds, normalize=True)
 
     @abc.abstractmethod
     def _update_fit_params(
-        self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
+        self,
+        train_tsdatasets: List[TSDataset],
+        train_labels: np.ndarray,
+        valid_tsdatasets: List[TSDataset],
+        valid_labels: np.ndarray
     ) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args: 
-            train_tsdataset(TSDataset): train dataset.
-            valid_tsdataset(TSDataset|None): validation dataset.
-
+            train_tsdatasets: List[TSDataset],
+            train_labels: np.ndarray,
+            valid_tsdatasets: List[TSDataset],
+            valid_labels: np.ndarray
         Returns:
             Dict[str, Any]: model parameters.
         """
@@ -671,42 +617,13 @@ class AnomalyBaseModel(abc.ABC):
             paddle.nn.Layer.
         """
         pass
-
-    def _build_meta(self):
-        res = {
-            "model_type": "anomaly",
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            "modulename": self.__module__,
-            "model_threshold": self._threshold,
-            "size": {
-                "in_chunk_len": self._in_chunk_len
-            },
-            "input_data": {}
-        }
-        for key, value in self._fit_params.items():
-            if not isinstance(value, int):
-                continue 
-            if value != 0:
-                res['input_data'][key] = value
-        return res
     
-    def save(self, path: str, network_model: bool = False, dygraph_to_static: bool = True, batch_size: Optional[int] = None) -> None:
+    def save(self, path: str) -> None:
         """
-        Saves a AnomalyBaseModel instance to a disk file.
-
-        1> A AnomalyBaseModel (or any child classes inherited from AnomalyBaseModel) instance have a set of member
-        variables, they can be divided into 3 categories:
-        `pickle-serializable members` (e.g. python built-in type such as int, str, dict, etc.),
-        `paddle-related pickle-not-serializable members` (e.g. paddle.nn.Layer, paddle.optimizer.Optimizer),
-        `paddle-not-related pickle-not-serializable members`.
-
-        2> To call this method, self._network and self._optimizer must not be None.
+        Saves a PaddleBaseClassifier instance to a disk file.
 
         Args:
             path(str): A path string containing a model file name.
-            network_model(bool): Save network model structure and parameters separately for Paddle Inference or not, default False.
-            dygraph_to_static(bool): Change network from dygraph to static or not, it works when network_model==True, default True.
-            batch_size(int): The fixed batch size for the param `input_spec` of network_model save, it works when network_model==True, default None.
 
         Raises:
             ValueError
@@ -743,7 +660,6 @@ class AnomalyBaseModel(abc.ABC):
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
             "network_statedict": "%s_%s" % (modelname, "network_statedict"),
-            "network_model": modelname,
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -756,37 +672,7 @@ class AnomalyBaseModel(abc.ABC):
         )
 
         # start to save
-        # 1 save network model and params for paddle inference
-        model_meta = self._build_meta()
-        if batch_size is not None:
-            model_meta['batch_size'] = batch_size
-        if network_model:
-            self._network.eval()
-            input_spec = build_network_input_spec(model_meta)
-            try:
-                if dygraph_to_static:
-                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
-                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
-                else:
-                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
-            except Exception as e:
-                raise_log(
-                    ValueError(
-                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
-                        (internal_filename_map["network_model"], str(e))
-                    )
-                )
-
-        # 2 save model meta (e.g. classname)
-        try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
-                json.dump(model_meta, f, ensure_ascii=False)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
-
-        # 3 save optimizer state dict (currently ignore optimizer logic.)
+        # 1 save optimizer state dict (currently ignore optimizer logic.)
         # optimizer_state_dict = self._optimizer.state_dict()
         # try:
         #     paddle.save(
@@ -801,7 +687,7 @@ class AnomalyBaseModel(abc.ABC):
         #         )
         #     )
 
-        # 4 save network state dict
+        # 2 save network state dict
         network_state_dict = self._network.state_dict()
         try:
             paddle.save(
@@ -816,7 +702,7 @@ class AnomalyBaseModel(abc.ABC):
                 )
             )
 
-        # 5 save model
+        # 3 save model
         optimizer = self._optimizer
         network = self._network
         callback_container = self._callback_container
@@ -834,6 +720,21 @@ class AnomalyBaseModel(abc.ABC):
         except Exception as e:
             raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
 
+        # 4 save model meta (e.g. classname)
+        model_meta = {
+            # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
+            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            # bts.models.dl.paddlepaddle.xxx
+            "modulename": self.__module__
+        }
+        try:
+            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+                json.dump(model_meta, f, ensure_ascii=False)
+        except Exception as e:
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
+            )
+
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
         self._network = network
@@ -841,17 +742,15 @@ class AnomalyBaseModel(abc.ABC):
         return
 
     @staticmethod
-    def load(path: str) -> "AnomalyBaseModel":
+    def load(path: str) -> "PaddleBaseClassifier":
         """
-        Loads a AnomalyBaseModel from a file.
-
-        As optimizer does not affect the model prediction results, currently optimizer will NOT be loaded.
+        Loads a PaddleBaseClassifier from a file.
 
         Args:
             path(str): A path string containing a model file name.
 
         Returns:
-            AnomalyBaseModel: the loaded AnomalyBaseModel instance.
+            PaddleBaseClassifier: the loaded PaddleBaseClassifier instance.
         """
         abs_path = os.path.abspath(path)
         raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
@@ -861,9 +760,9 @@ class AnomalyBaseModel(abc.ABC):
         with open(abs_path, "rb") as f:
             model = pickle.load(f)
         raise_if_not(
-            isinstance(model, AnomalyBaseModel),
+            isinstance(model, PaddleBaseClassifier),
             "loaded model type must be inherited from %s, but actual loaded model type: %s" %
-            (AnomalyBaseModel, model.__class__)
+            (PaddleBaseClassifier, model.__class__)
         )
 
         # 1.2 - 1.4 model._network
