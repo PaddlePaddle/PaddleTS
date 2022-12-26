@@ -17,44 +17,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:3
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:3
 #: 628717ab7ba04a3bb399cf31115277d0
 msgid "EnsembleAnomaly"
 msgstr "集成异常检测"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:6
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:6
 #: 57f1190b44a448f4927deb342bceeb71
 msgid "1. Prepare data"
 msgstr "1.准备数据"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:8
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:8
 #: 1401fd2f811041fdb44b03d6ff7e937e
 msgid ""
 "The built-in API: `get_dataset` is used to load nab_temp dataset: "
 "`NAB_TEMP`."
 msgstr "获取内部数据集"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:18
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:18
 #: a85e6b12024f4938ad6157520e6109e8
 msgid "2. Data processing"
 msgstr "2.数据预处理"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:20
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:20
 #: a631cb4d7add4f2080d180c1a02e9e54
 msgid "Set up training set (top 15%), and standardize the data."
 msgstr "切分训练集，然后标准化数据"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:41
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:41
 #: 6c6c00e9d973411991bf0a8695261e18
 msgid "3. Prepare Models"
 msgstr "3.准备模型"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:42
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:42
 #: b5ed594e39c54c8ba47e458e2777b719
 msgid "Prepare base models for ensemble model."
 msgstr "为集成模型准备基础模型"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:44
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:44
 #: ef20abceb6514a58b1ca9526a23943ad
 msgid ""
 "Please notice that, to keep the consistancy of models fit and predict, "
@@ -62,13 +62,13 @@ msgid ""
 "can ignore this three params for base models."
 msgstr "``in_chunk_len`` 这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:56
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:56
 #: 8702f66d7d32410d983f19a5e203d70d
 #, fuzzy
 msgid "3. Construct and Fitting"
 msgstr "4.组装和拟合模型"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:58
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:58
 #: e8b6d82030bb40e98dd82f33657e148f
 msgid ""
 "EnsembleAnomaly use a aggragate function to aggragate base model "
@@ -79,17 +79,17 @@ msgstr ""
 "更多关于集成异常检测模型的信息，请参考  `EnsembleAnomaly doc "
 "<../../api/paddlets.ensemble.weighting_ensemble.html>`_ ."
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:61
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:61
 #: 8b1629902b5c484d9b0a8e893ebd6b47
 msgid "Example1"
 msgstr "例子"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:76
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:76
 #: 58bad2bbfe18477b8d0aff0ff69a43fd
 msgid "4. Model prediction and evaluation"
 msgstr "4. 模型预测和评估"
 
-#: ../../source/modules/ensemble/ensemble_anomly.rst:78
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:78
 #: 9fde31390f65410babc7d8580697e682
 msgid "Use the trained model for prediction and evaluation."
 msgstr "用训练的模型进行预测和评估"
