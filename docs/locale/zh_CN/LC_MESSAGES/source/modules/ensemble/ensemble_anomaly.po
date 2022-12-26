@@ -60,12 +60,12 @@ msgid ""
 "Please notice that, to keep the consistancy of models fit and predict, "
 "params  ``in_chunk_len`` params was extracted into Ensemble models, you "
 "can ignore this three params for base models."
-msgstr "``in_chunk_len`` 这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
+msgstr "in_chunk_len这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
 
 #: ../../source/modules/ensemble/ensemble_anomaly.rst:56
 #: 8702f66d7d32410d983f19a5e203d70d
 #, fuzzy
-msgid "3. Construct and Fitting"
+msgid "4. Construct and Fitting"
 msgstr "4.组装和拟合模型"
 
 #: ../../source/modules/ensemble/ensemble_anomaly.rst:58
@@ -86,8 +86,8 @@ msgstr "例子"
 
 #: ../../source/modules/ensemble/ensemble_anomaly.rst:76
 #: 58bad2bbfe18477b8d0aff0ff69a43fd
-msgid "4. Model prediction and evaluation"
-msgstr "4. 模型预测和评估"
+msgid "5. Model prediction and evaluation"
+msgstr "5. 模型预测和评估"
 
 #: ../../source/modules/ensemble/ensemble_anomaly.rst:78
 #: 9fde31390f65410babc7d8580697e682
