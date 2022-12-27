@@ -21,22 +21,22 @@ FORECASTER_SUPPORT_MODES = ["mean", "min", "max", "median"]
 ANOMALY_SUPPORT_MODES = ["mean", "min", "max", "median", "voting"]
 
 class WeightingEnsembleBase(EnsembleBase):
+    """
+    The WeightingEnsembleBase Class.
 
+    Args:
+
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
+        model: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
+        verbose(bool): Turn on Verbose mode,set to true by default.
+
+    """
     def __init__(self,
                  estimators: List[Tuple[object, dict]],
                  mode="mean",
                  verbose: bool = False
                  ) -> None:
-        """
-        The WeightingEnsembleBase Class.
 
-        Args:
-
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
-            model: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
-            verbose(bool): Turn on Verbose mode,set to true by default.
-
-        """
         raise_if_not(isinstance(mode, str), "Mode should in type of string")
         self._mode = mode
         super().__init__(estimators, verbose)
@@ -98,7 +98,20 @@ class WeightingEnsembleBase(EnsembleBase):
 
 
 class WeightingEnsembleForecaster(WeightingEnsembleBase, BaseModel):
+    """
+    The WeightingEnsembleForecaster Class.
 
+    Args:
+
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
+        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
+            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. Bydefault, it will NOT skip any time steps.
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
+        mode: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
+        verbose(bool): Turn on Verbose mode,set to true by default.
+
+    """
     def __init__(self,
                  in_chunk_len: int,
                  out_chunk_len: int,
@@ -107,22 +120,7 @@ class WeightingEnsembleForecaster(WeightingEnsembleBase, BaseModel):
                  mode="mean",
                  verbose: bool = False
                  ) -> None:
-        """
-        The WeightingEnsembleForecaster Class.
 
-        Args:
-
-            in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-            out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-            skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
-                The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
-                default, it will NOT skip any time steps.
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
-
-            model: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
-            verbose(bool): Turn on Verbose mode,set to true by default.
-
-        """
         raise_if_not(mode in FORECASTER_SUPPORT_MODES,
                      f"Unsupported ensemble mode,supported ensemble modes: {FORECASTER_SUPPORT_MODES}")
         BaseModel.__init__(self, in_chunk_len, out_chunk_len, skip_chunk_len)
@@ -218,7 +216,23 @@ class WeightingEnsembleForecaster(WeightingEnsembleBase, BaseModel):
         return EnsembleBase.load(path, ensemble_file_name)
 
 class WeightingEnsembleAnomaly(WeightingEnsembleBase):
+    """
+    The WeightingEnsembleAnomaly Class.
 
+    Args:
+
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets Anomly models or Pyod models
+        model: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
+        contamination(int):Anomaly rate, should in [0,0.5). 
+                            For example, when anomaly rate=0.1, the top 10% values in trian scores will set to threshold.
+                            Set to 0 by default, use the max score on train as threshold.
+        standardization : bool, optional (default=True)
+            If True, perform standardization first to convert
+            prediction score to zero mean and unit variance.
+        verbose(bool): Turn on Verbose mode,set to true by default.
+
+    """
     def __init__(self,
                  in_chunk_len,
                  estimators: List[Tuple[object, dict]],
@@ -227,23 +241,6 @@ class WeightingEnsembleAnomaly(WeightingEnsembleBase):
                  standardization: bool = True, 
                  verbose: bool = False
                  ) -> None:
-        """
-        The WeightingEnsembleAnomaly Class.
-
-        Args:
-
-            in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets Anomly models or Pyod models
-            model: weighting mode, support ["mean","min","max","median"] for now, set to "mean" by default.
-            contamination(int):Anomaly rate, should in [0,0.5). 
-                              For example, when anomaly rate=0.1, the top 10% values in trian scores will set to threshold.
-                              Set to 0 by default, use the max score on train as threshold.
-            standardization : bool, optional (default=True)
-                If True, perform standardization first to convert
-                prediction score to zero mean and unit variance.
-            verbose(bool): Turn on Verbose mode,set to true by default.
-
-        """
         raise_if_not(contamination < 0.5 and contamination >= 0, "anomly_rate should in[0,0.5)")
         self._contamination = contamination
 

@@ -130,7 +130,8 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :maxdepth: 1
     :caption: Ensemble
 
-    Ensemble <source/modules/ensemble/overview.rst>
+    EnsembleForecaster <source/modules/ensemble/ensemble_forecaster.rst>
+    EnsembleAnomaly <source/modules/ensemble/ensemble_anomaly.rst>
 
 .. toctree::
     :maxdepth: 1

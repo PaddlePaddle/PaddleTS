@@ -1,6 +1,6 @@
-paddlets.ensemble.weighting_ensemble_forecaster
+paddlets.ensemble.weighting_ensemble
 ===============================================================
-.. automodule:: paddlets.ensemble.weighting_ensemble_forecaster
+.. automodule:: paddlets.ensemble.weighting_ensemble
     :members:
     :no-undoc-members:
     :show-inheritance:

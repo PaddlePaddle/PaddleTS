@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-27 10:37+0800\n"
+"POT-Creation-Date: 2022-12-26 11:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../index.rst:57 9330a633bff448fcb71a46582c2e690e
+#: ../../index.rst:57 4cb98ab1dd32463bbc90f3d1f32e38d5
 msgid "Get Started"
 msgstr "开始使用"
 
@@ -28,15 +28,15 @@ msgstr "使用GPU计算时序模型"
 msgid "Joint Training of Multiple Time Series"
 msgstr "多路时序数据联合训练"
 
-#: ../../index.rst:65 c8983a4c69974bf18900626cd85e1e20
+#: ../../index.rst:65 79883253bc314782b8e8a931788c9fa4
 msgid "Installation"
 msgstr "安装"
 
-#: ../../index.rst:71 d9a570350272426b9c69445f7a5cdb03
+#: ../../index.rst:71 951b9e59e4cf4e95a2b40313ab5780c8
 msgid "Dataset"
 msgstr "数据集定义、加载以及操作"
 
-#: ../../index.rst:78 96167a11c6444ae998774844584de2b1
+#: ../../index.rst:78 258f5a548ffc44449f2c3203df79c517
 msgid "Transform"
 msgstr "数据转换"
 
@@ -72,83 +72,91 @@ msgstr "时序分类"
 msgid "Paddle Inference"
 msgstr ""
 
-#: ../../index.rst:85 b50a831e02a843bc8a7ff2800c5bcdef
+#: ../../index.rst:85 6612507421e941fca01ccd3fcea81906
 msgid "Models"
 msgstr "模型"
 
-#: ../../index.rst:98 649f9b0ba3264489ab0aed4917fa1773
+#: ../../index.rst:97 d7aacf064cd5404d92b4bc511a458ab0
 msgid "Metrics"
 msgstr "评估指标"
 
-#: ../../index.rst:105 089d067f6f224c4e921c06532c280ac4
+#: ../../index.rst:104 53bef81cacf3469a9826003b0a98f280
 msgid "Pipeline"
 msgstr ""
 
-#: ../../index.rst:111 5bf56db4af464b5c8775c33658422651
+#: ../../index.rst:110 8835ef6553574fbd97d69caf0b9f4d42
 msgid "Analysis"
 msgstr "分析"
 
-#: ../../index.rst:117 a5677fd9ac0a459597abc3fd6d98b8fa
+#: ../../index.rst:116 eb3d54e6b24444b7ade7250de7e10b16
 msgid "Backtest"
 msgstr "回测"
 
-#: ../../index.rst:123 ad7b95a7f65247d399505ae703f4ef35
+#: ../../index.rst:122 af6952184404436f8e6679952a51c6a6
 msgid "AutoTS"
 msgstr ""
 
-#: ../../index.rst:129 f6402c676ea54bffb000a20b8479843e
+#: ../../index.rst:128
 msgid "Ensemble"
 msgstr "集成学习"
 
-#: ../../index.rst:135
+#: ../../index.rst:128
+msgid "EnsembleForecaster"
+msgstr "集成时序预测"
+
+#: ../../index.rst:128
+msgid "EnsembleAnomaly"
+msgstr "集成异常检测"
+
+#: ../../index.rst:134
 msgid "paddlets.analysis"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.automl"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.datasets"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.metrics"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.models"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.pipeline"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.transform"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.ensemble"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.utils"
 msgstr ""
 
-#: ../../index.rst:135
+#: ../../index.rst:134
 msgid "paddlets.xai"
 msgstr ""
 
-#: ../../index.rst:135 566c7c34ac134f47b1358d4963333521
+#: ../../index.rst:134 b40d38b6ad2e4b458c2c3d0c4eb3fb68
 msgid "API"
 msgstr ""
 
-#: ../../index.rst:2 67fa91686b794729976ad79720dbc911
+#: ../../index.rst:2 5385898efe4a4c89b537da529d99fb26
 msgid "Welcome to PaddleTS"
 msgstr "欢迎使用PaddleTS"
 
-#: ../../index.rst:4 1f17b73334314152917e2416cf98116c
+#: ../../index.rst:4 d6de66c22b2041e789bacc255aca2031
 msgid ""
 "PaddleTS is an easy-to-use Python library for deep time series modeling, "
 "focusing on the state-of-the-art deep neural network models based on "
@@ -158,6 +166,7 @@ msgid ""
 msgstr ""
 "PaddleTS "
 "是一个易用的深度时序建模的Python库，它基于飞桨深度学习框架PaddlePaddle，专注业界领先的深度模型，旨在为领域专家和行业用户提供可扩展的时序建模能力和便捷易用的用户体验。PaddleTS的主要特性包括："
+
 
 #: ../../index.rst:9 dbc7b13ca817490ca679b664923a1a09
 msgid ""
@@ -210,6 +219,7 @@ msgid ""
 "Third-party (e.g. scikit-learn) ML models & data transformations "
 "integration"
 msgstr "支持第三方机器学习模型及数据转换模块自动集成，支持包括sklearn等第三方库的时序应用"
+
 
 #: ../../index.rst:30 23736fa028334b20a07e771937997175
 msgid "Recently updated:"
