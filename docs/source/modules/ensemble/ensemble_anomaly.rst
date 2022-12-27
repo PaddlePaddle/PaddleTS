@@ -39,9 +39,11 @@ Set up training set (top 15%), and standardize the data.
 
 3. Prepare Models
 ==================================
-Prepare base models for ensemble model. Please notice that, to keep the consistancy of models fit and predict, 
-params  ``in_chunk_len`` params was extracted into Ensemblemodels, you can
-ignore this three params for base models.
+Prepare base models for ensemble model. 
+
+
+
+
 
 .. code:: python
    from paddlets.models.anomaly import AutoEncoder
