@@ -44,8 +44,8 @@ Prepare base models for ensemble model.
 
 
 
-
 .. code:: python
+
    from paddlets.models.anomaly import AutoEncoder
    from paddlets.models.anomaly import VAE
    ae_params = {"max_epochs":100}
