@@ -91,6 +91,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     Probability Forecasting <source/modules/models/probability_forecasting.rst>
     Representation  <source/modules/models/representation.rst>
     Anomaly Detection <source/modules/models/anomaly.rst>
+    Classification <source/modules/models/classify.rst>
     Paddle Inference <source/modules/models/paddle_inference.rst>
 
 

@@ -17,3 +17,4 @@ paddlets.models
     paddlets.models.utils.rst
     paddlets.models.anomaly.rst
     paddlets.models.ml_model_wrapper.rst
+    paddlets.models.data_adapter.rst
