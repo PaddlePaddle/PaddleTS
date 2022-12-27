@@ -30,7 +30,7 @@ msgstr ""
 #: 6b7494d5c3ea47f3b954e77663a504d7 of
 #: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:1
 msgid "Convolution layer to extract features."
-msgstr "用于提取高维特征的卷积层。"
+msgstr "提取高维特征的卷积层。"
 
 #: 02f813eddb3b4514aac7ddf8f1bb0d70 750f8e75a6564b4595cfddccc4d40867
 #: 781b90902ae14e2ba1bb36b6390294a3 9f901c0b173846f481637b0608612e51 of
