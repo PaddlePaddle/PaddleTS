@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-paddlets dl anomaly.
+paddlets dl classify.
 """

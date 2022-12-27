@@ -1,0 +1,412 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:23+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl.mtad_gat.rst:2
+#: 431a259a89ce45ee8d1dd8f6f47fe7f3
+msgid "paddlets.models.anomaly.dl.mtad_gat"
+msgstr ""
+
+#: a4f6e0299ac94b33824a686d5a4df198 of paddlets.models.anomaly.dl.mtad_gat:1
+msgid ""
+"This implementation is based on the article `Multivariate Time-series "
+"Anomaly Detection via Graph Attention Network "
+"<https://arxiv.org/pdf/2009.02040.pdf>`_ ."
+msgstr "基于图注意力网络的多元时间序列异常检测模型的实现。"
+
+#: 97c06f3db21343c8965bd2b64b000568 of paddlets.models.anomaly.dl.mtad_gat:3
+msgid "Some codes refer to `https://github.com/ML4ITS/mtad-gat-pytorch`."
+msgstr "部分代码参考了：https://github.com/ML4ITS/mtad-gat-pytorch。"
+
+#: 11d8fc2e60794229956d946dad3d37df of paddlets.models.anomaly.dl.mtad_gat:17
+msgid "Base model features"
+msgstr "网络结构："
+
+#: 3711ed5d0a3d4f0daadc29bcc6a9382d of paddlets.models.anomaly.dl.mtad_gat:6
+msgid ""
+"The author proposes a framework for multivariate time series anomaly "
+"detection named MTAD-GAT, which mainly includes a 1D convolution layer, "
+"two parallel GAT layers, a GRU layer, a full connection layer and an "
+"automatic encoder-decoder layer."
+msgstr "作者提出了一个多变量时间序列异常检测框架命名为MTAD-GAT，主要包括1个1维的卷积层，两个并行的GAT层、1个GRU层、1个全链接层和1个自动编码器-解码器层："
+
+#: cb541e371a364a438349c791ab95408a of paddlets.models.anomaly.dl.mtad_gat:8
+msgid "1D conv layer: Feature extraction of input data."
+msgstr "1维卷积层：提取时间序列高维特征。"
+
+#: dda1caad6b4f449ea57d1cb1b850f70d of paddlets.models.anomaly.dl.mtad_gat:10
+msgid ""
+"Two parallel GAT layers: Extract the features of spatial dimension and "
+"temporal dimension respectively."
+msgstr "2个并行的GAT层：捕获时间序列的特征和时序关系。"
+
+#: ce3f94ffa2cb4c6bb57a328716368ebd of paddlets.models.anomaly.dl.mtad_gat:12
+msgid "A GRU layer: Fusion the features of 1D conv and the two parallel GAT."
+msgstr "GRU层：融合卷积层和GAT层的特征来捕获序列模式。"
+
+#: 8cc8d7a561264bd1bb9906a063e6ecb3 of paddlets.models.anomaly.dl.mtad_gat:14
+msgid ""
+"A full connection layer: Implementation of anomaly detection based on "
+"forecasting method."
+msgstr "全连接层：实现基于预测的异常检测模型。"
+
+#: 06bc122de3df413a8a3c66bb11a6e14c of paddlets.models.anomaly.dl.mtad_gat:16
+msgid ""
+"An automatic encoder-decoder layer: Implementation of anomaly detection "
+"based on reconstruction method."
+msgstr "编码-解码层：实现基于重构的异常检测模型。"
+
+#: 99a9359807134395878e2407ef16475a of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
+msgstr ""
+
+#: e5fc8aaacb9b410380d490fca5e18824 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:1
+msgid "Multivariate Time-series Anomaly Detection via Graph Attention Network."
+msgstr "基于图注意网络的多维时间序列异常检测模型。"
+
+#: 4cd9546e9e534ab0806769678e762bbe of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT
+msgid "Parameters"
+msgstr "参数"
+
+#: 4b53cd45ee594b05bab7a3c8264d10e0 801c383062e242f7a6d33b6d90c23c09 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:3
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:70
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 2937815a87a443818b131853e6f537d4 aa5456b96ffc48a49a7a2c592da80234 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:5
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:76
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔。"
+
+#: 36e81cbbfbb3464284ad25cf01e7d87a b3e8aeed6e5b476a98c7c8ce606fd28c of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:7
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:82
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: 2cbd3a3049f64db49b456a6e55563a5b da9f4c765e7c4269bde244d83ca7dacc of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:9
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:88
+msgid "Optimizer algorithm."
+msgstr "优化器算法。"
+
+#: ac068394b1f4436990d3dd006d35e17b f7de7a68df904a23b4cfea176d0648cd of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:11
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:94
+msgid "The method to get anomaly threshold."
+msgstr "获取异常阈值的方法。"
+
+#: 213130ab60fc48fca8032163051ae1bd 6a98471c61d14b9993f83589c97a809a of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:13
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:100
+msgid "The parameter used to calculate the quantile which range is [0, 100]."
+msgstr "用于计算分位数的参数，取值范围0到100。"
+
+#: 4b8d81fc584a4c5aa99dcd3c9b52390a c75860a5b1784659aaf2721330afa6b5 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:15
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:106
+msgid "The threshold to judge anomaly."
+msgstr "判断异常的阈值。"
+
+#: 008d4b61430f494eaaae254c595a8b37 bc635a119db74bf4b34f8e1d79368200 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:17
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:112
+msgid "The method to get anomaly score."
+msgstr "获取异常分数的方法。"
+
+#: 277e8dce9539440b82caf9db8cb36987 d8bf0b4c4a214111ad71ce4e9d1a6bc8 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:19
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:118
+msgid "Whether to adjust the pred label according to the real label."
+msgstr "是否根据实际标签调整预测结果。"
+
+#: 8a231bcad1394102960e427ebc70b851 96459ce32f254563a3ee01799d78db19 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:21
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:124
+msgid "The method to adjust pred label."
+msgstr "调整预测结果的方法。"
+
+#: 246e2dc8fe0d42f4a2b25a95e169864a 25d96e4eb33a40ae885405429cb87bd0 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:23
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:130
+msgid "Optimizer parameters."
+msgstr "优化器参数。"
+
+#: 31b0436eb4734953a24e1f22ed441b55 aa33e06ad26e4d04bb6d724095ccc9cf of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:25
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:136
+msgid "Evaluation metrics of model."
+msgstr "模型的评估指标。"
+
+#: 30cde77d32cd466285a8573594effa00 aabf0d7b9a754d868e572add3a5222e9 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:27
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:142
+msgid "Customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: 60cf8f0b25f94929a576a359651915d0 aefd04bf747847eca3e5e21161ad2327 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:29
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:148
+msgid "Number of samples per batch."
+msgstr "每个批次中的样本数量。"
+
+#: 6473fd8a9f2f4e218567a58aec09af9d 95f0db3392d14ac89b3498037e9c5079 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:31
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:154
+msgid "Max epochs during training."
+msgstr "训练过程中的最大迭代轮数。"
+
+#: 4bb35ba518f54a9bad767552ac23f1c5 cf44184407c74d0387b5e962a6ae6c6a of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:33
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:160
+msgid "Verbosity mode."
+msgstr "模型日志模式。"
+
+#: 5c77f8d65b3e4583b3a310150f1724b9 e37e2a05a67e48f4ac7ad3d4f5692a42 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:35
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:166
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
+
+#: 4eceb60264524902a9f1d81b67aa3897 69f1c74c3e3148d6b0ccc8e189d03f1a of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:37
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:172
+msgid "Global random seed."
+msgstr "全局随机种子，注: 保证每次模型参数初始化一致。"
+
+#: 52aa4cc6cc554b18ae2fccd606de54d7 d7be099bbb6e412cbaa46918ab34a8bc of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:39
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:184
+msgid "The target dim index for forecasting and reconstruction model."
+msgstr "用于预测和重建模型的目标列。"
+
+#: 6ca9e7e9a8ee42819860defbaa60d584 7263e0b5312c4f0fa5043fdce45fe954 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:41
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:190
+msgid "Kernel size for Conv1D."
+msgstr "卷积核大小。"
+
+#: 353b5171cc4142ffa0860484be4d768a 3ab0c7c4bac343fc9d99a3af825659cb of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:43
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:196
+msgid "Output dimension of linear transformation in feat-oriented GAT layer."
+msgstr "在特征维度GAT层中线性变换的输出维数。"
+
+#: 06cdaeb333154b9c9e87cb7982911336 32985691671f404b8ccc8e5eb663a630 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:45
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:202
+msgid "Output dimension of linear transformation in time-oriented GAT layer."
+msgstr "在时间维度GAT层中线性变换的输出维数。"
+
+#: 625230fb65bb426f99bc3262a9967ac4 ff5858b3de67467692f111cf82fd05d0 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:47
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:208
+msgid ""
+"Whether to use the modified attention mechanism of GATv2 instead of "
+"standard GAT."
+msgstr "是否使用GATv2。"
+
+#: 3c7dc8dcc3c64686a84283cd81a1287d 8c8183fd3d1c4b7fb56fcc80f7b21c43 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:49
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:214
+msgid "Whether to include a bias term in the attention layer."
+msgstr "在attention层中是否使用偏置。"
+
+#: 7c141bdefcc040a090366e9a14613564 d16cf15c5d084cf08e85b3701bd5602a of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:51
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:220
+msgid "Number of layers in the GRU layer."
+msgstr "GRU层中的层数。"
+
+#: 2f3bfd5dd48147cf9e9736f16ddd447a 8be53ec81ef34752af0096b9c35994da of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:53
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:226
+msgid "Hidden size in the GRU layer."
+msgstr "GRU层中隐层的大小。"
+
+#: 5070b989826d4f5ea0907c0beff3e6ef c998b388427d4d358b8967e3304c03e7 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:55
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:232
+msgid "Number of layers in the FC-based Forecasting Model."
+msgstr "基于预测的模型中的全连接层数。"
+
+#: 1e6242339a394d0cada5ddf1d778824a aec57b33ec374990a0f424e6d707e4ed of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:57
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:238
+msgid "Hidden size in the FC-based Forecasting Model."
+msgstr "基于预测的模型中的隐层节点数。"
+
+#: 7162516b19b94ff5aae4e71236efe006 de014fb940854d3798f520cedbf1d741 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:59
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:244
+msgid "Number of layers in the GRU-based Reconstruction Model."
+msgstr "基于重建的模型中的层数。"
+
+#: 07ba28f902984206b80e465eaa157661 f18c69b9865f4810a8d8c5aca81b63db of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:61
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:250
+msgid "Hidden size in the GRU-based Reconstruction Model."
+msgstr "基于重建的模型中的隐层节点数。"
+
+#: a030bb7a795a428f989c1b4474d873dc ee855359d46646af801a198a4ab1a0a0 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:63
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:256
+msgid "Dropout regularization parameter."
+msgstr "dropout参数。"
+
+#: 68a67b2c312044c4a57b0c0245543228 c6781f537af241a9ba58f69c0c85fdfc of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:65
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:262
+msgid "The negative slope used in the LeakyReLU activation function."
+msgstr "leakyrelu激活函数中的参数。"
+
+#: 08d45c25dd2042f080e9b85d5406f3c4 0c7a3a565d124142a24fcc468dc315f0
+#: 25af335a73e3403a8596b61b79d0e7f8 358baaf5708d4e86a99267fdb2abf837
+#: 385031fe809a423587eeb68bb91044f4 3e5da3711279404798df1ecaf05d3c09
+#: 3e6b3cbe4a7b4d4db8a7c60034f6f56f 4b4ccf8c2fce4162b0f17a5d475b2eae
+#: 4c3759b60b3047f2a406d7b6c33988c0 5d7e873a7e09465b8c7e088a14ea159a
+#: 7ac188a5334c413fb5bb2f0463461b27 835b9509926a4bd7862738278b02e45a
+#: 85abd202da8b44ea8b10a0b6b387f7e1 8f6a8e4d964a4e3d88a98e40e27e6e44
+#: 95fd9502ac85448b881f799e3808e1e5 98c8101609424ae39cf0c5069542cd30
+#: a671b56a10b14a3893af2bcc67d1938c a9b2140669524a908ed08aa33ee5ebef
+#: abcc9e36f8ee4e7ab67e9d71dbe743d0 b0e2fd21231f4284bf0ce22b87abe389
+#: c1f848f9f63a4e70a55fdbd2d9c12f18 cbd5f71183ba4eeca665e221297c27e4
+#: d1204fd03aad4d45a373388f189e900c d4f2e48c73be41569b396042f923d7ee
+#: d7b17f8dbe7646deb191d94d63f699c9 d949dbf2866b46e4bfa898749fbf91a0
+#: db31190f309d43138a77983c56ca024f e381f3f04e5349b6bc044d69f072931a
+#: e4e935eef17248438e8041be04800a50 e8acedd53b9e4d63b944c7d4edeee720
+#: eb1653e0a1ff4d5c8e366178acab49ba efd7d9be5b2a46c19c4042e033686da0
+#: ffa74b12ff72495b854eef8b9dcb5416 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT
+msgid "type"
+msgstr ""
+
+#: 087bf9ca369043c2aaa7e5e674dcfbc8 28ba31a9155849d9889c0658e5141a6a
+#: 2e33b226b5084263a01b67fcd7e5195a 48b98d48a0d441549cdecb62db40c83c
+#: 503e68adeb3248a9bae1ba9c9eff0e8e 57384d59411f4658b68f9197912b7331
+#: 6e1d7d959a5941588516342e7fc95fa7 813e40dcb1b742819f79a442c905d49a
+#: a70c16530e074c518982eff588f0cb34 c4775df42dad403fa336ca2d6a802b7c
+#: d2c1a850ea004c94b49830f44b3a4fd3 dce113d69ac64609ab7ef0bb5ccd3939
+#: e71c38d69ab246378b34522980843044 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:72
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:78
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:150
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:156
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:162
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:168
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:192
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:222
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:228
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:234
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:240
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:246
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:252
+msgid "int"
+msgstr ""
+
+#: ac9e65f2ba494c8f938ffc670bc713b3 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:84
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: ca07ec66c4964a539378e3fe56b9e346 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:90
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: f50a4ed47f0045b896e5252d79b18dbb of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:96
+msgid "Callable[..., float]|None)"
+msgstr ""
+
+#: 6096e0065d4243e5a3f03822e400385e 8b771cfa4892445cb27f717e666f23cb
+#: cb00224b47934ba998293f230f62e3a4 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:102
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:258
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:264
+msgid "float"
+msgstr ""
+
+#: d9b87ec03a4640d79b348f2f16060f3b of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:108
+msgid "float|None"
+msgstr ""
+
+#: e36c0bb0c7a0405e9a62fb7a368f30b5 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:114
+msgid "Callable[..., List[float]]|None"
+msgstr ""
+
+#: 04743cf1b26442f59870ce14d99795ff 4777dd16089144ce89246722f1dd0182
+#: a2fac7797bd24249993d06b5b361fad3 d5722282ca574745920a25b2db960748 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:120
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:180
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:210
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:216
+msgid "bool"
+msgstr ""
+
+#: f4fe3e9d41144fb884b376028142fcbf of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:126
+msgid "Callable[..., np.ndarray]|None"
+msgstr ""
+
+#: ca06da09365d433ebb0dbe7834740ddc of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:132
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: eb9f6c1b2b1b436eb57e0b5909a24521 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:138
+msgid "List[str]"
+msgstr ""
+
+#: ed80013c750145e6a86eae57a40c7a02 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:144
+msgid "List[Callback]"
+msgstr ""
+
+#: a8a75a09d0624fe7a347a2e32fb4b0a5 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:174
+msgid "int|None"
+msgstr ""
+
+#: 840798a02f984e68819c073ac7040a96 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:178
+msgid "Training status."
+msgstr ""
+
+#: 20f5762cc33e4ed8a79819f17d662a46 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:186
+msgid "Optional[List[int]]"
+msgstr ""
+
+#: 101eb6fd0fe147ddbfb471cafd3caa0f 337c404864e54db7bcb0d38a8177c156 of
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:198
+#: paddlets.models.anomaly.dl.mtad_gat.MTADGAT:204
+msgid "Optional[int]"
+msgstr ""
+
