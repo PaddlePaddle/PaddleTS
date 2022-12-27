@@ -55,7 +55,7 @@ msgid "Prepare base models for ensemble model. "
 "Please notice that, to keep the consistancy of models fit and predict, "
 "params  ``in_chunk_len`` params was extracted into Ensemble models, you "
 "can ignore this three params for base models."
-msgstr "为集成模型准备基础模型,in_chunk_len这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
+msgstr "为集成模型准备基础模型, in_chunk_len这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
 
 #: ../../source/modules/ensemble/ensemble_anomaly.rst:56
 #: 8702f66d7d32410d983f19a5e203d70d
