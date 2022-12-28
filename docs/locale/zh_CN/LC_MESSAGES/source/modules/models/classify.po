@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-27 10:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/classify.rst:3 97338995b8b74f69b096f7aa1a9b0f06
+msgid "Tutorial of Time Series Classification"
+msgstr "时序分类使用指南"
+
+#: ../../source/modules/models/classify.rst:5 f0b1f014b24643a08ec5d18135fdacbf
+msgid "What is Time Series Classification?"
+msgstr "什么是时序分类？"
+
+#: ../../source/modules/models/classify.rst:7 8976b8efb68642c58cea42c9b551e89a
+msgid ""
+"Time series classification is a general task that has been applied in "
+"many fields. The purpose is to determine which predefined category a time"
+" series belongs to by using labeled training data. Time series "
+"classification is different from conventional classification because time"
+" series data is a sequence with order attribute."
+msgstr ""
+"时间序列分类是一项在多个领域均得到应用的通用任务，目的是利用标记好的训练数据，"
+"确定一个时间序列属于预先定义的哪一个类别。时间序列分类不同于常规分类，"
+"因为时序数据是具有顺序属性的序列。"
+
+#: ../../source/modules/models/classify.rst:9 82018de8880b48ad994ffb90f818ab30
+msgid ""
+"The ECG signal sample shown in the figure below represents a heartbeat "
+"activity. It can be distinguished according to different signal "
+"characteristics. The left represents normal heartbeat, while the right "
+"represents myocardial infarction. (Data from "
+"https://timeseriesclassification.com/description.php?Dataset=ECG200）"
+msgstr ""
+"如下图所示的心电图信号样本，它表示一个心跳活动。根据信号特征的不同可以加以区分，"
+"左边表示正常心跳，而右边表示心肌梗死。"
+"（数据来源于https://timeseriesclassification.com/description.php?Dataset=ECG200）"
+
+#: ../../source/modules/models/classify.rst:-1 1d9a38aa6af9433db8fbf04ac938cebb
+#: 3096321ab8144f91a91cc576e99341ce
+msgid "Classify Windows"
+msgstr ""
+
+#: ../../source/modules/models/classify.rst:14 493a0ce2c13e4af9ba0667e7c605e6f7
+msgid ""
+"It can be seen that we define a time series classification problem as the"
+" classification of time series. In the above example, each ECG is a data "
+"sample, and each data sample will correspond to a classified label. As "
+"shown in the figure below, the input of the model can be n TSDataset."
+msgstr ""
+"由此可见，我们定义一个时序分类问题是时序序列的分类，在上述例子中每一个心电图作为一个数据样本，"
+"每个数据样本会对应一个分类的label。如下图所示，模型的输入可以是是n个TSDataset。"
+
+#: ../../source/modules/models/classify.rst:19 4a71b9c118ad45e4a878343c80ca7959
+msgid ""
+"PaddleTS provides the components of time series classification, mainly "
+"including:"
+msgstr "PaddleTS提供了时序分类的能力，主要包括:"
+
+#: ../../source/modules/models/classify.rst:21 0d30ad93659c4c6fbcde6dbd45a68838
+msgid ""
+"The TSDataset data structure is used to adapt the data characteristics of"
+" the time series classification scenario, such as the ECG example above."
+msgstr "利用TSDataset数据结构，适配时序分类场景的数据特征，如上面心电图的例子。"
+
+#: ../../source/modules/models/classify.rst:22 9dcc48eb2e794e7788c5c106d88d2480
+msgid ""
+"It has implemented two deep learning models for time series "
+"classification, including  CNN and InceptionTime. It also provides the "
+"ClassifyBaseModel, which facilitates developers to build new time series "
+"classification models."
+msgstr ""
+"实现了两个时序分类的深度模型，包括经典的CNN以及领先的InceptionTime，"
+"同时提供ClassifyBaseModel基类，方便广大开发者构建新的时序分类模型。"
+
+#: ../../source/modules/models/classify.rst:23 ce357f2ad53f40f29ddd7f0737116b2c
+msgid ""
+"Accuracy is supported by default to evaluates the time series "
+"classification, and also applies the relevant evaluation operator of "
+"sklearn.metrics to evaluate the time series classification results."
+msgstr "默认支持accuracy_score对时序分类进行评估，也适配sklearn.metrics相关评估算子对时序分类结果进行评估。"
+
+#: ../../source/modules/models/classify.rst:27 1f3c41b261394204bf10a89ba58ffa0f
+msgid "An example"
+msgstr "示例："
+
+#: ../../source/modules/models/classify.rst:28 3190317e1e3c4dedbbed807fe8f79d37
+msgid ""
+"The following example uses the built-in CNN model to do an time series "
+"classification task based on PaddleTS."
+msgstr "下方的示例使用了内置的CNN模型展示如何基于PaddleTS进行时序分类。"
+
+#: ../../source/modules/models/classify.rst:31 5bc5589754ad4cb9b5e911b94af21d65
+msgid "1. Prepare data"
+msgstr "1. 数据准备"
+
+#: ../../source/modules/models/classify.rst:33 85d85c0e5ed74e129c08bf7c2fddfa61
+msgid ""
+"The built-in API: `get_dataset` is used to load BasicMotions dataset: "
+"`BasicMotions`."
+msgstr "使用内置的API：get_dataset加载BasicMotions数据集。"
+
+#: ../../source/modules/models/classify.rst:43 207bf50e6a414a2ba21f28f53b232860
+msgid "2. Train model"
+msgstr "2. 模型训练"
+
+#: ../../source/modules/models/classify.rst:45 0a8ce34d238d45a38e344c1bc48e8907
+msgid "Training time series classification model."
+msgstr "训练时序分类模型。"
+
+#: ../../source/modules/models/classify.rst:55 1ba2f7dd1ee04126a48c8908338e2b3f
+msgid "3. Model prediction and evaluation"
+msgstr "3. 模型预测和评估"
+
+#: ../../source/modules/models/classify.rst:57 2ab78feb49dc402c9bf8c3d31583c222
+msgid "Use the trained model for prediction and evaluation."
+msgstr "使用训练好的模型进行预测和评估。
+"
+
+#: ../../source/modules/models/classify.rst:68 23b83128dbe94a7a9f8eecd481714e8d
+msgid "4. Probability Forecasting"
+msgstr "概率预测"
+
+#: ../../source/modules/models/classify.rst:70 e585b2db55d54e1c9b7f3ef804f9ad9b
+msgid "Return probability of each class."
+msgstr "可以返回每个分类的概率"
+
+#: ../../source/modules/models/classify.rst:77 8715f64cc2784dfb952f24c721e38cf8
+msgid "5. Model persistence"
+msgstr "5. 模型持久化"
+
+#: ../../source/modules/models/classify.rst:79 6d8e345483964736a4bbfbb6e9317c6d
+msgid "The trained model can be saved to the specified path."
+msgstr "可以将训练完成的模型保存到指定路径。"
+
+#: ../../source/modules/models/classify.rst:85 3a214807575845d1bd739eb226566cd4
+msgid "After the model is saved, the model can be loaded for new data prediction."
+msgstr "模型保存之后，可以加载模型用于新的数据预测。"
+

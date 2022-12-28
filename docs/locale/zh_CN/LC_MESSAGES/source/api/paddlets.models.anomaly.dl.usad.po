@@ -1,0 +1,332 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-23 10:40+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl.usad.rst:2
+#: 2f0ba462bf4e47df8f360b4a190c0565
+msgid "paddlets.models.anomaly.dl.vae"
+msgstr ""
+
+#: 7d1a2ae68e8b481e86164767152e8d91 of paddlets.models.anomaly.dl.usad:1
+msgid ""
+"This implementation is based on the article `USAD : UnSupervised Anomaly "
+"Detection on Multivariate Time Series "
+"<https://dl.acm.org/doi/pdf/10.1145/3394486.3403392>`_ ."
+msgstr ""
+"USAD模型是2020年提出的基于自编码器, 同时利用对抗训练的无监督多时序异常检测学习方法 `USAD : UnSupervised Anomaly "
+"Detection on Multivariate Time Series "
+"<https://dl.acm.org/doi/pdf/10.1145/3394486.3403392>`_ ."
+
+#: b093f9e8c4ae45d3b21289287f5306a1 of paddlets.models.anomaly.dl.usad:5
+msgid "Base model features"
+msgstr "模型特性"
+
+#: 9b4241c2285d4e79a16f1f054ad08ce2 of paddlets.models.anomaly.dl.usad:4
+msgid "Based on adversely trained autoencoders."
+msgstr "基于对抗网络训练的AE模型"
+
+#: 001f64627f014387a29ef4edd52193fd of paddlets.models.anomaly.dl.usad.USAD:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel`"
+msgstr ""
+
+#: 527478b3963c4a17969da2054cae9fb1 of paddlets.models.anomaly.dl.usad.USAD:1
+msgid "USAD model for anomaly detection."
+msgstr "USAD 异常检测模型"
+
+#: 2861010ee3844cca96c7f6f5930a6a22 of paddlets.models.anomaly.dl.usad.USAD
+msgid "Parameters"
+msgstr "参数"
+
+#: 13c02f53928e48949e8b7619e6785f45 793c033d338543f58671a029475ccc0e of
+#: paddlets.models.anomaly.dl.usad.USAD:3
+#: paddlets.models.anomaly.dl.usad.USAD:61
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 83b6240228f44f9b8979d6846c67abc8 d94dbd6bec1e488c8b1c3aa563532920 of
+#: paddlets.models.anomaly.dl.usad.USAD:5
+#: paddlets.models.anomaly.dl.usad.USAD:67
+msgid "Sampling intervals between two adjacent samples."
+msgstr "相邻样本间的采样间隔。"
+
+#: e858c50f4c6742bb86fbdd93dec01a20 e90f32244e534be494237c8403efd4f7 of
+#: paddlets.models.anomaly.dl.usad.USAD:7
+#: paddlets.models.anomaly.dl.usad.USAD:73
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: 740edd5354a842b78825158729e45db3 b820f3fa8d4642d8b7294e354a9ad8cd of
+#: paddlets.models.anomaly.dl.usad.USAD:9
+#: paddlets.models.anomaly.dl.usad.USAD:79
+msgid "Optimizer algorithm."
+msgstr "优化器算法。"
+
+#: 0ef1e227d00248ab9d7ada378429b0e4 f6dc65b994c94a8eafd9a273cebd0339 of
+#: paddlets.models.anomaly.dl.usad.USAD:11
+#: paddlets.models.anomaly.dl.usad.USAD:85
+msgid "The method to get anomaly threshold."
+msgstr "获取异常阈值的方法。"
+
+#: bf193cc0ae4b4d1996c858f241322b55 e2721a8ac6234f7595112d0c16cb64b1 of
+#: paddlets.models.anomaly.dl.usad.USAD:13
+#: paddlets.models.anomaly.dl.usad.USAD:91
+msgid "The parameter used to calculate the quantile which range is [0, 100]."
+msgstr "用于计算异常的比例，0-100之间的百分比"
+
+#: 8da8702d02e245119599d26e06f8e0b1 a4780811f1b946dba34ce0687fa05c77 of
+#: paddlets.models.anomaly.dl.usad.USAD:15
+#: paddlets.models.anomaly.dl.usad.USAD:97
+msgid "The threshold to judge anomaly."
+msgstr "判断异常的阈值。"
+
+#: 4bc9dcd6a17d4fc69a87f4cd5bf14404 aa45241591244d6b940866223bd7488c of
+#: paddlets.models.anomaly.dl.usad.USAD:17
+#: paddlets.models.anomaly.dl.usad.USAD:103
+msgid "The method to get anomaly score."
+msgstr "获取异常分数的方法。"
+
+#: 978aaa6765704732b81a67af49a645d3 a8ded7a2d3ac4893baf4fc609a77f686 of
+#: paddlets.models.anomaly.dl.usad.USAD:19
+#: paddlets.models.anomaly.dl.usad.USAD:109
+msgid "Whether to adjust the pred label according to the real label."
+msgstr "是否基于真实值去调整预测值"
+
+#: 04e4f22f54e44a6591e702eae2e7058c 8e7c1dcd514f44118e4972000d7e64c6 of
+#: paddlets.models.anomaly.dl.usad.USAD:21
+#: paddlets.models.anomaly.dl.usad.USAD:115
+msgid "The method to adjust pred label."
+msgstr "调整预测数值的方法"
+
+#: 0a63eb1d63354bc3865f1a6e00fd3ab8 c86411f975574562b02bd0ec4f27e311 of
+#: paddlets.models.anomaly.dl.usad.USAD:23
+#: paddlets.models.anomaly.dl.usad.USAD:121
+msgid "Optimizer parameters."
+msgstr "优化器参数。"
+
+#: 735a8df2a6444d69b5265ff7bda72fce 905b6dba018d41328a894921b9e5c03c of
+#: paddlets.models.anomaly.dl.usad.USAD:25
+#: paddlets.models.anomaly.dl.usad.USAD:127
+msgid "Evaluation metrics of model."
+msgstr "模型的评估指标。"
+
+#: eca6975dc29b43d1a63dc5279daf868e f55d0ffb28ac4cb981aba4f15b1109d0 of
+#: paddlets.models.anomaly.dl.usad.USAD:27
+#: paddlets.models.anomaly.dl.usad.USAD:133
+msgid "Customized callback functions."
+msgstr "自定义的callback函数。"
+
+#: 028b827f06e24bbfa2bc2e6782b7d848 69e96515aa6f4c68b45e7df4f51be2b1 of
+#: paddlets.models.anomaly.dl.usad.USAD:29
+#: paddlets.models.anomaly.dl.usad.USAD:139
+msgid "Number of samples per batch."
+msgstr ""
+
+#: e9444b8a437a41f58eb51290b98d0ee5 f6e7cc74a67449db9c57dd23dcab9990 of
+#: paddlets.models.anomaly.dl.usad.USAD:31
+#: paddlets.models.anomaly.dl.usad.USAD:145
+msgid "Max epochs during training."
+msgstr "每个批次中的样本数量。"
+
+#: 2646c054871745ad98c3397eccee8153 a880e42456f74119b2fb84534afef331 of
+#: paddlets.models.anomaly.dl.usad.USAD:33
+#: paddlets.models.anomaly.dl.usad.USAD:151
+msgid "Verbosity mode."
+msgstr "模型日志模式。"
+
+#: 3867390c206c4deba270fb102edce5df ebd271f09c9b419b8d240c010d4431cd of
+#: paddlets.models.anomaly.dl.usad.USAD:35
+#: paddlets.models.anomaly.dl.usad.USAD:157
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
+
+#: 66a9f7e822e34b2ba6f0b2a3af8e2eb9 95fe6cef7895414f8a8c408efb73b35d of
+#: paddlets.models.anomaly.dl.usad.USAD:37
+#: paddlets.models.anomaly.dl.usad.USAD:163
+msgid "Global random seed."
+msgstr "全局随机种子，注: 保证每次模型参数初始化一致。"
+
+#: 4cccedb572254f3c94a2d50fa1d20d49 5ff1b8bc85184a29bed71f7a2a39cd15 of
+#: paddlets.models.anomaly.dl.usad.USAD:39
+#: paddlets.models.anomaly.dl.usad.USAD:175
+msgid "The type of encoder and decoder."
+msgstr "编码器和解码器的类型，目前支持MLP和CNN。"
+
+#: df849adf364a42b9bccbdc0650f2feef eb2eb464841b457bb784d3900a72599d of
+#: paddlets.models.anomaly.dl.usad.USAD:41
+#: paddlets.models.anomaly.dl.usad.USAD:181
+msgid "The activation function for the hidden layers."
+msgstr "隐层的激活函数。"
+
+#: 84c9269e3f3442efb172dc94b878b9e3 a8bb8fdcacd14da0b3da871536487ae7 of
+#: paddlets.models.anomaly.dl.usad.USAD:43
+#: paddlets.models.anomaly.dl.usad.USAD:187
+msgid "The activation function for the last layer."
+msgstr "最后一层的激活函数。"
+
+#: a0cbe1d2a85a44cc82c4379680289dbe dce1c15c121d4362b567371c3be8bc44 of
+#: paddlets.models.anomaly.dl.usad.USAD:45
+#: paddlets.models.anomaly.dl.usad.USAD:193
+msgid "The ith element represents the number of neurons in the ith hidden layer."
+msgstr "列表第i个元素表示第i层神经元的个数(MLP)或者输出通道数(CNN)。"
+
+#: dcd5e495bcfe445fafbc42c7d97935fe ff7ab1f8b9804187bb2bd55d49535890 of
+#: paddlets.models.anomaly.dl.usad.USAD:47
+#: paddlets.models.anomaly.dl.usad.USAD:199
+msgid "Kernel size for Conv1D."
+msgstr "卷积核的大小。"
+
+#: a83b412720dd47c4b1cf049ee671cfeb da6922a747df4bff9e21b0d64be74149 of
+#: paddlets.models.anomaly.dl.usad.USAD:49
+#: paddlets.models.anomaly.dl.usad.USAD:205
+msgid "Dropout regularization parameter."
+msgstr "神经元丢弃的比例。"
+
+#: 2af76167ff33479da0b8ca8f2b8e58b0 d143ad2c5fe7406d8e524e9c4eb17d0b of
+#: paddlets.models.anomaly.dl.usad.USAD:51
+#: paddlets.models.anomaly.dl.usad.USAD:211
+msgid "Whether to use batch normalization."
+msgstr "是否开启batch normalization。"
+
+#: d9827082d8c7478baec0fc64e510b5dc f9de9dea458c45c09e09a97e5c1179cb of
+#: paddlets.models.anomaly.dl.usad.USAD:53
+#: paddlets.models.anomaly.dl.usad.USAD:217
+msgid "The size of each embedding vector."
+msgstr "emb向量的维度"
+
+#: 1541870254b24909b5ede0c44f514339 a0e11ab96bd04002a22f3a7e084946b4 of
+#: paddlets.models.anomaly.dl.usad.USAD:55
+#: paddlets.models.anomaly.dl.usad.USAD:223
+msgid ""
+"Whether to use average pooling to aggregate embeddings, if False, concat "
+"each embedding."
+msgstr "在emb汇聚时是否使用平均池化，如果是False，直接对emb做concat连接"
+
+#: 2618e4a262544c929d36433a5dc36c9c d69445fcdfdd4c46b170cdea8a622080 of
+#: paddlets.models.anomaly.dl.usad.USAD:56
+#: paddlets.models.anomaly.dl.usad.USAD:229
+msgid "Whether to flatten the in_chunk_len and feature_dim."
+msgstr "是否对in_chunk_len以及feature_dim维度进行打平"
+
+#: 131a4329e2724c47a12bdfd0456d3450 142d5523e78e4f3b81930450e750cd45
+#: 191a7a00bdee4eda9c063edd60953d48 1a8932b4a9fb40caa97edc11d1a8f1cd
+#: 1b308f63f1fc4ff3a8d1ce70469905fa 29765e356bcc45efb5aea7fd1cbf90bf
+#: 2d4606067993452082ecdd5c0345db1e 3012b600bc964c9b9aae360d0f87bb11
+#: 3ab27c302fa043d6a553a6b436c01838 415a5805e6724651ac2a6a6754be8734
+#: 41e3a46e11c246b9ab0835d973206197 48c538b851bc446cbc3ef1b5379f970a
+#: 532e9e5cf6194cd089019b414e613745 6e1f1160eab340c0966cb8add5c7fe9e
+#: 738bd162370b441fa95092127fd22840 7beedc764fa248469ca3831faaf267e1
+#: 9415a7f6be0148738680d0010d85e4fd 993016a5825b43b0a4f497688807dc40
+#: 9a3af4859fb845cebb91225550f5e662 9a767b594ac7476bb9fb1ab278e4d6bd
+#: adda450a0b3b41449033041165fe3cfb b24e5e14893a409095bb2abe2c97818f
+#: b81f2a9cedfc477883c832454a704101 c16884b352d04a8787f7877f9556ddee
+#: c5b70c8e3aba44ac85f4ed15f4152c9e c5bc154411a04b9ebfaba64bcaef0195
+#: e76aaa5f4eb74bf688c5686b01df5fa0 fba41e9d42384b0983632cbcc56a6301
+#: fd103383405f4b82b2def8d69f8537d7 of paddlets.models.anomaly.dl.usad.USAD
+msgid "type"
+msgstr ""
+
+#: 18f5453d239b41ccb5500ad0f8d6dc92 565c7a90dbce452a86390a680d2ab64b
+#: 6542fc1fe1ef42609fd221239490fbb2 7845c9ef5bea4c99aa2d1dd38917b2d8
+#: 93e25c8a505349208132bc21ef0dbe73 9b759d9db4d441459464c976f207e8e8
+#: d7e4b0e1c54b4a35b832096a3987d6ca ea7ad3cee57d436a83720940877caedf of
+#: paddlets.models.anomaly.dl.usad.USAD:63
+#: paddlets.models.anomaly.dl.usad.USAD:69
+#: paddlets.models.anomaly.dl.usad.USAD:141
+#: paddlets.models.anomaly.dl.usad.USAD:147
+#: paddlets.models.anomaly.dl.usad.USAD:153
+#: paddlets.models.anomaly.dl.usad.USAD:159
+#: paddlets.models.anomaly.dl.usad.USAD:201
+#: paddlets.models.anomaly.dl.usad.USAD:219
+msgid "int"
+msgstr ""
+
+#: 506e13141b224d499812ed2e70a93204 9a452deeb0ec49f99561440a37ff060a
+#: f262cf4bc77b4cf39d827dcd23e5fab3 of paddlets.models.anomaly.dl.usad.USAD:75
+#: paddlets.models.anomaly.dl.usad.USAD:183
+#: paddlets.models.anomaly.dl.usad.USAD:189
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: 214bd1e8292a40d99f85534bfa14fde6 of paddlets.models.anomaly.dl.usad.USAD:81
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 201ef1bf9ea941e099f4e51f15ed1de8 of paddlets.models.anomaly.dl.usad.USAD:87
+msgid "Callable[..., float]|None)"
+msgstr ""
+
+#: 6bf51efe46794e638ac9670910b2c73f c762e759d0f94cf5a50f6147aa741891 of
+#: paddlets.models.anomaly.dl.usad.USAD:93
+#: paddlets.models.anomaly.dl.usad.USAD:207
+msgid "float"
+msgstr ""
+
+#: f79da3167cc54e119f2f23daace94f78 of paddlets.models.anomaly.dl.usad.USAD:99
+msgid "float|None"
+msgstr ""
+
+#: 5ddb939f25a34138abecdd43a7448c36 of paddlets.models.anomaly.dl.usad.USAD:105
+msgid "Callable[..., List[float]]|None"
+msgstr ""
+
+#: 1ad95c9236db4b43b26e98c61c2abcf1 2f580df0805a4ebf9727ad5a84f887ea
+#: 3077a958f4664c80b9760bcd13593ba6 4951660dd4624a0499d3d81035e0004b
+#: 897a7430834f4b88a3d40cbfcd739db0 of paddlets.models.anomaly.dl.usad.USAD:111
+#: paddlets.models.anomaly.dl.usad.USAD:171
+#: paddlets.models.anomaly.dl.usad.USAD:213
+#: paddlets.models.anomaly.dl.usad.USAD:225
+#: paddlets.models.anomaly.dl.usad.USAD:231
+msgid "bool"
+msgstr ""
+
+#: 129d592484b8496883d4e4a9c686781d of paddlets.models.anomaly.dl.usad.USAD:117
+msgid "Callable[..., np.ndarray]|None"
+msgstr ""
+
+#: 1c150967b1ef4330b1e77ff7683f375e of paddlets.models.anomaly.dl.usad.USAD:123
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 46118752011b45a89be27f1f01ec2c31 of paddlets.models.anomaly.dl.usad.USAD:129
+msgid "List[str]"
+msgstr ""
+
+#: 0935b5360cd549b8a3ef5c62f38559b2 of paddlets.models.anomaly.dl.usad.USAD:135
+msgid "List[Callback]"
+msgstr ""
+
+#: ab5f68341ba74ef5a4523b6866c17293 of paddlets.models.anomaly.dl.usad.USAD:165
+msgid "int|None"
+msgstr ""
+
+#: 90b2e85679db45fa90e1f41fe3d91724 of paddlets.models.anomaly.dl.usad.USAD:169
+msgid "Training status."
+msgstr ""
+
+#: 9d6240e6a67e4c59811b93579646700c of paddlets.models.anomaly.dl.usad.USAD:177
+msgid "str"
+msgstr ""
+
+#: 001433b362254937a7dfc9b66e8e4413 of paddlets.models.anomaly.dl.usad.USAD:195
+msgid "List[int]|None"
+msgstr ""
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 12:30+0800\n"
+"POT-Creation-Date: 2022-12-26 11:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,119 +17,150 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.dl.utils.rst:2
-#: f801fdabe9d349d993f428825fe6fadf
+#: 8414325850f34da4ac5fcadc60e0ff16
 msgid "paddlets.models.anomaly.dl.utils"
 msgstr "paddlets.models.anomaly.dl.utils"
 
-#: 6dc84e9a3e8f410087ec38246f414333 of
+#: 4b35e7fdc8384ff287cfa6adff1ebe0d of
+#: paddlets.models.anomaly.dl.utils.percentile:1
+msgid "The percentile function to get anomaly threshold."
+msgstr "根据分位数计算阈值。"
+
+#: 10725bddfad344bbb197267c69049ac7 28314f3e3f6d42ba99fba516127a9016
+#: 28760f59ac4b4ce4afecade1a0541416 410292c6eb5944f78860021828747724
+#: 47b03cf7b10149978137b8a49eb5d326 5ceee7fb3b1147da95e81aa0d7754180
+#: 881d528855e8437aa6c4257d856d7ffb ab7485c116994fc3b824c52bb99a575a
+#: e5f5f4c507154764a682ee324ee3d170 efba3063e47e4b709d893e9e9c6a3448 of
+#: paddlets.models.anomaly.dl.utils.adjust_learning_rate
+#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
+#: paddlets.models.anomaly.dl.utils.epsilon_th
+#: paddlets.models.anomaly.dl.utils.my_kl_loss
+#: paddlets.models.anomaly.dl.utils.percentile
+#: paddlets.models.anomaly.dl.utils.result_adjust
+#: paddlets.models.anomaly.dl.utils.series_prior_loss
+#: paddlets.models.anomaly.dl.utils.series_prios_energy
+#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
+#: paddlets.models.anomaly.dl.utils.to_tsdataset
+msgid "Parameters"
+msgstr "参数。"
+
+#: 6d716d35c4c14f438aeb016af321e541 ff4d62c526b54097bbd2bb72ea47e31c of
+#: paddlets.models.anomaly.dl.utils.epsilon_th:4
+#: paddlets.models.anomaly.dl.utils.percentile:3
+msgid "Anomaly score."
+msgstr "异常得分。"
+
+#: 35d8dbfb002e43d0b2965c6f24e78bb2 of
+#: paddlets.models.anomaly.dl.utils.percentile:5
+msgid "The parameter used to calculate the quantile, range is [0, 100]."
+msgstr "用于计算分位数的参数，取值范围0到100。"
+
+#: 05ed18b02e954f54870199ba31733126 2411e8fbec5943c583a9d9ca0bf86d90
+#: 2e15d7440b4c4648bbc3102912fcc527 547ec352397a4605932045e1febe8726
+#: 9ecb9a0539a04914a6ca0107e0fa6fa7 d539dad528cb48edbf879cb2605968c7
+#: d54a3b08bdc440199d5fa3b9a22d288b dbb5a5b794884c97977e93f1330bbda2
+#: fd170b6be3e240ecab02de593b604777 of
+#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
+#: paddlets.models.anomaly.dl.utils.epsilon_th
+#: paddlets.models.anomaly.dl.utils.my_kl_loss
+#: paddlets.models.anomaly.dl.utils.percentile
+#: paddlets.models.anomaly.dl.utils.result_adjust
+#: paddlets.models.anomaly.dl.utils.series_prior_loss
+#: paddlets.models.anomaly.dl.utils.series_prios_energy
+#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
+#: paddlets.models.anomaly.dl.utils.to_tsdataset
+msgid "Returns"
+msgstr ""
+
+#: 4d260bcc77f14c66acd4be835072519f a986265400ea42a89a8f02de256c1d73 of
+#: paddlets.models.anomaly.dl.utils.epsilon_th:9
+#: paddlets.models.anomaly.dl.utils.percentile:8
+msgid "Anomaly threshold."
+msgstr "异常阈值。"
+
+#: 02833f2034614e7ab47e06194363b79d 5bc99e8177554d92b9b87059f9425a9b
+#: 6f23d3093f6a483a98bda99d67809176 735e8f7b83f64735abd0225eab7a5337
+#: 8db22d58e7ea420997ba00201744288c a830f33b65104fcfb8e0cb936af5dffc
+#: b852c0a921804824965be4b5cca856e8 bb154a2663694a73906b48706974885e
+#: cb0767925b7944a2a74a30572def7ca7 of
+#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
+#: paddlets.models.anomaly.dl.utils.epsilon_th
+#: paddlets.models.anomaly.dl.utils.my_kl_loss
+#: paddlets.models.anomaly.dl.utils.percentile
+#: paddlets.models.anomaly.dl.utils.result_adjust
+#: paddlets.models.anomaly.dl.utils.series_prior_loss
+#: paddlets.models.anomaly.dl.utils.series_prios_energy
+#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
+#: paddlets.models.anomaly.dl.utils.to_tsdataset
+msgid "Return type"
+msgstr "返回类型。"
+
+#: 53bcab3141e449eabb687325c1769e03 of
 #: paddlets.models.anomaly.dl.utils.my_kl_loss:1
 msgid "The Kullback–Leibler divergence."
 msgstr "KL散度。"
 
-#: 09d6b0989b4d4d74ac2f07d2e616981d 3a8e40de77f248ba9be891bca1490d1b
-#: 3bfdaf9e72344aecbd2e9f405b97d21a 7fb78f34f366481988a0034310570625
-#: 7ffc5cecb30b40238a982472ed39071e 8a42c3c90a534ed4ac08e3f40013790d
-#: a574358d25274cb89b02acb083a3d004 cecdf6170cfb4e5fa94b681168c105e7 of
-#: paddlets.models.anomaly.dl.utils.adjust_learning_rate
-#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
-#: paddlets.models.anomaly.dl.utils.max
-#: paddlets.models.anomaly.dl.utils.my_kl_loss
-#: paddlets.models.anomaly.dl.utils.result_adjust
-#: paddlets.models.anomaly.dl.utils.series_prior_loss
-#: paddlets.models.anomaly.dl.utils.series_prios_energy
-#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
-msgid "Parameters"
-msgstr "参数。"
-
-#: 536412e2c4d44b208027a08efe05b8d5 of
+#: 74d3512469024b69b3c64f93fa6aeda2 of
 #: paddlets.models.anomaly.dl.utils.my_kl_loss:3
 msgid "Tensor of arbitrary shape in log-probabilities."
 msgstr "对数概率计算中，任意形状的张量。"
 
-#: ff17f1da4f6e4d9e9cebd5ba592edb75 of
+#: ac3b173d68114e7d9e976c2e93b0b51d of
 #: paddlets.models.anomaly.dl.utils.my_kl_loss:5
 msgid "Tensor of the same shape as input."
 msgstr "输入张量的形状。"
 
-#: 10bcefa860cc459bbafa267677e94b01 50c18c3216e74f6987d02f69459b0ffc
-#: 533619793f324002a125da2dd08bb157 9accdf79490847f28e589608e64e10ae
-#: 9e540420afae46d4961285bd57ebdf38 b53ac673519c445a8c3167e47ad05f14
-#: db764d8eac0840feab4a86191bf182a4 of
-#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
-#: paddlets.models.anomaly.dl.utils.max
-#: paddlets.models.anomaly.dl.utils.my_kl_loss
-#: paddlets.models.anomaly.dl.utils.result_adjust
-#: paddlets.models.anomaly.dl.utils.series_prior_loss
-#: paddlets.models.anomaly.dl.utils.series_prios_energy
-#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
-msgid "Returns"
-msgstr ""
-
-#: 1684141ec5fd4003948058ea2c53ea18 1c8bac36ef944715a6eb99247ca69e45
-#: 39b9ae0956d34d39bd8fabca4e17f13b of
+#: 85bc12eb850045acbe9b8aa7fe9ee450 be09c69632ed44a1a07225d9c67e09ba
+#: cd7e884e81694ea39e815cf7cd10955c of
 #: paddlets.models.anomaly.dl.utils.my_kl_loss:8
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:5
-#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:10
+#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:8
 msgid "Got loss."
 msgstr "得到loss值。"
 
-#: 1b519a4e17de4ca1aefd527813ca2179 1dbb2d4d31e34ba291fbd6804caf2e18
-#: 391f6ff2905e4b4d981750d719065f43 61535aff5234431490da96482484389b
-#: cc1a44b678b44b788002d9a11b9ff492 d16bedcfabe14dadb1acc5dd4ef436f1
-#: eed893f47acd441c972f64af93a5309c of
-#: paddlets.models.anomaly.dl.utils.anomaly_get_threshold
-#: paddlets.models.anomaly.dl.utils.max
-#: paddlets.models.anomaly.dl.utils.my_kl_loss
-#: paddlets.models.anomaly.dl.utils.result_adjust
-#: paddlets.models.anomaly.dl.utils.series_prior_loss
-#: paddlets.models.anomaly.dl.utils.series_prios_energy
-#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae
-msgid "Return type"
-msgstr "返回类型。"
-
-#: 4ed86e65e0c54ae98645f183e58fa30a of
+#: b19084dd46554d5eb8a31847f14a71ed of
 #: paddlets.models.anomaly.dl.utils.adjust_learning_rate:1
 msgid "Dynamic Learning Rate Adjustment."
 msgstr "动态调整学习率。"
 
-#: 10277d71e8774ccebaebe410cc7377ab of
+#: a0f2dbc685bc47dca9f55dc47abcbd43 of
 #: paddlets.models.anomaly.dl.utils.adjust_learning_rate:3
 msgid "Optimizer algorithm."
 msgstr "优化器算法。"
 
-#: b01af69ece1e410d9f0ba394bb2362ae of
+#: bb04bd429a024dbc8a882436d1fbbf5c of
 #: paddlets.models.anomaly.dl.utils.adjust_learning_rate:5
 msgid "Max epochs during training."
 msgstr "训练过程中的最大迭代次数。"
 
-#: 8a9bb07e4ac1407ba0c6b095c025986e of
+#: 17a57d3081f747e7a9e4957138865538 of
 #: paddlets.models.anomaly.dl.utils.adjust_learning_rate:7
 msgid "Learning rate."
 msgstr "学习率。"
 
-#: f003a1b223ae4046972a7d8baa0d3893 of
+#: e54e7829b3b04670ba0a82ab6cc55acb of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:1
 msgid "Calculate Association discrepancy in train."
 msgstr "训练过程中计算关联差异。"
 
-#: 631cbcd006b94c21b54034015c683c29 6c28be74426542b6a21a58ffe69834bd of
+#: 220971fb705f412a827acd0429d523a2 55bdbe2103184769bedb19d40b5cb07b of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:3
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:3
 msgid "Model ouput tensor list."
 msgstr "模型输出的张量列表。"
 
-#: 48c9d20f9de747baa0ffcfef6a1f45d9 of
+#: 07e8778257ec44a384e7b7c16248b926 of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:5
 msgid "Target tensor."
 msgstr "目标张量结果。"
 
-#: 4182a89d2ea94c50ab3a76182184ac18 of
+#: 72a7859f71ad4da9ba27d12e4f607333 of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:7
 msgid "Loss function."
 msgstr "损失函数。"
 
-#: 09d9ae8f05b045eda534a3b83989fc92 784ae5a73e6e49338d14e97a652b9379
-#: d38212f058b24ab78153e8e79fdc04de of
+#: 2dde121cdaf54f47a5a97676bb6f6694 68c196c724fc4a368b4bfc4350febf9d
+#: 86eb0f71015445bc870c5dd77c2bcbbc of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:17
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:9
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:9
@@ -138,125 +169,141 @@ msgid ""
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 3dc6ac15ff4a436f8e8181bfa4bc572b of
+#: 0d46cd3ad2e046269aaccb93b0680157 of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:11
 msgid "The optimization is to enlarge the association discrepancy."
 msgstr "优化策略: 放大关联差异。"
 
-#: 4f6eb119bf174db4ad256fd0c881ec81 of
+#: bc14c08a2b804b29839778ae93fa4c65 of
 #: paddlets.models.anomaly.dl.utils.series_prior_loss:14
 msgid ""
 "Series_loss and rec_loss. loss2(paddle.Tensor): Prior_loss and rec_loss. "
 "for_loss_one(paddle.Tensor): Rec_loss and Association discrepancy."
 msgstr "全局关联损失和重建损失.局部关联损失和重建损失.重建损失和关联差异。"
 
-#: 4c450347bc724ba0ae3e5719efa97b76 of
+#: 8f6f04d79df34049a0dbbec5af350a0f of
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:1
 msgid "calculate Association discrepancy in test."
 msgstr "测试过程中计算关联差异。"
 
-#: 35b5cb6d15154bfca13376c9a4f0098e e550ad099fa342b7a4ed183f11486d73 of
+#: 1e3d73abebd548a19bbacd5721fcfe9e 8a1283c1bad44ed7a324ddbab0896b92 of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:9
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:7
 msgid "A parameter to adjust series loss and prior loss."
 msgstr "一个用来调整全局关联损失与局部关联损失的参数。"
 
-#: 54c36c862c984681bd5aaf68d7c025c0 of
+#: c72d681ed6ed430489b107f278908841 of
 #: paddlets.models.anomaly.dl.utils.series_prios_energy:12
 msgid "Anomaly score for predict."
 msgstr "预测异常得分结果。"
 
-#: 9f07d2585bb8490aa6cc056d88b6c2ad of
+#: f6d8cc326e194f499c5f41da75c61cf1 of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:1
-msgid "Threshold are calculated based on Association-based Anomaly Criterion."
+msgid "Threshold is calculated based on Association-based Anomaly Criterion."
 msgstr "基于关联差异的异常标准计算阈值。"
 
-#: 1ac4bb8e5ba74aaaaf31949c53a185ba of
+#: 1051db08e1ae4d16a6241ed7e0177f3e of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:3
 msgid "Anomaly transformer model."
 msgstr "Anomaly transformer模型。"
 
-#: e5ae03bba8ef4888acd655249be2cd7f of
+#: 015f00d544564985927aec9ea6a23c7c of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:5
 msgid "Train set."
 msgstr "训练集。"
 
-#: 138287611cfc4023916dde1455078a84 of
+#: 50ddddb60d2646bab9702ff7f991bb62 of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:7
 msgid "Test set."
 msgstr "测试集。"
 
-#: 6a9965190f5e46a1872ca118820c33dd of
+#: 00ef05e9ac1846cc8cde65cca18cc09a of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:11
 msgid "The Proportion of Anomaly data in train set and test set."
 msgstr "训练集和测试集比例。"
 
-#: 436a6815d82247a99029b344824c1b12 of
+#: bf5f3e028d314aa99d854299235ea78d of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:13
 msgid "Loss function for the reconstruction loss."
 msgstr "重建损失函数。"
 
-#: 182a231cbbc8410ca94ae1797cb84aec of
+#: c41d0b378268402ea18e5523668b0ab6 of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:15
 msgid "Loss function for association discrepancy."
 msgstr "关联差异损失函数。"
 
-#: 11ca8dac92e74eb4b55031c643c5cd6c of
+#: 57e8cd681aeb4c3985175b36b26161e3 of
 #: paddlets.models.anomaly.dl.utils.anomaly_get_threshold:20
 msgid "The threshold to judge anomaly."
-msgstr "阈值:用于界定异常点的数值。"
+msgstr "用于判断异常的阈值。"
 
-#: 2c3613cc45b944c1ad9ad82358b95cbc of
+#: d294aaf6beac4f8c830bbc3e3d940b25 of
 #: paddlets.models.anomaly.dl.utils.result_adjust:1
 msgid ""
 "The adjustment is a widely-used convention in time series anomaly "
 "detection."
 msgstr "广泛应用于时序异常检测的后处理方法。"
 
-#: ea22870b2bb6458dbaee75d363334f7d of
+#: ed385c35553f47108b5e5ef73d0cbb17 of
 #: paddlets.models.anomaly.dl.utils.result_adjust:3
 msgid "The model prediction results."
 msgstr "模型预测结果。"
 
-#: d4364d9196fe4df7a919afdc9ac5ee7c of
+#: 06f946ab3ec04727b2afab8902e520ae of
 #: paddlets.models.anomaly.dl.utils.result_adjust:5
 msgid "Ground truth target values."
 msgstr "目标值的真实结果。"
 
-#: 04304847908e4309a5def802749d4187 of
+#: 56207a6d7b0d4cc983c97d2d1bec0595 of
 #: paddlets.models.anomaly.dl.utils.result_adjust:8
 msgid "Adjusted prediction results."
 msgstr "后处理后的预测结果。"
 
-#: 34bb97f80fae47ed820c1a8290365783 of paddlets.models.anomaly.dl.utils.max:1
-msgid "The max function to get anomaly threshold."
-msgstr "max函数计算阈值。"
-
-#: d69afc019b4b4fd2a233f062c7961d98 of paddlets.models.anomaly.dl.utils.max:3
-msgid "Anomaly score."
-msgstr "异常得分。"
-
-#: 7fa1d0a6ad2340379091a349062f92d0 of paddlets.models.anomaly.dl.utils.max:6
-msgid "Anomaly threshold."
-msgstr "异常检测阈值。"
-
-#: ba1f92df09eb4cf78369ed9ae458ce8f of
+#: 6108b2ae5ffb42c0a599914bc4ff4e62 of
 #: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:1
 msgid "smooth l1 loss."
 msgstr "smooth l1 损失函数。"
 
-#: 1e513110d0824da3866594f59376e426 of
+#: bec5cf2f5d974d149a5a2a33632fdec7 of
 #: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:3
 msgid "Model ouput."
 msgstr "模型输出。"
 
-#: e37f688e80a04eeb927fed3b81f8f46d of
+#: 1d161894fe72455287ccdd304f49d4fc of
 #: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:5
-msgid "Ground truth (correct) target values, keep style."
-msgstr "保持风格对齐的目标值真实值。"
-
-#: 792bc236c4c4417bba033250dea4da95 of
-#: paddlets.models.anomaly.dl.utils.smooth_l1_loss_vae:7
 msgid "Kld beta in 0~1."
 msgstr "范围在0~1之间。"
+
+#: 06afbfa46785428a9313c75a510f67e5 of
+#: paddlets.models.anomaly.dl.utils.to_tsdataset:1
+msgid ""
+"A decorator, used for converting ndarray to tsdataset in anomaly dl "
+"models."
+msgstr "数据转换装饰器，将np.ndarray转换成tsdataset。"
+
+#: 27ecf552ac6d491cba8dcd17e2c12c2c of
+#: paddlets.models.anomaly.dl.utils.to_tsdataset:3
+msgid "The task type. [\"anomaly_label\", \"anomaly_score\"] is optional."
+msgstr "任务类型，包括anomaly_label和anomaly_score两种。"
+
+#: 5680e04b893f492c977e898b9624bcf0 of
+#: paddlets.models.anomaly.dl.utils.to_tsdataset:6
+msgid "Wrapped core function."
+msgstr ""
+
+#: 59d304f0dae14f36b54f07223a0d9529 of
+#: paddlets.models.anomaly.dl.utils.epsilon_th:1
+msgid ""
+"Threshold method proposed by Hundman et. al. "
+"(https://arxiv.org/abs/1802.04431) Code from TelemAnom "
+"(https://github.com/khundman/telemanom)"
+msgstr "一种计算阈值的方法：https://arxiv.org/abs/1802.04431，代码来源于：https://github.com/khundman/telemanom。"
+
+#: b451fd420a774f5fb2f5a8349c3e9a10 of
+#: paddlets.models.anomaly.dl.utils.epsilon_th:6
+msgid "The parameter used to calculate the threshold."
+msgstr "用于计算阈值的参数。"
+
+#~ msgid "Ground truth (correct) target values, keep style."
+#~ msgstr "保持风格对齐的目标值真实值。"
 

@@ -1,0 +1,217 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-14 15:36+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/api/paddlets.xai.post_hoc.shap_explainer.rst:2
+#: 12f2a447343e478b8188626bf2a11e4c
+msgid "paddlets.xai.post_hoc.shap_explainer"
+msgstr ""
+
+#: cabdfa8a577d4eb4b0cf18db73b64dad of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:1
+msgid "Bases: :py:class:`~paddlets.xai.post_hoc.explainer_base.BaseExplainer`"
+msgstr ""
+
+#: a2629ebff30e4734922a508f4d5db9a1 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:1
+msgid ""
+"Shap explainer. This class only (currently) supports regression model of "
+"forecasting task. It uses shap value to provide the contribution value of"
+" model input to model output. For shap, please see "
+"`https://github.com/slundberg/shap`."
+msgstr ""
+"Shap解释器. 该类仅支持预测回归模型. 利用shap数值提供模型输入对输出的贡献度."
+"对于shap, 可以看`https://github.com/slundberg/shap`."
+
+#: 67369d101ae7457695da3fdb0ecc299b 6d7a21d9038c467b9e289d905255bdd5
+#: 7e3a0a8045024e949d3689788f913774 921d10c440b74257bc812a63cb45816d
+#: a5f4186aabee4e00be75927af5cbc818 c8e40365143f4aaba9c1723bfb0a1ad8 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot
+msgid "Parameters"
+msgstr ""
+
+#: 73a29593a591448492a83fb3d5638733 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:5
+msgid "A model object that supports `predict` function."
+msgstr "支持predict功能的模型对象"
+
+#: ccfa1f09ba7a415aa4dbf633c821b200 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:7
+msgid "A TSDataset for training the shap explainer"
+msgstr "用于训练shap解释器的TSDataset数据"
+
+#: dce589d8d20340ecbea7ca1301c5f212 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:9
+msgid "number of instances sampled from the background_data"
+msgstr "从背景板数据中采样的样本实例数量"
+
+#: 11d58d7f296c4263b820adaca867ac3e of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:11
+msgid "Optionally, the shap method to apply. Now just support `kernel` method."
+msgstr "可选，使用的shap方法. 目前仅支持kernel方法"
+
+#: 945accac4cd540cabd1ddd1bfee58ede of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:13
+msgid "Task type of the model. Now just support the regression task."
+msgstr "模型任务类型. 目前仅支持回归任务"
+
+#: f946971270ab403f88e6afb8f5bbf6c2 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:15
+msgid "random seed."
+msgstr "随机数种子"
+
+#: fd312d65b60a47698e7ac79171cfa3bb of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:17
+msgid "Only effective when the model is of type PaddleBaseModel."
+msgstr "当模型为PaddleBaseModel类型的时候有效，可以加速效率"
+
+#: 44db4cfb935a48009bccb4b0b7e06ee8 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer:19
+msgid "Optionally, additional keyword arguments passed to `shap_method`."
+msgstr "可选，额外参数对象传入shap_method对象"
+
+#: c11e29aced1848388ca1d77049b577ed of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:1
+msgid "Calculate the explanatory value of the test sample."
+msgstr "计算测试样本的解释性数值"
+
+#: ee6646a3aa3a4f7fa4629a5fdeac706d of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:3
+msgid "test data."
+msgstr 测试数据"
+
+#: 50cea6ade4444f379a2a6421d720a099 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:5
+msgid ""
+"Number of times to re-evaluate the model when explaining each prediction."
+" More samples lead to lower variance estimates of the SHAP values. "
+"Default nsamples=100."
+msgstr "解释每个预测时重新评估模型的次数. 数据越大造成shap数值的评估方差越小"
+
+#: f94f468060a44192898580effbfa0dfe of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:8
+msgid "The sample start index of the test data. Default the latest sample."
+msgstr "测试样本的开始索引. 模型最后一个样本"
+
+#: cc45c58d93d040c6b604270d7ee940ad of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:10
+msgid "The sample number of the test data."
+msgstr "测试样本的数量，配合sample_start_index使用"
+
+#: 9c243828c6654c22bf399b3a0caa061f of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:12
+msgid ""
+"Optionally, additional keyword arguments passed to "
+"`shap.explainer.shap_values`."
+msgstr ""
+
+#: 112bcf11b72446cfbe4928db6a0f2667 1829f5a5f27244e485acaa26618a06e7
+#: bfb0f6e07e024501874b6ee8c5fbbb22 c9998f9869c146b1a9b93d72bf6903e9
+#: e5f01b823d0746ec9ab85556a73d77ff of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot
+msgid "Returns"
+msgstr ""
+
+#: 91103523898e4640a5aabfb5584efdf9 c4cb9f92c31d404aa95cf070afcda641 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.explain:14
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation:8
+msgid "np.ndarray object"
+msgstr "np.ndarray对象"
+
+#: a89d7131e4734a83b379b2ede7005cdf of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation:1
+msgid ""
+"Get the explanatory output of a certain time point in the prediction "
+"length."
+msgstr "获取预测长度中特定时间点的解释性输出"
+
+#: 4b600bd8e03442f3a503a4fbd3fcc30d 85d6d02d847246fbaddf2187912c6313
+#: bc0af9fdbec24084a6013cfd9d44e853 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot:3
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation:3
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot:3
+msgid "The certain time point in the prediction length."
+msgstr "预测长度中特定时间点"
+
+#: 38c50cdd7bf4443d87566e6a83fd9c33 49625b69a6814a7ab2790f38e64de3a2
+#: 6910d109c5d4447a868da5cb783eebc7 a101c4bbfe1a41d19b7098e4a9561d4f of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot:5
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.get_explanation:5
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot:5
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot:5
+msgid "The sample index of the explanatory value. Default the first sample."
+msgstr "解释性数值样本索引. 默认第一个样本"
+
+#: e8a9d4ade706401ea86fa0b4a1f71a96 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot:1
+msgid ""
+"Display the shap value of different dimensions. Such as 'OI'(output time "
+"dimension vs input time dimension), 'OV'(output time dimension vs "
+"variable dimension), 'IV'(input time dimension vs variable dimension), "
+"'I'(input time dimension), and 'V'(variable dimension)."
+msgstr ""
+"展示不同维度的shap值. 例如'OI'(输出时间维度vs输入时间维度), 'OV'(输出时间维度vs特征维度), "
+"'IV'(输入时间维度vs特征维度), 'I'(输入时间维度), 'V'(特征维度)"
+
+#: 497229751d0c4ccc87726cfc96d62021 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot:3
+msgid "display method. Optional, {'OI', 'OV', 'IV', 'I', 'V'}."
+msgstr "展示方法. 可选 {'OI', 'OV', 'IV', 'I', 'V'}."
+
+#: 24fd35b16d9c4d27b6710b28baddfae3 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot:7
+msgid "other parameters."
+msgstr "其他参数"
+
+#: 2dee07a9428941cdb41727a997d65dd9 425bdeb31c574b7d9bda5407ab6d705e
+#: 9de5e644706d44fba2abcc52eb301827 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot:9
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.plot:9
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot:9
+msgid "None"
+msgstr ""
+
+#: dd4c8a049a5a43b4932193f4afaa4a46 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot:1
+msgid "Visualize the given SHAP values with an additive force layout."
+msgstr "以加性图层的方式可视化shap数值"
+
+#: 69c19d4786694203ac44ad47b8c05a14 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.force_plot:7
+msgid "Optionally, additional keyword arguments passed to `shap.force_plot`."
+msgstr "可选, 额外的参数传给shap.force_plot."
+
+#: 1ab32f53f2c642349a5097da409811cc of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot:1
+msgid "Create a SHAP feature importance based on previously interpreted samples."
+msgstr "基于解释性样本构建SHAP特征重要性图"
+
+#: e64d787b6acc4cd9bd06b8a252d20d94 of
+#: paddlets.xai.post_hoc.shap_explainer.ShapExplainer.summary_plot:7
+msgid "Optionally, additional keyword arguments passed to `shap.summary_plot`."
+msgstr "可选, 其他参数传给shap.summary_plot."
+

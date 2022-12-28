@@ -5,6 +5,7 @@ from typing import List, Dict, Any, Callable, Optional, Tuple
 from abc import ABC, abstractmethod
 
 import paddle
+import numpy as np
 from paddle import nn
 
 from paddle.distribution import Distribution
@@ -24,79 +25,6 @@ class Likelihood(ABC):
     ):
         self.mode = mode
     
-    @abstractmethod
-    def output_to_params(
-        self,
-        model_output: paddle.Tensor,
-    ) -> paddle.Tensor:
-        """
-        Rescale model output to distribution params, to be implemented in subclasses.
-
-        Args:
-            model_output(paddle.Tensor): The output of model.
-
-        Returns:
-            paddle.Tensor: The distribution parameters respect to subclass' distribution.
-        """
-        pass
-    
-    @abstractmethod
-    def params_to_distr(
-        self,
-        distr_params: paddle.Tensor,
-    ) -> Distribution:
-        """
-        Construct a distribution class by distribution parameters, to be implemented in subclasses.
-
-        Args:
-            distr_params(paddle.Tensor): The parameters of distribution.
-
-        Returns:
-            Distribution: The distribution instance defined in paddle.
-        """
-        pass
-    
-    def sample(
-        self,
-        model_output: paddle.Tensor,
-        num_samples: int = 1,
-    ) -> paddle.Tensor:
-        """
-        Samples a prediction from the model output：
-
-        1> output to distribution parameters;
-        
-        2> distribution parameters to distribution;
-        
-        3> sample by distribution
-
-        Args:
-            model_output(paddle.Tensor): The output of model.
-            num_samples(int): The number of samples to be sampled.
-        Returns:
-            paddle.Tensor: The samples of distribution.
-            
-        """
-        distr_params = self.output_to_params(model_output)
-        distr = self.params_to_distr(distr_params)
-        return distr.sample([num_samples])
-    
-    @abstractmethod
-    def get_mean(
-        self,
-        distr_params: paddle.Tensor
-    ) -> paddle.Tensor:
-        """
-        Compute mean by distribution params, to be implemented in subclasses.
-        
-        Args:
-            distr_params: The params of distribution.
-
-        Returns:
-            paddle.Tensor: The mean of distribution.
-        """
-        pass
-    
     @property
     @abstractmethod
     def num_params(self) -> int:
@@ -108,9 +36,10 @@ class Likelihood(ABC):
         """
         pass
     
+    @abstractmethod
     def loss(
         self, 
-        distr_params: paddle.Tensor, 
+        model_output: paddle.Tensor, 
         target: paddle.Tensor
     ) -> paddle.Tensor:
         """
@@ -119,15 +48,13 @@ class Likelihood(ABC):
         This is the basic way to compute the NLL loss. It can be overwritten by likelihood for which paddle proposes a numerically better NLL loss.
         
         Args:
-            distr_params: The parameters of distribution.
-            target: The ground truth of the sample.
+            model_output(paddle.Tensor): The output of model.
+            target(paddle.Tensor): The ground truth of the sample.
 
         Returns:
             paddle.Tensor: The loss computed by distribution parameters and ground truth.
         """
-        distr = self.params_to_distr(distr_params)
-        losses = -distr.log_prob(target)
-        return losses.mean()
+        pass
         
 
 class GaussianLikelihood(Likelihood):
@@ -158,7 +85,7 @@ class GaussianLikelihood(Likelihood):
     def params_to_distr(
         self,
         distr_params: paddle.Tensor,
-        ) -> Distribution:
+        ) -> "Distribution":
         """
         Construct Normal instance by parameters: mu and sigma.
 
@@ -196,3 +123,93 @@ class GaussianLikelihood(Likelihood):
             int: The number of parameters of Gaussian distribution.
         """
         return 2
+
+    def sample(
+        self,
+        model_output: paddle.Tensor,
+        num_samples: int = 1,
+    ) -> paddle.Tensor:
+        """
+        Samples a prediction from the model output：
+
+        1> output to distribution parameters;
+        
+        2> distribution parameters to distribution;
+        
+        3> sample by distribution
+
+        Args:
+            model_output(paddle.Tensor): The output of model.
+            num_samples(int): The number of samples to be sampled.
+        Returns:
+            paddle.Tensor: The samples of distribution.
+            
+        """
+        distr_params = self.output_to_params(model_output)
+        distr = self.params_to_distr(distr_params)
+        return distr.sample([num_samples])
+    
+    def loss(
+        self, 
+        model_output: paddle.Tensor, 
+        target: paddle.Tensor
+    ) -> paddle.Tensor:
+        """
+        Compute NLL loss by predicted distrbution parameters and ground truth target.
+
+        This is the basic way to compute the NLL loss. It can be overwritten by likelihood for which paddle proposes a numerically better NLL loss.
+        
+        Args:
+            model_output(paddle.Tensor): The output of model.
+            target(paddle.Tensor): The ground truth of the sample.
+
+        Returns:
+            paddle.Tensor: The loss computed by model output and ground truth.
+        """
+        distr_params = self.output_to_params(model_output)
+        distr = self.params_to_distr(distr_params)
+        losses = -distr.log_prob(target)
+        return losses.mean()
+    
+    
+class QuantileRegression(Likelihood):
+    """
+    Quantile regression.
+    """
+    def __init__(
+        self,
+        quantiles: Optional[List[float]] = [0.1, 0.5, 0.9]
+    ):
+        super(QuantileRegression, self).__init__(mode="quantiles")
+        self.quantiles = paddle.to_tensor(np.sort(quantiles))
+        
+    @property
+    def num_params(self) -> int:
+        """
+        For quantile regression, the number of parameters is the length of quantiles.
+
+        Returns:
+            int: length of quantiles
+        """
+        return len(self.quantiles)
+    
+    def loss(
+        self, 
+        model_output: paddle.Tensor, 
+        target: paddle.Tensor
+    ) -> paddle.Tensor:
+        """
+        Compute quantile loss.
+        
+        Args:
+            model_output(paddle.Tensor): The output of model, must be of shape (batch_size, n_timesteps, n_target_variables)
+            target: The ground truth of the sample, must be of shape (n_samples, n_timesteps, n_target_variables, n_quantiles)
+
+        Returns:
+            paddle.Tensor: The loss computed by model output and ground truth.
+        """
+        errors = target.unsqueeze(-1) - model_output
+        losses_array = 2 * paddle.max(paddle.stack([(self.quantiles - 1) * errors, self.quantiles * errors]), axis=0)
+        q_loss = (losses_array.sum(axis=-1)).mean(axis=-1).mean()
+        return q_loss
+

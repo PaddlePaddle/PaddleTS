@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:23+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._mtad_gat.layer.rst:2
+#: 1944869473a3401bb20861e965118d21
+msgid "paddlets.models.anomaly.dl._mtad_gat.layer"
+msgstr ""
+
+#: 7b7a216fb6094913bdd6c7fa3480e91a 9df4a631505048c0b28b66fc77984dbf of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:1
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr ""
+
+#: 6b7494d5c3ea47f3b954e77663a504d7 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:1
+msgid "Convolution layer to extract features."
+msgstr "用于提取高维特征的卷积层。"
+
+#: 02f813eddb3b4514aac7ddf8f1bb0d70 750f8e75a6564b4595cfddccc4d40867
+#: 781b90902ae14e2ba1bb36b6390294a3 9f901c0b173846f481637b0608612e51 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward
+msgid "Parameters"
+msgstr "参数"
+
+#: f7f354dd464840158c0484a845b2785d of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:3
+msgid "The number of features."
+msgstr "特征的维度。"
+
+#: daea264399354d379639112600acf0d3 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:5
+msgid "Kernel size for Conv1D."
+msgstr "卷积核大小。"
+
+#: 5bc5af191351478e8d6d0ca6c5c05cc9 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:10
+msgid "The pad layer."
+msgstr "填充层。"
+
+#: 122f35d44c9c455ea99c592f870dc3ba 1521b1e769dc4c159608e4a30daa80a9
+#: 2e0ef4bbfba04c4db9746f853674e481 9ef7617a317341bc8e4ec2cef93a90e9
+#: acf1fd2278b64149af470fc8e92e9ab1 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer
+msgid "type"
+msgstr ""
+
+#: 320802972ae747e4bba28647f8a8775d 6833346061fe44da801793af0df88d71
+#: 7a20d62493444767bae107e5c7d039ba d952125c617845618df31533e16211f1 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:12
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:18
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:24
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:22
+msgid "paddle.nn.Layer"
+msgstr ""
+
+#: a28d815c2a284ebfb3cf4a774f7e77de of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:16
+msgid "The conv layer."
+msgstr "卷积层。"
+
+#: d18b6a287ade4f9ab0fbb34e39075b6f of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer:22
+msgid "The relu layer."
+msgstr "激活层。"
+
+#: 7bac0cee615e44cc9a25cf16f6dad9b9 ea182da2322f4aca98dfab03eab8b193 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward:1
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward:1
+msgid "Forward"
+msgstr ""
+
+#: 1f34d3e80b8a4dae864a6505b5a40214 62eddc5859f941b1b29a892300f8fa4f of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward:3
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward:3
+msgid "The input data."
+msgstr "输入的数据。"
+
+#: 1f79063bce914f78a6aa075dbc1b3b3b 9ca55dbf4be4484d83c28a1d84831076 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward
+msgid "Returns"
+msgstr ""
+
+#: 19da6d4f4e3649fbb6ad7fd4a4fce150 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward:6
+msgid "Output of conv layer."
+msgstr "卷积层的输出。"
+
+#: 50cbd2439c3641408037e6a907d3cdb8 c03dce2925c343e9bf6b1b61d841b70e of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.ConvLayer.forward
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward
+msgid "Return type"
+msgstr ""
+
+#: 8fe92beda7324dd7a151d4b9ef7aee8b of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:1
+msgid "GRU layer."
+msgstr "GRU层。"
+
+#: 0823460518474751b2b4a6055f740fd8 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:3
+msgid "The input size"
+msgstr "输入数据的大小。"
+
+#: a61425e9a81345019f49880643037899 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:5
+msgid "The hidden size."
+msgstr "隐层的大小。"
+
+#: fcbf26c787d34f8e8596da44874ee27f of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:7
+msgid "The number of layer."
+msgstr "隐层的层数。"
+
+#: e5f0eaa533f74be78cf6924b8d61ae43 f453c236c6204fcab4873666ced4eab8 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:9
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:14
+msgid "Dropout regularization parameter."
+msgstr "dropout参数。"
+
+#: d967db50dbfe4086b6161aca0870e81c of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:16
+msgid "float"
+msgstr ""
+
+#: 94771d2e29114e01bcd9adb05e69e4f7 of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer:20
+msgid "The gru layer."
+msgstr "gru层。"
+
+#: ccdb7f0628e749908283a65c23ac66cc of
+#: paddlets.models.anomaly.dl._mtad_gat.layer.GRULayer.forward:6
+msgid "Output of grulayer. h(paddle.Tensor): final_states."
+msgstr "gru层的输出。"
+
