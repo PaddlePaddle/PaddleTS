@@ -18,16 +18,17 @@ PaddleTS provides three high-level features for deep time series modeling:
   architecture and provides maximum convenience for the developers to build new models.
 - Out-of-box models. PaddleTS provides off-the-shelf deep time series models:
 
-  - `Long Short-term Time-series Network <../../api/paddlets.models.forecasting.dl.lstnet.html>`_
-  - `Multilayer Perceptron <../../api/paddlets.models.forecasting.dl.mlp.html>`_
-  - `DeepARModel <../../api/paddlets.models.forecasting.dl.deepar.html>`_
-  - `NBEATSModel <../../api/paddlets.models.forecasting.dl.nbeats.html>`_
-  - `NHiTSModel <../../api/paddlets.models.forecasting.dl.nhits.html>`_
-  - `RnnBlockRegressor <../../api/paddlets.models.forecasting.dl.rnn.html>`_
-  - `Temporal Convolution Net Regressor <../../api/paddlets.models.forecasting.dl.tcn.html>`_
-  - `Transformer <../../api/paddlets.models.forecasting.dl.transformer.html>`_
+  - `DeepAR <../../api/paddlets.models.forecasting.dl.deepar.html>`_
   - `Informer <../../api/paddlets.models.forecasting.dl.informer.html>`_
-  - `TS2Vec <../../api/paddlets.models.representation.dl.ts2vec.html>`_
+  - `LSTNet(Long Short-term Time-series Network) <../../api/paddlets.models.forecasting.dl.lstnet.html>`_
+  - `MLP(Multilayer Perceptron) <../../api/paddlets.models.forecasting.dl.mlp.html>`_
+  - `NBEATS <../../api/paddlets.models.forecasting.dl.nbeats.html>`_
+  - `NHiTS <../../api/paddlets.models.forecasting.dl.nhits.html>`_
+  - `RNN <../../api/paddlets.models.forecasting.dl.rnn.html>`_
+  - `SCINet(Sample Convolution Interaction Network) <../../api/paddlets.models.forecasting.dl.scinet.html>`_
+  - `TCN(Temporal Convolution Net) <../../api/paddlets.models.forecasting.dl.tcn.html>`_
+  - `TFT(Temporal Fusion Transformer) <../../api/paddlets.models.forecasting.dl.tft.html>`_
+  - `Transformer <../../api/paddlets.models.forecasting.dl.transformer.html>`_
 
 
 1. A minimal example

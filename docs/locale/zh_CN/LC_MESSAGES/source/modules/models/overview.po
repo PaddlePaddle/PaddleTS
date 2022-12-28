@@ -72,49 +72,57 @@ msgid ""
 msgstr "开箱即用的模型。PaddleTS提供一组预定义的，开箱即用的时序深度学习模型："
 
 #: ../../source/modules/models/overview.rst:21 16f56700223b4e6688cab1d24d417d66
+msgid "`DeepAR <../../api/paddlets.models.forecasting.dl.deepar.html>`_"
+msgstr ""
+
+#: ../../source/modules/models/overview.rst:22 a7935a604489441eb9687793033ec3b1
+msgid "`Informer <../../api/paddlets.models.forecasting.dl.informer.html>`_"
+msgstr ""
+
+#: ../../source/modules/models/overview.rst:23 a8d44b1e4bee498097cec925a78d10fb
 msgid ""
-"`Long Short-term Time-series Network "
+"`LSTNet(Long Short-term Time-series Network) "
 "<../../api/paddlets.models.forecasting.dl.lstnet.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:22 5ba526b1ed3940868a51cf69dc8e64d6
 msgid ""
-"`Multilayer Perceptron "
+"`MLP(Multilayer Perceptron) "
 "<../../api/paddlets.models.forecasting.dl.mlp.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:23 9d99b638bd87412c99b1e36b73c5ec03
-msgid "`DeepARModel <../../api/paddlets.models.forecasting.dl.deepar.html>`_"
+msgid "`NBEATS <../../api/paddlets.models.forecasting.dl.nbeats.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:24 f7d38f720ac94b7aa7809d49d50d9ba6
-msgid "`NBEATSModel <../../api/paddlets.models.forecasting.dl.nbeats.html>`_"
+msgid "`NHiTS <../../api/paddlets.models.forecasting.dl.nhits.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:25 b0d602c8a11348b29a301f4934c5bcc2
-msgid "`NHiTSModel <../../api/paddlets.models.forecasting.dl.nhits.html>`_"
+msgid "`RNN <../../api/paddlets.models.forecasting.dl.rnn.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:26 d76aef3b6734478bb1ad4ae6626c8bda
-msgid "`RnnBlockRegressor <../../api/paddlets.models.forecasting.dl.rnn.html>`_"
+msgid ""
+"`SCINet(Sample Convolution Interaction Network) "
+"<../../api/paddlets.models.forecasting.dl.scinet.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:27 b03a2caacdf64d79aa4eef86098cb16f
 msgid ""
-"`Temporal Convolution Net Regressor "
+"`TCN(Temporal Convolution Net) "
 "<../../api/paddlets.models.forecasting.dl.tcn.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:28 c4268b47575d455789a4102664b04fba
-msgid "`Transformer <../../api/paddlets.models.forecasting.dl.transformer.html>`_"
+msgid ""
+"`TFT(Temporal Fusion Transformer) "
+"<../../api/paddlets.models.forecasting.dl.tft.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:29 c990f35c3e3241baa2c50a3b67c65ae5
-msgid "`Informer <../../api/paddlets.models.forecasting.dl.informer.html>`_"
-msgstr ""
-
-#: ../../source/modules/models/overview.rst:30 1036ff8e8f5e4a4da31a7a28157101f1
-msgid "`TS2Vec <../../api/paddlets.models.representation.dl.ts2vec.html>`_"
+msgid "`Transformer <../../api/paddlets.models.forecasting.dl.transformer.html>`_"
 msgstr ""
 
 #: ../../source/modules/models/overview.rst:34 1941a1bae4bb45caac75b332aa0e78b6
@@ -253,7 +261,7 @@ msgstr ""
 msgid ""
 "A 3-hour contiguous chunk of wind speed start at 11:00, which follows "
 "behind the in_chunk, i.e., [110, 120, 130], will be skipped."
-msgstr "一个长度为2小时的，紧跟在in_chunk后面的，开始于11:00的连续数据块，即 [110, 120, 130]，将被跳过。"
+msgstr "一个长度为3小时的，紧跟在 in_chunk 后面，开始于11:00的连续数据块，即 [110, 120, 130]，将被跳过。"
 
 #: ../../source/modules/models/overview.rst:133
 #: 7339c603da2e414681e1a465741bb2a1
