@@ -22,9 +22,9 @@ class _AEBlock(paddle.nn.Layer):
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e. the number of time steps feed to the model.
+        ed_type(str): The type of encoder and decoder.
         fit_params(dict): The parameters for fitting, including dimensions and dict sizes of variables.
-        mlp_hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer for mlp.
-        cnn_hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer for cnn.
+        hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer.
         activation(Callable[..., paddle.Tensor]): The activation function for the hidden layers.
         last_layer_activation(Callable[..., paddle.Tensor]): The activation function for the last layer.
         kernel_size(int): Kernel size for Conv1D.
@@ -34,7 +34,13 @@ class _AEBlock(paddle.nn.Layer):
         pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
         
     Attributes:
-        _nn(paddle.nn.Sequential): Dynamic graph LayerList.
+        _pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
+        _cat_size(int): The category feature size.
+        _cat_dim(int): The category feature dims after embedding.
+        _num_dim(int): The numerical feature dims.
+        _observed_cat_emb(List[int]): The emb of category feature.
+        _encoder(paddle.nn.Sequential): Dynamic graph LayerList for encoder.
+        _decoder(paddle.nn.Sequential): Dynamic graph LayerList for decoder.
     """
     def __init__(
         self,

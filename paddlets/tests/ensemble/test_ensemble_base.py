@@ -11,11 +11,11 @@ from typing import Callable, List, Optional, Tuple, Union
 from paddlets.models.forecasting import MLPRegressor
 from paddlets.models.forecasting import NHiTSModel
 from paddlets import TimeSeries, TSDataset
-from paddlets.ensemble import EnsembleForecasterBase
+from paddlets.ensemble.base import EnsembleBase
 
 
-class MockEnsemble(EnsembleForecasterBase):
-    def _fit(self,
+class MockEnsemble(EnsembleBase):
+    def fit(self,
             train_tsdataset: TSDataset,
             valid_tsdataset: Optional[TSDataset] = None) -> None:
         pass
@@ -34,87 +34,53 @@ class TestEnsembleBase(TestCase):
     def test_init(self):
         # case1
         mlp_params = {
-            'eval_metrics': ["mse", "mae"]
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
         }
 
         model1 = MockEnsemble(
-            in_chunk_len=7 * 96 + 20 * 4,
-            out_chunk_len=96,
-            skip_chunk_len=4 * 4,
             estimators=[(MLPRegressor, mlp_params)])
         assert model1 is not None
 
         # case2
         mlp_params = {
-            'in_chunk_len': 7 * 96 + 20 * 4,
-            'out_chunk_len': 96,
-            'skip_chunk_len': 4 * 4,
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         model2 = MockEnsemble(
-            in_chunk_len=7 * 96 + 20 * 4,
-            out_chunk_len=96,
-            skip_chunk_len=4 * 4,
             estimators=[(MLPRegressor, mlp_params)])
         assert model2 is not None
 
         # case3
         mlp1_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         mlp2_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         nhits_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         model2 = MockEnsemble(
-            in_chunk_len=7 * 96 + 20 * 4,
-            out_chunk_len=96,
-            skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
         assert model2 is not None
 
-        # case4 badcase
-        mlp1_params = {
-            'eval_metrics': ["mse", "mae"]
-        }
-
-        mlp2_params = {
-            'eval_metrics': ["mse", "mae"]
-        }
-
-        nhits_params = {
-            'eval_metrics': ["mse", "mae"]
-        }
-        with self.assertRaises(TypeError):
-            model2 = MockEnsemble(
-                in_chunk_len=7 * 96 + 20 * 4,
-                skip_chunk_len=4 * 4,
-                estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
-
-        # case5 badcase
-        mlp1_params = {
-            'eval_metrics': ["mse", "mae"]
-        }
-
-        mlp2_params = {
-            'eval_metrics': ["mse", "mae"]
-        }
-
-        nhits_params = {
-            'eval_metrics': ["mse", "mae"],
-        }
-        with self.assertRaises(ValueError):
-            model2 = MockEnsemble(
-                in_chunk_len=7 * 96 + 20 * 4,
-                out_chunk_len=96,
-                skip_chunk_len=4 * 4,
-                estimators=[(MLPRegressor, mlp1_params, []), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
 
     def test_fit_estimators(self):
         np.random.seed(2022)
@@ -142,22 +108,28 @@ class TestEnsembleBase(TestCase):
 
         # case1
         mlp1_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         mlp2_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         nhits_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         model1 = MockEnsemble(
-            in_chunk_len=16,
-            out_chunk_len=96,
-            skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
 
@@ -187,22 +159,27 @@ class TestEnsembleBase(TestCase):
 
         # case1
         mlp1_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         mlp2_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         nhits_params = {
-            'eval_metrics': ["mse", "mae"],
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"]
         }
-
         model1 = MockEnsemble(
-            in_chunk_len=16,
-            out_chunk_len=16,
-            skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
         model1._predict_estimators(tsdataset)
@@ -233,22 +210,28 @@ class TestEnsembleBase(TestCase):
 
         # case1
         mlp1_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         mlp2_params = {
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
             'eval_metrics': ["mse", "mae"]
         }
 
         nhits_params = {
-            'eval_metrics': ["mse", "mae"],
+            'in_chunk_len': 4 * 4,
+            'out_chunk_len': 1,
+            'skip_chunk_len': 0,
+            'eval_metrics': ["mse", "mae"]
         }
 
         model1 = MockEnsemble(
-            in_chunk_len=16,
-            out_chunk_len=16,
-            skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params), (NHiTSModel, nhits_params)])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params)])
 
         model1._fit_estimators(tsdataset)
         model1.save(path="/tmp/ensemble_test1/")

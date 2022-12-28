@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from typing import List, Dict, Any, Callable, Optional, Tuple
+from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 from copy import deepcopy
 import time
 import abc
@@ -27,7 +27,7 @@ logger = Logger(__name__)
 
 
 class ReprBaseModel(abc.ABC):
-    """PaddleTS deep time series representation framework, 
+    """BTS/PaddleTS deep time series representation framework, 
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:
@@ -133,25 +133,28 @@ class ReprBaseModel(abc.ABC):
 
     def _init_fit_dataloader(
         self, 
-        train_tsdataset: TSDataset
+        train_tsdataset: List[TSDataset]
     ) -> paddle.io.DataLoader:
         """Generate dataloader for train set.
 
         Args: 
-            train_tsdataset(TSDataset): Train set.
+            train_tsdataset(List[TSDataset]): Train set.
 
         Returns:
             paddle.io.DataLoader: Training dataloader.
         """
-        self._check_tsdataset(train_tsdataset)
-        data_adapter = DataAdapter()
-        train_dataset = data_adapter.to_sample_dataset(
-            rawdataset=train_tsdataset,
-            in_chunk_len=self._segment_size,
-            sampling_stride=self._sampling_stride,
-            fill_last_value=np.nan
-        )
-        return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
+        data_adapter, samples = DataAdapter(), []
+        for tsdataset in train_tsdataset:
+            self._check_tsdataset(tsdataset)
+            dataset = data_adapter.to_sample_dataset(
+                rawdataset=tsdataset,
+                in_chunk_len=self._segment_size,
+                sampling_stride=self._sampling_stride,
+                fill_last_value=np.nan
+            )
+            samples.extend(dataset.samples)
+        dataset.samples = samples
+        return data_adapter.to_paddle_dataloader(dataset, self._batch_size)
 
     def _init_encode_dataloader(
         self, 
@@ -191,13 +194,24 @@ class ReprBaseModel(abc.ABC):
         callback_container.set_trainer(self)
         return history, callback_container
     
-    def fit(self, train_tsdataset: TSDataset):
+    def fit(self, train_tsdataset: Union[TSDataset, List[TSDataset]]):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data. 
 
         Args: 
-            train_tsdataset(TSDataset): Train set. 
+            train_tsdataset(TSDataset|List[TSDataset]): Train set. 
         """
+        if isinstance(train_tsdataset, TSDataset):
+            train_tsdataset = [train_tsdataset]
+        raise_if_not(
+            len(train_tsdataset) != 0, 
+            "If the dataset is a list, it cannot be empty."
+        )
+        columns = list(map(lambda x: x.columns, train_tsdataset))
+        raise_if_not(
+            all(columns[0] == col for col in columns),
+            "If the dataset is a list, the column of `TSDataset` should be consistent."
+        )
         self._fit_params = self._update_fit_params(train_tsdataset)
         train_dataloader = self._init_fit_dataloader(train_tsdataset)
         self._fit(train_dataloader)

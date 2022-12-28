@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:47+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:3
+#: 628717ab7ba04a3bb399cf31115277d0
+msgid "EnsembleAnomaly"
+msgstr "集成异常检测"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:6
+#: 57f1190b44a448f4927deb342bceeb71
+msgid "1. Prepare data"
+msgstr "1.准备数据"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:8
+#: 1401fd2f811041fdb44b03d6ff7e937e
+msgid ""
+"The built-in API: `get_dataset` is used to load nab_temp dataset: "
+"`NAB_TEMP`."
+msgstr "获取内部数据集"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:18
+#: a85e6b12024f4938ad6157520e6109e8
+msgid "2. Data processing"
+msgstr "2.数据预处理"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:20
+#: a631cb4d7add4f2080d180c1a02e9e54
+msgid "Set up training set (top 15%), and standardize the data."
+msgstr "切分训练集，然后标准化数据"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:41
+#: 6c6c00e9d973411991bf0a8695261e18
+msgid "3. Prepare Models"
+msgstr "3.准备模型"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:42
+#: b5ed594e39c54c8ba47e458e2777b719
+msgid "Prepare base models for ensemble model."
+msgstr "为集成模型准备基础模型, in_chunk_len这个参数已经被提取到集成模型中，底层模型可以忽略这个参数。"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:56
+#: 8702f66d7d32410d983f19a5e203d70d
+msgid "4. Construct and Fitting"
+msgstr "4.组装和拟合模型"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:58
+#: e8b6d82030bb40e98dd82f33657e148f
+msgid ""
+"EnsembleAnomaly use a aggragate function to aggragate base model "
+"predictions, use \"mean\" mode by default. More infomation about "
+"EnsembleAnomaly  please read `EnsembleAnomaly doc "
+"<../../api/paddlets.ensemble.weighting_ensemble.html>`_ ."
+msgstr ""
+"更多关于集成异常检测模型的信息，请参考  `EnsembleAnomaly doc "
+"<../../api/paddlets.ensemble.weighting_ensemble.html>`_ ."
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:61
+#: 8b1629902b5c484d9b0a8e893ebd6b47
+msgid "Example1"
+msgstr "例子"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:76
+#: 58bad2bbfe18477b8d0aff0ff69a43fd
+msgid "5. Model prediction and evaluation"
+msgstr "5. 模型预测和评估"
+
+#: ../../source/modules/ensemble/ensemble_anomaly.rst:78
+#: 9fde31390f65410babc7d8580697e682
+msgid "Use the trained model for prediction and evaluation."
+msgstr "用训练的模型进行预测和评估"
+

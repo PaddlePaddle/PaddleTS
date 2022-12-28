@@ -1,0 +1,255 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 16:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.data_adapter.rst:2
+#: 90019adb20f947f6a98616fdc48501bf
+msgid "paddlets.models.data_adapter"
+msgstr ""
+
+#: 085f0bcb0fdd4ebc83e28da0be67a625 of
+#: paddlets.models.data_adapter.SampleDataset:1
+msgid "Bases: :py:class:`~paddle.fluid.dataloader.dataset.Dataset`"
+msgstr ""
+
+#: e1d0e30a3012495d8b02cc2316d17ed6 of
+#: paddlets.models.data_adapter.SampleDataset:1
+msgid "An implementation of paddle Dataset."
+msgstr "一个paddle Dataset数据集接口的实现。"
+
+#: b4ac23ac65044e839b71daf17cd8de14 of
+#: paddlets.models.data_adapter.SampleDataset:3
+msgid ""
+"The default time_window assumes each sample contains X (i.e. in_chunk), "
+"skip_chunk, and Y (i.e. out_chunk)."
+msgstr ""
+"time_window默认认为每条样本同时包含特征X时间块（即 in_chunk）, 跳过的时间块（即 skip_chunk）以及标签Y（即 "
+"out_chunk）。"
+
+#: aac399d9a5fc48b6a760d6bcccfcf508 of
+#: paddlets.models.data_adapter.SampleDataset:6
+msgid ""
+"If caller explicitly passes time_window parameter in, and time_window "
+"upper bound is larger than max standard timeseries (possibly be target or"
+" observed_cov) idx len, it means that each built sample will only contain"
+" X (i.e. in_chunk), but will not contain skip_chunk or Y (i.e. "
+"out_chunk)."
+msgstr ""
+"如果调用者显式地传入time_window参数，并且time_window窗口的上界大于 len(TSDataset._target) - 1, "
+"则意味着构建出的样本将仅包含特征X（即 in_chunk），而不会包含跳过的时间块（即 skip_chunk）或者标签Y（即 "
+"out_chunk）。"
+
+#: 03e89c02869e4de586791b594bab35c7 2f55057e63d94fd382e8a80a6f3ececc
+#: 301ebd0183e3426896b2b5c734d804ce 80d1c3dffa754cb88f1eac7f17f597a2
+#: b19f9c302f7c4533bc64427b46ee3263 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset
+#: paddlets.models.data_adapter.MLDataLoader
+#: paddlets.models.data_adapter.SampleDataset
+msgid "Parameters"
+msgstr ""
+
+#: 20ee98cf474846408cf872b0cf728444 4f7830ec4f90483583ccc9f581842746 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:3
+#: paddlets.models.data_adapter.SampleDataset:10
+msgid "Raw TSDataset to be converted."
+msgstr "待转换的TSDataset数据集。"
+
+#: 42496605d9644e8e990c0e80835951ed 945f9c3be4954252a80d0dcbfb4d7027 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:5
+#: paddlets.models.data_adapter.SampleDataset:12
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 5b57e1ed5f6142ea8c29c96deee3a3fd 75161769feb84c64a3c6eda61ab7f9d1 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:7
+#: paddlets.models.data_adapter.SampleDataset:14
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度。"
+
+#: 279ffa81dd1748aca6ddede1bf2ca410 84db3978beb243adb88185d5753df5c9 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:9
+#: paddlets.models.data_adapter.SampleDataset:16
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: 5de355839ed04ed58bf2950b257decc9 b04cf16007604a538ab894d9c0020005 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:13
+#: paddlets.models.data_adapter.SampleDataset:20
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, then `sampling_stride` represents the result of `t[i+1] "
+"- t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 4ed007c610ab48d6b3f75ea9c431df68 f8ba96cd209649e0902b9ab9d5f83ab9 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:18
+#: paddlets.models.data_adapter.SampleDataset:25
+msgid ""
+"The value used for filling last sample. Set to None if no need to fill. "
+"For any type `t` of fill_last_value that np.issubdtype(type(t), "
+"np.floating) or np.issubdtype(type(t), np.integer) is True are valid."
+msgstr "用于填充最后一条样本的值。如果无需填充最后一条样本，请将该值设置为None。"
+
+#: 18e6b0356f254a33a897b6beb1cd26e2 32109d1a71d34042a99ce7354a2f4287 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:22
+#: paddlets.models.data_adapter.SampleDataset:29
+msgid ""
+"A two-element-tuple-shaped time window that allows adapter to build "
+"samples. time_window[0] refers to the window lower bound, while "
+"time_window[1] refers to the window upper bound. Each element in the "
+"left-closed-and-right-closed interval refers to the TAIL index of each "
+"sample."
+msgstr ""
+"一个包含2个元素的元组类型的时间窗口，允许adapter模块在其范围内构建样本。 time_window[0] "
+"值代表窗口范围的下界，time_window[1] 值代表窗口范围的上界。 对于每一个包含在该左闭右闭范围内的元素，都代表一条样本的尾部索引。"
+
+#: 4ca55a5e58824b74a8cd7e746611c786 7c730083bb944b7d985fab41119842d4
+#: 9e69c67de93f4f5383cca2f5d5ee7826 ee198c2b54854fcf81a9507445c6b606 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:14
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:18
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:28
+#: paddlets.models.data_adapter.SampleDataset:35
+msgid "Examples"
+msgstr ""
+
+#: bdd4645cc96c4c0f83cb156233a95a0c cbc3ba3cd4694aac81f3405c73548409 of
+#: paddlets.models.data_adapter.DataAdapter:1
+#: paddlets.models.data_adapter.MLDataLoader:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 9aec61e8ac3b4fe885a7958142cee16b of
+#: paddlets.models.data_adapter.MLDataLoader:1
+msgid ""
+"Machine learning Data loader, provides an iterable over the given "
+"SampleDataset."
+msgstr "机器学习样本数据加载器，为MLDataset样本数据集提供一个可批量迭代能力。"
+
+#: 76732a5a16c34fcc88ba65fc151dee36 of
+#: paddlets.models.data_adapter.MLDataLoader:3
+msgid ""
+"The MLDataLoader supports iterable-style datasets with single-process "
+"loading and optional user defined batch collation."
+msgstr "MLDataLoader支持可迭代类型的数据集，其会使用单进程批量加载样本，如果用户传入自定义的整合函数，则也会应用于每次迭代的小批量样本之上。"
+
+#: 3d3ac5c056534b9aaa90011fa01a7fd2 of
+#: paddlets.models.data_adapter.MLDataLoader:6
+msgid "SampleDataset to be built."
+msgstr "待构建的SampleDataset样本数据集。"
+
+#: 7598d3ea31864db9a45bfe10263122c8 of
+#: paddlets.models.data_adapter.MLDataLoader:8
+msgid "The number of samples for each batch."
+msgstr "单次批量迭代的样本数。"
+
+#: b85da3b7762145f3a36608e2519a1ac4 of
+#: paddlets.models.data_adapter.MLDataLoader:10
+msgid "A user defined collate function for each batch, optional."
+msgstr "可选参数，用户自定义的应用于每个小批量样本的整合函数。"
+
+#: 8a9f1d38cf224ef8b86e838111c15240 of
+#: paddlets.models.data_adapter.DataAdapter:1
+msgid ""
+"Data adapter for dl and ml models, converts TSDataset to SampleDataset "
+"and DataLoader."
+msgstr "深度/非深度时序模型的样本数据构建类，用于将TSDataset转换为SampleDataset样本数据集和DataLoader批量样本加载器。"
+
+#: 7b37d37795a34b87919cb174360025f1 of
+#: paddlets.models.data_adapter.DataAdapter.to_sample_dataset:1
+msgid "Convert TSDataset to SampleDataset."
+msgstr "将 TSDataset 数据集转换为 SampleDataset 样本数据集。"
+
+#: 0bc619b4744b49319f666b23e0b16f45 of
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:1
+msgid "Convert SampleDataset to paddle DataLoader."
+msgstr "将 SampleDataset 样本数据集转换为 paddle DataLoader 批量样本加载器。"
+
+#: 96814a43c68b4b8db412636b5e58c711 efd95efadf4745f6b9717fcf14666420 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:3
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:3
+msgid "SampleDataset to be converted."
+msgstr "等待被转换的SampleDataset样本数据集。"
+
+#: 286c258aec284de4955a3af04e940a0d 388c3f00890f45b68445c2e1cad9ce89 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:5
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:5
+msgid "The number of samples for a single batch."
+msgstr "单次批量迭代的样本数。"
+
+#: 5c662736025c42f0954fdd298956bf53 c5cee7f80c754ea4b2357657d3371a64 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:7
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:7
+msgid "User-defined collate function for each batch, optional."
+msgstr "用户自定义的批量样本整合函数，可选。"
+
+#: 02cfb1fd562246e7b8a1db37521fb099 of
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:9
+msgid ""
+"Whether to shuffle indices order before generating batch indices, default"
+" True."
+msgstr "是否在生成批量样本之前对数据进行洗牌。默认为True。"
+
+#: 50affd84de9741edbd750cde6757e46d of
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:11
+msgid ""
+"Whether to discard when the remaining data does not meet a batch, default"
+" False."
+msgstr "如果剩余数据不满足一个batch size，是否丢弃这些剩余数据。默认为False。"
+
+#: 98178213479f4f00b96aecd0861652b1 fc7609842ba741228e32ebce13cc2d44 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader
+msgid "Returns"
+msgstr ""
+
+#: 2f610fe45a454b028a2308c5bc80d659 of
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader:14
+msgid "A built paddle DataLoader."
+msgstr "构建完成的paddle DataLoader批量样本加载器。"
+
+#: 37b9e159e0984a1699ca2f75b3a68b66 aed45cfbc63046d78db52a7f904fdaef of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader
+#: paddlets.models.data_adapter.DataAdapter.to_paddle_dataloader
+msgid "Return type"
+msgstr ""
+
+#: f018ba2420224a07a3b26498be5e07cd of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:1
+msgid "Convert SampleDataset to MLDataLoader."
+msgstr "将 SampleDataset 样本数据集转换为 MLDataLoader 批量样本加载器。"
+
+#: e99f36199d2f44a3bda042b8213c9b65 of
+#: paddlets.models.data_adapter.DataAdapter.to_ml_dataloader:10
+msgid "A built MLDataLoader."
+msgstr "构建完成的MLDataLoader批量样本加载器。"
+

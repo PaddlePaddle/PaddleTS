@@ -10,5 +10,4 @@ paddlets.models.representation.dl
 
     paddlets.models.representation.dl.ts2vec.rst
     paddlets.models.representation.dl.cost.rst
-    paddlets.models.representation.dl.adapter.rst
 

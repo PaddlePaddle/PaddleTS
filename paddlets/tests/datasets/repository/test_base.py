@@ -79,6 +79,20 @@ class TestDatasetRepository(TestCase):
         self.assertEqual(ts.get_label().data.shape, (87841, 1))
         self.assertEqual(ts.get_feature().data.shape, (87841, 25))
 
+        dataset_name = "BasicMotions_Train"
+        tss, y_labels = get_dataset(dataset_name)
+        self.assertEqual(len(tss), 40)
+        self.assertEqual(len(tss), len(y_labels))
+        for dataset in tss:
+            self.assertEqual(dataset.get_target().data.shape, (100, 6))
+        
+        dataset_name = "BasicMotions_Test"
+        ts, y_labels = get_dataset(dataset_name)
+        self.assertEqual(len(tss), 40)
+        self.assertEqual(len(tss), len(y_labels))
+        for dataset in tss:
+            self.assertEqual(dataset.get_target().data.shape, (100, 6))
+
 
 if __name__ == "__main__":
     unittest.main()
