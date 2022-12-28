@@ -2,5 +2,5 @@
 # -*- coding:utf-8 -*-
 
 """
-dl models classify dl tests.
+paddlets dl models classify adapter tests.
 """
