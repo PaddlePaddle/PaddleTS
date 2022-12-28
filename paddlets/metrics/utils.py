@@ -23,7 +23,8 @@ def ensure_2d(func) -> Callable[..., float]:
     def wrapper(
         obj: Metric,
         y_true: np.ndarray, 
-        y_score: np.ndarray
+        y_score: np.ndarray,
+        **kwargs
     ) -> float:
         """Core processing logic.
 
@@ -38,6 +39,6 @@ def ensure_2d(func) -> Callable[..., float]:
         batch_nd_true, batch_nd_score = y_true.shape[0], y_score.shape[0]
         y_true = np.reshape(y_true, (batch_nd_true, -1))
         y_score = np.reshape(y_score, (batch_nd_score, -1))
-        return func(obj, y_true, y_score)
+        return func(obj, y_true, y_score, **kwargs)
     return wrapper
 
