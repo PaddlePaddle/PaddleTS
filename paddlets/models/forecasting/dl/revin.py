@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# File Name:     revin.py
-# Author:        Yangrun
-# Created Time:  2022-12-07  17:40
-# Last Modified: <none>-<none>
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 
 from typing import Dict
 import functools
