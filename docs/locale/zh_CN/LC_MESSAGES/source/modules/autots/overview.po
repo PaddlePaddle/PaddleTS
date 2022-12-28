@@ -3,114 +3,273 @@
 # This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 19:13+0800\n"
+"POT-Creation-Date: 2022-12-20 17:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
-#: ../../source/modules/autots/overview.rst:3 297401b305b2434f8ff05d9b1eed983b
+#: ../../source/modules/autots/overview.rst:3 987fd2760b8b4c65b7af347acad03b87
 msgid "AutoTS"
 msgstr ""
 
-#: ../../source/modules/autots/overview.rst:5 4892e391e77346ccb279b295f3b18ad1
+#: ../../source/modules/autots/overview.rst:5 a0a17e06827c4f058b3d2413fc943884
 msgid "AutoTS is an automated machine learning tool for PaddleTS."
 msgstr "AutoTS是用于支持PaddleTS的自动机器学习能力组件。"
 
-#: ../../source/modules/autots/overview.rst:7 b767921004724aaca200fe624ead011e
+#: ../../source/modules/autots/overview.rst:7 dc2aa88e6c474dee98815c9857ee886e
 msgid ""
 "It frees the user from selecting hyperparameters for PaddleTS models or "
 "PaddleTS pipelines."
 msgstr "AutoTS 可以支持 PaddleTS 模型和 pipeline 的自动超参数选择，减少人工介入成本，降低专业门槛。"
 
-#: ../../source/modules/autots/overview.rst:10 04ba2a957d3549c18d6f21185cb8e493
+#: ../../source/modules/autots/overview.rst:10 21fd84a99c404245a0e9e7409f9afe86
 msgid "1. Installation"
 msgstr "1. 安装"
 
-#: ../../source/modules/autots/overview.rst:17 34df05221cd54f53a1d6ec6f1e7d8e2f
+#: ../../source/modules/autots/overview.rst:17 66cb31b486f94f2db83e87740161edac
 msgid "2. Quickstart"
 msgstr "2. 快速入门"
 
-#: ../../source/modules/autots/overview.rst:20 fc8ff82c0a1c4111adbbeaf4b43c7948
+#: ../../source/modules/autots/overview.rst:20 c5b7ee25657645cc8e62f6592ad214e8
 msgid "2.1. Prepare Data"
 msgstr "2.1. 准备数据"
 
-#: ../../source/modules/autots/overview.rst:28 cef68fa62045493c970f8d927f184177
+#: ../../source/modules/autots/overview.rst:29 a841dcb32dda46f0b08e4af2ce66d7a5
 msgid "2.2. Construct and Fitting"
 msgstr "2.2. 构造和训练"
 
-#: ../../source/modules/autots/overview.rst:30 dccec255b36645d3b1dc93c9b8b357ea
+#: ../../source/modules/autots/overview.rst:31 72059e29a14b4e489e3ef8357f194bae
 msgid ""
 "With four lines of code, we initialize an `AutoTS` model with "
 "`MLPRegressor` and perform model fitting. Autots will automatically "
 "optimize hyperparameters during the fitting process."
-msgstr "通过四行代码，我们利用 `MLPRegressor` 初始化了一个 `AutoTS` 模型。 AutoTS 会在训练的过程中"
-"自动进行超参优化。"
+msgstr "通过四行代码，我们利用 `MLPRegressor` 初始化了一个 `AutoTS` 模型。 AutoTS 会在训练的过程中自动进行超参优化。"
 
-#: ../../source/modules/autots/overview.rst:41 2d66211df4e94dca9a750de005c70508
+#: ../../source/modules/autots/overview.rst:42 b615dc9ac5c14b21acbdacdc02e5bb20
+msgid "2.3. Persistence"
+msgstr "2.3. 持久化"
+
+#: ../../source/modules/autots/overview.rst:44 9ff1b52a76f343deb7606ee0a5435a8e
+msgid ""
+"Although `AutoTS` itself does not provide persistence support, we can "
+"save the best estimator it found after hyperparameter optimization"
+msgstr "虽然 AutoTS 自身不提供持久化的支持，但我们可以保存超参优化后 AutoTS 所找到的最佳评估器。"
+
+#: ../../source/modules/autots/overview.rst:58 6ec36c53fcb44c2bb995afb34f16db49
 msgid "3. Search Space"
 msgstr "3. 搜索空间"
 
-#: ../../source/modules/autots/overview.rst:43 3b283edc7f864b538cceaf3108ea512f
+#: ../../source/modules/autots/overview.rst:61 345f86bfd9024b0fbc5a905f893feb64
+msgid "3.1. Run With Specified Search Space"
+msgstr "3.1. 指定搜索空间运行"
+
+#: ../../source/modules/autots/overview.rst:63 e41e37a265794fe788a43d4398f9f7dc
 msgid ""
 "For hyperparameter optimization, you can define a search space, or we "
-"also provide built-in recommended search space for the PaddleTS models if you "
-"do not define a search space."
+"also provide built-in recommended search space for the PaddleTS models if"
+" you do not define a search space."
 msgstr "对于超参数优化来说，你可以定义一个搜索空间。如果你没有指定一个搜索空间，我们也为每个 PaddleTS 模型内置了推荐的默认搜索空间。"
 
-#: ../../source/modules/autots/overview.rst:46 e69ae5bb5ece45739a8ead7205505669
+#: ../../source/modules/autots/overview.rst:66 f3e6576412674ff6a31a87db42a56689
 msgid ""
 "You can specify how your hyperparameters are sampled and define valid "
 "ranges for hyperparameters."
 msgstr "你可以利用搜索空间去控制你的超参的取值是如何采样的，控制值范围是多少。"
 
-#: ../../source/modules/autots/overview.rst:48 f4860a4f21ab418d879cb681e2349b35
+#: ../../source/modules/autots/overview.rst:68 86002259c3ef40129e830f38e74e4517
 msgid ""
 "The following is an example of a autots pipeline which specifying the "
 "search space:"
 msgstr "下面是一个指定了搜索空间的 autots pipeline 的例子："
 
-#: ../../source/modules/autots/overview.rst:71 9edc07b9f1174e53be70415dc03fdfc3
+#: ../../source/modules/autots/overview.rst:93 95a357e0d6524101a824ea37f52eda7a
 msgid ""
 "Search space API can refer to: "
 "https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
-msgstr "搜索空间定义的 API 可以参考：https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
+msgstr ""
+"搜索空间定义的 API "
+"可以参考：https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
 
-#: ../../source/modules/autots/overview.rst:74 5071ee72a7a94f6cad0f21a07795cf50
+#: ../../source/modules/autots/overview.rst:96 79f108c2245c41eb91ab1e42b697e494
+msgid "3.2. Get Default Search Space Using The Search Space Configer"
+msgstr "3.2. 通过Search Space Configer获取内置超参搜索空间"
+
+#: ../../source/modules/autots/overview.rst:98 755764f2b7cb4c38aecb783ab83993d2
+msgid ""
+"In order to make it easier for users to use AutoTS, we provide the "
+"`SearchSpaceConfiger`, which has built-in recommended search space for "
+"the PaddleTS models."
+msgstr "为了让用户更简单的使用 AutoTS，我们提供了为 PaddleTS 模型内置了默认超参搜索空间的SearchSpaceConfiger。"
+
+#: ../../source/modules/autots/overview.rst:102
+#: 5911c6cc1f7d4bdead97dbdf41957c10
+msgid "Algorithms that have been adapted to `SearchSpaceConfiger` are"
+msgstr "适配了SearchSpaceConfiger的算法有"
+
+#: ../../source/modules/autots/overview.rst:102
+#: 1de833a89aaa42068943b8c9f5742667
+msgid ""
+"[\"MLPRegressor\", \"RNNBlockRegressor\", \"NBEATSModel\", "
+"\"NHiTSModel\", \"LSTNetRegressor\", \"TransformerModel\", "
+"\"TCNRegressor\", \"InformerModel\", \"DeepARModel\"]"
+msgstr ""
+
+#: ../../source/modules/autots/overview.rst:104
+#: 0d2bf7f8375f49728359d8afb626f172
+msgid "Get the search space in the form of a string"
+msgstr "获取字符串形式的超参搜索空间"
+
+#: ../../source/modules/autots/overview.rst:130
+#: d9ad607ee0e049078c885c26569b4113
+msgid "Get the search space in the form of a dict"
+msgstr "获取字典形式的超参搜索空间"
+
+#: ../../source/modules/autots/overview.rst:146
+#: 2b225c0f6a2648f2bc8d6dd960d866fd
 msgid "4. Search Algorithms"
 msgstr "4. 搜索算法"
 
-#: ../../source/modules/autots/overview.rst:76 8b9c9bf465be4692a994cfaceddccb13
+#: ../../source/modules/autots/overview.rst:148
+#: c71897509c164a09bc98df4e065f5fe8
 msgid "Search Algorithms are wrappers around open-source optimization libraries."
 msgstr "PaddleTS 的搜索算法是利用多个开源的超参优化库包装而成。"
 
-#: ../../source/modules/autots/overview.rst:79 a2c916cad4e44ccaaf0a05855df0b5d5
+#: ../../source/modules/autots/overview.rst:151
+#: 22f5b543c10b4e72be7813e7c35688fe
 msgid "We have built in the following algorithms："
 msgstr "我们内置了如下几种搜索算法："
 
-#: ../../source/modules/autots/overview.rst:79 7dc4d4fdd23445748361a04f8fed5ac4
+#: ../../source/modules/autots/overview.rst:151
+#: 200be63d19174792bc4269c83942d633
 msgid "[\"Random\", \"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\"]"
 msgstr ""
 
-#: ../../source/modules/autots/overview.rst:81 ae551e9ddbb945d388ff2f3a109e75a4
+#: ../../source/modules/autots/overview.rst:153
+#: c7ee7e65cde141dd8292a4ac8f969269
 msgid ""
 "For more details about those optimization libraries, please refer to "
 "their documentation."
 msgstr "对于这些超参优化库的细节，可以参考它们对应的开源文档。"
 
-#: ../../source/modules/autots/overview.rst:83 77be0b56834c424baa38ecf2a56388dc
+#: ../../source/modules/autots/overview.rst:155
+#: 2264ad1a42b94d92a53fef6d569cb369
 msgid "You can specify different algorithms as follows:"
 msgstr "你可以通过下面的方式指定搜索算法："
 
-#: ../../source/modules/autots/overview.rst:89 ecf7c40d2d474407b51c1adfd71f5c70
+#: ../../source/modules/autots/overview.rst:161
+#: aafb0a2d6f494925a2515e389126f4d8
 msgid "If no search algorithm is specified, \"TPE\" will be used as default."
 msgstr "如果搜索算法没有被指定，我们会默认使用TPE算法。"
+
+#: ../../source/modules/autots/overview.rst:164
+#: df73ddd8df9e46e993c482015fd83aca
+msgid "5. Parallelism and Resources"
+msgstr "5. 并行与计算资源管理"
+
+#: ../../source/modules/autots/overview.rst:166
+#: 4660ea100dea422e83edad0dada11fc9
+msgid ""
+"The function `AutoTS.fit()` will run n_trials (defaulting to 20) times "
+"trials during hyperparameter optimization, which means to sample n_trials"
+" sets of hyperparameters from the hyperparameter space."
+msgstr ""
+"函数 AutoTS.fit() 会在超参优化过程中运行 n_trials （默认为20）个 trials（超参试验），即，在超参搜索空间中采样 "
+"n_trials 组超参数组合。"
+
+#: ../../source/modules/autots/overview.rst:169
+#: 117e5ac89577488cadd8aab897993b8e
+msgid ""
+"Parallelism is determined by `cpu_resource`, `gpu_resource`, and "
+"`max_concurrent_trials`."
+msgstr "并行度会受到cpu_resource, gpu_resource, max_concurrent_trials参数的影响。"
+
+#: ../../source/modules/autots/overview.rst:171
+#: 935545d9f05a475b81d7f56a9628694d
+msgid ""
+"The `max_concurrent_trials` (defaulting to 1) controls the maximum number"
+" of trials running concurrently."
+msgstr "max_concurrent_trials （默认为1）控制了最大的并行运行的 trials 的数量。"
+
+#: ../../source/modules/autots/overview.rst:185
+#: 248dbaa887f24d87a8b2fe0c2cea9a35
+msgid "5.1. How To Leverage GPUs?"
+msgstr "5.1. 如何利用 GPUs？"
+
+#: ../../source/modules/autots/overview.rst:187
+#: 4169d11467f8412ca5790c702b4655f8
+msgid ""
+"To leverage GPUs, you must set `gpu_resource` (defaulting to 0) in "
+"`AutoTS.fit()` and set CUDA_VISIBLE_DEVICES."
+msgstr ""
+"为了利用 GPUs，你需要在AutoTS.fit()中设置 gpu_resource "
+"（默认为0），并且设置CUDA_VISIBLE_DEVICES。"
+
+#: ../../source/modules/autots/overview.rst:189
+#: 59920194812949b5a1deb42260ad8759
+msgid ""
+"**Note that GPUs will not be assigned if you do not specify them "
+"(gpu_resource, defaulting to 0).**"
+msgstr "**注意，如果你不设置 gpu_resource （默认为0），则GPUs不会被使用。**"
+
+#: ../../source/modules/autots/overview.rst:202
+#: 36ef4c44998f448fa797b9d00bfa7d00
+msgid ""
+"More details refer to: https://docs.ray.io/en/latest/tune/tutorials/tune-"
+"resources.html"
+msgstr ""
+"搜索空间定义的 API "
+"细节可以参考：https://docs.ray.io/en/latest/tune/api_docs/search_space.html"
+
+#: ../../source/modules/autots/overview.rst:205
+#: ae900856c89643b99627fc38afce087d
+msgid "6. Log and Temporary Files"
+msgstr "6. 日志和临时文件"
+
+#: ../../source/modules/autots/overview.rst:207
+#: 9d4d44ba3593445692df901a14c923f1
+msgid ""
+"The parameter `local_dir` in `AutoTS()` can specify a dir to save "
+"training results to (Defaulting to `./`, and the results directory is "
+"defaulting to `./ray_results`)."
+msgstr ""
+"AutoTS()的初始化参数 local_dir 可以指定一个目录保存训练过程中的结果信息（默认为 ./，结果信息默认保存至 "
+"./ray_results ）。"
+
+#: ../../source/modules/autots/overview.rst:211
+#: 70fd908f64f24891bb2a9bbe57e1f33a
+msgid "6.1. Temporary Files"
+msgstr "6.1. 临时文件"
+
+#: ../../source/modules/autots/overview.rst:213
+#: 72c7226fa64c463b9b388befd335948c
+msgid ""
+"Ray is a dependencies of AutoTS, and the root temporary directory for the"
+" Ray process is an OS-specific conventional location, e.g., “/tmp/ray”. "
+"Due to a known issue with Ray, AutoTS did not specify the root temporary "
+"directory for Ray, while specifying it would cause a startup failure."
+msgstr ""
+"AutoTS 依赖 Ray 实现，而 Ray 的临时文件目录与系统相关，例如/tmp/ray。由于 Ray 的已知 "
+"issue，AutoTS暂未指定它的临时文件目录，如果指定会造成 Ray 的启动失败。我们将持续跟进这个issue。"
+
+#: ../../source/modules/autots/overview.rst:216
+#: c7546dcba5f04805b3658e3fb00b0672
+msgid "**Please clean up the temporary directory by yourself.**"
+msgstr "**请用户自行清理临时文件夹。**"
+
+#: ../../source/modules/autots/overview.rst:218
+#: 761f92eae4244ee2ab1076b1523854eb
+msgid ""
+"Depending on the system, the temporary file may be stored in folders such"
+" as /tmp or /usr/tmp or `tmp` based on the system root directory. The "
+"temporary folder can be set by the environment variable "
+"RAY_TMPDIR/TMPDIR, or using tempfile.gettempdir()."
+msgstr "基于系统，临时文件夹（例如，/tmp/ray）可能存在于/tmp或者/usr/tmp，或者根据用户的系统根目录所决定。它可以被环境变量RAY_TMPDIR/TMPDIR所改变，或者通过代码tempfile.gettempdir()读取。"
 
