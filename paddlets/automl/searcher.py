@@ -10,8 +10,6 @@ from optuna.samplers import CmaEsSampler
 from optuna.samplers import TPESampler
 from ray.tune.suggest import ConcurrencyLimiter
 
-MAX_CONCURRENT = 4
-
 class Searcher:
     """
 
@@ -30,20 +28,21 @@ class Searcher:
         return ["Random", "CMAES", "TPE", "CFO", "BlendSearch", "Bayes"]
 
     @classmethod
-    def get_searcher(cls, search_algo):
+    def get_searcher(cls, search_algo, max_concurrent=1):
         """
         Get a searcher by string
 
         Args:
             search_algo: The algorithm for optimization.
                 Supported algorithms are "Random", "CMAES", "TPE", "CFO", "BlendSearch", "Bayes".
+            max_concurrent: The maximum number of trials running concurrently.
 
         Returns:
             Searcher: An object of the suggesting algorithm.
 
         """
         if search_algo == "Random":
-            algo = BasicVariantGenerator(max_concurrent=MAX_CONCURRENT)
+            algo = BasicVariantGenerator(max_concurrent=max_concurrent)
         else:
             if search_algo == "CMAES":
                 algo = OptunaSearch(sampler=CmaEsSampler())
@@ -57,6 +56,6 @@ class Searcher:
                 algo = TuneBOHB()
             else:
                 raise NotImplementedError("Unknown searcher")
-            algo = ConcurrencyLimiter(algo, max_concurrent=MAX_CONCURRENT)
+            algo = ConcurrencyLimiter(algo, max_concurrent=max_concurrent)
 
         return algo

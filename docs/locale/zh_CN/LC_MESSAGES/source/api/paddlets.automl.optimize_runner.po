@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:53+0800\n"
+"POT-Creation-Date: 2022-12-16 15:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,29 +17,29 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #: ../../source/api/paddlets.automl.optimize_runner.rst:2
-#: 4ecafcfa01fc49d6bc14d4ae749566c2
+#: 1d283313b55c49d7b77b4df9fb5975f0
 msgid "paddlets.automl.optimize_runner"
 msgstr ""
 
-#: 088b51708272466697204c0ab34b8319 of
+#: 68bae15e341d4dba9535e1dd9ffde25d of
 #: paddlets.automl.optimize_runner.OptimizeRunner:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
-#: 5ea3bb5cf5db45d6a2d893bb3f6650a6 of
+#: 2602269c4ae14834ae68da16ac1d1bdd of
 #: paddlets.automl.optimize_runner.OptimizeRunner:1
 msgid "Optimize runner is for experiment execution and hyperparameter tuning."
 msgstr "Optimize runner 是用于模型训练的运行，以实现超参优化。"
 
-#: 196651dec57f415abb9ab54fe58e934f 8741599298bb421ebbf519fc38a473cd
-#: 95b69d7d95bf4195973ada24792760f8 of
+#: 4e73dcbf077e4a5681b6d76006f58555 74519b43580547f89277d82d5e818e46
+#: bbb449bd798244b4b37dbbcd28379ee1 of
 #: paddlets.automl.optimize_runner.OptimizeRunner
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
 msgid "Parameters"
 msgstr "参数"
 
-#: 373b52b6c1ef4ac5ba977d947746221a of
+#: ec603ce6756941b19747c506001bf71a of
 #: paddlets.automl.optimize_runner.OptimizeRunner:3
 msgid ""
 "The algorithm for optimization.Supported algorithms are \"auto\", "
@@ -49,25 +48,25 @@ msgstr ""
 "超参优化算法。支持的算法为 'auto', 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
 "'Bayes'。"
 
-#: c62d57d8bf014a42974e6af0e8f72a17 of
+#: a2f16ea1fe0c44cd8f558f8c02451e3e of
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:1
 msgid "Build a paddlets estimator with config."
 msgstr "通过配置构建 paddlets 评估器。"
 
-#: fac7a3c83f43480fa2cc1c1d03c02c5c of
+#: 97d364f6cdd8417798dfa60d6568317d of
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:3
 msgid "Algorithm configuration for estimator."
 msgstr "评估器的算法配置参数。"
 
-#: 2c4b3cbd4da248049b81297f61cae7c2 4d9539869bf44741972d70122a759b1e of
+#: 054558b084d14bd49f774668e7060fdf d4af613e12ad4e2fb52149d556a1b1cc of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:3
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:5
 msgid ""
-"A class of a PaddleTS model or a list of classes consisting of several "
-"PaddleTS transformers and a PaddleTS model."
+"A class of a paddlets model or a list of classes consisting of several "
+"paddlets transformers and a paddlets model."
 msgstr "一个 PaddleTS 模型的类名，或者是由若干个 PaddleTS 的特征工程类名与一个 PaddleTS 模型类名组成的列表。"
 
-#: bc2bc2aa6055410bb62684e4e7564dcb e671844e40a141fd84726956850172bc of
+#: 259ac528f8504e7b95e62679d1c3ca04 49d431c1aff24722af7908f032bcd0ff of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:5
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:8
 msgid ""
@@ -75,7 +74,7 @@ msgid ""
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 8b2bfa7bf95d43aeb1f889d7364d38b8 dfde33ef84324d6ab63339cfb92f9cd7 of
+#: 1932600d209c4cf0a62ad52d1e7a79f6 dd0346dfe5f442889288d64f5a572535 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:7
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:10
 msgid ""
@@ -83,120 +82,138 @@ msgid ""
 "output by the model."
 msgstr "模型输出的序列长度。"
 
-#: 4517045d33c64aab912037a1a62c7a04 of
+#: 8509617725a24d5c8f5d1d28c184edf2 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:12
 msgid ""
 "The number of time steps between in_chunk and out_chunk for a single "
 "sample."
 msgstr "输入序列与输出序列之间跳过的序列长度"
 
-#: dfd44e39a1ec4f1384175cc61699f019 ebdda2c62c834ffda76b9a5b76e89f2e of
+#: 50d78a8c89f7436a9228ba3b48dd8650 ea55bd932a8e41c49efe74641bb01e04 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:13
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:13
 msgid "Sampling intervals between two adjacent samples."
 msgstr "相邻样本间的采样间隔。"
 
-#: 759c1ed219e441b7a0f91c7df4ff956d b954d302eee345b8aed81f33a7962ede of
+#: 7bf713ca94b44f29acda485cd5d68135 a6204e3a14954fbdb369e540ccf15f96 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
 msgid "Returns"
 msgstr "返回值"
 
-#: 1f301d139326445ab4d61b25c0136525 of
+#: 0e7f369b92934729b96962fbae13d95d of
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator:16
-msgid "PaddleTS estimator."
-msgstr "通过配置构建 paddlets 评估器。"
+msgid "paddlets estimator."
+msgstr "通过配置构建 paddlets 学习器。"
 
-#: 21b82444d37c45c3a89335ae5c2d35fb b091a6e4f74f40e1a4cf1c1793d75c72 of
+#: 5c95a8d3803d4a6c82559c3beaddca8c ca127de0ba1a40af8d83c03ecccd2c2a of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize
 #: paddlets.automl.optimize_runner.OptimizeRunner.setup_estimator
 msgid "Return type"
 msgstr "返回类型"
 
-#: 88ef75f0848b46afa8a9c8f30546218d of
+#: c887d31434ab467ba15b80cf7e7b93af of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:1
 msgid "Execute optimization."
 msgstr "执行超参优化"
 
-#: 38973e091558490c97c4b3e656be91fe of
+#: 6688e8bb76e242718527a07d2f191e3b of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:9
 msgid "Train dataset."
 msgstr "训练数据集。"
 
-#: de40ae1afd5942bb859e0b9b936da544 of
+#: 5e7484c5af4f47cb9c8d54800666b67e of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:11
 msgid "Valid dataset."
 msgstr "验证数据集。"
 
-#: 73255157205f4834bdee682ba4d71c77 of
+#: 7a174cd2eefb4636b2a73c99144198c3 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:15
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
 "single sample."
 msgstr "可选变量，输入序列与输出序列之间跳过的序列长度"
 
-#: 80b94c654afa4c0fa3403b0d6ee442be of
+#: a6c55786c97545a58e862c56627c2dd3 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:17
 msgid "The domain of the automl to be optimized."
 msgstr "用于 AutoTS 超参优化的搜索空间。"
 
-#: f9b0de36b07d4973bc05dda96d3e7948 of
+#: 6eacf962d2dd43108d6eff162cd3dbc1 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:19
 msgid "A class of a metric, e.g. MAE, MSE."
 msgstr "metric 的类名，例如 MAE、MSE。"
 
-#: 1fac18e0e38c4ed8aec7ba7f2c7884e7 of
+#: 96b60294bfc24939baec8ed892234349 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:21
 msgid ""
 "According to the mode, the metric is maximized or minimized. Supported "
 "mode are \"min\", \"max\""
 msgstr "根据优化模式，metric会向增大或者减小的方向优化。"
 
-#: 671b3afa94664e3bae10a771229daa46 of
+#: c0dd2788936b4d768486ef48240b8a7d of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:23
 msgid ""
 "A string of resampling strategies. Supported resampling strategy are "
 "\"cv\", \"holdout\"."
 msgstr "重采样策略。支持的重采样策略是 'cv', 'holdout'。"
 
-#: c1c376314adf4eada7404388339ac393 of
+#: 472eb7a3b61644a2974085e371c06aaa of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:26
 msgid ""
 "The proportion of the dataset included in the validation split for "
 "holdout."
 msgstr "重采样策略为 holdout 时，被留作验证集的数据的比例。"
 
-#: de439fc80f6848bd8825a9ef29faefba of
+#: 96401088275442328957ff48936d68a0 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:28
 msgid "Number of folds for cv."
 msgstr "当重采样策略为 cv 时，交叉验证的 fold 的数量。"
 
-#: 22a28e8b747d4dd9b37128f641eb035b of
+#: c2fe46a77f0c4b9eab599ba70994d7a7 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:30
 msgid "The number of configurations suggested by the search algorithm."
 msgstr "超参优化算法可以建议的算法配置的数量。"
 
-#: 2b7f622aead04953be72617e34539cf2 of
+#: c562361f6eaa4651975b3320ac5727b2 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize:32
 msgid "CPU resources to allocate per trial."
 msgstr "被分配到每个算法配置训练过程中的 CPU 资源。"
 
-#: 01f907df81e1471586a8ff3920a1d88a of
-#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:33
-msgid "GPU resources to allocate per trial."
-msgstr "被分配到每个算法配置训练过程中的 GPU 资源。"
+#: 175c4f2a48574418a33561157cff83b3 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:34
+msgid ""
+"GPU resources to allocate per trial. Note that GPUs will not be assigned "
+"if you do not specify them here."
+msgstr ""
+"被分配到每个算法配置训练过程中的 GPU 资源。注意，如果你不指定此参数，则GPU资源不会被使用。"
+"此参数的使用可以查看AutoTS使用文档。"
 
-#: 746fc9557e854cb18cee0f4d0490af29 of
-#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:35
+#: 7094d250f60543d4862d2ef0c9c488ff of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:37
+msgid "The maximum number of trials running concurrently."
+msgstr "最大并发运行的参数试验数量。"
+
+#: e0c0c4bc426d487f8c1c706fbc704ddb of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:39
+msgid "Local dir to save training results to. Defaults to `./`."
+msgstr ""
+"用于存放 ray 的运行结果。临时日志由于ray的已知issue，暂未存储在用户指定的local dir。用户须自行清理ray的临时log文件夹"
+"，基于系统，可能存储于/tmp 或 /usr/tmp 等文件夹。临时文件夹可由环境变量RAY_TMPDIR/TMPDIR，或者基于系统根目录的/tmp"
+"或者利用tempfile.gettempdir()获取"
+
+#: 31db33e0befb4ea4ae6f39142ee64d22 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:42
 msgid "Object for experiment analysis."
 msgstr "用于参数优化过程分析的对象。"
 
-#: 7ac403c1cb8346a984ac3b5e30325c2d of
+#: 385176ce592b4a968fb3f4c235121e21 of
 #: paddlets.automl.optimize_runner.OptimizeRunner.optimize
 msgid "Raises"
 msgstr ""
 
-#: 4117cf12b7934649ac7d16564267cd95 of
-#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:38
+#: cf80d6d201224de69a6e0c1cfbf55c05 of
+#: paddlets.automl.optimize_runner.OptimizeRunner.optimize:45
 msgid "Any trials failed."
 msgstr "任意一个训练失败"
+
