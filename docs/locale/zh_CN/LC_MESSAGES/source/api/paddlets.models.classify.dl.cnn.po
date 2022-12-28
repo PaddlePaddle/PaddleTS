@@ -1,0 +1,215 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-22 12:04+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.classify.dl.cnn.rst:2
+#: 3ae11701fa5a427bb95531c93850bf39
+msgid "paddlets.models.classify.dl.cnn"
+msgstr ""
+
+#: 51d101fad4b140ec8d4c5c18bc46337b of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier`"
+msgstr ""
+
+#: 8c85b3e31a2f4380b1e938771bb9cd59 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:1
+msgid "CNNClassifier."
+msgstr ""
+
+#: d74bc8b4a9434f7989365375cf7e48c6 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier
+msgid "Parameters"
+msgstr "参数"
+
+#: 37c5238b50a84fd7b28e0c67ab72bd09 a6e2939c4863410b9691d1fbbb4ac743 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:3
+#: paddlets.models.classify.dl.cnn.CNNClassifier:38
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: 0e20a726e5f14637817e0db8a6f504ba 1c730a78f838403f98aeb73a9d74bed6 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:5
+#: paddlets.models.classify.dl.cnn.CNNClassifier:44
+msgid "Optimizer algorithm."
+msgstr "优化器算法"
+
+#: 789ba2d030bd4c668c17f2b307b02355 b8ac3ccbe47740199e6f8fcac7379546 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:7
+#: paddlets.models.classify.dl.cnn.CNNClassifier:50
+msgid "Optimizer parameters."
+msgstr "优化器参数"
+
+#: da693a2926384daeabf32763e1bb44e3 f6d4501ee90d471c8a36aa879ec5caba of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:9
+#: paddlets.models.classify.dl.cnn.CNNClassifier:56
+msgid "Evaluation metrics of model."
+msgstr "模型评估指标。"
+
+#: ab4620cb4ce9480d9c548b7335409a4b d7952c0c4a5d459092e6dc839151b2e2 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:11
+#: paddlets.models.classify.dl.cnn.CNNClassifier:62
+msgid "Customized callback functions."
+msgstr "自定义回调函数。"
+
+#: 077e77a89b14469498654bf68c139359 3a2dcbdb21c340998a0520ff75bec928 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:13
+#: paddlets.models.classify.dl.cnn.CNNClassifier:68
+msgid "Number of samples per batch."
+msgstr "每个批次的样本数量。"
+
+#: 147227a347164b01a98e47b5db3ed738 aa4d4233440949dfa82dcbd764c6eb0b of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:15
+#: paddlets.models.classify.dl.cnn.CNNClassifier:74
+msgid "Max epochs during training."
+msgstr "训练过程中最大迭代轮数"
+
+#: 2648acfdcb964f1cbc8cc6dd552e56fb f065675fbecb4b1cb0f9c116a70aa0f4 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:17
+#: paddlets.models.classify.dl.cnn.CNNClassifier:80
+msgid "Verbosity mode."
+msgstr "模型日志模式"
+
+#: 43c36cea204e4fc2b12bcd91f5fd6aa9 bfe15e3d82404cc2b20dbbcfee59a806 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:19
+#: paddlets.models.classify.dl.cnn.CNNClassifier:86
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
+
+#: 15bf2cb314f2434dbcfb64096ef52483 fceb9d1b27f14b4aa31bcb9637aa865b of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:21
+#: paddlets.models.classify.dl.cnn.CNNClassifier:92
+msgid "Global random seed."
+msgstr "全局随机种子， 注: 保证每次模型参数初始化一致。"
+
+#: 985e638b15bb499a977c733c59f8a51b f38c28b6f444455292e1963cb6bc3a0f of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:23
+#: paddlets.models.classify.dl.cnn.CNNClassifier:104
+msgid "The activation function for the hidden layers."
+msgstr ""
+
+#: 76cf2623eeee4ac68c4b6992fa76de6c c3360d60db3c4dd6bb9d15745fe3dbee of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:25
+#: paddlets.models.classify.dl.cnn.CNNClassifier:110
+msgid "The activation function for the last hidden layers."
+msgstr "最后一层隐藏层的激活函数。"
+
+#: 4983fd88ec634eb8bc3d01244a0124c8 877de028e6584de082b412495acd03b2 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:27
+#: paddlets.models.classify.dl.cnn.CNNClassifier:116
+msgid "The ith element represents the number of neurons in the ith hidden layer."
+msgstr "第i个元素表示第i个隐藏层中的神经元数量"
+
+#: 52f84de71a3f4e0dba7b4d5d05972921 b20e4e2468eb4a68b6fd033dce91a380 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:29
+#: paddlets.models.classify.dl.cnn.CNNClassifier:122
+msgid "Kernel size for Conv1D."
+msgstr "Conv1D的内核大小"
+
+#: 7fdb584a099e470ba629b55f3855fa31 a9e49fb896a34ba0b977fc1136581213 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:31
+#: paddlets.models.classify.dl.cnn.CNNClassifier:128
+msgid "Dropout regularization parameter."
+msgstr "Dropout正则化参数"
+
+#: 94a46c16f95247ce97b28fdee8ff2e02 d4949603915544d4b569c4d35760b1eb of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:33
+#: paddlets.models.classify.dl.cnn.CNNClassifier:134
+msgid "Whether to use batch normalization."
+msgstr "是否使用批处理规范化"
+
+#: 2462f10fb4b248ea8433e765f04a8933 2c76441d1bc44d888e1e8cc730a51e38
+#: 3a5933cb7a294d248e176e97f986ce6b 4f75b3fedf394090a9922f1ac32211ab
+#: 50757d036d8c4755bba9c529cefb260d 53dc414b34904e8d9f0f6a3a8cf207bb
+#: 580a2a9ad7724d129df257f75a6f3f2d 63262da4cc6440a88b56b633eacea9ec
+#: 7cca6a8a0943410caabcaf9f64912b03 89050d94fa3e452e8ab6f082743308e6
+#: 9430c79622d4496a80cc4e2faad984f0 9fe77f3f33864e0f844eb85ad99d65b0
+#: ac4b034712ac4db79087ff20434f146f b00f8c8474c84cf6962fe559dd5f46a0
+#: dd7f7566ad2140f19d16a1167c9bfcc5 e02dee0749cc4d8e9efb80a61ddbaec9
+#: e1e41412880144328a04b32cfb25b2e1 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier
+msgid "type"
+msgstr ""
+
+#: 2ca2ae95f1a34b5585722a23cffa03cb 7cb433ed4e3f4e4297fa171637f36bca
+#: 809177fd41d74e3e8aa513e48a4997ee of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:40
+#: paddlets.models.classify.dl.cnn.CNNClassifier:106
+#: paddlets.models.classify.dl.cnn.CNNClassifier:112
+msgid "Callable[..., paddle.Tensor]"
+msgstr ""
+
+#: ab7e804d562a417da33701b534e74fc2 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:46
+msgid "Callable[..., Optimizer]"
+msgstr ""
+
+#: 61029a3695074534985c36196dc8ac4e of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:52
+msgid "Dict[str, Any]"
+msgstr ""
+
+#: 68099dc2a9ed417f963402e7a603cd93 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:58
+msgid "List[str]"
+msgstr ""
+
+#: 0e417be3bfcf4b9486ec8e1fde9c3278 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:64
+msgid "List[Callback]"
+msgstr ""
+
+#: 3295bfb2233248659f8a86e17853f99b 4c9c1efa89894bdcbcf619f95da39fea
+#: 9a899794ffde4f2ea8fcc58fceec2ed0 ea87030aed60472786d66a382e6b8f9c
+#: f443e04fea7a4f579655f3a0a429fa13 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:70
+#: paddlets.models.classify.dl.cnn.CNNClassifier:76
+#: paddlets.models.classify.dl.cnn.CNNClassifier:82
+#: paddlets.models.classify.dl.cnn.CNNClassifier:88
+#: paddlets.models.classify.dl.cnn.CNNClassifier:124
+msgid "int"
+msgstr ""
+
+#: 3620413a758d4ea5bbcf921842250045 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:94
+msgid "int|None"
+msgstr ""
+
+#: 7e9b958376784cbca4626c33631ff277 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:98
+msgid "Training status."
+msgstr ""
+
+#: 762a0e39257e42f4b68f0b525eacf240 b3c5a12fa4f743b48f7b52379d26a639 of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:100
+#: paddlets.models.classify.dl.cnn.CNNClassifier:136
+msgid "bool"
+msgstr ""
+
+#: da311f670ee644c3bc3c15c7d4b4306c of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:118
+msgid "List[int]|None"
+msgstr ""
+
+#: 844c04075e9c4067b63a9a4dd8e8819d of
+#: paddlets.models.classify.dl.cnn.CNNClassifier:130
+msgid "float"
+msgstr ""
+

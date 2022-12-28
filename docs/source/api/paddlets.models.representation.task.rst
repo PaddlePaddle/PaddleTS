@@ -9,4 +9,6 @@ paddlets.models.representation.task
     :maxdepth: 4
 
     paddlets.models.representation.task.repr_forecasting.rst
+    paddlets.models.representation.task.repr_classifier.rst
+    paddlets.models.representation.task.repr_cluster.rst
 

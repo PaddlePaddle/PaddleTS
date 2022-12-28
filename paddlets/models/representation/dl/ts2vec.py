@@ -189,16 +189,17 @@ class TS2Vec(ReprBaseModel):
 
     def _update_fit_params(
         self,
-        train_tsdataset: TSDataset,
+        train_tsdataset: List[TSDataset],
     ) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
-            train_tsdataset(TSDataset): train dataset.
+            train_tsdataset(List[TSDataset]): train dataset.
 
         Returns:
             Dict[str, Any]: model parameters.
         """
+        train_tsdataset = train_tsdataset[0]
         input_dim = train_tsdataset.get_target().data.shape[1]
         if train_tsdataset.get_observed_cov():
             input_dim += train_tsdataset.get_observed_cov().data.shape[1]
@@ -211,28 +212,29 @@ class TS2Vec(ReprBaseModel):
 
     def _init_fit_dataloader(
         self,
-        train_tsdataset: TSDataset
+        train_tsdataset: List[TSDataset]
     ) -> paddle.io.DataLoader:
         """Generate dataloader for train set.
 
         Args:
-            train_tsdataset(TSDataset): Train set.
+            train_tsdataset(List[TSDataset]): Train set.
 
         Returns:
             paddle.io.DataLoader: Training dataloader.
         """
-        self._check_tsdataset(train_tsdataset)
-        data_adapter = DataAdapter()
-        train_dataset = data_adapter.to_sample_dataset(
-            rawdataset=train_tsdataset,
-            in_chunk_len=self._segment_size,
-            sampling_stride=self._sampling_stride,
-            fill_last_value=np.nan
-        )
-        # In order to align with the paper of TS2Vec, a customized data organization is required.
-        train_dataset.samples = custom_collate_fn(train_dataset.samples)
-        return data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
-    
+        data_adapter, samples = DataAdapter(), []
+        for tsdataset in train_tsdataset:
+            self._check_tsdataset(tsdataset)
+            dataset = data_adapter.to_sample_dataset(
+                rawdataset=tsdataset,
+                in_chunk_len=self._segment_size,
+                sampling_stride=self._sampling_stride,
+                fill_last_value=np.nan
+            )
+            samples.extend(dataset.samples)
+        dataset.samples = custom_collate_fn(samples)
+        return data_adapter.to_paddle_dataloader(dataset, self._batch_size)
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 

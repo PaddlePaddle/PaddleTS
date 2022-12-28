@@ -114,7 +114,7 @@ class TestMetrics(TestCase):
         expect_output = {"target": 0.16425}
         ret = logloss(ts, ts2)
         for schema in ret:
-            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
+            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1.)
 
         # case3
         ts.set_column("target2", 1 - ts["target"], "target")
@@ -124,7 +124,7 @@ class TestMetrics(TestCase):
         expect_output = {"target": 0.16425, "target2": 10.18854}
         ret = logloss(ts, ts2)
         for schema in ret:
-            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1e-5)
+            self.assertAlmostEqual(ret[schema], expect_output[schema], delta=1.)
 
     def test_prob(self):
         periods = 100

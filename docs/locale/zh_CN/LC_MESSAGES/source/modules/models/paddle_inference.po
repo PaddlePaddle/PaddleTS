@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-20 10:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/modules/models/paddle_inference.rst:3
+#: 23fde0ece7e741678c6531036f267349
+msgid "Paddle Inference Support"
+msgstr ""
+
+#: ../../source/modules/models/paddle_inference.rst:5
+#: 207df382c8e54baba854247cc1c0e391
+msgid ""
+"The vast majority of models in PaddleTS support Paddle Inference. For the"
+" instruction and functions of Paddle Inference, please refer to `Paddle "
+"Inference "
+"<https://paddleinference.paddlepaddle.org.cn/master/product_introduction/inference_intro.html>`_"
+" . PaddleTS supports export of native Paddle network models for the "
+"deployment of Paddle Inference. To simplify the process, PaddleTS "
+"provides the Python tool to build input data, so users can build input "
+"data for Paddle Inference easily."
+msgstr ""
+"当前的PaddleTS已完成了绝大多数模型对Paddle Inference功能的支持, "
+"Paddle Inference相关介绍以及功能可以参考:  `Paddle Inference <https://paddleinference.paddlepaddle.org.cn/master/product_introduction/inference_intro.html>`_ . "
+"PaddleTS 支持了原生paddle network模型的导出, 可用于Paddle Inference进行推理部署, 同时为了简化用户使用流程, 提供了python的前序数据构建的工具,"
+"可以让用户轻松完成Paddle Inference的输入数据构建."
+
+#: ../../source/modules/models/paddle_inference.rst:12
+#: 2a7ff0d1ec5848a3b702e27e3676bc58
+msgid "1. Build and Train Model"
+msgstr "1. 模型准备以及训练"
+
+#: ../../source/modules/models/paddle_inference.rst:39
+#: 57cf77fe16ad4612aa823b21b622aced
+msgid "2 Save model"
+msgstr "2 模型保存"
+
+#: ../../source/modules/models/paddle_inference.rst:41
+#: 672d76f366954239abc13837e4d06765
+msgid ""
+"`network_model` and `dygraph_to_static` parameters are added in `save` "
+"interfaces of all PaddleTS time-series forecasting and anomaly detection "
+"models. The `network_model` parameter controls which objects are dumped. "
+"The default value of network_model is False, which means the dumped files"
+" can be only used by `PaddleTS.predict` interface. If True, additional "
+"files which can be used by `paddle inference` will be dumped. "
+"`dygraph_to_static` converts the dumped model from a dynamic graph to a "
+"static one, and it works only when network_model is True. For more "
+"information, please refer to `dygraph_to_static "
+"<https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/jit/index_cn.html>`_."
+msgstr ""
+"PaddleTS所有时序预测以及异常检测模型的save接口都新增了 `network_model` 以及 `dygraph_to_static` 的参数设置;"
+"其中, network_model默认是False, 表示仅导出只支持PaddleTS.predict推理的模型文件, 当network_model设置为True的时候, 再次基础上，会"
+"新增对paddle 原始network 的模型以及参数的导出, 可用于 Paddle Inference进行推理; dygraph_to_static参数仅当当network_model为True的"
+"时候起作用，表示将导出的模型从动态图转换成静态图, 参考 `动转静 <https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/jit/index_cn.html>`_."
+
+#: ../../source/modules/models/paddle_inference.rst:55
+#: c5817d208321450db32a297b3dbb11df
+msgid ""
+"The preceding code snippet is an example to dump model files after "
+"saving. `rnn.pdmodel` and `rnn.pdiparams` are native paddle models and "
+"parameters, which can be used for `Paddle Inference`. At the meanwhile, "
+"PaddleTS generates `rnn_model_meta` file for model description with input"
+" data types and metadata of shape. Users can deploy the app correctly in "
+"an easy way."
+msgstr ""
+"上述代码展示了save后的模型文件, 其中rnn.pdmodel以及rnn.pdiparams作为paddle 原生模型以及模型参数, 可用于Paddle Inference的应用;"
+"同时PaddleTS生成了rnn_model_meta文件用于模型的描述, 里面包含了模型的输入数据类型以及shape的各种元信息, 便于用户对模型进行正确的部署应用."
+
+#: ../../source/modules/models/paddle_inference.rst:59
+#: c238de92d88e4c20982c34727b726d4f
+msgid "3. Paddle Inference"
+msgstr ""
+
+#: ../../source/modules/models/paddle_inference.rst:61
+#: 74a54f80f97748ebab0dd9ec8b9cbdfe
+msgid ""
+"With the dumped model in step 2, users can deploy models by `Paddle "
+"Inference`. Here's the example."
+msgstr ""
+"有了第二步导出的模型, 用户即可利用Paddle Inference 进行模型推理部署了，下面给出了简单的示例"
+
+#: ../../source/modules/models/paddle_inference.rst:64
+#: 98eaee212cfa484fa52669f0f99f54be
+msgid "3.1 Load model"
+msgstr "3.1 模型导入"
+
+#: ../../source/modules/models/paddle_inference.rst:83
+#: 0a71194595794d498615c78a64d5f2d1
+msgid ""
+"As the above code snippet shows, we can build the input based on "
+"input_name, which contains attributes of the data "
+"(target、known_cov、observed_cov). In addition to input_name, "
+"rnn_model_meta contains input types, the shape format of data, original "
+"`in_chunk_len` and `out_chunk_len` and so on. With these information, "
+"users can build input data correctly and easily."
+msgstr ""
+"通过上述代码我们可以看到, 我们可以基于input_name去构建我们的输入, 同时input_name本身也包含了数据的属性(target、known_cov、observed_cov), "
+"并且rnn_model_meta文件中除了保函input_name之外, 还包含了其输入类型、数据的shape格式、原始的in_chunk_len、out_chunk_len等信息; 基于这些信息，"
+
+#: ../../source/modules/models/paddle_inference.rst:88
+#: d8ae8acaf28c4360978621407f3313b7
+msgid "3.2 Build Input Tensor"
+msgstr "3.2 构建输入的tensor"
+
+#: ../../source/modules/models/paddle_inference.rst:90
+#: 7883630a56b348f8b6a8c8c5d15dd374
+msgid ""
+"PaddleTS also has built-in functions to build Paddle Inference input "
+"automatically."
+msgstr ""
+"当然, 为了简化用户的使用, PaddleTS也内置了基于TSDataset自动构建Paddle Inference输入的功能"
+
+#: ../../source/modules/models/paddle_inference.rst:107
+#: 5ce56fe707a645a8b5399ae4aa1ed5c6
+msgid "3.3 Inference"
+msgstr "3.3 推理"
+
+#: ../../source/modules/models/paddle_inference.rst:120
+#: a0d58aac48e44a218464b3a189356d86
+msgid ""
+"The results of above code snippet are basically consistent with the "
+"results of predict in chapter 1."
+msgstr ""
+"我们可以看到, 上述程序输出的结果和章节1中predict的结果基本一致"

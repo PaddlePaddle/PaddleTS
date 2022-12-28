@@ -7,5 +7,3 @@ paddlets.models.anomaly.ml
 
 .. toctree::
     :maxdepth: 4
-
-    paddlets.models.anomaly.ml.adapter.rst

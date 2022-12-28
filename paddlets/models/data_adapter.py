@@ -1470,35 +1470,39 @@ class DataAdapter(object):
             time_window(Tuple, optional): A two-element-tuple-shaped time window that allows adapter to build samples.
                 time_window[0] refers to the window lower bound, while time_window[1] refers to the window upper bound.
                 Each element in the left-closed-and-right-closed interval refers to the TAIL index of each sample.
-        samples = [
-            {
-                "past_target": np.ndarray(
-                    shape=(in_chunk_len, target_col_num)
-                ),
-                "future_target": np.ndarray(
-                    shape=(out_chunk_len, target_col_num)
-                ),
-                "known_cov_numeric": np.ndarray(
-                    shape=(in_chunk_len + out_chunk_len, known_numeric_col_num)
-                ),
-                "known_cov_categorical": np.ndarray(
-                    shape=(in_chunk_len + out_chunk_len, known_categorical_col_num)
-                ),
-                "observed_cov_numeric": np.ndarray(
-                    shape=(in_chunk_len, observed_numeric_col_num)
-                ),
-                "observed_cov_categorical": np.ndarray(
-                    shape=(in_chunk_len + out_chunk_len, observed_categorical_col_num)
-                ),
-                "static_cov_numeric": np.ndarray(
-                    shape=(in_chunk_len + out_chunk_len, static_numeric_col_num)
-                ),
-                "static_cov_categorical": np.ndarray(
-                    shape=(in_chunk_len + out_chunk_len, static_categorical_col_num)
-                )
-            },
-            # ...
-        ]
+
+        Examples:
+            .. code-block:: python
+
+                samples = [
+                    {
+                        "past_target": np.ndarray(
+                            shape=(in_chunk_len, target_col_num)
+                        ),
+                        "future_target": np.ndarray(
+                            shape=(out_chunk_len, target_col_num)
+                        ),
+                        "known_cov_numeric": np.ndarray(
+                            shape=(in_chunk_len + out_chunk_len, known_numeric_col_num)
+                        ),
+                        "known_cov_categorical": np.ndarray(
+                            shape=(in_chunk_len + out_chunk_len, known_categorical_col_num)
+                        ),
+                        "observed_cov_numeric": np.ndarray(
+                            shape=(in_chunk_len, observed_numeric_col_num)
+                        ),
+                        "observed_cov_categorical": np.ndarray(
+                            shape=(in_chunk_len + out_chunk_len, observed_categorical_col_num)
+                        ),
+                        "static_cov_numeric": np.ndarray(
+                            shape=(in_chunk_len + out_chunk_len, static_numeric_col_num)
+                        ),
+                        "static_cov_categorical": np.ndarray(
+                            shape=(in_chunk_len + out_chunk_len, static_categorical_col_num)
+                        )
+                    },
+                    # ...
+                ]
         """
         return SampleDataset(
             rawdataset=rawdataset,
@@ -1533,6 +1537,7 @@ class DataAdapter(object):
 
         Examples:
             .. code-block:: python
+
                 dataloader = [
                     # 1st batch
                     {
@@ -1580,7 +1585,7 @@ class DataAdapter(object):
         collate_fn: Callable = None
     ) -> MLDataLoader:
         """
-        Convert SampleDataset to paddle DataLoader.
+        Convert SampleDataset to MLDataLoader.
 
         Args:
             sample_dataset(SampleDataset): SampleDataset to be converted.
@@ -1588,35 +1593,36 @@ class DataAdapter(object):
             collate_fn(Callable, optional): User-defined collate function for each batch, optional.
 
         Returns:
-            PaddleDataLoader: A built paddle DataLoader.
+            MLDataLoader: A built MLDataLoader.
 
         Examples:
             .. code-block:: python
+
                 dataloader = [
                     # 1st batch
                     {
-                        "past_target": paddle.Tensor(
+                        "past_target": np.ndarray(
                             shape=(batch_size, in_chunk_len, target_col_num)
                         ),
-                        "future_target": paddle.Tensor(
+                        "future_target": np.ndarray(
                             shape=(batch_size, out_chunk_len, target_col_num)
                         ),
-                        "known_cov_numeric": paddle.Tensor(
+                        "known_cov_numeric": np.ndarray(
                             shape=(batch_size, known_cov_chunk_len, known_cov_numeric_col_num)
                         ),
-                        "known_cov_categorical": paddle.Tensor(
+                        "known_cov_categorical": np.ndarray(
                             shape=(batch_size, known_cov_chunk_len, known_cov_categorical_col_num)
                         ),
-                        "observed_cov_numeric": paddle.Tensor(
+                        "observed_cov_numeric": np.ndarray(
                             shape=(batch_size, observed_cov_chunk_len, observed_cov_col_num)
                         ),
-                        "observed_cov_categorical": paddle.Tensor(
+                        "observed_cov_categorical": np.ndarray(
                             shape=(batch_size, observed_cov_chunk_len, observed_cov_categorical_col_num)
                         ),
-                        "static_cov_numeric": paddle.Tensor(
+                        "static_cov_numeric": np.ndarray(
                             shape=(batch_size, 1, static_cov_numeric_col_num)
                         ),
-                        "static_cov_categorical": paddle.Tensor(
+                        "static_cov_categorical": np.ndarray(
                             shape=(batch_size, 1, static_cov_categorical_col_num)
                         )
                     },

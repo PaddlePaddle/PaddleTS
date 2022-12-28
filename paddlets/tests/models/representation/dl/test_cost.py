@@ -150,9 +150,12 @@ class TestCoST(TestCase):
             sampling_stride=300,
             num_layers=1,
             batch_size=1,
-            max_epochs=10,
+            max_epochs=1,
         )
         cost.fit(self.tsdataset1)
+
+        # case2 (用户传入多组时序数据用于多实例训练)
+        cost.fit([self.tsdataset1, self.tsdataset1])
 
     def test_encode(self):
         """unittest function

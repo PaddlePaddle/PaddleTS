@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-22 10:46+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.forecasting.dl.scinet.rst:2
+#: fbf9b402619f48248fd5d5cf87776947
+msgid "paddlets.models.forecasting.dl.scinet"
+msgstr ""
+
+#: 25ab1f0505b4489ea0363ae810448854 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
+msgstr ""
+
+#: 3e1edcc1df674e3a8051dcb4ce00f61d of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:1
+msgid ""
+"DownSampled Convolutional Interactive Network (SCINet) for time series "
+"forcasting. Refers to `SCINet <https://arxiv.org/pdf/2106.09305.pdf>`_ ."
+msgstr "基于下采样、卷积、交互学习模块的时序预测模型SCINet。参考 `SCINet <https://arxiv.org/pdf/2106.09305.pdf>`_ 。"
+
+#: f099d950523940b690a323a23ea4e867 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel
+msgid "Parameters"
+msgstr ""
+
+#: 7495ab6274794fcfb6353eb793fff219 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:4
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: df1ff20bb3674edda6ae590ff90afa31 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:6
+msgid ""
+"The size of the forecasting horizon, i.e. the number of time steps output"
+" by the model."
+msgstr "模型输出的序列长度。"
+
+#: a239a1f8fd0e473fa1fc4de9b47da751 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:8
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量，输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
+
+#: af5e8dd7195b41dcbcbd0f3ef03999ee of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:12
+msgid ""
+"Time steps to stride over the i-th sample and (i+1)-th sample. More "
+"precisely, let `t` be the time index of target time series, `t[i]` be the"
+" start time of the i-th sample, `t[i+1]` be the start time of the "
+"(i+1)-th sample, thus `sampling_stride` is equal to `t[i+1] - t[i]`."
+msgstr ""
+"在第i条样本和第i+1条样本之间跨越的时间步数。 具体来说，令 `t` 为target时序数据的时间索引，`t[i]` "
+"为第i条样本的起始时间，`t[i+1]`为第i+1条样本的起始时间， 则`sampling_stride`代表 `t[i+1] - t[i]` "
+"的计算结果，即2条相邻的样本之间相差的时间点的数量。"
+
+#: 7ba6955d22e34b85af1299af7f91033f of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:16
+msgid "Loss function."
+msgstr "损失函数。"
+
+#: d57161c9f31e42488d8467b4fccef9d6 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:18
+msgid "Optimizer algorithm."
+msgstr "优化方法。"
+
+#: 23dd4793070a46478f8e0525498e4fba of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:20
+msgid "Optimizer parameters."
+msgstr "优化器参数。"
+
+#: 1de4526b7dbe437988d0f991b0beebeb of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:22
+msgid "Evaluation metrics of model."
+msgstr "模型的评估指标。"
+
+#: 3818a74fd697412c987ccc9a3d8d37de of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:24
+msgid "Customized callback functions."
+msgstr "自定义的回调函数。"
+
+#: 4192e5c509e24b518fb76a5133193e8c of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:26
+msgid "Number of samples per batch."
+msgstr "单个batch的样本数量。"
+
+#: c2426eb5bc894446b703ffe77987def2 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:28
+msgid "Max training epochs."
+msgstr "最大允许的训练epoch数。"
+
+#: 978845c36ae34d81a2b1ec39fcba0743 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:30
+msgid "Verbosity mode."
+msgstr "调试（详细输出）模式。"
+
+#: 0d190c985d5d448dbb7709438c57dc09 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:32
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "在终止训练前允许等待收敛的epoch数量。"
+
+#: 1dce1cb4e98042f98bb3d5fd932d7963 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:34
+msgid "Global random seed."
+msgstr "全局的随机种子。"
+
+#: 12abc8efd1ec410e8fd0e6db5381ca9c of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:36
+msgid "stack number in Stacked SCINet."
+msgstr "SCINet中的stack数量。"
+
+#: 40070c247d0f495ab1c036a441fc2fb7 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:38
+msgid "scinet tree level."
+msgstr "SCINet中二叉树的树高。"
+
+#: 41ce74b3aab24ee1bf41559cc4fb2981 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:40
+msgid "decoder layer number."
+msgstr "解码器层的层数。"
+
+#: 9706a51fa4ae40048340362ec4b89d0d of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:42
+msgid "length to concat per stack."
+msgstr "每个stack的拼接长度。"
+
+#: ecd3a1e288a54027b7d2ea9e59397785 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:44
+msgid "kernel size for Conv1D layer."
+msgstr "Conv1D网络层的kernel值。"
+
+#: 57ce172a985f48149c6c406490b3cad6 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:46
+msgid "dropout regularization parameter."
+msgstr "dropout层的丢弃率参数值。"
+
+#: 3ff6379f71384a2d92c8db6aa3c1a26c of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:48
+msgid "group number for Conv1D layer groups parameter."
+msgstr "Conv1D网络层的groups参数值。"
+
+#: 13ee4f8aafb44f9e82d5aff4f2026879 of
+#: paddlets.models.forecasting.dl.scinet.SCINetModel:50
+msgid "The number of features in hidden state for SCINet Interactor module."
+msgstr "SCINet的Interactor模块内部有Conv1D网络层，该参数用于计算Conv1D层的in_channels和out_channels值。"
+

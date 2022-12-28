@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-15 21:52+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.task.repr_classifier.rst:2
+#: 7cd4f0e82f7844ea921671d361553061
+msgid "paddlets.models.representation.task.repr_classifier"
+msgstr ""
+
+#: 4ae4bc4e09f54fc39ec3d7768a552275 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.ensemble.stacking_ensemble.StackingEnsembleBase`"
+msgstr ""
+
+#: c84bbbb24c3c4ff79ae431759554720c of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:1
+msgid "The ReprClassifier Class."
+msgstr "表征分类"
+
+#: 010adf99095b43bc9c8222ef3645c45f 2909bbca2e9041a681f15fa2385fabb4
+#: 41ddf6994f6a4d2591b99e9a2e50c1fa 6df5d2b99d744bd0ac138293ab46b70a
+#: ccac49616b4f42c9be6a6d7d577c39c1 fd9ade43ad4f42f7a937ca892ce40973 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.fit
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict_proba
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.save
+msgid "Parameters"
+msgstr ""
+
+#: dda2acae692c4cab91731aa7f8b1ec43 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:3
+msgid "Representation model to use for forcast."
+msgstr "所用的表征模型类"
+
+#: 2ee5caff232f452ab11795c9abef236f of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:5
+msgid "params for reprmodel init."
+msgstr "表征模型的参数"
+
+#: 00e6bf534f0b4950a28b53fdbe6744b0 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:7
+msgid ""
+"params for reprmodel encode, \"slide_len\" will set to in_chunk_len by "
+"force."
+msgstr "表征模型的encode参数"
+
+#: e5307ecf84ba483ab0da04d17fd5300d of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:9
+msgid ""
+"The downstream learner, should be a sklearn-like classifier, set to "
+"GradientBoostingClassifier() by default."
+msgstr "下游分类器，需要是一个sklearn形式的分类器，默认GradientBoostingClassifier()"
+
+#: 190d2f6d4fb241ed8a02689bcfd12aea of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier:11
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志，默认开启"
+
+#: 8a37b70ac12849dcbee1747bb773196d of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.fit:1
+msgid "train data."
+msgstr "训练集，需要是一个List[TSDataset]"
+
+#: cc5edebb0202496081b666bc731d79a5 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.fit:3
+msgid "labels, length equal to length of tsdataset_list"
+msgstr "标签，长度跟训练集长度相同"
+
+#: d654aefb2f454c2f83d856bac529e113 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict:1
+msgid "Predict"
+msgstr "预测"
+
+#: 627069d010d6421387506b3c189daf32 97c3f29764a54f1c86df75a81f0e742a of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict:3
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict_proba:3
+msgid "predict data."
+msgstr "预测数据"
+
+#: 08f6e40e235f40c18063710abb3567cf of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.predict_proba:1
+msgid "Predict proba"
+msgstr "预测概率"
+
+#: 2745ee7556ac4af688d4525f3eaafc8d of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.save:1
+msgid "Save the repr-classifier model to a directory."
+msgstr "保存模型"
+
+#: d54fe20736ce4a2bbfa9aab860b2cd87 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: 3864d1220e6d463391cc5d4eb0081d30 ae7bcef6f99a4e7c89695741679d7662 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load:5
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.save:5
+msgid ""
+"Name of repr-classifier model object. This file contains meta information"
+" of repr-cluster model."
+msgstr "保存文件名"
+
+#: 8c7746bc315a4b9792e4f775e57b2827 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load:1
+msgid "Load the repr-classifier model from a directory."
+msgstr "加载模型"
+
+#: 5611ec6bb3fa43669972ba5781c81c82 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load:3
+msgid "Input directory path."
+msgstr "加载路径"
+
+#: fbff29d593fc486e8c6bd49e26e129ea of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load
+msgid "Returns"
+msgstr ""
+
+#: feb6b22662264bfeafe0123b785ed633 of
+#: paddlets.models.representation.task.repr_classifier.ReprClassifier.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+
