@@ -94,10 +94,6 @@ class TestOptimizeRunner(TestCase):
         unittest function
 
         """
-        from paddlets.models.forecasting.ml.arima import ArimaModel
-        from paddlets.models.forecasting.ml import LGBM
-        # Arima 不支持 stride，这个需要 Arima改造
-        ml = [ArimaModel, LGBM]
         from paddlets.models.forecasting import MLPRegressor, RNNBlockRegressor, LSTNetRegressor, NHiTSModel, \
             TransformerModel, InformerModel, DeepARModel
         from paddlets.automl.search_space_configer import SearchSpaceConfiger
@@ -111,12 +107,6 @@ class TestOptimizeRunner(TestCase):
         scaler = StandardScaler()
         scaler.fit(tsdataset)
         tsdataset = scaler.transform(tsdataset)
-
-        for e in ml:
-            autots_model = AutoTS(e, 25, 1, sampling_stride=25, local_dir="./")
-            autots_model.fit(tsdataset, n_trials=2)
-            sp = autots_model.search_space()
-            predicted = autots_model.predict(tsdataset)
 
         for e in dl:
             sp = paddlets_configer.get_default_search_space(e)
