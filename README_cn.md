@@ -20,26 +20,30 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 * 设计统一数据结构，实现对多样化时序数据的表达，支持单目标与多目标变量，支持多类型协变量
 * 封装基础模型功能，如数据加载、回调设置、损失函数、训练过程控制等公共方法，帮助开发者在新模型开发过程中专注网络结构本身
-* 内置业界领先的深度学习模型，包括NBEATS、NHiTS、LSTNet、TCN、Transformer, DeepAR（概率预测）、Informer等时序预测模型，以及TS2Vec等时序表征模型
+* 内置业界领先的深度学习模型，包括NBEATS、NHiTS、LSTNet、TCN、Transformer、DeepAR、Informer等时序预测模型，
+  TS2Vec、CoST等时序表征模型，以及
+  Autoencoder、VAE、AnomalyTransformer等时序异常检测模型
 * 内置多样化的数据转换算子，支持数据处理与转换，包括缺失值填充、异常值处理、归一化、时间相关的协变量提取等
 * 内置经典的数据分析算子，帮助开发者便捷实现数据探索，包括数据统计量信息及数据摘要等功能
 * 自动模型调优AutoTS，支持多类型HPO(Hyper Parameter Optimization)算法，在多个模型和数据集上展现显著调优效果 
-* 第三方机器学习模型及数据转换模块自动集成，支持包括sklearn、pyod等第三方库的时序应用
+* 第三方机器学习模型及数据转换模块自动集成，支持包括sklearn、[pyod](https://github.com/yzhao062/pyod)等第三方库的时序应用
 * 支持在GPU设备上运行基于PaddlePaddle的时序模型
+* 时序模型集成学习能力
 
 最新更新：
-* 发布时序表征模型 Contrastive Learning of Disentangled Seasonal-trend Representations(CoST)
-* 支持时序异常检测，发布包括AE (Autoencoder)、VAE (Variational Autoencoder)、AnomalyTransformer深度学习模型
-* 支持第三方时序异常检测库[pyod](https://github.com/yzhao062/pyod)自动集成
-* 新增时序模型集成学习能力。目前发布版本支持StackingEnsembleForecaster和WeightingEnsembleForecaster等2种时序预测集成学习方法
-* RNN模型现在支持使用分类特征和静态协变量
-* 新增基于表征模型的时序预测功能，支持使用时序表征模型解决时序预测任务
-* 支持基于多时序数据集的组合训练
+* 新增时序分类能力
+* 全新发布6个深度时序模型。
+  USAD(UnSupervised Anomaly Detection)与MTAD_GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network)异常检测模型，
+  CNN与Inception Time时序分类模型，
+  SCINet(Sample Convolution and Interaction Network)与TFT(Temporal Fusion Transformer)时序预测模型
+* 新发布[Paddle Inference](https://www.paddlepaddle.org.cn/paddle/paddleinference)支持，已适配时序预测与时序异常检测
+* 新增模型可解释性能力。包括模型无关的可解释性与模型相关的可解释性
+* 新增支持基于表征的聚类与分类
+  
+您也可以参考[发布说明](https://github.com/PaddlePaddle/PaddleTS/wiki/Release-Notes)获取更详尽的更新列表。
 
 未来，更多的高级特性会进一步发布，包括但不限于：
-* 更多时序异常检测模型
-* 更多时序表征模型
-* 更多概率预测模型
+* 更多时序模型
 * 场景化Pipeline，支持端到端真实场景解决方案
 
 
@@ -56,10 +60,12 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 | [**paddlets.models.forecasting**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models/overview.html)          | 时序模型模块，基于飞桨深度学习框架PaddlePaddle的时序预测模型   |
 | [**paddlets.models.representation**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models/representation.html) | 时序模型模块，基于飞桨深度学习框架PaddlePaddle的时序表征模型   |
 | [**paddlets.models.anomaly**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/models/anomaly.html)               | 时序模型模块，基于飞桨深度学习框架PaddlePaddle的时序异常检测模型 |
+| [**paddlets.models.classify**](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.models.classify.html)        | 时序模型模块，基于飞桨深度学习框架PaddlePaddle的时序分类模型   |
 | [**paddlets.pipeline**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/pipeline/overview.html)                  | 建模任务流模块，支持特征工程、模型训练、模型评估的任务流实现         |
 | [**paddlets.metrics**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/metrics/overview.html)                    | 效果评估模块，提供多维度模型评估能力                     |
 | [**paddlets.analysis**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/analysis/overview.html)                  | 数据分析模块，提供高效的时序特色数据分析能力                 |
 | [**paddlets.ensemble**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/ensemble/overview.html)                  | 时序集成学习模块，基于模型集成提供时序预测能力                |
+| [**paddlets.xai**](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.xai.html)                                | 时序模型可解释性模块                             |
 | [**paddlets.utils**](https://paddlets.readthedocs.io/zh_CN/latest/source/modules/backtest/overview.html)                     | 工具集模块，提供回测等基础功能                        |
 
 
