@@ -58,7 +58,7 @@ Although `AutoTS` itself does not provide persistence support, we can save the b
 ==================
 
 3.1. Run With Specified Search Space
---------------------
+--------------------------------------
 
 For hyperparameter optimization, you can define a search space, or we also provide built-in recommended search space
 for the PaddleTS models if you do not define a search space.
@@ -93,7 +93,7 @@ The following is an example of a autots pipeline which specifying the search spa
 Search space API can refer to: https://docs.ray.io/en/latest/tune/api_docs/search_space.html
 
 3.2. Get Default Search Space Using The Search Space Configer
---------------------
+---------------------------------------------------------------
 
 In order to make it easier for users to use AutoTS, we provide the `SearchSpaceConfiger`, which has built-in
 recommended search space for the PaddleTS models.
@@ -171,6 +171,7 @@ Parallelism is determined by `cpu_resource`, `gpu_resource`, and `max_concurrent
 The `max_concurrent_trials` (defaulting to 1) controls the maximum number of trials running concurrently.
 
 .. code:: python
+
     # If you have 4 CPUs on your machine, this will run 2 concurrent trials at a time.
     autots.fit(train_tsdataset, valid_tsdataset, cpu_resource=2)
 

@@ -234,12 +234,6 @@ msgid ""
 "which contains each quantile result respect to quantile points."
 msgstr "分位点，默认值为None。在预测评估阶段，如果指定`q_points`，输出dict包含分位点对应的分位数损失。"
 
-#: 324a37ea44a64ebf871f23fbd5dee924 of paddlets.metrics.metrics.QuantileLoss:8
-msgid ""
-"The quantile level of interest. In validation phase, it is used to "
-"measure validation loss."
-msgstr "分位水平，用于评估validation的损失。"
-
 #: 8dd1b67b1e30461db073133368ff94fe b5d04fb393c146929db0adf2fa7d818b of
 #: paddlets.metrics.metrics.QuantileLoss.metric_fn:1
 #: paddlets.metrics.metrics.QuantileLoss.metric_fn:8
