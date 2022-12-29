@@ -801,7 +801,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         categorical: bool = True
     ):
         """
-        Build mock bts dataset.
+        Build mock dataset.
 
         all timeseries must have same freq.
         """

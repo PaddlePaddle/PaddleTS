@@ -46,11 +46,10 @@ msgstr ""
 msgid "Replace the outliers with `mu`."
 msgstr "将异常值用平均值(`mu`)替换"
 
-#: 0559de2bc579495486a2e0e91d8d355c 09f16b31069541b48a48be57c17a1d98
-#: paddlets.transform.ksigma.KSigma paddlets.transform.ksigma.KSigma.fit
-#: paddlets.transform.ksigma.KSigma.fit_transform
-#: paddlets.transform.ksigma.KSigma.transform c8550f7906814d42b5aeb66922eb5e38
-#: ca0eea243dac4bdd92314f9da15b4ee8 of
+#: 14f19bded1b54b879d75f260bda80a66 b5bc9b0a4baf4352a5249c207861df53
+#: ec0d48a8c2cd41c395140be8043ed969 of paddlets.transform.ksigma.KSigma
+#: paddlets.transform.ksigma.KSigma.fit_one
+#: paddlets.transform.ksigma.KSigma.transform_one
 msgid "Parameters"
 msgstr ""
 
@@ -64,11 +63,10 @@ msgstr "需要进行检测和修正的列名(如果传入的是多列，每列�
 msgid "The hyper-parameter which takes a positive value (3.0 by default)."
 msgstr "ksigma中k的取值, 大于0，默认是3.0"
 
-#: 03ed76e8351b42318a62edb3b61f7197 0d2a9f11adac4c9193a0e890ab33b8ed
-#: 21b2c80cc2b74168bfdafad96df0d9c6 397a34b8fe90446a930f935c0188a47d
-#: paddlets.transform.ksigma.KSigma paddlets.transform.ksigma.KSigma.fit
-#: paddlets.transform.ksigma.KSigma.fit_transform
-#: paddlets.transform.ksigma.KSigma.transform of
+#: 56b907f4ccbc4b51874cf60998cfaddb 5fc9f4fa43d742d6815a63e05f820af9
+#: a07beb38dbaa45caab080ee8a0178206 of paddlets.transform.ksigma.KSigma
+#: paddlets.transform.ksigma.KSigma.fit_one
+#: paddlets.transform.ksigma.KSigma.transform_one
 msgid "Returns"
 msgstr ""
 
@@ -76,106 +74,32 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: ac7ab87fb0114248a5e78859ed41387e paddlets.transform.ksigma.KSigma.fit:1 of
+#: c5ed2c51d44d4e09852d7f1707798a04 of
+#: paddlets.transform.ksigma.KSigma.fit_one:1
 msgid ""
 "The process to determine the mean (mu), standard deviation (std), and "
 "valid interval ([mu - k * std, mu + k * std])"
 msgstr "ksigma异常检测过程，包括计算平均值、标准差以及正常值的范围"
 
-#: 4efbadd80cf7409990f8a78990bf40d5 4fcaf929de47402cae6370490d51623e
-#: 64f1d349c01e4ee0b44040da7416e968 a7ef4edf4b714c019eb31b9daa3b185d
-#: paddlets.transform.ksigma.KSigma.fit:3
-#: paddlets.transform.ksigma.KSigma.fit_transform:3
-#: paddlets.transform.ksigma.KSigma.fit_transform:8
-#: paddlets.transform.ksigma.KSigma.transform:3
-#: paddlets.transform.ksigma.KSigma.transform:8 d1fc64cf3fd44401a48f96c720e331f8 of
+#: 16b6a13eb9984e27bae2a622f3bb4edb 45e778f67d4b46538c1b2482a97e0bd0
+#: c597b32ba6004def981ae6babe1b14a1 of
+#: paddlets.transform.ksigma.KSigma.fit_one:3
+#: paddlets.transform.ksigma.KSigma.transform_one:3
+#: paddlets.transform.ksigma.KSigma.transform_one:8
 msgid "TSDataset"
 msgstr ""
 
-#: 4104961c4a1447ddb2eb14b95fa9d51f paddlets.transform.ksigma.KSigma.fit:6 of
+#: 33178499f7e64b73b2110b96a6380e78 of
+#: paddlets.transform.ksigma.KSigma.fit_one:6
 msgid "self"
 msgstr ""
 
-#: 1e7167155672417cadde698dd2606fb2 paddlets.transform.ksigma.KSigma.transform:1 of
+#: aa289a226ccb40cc92a19b4b3c8bc8e1 of
+#: paddlets.transform.ksigma.KSigma.transform_one:1
 msgid "Replace the outliers with mu"
 msgstr "将异常值用平均值(`mu`)替换"
 
-#: ab9bf3f8598f4b4fabb06419bcd684e3 paddlets.transform.ksigma.KSigma.transform:5 of
+#: 74817d5043994791b4efccd6bea2b8db of
+#: paddlets.transform.ksigma.KSigma.transform_one:5
 msgid "Whether to perform transform inplace, the default is False."
 msgstr "是否对数据原地转换，如果为False则对数据副本进行转换, 不修改原数据，默认为False"
-
-#: paddlets.transform.ksigma.KSigma.fit_transform:1 e0d0d21db9a340ff9be4991d96a5ebc0
-#: of
-msgid "Execute fit and transform sequentially"
-msgstr "顺序执行fit和transform"
-
-#: a12c4acbd96d48ee92872a52aecd5d6e paddlets.transform.ksigma.KSigma.fit_transform:5
-#: of
-msgid "Whether to perform fit/transform inplace, the default is False."
-msgstr "是否对数据原地转换，如果为False则对数据副本进行转换, 不修改原数据，默认为False"
-
-#~ msgid ""
-#~ "利用ksima规则对数据完成异常值检测以及修正(默认使用3sigma),计算规则包括: 1. "
-#~ "计算某列数据的平均值(mean)和标准差(std); 2. "
-#~ "根据平均值(mean)和标准差(std)来确定正常数据的范围,如果数值不在[mean - k*std, "
-#~ "mean + k*std]范围内,则判定为异常值,其中k是超参数,默认为3; 3. "
-#~ "将异常值用平均值(mean)替换;"
-#~ msgstr ""
-
-#~ msgid "需要进行检测和修正的列名(如果传入的是多列,每列单独进行fit和transform)"
-#~ msgstr ""
-
-#~ msgid "ksigma中k的取值, 默认是3"
-#~ msgstr ""
-
-#~ msgid "ksigma异常值检测逻辑"
-#~ msgstr ""
-
-#~ msgid "ksigma异常值修复逻辑,将当前转换算子应用到所有传入的数据上"
-#~ msgstr ""
-
-#~ msgid "是否对数据原地转换. 如果为False则对数据副本进行转换, 不修改原数据.默认为False"
-#~ msgstr ""
-
-#~ msgid "顺序执行fit和transform函数"
-#~ msgstr ""
-
-#~ msgid "是否对数据原地转换. 如果为False则对数据副本进行转换, 不修改原数据. 默认为False"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Using ksigma to anomaly detection and"
-#~ " fix of data, calculation rules "
-#~ "include:"
-#~ msgstr "使用ksigma规则对数据进行异常检测和修复，计算规则包括："
-
-#~ msgid ""
-#~ "Determine the range of normal data "
-#~ "according to the average value(mean) and"
-#~ " standard deviation(std). If the value "
-#~ "is not within the range of "
-#~ "mean-k*std to mean+k*std, it will be "
-#~ "judged as a outlier, where k is"
-#~ " a hyperparameter(>=0),and the default is"
-#~ " 3.0."
-#~ msgstr ""
-#~ "根据平均值(``mean``)和标准差(``std``)来确定正常数据的范围，如果数值不在[mean-k*std, "
-#~ "mean+k*std]范围内，则判断为异常值，其中k是超参数，默认值为3.0"
-
-#~ msgid ""
-#~ "The Columns name that need to be"
-#~ " detected and fixed (If multiple "
-#~ "columns are passed in, fit and "
-#~ "transform are performed separately for "
-#~ "each column)."
-#~ msgstr "需要进行检测和修复的列名(如果传入的是多列，每列单独进行fit和transform)"
-
-#~ msgid "The value of K in ksigma which is >= 0, and the default is 3.0."
-#~ msgstr "ksigma中的k值，默认为3.0"
-
-#~ msgid "The outlier detection process"
-#~ msgstr "ksigma异常检测过程"
-
-#~ msgid "The outlier fix process"
-#~ msgstr "ksigma异常修复过程"
-

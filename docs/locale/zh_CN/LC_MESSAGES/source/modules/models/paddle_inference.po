@@ -64,7 +64,7 @@ msgid ""
 "<https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/jit/index_cn.html>`_."
 msgstr ""
 "PaddleTS所有时序预测以及异常检测模型的save接口都新增了 `network_model` 以及 `dygraph_to_static` 的参数设置;"
-"其中, network_model默认是False, 表示仅导出只支持PaddleTS.predict推理的模型文件, 当network_model设置为True的时候, 再次基础上，会"
+"其中, network_model默认是False, 表示仅导出只支持PaddleTS.predict推理的模型文件, 当network_model设置为True的时候, 在此基础上，会"
 "新增对paddle 原始network 的模型以及参数的导出, 可用于 Paddle Inference进行推理; dygraph_to_static参数仅当当network_model为True的"
 "时候起作用，表示将导出的模型从动态图转换成静态图, 参考 `动转静 <https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/jit/index_cn.html>`_."
 
@@ -110,7 +110,7 @@ msgid ""
 "users can build input data correctly and easily."
 msgstr ""
 "通过上述代码我们可以看到, 我们可以基于input_name去构建我们的输入, 同时input_name本身也包含了数据的属性(target、known_cov、observed_cov), "
-"并且rnn_model_meta文件中除了保函input_name之外, 还包含了其输入类型、数据的shape格式、原始的in_chunk_len、out_chunk_len等信息; 基于这些信息，"
+"并且rnn_model_meta文件中除了保函input_name之外, 还包含了其输入类型、数据的shape格式、原始的in_chunk_len、out_chunk_len等信息; 基于这些信息，用户可以轻松的完成输入数据构建。"
 
 #: ../../source/modules/models/paddle_inference.rst:88
 #: d8ae8acaf28c4360978621407f3313b7

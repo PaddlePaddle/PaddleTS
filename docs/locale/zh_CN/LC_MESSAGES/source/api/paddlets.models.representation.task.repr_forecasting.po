@@ -26,7 +26,8 @@ msgstr ""
 #: paddlets.models.representation.task.repr_forecasting.ReprForecasting:1
 msgid ""
 "Bases: "
-":py:class:`paddlets.ensemble.ensemble_forecaster_base.EnsembleForecasterBase`"
+":py:class:`~paddlets.ensemble.stacking_ensemble.StackingEnsembleBase`, "
+":py:class:`~paddlets.models.base.BaseModel`"
 msgstr ""
 
 
@@ -35,10 +36,14 @@ msgstr ""
 msgid "The ReprForecasting Class."
 msgstr "表征预测"
 
-
-#: 2aa563190ccb449da30b8070a46c4b32 577cc543bec84b749ef384b65836f59a of
+#: 098651f22c0643dbb1f000b47085274b 12d9ee003af84faf8cfba8d221f53ee6
+#: 46d2023c83444e3da17243ff14244cef 51a364800c264ec2b8faff8f82524dfd
+#: c2df1b4ccf0d4dffa2752d917f348519 of
 #: paddlets.models.representation.task.repr_forecasting.ReprForecasting
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.fit
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load
 #: paddlets.models.representation.task.repr_forecasting.ReprForecasting.predict
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.save
 msgid "Parameters"
 msgstr ""
 
@@ -59,7 +64,7 @@ msgstr "模型输出的序列长度"
 
 #: c1a8b4c4d66c49589cf3ff990999fcd1 of
 #: paddlets.models.representation.task.repr_forecasting.ReprForecasting:7
-msgid "Representation model to use for forecasting."
+msgid "Representation model to use for forcast."
 msgstr "用来表征的上游模型"
 
 
@@ -106,9 +111,57 @@ msgstr "下游的学习器，需要是一个sklearn回归器，默认设置成Ri
 msgid "Turn on Verbose mode,set to true by default."
 msgstr "是否开启日志"
 
+#: ce17c26b962f48adb8b86c5e606a93c6 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.fit:1
+msgid "Train dataset."
+msgstr "训练集。"
 
 #: e8d078b0039947f78e9e302879469d26 of
 #: paddlets.models.representation.task.repr_forecasting.ReprForecasting.predict:1
+msgid "Predict"
+msgstr ""
+
+#: 13e41c2f98834550bd46f02c72b571cf of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.predict:3
 msgid "Dataset to predict."
 msgstr "需要预测的数据"
+
+#: ba71c98558f944c7bd624073a8cb8ecf of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.save:1
+msgid "Save the repr-forecaster model to a directory."
+msgstr "保存模型"
+
+#: 98b78b5c0f24453a9c39d74af9abd6b1 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: 64ab691c74e544689d1c669dec3d68c4 e06523c496454acebfefc287ce3b9a31 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load:5
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.save:5
+msgid ""
+"Name of repr-forecaster model object. This file contains meta information"
+" of repr-forecaster model."
+msgstr "保存文件名"
+
+#: eaaa34021a4e402eb54c8fe25d20498c of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load:1
+msgid "Load the repr-forecaster model from a directory."
+msgstr "加载模型"
+
+#: aeaa61c8fb604486825c029170ec0cc8 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load:3
+msgid "Input directory path."
+msgstr "输入目录"
+
+#: f79a699f30594a27bf61c0538fba2d22 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load
+msgid "Returns"
+msgstr ""
+
+#: d50ed3dc5f0c40b4809ff600694c3cc2 of
+#: paddlets.models.representation.task.repr_forecasting.ReprForecasting.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+
 

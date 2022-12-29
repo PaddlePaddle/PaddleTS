@@ -74,6 +74,11 @@ msgstr "RNN模型隐藏状态h大小。"
 
 #: c371af10ebfa4480ac0b4505c5870381 of
 #: paddlets.models.forecasting.dl.rnn.RNNBlockRegressor:13
+msgid "The size of each embedding vector."
+msgstr "embedding向量的维度大小。"
+
+#: 083de163be5247fb98a4e5c6732ce606 of
+#: paddlets.models.forecasting.dl.rnn.RNNBlockRegressor:15
 msgid "The number of recurrent layers."
 msgstr "循环网络的层数。"
 
@@ -82,8 +87,15 @@ msgstr "循环网络的层数。"
 msgid "The fraction of neurons that are dropped in all-but-last RNN layers."
 msgstr "dropout概率，除第一层外每层输入时的dropout概率。"
 
-#: f93a1f9e66114118b9e9c9f8ad9c4f59 of
-#: paddlets.models.forecasting.dl.rnn.RNNBlockRegressor:17
+#: 2e873e7c95914bd2aea295f6bca8d533 of
+#: paddlets.models.forecasting.dl.rnn.RNNBlockRegressor:19
+msgid ""
+"Whether to use average pooling to aggregate embeddings, if False, concat "
+"each embedding."
+msgstr "是否使用平均池化聚合embedding向量，如果false，concat每个embedding。"
+
+#: 0124fc8bf63c47ac83547b9f4dc7a208 of
+#: paddlets.models.forecasting.dl.rnn.RNNBlockRegressor:21
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
 "single sample. The skip chunk is neither used as a feature (i.e. X) nor a"

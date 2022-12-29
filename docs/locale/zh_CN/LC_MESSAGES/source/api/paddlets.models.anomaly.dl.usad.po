@@ -18,8 +18,8 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../source/api/paddlets.models.anomaly.dl.usad.rst:2
-#: 2f0ba462bf4e47df8f360b4a190c0565
-msgid "paddlets.models.anomaly.dl.vae"
+#: 8a8fb9b4f16a4efa99030129430b034a
+msgid "paddlets.models.anomaly.dl.usad"
 msgstr ""
 
 #: 7d1a2ae68e8b481e86164767152e8d91 of paddlets.models.anomaly.dl.usad:1
@@ -138,13 +138,13 @@ msgstr "自定义的callback函数。"
 #: paddlets.models.anomaly.dl.usad.USAD:29
 #: paddlets.models.anomaly.dl.usad.USAD:139
 msgid "Number of samples per batch."
-msgstr ""
+msgstr "单个batch中的样本数量。"
 
 #: e9444b8a437a41f58eb51290b98d0ee5 f6e7cc74a67449db9c57dd23dcab9990 of
 #: paddlets.models.anomaly.dl.usad.USAD:31
 #: paddlets.models.anomaly.dl.usad.USAD:145
 msgid "Max epochs during training."
-msgstr "每个批次中的样本数量。"
+msgstr "最大允许的训练epoch数。"
 
 #: 2646c054871745ad98c3397eccee8153 a880e42456f74119b2fb84534afef331 of
 #: paddlets.models.anomaly.dl.usad.USAD:33

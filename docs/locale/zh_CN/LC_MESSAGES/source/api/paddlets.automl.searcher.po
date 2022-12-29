@@ -62,7 +62,7 @@ msgid ""
 "The algorithm for optimization. Supported algorithms are \"Random\", "
 "\"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\"."
 msgstr ""
-"超参优化算法。支持的算法为 'auto', 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
+"超参优化算法。支持的算法为 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
 "'Bayes'"
 
 #: 5676112bfe6a456a8f598062fa6bf916 of

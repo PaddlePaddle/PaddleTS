@@ -51,7 +51,7 @@ Currently Support:
 
 1.2 Training 
 ------------
-More infomation about ReprForecasting please check `ReprForecasting API doc <../../api/paddlets.models.representation.task.repr_forecasting.html>`_ 
+More information about ReprForecasting please check `ReprForecasting API doc <../../api/paddlets.models.representation.task.repr_forecasting.html>`_
 
 .. code-block:: python
 

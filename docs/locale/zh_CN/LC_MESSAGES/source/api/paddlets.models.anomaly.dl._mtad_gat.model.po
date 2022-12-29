@@ -145,7 +145,7 @@ msgstr "基于预测的模型。"
 #: 9f450a433993402bb3c659850e977c51 of
 #: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:16
 msgid "Dynamic graph LayerList."
-msgstr ""
+msgstr "一组动态图Layer列表。"
 
 #: 19910c2f10f84f48b1ea67a8f3ffa74b of
 #: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:18
