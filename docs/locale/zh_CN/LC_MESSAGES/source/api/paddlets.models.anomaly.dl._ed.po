@@ -22,3 +22,7 @@ msgstr ""
 msgid "paddlets.models.anomaly.dl._ed"
 msgstr ""
 
+#: 599fb7617ca448edb5f5f270cb60bd18 of paddlets.models.anomaly.dl._ed:1
+msgid "models.anomaly.dl._anomaly_transformer"
+msgstr ""
+

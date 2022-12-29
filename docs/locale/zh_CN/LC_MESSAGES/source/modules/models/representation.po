@@ -150,7 +150,7 @@ msgstr "1.2 训练"
 #: ../../source/modules/models/representation.rst:54
 #: 45fd1415bf374550aaa70ba0d5554ec4
 msgid ""
-"More infomation about ReprForecasting please check `ReprForecasting API "
+"More information about ReprForecasting please check `ReprForecasting API "
 "doc "
 "<../../api/paddlets.models.representation.task.repr_forecasting.html>`_"
 msgstr ""

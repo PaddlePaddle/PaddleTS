@@ -24,7 +24,7 @@ msgstr ""
 #: bc9a2a8a6ddd43368b979fa2a025b4a8 of
 #: paddlets.models.utils.get_target_from_tsdataset:1
 msgid "Just reserve target in tsdataset."
-msgstr ""
+msgstr "只在tsdataset数据集中保留target。"
 
 #: 482d94e307954eaaa28cb741715b82ee 86088044cc104270a161025cf60ece6f
 #: c1dcf3ce4249404d8f73808b3085b498 f544f59ec53e47309237b8aba2a4551e of
