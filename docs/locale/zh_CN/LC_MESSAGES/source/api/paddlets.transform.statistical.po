@@ -32,12 +32,11 @@ msgstr "继承自基类BaseTransform"
 msgid "Statistical features: 'median', 'mean', 'max', 'min', 'std'"
 msgstr "统计指标集合包括：'median', 'mean', 'max', 'min', 'std'"
 
-#: 1a194a7a8d9341b3af109f16eef76b78 a23e914cd1334656bbcc0727c3e16257
+#: 5d81923cd9454733bca10a06ed39bd9c 9e0e215bdc774eb2a6fa7e35508536c8
+#: b30355a9e93f47ca8b0d393ebc18c694 of
 #: paddlets.transform.statistical.StatsTransform
-#: paddlets.transform.statistical.StatsTransform.fit
-#: paddlets.transform.statistical.StatsTransform.fit_transform
-#: paddlets.transform.statistical.StatsTransform.transform
-#: e134314545854e37af09a636e2ebf774 e4fa4a6182f14d2ea332cb60365a42be of
+#: paddlets.transform.statistical.StatsTransform.fit_one
+#: paddlets.transform.statistical.StatsTransform.transform_one
 msgid "Parameters"
 msgstr ""
 
@@ -63,12 +62,11 @@ msgid ""
 "'min', 'std']."
 msgstr "指定需要统计的指标集合，默认为全选，即['median', 'mean', 'max', 'min', 'std']"
 
-#: 00fe11f3952b454f92d380a3397525e4 1fe42740d3ae46a38a0be6b893c30f37
-#: 50aedff364cb4a4abaa441760ea87715 paddlets.transform.statistical.StatsTransform
-#: paddlets.transform.statistical.StatsTransform.fit
-#: paddlets.transform.statistical.StatsTransform.fit_transform
-#: paddlets.transform.statistical.StatsTransform.transform
-#: e0cb93319d904f1ab5e5c7ee55045e7d of
+#: 66e153872f6e4c97965b43bad309af2c 716372050ed34ed792c1d171114088f7
+#: dbadb57e123e4df49a0cb6ecd1ba3554 of
+#: paddlets.transform.statistical.StatsTransform
+#: paddlets.transform.statistical.StatsTransform.fit_one
+#: paddlets.transform.statistical.StatsTransform.transform_one
 msgid "Returns"
 msgstr ""
 
@@ -82,90 +80,37 @@ msgstr ""
 msgid "Examples"
 msgstr ""
 
-#: 0eb70dadb391476cbd9c80382c38df7e
-#: paddlets.transform.statistical.StatsTransform.fit:1 of
+#: 972eb7736fd54b1a965c464550202a3b of
+#: paddlets.transform.statistical.StatsTransform.fit_one:1
 msgid "Fit the StatsTransform to dataset."
 msgstr "对dataset进行StatsTransform拟合"
 
-#: b5311b0372934a259c7a41502403a865
-#: paddlets.transform.statistical.StatsTransform.fit:3 of
+#: ffb59ee4e7b0458aab92a504aa6f19a3 of
+#: paddlets.transform.statistical.StatsTransform.fit_one:3
 msgid "Dataset to be fitted."
 msgstr "需要进行拟合的数据"
 
-#: 6a5ffeb1ff8d43a5aff8019ae753f5f2
-#: paddlets.transform.statistical.StatsTransform.fit:6 of
+#: 127ba4da4c8e44aa8cfa30786420f968 of
+#: paddlets.transform.statistical.StatsTransform.fit_one:6
 msgid "StatsTransform"
 msgstr ""
 
-#: paddlets.transform.statistical.StatsTransform.transform:1
-#: e5e2ba2264174e1889ab121742bd8522 of
+#: 5dfef33f25fb4d65a7910b66b3e1afa5 of
+#: paddlets.transform.statistical.StatsTransform.transform_one:1
 msgid "Transform dataset to statstransform codes."
 msgstr "对dataset进行StatsTransform转换"
 
-#: 1ffbfb4497124b33882409f1af20b187
-#: paddlets.transform.statistical.StatsTransform.transform:3 of
+#: 6a0ec0f0720d43a8af85cd785efe1295 of
+#: paddlets.transform.statistical.StatsTransform.transform_one:3
 msgid "Dataset to be transformed."
 msgstr "需要转换的数据"
 
-#: 1bfabbec58a04e3f82ec83aae8fa0e58 2dc47fb21e83475b8cd20b598aab959a
-#: paddlets.transform.statistical.StatsTransform.fit_transform:5
-#: paddlets.transform.statistical.StatsTransform.transform:5 of
+#: 27c8a1a4fabb481b9a9141bcbe977c83 of
+#: paddlets.transform.statistical.StatsTransform.transform_one:5
 msgid "Whether to perform the transformation inplace. default=False"
 msgstr "是否在原数据上进行转换，默认否。"
 
-#: b39948a7c4ba4d35b1e2efa0ef195a0f
-#: paddlets.transform.statistical.StatsTransform.fit_transform:8
-#: paddlets.transform.statistical.StatsTransform.transform:8
-#: c519d1232cb740ba8553a29d1ba87963 of
+#: eb5a774b11a44f65aa223e29d45ef188 of
+#: paddlets.transform.statistical.StatsTransform.transform_one:8
 msgid "TSDataset"
 msgstr "TSDataset"
-
-#: b877e8d3131b47c3b99e661c16e78339
-#: paddlets.transform.statistical.StatsTransform.fit_transform:1 of
-msgid "Fit StatsTransform to dataset, then transform dataset."
-msgstr "先对dataset进行拟合，再进行转换"
-
-#: 025cf9f54a454367a80a7ec81ebbca47
-#: paddlets.transform.statistical.StatsTransform.fit_transform:3 of
-msgid "Dataset to be fitted and transformed."
-msgstr "需要进行拟合和转换的数据"
-
-#~ msgid "时序统计值，包括：median、mean、max、min、std"
-#~ msgstr ""
-
-#~ msgid "需要进行计算统计值的列名"
-#~ msgstr ""
-
-#~ msgid "计算统计值时相对当前索引的起始坐标, 统计范围为start: end"
-#~ msgstr ""
-
-#~ msgid "计算统计值时相对当前索引的结尾坐标, 统计范围为start: end，不包括end位置的统计值"
-#~ msgstr ""
-
-#~ msgid "需要统计的指标，默认是['median', 'mean', 'max', 'min', 'std']"
-#~ msgstr ""
-
-#~ msgid "计算时序统计值的策略逻辑"
-#~ msgstr ""
-
-#~ msgid "将当前转换算子应用到所有传入的数据上"
-#~ msgstr ""
-
-#~ msgid "是否对数据原地转换. 如果为False则对数据副本进行转换, 不修改原数据.默认为False"
-#~ msgstr ""
-
-#~ msgid "顺序执行fit和transform函数"
-#~ msgstr ""
-
-#~ msgid "是否对数据原地转换. 如果为False则对数据副本进行转换, 不修改原数据. 默认为False"
-#~ msgstr ""
-
-#~ msgid "Fit the StatsTransform to X."
-#~ msgstr ""
-
-#~ msgid "Transform X to statstransform codes"
-#~ msgstr ""
-
-#~ msgid "Fit StatsTransform to X, then transform X."
-#~ msgstr ""
-

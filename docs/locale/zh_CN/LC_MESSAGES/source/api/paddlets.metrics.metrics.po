@@ -314,8 +314,8 @@ msgstr "包含若干Metric的容器."
 
 #: 8dc266d6f10f4ebcb358fe804fca911f of
 #: paddlets.metrics.metrics.MetricContainer:3
-msgid "List of metric names."
-msgstr "Metric名称的列表."
+msgid "List of metric or metric names."
+msgstr "Metric或etric名称的列表."
 
 #: 3aed72d8c5de4833ba1f04a312da0ca3 c45a1c9b1a8a4805a8e20c89d2fa9231 of
 #: paddlets.metrics.metrics.MetricContainer:5
@@ -343,18 +343,4 @@ msgstr "与评估集名称关联的Metric名称列表."
 msgid "List[str]"
 msgstr ""
 
-#~ msgid "Bases: :py:class:`~bts.metrics.base.Metric`"
-#~ msgstr ""
-
-#~ msgid "accuracy_score."
-#~ msgstr "准确率得分"
-
-#~ msgid "precision_score."
-#~ msgstr "精确率得分"
-
-#~ msgid "recall_score."
-#~ msgstr "召回率得分"
-
-#~ msgid "f1_score."
-#~ msgstr "F1得分"
 

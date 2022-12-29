@@ -1665,7 +1665,7 @@ class TestDataAdapter(unittest.TestCase):
         cov_dtypes_bits: int = 2**0 + 2**2 + 2**4
     ):
         """
-        Build mock bts dataset.
+        Build mock dataset.
 
         cov_dtypes_bits totally control 6 bits:
         known_numeric_bit = 2**0 (default True)

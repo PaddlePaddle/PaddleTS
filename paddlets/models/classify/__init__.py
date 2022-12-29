@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-Bts classify.
+classify.
 """
 
 from paddlets.models.classify.dl.cnn import CNNClassifier

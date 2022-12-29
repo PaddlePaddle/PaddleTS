@@ -107,7 +107,7 @@ msgstr "卷积核大小，默认为40"
 #: ef7100be78a944ccac2adf3ea6d79b01 of
 #: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:29
 msgid "Output size for inception block, set to 128 by default."
-msgstr "inception block的输出维度"
+msgstr "inception block的输出维度，默认设置为128"
 
 #: 4927a33163d4458283d852611150fbdd of
 #: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:31
@@ -124,8 +124,4 @@ msgstr "是否增加残差"
 msgid "If use bottleneck layer or not, Set to True by default."
 msgstr "是否启用瓶颈层"
 
-#: 33497b4f752240828a6bc5b54ce02e7a of
-#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:38
-msgid "Attributes:"
-msgstr ""
 

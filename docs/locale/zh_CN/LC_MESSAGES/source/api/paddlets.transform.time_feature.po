@@ -32,12 +32,11 @@ msgstr "基类: :py:class:`~paddlets.transform.base.BaseTransform`"
 msgid "Transform time index into specific time features"
 msgstr "时间格式数据转换为具体的索引特征"
 
-#: 28c72db2048247f98de59d1818aa79fe 300a5894a4b24f318fd2cbce953c018b
-#: 72e6392b598e43e49d2a8ec2063f6757 c8089f4609ca44149cf188d3562bd446 of
+#: 5c2e9ccfe1f14b8482966ba443a21f7b aabec76ecda34e40b7fb7df0d1c0bd2a
+#: cd9f087d5db947c7a26b8dfc53e5439c of
 #: paddlets.transform.time_feature.TimeFeatureGenerator
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform
+#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_one
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one
 msgid "Parameters"
 msgstr ""
 
@@ -71,12 +70,11 @@ msgstr ""
 "covariates）计算得到，但是，如果其为None，则未来（future）target的尾部索引需要在当前transform中被手动拼接在存量的target后面，才能在"
 " :func:`predict` 调用中提供未来（future）target的尾部索引的信息。"
 
-#: 0a1d9dffecd2442cb2f100f290129e0a a8fce1c2b2a14ad4842bedba3b89ac79
-#: b17a117dc12243c9bfb06063e8cd5103 e510fef04596435cb319db6adbd10440 of
+#: 275a11f8473c4c6585e1d0cb6d1b4b88 7607efe45d5d4b2aad525741a58a6858
+#: c9a7ba4551584cfeb98097a6dcf0fa2a of
 #: paddlets.transform.time_feature.TimeFeatureGenerator
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform
+#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_one
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one
 msgid "Returns"
 msgstr ""
 
@@ -85,50 +83,39 @@ msgstr ""
 msgid "None"
 msgstr "None"
 
-#: 9696af3eac8d44e1bf0b81dffd4ef9bc of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit:1
+#: 77fb2bfbd13f4914bcdc71869c3a9ea0 of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_one:1
 msgid "This transformer does not need to be fitted."
 msgstr "当前transformer不需要被训练。"
 
-#: e28c55d7e4124a82a36b1c32348c6d11 of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit:3
+#: 87dd93fbf1e34efe80b4fa85e9cb7cfa of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_one:3
 msgid "Dataset to be fitted."
 msgstr "需要进行拟合的数据"
 
-#: 8c7443986270465d9d1464d6a6b926de of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit:6
+#: 48d48917a59a400cbda7e16bf96f1079 of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_one:6
 msgid "TimeFeatureGenerator"
 msgstr ""
 
-#: 4d2fcbff439b45f4b96d4f3743783785 of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform:1
+#: ae5212fc321d498fa5c9584f0fe9e94d of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one:1
 msgid "Transform time column to time features."
 msgstr "转换时间索引到时间类型特征"
 
-#: 3737145529b14d76a8fe164e8f5c621b of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform:3
+#: 0bf614e2daf94738be1e5e27a93a0561 of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one:3
 msgid "Dataset to be transformed."
 msgstr "需要进行转换的数据"
 
-#: 93440b70726d491fab098739cd027bf0 cc90d00bef8d4c08a78354612ee6a46c of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform:5
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform:5
+#: 6ea305a420584460b89b95957c708af8 of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one:5
 msgid "Whether to perform the transformation inplace. default=False"
 msgstr "是否对数据原地转换。如果为False则对数据副本进行转换, 不修改原数据。默认为False。"
 
-#: 6f5207f696b946378977b2f727f7514d a3030ed16841466f833f8f874b5e6313 of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform:8
-#: paddlets.transform.time_feature.TimeFeatureGenerator.transform:8
+#: 24195a6065b143d7bcbea2a5216df609 of
+#: paddlets.transform.time_feature.TimeFeatureGenerator.transform_one:8
 msgid "TSDataset"
 msgstr "时序数据集"
 
-#: 2c115e0b5bb847639e2f6356fd83bde1 of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform:1
-msgid "Fit and transform time columns to time features."
-msgstr "时间索引转换到时间类型特征"
-
-#: d4046f324a5440e3a57eedab4c2480cd of
-#: paddlets.transform.time_feature.TimeFeatureGenerator.fit_transform:3
-msgid "Dataset to be fitted and transformed."
-msgstr "需要进行拟合和转换的数据"
 

@@ -278,17 +278,12 @@ msgstr ""
 msgid "Data to be checked."
 msgstr "被检查的数据"
 
-#: ef562d83f632404d86555504ec308905 of
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:2
-msgid "Train a neural network stored in self._network,"
-msgstr "训练一个深度模型，存储在self._network中"
-
-#: 89353108dc974f9ab4402a122d2c970d of
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:2
+#: a7894f47b2954ee4b77919512fc928a5 of
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:1
 msgid ""
-"Using train_dataloader for training data and valid_dataloader for "
-"validation."
-msgstr ""
+"Train a neural network stored in self._network, using train_dataloader "
+"for training data and valid_dataloader for validation."
+msgstr "训练一个深度模型，存储在self._network中。使用train_dataloader做为训练集，valid_dataloader做为验证集。"
 
 #: 2f29f67fc95944ecaad01923b9b586c0 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:4

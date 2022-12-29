@@ -581,7 +581,7 @@ class TestReprBaseModel(unittest.TestCase):
         seed: bool = False
     ):
         """
-        build bts TSDataset instance.
+        build TSDataset instance.
 
         Note that random_data must set to True if the returned TSDataset is used for fitting models, otherwise paddle
         will raise the following exception:

@@ -203,10 +203,6 @@ class InceptionTimeClassifier(PaddleBaseClassifier):
         block_depth(int): Depth for inception block, set to 6 by default.
         use_bottleneck(bool):If add residuals between Inception modules.
         use_residual(bool): If use bottleneck layer or not, Set to True by default.
-
-
-    Attributes:
-
     """
 
     def __init__(

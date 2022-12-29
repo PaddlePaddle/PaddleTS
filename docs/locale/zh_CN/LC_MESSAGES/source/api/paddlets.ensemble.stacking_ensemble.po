@@ -143,7 +143,9 @@ msgstr "holdout重采样策略的参数，代表验证集的比例，应该在�
 
 #: cde51176b13b4643bed0fc40167d6a6a of
 #: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:19
-msgid "Number of folds for cv.The k_fold should be in the range of (0, 10]."
+msgid ""
+"Number of folds for cv.The k_fold should be in the range of (0, 10], "
+"defaults to 3."
 msgstr "底层模型时序交叉验证cv的参数，代表交叉验证的轮数，在(0,10]之间，默认为3"
 
 #: f2185b51b82544cdbbbbb9ef041e14da of

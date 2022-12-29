@@ -41,24 +41,30 @@ msgstr ""
 "任何用于时序数据转换（如：:class:`transform.MinMaxScaler`）的类均可以继承自此基类， 并实现 "
 ":func:`fit`, :func:`transform` 和 :func:`fit_transform` 方法。"
 
-#: ad9da20bdd5244eab9f080e59d4cd187 b25377f57dd244e894251edfa25288a1 of
+#: 0c6f5d7fb62440bea02e0a33af4fb476 0cdc0211e0084b16bb607798978ea99b
+#: 3bb0e367831e4fd088e2bed8b5e8920a of
 #: paddlets.transform.base.BaseTransform.fit:1
-#: paddlets.transform.base.UdBaseTransform.fit:1
+#: paddlets.transform.base.BaseTransform.fit_one:1
+#: paddlets.transform.base.UdBaseTransform.fit_one:1
 msgid "Learn the parameters from the dataset needed by the transformer."
 msgstr "从给定数据集中学习transformer所需的参数。"
 
-#: 54a9c6be0e6f4fcd93808150b3e7f66e cfd42e0d49e644d2ab8cfee45c32b974
-#: d8794b7e049e4483909e4fcf20470f46 of
+#: 2387c55eecf24bd79573ea12d362063d af05ba37b8a542ffa3792e7c358018af
+#: e2c6c90a0194462b962e36d4497c21bc f53d5b9de8434d7f8bc8368d0192eb5f
+#: f548b49048dc48fd8b732c8420847db5 of
 #: paddlets.transform.base.BaseTransform.fit:3
+#: paddlets.transform.base.BaseTransform.fit_one:3
 #: paddlets.transform.base.BaseTransform.fit_transform:4
 #: paddlets.transform.base.BaseTransform.transform:3
+#: paddlets.transform.base.BaseTransform.transform_one:3
 msgid ""
 "Any non-abstract class inherited from this class should implement this "
 "method."
 msgstr "任何继承自此类的非抽象子类均需实现此方法。"
 
-#: f95f2346726b4ba5a1bc90a803297d77 of
+#: 34317d3e3afe4f8dbabce0717a16c9b5 4635ade5a7f44703adf4f7546e50c6a1 of
 #: paddlets.transform.base.BaseTransform.fit:5
+#: paddlets.transform.base.BaseTransform.fit_one:5
 msgid ""
 "The parameters fitted by this method is transformer-specific. For "
 "example, the `MinMaxScaler` needs to compute the MIN and MAX, and the "
@@ -68,80 +74,96 @@ msgstr ""
 "该方法训练的参数和具体的transformer有关。举例来说，`MinMaxScaler` 需要计算 最大值（MAX）和最小值（MIN），同时 "
 "`StandardScaler` 需要计算均值（MEAN）和标准偏差（standard deviation）。"
 
-#: 051521992bc748c38ef02d5d5ab47111 0cd943ef83c44071b9b412198648af98
-#: 16fe40024da744be9087290cd61b53f9 18aa0fea0e9649799040827b8c4aa49c
-#: 2ae97eae126b46888e0dfc977fdf0e4d 6497842e0afe4271a576122c89de01a7
-#: 6dd21a53d67b41958ddaf1de01855a1b c0c20993c4cb456889c9bab6a784ec2e
-#: c5e71a6c0ae14d98afaa98b887ac0a40 d948e470b01d4c35a5c44afaec6df6be of
+#: 29f2606bb8da40f5b48745c007448111 4a11fcf7dcdd42239a98cd19f97aae63
+#: 4f75b1168c2b468b95d02ea56f403d69 5c6b92892a474fc9a593d23384b0ebf2
+#: 6b68ab414451422397185f295f2e5e62 6f65f3c1173740bda551268ff845c672
+#: 72ac47931ad04154811089b76eae15a4 89d7ee9011cb447da5a4c7fdf2ff1d69
+#: 9bb4666e3a5f41259782fdc6368090a9 b33f421b7ef447e3a525805c036f0add
+#: d215c6c3b8b4465b8037db64069bb4e2 dbfbb879cea9484a8516f1d08c1a60a7 of
 #: paddlets.transform.base.BaseTransform.fit
+#: paddlets.transform.base.BaseTransform.fit_one
 #: paddlets.transform.base.BaseTransform.fit_transform
 #: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform_one
 #: paddlets.transform.base.BaseTransform.transform
 #: paddlets.transform.base.BaseTransform.transform_n_rows
+#: paddlets.transform.base.BaseTransform.transform_one
 #: paddlets.transform.base.UdBaseTransform
-#: paddlets.transform.base.UdBaseTransform.fit
-#: paddlets.transform.base.UdBaseTransform.fit_transform
-#: paddlets.transform.base.UdBaseTransform.inverse_transform
-#: paddlets.transform.base.UdBaseTransform.transform
+#: paddlets.transform.base.UdBaseTransform.fit_one
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one
+#: paddlets.transform.base.UdBaseTransform.transform_one
 msgid "Parameters"
 msgstr "参数"
 
-#: da71a5814dc047b8ac6be543d2663e1b of
+#: 810ee2d49c08452d9b44dfaae8054a70 fdb160216a90415ba613413381375bd8 of
 #: paddlets.transform.base.BaseTransform.fit:9
+#: paddlets.transform.base.BaseTransform.fit_one:9
 msgid "dataset from which to fit the transformer."
 msgstr "用于训练transformer的数据集。"
 
-#: cd1141051c8e41a096c1b8bcd4d58c39 of
+#: 350d0f60ee8d4c9d87f6dc5ab3435df8 892336a7ed0949669d4d3e40eab5271b of
 #: paddlets.transform.base.BaseTransform.transform:1
+#: paddlets.transform.base.BaseTransform.transform_one:1
 msgid "Apply the fitted transformer on the dataset"
 msgstr "将训练完成的transformer应用于给定数据集。"
 
-#: 31ce823923fe47468f5b72ca25d7b6c2 a0e6b97a9a8348e1b22114bc55b8504f
-#: a9773d4a69b64c7fa4c5a19f1a059396 of
+#: 20d538cb222a48bc9d1fd08fc8f1c0e0 4c71f57e445140a5954d16074ad7f304
+#: 5f8c3fe33c2f4ceb896db368b9a17e55 6d664e8a0c57448085ad148befa0fd0b of
 #: paddlets.transform.base.BaseTransform.transform:5
 #: paddlets.transform.base.BaseTransform.transform_n_rows:4
-#: paddlets.transform.base.UdBaseTransform.transform:3
+#: paddlets.transform.base.BaseTransform.transform_one:5
+#: paddlets.transform.base.UdBaseTransform.transform_one:3
 msgid "dataset to be transformed."
 msgstr "待转换的输入数据。"
 
-#: 10f7c34f9a114344870412ac24d694aa 36c0dc8dc5594e4a9e047876205ce53a
-#: ab26ff565c2b469ca7e4aabb9b6c6653 e3b1559af13d4efabe753bb6f28f9905 of
+#: 072b82f90a7f4ce8ae3be1bdc92cdf08 0e0eadc619e84bcd8f088b6d37267491
+#: 4d19112e2a604dc698f8cfd0b1fe4592 d3bd62fa79b94a67807b1684810d9a72
+#: e121aaf9ae86439e8be6e01639ac8b13 e17934deb135478e97ef94d8d57f01cd of
 #: paddlets.transform.base.BaseTransform.fit_transform:8
 #: paddlets.transform.base.BaseTransform.inverse_transform:15
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:15
 #: paddlets.transform.base.BaseTransform.transform:7
 #: paddlets.transform.base.BaseTransform.transform_n_rows:8
+#: paddlets.transform.base.BaseTransform.transform_one:7
 msgid "Set to True to perform inplace transformation. Default is False."
 msgstr "若设置为True，则会执行一个就地转换。默认值为False。"
 
-#: 0a4b911d5a4d4dc2b4572cb2259e9763 12180cdf4af7496597a6a8cbcc2bf4dc
-#: 55578f74cb794b24b61e69293060f1b1 7b97fde6ea064452a81123c028b18c27
-#: 9aa843cc2cc0438cad707f75d6ec889e adea5124049e4cfe9eef654c05ac74c5
-#: bd17f798f47b497c859870f07357af5c c03e67b8b3cb46ba843f3ef7b5aafa02 of
+#: 1e18dbd463284ca398619e736cb76e20 28ce6798195a4cad8985b9147ba9f660
+#: 58e00993b46548d8bcca17f0ad9243d8 5981ec201b8e4e3caabd110e559de032
+#: 676963e519a649ef92b63ab36fd937b9 7aeaad00aed2421091f664573efbfc24
+#: c42a3b68234143e0b3bee7653195bd94 f459f55ca8404f519f3cb571f07d2998
+#: f6e39d19a60d47abac3d200c5b1a3dea of
 #: paddlets.transform.base.BaseTransform.fit_transform
 #: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform_one
 #: paddlets.transform.base.BaseTransform.transform
 #: paddlets.transform.base.BaseTransform.transform_n_rows
-#: paddlets.transform.base.UdBaseTransform.fit
-#: paddlets.transform.base.UdBaseTransform.fit_transform
-#: paddlets.transform.base.UdBaseTransform.inverse_transform
-#: paddlets.transform.base.UdBaseTransform.transform
+#: paddlets.transform.base.BaseTransform.transform_one
+#: paddlets.transform.base.UdBaseTransform.fit_one
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one
+#: paddlets.transform.base.UdBaseTransform.transform_one
 msgid "Returns"
 msgstr "返回"
 
-#: de652f8c277a48278fb6d8ee10959752 f699406c7e0743b3a3ac555807915a78 of
+#: 3a0f121d62524bbaa40b0e4b2eeb1c75 467271a406ef4a8180044bc51de81922
+#: bcf6a9f4ef9644fb99a4123bf801a60a of
 #: paddlets.transform.base.BaseTransform.transform:10
 #: paddlets.transform.base.BaseTransform.transform_n_rows:11
+#: paddlets.transform.base.BaseTransform.transform_one:10
 msgid "transformed dataset."
 msgstr "完成数据转换的数据集。"
 
-#: 5a8d4fa59cdc490bbc421ed20b9b4cf8 60b5ead6a9754724a59136801295f055
-#: b2f80e93bc094e088b7eb6d9f287d5ad d96f488c1d5f4c00878a1e1ac6fd5679
-#: fe727b17db154e2cb9e2dd31e823f828 of
+#: 12583af586be42d8957776b50fed9980 79544aa597e44a8e85422816dfe30987
+#: 82fa18fc873849499f80ccecf506ac6d 93845eecacc548408f4329d9febae78b
+#: 9d5ddfb35a97490f9e103d7f9d943548 b4a099c012c4418387e9c9a71af0b6d9
+#: ceb7f611a1264bd8b038a6bae07eab33 of
 #: paddlets.transform.base.BaseTransform.fit_transform
 #: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform_one
 #: paddlets.transform.base.BaseTransform.transform
 #: paddlets.transform.base.BaseTransform.transform_n_rows
-#: paddlets.transform.base.UdBaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.transform_one
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one
 msgid "Return type"
 msgstr "返回类型"
 
@@ -173,14 +195,17 @@ msgstr "将要被处理的数据集。"
 msgid "transformed data."
 msgstr "完成数据转换的数据集。"
 
-#: 977552ebc91349d986035b8ab3674b58 d161aa5fb528403f85ba22795309de00 of
+#: 177e2151063343a194d8d06b94cbd72d 9d9cac164bd34360be71a35964a90df3
+#: f7c70e4e4ab3405a836c3a365732558c of
 #: paddlets.transform.base.BaseTransform.inverse_transform:1
-#: paddlets.transform.base.UdBaseTransform.inverse_transform:1
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:1
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one:1
 msgid "Inversely transform the dataset output by the `transform` method."
 msgstr "`transform` 方法的逆向转换方法。"
 
-#: 47b298063e6b48f19e41d804c49f9592 of
+#: 98ed1ef139e94aabbfccba236177184c 9d743e695fb44a4189ef7f58df3e80f6 of
 #: paddlets.transform.base.BaseTransform.inverse_transform:3
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:3
 msgid ""
 "Differ from other abstract methods, this method is not decorated by "
 "abc.abstractmethod. The reason is that not all the transformations can be"
@@ -191,8 +216,9 @@ msgstr ""
 "与其他抽象方法不同的是，该方法并没有被 abc.abstractmethod "
 "装饰器装饰。这样做的原因是并非所有的时序数据转换都可以被逆向转换回原来的形式，因此，我们认为不可能、也无法强制要求所有继承自此基类的子类都实现该方法。"
 
-#: 2b93a7eff92b4c21aa7f5cf1a156cf8c of
+#: c79c1e67ee974c13b4bb765fd6c1c607 ccde42832ff148198353d2501c1276f9 of
 #: paddlets.transform.base.BaseTransform.inverse_transform:7
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:7
 msgid ""
 "In general, other modules such as Pipeline will possibly call this method"
 " WITHOUT knowing if the called transform instance has implemented this "
@@ -207,19 +233,23 @@ msgstr ""
 "表达式作为该基类方法的默认占位符，而是抛出了一个 NotImplementedError 错误。这个抛出的错误使得调用者可以使用 try-"
 "except 机制去识别那些没有实现该方法的 transform 实例。"
 
-#: 0039aafc0bc34f5999996c471de1a1b6 cfcefab39c9c4b08a2afca3eae26825a of
+#: 2735dcbc054442abb53330ee5c8626b0 80c268ebc87a4fe4ab5a6b2c32251a10
+#: 8c805c7ea1b24ddb9e4c41e3f386c85a of
 #: paddlets.transform.base.BaseTransform.inverse_transform:13
-#: paddlets.transform.base.UdBaseTransform.inverse_transform:3
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:13
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one:3
 msgid "dataset to be inversely transformed."
 msgstr "完成逆向转换的数据集。"
 
-#: f59b2d55e2174e9fa922a44670ee092b of
+#: 61ee38d4f1ac477db35ea205a025755f 63a82ab685374dd08a284ddaf40f42cd of
 #: paddlets.transform.base.BaseTransform.inverse_transform:18
+#: paddlets.transform.base.BaseTransform.inverse_transform_one:18
 msgid "inverserly transformed dataset."
 msgstr "完成逆向转换的数据集。"
 
-#: 8715cb04d98d4387b6f1b6b5ece36ef8 of
+#: 1652d5910abd43fd9dbfbe7600428b86 d365cdc1cb5f4272a31c6a4017dad94e of
 #: paddlets.transform.base.BaseTransform.inverse_transform
+#: paddlets.transform.base.BaseTransform.inverse_transform_one
 msgid "Raises"
 msgstr "抛出异常"
 
@@ -267,50 +297,39 @@ msgid ""
 "based on input."
 msgstr "输出列的名称, None代表将会基于输入列进行自动推断"
 
-#: 9115ff064af244558cf3ff782fb3f85e of
-#: paddlets.transform.base.UdBaseTransform.fit:3
+#: 4823ea03d9fa491593e15caeba35bdf2 of
+#: paddlets.transform.base.UdBaseTransform.fit_one:3
 msgid "dataset from which to fit the transformer"
 msgstr "用于训练transformer的数据集。"
 
-#: 7f4b0693b6b144f58d09618deacfc39f of
-#: paddlets.transform.base.UdBaseTransform.fit:6
+#: f86d56ea36764108beefcfc06037d838 of
+#: paddlets.transform.base.UdBaseTransform.fit_one:6
 msgid "self"
 msgstr ""
 
-#: 99ad70caa0284081bc9ffe15791e1277 of
-#: paddlets.transform.base.UdBaseTransform.transform:1
+#: 96ab1bfa2c1a472694c319646ce24652 of
+#: paddlets.transform.base.UdBaseTransform.transform_one:1
 msgid "Transform or inverse_transform the dataset with the fitted transformer."
 msgstr "`transform` 方法的逆向转换方法。"
 
-#: 4223f33eb7c4484097059682adffe1d1 aa499f1016034f71a7fe8a1e88f46cc9 of
-#: paddlets.transform.base.UdBaseTransform.fit_transform:5
-#: paddlets.transform.base.UdBaseTransform.transform:5
+#: 8e77831f8fac4104ad4df5832b55b992 of
+#: paddlets.transform.base.UdBaseTransform.transform_one:5
 msgid "whether to replace the original data. default=False"
 msgstr "是否替换原始的数据,默认是False"
 
-#: 3828008dd09344aba17ce6d519c947fb dcd863fe77f14a7188d4abee1d588a99 of
-#: paddlets.transform.base.UdBaseTransform.fit_transform:8
-#: paddlets.transform.base.UdBaseTransform.transform:8
+#: c9c6ca5cc7e3414d95739223dc638b57 of
+#: paddlets.transform.base.UdBaseTransform.transform_one:8
 msgid "TSDataset"
 msgstr "完成数据转换的数据集。"
 
-#: 336f3233010a42e88b625c159eef5489 of
-#: paddlets.transform.base.UdBaseTransform.inverse_transform:5
+#: 7900a44577fa4ee28884aaeb92639ab6 of
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one:5
 msgid "Set to True to perform inplace operation and avoid data copy."
 msgstr "设置为True以执行就地操作并避免数据复制"
 
-#: 6aa0057702ef48e1969b9e944bb3502c of
-#: paddlets.transform.base.UdBaseTransform.inverse_transform:8
+#: d4677f0356de40d8b912ae0a06c93d64 of
+#: paddlets.transform.base.UdBaseTransform.inverse_transform_one:8
 msgid "Inversely transformed TSDataset."
 msgstr "完成逆向转换的数据集。"
 
-#: 20243ba330b54d28870636aa33caf0d0 of
-#: paddlets.transform.base.UdBaseTransform.fit_transform:1
-msgid "First fit the transformer, and then transform the dataset."
-msgstr "先做fit操作, 然后做transform操作"
-
-#: fe7cec66c8e54d9895aa297a268a5354 of
-#: paddlets.transform.base.UdBaseTransform.fit_transform:3
-msgid "dataset to be processed."
-msgstr "将要被处理的数据集。"
 

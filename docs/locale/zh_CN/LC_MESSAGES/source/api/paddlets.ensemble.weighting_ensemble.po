@@ -70,7 +70,7 @@ msgstr "一个由paddlets模型组成的 tuple (模型类名,模型参数) 列�
 msgid ""
 "weighting mode, support [\"mean\",\"min\",\"max\",\"median\"] for now, "
 "set to \"mean\" by default."
-msgstr "weighting的模式，支持[“mean”,”min”,”max”,”median”]"
+msgstr "weighting的模式，支持[“mean”,”min”,”max”,”median”]，默认值为“mean”"
 
 #: 22661b10ed1b4c60b462d306b52e7d52 42b5b6bbee614571b3813e94b950281c
 #: 5b95464309cb4589ab1d986f82d3eb97 of

@@ -79,7 +79,7 @@ With the dumped model in step 2, users can deploy models by `Paddle Inference`. 
         json_data = json.load(f)
         print(json_data)
     
-    # {'model_type': 'forecasting', 'ancestor_classname_set': ['RNNBlockRegressor', 'PaddleBaseModelImpl', 'PaddleBaseModel', 'BaseModel', 'Trainable', 'ABC', 'object'], 'modulename': 'bts.models.forecasting.dl.rnn', 'size': {'in_chunk_len': 4, 'out_chunk_len': 2, 'skip_chunk_len': 0}, 'input_data': {'past_target': [None, 4, 1], 'observed_cov_numeric': [None, 4, 11]}}
+    # {'model_type': 'forecasting', 'ancestor_classname_set': ['RNNBlockRegressor', 'PaddleBaseModelImpl', 'PaddleBaseModel', 'BaseModel', 'Trainable', 'ABC', 'object'], 'modulename': 'paddlets.models.forecasting.dl.rnn', 'size': {'in_chunk_len': 4, 'out_chunk_len': 2, 'skip_chunk_len': 0}, 'input_data': {'past_target': [None, 4, 1], 'observed_cov_numeric': [None, 4, 11]}}
 
 As the above code snippet shows, we can build the input based on input_name, which contains attributes of the data (target、known_cov、observed_cov).
 In addition to input_name, rnn_model_meta contains input types, the shape format of data, original `in_chunk_len` and `out_chunk_len` and so on.
