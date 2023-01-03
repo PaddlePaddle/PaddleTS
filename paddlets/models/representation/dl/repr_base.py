@@ -27,7 +27,7 @@ logger = Logger(__name__)
 
 
 class ReprBaseModel(abc.ABC):
-    """BTS/PaddleTS deep time series representation framework, 
+    """deep time series representation framework,
         all time series models based on paddlepaddle implementation need to inherit this class.
 
     Args:

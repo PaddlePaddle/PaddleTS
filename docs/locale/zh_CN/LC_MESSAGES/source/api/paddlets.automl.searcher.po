@@ -3,71 +3,75 @@
 # This file is distributed under the same license as the   package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 15:25+0800\n"
+"POT-Creation-Date: 2022-12-16 15:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../source/api/paddlets.automl.searcher.rst:2
-#: c86a88953753430daf39069ce70e85ab
+#: a021189debc14384bd53d183d4421b96
 msgid "paddlets.automl.searcher"
 msgstr ""
 
-#: c43d2d9df64145a0a0884170829092e9 of paddlets.automl.searcher.Searcher:1
+#: 59eda22b81554f108370c66adc3e2604 of paddlets.automl.searcher.Searcher:1
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
-#: c479628a9c804e688bafdddcf073aaec of paddlets.automl.searcher.Searcher:1
+#: 247fa0df84b643dc8e28e5df3ad3883f of paddlets.automl.searcher.Searcher:1
 msgid "Searcher is for getting suggesting algorithms for automl."
 msgstr "Searcher 是用于 automl 的获取超参优化算法"
 
-#: 6e217ea79a114c7caa1354c6e6b108cf f15520104fe846ce8871cf6b07179bb1 of
+#: 77daf2625d90400f9ed19e4716e05415 c41e8ff6cdfd4b33988d84aeea6fa7f7 of
 #: paddlets.automl.searcher.Searcher.get_searcher
 #: paddlets.automl.searcher.Searcher.get_supported_algs
 msgid "Returns"
 msgstr ""
 
-#: 81c0c2d74d4f4638ba2c6beaf0e2c302 of
+#: c2623340bd2446d381c06d1f905e6522 of
 #: paddlets.automl.searcher.Searcher.get_supported_algs:1
 msgid "A list of supported algorithms."
 msgstr "一个包含已支持的超参优化算法的列表"
 
-#: 1590d7d056b04c868aac7e1c41e27236 c75ad0ac00a74f9f9e7e4c0fe48f4a0d of
+#: 263d77fb4d124e57ab4c80d7a1b8eee7 d3cc565d15ca466f8d7b4e564b48d845 of
 #: paddlets.automl.searcher.Searcher.get_searcher
 #: paddlets.automl.searcher.Searcher.get_supported_algs
 msgid "Return type"
 msgstr ""
 
-#: 649523c736bc48b4a6a697217f0c6162 of
+#: 83bfcecb0f4b45eaaa38dfec1e2f6f0b of
 #: paddlets.automl.searcher.Searcher.get_searcher:1
 msgid "Get a searcher by string"
 msgstr "利用一个字符串获取一个超参优化算法。"
 
-#: 98862209d4ae456a85bf1e4ad9f758bf of
+#: 9ff67e90316c4e7ebd42c37835885f31 of
 #: paddlets.automl.searcher.Searcher.get_searcher
 msgid "Parameters"
 msgstr ""
 
-#: ffff17e422784ff18a9d9f3a19795481 of
+#: f8b112763aff4c65ab11d6459b49e881 of
 #: paddlets.automl.searcher.Searcher.get_searcher:3
 msgid ""
 "The algorithm for optimization. Supported algorithms are \"Random\", "
 "\"CMAES\", \"TPE\", \"CFO\", \"BlendSearch\", \"Bayes\"."
 msgstr ""
-"超参优化算法。支持的算法为 'auto', 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
-"'Bayes'。
+"超参优化算法。支持的算法为 'Random', 'CMAES', 'TPE', 'CFO', 'BlendSearch', "
+"'Bayes'"
 
-#: 96f254580f4643d6b02a9ea0570b5d0d of
-#: paddlets.automl.searcher.Searcher.get_searcher:6
+#: 5676112bfe6a456a8f598062fa6bf916 of
+#: paddlets.automl.searcher.Searcher.get_searcher:5
+msgid "The maximum number of trials running concurrently."
+msgstr "最大并发运行的参数试验数量。"
+
+#: 03aa6cff44644b6ea35065e13e532625 of
+#: paddlets.automl.searcher.Searcher.get_searcher:7
 msgid "An object of the suggesting algorithm."
 msgstr "超参优化算法对象。"
 

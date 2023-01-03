@@ -266,7 +266,8 @@ class Precision(Metric):
     def metric_fn(
         self, 
         y_true: np.ndarray, 
-        y_score: np.ndarray
+        y_score: np.ndarray,
+        **kwargs
     ) -> float:
         """Precision_score.
 
@@ -277,7 +278,7 @@ class Precision(Metric):
         Returns:
             float: precision_score. A non-negative floating point value (the best value is 1.0).
         """
-        return metrics.precision_score(y_true, y_score)
+        return metrics.precision_score(y_true, y_score, **kwargs)
 
     
 class Recall(Metric):
@@ -301,7 +302,8 @@ class Recall(Metric):
     def metric_fn(
         self, 
         y_true: np.ndarray, 
-        y_score: np.ndarray
+        y_score: np.ndarray,
+        **kwargs
     ) -> float:
         """Recall_score.
 
@@ -312,7 +314,7 @@ class Recall(Metric):
         Returns:
             float: recall_score. A non-negative floating point value (the best value is 1.0).
         """
-        return metrics.recall_score(y_true, y_score)
+        return metrics.recall_score(y_true, y_score, **kwargs)
 
     
 class F1(Metric):
@@ -336,7 +338,8 @@ class F1(Metric):
     def metric_fn(
         self, 
         y_true: np.ndarray, 
-        y_score: np.ndarray
+        y_score: np.ndarray,
+        **kwargs
     ) -> float:
         """F1_score.
 
@@ -347,7 +350,7 @@ class F1(Metric):
         Returns:
             float: f1_score. A non-negative floating point value (the best value is 1.0).
         """
-        return metrics.f1_score(y_true, y_score)
+        return metrics.f1_score(y_true, y_score, **kwargs)
     
 
 class MetricContainer(object):

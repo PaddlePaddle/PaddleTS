@@ -18,6 +18,7 @@ from paddlets.utils import check_train_valid_continuity
 from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
 
+
 logger = Logger(__name__)
 
 METRICS = {
@@ -39,7 +40,7 @@ class AutoTS(BaseModel):
 
     Args:
         estimator(Union[str, Type[BaseModel], List[Union[str, Type[BaseTransform], Type[BaseModel]]]]): A class of
-            a PaddleTS model or a list of classes consisting of several PaddleTS transformers and a PaddleTS model
+            a paddlets model or a list of classes consisting of several paddlets transformers and a paddlets model
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
         skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
@@ -70,7 +71,7 @@ class AutoTS(BaseModel):
         refit(bool): Whether to refit the model with the best parameter on full training data.If refit is True, the
             AutoTS object can be used to predict. If refit is False, the AutoTS
             object can be used to get the best parameter, but can not make predictions.
-        local_dir(str): Local dir to save training results to. Defaults to `~/ray_results`.
+        local_dir(str): Local dir to save training results and log to. Defaults to `./`.
         ensemble(bool): Not supported yet. This feature will be comming in future.
         n_jobs(int): Not supported yet. This feature will be comming in future.
         verbose(int): Not supported yet. This feature will be comming in future.
@@ -173,7 +174,10 @@ class AutoTS(BaseModel):
         self._n_jobs = n_jobs
         self._verbose = verbose
         self._optimize_runner = OptimizeRunner(search_alg=self._search_alg)
-        self._local_dir = local_dir
+        if local_dir is None:
+            self._local_dir = "./"
+        else:
+            self._local_dir = local_dir
 
     @log_decorator
     def fit(
@@ -182,7 +186,8 @@ class AutoTS(BaseModel):
             valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
             n_trials: int = 20,
             cpu_resource: float = 1.0,
-            gpu_resource: float = 0
+            gpu_resource: float = 0,
+            max_concurrent_trials: int = 1,
     ):
         """
         Fit the estimator with the given tsdataset.
@@ -194,12 +199,17 @@ class AutoTS(BaseModel):
             train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
             valid_tsdataset(Union[TSDataset, List[TSDataset]], optional): Valid dataset.
             n_trials(int): The number of configurations suggested by the search algorithm.
-            cpu_resource: CPU resources to allocate per trial.
-            gpu_resource: GPU resources to allocate per trial.
+            cpu_resource(float): CPU resources to allocate per trial.
+            gpu_resource(float): GPU resources to allocate per trial. Note that GPUs will not be assigned if you do
+                not specify them here.
+            max_concurrent_trials(int): The maximum number of trials running concurrently.
+
 
         Returns:
             Optional(BaseModel, Pipeline): Refitted estimator.
         """
+        if cpu_resource < 0 or gpu_resource < 0 or max_concurrent_trials <= 0:
+            raise NotImplementedError("invalid cpu_resource || gpu_resource || max_concurrent_trials")
         if isinstance(train_tsdataset, list):
             # check valid tsdataset exist
             if valid_tsdataset is None:
@@ -220,17 +230,18 @@ class AutoTS(BaseModel):
                                                   n_trials=n_trials,
                                                   cpu_resource=cpu_resource,
                                                   gpu_resource=gpu_resource,
-                                                  local_dir=self._local_dir
+                                                  local_dir=self._local_dir,
+                                                  max_concurrent_trials=max_concurrent_trials,
                                                   )
         self._best_param = analysis.best_config
         if self._refit:
             logger.info("AutoTS: start refit")
             self._best_estimator = self._optimize_runner.setup_estimator(config=self._best_param,
-                                                                         paddlets_estimator=self._estimator,
-                                                                         in_chunk_len=self._in_chunk_len,
-                                                                         out_chunk_len=self._out_chunk_len,
-                                                                         skip_chunk_len=self._skip_chunk_len,
-                                                                         sampling_stride=self._sampling_stride)
+                                                   paddlets_estimator=self._estimator,
+                                                   in_chunk_len=self._in_chunk_len,
+                                                   out_chunk_len=self._out_chunk_len,
+                                                   skip_chunk_len=self._skip_chunk_len,
+                                                   sampling_stride=self._sampling_stride)
 
             estimator_model = self._estimator[-1] if self._is_pipeline else self._estimator
             if hasattr(estimator_model, "__mro__") and PaddleBaseModel in estimator_model.__mro__:
@@ -249,8 +260,8 @@ class AutoTS(BaseModel):
             elif hasattr(estimator_model, "__mro__") and MLBaseModel in estimator_model.__mro__:
                 # if is ml model && data is continuity, concat
                 if valid_tsdataset is not None \
-                        and not isinstance(train_tsdataset, list) \
-                        and not isinstance(valid_tsdataset, list) \
+                        and not isinstance(train_tsdataset, list)\
+                        and not isinstance(valid_tsdataset, list)\
                         and check_train_valid_continuity(train_tsdataset, valid_tsdataset):
                     train_tsdataset = TSDataset.concat([train_tsdataset, valid_tsdataset])
                 self._best_estimator.fit(train_tsdataset)
@@ -282,6 +293,17 @@ class AutoTS(BaseModel):
             Dict: The dict of the best parameters.
         """
         return self._best_param
+
+    def best_estimator(self):
+        """
+        Return the best_estimator in optimization.
+
+        Returns:
+            estimator: The best_estimator in optimization.
+        """
+        if not self._refit:
+            raise NotImplementedError("The best_estimator is not refitted.")
+        return self._best_estimator
 
     def search_space(self):
         """

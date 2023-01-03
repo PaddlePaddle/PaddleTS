@@ -16,7 +16,6 @@ from sklearn.utils import check_random_state
 import numpy as np
 import paddle
 
-# from bts.models.utils import format_labels
 from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
@@ -331,8 +330,9 @@ class PaddleBaseClassifier(BaseClassifier):
         valid_tsdatasets: List[TSDataset] = None,
         valid_labels: np.ndarray = None
     ):
-        """Train a neural network stored in self._network, 
-            Using train_dataloader for training data and valid_dataloader for validation.
+        """
+        Train a neural network stored in self._network, using train_dataloader for training data and valid_dataloader
+        for validation.
 
         Args: 
             train_tsdataset(TSDataset): Train set.
@@ -724,7 +724,6 @@ class PaddleBaseClassifier(BaseClassifier):
         model_meta = {
             # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
             "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            # bts.models.dl.paddlepaddle.xxx
             "modulename": self.__module__
         }
         try:

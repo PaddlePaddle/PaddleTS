@@ -22,3 +22,7 @@ msgstr ""
 msgid "paddlets.models.anomaly"
 msgstr ""
 
+#: 52025d87cfaa45e39dee6612c988741b of paddlets.models.anomaly:1
+msgid "paddlets anomaly."
+msgstr ""
+

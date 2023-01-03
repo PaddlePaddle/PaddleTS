@@ -328,8 +328,8 @@ class ProbSparseAttention(paddle.nn.Layer):
         """
         L_K, L_Q, batch_size = key.shape[1], query.shape[1], query.shape[0]
         # set the number of samples of query and key
-        u_k = min(int(5 * np.log(L_K)), L_Q)
-        u_q = min(int(5 * np.log(L_Q)), L_Q)
+        u_k = max(min(int(5 * np.log(L_K)), L_Q), 1)
+        u_q = max(min(int(5 * np.log(L_Q)), L_Q), 1)
         
         # q/k/v: [batch_size, in_chunk_len, d_model] ->
         # [batch_size, n_heads, in_chunk_len, head_dim]

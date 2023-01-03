@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"POT-Creation-Date: 2022-12-29 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,11 +48,10 @@ msgstr "相邻值替换缺失值，这些值可以是缺失值之前或之后的
 msgid "Replace the missing values with the value specified by the user."
 msgstr "或使用用户指定的值替换缺失值。"
 
-#: 508f47fd36b14757916eb736b1f312c5 bf6741856c0f455d98435ab46b898227
-#: c5e2be3b37994985a372dbc7643d2cd2 dc35ea83346c4bdaa25dc630592d8ded of
-#: paddlets.transform.fill.Fill paddlets.transform.fill.Fill.fit
-#: paddlets.transform.fill.Fill.fit_transform
-#: paddlets.transform.fill.Fill.transform
+#: d1e06d3bcac34930a98e9b9db2da6193 f517805d78304b65a6cf5eff6fb3e0eb
+#: f64d7bc15a88485cba0eea1579640196 of paddlets.transform.fill.Fill
+#: paddlets.transform.fill.Fill.fit_one
+#: paddlets.transform.fill.Fill.transform_one
 msgid "Parameters"
 msgstr "参数"
 
@@ -88,11 +87,10 @@ msgid ""
 "the min_num_non_missing_values, the statistic will be set to np.nan."
 msgstr "滑动窗口中非缺失值的最小数量，如果滑动窗口长度小于参数min_num_non_missing_values，则统计为np.nan"
 
-#: 10a6daf6c9064dcc8f50a279a26498b4 7b7f275db88c421ea68952b2ed8924dc
-#: 8d6dbc78786a453fb952781d25d6cfbb e2ff03305b4446cda1458927c089fac8 of
-#: paddlets.transform.fill.Fill paddlets.transform.fill.Fill.fit
-#: paddlets.transform.fill.Fill.fit_transform
-#: paddlets.transform.fill.Fill.transform
+#: 439a10a0669f471d905a562a3bfad55c 8b3e2a1aa8fc4e7ca2ff8d99d1a9a962
+#: ad252b8f0c104f329ccb0e8030f6efad of paddlets.transform.fill.Fill
+#: paddlets.transform.fill.Fill.fit_one
+#: paddlets.transform.fill.Fill.transform_one
 msgid "Returns"
 msgstr "返回"
 
@@ -100,44 +98,37 @@ msgstr "返回"
 msgid "None"
 msgstr "None"
 
-#: 479db07efb4c443eab665530725df6f9 of paddlets.transform.fill.Fill.fit:1
+#: f023c951879b4feab53bc8e28c19bcdc of paddlets.transform.fill.Fill.fit_one:1
 msgid "dataset to process"
 msgstr "进行拟合的数据"
 
-#: b0b27b52f54442d48c3f7814b68ce22a of paddlets.transform.fill.Fill.fit:4
+#: 37130accf5264f718905ac27383fbf05 of paddlets.transform.fill.Fill.fit_one:4
 msgid "self"
 msgstr "算子自身"
 
-#: 5004923344fd4069acab7d48f660bf96 of paddlets.transform.fill.Fill.transform:1
+#: fb77329b482b43c780d4877d694b3cda of
+#: paddlets.transform.fill.Fill.transform_one:1
 msgid "Fill missing values."
 msgstr "补全缺失值。"
 
-#: 152f64c3b4134b959494c7c2bce6a776 4ad6ac85b3a2472683bf7201bebd8246 of
-#: paddlets.transform.fill.Fill.fit_transform:3
-#: paddlets.transform.fill.Fill.transform:3
+#: 1c3d02243a244f58a02411c5c5cf26a6 of
+#: paddlets.transform.fill.Fill.transform_one:3
 msgid "TSDataset or List[TSDataset]"
 msgstr "时序数据TSDataset"
 
-#: 1c0ce40423ef47ba8db30b32cf2019d4 4d04d42879464137b041fbac5cc5422c of
-#: paddlets.transform.fill.Fill.fit_transform:5
-#: paddlets.transform.fill.Fill.transform:5
+#: 6c2d08ef108e458ab7541fb5ffd78a35 of
+#: paddlets.transform.fill.Fill.transform_one:5
 msgid "Set to True to perform inplace row normalization and avoid a copy."
 msgstr "设置为True时，数据会在源输入数据上修改，避免复制新数据。"
 
-#: 3a6c5f07010e4abb940fd740eb23be92 5a57c018e01042bc8b8e84039cd55ba9 of
-#: paddlets.transform.fill.Fill.fit_transform:8
-#: paddlets.transform.fill.Fill.transform:8
+#: c63873a5f73f46c693a622016f0acbba of
+#: paddlets.transform.fill.Fill.transform_one:8
 msgid "Transformed TSDataset."
 msgstr "转换后的时序数据集TSDataset."
 
-#: 5345c335db3a441bb5625ab0e5765c6d 8eea338433e54badae7eba1c5ad65004 of
-#: paddlets.transform.fill.Fill.fit_transform
-#: paddlets.transform.fill.Fill.transform
+#: f2873c2b4a3e48f0b0e6bc2c981bde76 of
+#: paddlets.transform.fill.Fill.transform_one
 msgid "Return type"
 msgstr "返回 类型"
 
-#: 6d8627c0404145d0816b021f18c8d755 of
-#: paddlets.transform.fill.Fill.fit_transform:1
-msgid "First fit the scaler, and then do transformation."
-msgstr "首先执行拟合方法，然后执行转换方法。"
 

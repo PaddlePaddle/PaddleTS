@@ -30,11 +30,9 @@ msgstr ""
 #: e7eb7d0688a147d9a6a8d1fac6fb07ae of
 #: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter:1
 msgid ""
-#~ "Data adapter, converts `TSDataset` to `paddle.io.Dataset` "
-#~ "and `paddle.io.DataLoader`."
-msgstr ""
-#~ "数据转换类，用于将TSDataset数据集转换为paddle Dataset样本数据集"
-#~ "和paddle DataLoader样本数据批量加载器。"
+"Data adapter, converts `TSDataset` to `paddle.io.Dataset` and "
+"`paddle.io.DataLoader`."
+msgstr "数据转换类，用于将TSDataset数据集转换为paddle Dataset样本数据集和paddle DataLoader样本数据批量加载器。"
 
 #: 8319dccaf4e84623afea1a61cfcf71fb of
 #: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataset:1
@@ -98,8 +96,7 @@ msgstr "用户自定义的单批量样本整合函数，可选参数。"
 #: paddlets.models.classify.dl.adapter.data_adapter.ClassifyDataAdapter.to_paddle_dataloader:9
 msgid ""
 "Whether to shuffle indices order before generating batch indices, default"
-" True. TODO: add this argument to __init__ construct method allow caller "
-"to set its value."
+" True."
 msgstr "是否在生成批量样本之前对数据进行洗牌。默认为True。"
 
 #: e553baefafb44b778d2eb410b20d576e of

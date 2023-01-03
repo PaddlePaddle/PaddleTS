@@ -127,7 +127,7 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
         final_learner(Callable): The final learner on stack level 2, should be a sklearn-like regressor, set to GradientBoostingRegressor(max_depth=5) by default.
         resampling_strategy(str): A string of resampling strategies.Supported resampling strategy are "cv", "holdout".
         split_ratio(Union[str, float]): The proportion of the dataset included in the validation split for holdout.The split_ratio should be in the range of (0, 1). 
-        k_fold(Union[str, int]): Number of folds for cv.The k_fold should be in the range of (0, 10].
+        k_fold(Union[str, int]): Number of folds for cv.The k_fold should be in the range of (0, 10], defaults to 3.
         use_backtest(bool): If use backtest on predictions.
         verbose(bool): Turn on Verbose mode,set to true by default.
 

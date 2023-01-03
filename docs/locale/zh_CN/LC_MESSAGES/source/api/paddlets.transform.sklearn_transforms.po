@@ -38,11 +38,14 @@ msgstr ""
 msgid "Transform categorical columns with OneHot encoder."
 msgstr "使用one-hot编码转换dataset"
 
-#: 108b6ba136e54967b00b1b92961d587c 736ae1dab5834e9caef3306c6eb6e10d
-#: 90c25ad728034afbac83f195bffa1676 e5183a194b4a4f7591a9cb9eddd884ea of
+#: 182800fc94f84891afb7d8b890072953 2baa7b420b9346b4a2201644103303d7
+#: 4355f73583114a0788ab8375acf0534d 6cb1b6493b314851aed66eb5ff8986bd
+#: c03f4515ef314f258022abcff3471909 e636cba9aca2423daba2e63f763d8880 of
 #: paddlets.transform.sklearn_transforms.MinMaxScaler
 #: paddlets.transform.sklearn_transforms.OneHot
 #: paddlets.transform.sklearn_transforms.Ordinal
+#: paddlets.transform.sklearn_transforms.Ordinal.fit
+#: paddlets.transform.sklearn_transforms.Ordinal.transform
 #: paddlets.transform.sklearn_transforms.StandardScaler
 msgid "Parameters"
 msgstr ""
@@ -74,11 +77,13 @@ msgid ""
 "it determine categories automatically from the dataset."
 msgstr "auto或者指定的数组类型，默认是auto，代表自动从数据集中确定类别"
 
-#: 4e274416b4ed485d96714987ab045592 80ae0ad734904caa86d8a4ed2fe5a81e
-#: bf6fb0a6a3f24f7f80d3c0004812762e d4783dd792584a79a81e8da8f73677ca of
+#: a31214ca073941d59918c635d137e436 baa8f0bfbc2548f48883160b025376bb
+#: bfa22fc7c3cd48789e06d3faeef521a0 c9812af0d013454d80d67aec93a24bf5
+#: f351a6530d7f4b5c9b3fcf8b871c98eb of
 #: paddlets.transform.sklearn_transforms.MinMaxScaler
 #: paddlets.transform.sklearn_transforms.OneHot
 #: paddlets.transform.sklearn_transforms.Ordinal
+#: paddlets.transform.sklearn_transforms.Ordinal.transform
 #: paddlets.transform.sklearn_transforms.StandardScaler
 msgid "Returns"
 msgstr ""
@@ -133,6 +138,60 @@ msgid ""
 msgstr ""
 "'auto'或数组类型，默认='auto'，如果categorie 是'auto',它会根据训练数据自动确定类别。如果类别是列表, "
 "categorie[i] 保存第 i 列中预期的类别。传递的类别不能混合字符串和数值，如果是数值则要排序"
+
+#: a11512e1d52e4a0f994c5ba7f6cc07fa of
+#: paddlets.transform.sklearn_transforms.Ordinal.fit:1
+msgid "Learn the parameters from the dataset needed by the transformer."
+msgstr "从输入dataset数据集中学习transformer所需的参数。"
+
+#: 00ae44032987470db8dcd57bc9efb836 66fc237ae147408e897fe6e282c38b22 of
+#: paddlets.transform.sklearn_transforms.Ordinal.fit:3
+#: paddlets.transform.sklearn_transforms.Ordinal.transform:3
+msgid ""
+"Any non-abstract class inherited from this class should implement this "
+"method."
+msgstr "任何继承自此类的非抽象子类均需实现此方法。"
+
+#: 2fe70c6cc4a94ac794cd8021d305b074 of
+#: paddlets.transform.sklearn_transforms.Ordinal.fit:5
+msgid ""
+"The parameters fitted by this method is transformer-specific. For "
+"example, the `MinMaxScaler` needs to compute the MIN and MAX, and the "
+"`StandardScaler` needs to compute the MEAN and STD (standard deviation) "
+"from the dataset."
+msgstr ""
+"该方法训练的参数和具体的transformer有关。举例来说，`MinMaxScaler` 需要计算 最大值（MAX）和最小值（MIN），同时 "
+"`StandardScaler` 需要计算均值（MEAN）和标准偏差（standard deviation）。"
+
+#: cdb071e0ce3d4c2e8449813d73a9d42e of
+#: paddlets.transform.sklearn_transforms.Ordinal.fit:9
+msgid "dataset from which to fit the transformer."
+msgstr "用于训练transformer的数据集。"
+
+#: fa8ad973bcc74b19bc654277acd5962f of
+#: paddlets.transform.sklearn_transforms.Ordinal.transform:1
+msgid "Apply the fitted transformer on the dataset"
+msgstr "将训练完成的transformer应用于给定数据集。"
+
+#: a2ab44cd23134544a0ae6d4cfa2481f3 of
+#: paddlets.transform.sklearn_transforms.Ordinal.transform:5
+msgid "dataset to be transformed."
+msgstr "待转换的输入数据。"
+
+#: 9737e60ed0954369be2d812437302a86 of
+#: paddlets.transform.sklearn_transforms.Ordinal.transform:7
+msgid "Set to True to perform inplace transformation. Default is False."
+msgstr "若设置为True，则会执行一个就地转换。默认值为False。"
+
+#: 23e8b325b2144d87a9a0858ce69826be of
+#: paddlets.transform.sklearn_transforms.Ordinal.transform:10
+msgid "transformed dataset."
+msgstr "转换完成的数据集。"
+
+#: 386eec1a7a2c4e6eb4dcb1febfa102d5 of
+#: paddlets.transform.sklearn_transforms.Ordinal.transform
+msgid "Return type"
+msgstr ""
 
 #: 2de7ed05623049b89629a978863f2fe4 of
 #: paddlets.transform.sklearn_transforms.MinMaxScaler:1

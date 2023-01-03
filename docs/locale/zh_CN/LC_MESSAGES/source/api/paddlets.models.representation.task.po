@@ -23,6 +23,6 @@ msgid "paddlets.models.representation.task"
 msgstr ""
 
 #: 66412cd229b34a86b76a3ef5ec162a62 of paddlets.models.representation.task:1
-msgid "bts models forecasting tests."
+msgid "paddlets models forecasting tests."
 msgstr ""
 

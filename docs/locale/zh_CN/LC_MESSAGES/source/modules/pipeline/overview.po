@@ -3,27 +3,26 @@
 # This file is distributed under the same license as the PaddleTS package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 16:20+0800\n"
+"POT-Creation-Date: 2022-12-19 15:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../source/modules/pipeline/overview.rst:3
-#: c000ca5144564b9a9d1df5d799b3f401
+#: 7b4cd09805c94dabbb5e81fcb133e2af
 msgid "Pipeline"
 msgstr ""
 
 #: ../../source/modules/pipeline/overview.rst:5
-#: 060b52b5b4e04f0c964248b36d59d165
+#: 9c806fb3825b45f98c63b0ce12d8e4d3
 msgid ""
 "The pipeline is designed to build a workflow for time series modeling "
 "which may be comprised of a set of `transformers "
@@ -33,12 +32,12 @@ msgstr ""
 "方法与一个学习器的时序建模机器学习工作流。"
 
 #: ../../source/modules/pipeline/overview.rst:9
-#: 0846a7372158424c9f09b30b19d601f1
+#: f969ae7cbf554167badec2bdeca3d5f4
 msgid "1. Pipeline: Chain transformers"
 msgstr "1. 组装特征工程工作流"
 
 #: ../../source/modules/pipeline/overview.rst:11
-#: 28e44d42f491428baa1f4ba2bfc17226
+#: 8c5ca464bf814c848e3abb6bba5b54ad
 msgid ""
 "There is often a sequence of steps in processing the time series data. "
 "Pipeline can be used for chaining multiple `transformers "
@@ -46,12 +45,12 @@ msgid ""
 msgstr "时序数据预处理通常包含多个步骤。我们可将多个特征工程方法组装为一个Pipeline。"
 
 #: ../../source/modules/pipeline/overview.rst:15
-#: 3802ef2dcaa44b2d930eaadfe33648e6
+#: 43a71f0341724ffa90014735e57f0fa0
 msgid "1.1. Prepare data"
 msgstr "1.1. 准备数据"
 
 #: ../../source/modules/pipeline/overview.rst:79
-#: 2353064b07a246548c0e192545f0e1f6
+#: ce29626b5ce3457aad86fd0ace0d1c54
 msgid ""
 "For this data, we might want to do anomaly detection on both observed co-"
 "variates and known co-variates using `KSigma` then generate the time "
@@ -61,12 +60,12 @@ msgstr ""
 " 生成时间特征。"
 
 #: ../../source/modules/pipeline/overview.rst:83
-#: 9ecb1a548aec4749a45495322b5673fd
+#: 05d68e85fa3747378c786beafdfadd63
 msgid "1.2. Construct"
 msgstr "1.2. 构建"
 
 #: ../../source/modules/pipeline/overview.rst:85
-#: 7e830033ad9c47bd952a034a418a9194
+#: 26c597ba6cb143c99e1d6d0cbe583e70
 msgid ""
 "The pipeline is built using a list of (key, value) pairs, where the key "
 "is the class name of `transformers <../transform/overview.html>`_ and "
@@ -76,13 +75,13 @@ msgstr "`Pipeline` 使用包含 (key, value) 对的列表进行初始化。 key 
 
 #: ../../source/modules/pipeline/overview.rst:88
 #: ../../source/modules/pipeline/overview.rst:135
-#: aed7159e6a7a40ea856701ef01a16ac7 ea189f7a036a42fc8d5074e3e824daab
+#: 3017d3e6abfb4d2596da62b76ca6f53a 616ef586ff434e728804cdd784c08c57
 msgid "This pipeline is comprised of the following:"
 msgstr "该 `Pipeline` 由以下部分组成："
 
 #: ../../source/modules/pipeline/overview.rst:90
 #: ../../source/modules/pipeline/overview.rst:137
-#: 164ac2c90c9c4d6497043a7d7c9df7b9 6a4010b66e3e4e1385dd5a76225034b7
+#: 232acfac006e4a3f8c8d1fbc589bcc01 8c55ae7512b043059b60921451e5b9df
 msgid ""
 "A `KSigma <../../api/paddlets.transform.ksigma.html>`_ transformer to "
 "detect outliers."
@@ -90,7 +89,7 @@ msgstr "用于异常值检测的 `Ksigma <../../api/paddlets.transform.ksigma.ht
 
 #: ../../source/modules/pipeline/overview.rst:91
 #: ../../source/modules/pipeline/overview.rst:138
-#: 78262f769e134efca6681ca6c2fd4d7a d046666b11054e34b04783cab740e25a
+#: ac7e8a706f5d4990838029ccc3693e6d d9d714afe295427a8130a02e0a61ec79
 msgid ""
 "A `TimeFeatureGenerator "
 "<../../api/paddlets.transform.time_feature.html>`_ transformer to "
@@ -100,22 +99,22 @@ msgstr ""
 "<../../api/paddlets.transform.time_feature.html>`_ 特征工程方法。"
 
 #: ../../source/modules/pipeline/overview.rst:100
-#: a5d3aba9db374d85995ff21ee68ebe9f
+#: 7fa995479265468da9b02894fb904f3e
 msgid "1.3. Transform"
 msgstr "1.3. 执行特征工程"
 
 #: ../../source/modules/pipeline/overview.rst:102
-#: 85eb2a4d183649d693b7e99b8c55aae3
+#: 7a2db0ecf2914d9f9120d326d91c3919
 msgid "Fit pipeline and perform the transformation."
 msgstr "拟合 `Pipeline` 并执行特征工程。"
 
 #: ../../source/modules/pipeline/overview.rst:127
-#: a288a72431ab4b80a04d4908920e47e3
+#: b6aa020fcd3c49f682ce692f7fc7146e
 msgid "2. Pipeline: Chain model"
 msgstr "2. 组装含有学习器的工作流"
 
 #: ../../source/modules/pipeline/overview.rst:129
-#: 150c646267464b6f836ed09a401ab23d
+#: 614b76cbcfab4a97bdfa53c0110ebf2b
 msgid ""
 "The last object of a pipeline may be a model, then you can only call "
 "`fit` once on your data to `fit` whole steps in your pipeline."
@@ -124,13 +123,12 @@ msgstr ""
 "中的各个特征工程方法与学习器对数据的拟合。"
 
 #: ../../source/modules/pipeline/overview.rst:133
-#: 567102355f974242bfe70f38d38634d5
+#: aca511984e834f438abc62b985156464
 msgid "2.1. Construct"
 msgstr "2.1. 构建"
 
 #: ../../source/modules/pipeline/overview.rst:139
-#: ac2611b3c25341ff80135339dedb80ca
-#, fuzzy
+#: 4cb14cd27c8948be999e7a34f84c5935
 msgid ""
 "A `MLPRegressor <../../api/paddlets.models.forecasting.dl.mlp.html>`_ to "
 "build a model on given time series data."
@@ -139,12 +137,12 @@ msgstr ""
 "<../../api/paddlets.models.dl.paddlepaddle.mlp.html>`_ 学习器。"
 
 #: ../../source/modules/pipeline/overview.rst:153
-#: 769dd5f9ad2c4a43bae904562c6c4bf4
+#: 0dc8713db587492093b282308f3e8713
 msgid "2.2. Fit pipeline and make predictions"
 msgstr "2.2. 拟合 `Pipeline` 并执行预测"
 
 #: ../../source/modules/pipeline/overview.rst:155
-#: 4a4140c8121344809d0998fac8677da2
+#: 0cd916786f0546069a96d7f06afb3ba1
 msgid ""
 "You can use `pipeline.predict` for time series forecasting or use "
 "`recursive_predict` for recursive multi-step time series forecasting "
@@ -154,12 +152,12 @@ msgstr ""
 "进行多步时序预测。"
 
 #: ../../source/modules/pipeline/overview.rst:168
-#: b2b48e81906849b7ae5849a9b3e32490
+#: 3e2b20700e7b4e05b914a2a2dd5da0d6
 msgid "2.3. Recursive predict"
 msgstr "2.3. 递归多步预测"
 
 #: ../../source/modules/pipeline/overview.rst:170
-#: a3019ed8b1fa497ea1fa6546065d0620
+#: 334e652a38fc4f5fbb37295af54b7ce4
 msgid ""
 "The recursive strategy involves applying `pipeline.predict` method "
 "iteratively for multi-step time series forecasting. The predicted results"
@@ -170,7 +168,14 @@ msgstr ""
 " 时序数据集 的目标列中，并在模型预测时，被添加至历史目标值的滑动窗口中用于下一时刻预测。"
 
 #: ../../source/modules/pipeline/overview.rst:174
-#: 1ec9a28cc04c4ac192684f1413973391
+#: a16457a2e3974bee8a0cb8325370abe1
+msgid ""
+"Note that `pipeline.recursive_predict` is not supported when "
+"`pipeline.skip_chunk` != 0."
+msgstr "注意： `pipeline.recursive_predict` 函数在 `pipeline.skip_chunk` != 0 时，无法使用。"
+
+#: ../../source/modules/pipeline/overview.rst:176
+#: 87b5cb7749804752aa58a7d64b617016
 msgid ""
 "Note that each call of `pipeline.predict` will return a result of length "
 "`out_chunk_len`, so `pipeline.recursive_predict` will be called "
@@ -184,26 +189,53 @@ msgstr ""
 " `Pipeline` 的 `out_chunk_length` 是2，而 `recursive_predict` 允许你将 "
 "`predict_length` 设置为5或者更多："
 
-#: ../../source/modules/pipeline/overview.rst:187
-#: 02328b6744c2416c8b3b221176882796
+#: ../../source/modules/pipeline/overview.rst:193
+#: 7f1e48f8eac14693891d9cfdc248b290
 msgid ""
-"Note that `pipeline.recursive_predict` is not supported when "
-"`pipeline.skip_chunk` != 0."
-msgstr "注意： `pipeline.recursive_predict` 函数在 `pipeline.skip_chunk` != 0 时，无法使用。"
+"When known_cov or observed_cov exists, the length of known_cov must be "
+"greater than or equal to the number of `recursive prediction steps * "
+"prediction length` and the length of observed_cov must be greater than or"
+" equal to number of `(recursive prediction steps - 1) * prediction` "
+"length to meet the needs of feature construction."
+msgstr ""
+"当known_cov或者observed_cov存在时，known_cov时间长度需要大于等于 `递归预测步数*预测长度` "
+"，observed_cov的时间长度需要大于等于 `（递归预测步数-1）*预测长度` ，以满足预测时特征构建的需求。"
 
-#: ../../source/modules/pipeline/overview.rst:189
-#: 4578c3b017de4a5eacad9bad29f920ee
+#: ../../source/modules/pipeline/overview.rst:197
+#: 23898c6a02a341d4934314e5bfe0d5a8
 msgid ""
 "**Note**: The prediction errors are accumulated such that the performance"
 " of prediction will degrade as the prediction time horizon increases."
 msgstr "**注意**： 在递归预测中，预测误差会被累计，因此预测性能会随着预测长度的增加而下降。"
 
-#: ../../source/modules/pipeline/overview.rst:192
-#: f60ee5e590af4c248b10bcd6c444402c
+#: ../../source/modules/pipeline/overview.rst:200
+#: 95926569abbb497cab64ae35823c11ec
 msgid ""
 "For detailed usage, please refer to `API: pipeline.recursive_predict "
 "<../../api/paddlets.pipeline.pipeline.html#paddlets.pipeline.pipeline.Pipeline.recursive_predict>`_"
 msgstr ""
 "更多使用细节，请参考：`API: pipeline.recursive_predict "
 "<../../api/paddlets.pipeline.pipeline.html#paddlets.pipeline.pipeline.Pipeline.recursive_predict>`_"
+
+#: ../../source/modules/pipeline/overview.rst:204
+#: 287c3a2a681646e98eb023956c6aa08a
+msgid "3. Pipeline: Persistence"
+msgstr "3. 持久化"
+
+#: ../../source/modules/pipeline/overview.rst:206
+#: 212a71437bd4404785a257c2d940b7c7
+msgid ""
+"Similar to other PaddleTS models, `Pipeline` provides save() and load() "
+"functions to support persistence."
+msgstr "与其他的 PaddleTS 模型相似，`Pipeline` 提供了 save() 和 load() 函数以支持持久化的需要。"
+
+#: ../../source/modules/pipeline/overview.rst:209
+#: 3fceb878fe1d4112ac4030c25edf2777
+msgid "3.1. Save"
+msgstr "3.1. 保存"
+
+#: ../../source/modules/pipeline/overview.rst:214
+#: 8281e53746ec4111bef9d70c522ed962
+msgid "3.2. Load"
+msgstr "3.2. 加载"
 

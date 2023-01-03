@@ -584,6 +584,6 @@ msgid ""
 "To learn more about the ``AutoTS``, refer to `AutoTS "
 "<../modules/autots/overview.html>`__"
 msgstr ""
-"了解更多 ``TSDataset`` 模块功能，可参考 `数据集定义、加载以及操作 "
-"<../modules/datasets/overview.html>`_"
+"了解更多 ``AutoTS`` 模块功能，可参考 `AutoTS "
+"<../modules/autots/overview.html>`_"
 

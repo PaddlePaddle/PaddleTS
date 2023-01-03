@@ -103,7 +103,7 @@ msgstr "全局随机种子， 注: 保证每次模型参数初始化一致。"
 #: paddlets.models.classify.dl.cnn.CNNClassifier:23
 #: paddlets.models.classify.dl.cnn.CNNClassifier:104
 msgid "The activation function for the hidden layers."
-msgstr ""
+msgstr "隐藏层的激活函数。"
 
 #: 76cf2623eeee4ac68c4b6992fa76de6c c3360d60db3c4dd6bb9d15745fe3dbee of
 #: paddlets.models.classify.dl.cnn.CNNClassifier:25

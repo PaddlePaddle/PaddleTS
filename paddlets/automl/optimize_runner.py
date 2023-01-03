@@ -2,10 +2,12 @@
 # -*- coding:utf-8 -*-
 
 from typing import List, Optional, Type, Union
+import os
 import copy
 import inspect
 
 from abc import ABCMeta
+import ray
 from ray import tune
 from ray.tune.sample import Categorical
 from ray.tune import choice
@@ -23,7 +25,7 @@ from paddlets.automl.searcher import Searcher
 
 logger = Logger(__name__)
 MODEL_SETUP_SEED = 2022
-
+NEED_METRIC_PROB_ESTIMATORS = ["DeepARModel", "TFTModel"]
 
 class OptimizeRunner:
     """
@@ -55,15 +57,15 @@ class OptimizeRunner:
 
         Args:
             config(dict): Algorithm configuration for estimator.
-            paddlets_estimator(Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]]): A class of a PaddleTS model
-                or a list of classes consisting of several PaddleTS transformers and a PaddleTS model.
+            paddlets_estimator(Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]]): A class of a paddlets model
+                or a list of classes consisting of several paddlets transformers and a paddlets model.
             in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
             skip_chunk_len: The number of time steps between in_chunk and out_chunk for a single sample.
             sampling_stride(int): Sampling intervals between two adjacent samples.
 
         Returns:
-            BaseModel: PaddleTS estimator.
+            BaseModel: paddlets estimator.
 
         """
         running_config = copy.deepcopy(config)
@@ -121,6 +123,7 @@ class OptimizeRunner:
                  n_trials: int = 5,
                  cpu_resource: float = 1.0,
                  gpu_resource: float = 0,
+                 max_concurrent_trials: int = 1,
                  local_dir: Optional[str] = None,
                  ):
         """
@@ -128,7 +131,7 @@ class OptimizeRunner:
 
         Args:
             paddlets_estimator(Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]]):
-                A class of a PaddleTS model or a list of classes consisting of several PaddleTS transformers and a PaddleTS model.
+                A class of a paddlets model or a list of classes consisting of several paddlets transformers and a paddlets model.
             in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
             out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
             train_tsdataset(Union[TSDataset, List[TSDataset]]): Train dataset.
@@ -143,9 +146,11 @@ class OptimizeRunner:
             split_ratio(float): The proportion of the dataset included in the validation split for holdout.
             k_fold(int): Number of folds for cv.
             n_trials(int): The number of configurations suggested by the search algorithm.
-            cpu_resource: CPU resources to allocate per trial.
-            gpu_resource: GPU resources to allocate per trial.
-            local_dir(str): Local dir to save training results to. Defaults to ``~/ray_results``.
+            cpu_resource(float): CPU resources to allocate per trial.
+            gpu_resource(float): GPU resources to allocate per trial. Note that GPUs will not be assigned if you do
+                not specify them here.
+            max_concurrent_trials(int): The maximum number of trials running concurrently.
+            local_dir(str): Local dir to save training results to. Defaults to `./`.
 
         Returns:
             ExperimentAnalysis: Object for experiment analysis.
@@ -167,6 +172,11 @@ class OptimizeRunner:
                                              skip_chunk_len=skip_chunk_len,
                                              sampling_stride=sampling_stride)
             score = None
+            metric_instance = None
+            if estimator.__class__.__name__ in NEED_METRIC_PROB_ESTIMATORS:
+                metric_instance = metric(mode="prob")
+            else:
+                metric_instance = metric()
             if valid_tsdataset:
                 logger.info("Got user-defined valid_tsdataset.If trian and valid dataset are not continious.\n"
                             "The first input_chunk_len target value of valid_tsdataset will be used to build the feature, "
@@ -174,7 +184,7 @@ class OptimizeRunner:
                 score = fit_and_score(train_data=train_tsdataset,
                                       valid_data=valid_tsdataset,
                                       estimator=estimator,
-                                      metric=metric())["score"]
+                                      metric=metric_instance)["score"]
             else:
                 if resampling_strategy == "holdout":
                     splitter = HoldoutSplitter(test_size=split_ratio)
@@ -183,9 +193,12 @@ class OptimizeRunner:
                 score = cross_validate(data=train_tsdataset,
                                        splitter=splitter,
                                        estimator=estimator,
-                                       metric=metric())
+                                       metric=metric_instance)
 
             tune.report(**{self.report_metric: score})
+
+        if local_dir is None:
+            local_dir = "./"
 
         if isinstance(train_tsdataset, list):
             # check valid tsdataset exist
@@ -193,24 +206,31 @@ class OptimizeRunner:
                 raise NotImplementedError("When the train_tsdataset is a list, valid_tsdataset is required!")
 
         # 若sp不存在，则获取默认search space
+        # if sp is None, get default search space using paddlets_configer
         if search_space is None:
             search_space = self.paddlets_configer.get_default_search_space(paddlets_estimator)
 
-        searcher = Searcher.get_searcher(self.search_alg)
+        searcher = Searcher.get_searcher(self.search_alg, max_concurrent=max_concurrent_trials)
 
         running_search_space = copy.deepcopy(search_space)
         self._track_choice_mapping = self._preprocess_search_space(running_search_space)
+
+        # 将ray临时文件夹修改为用户自定义文件夹
+        # 临时文件夹的设置会导致ray启动错误 https://github.com/ray-project/ray/issues/30650
+        # set ray temp dir to local_dir
+        # The setting of _temp_dir will cause ray startup error, issue: https://github.com/ray-project/ray/issues/30650
+        # os.environ['RAY_TMPDIR'] = local_dir + "/ray_log/"
 
         return tune.run(run_trial, num_samples=n_trials, config=running_search_space,
                         metric=self.report_metric,
                         mode=mode,
                         search_alg=searcher,
-                        max_failures=5,
+                        fail_fast=True,
                         resources_per_trial={
                             "cpu": cpu_resource,
                             "gpu": gpu_resource
                         },
-                        local_dir=local_dir,
+                        local_dir=local_dir+"/ray_results",
                         )
 
     def _backtrack_traverse_search_space(self, sp, track, track_choice_mapping):

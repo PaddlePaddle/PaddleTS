@@ -54,7 +54,6 @@ class ClassifyDataAdapter(object):
             batch_size(int): The number of samples for a single batch.
             collate_fn(Callable, optional): User-defined collate function for each batch, optional.
             shuffle(bool, optional): Whether to shuffle indices order before generating batch indices, default True.
-                TODO: add this argument to __init__ construct method allow caller to set its value.
 
         Returns:
             PaddleDataLoader: A built paddle DataLoader.
