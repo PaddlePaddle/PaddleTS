@@ -14,7 +14,7 @@ from paddlets.models.classify.dl.inception_time import InceptionTimeClassifier
 from paddlets.datasets import TimeSeries, TSDataset
 
 
-class TestCNNClassifier(TestCase):
+class TestInceptionTimeClassifier(TestCase):
     def setUp(self):
         """unittest function
         """
