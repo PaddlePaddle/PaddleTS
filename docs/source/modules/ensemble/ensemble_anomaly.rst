@@ -62,9 +62,9 @@ Example1
 
 .. code:: python
 
-    from paddlets.ensemble import EnsembleAnomaly 
+    from paddlets.ensemble import WeightingEnsembleAnomaly
 
-    model = EnsembleAnomaly(
+    model = WeightingEnsembleAnomaly(
     in_chunk_len=2,
     estimators=[(AutoEncoder, ae_params),(VAE, vae_params)],
     mode = "voting")
@@ -81,7 +81,7 @@ Use the trained model for prediction and evaluation.
 
    from paddlets.metrics import F1,ACC,Precision,Recall
    
-   pred_label = model.predict(test_data_scaled)
+   pred_label = model.predict(test_tsdata_scaled)
    lable_name = pred_label.target.data.columns[0]
    f1 = F1()(test_tsdata, pred_label)
    precision = Precision()(test_tsdata, pred_label)
