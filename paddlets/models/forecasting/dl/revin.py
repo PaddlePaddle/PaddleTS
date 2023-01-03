@@ -13,33 +13,23 @@ logger = Logger(__name__)
 
 
 class RevinWrapper(nn.Layer):
-    def __init__(self, base_net: nn.Layer, num_features: int, eps=1e-5, affine=True):
-        """
-        The paddlepaddle implementation of Reversible Instance Normalization for
-        Accurate Time-Series Forecasting against Distribution Shift (RevIN)
+    """
+    The RevIN\[1\] (Reversible Instance Normalization) is a simple yet effective normalization method
+    to mitigate the negaitve effects of temporal distribution shift problem.
+    This method has been proved to be effective in improving the performance of various existing models.
 
-        The RevIN (Reversible Instance Normalization) is a simple yet effective normalization method
-        to mitigating the negaitve effects of temporal distribution shift problem.
+    \[1\] Kim, Taesung, et al. "Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift", `https://openreview.net/forum?id=cGDAkQo1C0p`_
 
-        This method has been proved to be effective in improving the performance of various existing models.
-
-        @inproceedings{kim2021reversible,
-            title={Reversible Instance Normalization for Accurate Time-Series Forecasting against Distribution Shift},
-            author={Kim, Taesung and Kim, Jinhee and Tae, Yunwon and Park, Cheonbok and Choi, Jang-Ho and Choo, Jaegul},
-            booktitle = {International Conference on Learning Representations},
-            year= {2021},
-            url= {https://openreview.net/forum?id=cGDAkQo1C0p}
-            }
-
-        This code is based on the official Pytorch Implementation (https://github.com/ts-kim/RevIN)
+    This code is based on the official Pytorch Implementation (https://github.com/ts-kim/RevIN)
 
 
-        Args:
+    Args:
         base_net(nn.Layer): the base network
-        num_features (int): the number of features or channels
+        num_features (int): the number of target dims
         eps (float): a value added for numerical stability
-        affine (float): if True, RevIN has learnable affine parameters
-        """
+        affine (bool): if True, RevIN has learnable affine parameters
+    """
+    def __init__(self, base_net: nn.Layer, num_features: int, eps=1e-5, affine=True):
 
         super(RevinWrapper, self).__init__()
         self._base_net = base_net
@@ -86,6 +76,7 @@ class RevinWrapper(nn.Layer):
         The past_target is first normalizated by the revin and the fed into the base model
         Args:
         data(Dict[str, paddle.Tensor]): a dict specifies all kinds of input data
+
         Returns:
             predictions: output of RNN model, with shape [batch_size, out_chunk_len, target_dim]
         """
