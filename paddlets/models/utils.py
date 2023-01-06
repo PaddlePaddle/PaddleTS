@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from typing import Callable, Dict, List
+from copy import deepcopy
 import functools
 
 import pandas as pd
@@ -176,17 +177,22 @@ def build_network_input_spec(meta_data: Dict[str, str]) -> List[type]:
         List[type]: input_spec param for paddle api `paddle.jit.to_static`
     """
     input_spec = [{}]
-    new_meta_data = {}
-    for key, value in meta_data["input_data"].items():
-        if key not in INPUT_SPEC_NAME_DATA_MAPPING:
-            continue
-        name = INPUT_SPEC_NAME_DATA_MAPPING[key]
-        time_len = meta_data['size']['in_chunk_len'] + meta_data['size']['out_chunk_len'] if 'known' in name else meta_data['size']['in_chunk_len']
-        if 'static' in name:
-            time_len = 1
-        input_dtype = "int64" if 'cat' in name else "float32"
-        batch_size = meta_data.get('batch_size', None)
-        input_spec[0][name] = InputSpec(shape=[batch_size, time_len, value], dtype=input_dtype, name=name)
-        new_meta_data[name] = (batch_size, time_len, value)
-    meta_data["input_data"] = new_meta_data
+    if meta_data['model_type'] == 'classification':
+        for key, value in meta_data['input_data'].items():
+            value = deepcopy(value)
+            input_spec[0][key] = InputSpec(shape=value, dtype="float32", name=key)
+    else:
+        new_meta_data = {}
+        for key, value in meta_data["input_data"].items():
+            if key not in INPUT_SPEC_NAME_DATA_MAPPING:
+                continue
+            name = INPUT_SPEC_NAME_DATA_MAPPING[key]
+            time_len = meta_data['size']['in_chunk_len'] + meta_data['size']['out_chunk_len'] if 'known' in name else meta_data['size']['in_chunk_len']
+            if 'static' in name:
+                time_len = 1
+            input_dtype = "int64" if 'cat' in name else "float32"
+            batch_size = meta_data.get('batch_size', None)
+            input_spec[0][name] = InputSpec(shape=[batch_size, time_len, value], dtype=input_dtype, name=name)
+            new_meta_data[name] = (batch_size, time_len, value)
+        meta_data["input_data"] = new_meta_data
     return input_spec

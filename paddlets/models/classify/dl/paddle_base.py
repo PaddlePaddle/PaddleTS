@@ -16,6 +16,7 @@ from sklearn.utils import check_random_state
 import numpy as np
 import paddle
 
+# from paddlets.models.utils import format_labels
 from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
@@ -26,6 +27,8 @@ from paddlets.metrics import (
     MetricContainer, 
     Metric
 )
+
+from paddlets.models.utils import build_network_input_spec
 from paddlets.models.classify.dl.adapter.data_adapter import ClassifyDataAdapter
 from paddlets.models.classify.base import BaseClassifier
 from paddlets.datasets import TSDataset
@@ -330,9 +333,8 @@ class PaddleBaseClassifier(BaseClassifier):
         valid_tsdatasets: List[TSDataset] = None,
         valid_labels: np.ndarray = None
     ):
-        """
-        Train a neural network stored in self._network, using train_dataloader for training data and valid_dataloader
-        for validation.
+        """Train a neural network stored in self._network, 
+            Using train_dataloader for training data and valid_dataloader for validation.
 
         Args: 
             train_tsdataset(TSDataset): Train set.
@@ -618,7 +620,7 @@ class PaddleBaseClassifier(BaseClassifier):
         """
         pass
     
-    def save(self, path: str) -> None:
+    def save(self, path: str, network_model: bool = False, dygraph_to_static = True, batch_size: Optional[int] = None) -> None:
         """
         Saves a PaddleBaseClassifier instance to a disk file.
 
@@ -660,6 +662,7 @@ class PaddleBaseClassifier(BaseClassifier):
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
             "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_model": modelname,
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -672,27 +675,43 @@ class PaddleBaseClassifier(BaseClassifier):
         )
 
         # start to save
-        # 1 save optimizer state dict (currently ignore optimizer logic.)
-        # optimizer_state_dict = self._optimizer.state_dict()
-        # try:
-        #     paddle.save(
-        #         obj=optimizer_state_dict,
-        #         path=os.path.join(abs_root_path, internal_filename_map["optimizer_statedict"])
-        #     )
-        # except Exception as e:
-        #     raise_log(
-        #         ValueError(
-        #             "error occurred while saving %s: %s, err: %s" %
-        #             (internal_filename_map["optimizer_statedict"], optimizer_state_dict, str(e))
-        #         )
-        #     )
+        # 1 save network model and params for paddle inference
+        model_meta = self._build_meta()
+        if batch_size is not None:
+            model_meta['batch_size'] = batch_size
+            model_meta['input_data']['features'][0] = batch_size
+        if network_model:
+            self._network.eval()
+            input_spec = build_network_input_spec(model_meta)
+            try:
+                if dygraph_to_static:
+                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
+                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
+                else:
+                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
+            except Exception as e:
+                raise_log(
+                    ValueError(
+                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
+                        (internal_filename_map["network_model"], str(e))
+                    )
+                )
 
-        # 2 save network state dict
+        # 2 save model meta (e.g. classname)
+        try:
+            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+                json.dump(model_meta, f, ensure_ascii=False)
+        except Exception as e:
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
+            )
+
+        # 3 save network state dict
         network_state_dict = self._network.state_dict()
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
+                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"]),
             )
         except Exception as e:
             raise_log(
@@ -702,10 +721,11 @@ class PaddleBaseClassifier(BaseClassifier):
                 )
             )
 
-        # 3 save model
+        # 4 save model
         optimizer = self._optimizer
         network = self._network
         callback_container = self._callback_container
+        loss_fn = self._loss_fn
 
         # _network is inherited from a paddle-related pickle-not-serializable object, so needs to set to None.
         self._network = None
@@ -714,30 +734,20 @@ class PaddleBaseClassifier(BaseClassifier):
         # _callback_container contains PaddleBaseModel instances, as PaddleBaseModel contains pickle-not-serializable
         # objects `_network` and `_optimizer`, so also needs to set to None.
         self._callback_container = None
+        # loss_fn could possibly contain paddle.Tensor when it is a bound method of a class, thus needs to set to
+        # None to avoid pickle.dumps failure.
+        self._loss_fn = None
         try:
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
         except Exception as e:
             raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
 
-        # 4 save model meta (e.g. classname)
-        model_meta = {
-            # ChildModel,PaddleBaseModelImpl,PaddleBaseModel,BaseModel,Trainable,ABC,object
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
-            "modulename": self.__module__
-        }
-        try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
-                json.dump(model_meta, f, ensure_ascii=False)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
-
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
         self._network = network
         self._callback_container = callback_container
+        self._loss_fn = loss_fn
         return
 
     @staticmethod
@@ -784,3 +794,18 @@ class PaddleBaseClassifier(BaseClassifier):
         #
         # model._optimizer.set_state_dict(optimizer_statedict)
         return model
+
+    def _build_meta(self):
+        raise_if_not(
+            "feature_dim" in self._fit_params and "input_lens" in self._fit_params,
+            f"feature_dim or input_lens not in model._fit_params: {self._fit_params}, the model: {self.__module__} not support build_meta and save!"
+        )
+        res = {
+            "model_type": "classification",
+            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "modulename": self.__module__,
+            "size": {},
+            "input_data": {"features": [None, self._fit_params["input_lens"], self._fit_params["feature_dim"]]},
+        }
+
+        return res
