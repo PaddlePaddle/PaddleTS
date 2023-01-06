@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:23+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._mtad_gat.attention.rst:2
+#: 814900862cb348549c3fffba65194d33
+msgid "paddlets.models.anomaly.dl._mtad_gat.attention"
+msgstr ""
+
+#: b678a13b280f439eba559bfed128e191 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr ""
+
+#: 10fea811e4474670a864201eb48b375b of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:1
+msgid "Feature/Temporal Graph Attention Layer."
+msgstr "特征/时间 图注意力层。"
+
+#: 7a267a813a494ee49181e2e3775aac72 b833455e0dee440cad4a2aace1d9193c of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward
+msgid "Parameters"
+msgstr "参数"
+
+#: 8036bb3af92e4a4ca30fe5419319bbbe of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:3
+msgid "The number of features."
+msgstr "特征的数目。"
+
+#: 0a7978a69a7848468298ca0e446d95e4 445bcc83388641d0bb98956a1f0c5540 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:5
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:28
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: ed03fd4b600a4266962e3b2bfe348528 fd99cddb16c748c9bf805c95b92b2b5c of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:7
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:34
+msgid "The percentage of nodes to dropout."
+msgstr "dropout比例。"
+
+#: ba26979af7be402ca1c136a556cd7e3a c10235014cc34383a93b14aa5e136580 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:9
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:40
+msgid "The negative slope used in the LeakyReLU activation function."
+msgstr "leakyrelu激活函数中的参数。"
+
+#: 4313e207d45740f68a5b3594bfe6d65c da17bf38a89944f298853057a3565ffc of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:11
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:46
+msgid "The embedding dimension (output dimension of linear transformation)."
+msgstr "线性变换的输出维数。"
+
+#: cd7cb483c56640fca5f1fb77da6bdb10 ddf79b316a59438da62d069d33addcfa of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:13
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:52
+msgid ""
+"Whether to use the modified attention mechanism of GATv2 instead of "
+"standard GAT."
+msgstr "是否使用GATv2。"
+
+#: 8ca0de375f78488d879c95f7dd41a162 ab255ec826084fc799546f2883fb3b12 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:15
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:58
+msgid "whether to include a bias term in the attention layer."
+msgstr "在attention层中是否使用偏置。"
+
+#: 021eb0c732d64c619957e64ec11ea953 f63dd46f6e3245f3897e777f2295e7bd of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:17
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:64
+msgid "Feature or Temporal Graph."
+msgstr "特征图或者时间图。"
+
+#: ea3af5fcb2b6440c9606bf5db262231a of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:22
+msgid "The number of features/nodes."
+msgstr "特征或者节点数目。"
+
+#: 147f3eca781044d697cdc345e7c0695e 3e51411334a94704ae5686d9b5d7c2ef
+#: 3e5808d5df3c489bbc4bfbbc94cfb0df 5b1b0ef5e9884f71a87844375127ad7e
+#: 6a6a4bbc571c40cb873073edd4745b22 7007d94d95fa4cabbaa3d08a541dca3e
+#: 735408a19b7e4676ba40a883dad38f9f 79560f942b38443eb1411779a8b08587
+#: 9a9846948989471c85b993e3a9e9cea6 9f0c56d5661847558fc16cdd185f05ed
+#: b5099c2a71d44e5b958110ee60b9622c e969a1ced46e432cb765de19698964c4
+#: eebb3fa7c7f441669464e020e03e5249 f3ff8ebd2c714fbc99ecf57bed049f21 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention
+msgid "type"
+msgstr ""
+
+#: 70cc23d55a9748dcbe9a5889ec954bf2 ac673e0c53014eda93a7e91bfaedc66a
+#: f9e4a31a7b22447d8723b55a04348c23 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:24
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:30
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:72
+msgid "int"
+msgstr ""
+
+#: 33ec6699d51644d7b8f986927a772a49 6f458178f4d54459a52f00a9a637cb57 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:36
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:42
+msgid "float"
+msgstr ""
+
+#: cf8a5c88bd9e4071b6d9ebeac42608fd of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:48
+msgid "None|int"
+msgstr ""
+
+#: 008f05327ac74c3da9a4e0aa617fe0c6 a6c1f1c923e94d23b7d54c73391a17bb of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:54
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:60
+msgid "bool"
+msgstr ""
+
+#: b2ad4be040b94bb4bd0b7684d23dd42d of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:66
+msgid "str"
+msgstr ""
+
+#: e61ee658aafc459dbaf1979e7c3ed100 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:70
+msgid "Number of nodes in a graph."
+msgstr "图中的节点数目。"
+
+#: fd867b7935a343c39e56efd234c2324b of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:76
+msgid "The linear transformation layer."
+msgstr "线性变换层。"
+
+#: 38ce2ac0a6394d56aa95ff7f9491e0e8 da20f76938d04bffb30606be4c767250
+#: ec4a5e576b2843d1817a52ce83dd8388 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:78
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:96
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:102
+msgid "paddle.nn.Layer"
+msgstr ""
+
+#: 97c03285ffe34340a324172356d236d0 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:82
+msgid "The attention parameter."
+msgstr "attention层的参数。"
+
+#: 00f8085437a04e56af61339d43990701 6bf1ac713a7447f4ba621543c2a04139 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:84
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:90
+msgid "paddle.Parameter"
+msgstr ""
+
+#: 12ec2762d96045d48fc7bdf4b2414b9f of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:88
+msgid "The bias parameter."
+msgstr "bias参数。"
+
+#: 543852b910914559ae24407b46929caf of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:94
+msgid "The LeakyReLU activation layer."
+msgstr "leakrelu激活层。"
+
+#: a8ab012802784f7fa90bb30544b80a64 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention:100
+msgid "The Sigmoid layer."
+msgstr "sigmoid层。"
+
+#: f65d2e60342e42d4b92d09ba1acb2f7a of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward:1
+msgid "Feature extraction based on graph attention network"
+msgstr "基于图注意力网络的特征提取。"
+
+#: 944666f36799481c8eae46af02f4f904 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward:3
+msgid "The input data."
+msgstr "输入的数据。"
+
+#: 77a08271ed0c44c8b2321e9918b87ef1 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward
+msgid "Returns"
+msgstr ""
+
+#: 7f7e780c845d436db1f362c4ffcfd6b8 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward:6
+msgid "Output of Layer."
+msgstr "网络输出结果。"
+
+#: e426aeac838a46ff91e24601312e13f1 of
+#: paddlets.models.anomaly.dl._mtad_gat.attention.FeatOrTempAttention.forward
+msgid "Return type"
+msgstr ""
+

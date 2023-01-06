@@ -22,3 +22,7 @@ msgstr ""
 msgid "paddlets.models.classify.dl"
 msgstr ""
 
+#: 5e100b84c897460fae7aaa184b8fc2c7 of paddlets.models.classify.dl:1
+msgid "paddlets dl classify."
+msgstr ""
+

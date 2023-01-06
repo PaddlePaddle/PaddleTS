@@ -35,7 +35,7 @@ RAY_SAMPLE = {
 
 class SearchSpaceConfiger:
     """
-    SearchSpaceConfiger is for getting the default search space for the PaddleTS transformer, PaddleTS model, or PaddleTS pipeline used
+    SearchSpaceConfiger is for getting the default search space for the paddlets transformer, paddlets model, or paddlets pipeline used
     by automl.
 
     """
@@ -44,8 +44,8 @@ class SearchSpaceConfiger:
         """
 
         Args:
-            paddlets_estimator: A class(or str) of a PaddleTS model or a list of classes(or str) consisting of several PaddleTS
-                transformers and a PaddleTS model.
+            paddlets_estimator: A class(or str) of a paddlets model or a list of classes(or str) consisting of several paddlets
+                transformers and a paddlets model.
 
         Returns:
             dict: The domain of the automl to be optimized.
@@ -118,11 +118,11 @@ class SearchSpaceConfiger:
 
     def recommend(self, estimator, verbose=True):
         """
-        Recommend a search space for the PaddleTS estimator.
+        Recommend a search space for the paddlets estimator.
 
         Args:
-            estimator: A class(or str) of a PaddleTS model or a list of classes(or str) consisting of several PaddleTS
-                transformers and a PaddleTS model.
+            estimator: A class(or str) of a paddlets model or a list of classes(or str) consisting of several paddlets
+                transformers and a paddlets model.
 
         Returns:
             str: Search space in form of str
@@ -148,8 +148,8 @@ class SearchSpaceConfiger:
         Convert search space to string
 
         Args:
-            search_space: A class(or str) of a PaddleTS model or a list of classes(or str) consisting of several PaddleTS
-                transformers and a PaddleTS model.
+            search_space: A class(or str) of a paddlets model or a list of classes(or str) consisting of several paddlets
+                transformers and a paddlets model.
 
         Returns:
             str: Search space in form of str
@@ -211,7 +211,7 @@ class SearchSpaceConfiger:
     def paddlets_default_search_space(self):
         """
 
-        Default search space for PaddleTS
+        Default search space for paddlets
 
         """
         return {
@@ -267,7 +267,7 @@ class SearchSpaceConfiger:
                                                       [256] * 3]),
                             "hidden_size": qrandint(32, 512, q=32),
                             "num_layers_recurrent": randint(1, 4),
-                            "dropout": quniform(0, 1, q=0.05),
+                            "dropout": quniform(0, 0.5, q=0.05),
                             "optimizer_params": {
                                 "learning_rate": uniform(1e-4, 1e-2)
                             },
@@ -296,7 +296,7 @@ class SearchSpaceConfiger:
                             "num_layers": randint(2, 6),
                             "layer_widths": 512,
                             "batch_norm": choice([True, False]),
-                            "dropout": quniform(0, 1, 0.05),
+                            "dropout": quniform(0, 0.5, 0.05),
                             "activation": choice(
                                 ["ReLU", "PReLU", "ELU", "Softplus", "Tanh", "SELU", "LeakyReLU", "Sigmoid",
                                  "GELU"]),
@@ -317,7 +317,7 @@ class SearchSpaceConfiger:
                             "rnn_num_cells": choice([1, 2, 4, 8, 16, 32, 64]),
                             "skip_rnn_cell_type": choice(["GRU", "LSTM"]),
                             "skip_rnn_num_cells": choice([1, 2, 4, 8, 16, 32, 64]),
-                            "dropout_rate": quniform(0, 1, 0.05),
+                            "dropout_rate": quniform(0, 0.5, 0.05),
                             "output_activation": None,
                             "batch_size": qrandint(8, 128, q=8),
                             "max_epochs": qrandint(30, 600, q=30),
@@ -332,7 +332,7 @@ class SearchSpaceConfiger:
                             "num_decoder_layers": randint(1, 11),
                             "dim_feedforward": qrandint(32, 512, q=32),
                             "activation": choice(["relu", "gelu"]),
-                            "dropout_rate": quniform(0, 1, q=0.05),
+                            "dropout_rate": quniform(0, 0.5, q=0.05),
                             "d_model": qrandint(32, 512, q=32),
                             "batch_size": qrandint(8, 128, q=8),
                             "max_epochs": qrandint(30, 600, q=30),
@@ -346,18 +346,74 @@ class SearchSpaceConfiger:
                                                      [8] * 3, [8] * 5, [8] * 7,
                                                      [16] * 3, [16] * 5, [16] * 7]),
                             "kernel_size": choice([3, 5, 7]),
-                            "dropout_rate": quniform(0, 1, 0.05),
+                            "dropout_rate": quniform(0, 0.5, 0.05),
                             "batch_size": qrandint(8, 128, q=8),
                             "max_epochs": qrandint(300, 1500, q=100),
                             "optimizer_params": {
                                 "learning_rate": uniform(1e-4, 1e-2)
                             },
                             "patience": qrandint(50, 150, q=10)
+                        },
+                        "InformerModel": {
+                            "nhead": choice([1, 2, 4, 8]),
+                            "num_encoder_layers": randint(1, 11),
+                            "num_decoder_layers": randint(1, 11),
+
+                            "activation": choice(["relu", "gelu"]),
+                            "dropout_rate": quniform(0, 0.5, q=0.05),
+                            "d_model": qrandint(32, 512, q=32),
+                            "batch_size": qrandint(8, 128, q=8),
+                            "max_epochs": qrandint(30, 600, q=30),
+                            "optimizer_params": {
+                                "learning_rate": uniform(1e-4, 1e-2)
+                            },
+                            "patience": qrandint(5, 50, q=5)
+                        },
+                        "DeepARModel": {
+                            "rnn_type_or_module": choice(["LSTM", "GRU"]),
+                            "fcn_out_config": choice([[16], [32], [64], [128], [256],
+                                                      [16] * 2, [32] * 2, [64] * 2, [128] * 2, [256] * 2,
+                                                      [16] * 3, [32] * 3, [64] * 3, [128] * 3,
+                                                      [256] * 3]),
+                            "hidden_size": qrandint(32, 512, q=32),
+                            "num_layers_recurrent": randint(1, 4),
+                            "dropout": quniform(0, 0.5, q=0.05),
+                            "optimizer_params": {"learning_rate": uniform(1e-4, 1e-2)},
+                            "batch_size": qrandint(8, 128, q=8),
+                            "max_epochs": qrandint(30, 600, q=30),
+                            "patience": qrandint(5, 50, q=5)
                         }
                     },
                     "pytorch": {}
                 },
                 "ml": {
+                    "LGBM": {
+                        "num_boost_round": randint(10, 2000),
+                        "early_stopping_rounds": 0,
+                        "params": {
+                            "boosting": choice(["gbdt", "rf", "dart"]),
+                            "objective": "regression",
+                            "metric": choice(["mse", "mae"]),
+                            "learning_rate": loguniform(1e-4, 0.1),
+                            "lambda_l1": quniform(0, 0.3, 0.05),
+                            "lambda_l2": quniform(0, 0.3, 0.05),
+                            "num_leaves": randint(15, 255),
+                            "max_depth": -1,
+                            "bagging_freq": randint(1, 6),
+                            "bagging_fraction": quniform(0.3, 0.95, 0.05),
+                            "feature_fraction": quniform(0.3, 1, 0.1),
+                            "min_data_in_leaf": randint(1, 32),
+                            "verbose": -1,
+                            "num_threads": 1,
+                            "seed": 28,
+                        },
+                    },
+                    "ArimaModel": {
+                        "p": 0,
+                        "d": 0,
+                        "q": 1,
+                        "trend": choice(["c", "nc"]),
+                    }
                 }
             }
         }

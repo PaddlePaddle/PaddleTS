@@ -332,66 +332,69 @@ class Pipeline(Trainable):
         step to determine its feature transform data in the next time step.
         """
         tsdataset_copy = tsdataset.copy()
-        # Preprocess tsdataset
+        # check tsdataset
+        out_chunk_time_freq = None
         if isinstance(tsdataset.get_target().data.index, pd.RangeIndex):
-            dataset_end_time = max(
-                tsdataset_copy.get_target().end_time + \
-                recursive_rounds * self._model._out_chunk_len * \
-                (tsdataset_copy.get_target().time_index.step),
-                tsdataset_copy.get_known_cov().end_time \
-                    if tsdataset_copy.get_known_cov() is not None \
-                    else tsdataset_copy.get_target().start_time,
-                tsdataset_copy.get_observed_cov().end_time \
-                    if tsdataset_copy.get_observed_cov() is not None \
-                    else tsdataset_copy.get_target().start_time
-            )
+            out_chunk_time_freq = self._model._out_chunk_len * \
+                                  (tsdataset_copy.get_target().time_index.step)
         elif isinstance(tsdataset.get_target().data.index, pd.DatetimeIndex):
-            dataset_end_time = max(
-                tsdataset_copy.get_target().end_time + \
-                recursive_rounds * self._model._out_chunk_len * \
-                (tsdataset_copy.get_target().time_index.freq),
-                tsdataset_copy.get_known_cov().end_time \
-                    if tsdataset_copy.get_known_cov() is not None \
-                    else tsdataset_copy.get_target().start_time,
-                tsdataset_copy.get_observed_cov().end_time \
-                    if tsdataset_copy.get_observed_cov() is not None \
-                    else tsdataset_copy.get_target().start_time
-            )
+            out_chunk_time_freq = self._model._out_chunk_len * \
+                                  (tsdataset_copy.get_target().time_index.freq)
         else:
             raise_log(ValueError(f"time col type not support, \
-                index type:{type(tsdataset.get_target().data.index)}"))
+                                                 index type:{type(tsdataset.get_target().data.index)}"))
+
+        target_res_end_time = tsdataset_copy.get_target().end_time + \
+                              recursive_rounds * out_chunk_time_freq
+        if tsdataset_copy.get_known_cov() is not None \
+                and target_res_end_time > tsdataset_copy.get_known_cov().end_time:
+            raise_log(RuntimeError(
+                "recursive_rounds is %s, "
+                "recursive predict output end time : %s, while no enough known_cov can be used as in_chunk, "
+                "known_cov's end_time must >= %s'" % (str(recursive_rounds),
+                                                      str(target_res_end_time),
+                                                      str(target_res_end_time))))
+        if tsdataset_copy.get_observed_cov() is not None \
+                and target_res_end_time > tsdataset_copy.get_observed_cov().end_time + out_chunk_time_freq:
+            raise_log(RuntimeError(
+                "recursive_rounds is %s, "
+                "recursive predict output end time : %s, while no enough observed_cov can be used as in_chunk, "
+                "observed_cov's end_time must >= %s'" % (str(recursive_rounds),
+                                                         str(target_res_end_time),
+                                                         str(target_res_end_time - out_chunk_time_freq))))
+
         # Reindex data and the default fill value is np.nan
-        fill_value = np.nan
-        if tsdataset_copy.get_known_cov() is not None:
-            if isinstance(tsdataset_copy.get_known_cov().data.index, pd.RangeIndex):
-                tsdataset_copy.get_known_cov().reindex(
-                    pd.RangeIndex(start=tsdataset_copy.get_known_cov().start_time,
-                                  stop=dataset_end_time + 1,
-                                  step=tsdataset_copy.get_known_cov().time_index.step),
-                    fill_value=fill_value
-                )
-            else:
-                tsdataset_copy.get_known_cov().reindex(
-                    pd.date_range(start=tsdataset_copy.get_known_cov().start_time,
-                                  end=dataset_end_time,
-                                  freq=tsdataset_copy.get_known_cov().time_index.freq),
-                    fill_value=fill_value
-                )
-        if tsdataset_copy.get_observed_cov() is not None:
-            if isinstance(tsdataset_copy.get_observed_cov().data.index, pd.RangeIndex):
-                tsdataset_copy.get_observed_cov().reindex(
-                    pd.RangeIndex(start=tsdataset_copy.get_observed_cov().start_time,
-                                  stop=dataset_end_time + 1,
-                                  step=tsdataset_copy.get_observed_cov().time_index.step),
-                    fill_value=fill_value
-                )
-            else:
-                tsdataset_copy.get_observed_cov().reindex(
-                    pd.date_range(start=tsdataset_copy.get_observed_cov().start_time,
-                                  end=dataset_end_time,
-                                  freq=tsdataset_copy.get_observed_cov().time_index.freq),
-                    fill_value=fill_value
-                )
+        # fill_value = np.nan
+        # if tsdataset_copy.get_known_cov() is not None:
+        #     if isinstance(tsdataset_copy.get_known_cov().data.index, pd.RangeIndex):
+        #         tsdataset_copy.get_known_cov().reindex(
+        #             pd.RangeIndex(start=tsdataset_copy.get_known_cov().start_time,
+        #                           stop=dataset_end_time + 1,
+        #                           step=tsdataset_copy.get_known_cov().time_index.step),
+        #             fill_value=fill_value
+        #         )
+        #     else:
+        #         tsdataset_copy.get_known_cov().reindex(
+        #             pd.date_range(start=tsdataset_copy.get_known_cov().start_time,
+        #                           end=dataset_end_time,
+        #                           freq=tsdataset_copy.get_known_cov().time_index.freq),
+        #             fill_value=fill_value
+        #         )
+        # if tsdataset_copy.get_observed_cov() is not None:
+        #     if isinstance(tsdataset_copy.get_observed_cov().data.index, pd.RangeIndex):
+        #         tsdataset_copy.get_observed_cov().reindex(
+        #             pd.RangeIndex(start=tsdataset_copy.get_observed_cov().start_time,
+        #                           stop=dataset_end_time + 1,
+        #                           step=tsdataset_copy.get_observed_cov().time_index.step),
+        #             fill_value=fill_value
+        #         )
+        #     else:
+        #         tsdataset_copy.get_observed_cov().reindex(
+        #             pd.date_range(start=tsdataset_copy.get_observed_cov().start_time,
+        #                           end=dataset_end_time,
+        #                           freq=tsdataset_copy.get_observed_cov().time_index.freq),
+        #             fill_value=fill_value
+        #         )
         target_length = len(tsdataset_copy.target)
 
         # feature process on pre data

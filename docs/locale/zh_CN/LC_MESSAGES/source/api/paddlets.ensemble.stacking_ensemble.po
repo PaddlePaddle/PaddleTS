@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-15 21:52+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.ensemble.stacking_ensemble.rst:2
+#: 62571599c3834d52830f02685de8ef78
+msgid "paddlets.ensemble.stacking_ensemble"
+msgstr ""
+
+#: 04faec13a4354e7598473a8ef31b965c of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase:1
+msgid "Bases: :py:class:`~paddlets.ensemble.base.EnsembleBase`"
+msgstr ""
+
+#: 365ddd52c72f485b90755aee02fa21e4 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase:1
+msgid "The StackingEnsembleBase Class."
+msgstr "Stacking集成模型基类"
+
+#: 0a79d7c4027a4713bd24c059dc14ed7e 4109f88258bc481ca556fda53ec0a64f
+#: 780d82afa3c64d50ae49acd4b722ba1c 8e3124176bd249df9440663c5030cd06
+#: b362cc37dbea4a81a83b04ff7bbc333a b7ab79acb40e4c44a4adee15ba2f23ad
+#: d1c2460c0969490fba37c193f07d5f97 f0c836d272774d749cbdcb8ff7ef7a03 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase.fit
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase.predict
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.fit
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.predict
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.save
+msgid "Parameters"
+msgstr ""
+
+#: 8d1cbab0cab0465fa03fa4dc5b412dab of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase:3
+msgid "A list of tuple (class,params) consisting of several paddlets models"
+msgstr "一个由paddlets模型组成的 tuple (模型类名,模型参数) 列表"
+
+#: 0d1cbd9abf154f8e81ed90a0d8623c70 9ad8ccc69d45426d91c76145ccb6f54d of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase:5
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:13
+msgid ""
+"The final learner on stack level 2, should be a sklearn-like regressor, "
+"set to GradientBoostingRegressor(max_depth=5) by default."
+msgstr "第二层的集成模型元学习器，必须为sklearn类型的回归模型， 默认使用GradientBoostingRegressor(max_depth=5)"
+
+#: 975b512b15c74b4e9402447d62e040dc cd24fd766db9414fab5ce80afac70229 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase:7
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:23
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志，默认开启"
+
+#: 172d57aa75cb4dceb84bbf4a703efedb 924a55c0989149529eee3971a774946b of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase.fit:1
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.fit:1
+msgid "Train dataset."
+msgstr "训练集"
+
+#: 1897207736b9420b9e73c3946a53fb5a 3efaf0f25a2a4312bf5816001de978d9 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase.fit:3
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.fit:3
+msgid "Valid dataset."
+msgstr "验证集"
+
+#: ea18dad14be542a6ae2afd095b137dbf f14ac4b25f084b328a338574f0f939e9 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleBase.predict:1
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.predict:3
+msgid "Dataset to predict."
+msgstr "预测数据"
+
+#: 215fd7a263a349828241ca00d0d1a42f of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.ensemble.stacking_ensemble.StackingEnsembleBase`, "
+":py:class:`~paddlets.models.base.BaseModel`"
+msgstr ""
+
+#: a871ad0fa6cc4a189195fdc7cec102ad of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:1
+msgid "The StackingEnsembleForecaster Class."
+msgstr "Stacking集成预测"
+
+#: 53ab166b8b814d68a47f31861f23cd20 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:3
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度"
+
+#: 37d63bbdb88948378b31355df4d6698e of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度"
+
+#: 704bfae7fca24735b00b42ee8d460c9a of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:7
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. By default, it will NOT skip any "
+"time steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0"
+
+#: fc9f55b9cbb544c6b54c68d009e8fb79 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:11
+msgid ""
+"A list of tuple (class,params) consisting of several paddlets Forecasting"
+" models."
+msgstr "一个由paddlets模型组成的 tuple (模型类名,模型参数) 列表"
+
+#: cae96ab1590c4f30b85b6233de08379a of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:15
+msgid ""
+"A string of resampling strategies.Supported resampling strategy are "
+"\"cv\", \"holdout\"."
+msgstr "底层模型重采样策略，支持(cv,holdout)"
+
+#: 5415c54979fa4e9f986a3925e284bf6c of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:17
+msgid ""
+"The proportion of the dataset included in the validation split for "
+"holdout.The split_ratio should be in the range of (0, 1)."
+msgstr "holdout重采样策略的参数，代表验证集的比例，应该在（0，1）区间"
+
+#: cde51176b13b4643bed0fc40167d6a6a of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:19
+msgid ""
+"Number of folds for cv.The k_fold should be in the range of (0, 10], "
+"defaults to 3."
+msgstr "底层模型时序交叉验证cv的参数，代表交叉验证的轮数，在(0,10]之间，默认为3"
+
+#: f2185b51b82544cdbbbbb9ef041e14da of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster:21
+msgid "If use backtest on predictions."
+msgstr "是否开启回测在底层模型，默认为True"
+
+#: 9fe77af6afdc444ca213a71d7dfe7a31 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.predict:1
+msgid "Predict"
+msgstr "预测"
+
+#: e275f31f50e04674a1e615440d881060 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.save:1
+msgid "Save the ensemble model to a directory."
+msgstr "保存模型"
+
+#: 3d9d281bde3c4a6db72be14726ef2ad9 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: da0cacb9155f49d4af87f10ffb14f977 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.save:5
+msgid ""
+"Name of ensemble object. This file contains meta information of ensemble "
+"model."
+msgstr "模型文件名"
+
+#: 08304b8af1fe49259256166dbd9723cf of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load:1
+msgid "Load the ensemble model from a directory."
+msgstr "加载模型"
+
+#: 43bcb980f75545c790a68ab70d1b96d4 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load:3
+msgid "Input directory path."
+msgstr "加载路径"
+
+#: 1cfe14386a084adeb0fc7b4c07cbe282 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load:5
+msgid "Name of ensemble object. This file contains meta information of ensemble."
+msgstr "模型文件名"
+
+#: f5249b3b3a644c458ebe209f65f84517 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load
+msgid "Returns"
+msgstr ""
+
+#: b009768782cf4cea994ec45ef23fe265 of
+#: paddlets.ensemble.stacking_ensemble.StackingEnsembleForecaster.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+

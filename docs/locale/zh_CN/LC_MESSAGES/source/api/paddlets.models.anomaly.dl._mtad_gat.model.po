@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-26 11:23+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.anomaly.dl._mtad_gat.model.rst:2
+#: cc24b4cc85ad4695a2a6d848bac401e6
+msgid "paddlets.models.anomaly.dl._mtad_gat.model"
+msgstr ""
+
+#: 23f041ad1fd14b4fbac428c6b251b99e 7bd151e233e34e7a8bb4f8b33fb20e8a of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:1
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:1
+msgid "Bases: :py:class:`~paddle.fluid.dygraph.layers.Layer`"
+msgstr ""
+
+#: 2cfb63431a0d4caab415ae4a32211cb6 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:1
+msgid "Reconstruction based Model."
+msgstr "基于重构的模型。"
+
+#: 570766c3c00f451da0225b918981cca5 5d746c004a204facae8d06531f531beb
+#: b569eef377554613a64527ba99790709 c5f766405e334b6bb8bf2d319882b2c1 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward
+msgid "Parameters"
+msgstr "参数"
+
+#: 07d428fc0a79490ea7022f4839cb25a9 2dd1105180db4a4c9c4c556aa1d140d6 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:3
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:18
+msgid ""
+"The size of the loopback window, i.e. the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度。"
+
+#: 21977be0a258499297f3628b7de5ae2e 7a8af198752b456e8981779f2660a4d3 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:3
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:5
+msgid "The number of features."
+msgstr "特征的维度。"
+
+#: 9760003bacc84d96b2b71e6b7764a403 f10d1bdbb3fd41e9b69de32ac417d5f3 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:5
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:7
+msgid "The hidden size."
+msgstr "隐层的节点数。"
+
+#: 0e740422f61447fa85afb0bb51e1dd19 b848180462be4643b5e25a64ee1855c1 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:7
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:9
+msgid "The number of output features."
+msgstr "输出的特征数。"
+
+#: 78becccacd6445cb880bbabe53288e31 98488cc81e284e56969f2e5cb6f56d1d of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:9
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:11
+msgid "The number of layer."
+msgstr "隐层的层数。"
+
+#: 73c4c5e2f1b64f45bdeb8efead139140 f4233c30d081444ea4b3b75a027431fd of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:11
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:13
+msgid "Dropout regularization parameter."
+msgstr "dropout参数。"
+
+#: 17f16e3691854793802934fe9cb04f6b 5069c5a2b699482f8a7d70f494b1be5b
+#: 51124216a35d486b8811d3e6ca9581b6 a3d9080d5aae46ee90f133645e2fc838
+#: c16b3d6f79744ef68cc6d5c06086a369 e6a600e2895a47bcab7cddc1e2116508 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction
+msgid "type"
+msgstr ""
+
+#: d07d36eae9c9437384d7addcdcd50663 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:20
+msgid "int"
+msgstr ""
+
+#: e97c91baef4c424490f5e5a414c9d06d of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:24
+msgid "The gru decoder layer."
+msgstr "gru解码层。"
+
+#: f5447256a8434ab6ba6fc935f0379f26 fb4f9da2131c4192b8b0e5f87484c6bc of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:26
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:32
+msgid "paddle.nn.Layer"
+msgstr ""
+
+#: 54efec9394fa4deabd26bf544b704794 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction:30
+msgid "The fc layer."
+msgstr "全连接层。"
+
+#: 02b1a62093ec44d1a67afe2b5685f445 c5e2ef8e32ca4ba283da0eed5661bd00 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward:1
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward:1
+msgid "Forward"
+msgstr ""
+
+#: 50c34c21ae37458296d92fb38eb849d4 cc2a93b9b8d24a64a470e3616131aa88 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward:3
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward:3
+msgid "The input data."
+msgstr "输入的数据。"
+
+#: 70f59cb8e11e4b43887276167a553273 e1b9ef61e1d44f42a9b8c7bcdf56ccb4 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward
+msgid "Returns"
+msgstr ""
+
+#: a75405d81ab64e2a93568462e6d831eb of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward:6
+msgid "Output of Reconstruction."
+msgstr "重建网络的输出。"
+
+#: 1c71394b3f2b45fba72895497c09f399 c0b7d39ff5784131b2ac11b293a0fde0 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward
+#: paddlets.models.anomaly.dl._mtad_gat.model.Reconstruction.forward
+msgid "Return type"
+msgstr ""
+
+#: 73d53bca25c345399d2d827a89bc5cdc of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:1
+msgid "Forecasting based Model."
+msgstr "基于预测的模型。"
+
+#: 9f450a433993402bb3c659850e977c51 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:16
+msgid "Dynamic graph LayerList."
+msgstr "一组动态图Layer列表。"
+
+#: 19910c2f10f84f48b1ea67a8f3ffa74b of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:18
+msgid "paddle.nn.Sequential"
+msgstr ""
+
+#: 3f0b222bc168416ca79ac8e3ecfbb558 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:22
+msgid "The dropout layer."
+msgstr "dropout层。"
+
+#: 8129c9f5328b4d5ab04dbe906dcf96a4 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:24
+msgid "paddle.nn.Dropout"
+msgstr ""
+
+#: de4e3b43907c41589cb3d608a24dbfd2 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:28
+msgid "The relu layer."
+msgstr "relu层。"
+
+#: bbc1421d0e6c4faa88ae756ab0f1c607 of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting:30
+msgid "paddle.nn.RelU"
+msgstr ""
+
+#: 978a47076e594a4d90b0d5f6e8dd8dcc of
+#: paddlets.models.anomaly.dl._mtad_gat.model.Forecasting.forward:6
+msgid "Output of Forecasting."
+msgstr "预测模型的输出。"
+

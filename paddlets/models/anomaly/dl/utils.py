@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import paddle
 import paddle.nn.functional as F
+import more_itertools as mit
 
 from paddlets.logger import raise_if_not, raise_if, raise_log, Logger
 from paddlets.datasets import TSDataset
@@ -331,3 +332,61 @@ def to_tsdataset(
             return TSDataset.load_from_dataframe(anomaly_target, freq=freq)
         return wrapper
     return decorate
+
+    
+def epsilon_th(anomaly_score: np.ndarray, reg_level: int = 1):
+    """
+    Threshold method proposed by Hundman et. al. (https://arxiv.org/abs/1802.04431)
+    Code from TelemAnom (https://github.com/khundman/telemanom)
+    
+    Args:
+        anomaly_score(np.ndarray): Anomaly score.
+        reg_level(int): The parameter used to calculate the threshold.
+
+    Return:
+        threshold(float): Anomaly threshold.
+    
+    """
+    a_s = anomaly_score
+    best_epsilon = None
+    max_score = -10000000
+    mean_a_s = np.mean(a_s)
+    sd_a_s = np.std(a_s)
+
+    for z in np.arange(2.5, 12, 0.5):
+        epsilon = mean_a_s + sd_a_s * z
+        pruned_a_s = a_s[a_s < epsilon]
+
+        i_anom = np.argwhere(a_s >= epsilon).reshape(-1,)
+        buffer = np.arange(1, 50)
+        i_anom = np.sort(
+            np.concatenate(
+                (
+                    i_anom,
+                    np.array([i + buffer for i in i_anom]).flatten(),
+                    np.array([i - buffer for i in i_anom]).flatten(),
+                )
+            )
+        )
+        i_anom = i_anom[(i_anom < len(a_s)) & (i_anom >= 0)]
+        i_anom = np.sort(np.unique(i_anom))
+
+        if len(i_anom) > 0:
+            groups = [list(group) for group in mit.consecutive_groups(i_anom)]
+            mean_perc_decrease = (mean_a_s - np.mean(pruned_a_s)) / mean_a_s
+            sd_perc_decrease = (sd_a_s - np.std(pruned_a_s)) / sd_a_s
+            if reg_level == 0:
+                denom = 1
+            elif reg_level == 1:
+                denom = len(i_anom)
+            elif reg_level == 2:
+                denom = len(i_anom) ** 2
+            score = (mean_perc_decrease + sd_perc_decrease) / denom
+            if score >= max_score and len(i_anom) < (len(a_s) * 0.5):
+                max_score = score
+                best_epsilon = epsilon
+
+    if best_epsilon is None:
+        best_epsilon = np.max(a_s)
+            
+    return best_epsilon

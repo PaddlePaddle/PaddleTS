@@ -24,13 +24,14 @@ msgstr ""
 #: bc9a2a8a6ddd43368b979fa2a025b4a8 of
 #: paddlets.models.utils.get_target_from_tsdataset:1
 msgid "Just reserve target in tsdataset."
-msgstr ""
+msgstr "只在tsdataset数据集中保留target。"
 
-#: 44d4e08b3cad4fb1ae1611e3cac48fa8 61c243a418fe432583ed3e6a73236390
-#: 8fa2682c0a9a47efbf5e4cc01ec3ee0d bf579cdc8f4d4418869795367d100871 of
+#: 482d94e307954eaaa28cb741715b82ee 86088044cc104270a161025cf60ece6f
+#: c1dcf3ce4249404d8f73808b3085b498 f544f59ec53e47309237b8aba2a4551e of
+#: paddlets.models.utils.build_network_input_spec
 #: paddlets.models.utils.check_tsdataset
 #: paddlets.models.utils.get_target_from_tsdataset
-#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
+#: paddlets.models.utils.to_tsdataset
 msgid "Parameters"
 msgstr "参数"
 
@@ -66,8 +67,7 @@ msgstr "其他: 非法."
 msgid "Data to be checked."
 msgstr "待检查的数据."
 
-#: 0222c4ff4b7a49e8a899cda186a7e2b1 045ad7c0b9984ac3a22fc1213f02a4b5 of
-#: paddlets.models.utils.to_tsdataset:1 paddlets.models.utils.to_tsdataset2:1
+#: f794a92c441441caa9000559295111de of paddlets.models.utils.to_tsdataset:1
 msgid ""
 "A decorator, used for converting ndarray to tsdataset (compatible with "
 "both DL and ML, compatible with both forecasting and anomaly)."
@@ -79,25 +79,34 @@ msgid ""
 " optional."
 msgstr ""
 
-#: 70f4fd011d0544f294a60aeb95a401ca f459a26ee0e846caa04a43046169a2f1 of
-#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
+#: 4bf4e0958218474ebf53c514564cc6ca d9681d8e22364df8abe68400f4eb594d of
+#: paddlets.models.utils.build_network_input_spec
+#: paddlets.models.utils.to_tsdataset
 msgid "Returns"
 msgstr "返回"
 
-#: 18788521c28840bbb12e7510731e0c63 91c526c6593545ff99081202b4f464fd of
-#: paddlets.models.utils.to_tsdataset:7 paddlets.models.utils.to_tsdataset2:7
+#: 8aefda99227d4234950cc026268100bc of paddlets.models.utils.to_tsdataset:7
 msgid "Wrapped core function."
 msgstr "被装饰的函数."
 
-#: 2e0e9f0fa0e54f46b5a14ee1320e7964 32955fba142b464f949714e955675eba of
-#: paddlets.models.utils.to_tsdataset paddlets.models.utils.to_tsdataset2
+#: 1e434d79a8354f9ba9ed22b30b82e1b8 768e000703dc41768fbd50a5acd71bad of
+#: paddlets.models.utils.build_network_input_spec
+#: paddlets.models.utils.to_tsdataset
 msgid "Return type"
 msgstr ""
 
-#: 68aae619ff5246a9bf98125e10edc3ea of paddlets.models.utils.to_tsdataset2:4
-msgid "The task type. [\"anomaly_label\", \"anomaly_score\"] is optional."
-msgstr ""
+#: 2722728e26a0445dbdae7acb014df75a of
+#: paddlets.models.utils.build_network_input_spec:1
+msgid "build paddle network input_spec params for save by meta_data"
+msgstr "构建paddle网络network参数，用于保存meta_data"
 
-#~ msgid "Core function."
-#~ msgstr "核心函数."
+#: bef1c3d9b4e44ebd9e02369533c88f1c of
+#: paddlets.models.utils.build_network_input_spec:3
+msgid "The meta data in model."
+msgstr "模型的meta数据。"
+
+#: fe85fdbdbffa4024ade0b2b969bb38b3 of
+#: paddlets.models.utils.build_network_input_spec:6
+msgid "input_spec param for paddle api `paddle.jit.to_static`"
+msgstr "paddle api `paddle.jit.to_static` 的input_spec参数"
 

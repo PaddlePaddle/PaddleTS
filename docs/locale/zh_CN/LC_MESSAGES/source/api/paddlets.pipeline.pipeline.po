@@ -321,9 +321,4 @@ msgstr "输入目录"
 msgid "The loaded pipeline."
 msgstr "被加载的 Pipeline 对象。"
 
-#~ msgid "Bases: :py:class:`bts.models.base.Trainable`"
-#~ msgstr ""
-
-#~ msgid "Return transformed results by default, Return Both transformed results"
-#~ msgstr ""
 

@@ -344,6 +344,12 @@ msgstr "获取数据的异常标签，输出格式为TSDataset。"
 msgid "Data to be predicted."
 msgstr "用于预测的数。"
 
+#: 4823fffd9f1c4b49807e67ca69793911 95d50d5c3fbe4e57b580e3b8b54c333d of
+#: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict:5
+#: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.predict_score:5
+msgid "Additional arguments for `_predict`."
+msgstr "_predict额外的参数。"
+
 #: 92d3d1799e4445b19b9492ac712b5993 b09630544aae4ba08e86f86fe29ecac1
 #: f467682c000e4498a2035d9ceadb1b33 of
 #: paddlets.models.anomaly.dl.anomaly_base.AnomalyBaseModel.load

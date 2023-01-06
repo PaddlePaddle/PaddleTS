@@ -22,7 +22,7 @@ msgstr ""
 msgid "paddlets.models.classify"
 msgstr ""
 
-#: 06e387f3269d4cc08a2cb2afc3b3ddfa of paddlets.models.classify:1
-msgid "Bts classify."
+#: 39dbaa0abc1e4be1a5669fed7abf715d of paddlets.models.classify:1
+msgid "classify."
 msgstr ""
 

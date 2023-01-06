@@ -1,0 +1,256 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-15 21:57+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.ensemble.weighting_ensemble.rst:2
+#: 0f627160bd90427282786c6752d26643
+msgid "paddlets.ensemble.weighting_ensemble"
+msgstr ""
+
+#: 7989c7fc2432412f90dcb1456b6b70f4 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase:1
+msgid "Bases: :py:class:`~paddlets.ensemble.base.EnsembleBase`"
+msgstr ""
+
+#: 49ff936665344689b929caaadd1bb85c of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase:1
+msgid "The WeightingEnsembleBase Class."
+msgstr "WeightingEnsemble基类"
+
+#: 16fbaa10397044d0bd1770a5c12db9f1 179d6ddf07e8425b8bfbd9f15edb150f
+#: 18cbbcfc40cc4f8da79b1b91dfeb5249 263ef45f43ff4c5986e0854692876e9a
+#: 424fc9786d524ff8a42f6de7a24297aa 449d9a80a1b646d3bf4e7cad21751b88
+#: 44c4a423588e4e9d9a141c7f82309902 4a4d4d47b1964a40abde919040e162f7
+#: 80f33c73c26a4c8dab591efae044a1c3 954056418ea74adb80c0803c7118c980
+#: a9f3640d70fc4ebc812e6615e661250b bd8d37e9666e4235a05d3138a261729d
+#: c982eef1ce06447faa5c98008ccf7db0 d8f50e71d15544dd92aaa1890a55fd31 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.fit
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict_score
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.save
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.fit
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.predict
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.fit
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.predict
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.save
+msgid "Parameters"
+msgstr ""
+
+#: 40e74905f3e04786b61c1f94b25ed6a4 6e742c97bec340ea9c0acb5e55d06f50 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:10
+msgid "A list of tuple (class,params) consisting of several paddlets models"
+msgstr "一个由paddlets模型组成的 tuple (模型类名,模型参数) 列表"
+
+#: 7b1394205b534eabba2f4e359af41da5 8072068a530346d58ad407c2f0f3ba3f
+#: b162e24fddcc4a70b7d1de588fe30452 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:7
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase:5
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:12
+msgid ""
+"weighting mode, support [\"mean\",\"min\",\"max\",\"median\"] for now, "
+"set to \"mean\" by default."
+msgstr "weighting的模式，支持[“mean”,”min”,”max”,”median”]，默认值为“mean”"
+
+#: 22661b10ed1b4c60b462d306b52e7d52 42b5b6bbee614571b3813e94b950281c
+#: 5b95464309cb4589ab1d986f82d3eb97 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:15
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase:6
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:13
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志，默认开启"
+
+#: 7ab472a427e548a4911d5cbbfd624485 e9df155306cc41019e7b52a79468938e of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.fit:1
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.fit:1
+msgid "Fit"
+msgstr ""
+
+#: 0e056a28fa7842bc87ad28b6aa3cc881 c2dd936460974758912867d7ec6f287a
+#: dd0f43158741462a93b805499fec989b of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.fit:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.fit:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.fit:1
+msgid "Train dataset."
+msgstr "训练集"
+
+#: 4a03378a504247758e32dd775d59bef1 a898bcb4514f477eb346f6241bd7522e
+#: fa1381aae6374aeab6edab297aa54ad9 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.fit:5
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.fit:5
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.fit:3
+msgid "Valid dataset."
+msgstr "验证集"
+
+#: 4a32cdb4f71f42609d2deddec4747ef2 75d7ec750c294338847fbe28ac143ee6
+#: a8d4770783954879874deb811a85705e of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase.predict:1
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.predict:1
+msgid "Dataset to predict."
+msgstr "预测的数据"
+
+#: 8e9b48a95f4840fa8b23aa46e85e9de3 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase`, "
+":py:class:`~paddlets.models.base.BaseModel`"
+msgstr ""
+
+#: 4fcf69e0f7be4028950643c592492ff1 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:1
+msgid "The WeightingEnsembleForecaster Class."
+msgstr "Weighting集成预测"
+
+#: 122fa5da925a4f608bb9d08873fcaa73 f5e0e3b5e4054c0cbea080faa66ef370 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:3
+msgid ""
+"The size of the loopback window, i.e., the number of time steps feed to "
+"the model."
+msgstr "模型输入的时间序列长度"
+
+#: e8170051c59e423ea3e847ce69309229 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:5
+msgid ""
+"The size of the forecasting horizon, i.e., the number of time steps "
+"output by the model."
+msgstr "模型输出的序列长度"
+
+#: 31da8508501b4276a0d700b19a053711 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster:7
+msgid ""
+"Optional, the number of time steps between in_chunk and out_chunk for a "
+"single sample. The skip chunk is neither used as a feature (i.e. X) nor a"
+" label (i.e. Y) for a single sample. Bydefault, it will NOT skip any time"
+" steps."
+msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0"
+
+#: 4146987462b14788a84712f99a9a6f31 41687d9fc72b444f93184e17d97d45c5 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.save:1
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.save:1
+msgid "Save the ensemble model to a directory."
+msgstr "保存模型"
+
+#: 6de62b0d38e24097a5be091ecb85e4e2 a98cc0b45b87470997cba5a1b2f830ce of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.save:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: 6311aec660514684bc4d22d29414a94d 89eddcdd93c74bea93e7e76328415bae of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.save:5
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.save:5
+msgid ""
+"Name of ensemble object. This file contains meta information of ensemble "
+"model."
+msgstr "模型文件名"
+
+#: 91fa9df6979d43139b015bb83e549087 dfb44483435f4192ac924d8db41b300e of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load:1
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load:1
+msgid "Load the ensemble model from a directory."
+msgstr "加载模型"
+
+#: ad5a23867cc349f791aadb2957406fcb edc647e01e8e49a1b428dd7c3895fd86 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load:3
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load:3
+msgid "Input directory path."
+msgstr "加载路径"
+
+#: 37c7ba2dd2b7449e86a6b9972c9d41b5 a28e245132344edcbfd546b760d8fc7e of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load:5
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load:5
+msgid "Name of ensemble object. This file contains meta information of ensemble."
+msgstr "模型文件名"
+
+#: 00d99902617c4a32b9fc05ae631b1aa3 bb57db2baec64eee90ce99d7db69aba6
+#: f61776821c8044829b11cac92fc3f3a7 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict_score
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load
+msgid "Returns"
+msgstr ""
+
+#: 03578316c2f04dddaceba423466027ef c3d88403a5e9481a93677e8e9499b590 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.load:8
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleForecaster.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+
+#: b76f5603bdd840c28c09e820299900d1 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.ensemble.weighting_ensemble.WeightingEnsembleBase`"
+msgstr ""
+
+#: ff7efde381054374b6f4c4ee334b4016 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:1
+msgid "The WeightingEnsembleAnomaly Class."
+msgstr "Weighting集成异常检测"
+
+#: 514141f8221741449e19c0773d155191 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:5
+msgid ""
+"A list of tuple (class,params) consisting of several paddlets Anomly "
+"models or Pyod models"
+msgstr "一个由paddlets异常检测模型/pyody异常检测模型，组成的 tuple (模型类名,模型参数) 列表"
+
+#: d425c45d63434110bbc0f37edcf2d486 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:8
+msgid ""
+"Anomaly rate, should in [0,0.5). For example, when anomaly rate=0.1, the "
+"top 10% values in trian scores will set to threshold. Set to 0 by "
+"default, use the max score on train as threshold."
+msgstr "异常率，在[0,0.5)之间。 举个例子，当值为0.1时，在训练集里第10%th的数值将被设认为是异常阈值。"
+"默认为0，即训练集预测结果中的最大score为异常阈值。"
+
+#: 2ac53c9a0af54ba195d3c81cea588eab of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly:12
+msgid ""
+"bool, optional (default=True) If True, perform standardization first to "
+"convert prediction score to zero mean and unit variance."
+msgstr "底层模型输出是否标准化，默认为True"
+
+#: 95c5962ed59c4f7b9dcc2c24246f19a2 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict:1
+msgid "Predict"
+msgstr "预测"
+
+#: 80b621fa45434bc587953911ddf1017d of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict_score:1
+msgid "Get anomaly score on a batch. the result are output as tsdataset."
+msgstr "获得异常检测分数，结果为tsdataset的形式"
+
+#: 2b567534c5ab4bd7bf9209ad6874047e of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict_score:3
+msgid "Data to be predicted."
+msgstr "预测的数据"
+
+#: 4c40ef594d2a473e96b5ff65190b1eb5 of
+#: paddlets.ensemble.weighting_ensemble.WeightingEnsembleAnomaly.predict_score:6
+msgid "TSDataset."
+msgstr ""
+

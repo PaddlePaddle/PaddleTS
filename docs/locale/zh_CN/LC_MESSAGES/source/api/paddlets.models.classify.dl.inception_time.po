@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-28 17:35+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.classify.dl.inception_time.rst:2
+#: 2161c032fa75486cbc382fc587e12ba9
+msgid "paddlets.models.classify.dl.inception_time"
+msgstr ""
+
+#: 89535ac1247d4c5db2c2d601520fc01c of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier`"
+msgstr ""
+
+#: d838ba33584f459791c55ef4412d2daf of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:1
+msgid ""
+"InceptionTime\\[1\\] is a time series Classification model introduced in "
+"2019. InceptionTime an ensemble of deep Convolutional Neural Network "
+"(CNN) models, inspired by the Inception-v4 architecture."
+msgstr "InceptionTime是在2019年提出的基于CNN网络的时序分类模型，它的灵感来自于Inception-v4架构"
+
+#: e73a3c3bfed84e61ab8e0df966fb3e25 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:4
+msgid ""
+"\\[1\\] Hassan I.F, et al. \"InceptionTime: Finding AlexNet for Time "
+"Series Classification\", `<https://arxiv.org/pdf/1909.04939v3.pdf>`_"
+msgstr ""
+
+#: 7abc6c55bfdb4e988c522059fca52e38 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier
+msgid "Parameters"
+msgstr "参数"
+
+#: 5cf0751c61964ffe90abf33aac7a135c of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:7
+msgid "Optimizer algorithm."
+msgstr "优化算法"
+
+#: 2de288d548fc4f11bdfa14da4e3d1258 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:9
+msgid "Optimizer parameters."
+msgstr "优化算法参数"
+
+#: a132ec41593d4d5b9fedcb178e4aa43e of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:11
+msgid "Evaluation metrics of model."
+msgstr "评估指标"
+
+#: 271e2a75bc9c4d2ea0dd2b1ff3b54b44 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:13
+msgid "Customized callback functions."
+msgstr "callback方程"
+
+#: 40c9930933c141dfb286c364e02cdf20 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:15
+msgid "Number of samples per batch."
+msgstr "每个batch的样本量"
+
+#: 6fa2ff41d8a54ec9992221ac9fd22a8a of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:17
+msgid "Max epochs during training."
+msgstr "最大训练轮次"
+
+#: e8300a8617b442e994706ad0e2c3a8f4 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:19
+msgid "Verbosity mode."
+msgstr "是否开启日志"
+
+#: 84697c25ec1748c68fdede36495b9da5 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:21
+msgid "Number of epochs to wait for improvement before terminating."
+msgstr "训练结束之前等待提升的轮次"
+
+#: 2fe432990f624f71b944ec2c8cdba30b of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:23
+msgid "Global random seed."
+msgstr "随机种子"
+
+#: 5b5c5fb5ebe8425a9a930ff06ff6dc66 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:25
+msgid "Activation function,set to \"ReLU\" by defalut."
+msgstr "激活方程，默认使用ReLU"
+
+#: 10e2c52bb3114353bb0d5ed1c1e6a674 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:27
+msgid "Kernel size for inception module, set to 40 by default."
+msgstr "卷积核大小，默认为40"
+
+#: ef7100be78a944ccac2adf3ea6d79b01 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:29
+msgid "Output size for inception block, set to 128 by default."
+msgstr "inception block的输出维度，默认设置为128"
+
+#: 4927a33163d4458283d852611150fbdd of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:31
+msgid "Depth for inception block, set to 6 by default."
+msgstr "inception block的深度，默认设置为6"
+
+#: 93b9591a884244a299ba1267555687c6 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:33
+msgid "If add residuals between Inception modules."
+msgstr "是否增加残差"
+
+#: 68556e4bfb484a08a42a936a67c65f35 of
+#: paddlets.models.classify.dl.inception_time.InceptionTimeClassifier:35
+msgid "If use bottleneck layer or not, Set to True by default."
+msgstr "是否启用瓶颈层"
+
+

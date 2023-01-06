@@ -91,6 +91,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     Probability Forecasting <source/modules/models/probability_forecasting.rst>
     Representation  <source/modules/models/representation.rst>
     Anomaly Detection <source/modules/models/anomaly.rst>
+    Classification <source/modules/models/classify.rst>
     Paddle Inference <source/modules/models/paddle_inference.rst>
 
 
@@ -129,7 +130,8 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :maxdepth: 1
     :caption: Ensemble
 
-    Ensemble <source/modules/ensemble/overview.rst>
+    EnsembleForecaster <source/modules/ensemble/ensemble_forecaster.rst>
+    EnsembleAnomaly <source/modules/ensemble/ensemble_anomaly.rst>
 
 .. toctree::
     :maxdepth: 1

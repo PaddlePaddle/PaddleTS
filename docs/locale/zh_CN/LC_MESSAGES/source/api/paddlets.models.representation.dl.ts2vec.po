@@ -107,6 +107,30 @@ msgstr "模型训练过程中打印日志信息的间隔."
 msgid "Global random seed."
 msgstr "全局随机数种子, 注: 保证每次模型参数初始化一致."
 
+#: 0c9be993e4c3448da88297c988dc8f36 2a4bbd28d7ef42278f19a3ebaf46c574 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:26
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:91
+msgid "The dimension of representation."
+msgstr "表征维度。"
+
+#: 5d24709262f34253af7495e3b42ca54e f17f99c001e74da99886ce50c318e475 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:28
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:97
+msgid "The number of channels in the hidden layer."
+msgstr "隐藏层的channel数。"
+
+#: 431f62d38cc44274915beb9f42eb0139 acf0eda7d1704dc4b89383fb716e6299 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:30
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:103
+msgid "The number of `ConvLayer` to be stacked."
+msgstr "空洞卷积网络的层数."
+
+#: cb99e2576ca04637947212deb6a494b0 f8f8c3f5c6f94861af67da8f672d18d0 of
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:32
+#: paddlets.models.representation.dl.ts2vec.TS2Vec:109
+msgid "The minimum unit to perform temporal contrast."
+msgstr "完成时间比较的最小单元。"
+
 #: 251bb380325c4367979fee4fc3db2f78 2626ef5e63a34958ab30ffc0d04b3294
 #: 3d056e919707485db3f8a5e84178686c 559d70f15e86470ba4b909ce1d5295bf
 #: bc01dd14112f4d948245450a8091231c d68f866fc53c4cff8611c12bd76d760d

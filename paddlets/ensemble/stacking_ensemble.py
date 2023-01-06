@@ -18,22 +18,22 @@ from paddlets.ensemble.base import EnsembleBase
 from paddlets.models.utils import to_tsdataset
 
 class StackingEnsembleBase(EnsembleBase):
+    """
+    The StackingEnsembleBase Class.
 
+    Args:
+
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
+        final_learner(Callable): The final learner on stack level 2, should be a sklearn-like regressor, set to GradientBoostingRegressor(max_depth=5) by default.
+        verbose(bool): Turn on Verbose mode,set to true by default.
+
+    """
     def __init__(self,
                  estimators: List[Tuple[object, dict]],
                  final_learner: Callable = None,
                  verbose: bool = False
                  ) -> None:
-        """
-        The StackingEnsembleBase Class.
 
-        Args:
-
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets models 
-            final_learner(Callable): The final learner on stack level 2, should be a sklearn-like regressor, set to GradientBoostingRegressor(max_depth=5) by default.
-            verbose(bool): Turn on Verbose mode,set to true by default.
-
-        """
         super().__init__(estimators, verbose)
         self._final_learner = self._check_final_learner(final_learner)
 
@@ -113,7 +113,25 @@ class StackingEnsembleBase(EnsembleBase):
 
 
 class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
+    """
+    The StackingEnsembleForecaster Class.
 
+    Args:
+
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
+        skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
+            The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
+            default, it will NOT skip any time steps.
+        estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets Forecasting models.
+        final_learner(Callable): The final learner on stack level 2, should be a sklearn-like regressor, set to GradientBoostingRegressor(max_depth=5) by default.
+        resampling_strategy(str): A string of resampling strategies.Supported resampling strategy are "cv", "holdout".
+        split_ratio(Union[str, float]): The proportion of the dataset included in the validation split for holdout.The split_ratio should be in the range of (0, 1). 
+        k_fold(Union[str, int]): Number of folds for cv.The k_fold should be in the range of (0, 10], defaults to 3.
+        use_backtest(bool): If use backtest on predictions.
+        verbose(bool): Turn on Verbose mode,set to true by default.
+
+    """
     def __init__(self,
                  in_chunk_len: int,
                  out_chunk_len: int,
@@ -126,25 +144,7 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
                  k_fold: Union[str, int] = 3,
                  verbose: bool = False
                  ) -> None:
-        """
-        The StackingEnsembleForecaster Class.
 
-        Args:
-
-            in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-            out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-            skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
-                The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
-                default, it will NOT skip any time steps.
-            estimators(List[Tuple[object, dict]] ): A list of tuple (class,params) consisting of several paddlets Forecasting models.
-            final_learner(Callable): The final learner on stack level 2, should be a sklearn-like regressor, set to GradientBoostingRegressor(max_depth=5) by default.
-            resampling_strategy(str): A string of resampling strategies.Supported resampling strategy are "cv", "holdout".
-            split_ratio(Union[str, float]): The proportion of the dataset included in the validation split for holdout.The split_ratio should be in the range of (0, 1). 
-            k_fold(Union[str, int]): Number of folds for cv.The k_fold should be in the range of (0, 10].
-            use_backtest(bool): If use backtest on predictions.
-            verbose(bool): Turn on Verbose mode,set to true by default.
-
-        """
         self._use_backtest = use_backtest
         self._resampling_strategy = resampling_strategy
         self._split_ratio = split_ratio

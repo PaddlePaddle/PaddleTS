@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-15 22:26+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../source/api/paddlets.models.representation.task.repr_cluster.rst:2
+#: 0c66d657e9f748d4a2c4f9d95bac1abf
+msgid "paddlets.models.representation.task.repr_cluster"
+msgstr ""
+
+#: 171fa552e0d645599c0345d50ade36cf of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:1
+msgid ""
+"Bases: "
+":py:class:`~paddlets.ensemble.stacking_ensemble.StackingEnsembleBase`"
+msgstr ""
+
+#: 5a96b55235b742a5bcf883acc678ad7d of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:1
+msgid "The ReprCluster Class."
+msgstr "表征聚类"
+
+#: 793aa720d6d4453599d749a4f4af743c 9c7ea2b63c0042149edf18d515c91cc7
+#: a898ed2ad00a4a3894db85119a6eadb3 dbaa7b788a5e4aa886fa9260fdcae563
+#: fa9636377047470199a83cf27f5b45d5 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.fit
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.predict
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.save
+msgid "Parameters"
+msgstr ""
+
+#: 7edc9b074d8e4d0094e9ad069c4526ea of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:3
+msgid "Representation model to use for cluster."
+msgstr "使用的表征模型"
+
+#: c1e9b149e79e4b70938b58a173266979 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:5
+msgid "params for reprmodel init."
+msgstr "表征模型的参数"
+
+#: b503848f73e5458e81567c36738cbbaf of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:7
+msgid "params for reprmodel encode."
+msgstr "表征模型encode的参数"
+
+#: f142e8a7841f414ba04270b03c53f681 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:9
+msgid ""
+"The downstream learner, should be a sklearn-like cluster, set to KMeans()"
+" by default."
+msgstr "下游聚类器，需要是一个sklearn形式的聚类器，默认KMeans()"
+
+#: 03a98d320cda40d988bc1d9c0e83de58 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster:11
+msgid "Turn on Verbose mode,set to true by default."
+msgstr "是否开启日志，默认开启"
+
+#: ea7c0d2a89744666b45fb2fa753576b6 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.fit:1
+msgid "train data."
+msgstr "训练集"
+
+#: 9e3696c7cf51470487176a7e9e4ac0fb of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.predict:1
+msgid "Predict"
+msgstr "预测"
+
+#: 8636474ef1d3412195467784232b8b79 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.predict:3
+msgid "predict data."
+msgstr "预测数据"
+
+#: 03cbf032be16432e9c1aca170df64e7f of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.save:1
+msgid "Save the repr-cluster model to a directory."
+msgstr "保存模型"
+
+#: 94b045aa912844e799c3d2b4c634352a of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.save:3
+msgid "Output directory path."
+msgstr "保存路径"
+
+#: 1c60d618623f4912a133a9c4536f6cad 635f35ad72b146d0adff8479acede588 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load:5
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.save:5
+msgid ""
+"Name of repr-cluster model object. This file contains meta information of"
+" repr-cluster model."
+msgstr "保存文件名"
+
+#: beb59f20f53a4d55a36809f93f250d23 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load:1
+msgid "Load the repr-cluster model from a directory."
+msgstr "加载模型"
+
+#: 32ea8210e37d4b2eafe5c29ea02d323a of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load:3
+msgid "Input directory path."
+msgstr "加载路径"
+
+#: 59bccb775e8f48a78c7ebaa8b628e2eb of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load
+msgid "Returns"
+msgstr ""
+
+#: a9b27bcb71394bf1a3cf9c2e8af02573 of
+#: paddlets.models.representation.task.repr_cluster.ReprCluster.load:8
+msgid "The loaded ensemble model."
+msgstr "加载的模型"
+

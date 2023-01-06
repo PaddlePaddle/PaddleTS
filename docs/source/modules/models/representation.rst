@@ -25,6 +25,11 @@ For the sake of accommodating both beginners and experienced developers, there a
 
 A pipeline that combines the representation model and downstream tasks
 
+Currently Support:
+    - `ReprForecasting <../../api/paddlets.models.representation.task.repr_forecasting.html>`_ 
+    - `ReprClassifier <../../api/paddlets.models.representation.task.repr_classifier.html>`_ 
+    - `ReprCluster <../../api/paddlets.models.representation.task.repr_cluster.html>`_ 
+
 1.1 Prepare the data
 --------------------
 
@@ -46,7 +51,7 @@ A pipeline that combines the representation model and downstream tasks
 
 1.2 Training 
 ------------
-More infomation about ReprForecasting please check `ReprForecasting API doc <../../api/paddlets.models.representation.task.repr_forecasting.html>`_ 
+More information about ReprForecasting please check `ReprForecasting API doc <../../api/paddlets.models.representation.task.repr_forecasting.html>`_
 
 .. code-block:: python
 
@@ -94,7 +99,7 @@ More infomation about ReprForecasting please check `ReprForecasting API doc <../
    #load model
    model = ReprForecasting.load(path="/tmp/rpr_test/")
 
-2. Method two
+1. Method two
 =================
 
 Decoupling the representational model and downstream tasks. It's divided into two stages, the first stage is representation model training and prediction, and the second stage is the training and prediction of downstream tasks

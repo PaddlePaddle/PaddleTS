@@ -180,6 +180,27 @@ msgstr "2> 调用此方法前需保证self._network 和 self._optimizer成员不
 msgid "A path string containing a model file name."
 msgstr "一个包含模型文件名的字符串格式的路径。"
 
+#: 592868dc1f5e40e2b8009ea064012757 of
+#: paddlets.models.forecasting.dl.paddle_base.PaddleBaseModel.save:13
+msgid ""
+"Save network model structure and parameters separately for Paddle "
+"Inference or not, default False."
+msgstr "是否将模型网络结构与网络参数分开保存，默认为False。"
+
+#: 6a821004057c498c8ef80958b9be7f88 of
+#: paddlets.models.forecasting.dl.paddle_base.PaddleBaseModel.save:15
+msgid ""
+"Change network from dygraph to static or not, it works when "
+"network_model==True, default True."
+msgstr "是否将网络从动态图转为静态图，仅当network_model参数为True时生效，默认值为True。"
+
+#: 4f37803f898746b4a2ddd7926c32817b of
+#: paddlets.models.forecasting.dl.paddle_base.PaddleBaseModel.save:17
+msgid ""
+"The fixed batch size for the param `input_spec` of network_model save, it"
+" works when network_model==True, default None."
+msgstr "input_spec参数中包含的固定的单批次样本数量，仅当network_model为True时生效，默认为None。"
+
 #: 60640e579c5446bba21efb8fbee166b4 of
 #: paddlets.models.forecasting.dl.paddle_base.PaddleBaseModel.save
 msgid "Raises"
