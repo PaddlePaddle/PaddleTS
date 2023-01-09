@@ -16,4 +16,5 @@ from paddlets.models.forecasting.dl.informer import InformerModel
 from paddlets.models.forecasting.dl.deepar import DeepARModel
 from paddlets.models.forecasting.dl.tft import TFTModel
 from paddlets.models.forecasting.dl.scinet import SCINetModel
+from paddlets.models.forecasting.dl.nlinear import NLinearModel
 
