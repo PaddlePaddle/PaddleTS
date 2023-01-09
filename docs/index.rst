@@ -135,6 +135,12 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
 
 .. toctree::
     :maxdepth: 1
+    :caption: XAI
+
+    XAI <source/modules/xai/overview.rst>
+
+.. toctree::
+    :maxdepth: 1
     :caption: API
 
     paddlets.analysis <source/api/paddlets.analysis.rst>

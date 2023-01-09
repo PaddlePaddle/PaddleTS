@@ -1,0 +1,247 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-06 15:52+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/modules/xai/overview.rst:3 102030fbef95418fa0aafed93d337088
+msgid "XAI"
+msgstr "XAI"
+
+#: ../../source/modules/xai/overview.rst:5 79ca052607994091bb252a4c0ea0d89b
+msgid ""
+"Xai is a model interpretation module, which can explain how complex model"
+" prediction results are formed, and help users quickly understand the "
+"relationship between input and output. At present, the xai module is "
+"divided into two sub-modules: `ante_hoc` and `post_hoc`. The former "
+"provides interpretability based on the designed model network structure, "
+"while the latter has nothing to do with the model network, but interprets"
+" the original model through the proxy model."
+msgstr ""
+"Xai是一个模型解释模块，可以解释复杂的模型预测结果是如何形成的，帮助用户快速理解输入输出之间的关系。 "
+"目前xai模块分为两个子模块：ante_hoc和post_hoc。 "
+"前者基于设计的模型网络结构提供可解释性，后者与模型网络无关，而是通过代理模型解释原始模型。"
+
+#: ../../source/modules/xai/overview.rst:8 83a0b33f0fb74644b00aaae5db35083c
+msgid "1. Prepare Data"
+msgstr "1. 准备数据"
+
+#: ../../source/modules/xai/overview.rst:10 93993f8c304e492780a73045ff2f844e
+msgid "1.1. Get Data and import library"
+msgstr "1.1 获取数据与导入库"
+
+#: ../../source/modules/xai/overview.rst:11 4303a74b8c9a4b21a2249e00f094f0d0
+msgid "Get PaddleTS inner-build datasets."
+msgstr "获取PaddleTS内置数据集"
+
+#: ../../source/modules/xai/overview.rst:31 e4d8fa8e3dd642ca84e16ef07aef98e7
+msgid "1.2. Split Data"
+msgstr "1.2 划分数据"
+
+#: ../../source/modules/xai/overview.rst:32 14c096be7cb249d7b12c621661efeaa6
+msgid "Split dataset into train/test/valid."
+msgstr "划分数据集为训练/测试/验证"
+
+#: ../../source/modules/xai/overview.rst:55 b3f106979da5426fb3ff2be71c9dd2a8
+msgid "2. Prepare model parameters"
+msgstr "2. 准备模型参数"
+
+#: ../../source/modules/xai/overview.rst:56 587b70473bc148759ee6a61d8b9c8431
+msgid "Prepare base model parameters."
+msgstr "准备基础模型参数"
+
+#: ../../source/modules/xai/overview.rst:69 d7e2f79daeb04d0099e4c0f764c625f4
+msgid "3. Construct and Fitting"
+msgstr "3. 构建并训练"
+
+#: ../../source/modules/xai/overview.rst:70 0b54b185348e4430afd1d65cad8ed1ef
+msgid "Construct and Fitting pipeline"
+msgstr "构建并训练pipeline"
+
+#: ../../source/modules/xai/overview.rst:89 17b2c33357c14f51aa9af207a8a78dc0
+msgid "4. Xai"
+msgstr "4. 模型解释"
+
+#: ../../source/modules/xai/overview.rst:90 0088904816484cffa1005d346f9a7948
+msgid "Interpretation of prediction results based on `kernel shap` method."
+msgstr "基于kernel shap方法解释预测结果"
+
+#: ../../source/modules/xai/overview.rst:93 8e494fea99b8440a9684bbc97eeb0850
+msgid "4.1. Initialize the interpreter"
+msgstr "4.1 初始化解释器"
+
+#: ../../source/modules/xai/overview.rst:95 43623f57f808422395b825c04e1b33f4
+msgid ""
+"`ShapExplainer`: Help users realize the link bridge between the PaddleTS "
+"model and the shap interpreter, and better help users understand the "
+"nature of the output results."
+msgstr "`ShapExplainer`: 帮助用户实现PaddleTS模型与shap解释器之间的链接桥梁，更好的帮助用户理解输出结果性质"
+
+#: ../../source/modules/xai/overview.rst:102 87314d67ba3046ff9970c54b50ab4025
+msgid "4.2. Explain test sample"
+msgstr "4.2 解释测试样本"
+
+#: ../../source/modules/xai/overview.rst:104 bc19031549d34276b186b516630702c8
+msgid ""
+"`ShapExplainer.explain`: Help users calculate samples that need to be "
+"interpreted, and give feature contribution"
+msgstr "`ShapExplainer.explain`: 帮助用户计算需要解释性的样本，给出特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:111 cbb1d2cee82d4742821eed5937adeb34
+msgid "4.3. Feature contribution figure"
+msgstr "4.3 特征贡献图"
+
+#: ../../source/modules/xai/overview.rst:113 967b13f2ca9f4d4b8ecc3caa52e651ee
+msgid ""
+"`ShapExplainer.force_plot`: Use additive layers to show sample data time "
+"points that require interpretation. In the display results, `lag_0` "
+"represents the last moment of in_chunk_len, and `lag_1` represents the "
+"first moment of out_chunk_len"
+msgstr ""
+"`ShapExplainer.force_plot`: "
+"采用加性图层展示需要解释性的样本数据时间点。展示结果中lag_0代表in_chunk_len最后一个时刻，lag_1代表out_chunk_len的第一个时刻"
+
+#: ../../source/modules/xai/overview.rst:119 d2b86728bdb24a78b495b02692597f98
+msgid "|fig_1|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:188 12cf235aef6041a7b9e19dca59e5591d
+#: 80bac98de04f46359cd77e5ebe557c99
+msgid "fig_1"
+msgstr "特征贡献叠加图"
+
+#: ../../source/modules/xai/overview.rst:122 8dc669189e564322b350dabbc4d982b8
+msgid "4.4. Feature importance display"
+msgstr "4.4 特征重要性展示"
+
+#: ../../source/modules/xai/overview.rst:124 d7be566793f946edb1aead86194b646c
+msgid ""
+"`ShapExplainer.summary_plot`: Calculate and sort the feature contribution"
+" value for the specified time point to be predicted."
+msgstr "`ShapExplainer.summary_plot`: 针对指定的待预测时间点计算特征贡献度数值并排序"
+
+#: ../../source/modules/xai/overview.rst:130 3e8410b4047b42aeb844062f863bdb72
+msgid "|fig_2|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:189 24e2e5afabc04379a47fbe9924916741
+#: a39a64df03d54154bac91676c673c1d7
+msgid "fig_2"
+msgstr "特征重要性图示"
+
+#: ../../source/modules/xai/overview.rst:133 9bbd5c307cc4494b859df62b5597c9e7
+msgid ""
+"4.5. Multi-dimensional output contribution value display---feature "
+"variable"
+msgstr "4.5 多维度输出贡献值展示---特征变量"
+
+#: ../../source/modules/xai/overview.rst:135 258a8fbc98b64d54843b57f6ae5ec24c
+msgid ""
+"Note: The following shows the feature contribution of each feature "
+"variable at all input time steps and all output time steps"
+msgstr "Note: 以下展示每个特征变量在所有输入时间步和所有输出时间步上的特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:141 98a127c0187b4a92bfa8d70d5c904387
+msgid "|fig_3|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:190 0f41f07f09434850b36727b66e742a7f
+#: 8a63688b50c6495e9376bc2f8c1b34dc
+msgid "fig_3"
+msgstr "特征变量贡献度"
+
+#: ../../source/modules/xai/overview.rst:144 504000c482674a0abddfcd55e3e49b76
+msgid "4.6. Multi-dimensional output contribution value display---input time step"
+msgstr "4.6 多维度输出贡献值展示---输入时间步"
+
+#: ../../source/modules/xai/overview.rst:146 a00c7c8773c54c92b760dead14142596
+msgid ""
+"Note: The following shows the feature contribution of each input time "
+"step on all features and all output time steps."
+msgstr "Note: 以下展示每个输入时间步在所有特征和所有输出时间步上的特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:152 0146609b87f6444dbd4a4650271e241f
+msgid "|fig_4|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:191 01fddc1323e54a55bdcb3c8ac08d0830
+#: b29161ba63f74575896382aca966135e
+msgid "fig_4"
+msgstr "输入时间步贡献度"
+
+#: ../../source/modules/xai/overview.rst:155 ff19f99dab4549f7a693893b8bfbec5b
+msgid ""
+"4.7. Multi-dimensional output contribution value display---Input time "
+"step and output time step"
+msgstr "4.7 多维度输出贡献值展示---输入时间步与输出时间步"
+
+#: ../../source/modules/xai/overview.rst:157 d7c78f0c863a47deb12ed9a1845aa608
+msgid ""
+"Note: The following shows the feature contribution of each input time "
+"step and each output time step on all feature variables"
+msgstr "Note: 以下展示每个输入时间步和每个输出时间步在所有特征变量上的特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:163 513a68afb84e48738d005331f47fbca7
+msgid "|fig_5|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:192 8c10da7f1c4444d8bf77f14e1d88fce2
+#: a5095e60476d4caaa6a04e11032e981a
+msgid "fig_5"
+msgstr "输入时间步和输出时间步联合贡献度"
+
+#: ../../source/modules/xai/overview.rst:166 9da97c6a3a2a4a0da63467bd5555f53f
+msgid ""
+"4.8. Multi-dimensional output contribution value display---Feature "
+"variables and output time steps"
+msgstr "4.8 多维度输出贡献值展示---特征变量与输出时间步"
+
+#: ../../source/modules/xai/overview.rst:168 d9519f6647d94292b7fdfc29a289893f
+msgid ""
+"Note: The following shows the feature contribution of each feature "
+"variable and each output time step on all input time steps"
+msgstr "Note: 以下展示每个特征变量和每个输出时间步在所有输入时间步上的特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:174 5c04f6135b894d8bbe94210213026049
+msgid "|fig_6|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:193 89b80693ff0e46fd905895c812829d63
+#: adbb070b6df14ab595e235d93317f5e1
+msgid "fig_6"
+msgstr "特征变量和输出时间步联合贡献度"
+
+#: ../../source/modules/xai/overview.rst:177 89291150ab2c4af188fbb81832ba2346
+msgid ""
+"4.9. Multi-dimensional output contribution value display---Feature "
+"variables and input time steps"
+msgstr "4.9 多维度输出贡献值展示---特征变量和输入时间步"
+
+#: ../../source/modules/xai/overview.rst:179 cd3fddf29d7e4f08a0bdec282c53faf9
+msgid ""
+"Note: The following shows the feature contribution of each input time "
+"step and each variable over all output time steps"
+msgstr "Note: 以下展示每个输入时间步和每个变量在所有输出时间步上的特征贡献度"
+
+#: ../../source/modules/xai/overview.rst:185 07a813d2b9d24746b1b9407b9c9ff441
+msgid "|fig_7|"
+msgstr ""
+
+#: ../../source/modules/xai/overview.rst:194 49edafc5956046998c8c10d110d4bb70
+#: dee292eebf6142fb8a4a561c29ccd812
+msgid "fig_7"
+msgstr "特征变量和输入时间步联合贡献度"
+
