@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 import paddle
 import paddle.nn.functional as F
-from paddle.nn import Linear
+from paddle.nn import AvgPool1D, Linear
 from paddle.optimizer import Optimizer
 
 from paddlets.datasets import TSDataset
@@ -21,9 +21,38 @@ OBSERVED_COV = "observed_cov_numeric"
 KNOWN_COV = "known_cov_numeric"
 
 
-class _NLinearModel(paddle.nn.Layer):
+class _SeriesDecomp(paddle.nn.Layer):
+    """
+    Series decomposition block.
+
+    Args:
+        kernel_size(int): The size of the kernel for the moving average.
+    """
+
+    def __init__(self, kernel_size: int):
+        super(_SeriesDecomp, self).__init__()
+        self.moving_avg = AvgPool1D(kernel_size, stride=1, padding="same")
+
+    def forward(self, x: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
+        """
+        Args:
+            x(paddle.Tensor): Input tensor of the decomposition block.
+
+        Returns:
+            trend(padle.Tensor): Tensor containing the trend component by a moving average.
+            seasonal(padle.Tensor): Tensor containing the the remainder (seasonal) component.
+        """
+        trend = paddle.transpose(x, perm=[0, 2, 1])
+        trend = self.moving_avg(trend)
+        trend = paddle.transpose(trend, perm=[0, 2, 1])
+        seasonal = x - trend
+        return trend, seasonal
+
+
+class _DLinearModel(paddle.nn.Layer):
     def __init__(
         self,
+        kernel_size: int,
         in_chunk_len: int,
         out_chunk_len: int,
         target_dim: int,
@@ -32,13 +61,14 @@ class _NLinearModel(paddle.nn.Layer):
     ):
         """
         Args:
+            kernel_size(int): The size of the kernel for the moving average.
             in_chunk_len(int): The length of the input sequence fed to the model.
             out_chunk_len(int): The length of the forecast of the model.
             target_dim(int): The number of targets to be forecasted.
             known_cov_dim(int): The number of known covariates.
             observed_cov_dim(int): The number of observed covariates.
         """
-        super(_NLinearModel, self).__init__()
+        super(_DLinearModel, self).__init__()
         self._target_dim = target_dim
         self._known_cov_dim = known_cov_dim
         self._observed_cov_dim = observed_cov_dim
@@ -47,50 +77,57 @@ class _NLinearModel(paddle.nn.Layer):
         in_chunk_len_multi = in_chunk_len * input_dim + out_chunk_len * known_cov_dim
         out_chunk_len_multi = out_chunk_len * target_dim
 
-        self._linear = Linear(in_chunk_len_multi, out_chunk_len_multi)
+        self._decompsition = _SeriesDecomp(kernel_size)
+        self._linear_seasonal = Linear(in_chunk_len_multi, out_chunk_len_multi)
+        self._linear_trend = Linear(in_chunk_len_multi, out_chunk_len_multi)
 
     def forward(self, data: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """
-        forward NLinear network.
+        forward DLinear network.
 
         Args:
             data(Dict[str, paddle.Tensor]): a dict specifies all kinds of input data
 
         Returns:
-            out(padle.Tensor): Tensor containing the output of the NLinear model.
+            out(padle.Tensor): Tensor containing the output of the DLinear model.
         """
         backcast = data[PAST_TARGET]
         known_cov = data[KNOWN_COV] if self._known_cov_dim > 0 else None
         observed_cov = data[OBSERVED_COV] if self._observed_cov_dim > 0 else None
         batch_size = paddle.shape(backcast)[0]
 
-        # normalize
-        seq_last = backcast[:, -1:, :].detach()
-        backcast = backcast - seq_last
+        # decomposition
+        trend, seasonal = self._decompsition(backcast)
 
         # concat backcast, known_cov, observed_cov if any
-        feature = [backcast.reshape((batch_size, -1))]
+        trend_feature = [trend.reshape((batch_size, -1))]
+        seasonal_feature = [seasonal.reshape((batch_size, -1))]
         if known_cov is not None:
-            feature.append(known_cov.reshape((batch_size, -1)))
+            known_cov_flat = known_cov.reshape((batch_size, -1))
+            trend_feature.append(known_cov_flat)
+            seasonal_feature.append(known_cov_flat)
         if observed_cov is not None:
-            feature.append(observed_cov.reshape((batch_size, -1)))
-        out = paddle.concat(x=feature, axis=1)
+            observed_cov_flat = observed_cov.reshape((batch_size, -1))
+            trend_feature.append(observed_cov_flat)
+            seasonal_feature.append(observed_cov_flat)
+        trend_out = paddle.concat(x=trend_feature, axis=1)
+        seasonal_out = paddle.concat(x=seasonal_feature, axis=1)
 
         # forward
-        out = self._linear(out)
+        trend_out = self._linear_trend(trend_out)
+        seasonal_out = self._linear_seasonal(seasonal_out)
+        out = trend_out + seasonal_out
         out = out.reshape([batch_size, -1, self._target_dim])
-
-        # inverse normalize
-        out = out + seq_last
 
         return out
 
 
-class NLinearModel(PaddleBaseModelImpl):
+class DLinearModel(PaddleBaseModelImpl):
     """
-    Implementation of NLinear model
+    Implementation of DLinear model
 
     Args:
+        kernel_size(int): The size of the kernel for the moving average.
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
         skip_chunk_len(int, Optional): Optional, the number of time steps between in_chunk and out_chunk for a single sample. The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By default it will NOT skip any time steps.
@@ -109,6 +146,7 @@ class NLinearModel(PaddleBaseModelImpl):
 
     def __init__(
         self,
+        kernel_size: int,
         in_chunk_len: int,
         out_chunk_len: int,
         skip_chunk_len: int = 0,
@@ -124,7 +162,8 @@ class NLinearModel(PaddleBaseModelImpl):
         patience: int = 10,
         seed: Optional[int] = None,
     ):
-        super(NLinearModel, self).__init__(
+        self._kernel_size = kernel_size
+        super(DLinearModel, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
             skip_chunk_len=skip_chunk_len,
@@ -144,15 +183,15 @@ class NLinearModel(PaddleBaseModelImpl):
     def _check_tsdataset(self, tsdataset: TSDataset):
         """
         Rewrite _check_tsdataset to fit the specific model.
-        For NLinear, all data variables are expected to be float.
+        For DLinear, all data variables are expected to be float.
         """
         for column, dtype in tsdataset.dtypes.items():
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
-                f"NLinear variables' dtype only supports [float16, float32, float64], "
+                f"DLinear variables' dtype only supports [float16, float32, float64], "
                 f"but received {column}: {dtype}.",
             )
-        super(NLinearModel, self)._check_tsdataset(tsdataset)
+        super(DLinearModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
         self,
@@ -191,7 +230,8 @@ class NLinearModel(PaddleBaseModelImpl):
         Returns:
             paddle.nn.Layer
         """
-        return _NLinearModel(
+        return _DLinearModel(
+            self._kernel_size,
             self._in_chunk_len,
             self._out_chunk_len,
             self._fit_params["target_dim"],
