@@ -307,6 +307,98 @@ class TestClassifyBaseModel(unittest.TestCase):
         self.assertFalse(succeed)
         shutil.rmtree(path)
 
+        ############################################
+        # case 8 (good case)                       
+        # 1) network_model == True
+        # 2) dygraph_to_static == True
+        ############################################
+
+        # save the same model instance twice with different name at same path.
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        # build and fit the only model instance.
+        model = self._build_cnn_model()
+
+        paddlets_ds, labels = self._build_mock_data_and_label(random_data=True)
+        model.fit(train_tsdatasets=paddlets_ds, train_labels=labels)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        # save the first one.
+        model_1_name = "a"
+        model_1_internal_filename_map = {
+            "network_model":"%s.pdmodel" % (model_1_name),
+            "network_model_params":"%s.pdiparams" % (model_1_name),
+            "network_model_params_info":"%s.pdiparams.info" % (model_1_name),
+            "model_meta": "%s_%s" % (model_1_name, "model_meta"),
+            "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, model_1_name), network_model=True, dygraph_to_static=True)
+        
+        files = set(os.listdir(path))
+        self.assertEqual(files, {model_1_name, *model_1_internal_filename_map.values()})
+
+        with open(os.path.join(path, model_1_internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
+        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.anomaly.dl.autoencoder
+        self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
+        self.assertEqual("classification", model_meta['model_type'])
+        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
+
+        shutil.rmtree(path)
+
+        ############################################
+        # case 9 (good case)                       
+        # 1) network_model == True
+        # 2) dygraph_to_static == False
+        ############################################
+
+        # save the same model instance twice with different name at same path.
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        # build and fit the only model instance.
+        model = self._build_cnn_model()
+
+        paddlets_ds, labels = self._build_mock_data_and_label(random_data=True)
+        model.fit(train_tsdatasets=paddlets_ds, train_labels=labels)
+        self.assertTrue(model._network is not None)
+        self.assertTrue(model._optimizer is not None)
+
+        # save the first one.
+        model_1_name = "a"
+        model_1_internal_filename_map = {
+            "network_model":"%s.pdmodel" % (model_1_name),
+            "network_model_params":"%s.pdiparams" % (model_1_name),
+            "network_model_params_info":"%s.pdiparams.info" % (model_1_name),
+            "model_meta": "%s_%s" % (model_1_name, "model_meta"),
+            "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
+            # currently ignore optimizer.
+            # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
+        }
+        model.save(os.path.join(path, model_1_name), network_model=True, dygraph_to_static=False)
+        
+        files = set(os.listdir(path))
+        self.assertEqual(files, {model_1_name, *model_1_internal_filename_map.values()})
+
+        with open(os.path.join(path, model_1_internal_filename_map["model_meta"]), "r") as f:
+            model_meta = json.load(f)
+        # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
+        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        # paddlets.models.anomaly.dl.autoencoder
+        self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
+        self.assertEqual("classification", model_meta['model_type'])
+        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
+
+        shutil.rmtree(path)
+
     def test_load(self):
         """Test ClassifyBaseModel.load()"""
         ###################################
@@ -502,6 +594,109 @@ class TestClassifyBaseModel(unittest.TestCase):
             succeed = False
         self.assertFalse(succeed)
         shutil.rmtree(path)
+
+        ###############################
+        # case 5 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == True
+        ###############################
+        model = self._build_cnn_model()
+
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        model_network = model._network
+
+        preds = model.predict(paddlets_ds)
+        self.assertEqual(len(preds), len(train_paddlets_ds))
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        # use same mode instance to save the first model file.
+        model_1_name = "a"
+        abs_model_1_path = os.path.join(path, model_1_name)
+        model.save(abs_model_1_path, network_model=True, dygraph_to_static=True)
+
+        with open(os.path.join(path, "a_model_meta"), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_1_path + ".pdmodel", abs_model_1_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+
+        input_handle = predictor.get_input_handle(input_names[0])
+        input_handle.reshape([100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+
+        input_data = np.random.randn(100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1])
+        input_data = input_data.astype(np.float32)
+
+        input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (100, 4))
+      
+        shutil.rmtree(path)
+
+        ###############################
+        # case 6 (good case)          
+        # 1) paddle inference.
+        # 2) dygraph_to_static == False
+        ###############################
+        model = self._build_cnn_model()
+
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        model_network = model._network
+
+        preds = model.predict(paddlets_ds)
+        self.assertEqual(len(preds), len(train_paddlets_ds))
+
+        path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
+        os.mkdir(path)
+
+        # use same mode instance to save the first model file.
+        model_1_name = "a"
+        abs_model_1_path = os.path.join(path, model_1_name)
+        model.save(abs_model_1_path, network_model=True, dygraph_to_static=False)
+
+        with open(os.path.join(path, "a_model_meta"), "r") as f:
+            model_meta = json.load(f)
+
+        import paddle.inference as paddle_infer
+        config = paddle_infer.Config(abs_model_1_path + ".pdmodel", abs_model_1_path + ".pdiparams")
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        self.assertEqual(len(input_names), len(model_meta['input_data']))
+        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+
+        input_handle = predictor.get_input_handle(input_names[0])
+        input_handle.reshape([100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+
+        input_data = np.random.randn(100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1])
+        input_data = input_data.astype(np.float32)
+
+        input_handle.copy_from_cpu(input_data)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+
+        self.assertEqual(output_data.shape, (100, 4))
+      
+        shutil.rmtree(path)
+
 
     def _build_cnn_model(
         self
