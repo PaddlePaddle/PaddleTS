@@ -220,6 +220,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         optimizer = self._optimizer
         network = self._network
         callback_container = self._callback_container
+        loss_fn = self._loss_fn
 
         # _network is inherited from a paddle-related pickle-not-serializable object, so needs to set to None.
         self._network = None
@@ -228,6 +229,9 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         # _callback_container contains PaddleBaseModel instances, as PaddleBaseModel contains pickle-not-serializable
         # objects `_network` and `_optimizer`, so also needs to set to None.
         self._callback_container = None
+        # loss_fn could possibly contain paddle.Tensor when it is a bound method of a class, thus needs to set to
+        # None to avoid pickle.dumps failure.
+        self._loss_fn = None
         try:
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
@@ -238,6 +242,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         self._optimizer = optimizer
         self._network = network
         self._callback_container = callback_container
+        self._loss_fn = loss_fn
 
         return
 
