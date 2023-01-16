@@ -23,8 +23,16 @@ KNOWN_COV = "known_cov_numeric"
 class _NLinearModel(paddle.nn.Layer):
     """
     Network structure of NLinear model, cover multi-targets, known_covariates, observed_covariates.
-    """
 
+    Args:
+        in_chunk_len(int): The length of the input sequence fed to the model.
+        out_chunk_len(int): The length of the forecast of the model.
+        target_dim(int): The number of targets to be forecasted.
+        known_cov_dim(int): The number of known covariates.
+        observed_cov_dim(int): The number of observed covariates.
+        hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty.
+        use_bn(bool): Whether to use batch normalization. Only used if `hidden_config` is not empty.
+    """
     def __init__(
         self,
         in_chunk_len: int,
@@ -35,16 +43,6 @@ class _NLinearModel(paddle.nn.Layer):
         hidden_config: List[int],
         use_bn: bool,
     ):
-        """
-        Args:
-            in_chunk_len(int): The length of the input sequence fed to the model.
-            out_chunk_len(int): The length of the forecast of the model.
-            target_dim(int): The number of targets to be forecasted.
-            known_cov_dim(int): The number of known covariates.
-            observed_cov_dim(int): The number of observed covariates.
-            hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty.
-            use_bn(bool): Whether to use batch normalization. Only used if `hidden_config` is not empty.
-        """
         super(_NLinearModel, self).__init__()
         self._target_dim = target_dim
         self._known_cov_dim = known_cov_dim
@@ -103,8 +101,25 @@ class _NLinearModel(paddle.nn.Layer):
 class NLinearModel(PaddleBaseModelImpl):
     """
     Implementation of NLinear model.
-    """
 
+    Args:
+        in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
+        out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
+        skip_chunk_len(int, Optional): Optional, the number of time steps between in_chunk and out_chunk for a single sample. The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By default it will NOT skip any time steps.
+        sampling_stride(int, optional): sampling intervals between two adjacent samples.
+        loss_fn(Callable, Optional): loss function.
+        optimizer_fn(Callable, Optional): optimizer algorithm.
+        optimizer_params(Dict, Optional): optimizer parameters.
+        eval_metrics(List[str], Optional): evaluation metrics of model.
+        callbacks(List[Callback], Optional): customized callback functions.
+        batch_size(int, Optional): number of samples per batch.
+        max_epochs(int, Optional): max epochs during training.
+        verbose(int, Optional): verbosity mode.
+        patience(int, Optional): number of epochs with no improvement after which learning rate wil be reduced.
+        seed(int, Optional): global random seed.
+        hidden_config(List[int], Optional): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty by default.
+        use_bn(bool, Optional): Whether to use batch normalization. Only used if `hidden_config` is not empty.
+    """
     def __init__(
         self,
         in_chunk_len: int,
@@ -124,25 +139,6 @@ class NLinearModel(PaddleBaseModelImpl):
         hidden_config: List[int] = [],
         use_bn: bool = False,
     ):
-        """
-        Args:
-            in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
-            out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-            skip_chunk_len(int, Optional): Optional, the number of time steps between in_chunk and out_chunk for a single sample. The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By default it will NOT skip any time steps.
-            sampling_stride(int, optional): sampling intervals between two adjacent samples.
-            loss_fn(Callable, Optional): loss function.
-            optimizer_fn(Callable, Optional): optimizer algorithm.
-            optimizer_params(Dict, Optional): optimizer parameters.
-            eval_metrics(List[str], Optional): evaluation metrics of model.
-            callbacks(List[Callback], Optional): customized callback functions.
-            batch_size(int, Optional): number of samples per batch.
-            max_epochs(int, Optional): max epochs during training.
-            verbose(int, Optional): verbosity mode.
-            patience(int, Optional): number of epochs with no improvement after which learning rate wil be reduced.
-            seed(int, Optional): global random seed.
-            hidden_config(List[int], Optional): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty by default.
-            use_bn(bool, Optional): Whether to use batch normalization. Only used if `hidden_config` is not empty.
-        """
         self._hidden_config = hidden_config
         self._use_bn = use_bn
         super(NLinearModel, self).__init__(
