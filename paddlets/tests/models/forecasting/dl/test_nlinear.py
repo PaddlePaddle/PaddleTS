@@ -96,6 +96,8 @@ class TestNLinearModel(TestCase):
             skip_chunk_len=15 * 4,
             sampling_stride=96,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
         )
         reg.fit(self.data_real_world, self.data_real_world)
 
@@ -105,6 +107,8 @@ class TestNLinearModel(TestCase):
             out_chunk_len=96,
             skip_chunk_len=15 * 4,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
         )
         reg.fit(self.data_multi_target, self.data_multi_target)
 
@@ -114,6 +118,8 @@ class TestNLinearModel(TestCase):
             out_chunk_len=96,
             skip_chunk_len=15 * 4,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
         )
         reg.fit(self.data_no_cov, self.data_no_cov)
 
@@ -124,6 +130,8 @@ class TestNLinearModel(TestCase):
             skip_chunk_len=15 * 4,
             sampling_stride=96,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
             hidden_config=[100],
         )
         reg.fit(self.data_real_world, self.data_real_world)
@@ -135,6 +143,8 @@ class TestNLinearModel(TestCase):
             skip_chunk_len=15 * 4,
             sampling_stride=96,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
             hidden_config=[100],
             use_bn=True,
         )
@@ -147,6 +157,8 @@ class TestNLinearModel(TestCase):
                 out_chunk_len=96,
                 skip_chunk_len=15 * 4,
                 eval_metrics=["mse", "mae"],
+                batch_size=128,
+                max_epochs=5,
             )
             reg.fit(self.data_int_type, self.data_int_type)
 
@@ -157,6 +169,8 @@ class TestNLinearModel(TestCase):
             skip_chunk_len=15 * 4,
             sampling_stride=96,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
         )
 
         # case1: single target, real world data
@@ -170,6 +184,8 @@ class TestNLinearModel(TestCase):
             out_chunk_len=96,
             skip_chunk_len=15 * 4,
             eval_metrics=["mse", "mae"],
+            batch_size=128,
+            max_epochs=5,
         )
 
         # case2: multi-target
