@@ -401,6 +401,9 @@ class AnomalyTransformer(AnomalyBaseModel):
             train_tsdataset(TSDataset): Train set. 
             valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
         """
+        self._check_tsdataset(train_tsdataset)
+        if valid_tsdataset is not None:
+            self._check_tsdataset(valid_tsdataset)
         self._fit_params = self._update_fit_params(train_tsdataset, valid_tsdataset)
         train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
         self._fit(train_dataloader, valid_dataloaders)
