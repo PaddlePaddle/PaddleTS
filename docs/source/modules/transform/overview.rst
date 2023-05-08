@@ -61,7 +61,7 @@ Alternatively, one can also call the combined ``fit_transform`` to achieve the s
     data = TSDataset.load_from_csv("/path/to/data.csv")
 
     # 2 init the onehot encoder transform instance.
-    encoder = Onehot(cols=["Gender"])
+    encoder = OneHot(cols=["Gender"])
 
     # 3 fit + transform simultaneously
     transformed_data = encoder.fit_transform(dataset=data)
