@@ -436,7 +436,7 @@ FaceDetectionTrainDataset = DatasetConfig(
 )
 
 FaceDetectionTestDataset = DatasetConfig(
-    name = "FaceDetection_Train",
+    name = "FaceDetection_Test",
     type = "classification",
     path = "https://paddlets.bj.bcebos.com/classification/FaceDetection_TEST.csv",
     load_param = {

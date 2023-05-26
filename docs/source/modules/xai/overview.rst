@@ -52,7 +52,7 @@ Split dataset into train/test/valid.
 
 
 2. Prepare model parameters
-====================
+===============================
 Prepare base model parameters.
 
 .. code:: python
