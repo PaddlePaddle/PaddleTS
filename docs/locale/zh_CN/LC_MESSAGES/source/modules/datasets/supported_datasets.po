@@ -1,0 +1,235 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, PaddlePaddle
+# This file is distributed under the same license as the   package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-26 15:31+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#: ../../source/modules/datasets/supported_datasets.rst:2
+#: 5b08165cdb8a4cfa9cacbd219ee30dd2
+msgid "Supported Datasets"
+msgstr "支持的数据集"
+
+#: ../../source/modules/datasets/supported_datasets.rst:4
+#: 512536aa09bb420fb277ce9c744b6ecb
+msgid ""
+"PaddleTS currently supports dozens of datasets including the four major "
+"tasks of timing prediction, timing anomaly detection, timing completion, "
+"and timing classification."
+msgstr "PaddleTS目前支持包含时序预测、时序异常检测、时序补全、时序分类四大任务在内的数十种数据集。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:7
+#: 6af0f3863a0f4a21a37a238c92a551b9
+msgid "Time Series Prediction"
+msgstr "时序预测"
+
+#: ../../source/modules/datasets/supported_datasets.rst:9
+#: 7c613bb310ca4d419dacd27ed0411635
+msgid ""
+"Time series forecasting is one of the most important tasks in time "
+"series. At present, we integrate data from multiple scenarios such as "
+"electricity, weather, disease, and exchange rate for time series "
+"forecasting."
+msgstr "时序预测是时间序列中最重要的任务之一，目前我们针对时序预测集成了电力、天气、疾病、汇率等多个场景下的数据。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:12
+#: bcbba1f602d94f57b3fc0981778d7779
+msgid "1. ETT-small"
+msgstr "1. ETT-small"
+
+#: ../../source/modules/datasets/supported_datasets.rst:13
+#: d8a8004662744ee5b9e79bbd79a6694a
+msgid "Data source: https://github.com/zhouhaoyi/ETDataset"
+msgstr "数据来源：https://www.bgc-jena.mpg.de/wetter"
+
+#: ../../source/modules/datasets/supported_datasets.rst:14
+#: 7cf8cbab7b6b459ab4ac9a823a0d34f7
+msgid ""
+"Data brief introduction: Power transformer data containing 7 variables, "
+"used to forecast electricity demand in various regions. Divided into "
+"minute-level and hour-level data"
+msgstr "数据简介：包含22个变量的每十分钟采样天气数据，用于预测天气。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:15
+#: d4142666a10246e0a6e47d365d91dbba
+msgid "Dataset names: ETTh1, ETTh2, ETTm1, ETTm2."
+msgstr "数据集名称：ETTh1、ETTh2、ETTm1、ETTm2。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:18
+#: 75a04d4c2b0e42c1b23c16ce1ce6f72d
+msgid "2. Weather"
+msgstr "2. Weather"
+
+#: ../../source/modules/datasets/supported_datasets.rst:19
+#: 7e060c2ecf3d47f4bdb6f175285ab06a
+msgid "Data source: https://www.bgc-jena.mpg.de/wetter"
+msgstr "数据来源：https://www.bgc-jena.mpg.de/wetter"
+
+#: ../../source/modules/datasets/supported_datasets.rst:20
+#: 2f0f532a561345a9b7f31392cae081b7
+msgid ""
+"Data introduction: contains 22 variables sampled weather data every ten "
+"minutes, used to predict the weather."
+msgstr "数据简介：包含22个变量的每十分钟采样天气数据，用于预测天气。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:21
+#: ec08f8533fcd43c6bc6ccb26c3f3c994
+msgid "Dataset name: Weather."
+msgstr "数据集名称：Weather。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:24
+#: 697071c8248e4c6392939bf04aaba8d8
+msgid "3. ILI"
+msgstr "3. ILI"
+
+#: ../../source/modules/datasets/supported_datasets.rst:25
+#: 5e63ca724c4348ff9cbca2e1f5968899
+msgid "Data source: https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html"
+msgstr "数据来源：https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html"
+
+#: ../../source/modules/datasets/supported_datasets.rst:26
+#: 8d56ffc9b4174b86899bcf2b50ff9f2c
+msgid ""
+"Data brief introduction: Contains daily sampling of 22 variables, "
+"influenza disease data spanning 19 years, used to predict the proportion "
+"of influenza patients."
+msgstr "数据简介：包含22个变量的每天采样，跨度19年的流感疾病数据，用于预测流感病人比例。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:27
+#: 35c42685ebce4d4892242b9a7e66579f
+msgid "Dataset name: ILI."
+msgstr "数据集名称：ILI。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:30
+#: 0181270e1b7f402b8311aed1a671fff7
+msgid "4. Traffic"
+msgstr "4. Traffic"
+
+#: ../../source/modules/datasets/supported_datasets.rst:31
+#: 8f2e0442fbd74cf09179ad96d13ca9c1
+msgid "Data source: https://pems.dot.ca.gov"
+msgstr "数据来源：https://pems.dot.ca.gov"
+
+#: ../../source/modules/datasets/supported_datasets.rst:32
+#: 45f33daaaa4b48f2a47cb0d58f4a41c5
+msgid ""
+"Data brief introduction: Contains 862 sensors, hourly road occupancy "
+"ratio."
+msgstr "数据简介：包含862个传感器下，每小时的道路占用比例。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:33
+#: d290cbcfde3f42a182f05c1c1c9e91e4
+msgid "Dataset name: Traffic."
+msgstr "数据集名称：Traffic。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:36
+#: 49d71bfda6184b25a3124cd070b64f44
+msgid "5. Exchange"
+msgstr "5. Exchange"
+
+#: ../../source/modules/datasets/supported_datasets.rst:37
+#: f40f84aa1b1247dc966d84845a13fe97
+msgid "Data source: https://github.com/laiguokun/multivariate-time-series-data"
+msgstr "数据来源：https://github.com/laiguokun/multivariate-time-series-data"
+
+#: ../../source/modules/datasets/supported_datasets.rst:38
+#: c652f6b58fc74217b3395a8d0edc2c1e
+msgid "Data profile: Contains daily sampled exchange rate data spanning 36 years."
+msgstr "数据简介：包含跨度36年的每天采样的汇率数据。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:39
+#: a8408582aa33430facd97d49623c96b8
+msgid "Dataset name: Exchange."
+msgstr "数据集名称：Exchange。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:42
+#: 37d673c320a344e48a72bfa5455a732d
+msgid "6. ECL"
+msgstr "6. ECL"
+
+#: ../../source/modules/datasets/supported_datasets.rst:43
+#: 1dddbd4bea22420cb73fc45b8b9a87dd
+msgid ""
+"Data source: "
+"https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014"
+msgstr "数据来源：https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014"
+
+#: ../../source/modules/datasets/supported_datasets.rst:44
+#: 083e5830b302477cb07db65d9a093a86
+msgid ""
+"Data introduction: Contains hourly electricity consumption data of 321 "
+"customers spanning 4 years, used to predict electricity demand in various"
+" regions."
+msgstr "数据简介：包含321个客户跨度4年的每小时用电数据，用于预测各地区的电力需求。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:45
+#: f6f79041cf5f46e8a804adabfbcfb69e
+#, fuzzy
+msgid "Dataset name: ECL."
+msgstr "数据集名称：ECL"
+
+#: ../../source/modules/datasets/supported_datasets.rst:48
+#: 400d01add51041be83fdb0559a7cae12
+msgid "6. M4"
+msgstr "6. M4"
+
+#: ../../source/modules/datasets/supported_datasets.rst:49
+#: 9bfb3960657e4b8cb7e5ac8a198a586b
+msgid ""
+"Data source: https://www.kaggle.com/datasets/yogesh94/m4-forecasting-"
+"competition-dataset"
+msgstr ""
+"数据来源：https://www.kaggle.com/datasets/yogesh94/m4-forecasting-competition-"
+"dataset"
+
+#: ../../source/modules/datasets/supported_datasets.rst:50
+#: 05cd09baa66f48b9bbc7f10f40871a5f
+msgid ""
+"Data introduction: 100,000 pieces of univariate data including "
+"demography, finance, industry, macroeconomics, microeconomics, etc."
+msgstr "数据集简介：包含人后、经济、工业、宏观经济、微观经济等的100000条单变量数据。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:51
+#: 7fc1fac4fd014684804dfdbd4223ee1d
+msgid ""
+"Dataset name: M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4"
+"-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-"
+"test, M4-Hourly-train, M4-Hourly-test."
+msgstr "数据集名称：M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4-Hourly-train, M4-Hourly-test。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:54
+#: f3b5ce64474c4aa7bb12f3e255eb0ba9
+msgid "7. WTH"
+msgstr "7. WTH"
+
+#: ../../source/modules/datasets/supported_datasets.rst:55
+#: e486d3edde064f899bf6fcd9bc04a6a3
+msgid "Data source: https://www.ncei.noaa.gov/data/local-climatological-data/"
+msgstr "数据来源：https://www.ncei.noaa.gov/data/local-climatological-data/"
+
+#: ../../source/modules/datasets/supported_datasets.rst:56
+#: 51e3e3de2b0a4cfbb5b38f21eee7445e
+msgid ""
+"Data introduction: hourly weather data with 12 variables spanning 4 "
+"years, used to predict the weather in various regions."
+msgstr "数据简介：包含12个变量跨度4年的每小时天气数据，用于预测各地区的天气。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:57
+#: 35083db2492d4babb7158b3f92908455
+msgid "Dataset names: WTH, UNI_WTH."
+msgstr "数据集名称：WTH、UNI_WTH。"
+

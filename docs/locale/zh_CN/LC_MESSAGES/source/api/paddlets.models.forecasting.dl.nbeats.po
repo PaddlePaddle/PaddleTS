@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 15:39+0800\n"
+"POT-Creation-Date: 2023-05-26 15:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/api/paddlets.models.forecasting.dl.nbeats.rst:2
-#: b8ed68b3971a429aa21d513758e0228b
+#: bbfc6fd5a67f4d0e9bbaeabd86d8b242
 msgid "paddlets.models.forecasting.dl.nbeats"
 msgstr ""
 
-#: c7cbce3f3e734cf3a6f155a3a293b4d4 of paddlets.models.forecasting.dl.nbeats:1
+#: c4b9c8b2de754a21829deefbac9dfe47 of paddlets.models.forecasting.dl.nbeats:1
 msgid ""
 "This implementation is based on the article `N-BEATS: Neural basis "
 "expansion analysis for interpretable time series forecasting "
@@ -30,24 +30,24 @@ msgstr ""
 "基于论文：`N-BEATS: Neural basis expansion analysis for interpretable time "
 "series forecasting <https://arxiv.org/pdf/1905.10437.pdf>`_ 实现。"
 
-#: e80532385ea44a5f850e7faa40981cd9 of paddlets.models.forecasting.dl.nbeats:8
+#: 3eeef38655aa4f51adb5b357690a256c of paddlets.models.forecasting.dl.nbeats:8
 msgid "Base model features"
 msgstr "原模型特性"
 
-#: 07e19a52c82b4d18b746193016fe89d1 of paddlets.models.forecasting.dl.nbeats:4
+#: 0ed89f8822494de3a6a64b9f8ec6bc8b of paddlets.models.forecasting.dl.nbeats:4
 msgid ""
 "Basic architecture: A network with hierarchical stacking, bi-directional "
 "residual connection and interpretable generator."
 msgstr "基础架构：多层堆栈，双向残差连接，并具有可解释性生成器的网络结构。"
 
-#: b0b1e1fb87fe4310aa214bb58c703a38 of paddlets.models.forecasting.dl.nbeats:6
+#: 5a9aa263ea9f480bbf1b20ab11ddb1f8 of paddlets.models.forecasting.dl.nbeats:6
 msgid ""
 "Hierarchical stacking: The Design of multi-stacks with multi-blocks in "
 "each is for different kinds of information extraction, ie, trend, "
 "seasonality, etc.."
 msgstr "多层堆栈：多栈与多模块循环堆叠，各栈用来提取不同的可解释特性，比如趋势性与季节性。"
 
-#: 7ad62906626b4834929ebc3fec7d3067 of paddlets.models.forecasting.dl.nbeats:8
+#: 60526eb68d234f0898321c4378e68470 of paddlets.models.forecasting.dl.nbeats:8
 msgid ""
 "Bi-directional residual cascade: The backward residual connection is for "
 "computing of the residual signal, and pass the residual to the next "
@@ -55,87 +55,88 @@ msgid ""
 "forecasts to the final output."
 msgstr "双向残差串联结构：向后残差连接用来计算历史残差信号，并传递至下一层网络；向前差残连接累加计算得到最终模型预测。"
 
-#: ff56d2808d27471e817765ae3edf6f27 of paddlets.models.forecasting.dl.nbeats:14
+#: fe567dcb203f4b0eaa931f208b410fb9 of paddlets.models.forecasting.dl.nbeats:12
 msgid "Updated features"
 msgstr "升级模型特性"
 
-#: 903338c6b2ce40f78b24e3ef57da811b of paddlets.models.forecasting.dl.nbeats:11
+#: a8fd579c856b40dabca4e8122294695a of paddlets.models.forecasting.dl.nbeats:11
 msgid "Multi-target: support multi-target modelling."
 msgstr "多目标变量：支持多目标建模。"
 
-#: c49b3177c6584038b00ec8f12618168c of paddlets.models.forecasting.dl.nbeats:13
+#: a032dba8992740f7a8c880efc48d7d74 of paddlets.models.forecasting.dl.nbeats:13
 msgid ""
 "Covariates: support known covariates(future known covariates) and "
 "observed covariates(future unknown covariates)."
 msgstr "协变量：支持可预知协变量特征与观测协变量特征。"
 
-#: 9b0366d56a7146f1860d815a2a067c18 of
+#: d7d7ea83d20647c8a70bf9921c316e8c of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:1
 msgid ""
 "Bases: "
 ":py:class:`~paddlets.models.forecasting.dl.paddle_base_impl.PaddleBaseModelImpl`"
 msgstr ""
 
-#: 4ad723d4b4a94bc59f52d68942919f02 of
+#: 7f01a97618b943f3a7d188be262020d8 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:1
 msgid "Implementation of NBeats model."
 msgstr "NBeats模型实现。"
 
-#: d991da788c2949aca0d63036526180a7 of
+#: f492f91870bd4da4b6ffe1444a886311 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel
 msgid "Parameters"
 msgstr "参数"
 
-#: 00a322409d0d4fe4a0c634a8b8792b02 of
+#: 6fdc37cf6bc64016bf4041ed214865c2 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:3
 msgid ""
 "The size of the loopback window, i.e., the number of time steps feed to "
 "the model."
 msgstr "模型输入的时间序列长度。"
 
-#: 21820517472a466fbbab302353880691 of
+#: f5d8633884b941e0bab4a4266b8d283c of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:5
 msgid ""
 "The size of the forecasting horizon, i.e., the number of time steps "
 "output by the model."
 msgstr "模型输出的序列长度。"
 
-#: 1af1b78f490946219db5222507bcc6d3 of
+#: d43bab53cabc47be9d48e6edf217af87 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:7
+#, fuzzy
 msgid ""
 "Boolean value indicating whether the generic architecture of N-BEATS is "
-"used. If not, the interpretable architecture outlined in the paper "
-"(consisting of one trend and one seasonality stack with appropriate "
-"waveform generator functions)."
+"used.                     If not, the interpretable architecture outlined"
+" in the paper (consisting of one trend and one seasonality stack"
+"                     with appropriate waveform generator functions)."
 msgstr "布尔类型变量，指示是否使用普通网络结构，如不使用则使用可解释性网络结构。"
 
-#: 2966cd2501254d18855f1aec3e9ffda4 of
+#: 10726613a4e3473b9fc4c858ea2d1a4c of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:9
 msgid ""
 "The number of stacks that make up the whole model. Only used if "
 "`generic_architecture` is set to `True`."
 msgstr "stack数量，当generic_architecture为True时生效。"
 
-#: 4b560241a5c14587bf7e378d8519bd4c of
+#: 277061cbbaef43f68712b19aaac521a2 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:11
+#, fuzzy
 msgid ""
-"The number of blocks making up each stack. If a list is passed, it must "
-"have a length equal to `num_stacks` and every entry in that list "
-"corresponds to the corresponding stack. If an integer is passed, every "
-"stack will have the same number of blocks."
-msgstr "每个stack中block的数量，如果传入一个list，它的长度必须与`num_stack`一致，"
-"其中的每个元素对应于各stack中block的数量。如果传入一个整数，每个stack中的block"
-"数量一致。"
+"The number of blocks making up each stack.                     If a list "
+"is passed, it must have a length equal to `num_stacks` and every entry in"
+" that list corresponds to the corresponding stack.                    If "
+"an integer is passed, every stack will have the same number of blocks."
+msgstr "每个stack中block的数量，如果传入一个list，它的长度必须与`num_stack`一致，其中的每个元素对应于各stack中block的数量。如果传入一个整数，每个stack中的block数量一致。"
 
-#: 21837855e9d34d3cb05e76e836b15cdd of
+#: e5875b0bdad548179d2eed9ea1adb8cf of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:13
+#, fuzzy
 msgid ""
 "The number of fully connected layers preceding the final forking layers "
-"in each block of every stack. Only used if `generic_architecture` is set "
-"to `True`."
+"in each block of every stack.                     Only used if "
+"`generic_architecture` is set to `True`."
 msgstr "每个block中分叉结构前的全连接层数量，仅当generic_architecture为True时生效。"
 
-#: 450de0ca8bd8400ab12bca0c541106d9 of
+#: 4aa0c1a3425948f3bb57136df3ace8a6 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:15
 msgid ""
 "Determines the number of neurons that make up each fully connected layer "
@@ -145,7 +146,7 @@ msgid ""
 "stack will have blocks with FC layers of the same width."
 msgstr "每个block中全连接层的神经元数量，如果传入list，则list长度必须等于num_stacks，且list中每个元素对应于当前层的神经元数量。如果传入整数，则每个stack中的block中具有相同的神经元数量。"
 
-#: 6695c699e0724109a5ffd8b4740fc538 of
+#: f3fc8f5e28fd4300bf07236614ef5f03 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:17
 msgid ""
 "The dimensionality of the waveform generator parameters, also known as "
@@ -153,14 +154,14 @@ msgid ""
 "`True`."
 msgstr "波形生成器参数个数，仅当generic_architecture为True时生效。"
 
-#: 306f168b929c48a9b0b2bf14da0403ea of
+#: 1b2557dcc96b48a0a1904afd75f843fa of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:19
 msgid ""
 "The degree of the polynomial used as waveform generator in trend stacks. "
 "Only used if `generic_architecture` is set to `False`."
 msgstr "季节性波形生成器的多项式次数，仅当generic_architecture为False时生效。"
 
-#: adb5d3f6b0f44899a2fde20e0f1fd03d of
+#: 4e84c516fea44fdbac0cd131af1de0e6 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:21
 msgid ""
 "Optional, the number of time steps between in_chunk and out_chunk for a "
@@ -169,59 +170,59 @@ msgid ""
 " steps."
 msgstr "可选变量， 输入序列与输出序列之间跳过的序列长度，既不作为特征也不作为预测目标使用，默认值为0。"
 
-#: f8f8e4c739614c8582cfba2003cbb172 of
+#: d2c59082648643609ccaaf47ebe76ac6 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:23
 msgid "sampling intervals between two adjacent samples."
 msgstr "相邻两个样本的采样间隔。"
 
-#: da9e03e45b9b4205a8d29012d94cfa1b of
+#: 92b0ceff071841fe9bcd7bfd796ffea0 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:25
 msgid "loss function."
 msgstr "损失函数。"
 
-#: 94baf30f8e8a40aa886fb895e6bc27de of
+#: e6054068d9d0421c9cea059c093ee378 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:27
 msgid "optimizer algorithm."
 msgstr "优化器算法。"
 
-#: bddea4879d44483ab2e844e6d2bffacf of
+#: 8290b63dd6814139b75988af7bfea371 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:29
 msgid "optimizer parameters."
 msgstr "优化器参数。"
 
-#: bc8630a384044cbfbb6255868d9858c6 of
+#: 8da8488ab7d54f4fbe6132ab6853f537 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:31
 msgid "evaluation metrics of model."
 msgstr "模型评估指标。"
 
-#: f474b59fd04e48d98a0d9c2ba5eb338c of
+#: 6c1e98968ec74d69a024f8b3d2540290 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:33
 msgid "customized callback functions."
 msgstr "自定义的callback函数。"
 
-#: 67b1df25af89454e987a1980e3c46008 of
+#: 7a49be09c9874ec89d609cedf541b2a3 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:35
 msgid "number of samples per batch."
 msgstr "每个batch中的样本数量。"
 
-#: 3cd7aa751cc34a2bb8ebcccc767acf61 of
+#: 5d1abdd1256142cc92ea44a8ff30c42d of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:37
 msgid "max epochs during training."
 msgstr "训练过程中最大迭代轮数。"
 
-#: a2559a1bb87a45cfa38a92a85c0d56eb of
+#: 78c1ffb4cbd0422cab327896ee7f12f4 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:39
 msgid "verbosity mode."
 msgstr "模型日志模式。"
 
-#: ad1078a97b2349e18ac874c947643cfb of
+#: 14eeb201abd7445db4264acd61bf1fda of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:41
 msgid ""
 "number of epochs with no improvement after which learning rate wil be "
 "reduced."
 msgstr "训练过程中学习率降低所需的效果不再提升的轮数。"
 
-#: 4ba4489924134a27a0aab1aa5e326847 of
+#: 50c7c6f75bc84e15929c1c848352de95 of
 #: paddlets.models.forecasting.dl.nbeats.NBEATSModel:43
 msgid "global random seed."
 msgstr ""

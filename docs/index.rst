@@ -73,6 +73,7 @@ Project GitHub: https://github.com/PaddlePaddle/PaddleTS
     :caption: Dataset
 
     Dataset <source/modules/datasets/overview.rst>
+    Supported Datasets <source/modules/dataset/supported_datasets.rst>
 
 
 .. toctree::
