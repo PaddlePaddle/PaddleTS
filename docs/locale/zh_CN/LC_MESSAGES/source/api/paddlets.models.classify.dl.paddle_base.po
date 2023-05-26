@@ -8,35 +8,34 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-22 11:18+0800\n"
+"POT-Creation-Date: 2023-05-26 15:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.12.1\n"
 
 #: ../../source/api/paddlets.models.classify.dl.paddle_base.rst:2
-#: 4dfacaed459a45f2a9984ed5ea36ae42
+#: 9e5629bc0b6b4d42848548cd19cf9fc4
 msgid "paddlets.models.classify.dl.paddle_base"
 msgstr ""
 
-#: 0023fd5c75cd410e953e5c13bcb9ed00 of
+#: 557cba4183fa42d1993ccc58120be630 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:1
 msgid "Bases: :py:class:`~paddlets.models.classify.base.BaseClassifier`"
 msgstr ""
 
-#: c3496de1dbb54637ab230194a64274fb of
+#: 73507346d7f5476cafdff882fe356eda of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:1
-msgid ""
-"Base class for all paddle deep time series classify models."
+msgid "Base class for all paddle deep time series classify models."
 msgstr "所有paddle深度时序分类模型的基类。"
 
-#: 2941640e520c452888b079d9b1c9c6cd 581d1b8b78bb4f188e4340699d6d8104
-#: 599d4a35171b45e2b831b04ffec45f19 8fa1f3c46ab04a539ed6bc682ce9124e
-#: 9e18f6007fe94be7a852934e815a6c1e bfaf63d936f7454b97017fafc0d50428
-#: cb273e020a5a47d0b888f8f8ee677603 fdd3cb3d0ac543368f6c262c7093e938 of
+#: 0035330c98c647799baf627e20cdd437 30430a4095c6415b887df7b79a19b4d1
+#: 4449b986050542f58329026f00a92271 5a8236d565754bc6a4f7335d7dc6512c
+#: a2b554d21a0b46e6a31aac4dcc6a812c a80c866af53b4c9d82c4feb28a8328e4
+#: d6be69ef649e4ba2bb6eee94a03ed2d5 e248e6319fb9447f82d000a05363db8a of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit
@@ -48,110 +47,110 @@ msgstr "所有paddle深度时序分类模型的基类。"
 msgid "Parameters"
 msgstr "参数"
 
-#: 981c2379a80947a09777b24cd128904d c907cfa10f0a49e2a1bd4a0fb3b58f92 of
+#: 490605095cb940ab95d6c2fbabf00f22 50e397bccdd94d28ad1b1dfa2edf7740 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:3
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:26
 msgid "Loss function."
 msgstr "损失函数。"
 
-#: 13882806b79c4b90a2463944c6cde480 9fbf2554b29547e69807d556d749834e of
+#: 2d9724b567bd456f9f7e21ea03137411 e7ab92c8ae0042e88d908ef2c20de46a of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:5
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:32
 msgid "Optimizer algorithm."
 msgstr "优化器算法。"
 
-#: 736fceb26faf4d8a86ad88d57f8564c5 ccbda20e59024d81abebdefbed174c92 of
+#: 145d6dd6dcc24c1586ebcd95ab42609e 2c6cba9db77a4399be9f039ea3e876a2 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:7
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:38
 msgid "Optimizer parameters."
 msgstr "优化器参数。"
 
-#: 2decfda683d84c3898be87a61037aebc 7992e6b0eeb443a59041397cd3112f0e of
+#: 2a8f5c7a0c3343269dfd8327d972b764 d3b28b93dabf4381882da40c71073046 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:9
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:44
 msgid "Evaluation metrics of model."
 msgstr "模型评估指标。"
 
-#: 32107ecaed5446848660181d45e688c2 edff31c811fa443c8032f33a14bbf05c of
+#: 53e6f138e01d4dfaa72588b863e11ada ed4986276fc448a2885f3cd35b8ad72e of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:11
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:50
 msgid "Customized callback functions."
 msgstr "自定义回调函数。"
 
-#: f6fb39af67074205aa6ee1af21cd4aa0 f8f3d29b496345c9a9d99181eb162cbb of
+#: 89f81380e2f34424ba9aa6d617bc7224 c55dac2a7f0540d4a155a5db81e26acf of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:13
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:56
 msgid "Number of samples per batch."
 msgstr "每个批次的样本数量"
 
-#: 26859c419e624a60870e2c9089be746a 5f86cfc10f45447d9490452c3304be8b of
+#: 90ba7578a9de42338b1dab7e2574029e b77acea39f3643098af9730e413eebab of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:15
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:62
 msgid "Max epochs during training."
 msgstr "训练过程中最大迭代轮数"
 
-#: 2eefda04c3d344d6b44596daa23f491f 6712128f48ca462e84a843b0df633b04 of
+#: 11b3db3c4b794315a6ea840183600624 1413932642ca4d45ba2ecc268bfc3515 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:17
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:68
 msgid "Verbosity mode."
 msgstr "模型日志模式"
 
-#: 89131bdd48df49f3a598942739ccbb1e 935a6a2223a24f14a5afbbfe16b12857 of
+#: 2bf077e781d64e59aff7c4b32e39b078 c65f43f9b0d34db49fb699e719c01bd9 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:19
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:74
 msgid "Number of epochs to wait for improvement before terminating."
 msgstr "模型训练过程中, 当评估指标超过一定轮数不再变优，模型提前停止训练。"
 
-#: 70fc657616574321844eabbdd088ec47 921fbb4413d14a4ea7436bcdd801f1ea of
+#: 084b05650bec4d32b6844cb9455bd773 1464757642b941d4aab159a94bd8a809 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:21
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:80
 msgid "Global random seed."
 msgstr "全局随机种子， 注: 保证每次模型参数初始化一致。"
 
-#: 0fd5a8ed9ef94774a127fb5435a675ca 1ad0a51e278a4c49900c0c4816c0c52c
-#: 26e120c379f74ab4b5f11153ae0febf2 30c75355597a4c64af6c1ae83953edc9
-#: 366a503792d045f38badd35c21959f61 369d873970f24f51a2d8d92aaa9ae42d
-#: 5cf7af7bb5694abdbe41390c77fc94ab 662a4b50c9814b0580ba7eb0db6e4924
-#: 6fc75a4ddef84a60851cda09b8154f15 85bd1de7ae7d48e5bee19ffd3d00c0ef
-#: 873d5bc795cb4d36a3b4c6bf565e4101 8ec5a3ecf8804c9e9108f52b1e0811c6
-#: b29170461d4a4d93b047c7df0cd5eb0a b5b52ea7e2d948b9803e627b902085df
-#: c13fe13ae97b415489c2dbdf4dc4e1aa d076912b0691417daf88308b596cf43e
-#: e13fd412701e4682b7d2d3568a456a7d e3bd89f8a38b4469a8c99424040d1244
-#: e50b149c76ce449db6cfd625331a9077 e8260785971a4f9090d3d4222d6c42a5 of
+#: 07d5d3d3a9794097bc64b206055b1b9a 0cfef40b94534792b0cdf9549621d5ab
+#: 0d53d5a447f443a18752361af6155e41 165b39a28aca47d1a2fc9821d6007b33
+#: 1e67db40599d4d06a0982f932061966b 249876f1c1a2458d8c38fd02da702ef1
+#: 2ccf3b2bc3914bb88c96e87a76d213aa 541f2fcb421041629bb2a92a74dd69e6
+#: 5a859ff2fe5b4053915be1f7d51a8bc1 5dfcf10301df460aaeb3d85a835211d6
+#: 6186cda495884ce381bb3bddc876d61a 63994c778197401197689c280b6aa177
+#: 7845e44f9c254431978e0907f0dc3ada 7910f0ec7a784685b0361a64b3f19a0c
+#: 9220a1dbb0824d62b2548c2e72ccaaac 9704f0833a9a426cbaeca5eb4ba69cb5
+#: bddc83fb921d4985941339a0e5a258fb d34fabc4c9414e3399a23d8201a00002
+#: d9c4644e2b534d1ba67d366b717d9921 dc018713f3d041bfba61561221840c0c of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier
 msgid "type"
 msgstr ""
 
-#: 3a1b288978734062938d3be42fa7ac41 of
+#: aff838bc1bc74716ac4bfbb4b039d701 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:28
 msgid "Callable[..., paddle.Tensor]|None"
 msgstr ""
 
-#: 75b41d8dcee545d9ac55f3c4acbd707b of
+#: 1b06521a297e422192914256f4a4c7de of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:34
 msgid "Callable[..., Optimizer]"
 msgstr ""
 
-#: b1826d934c8046b18cd669a845654e76 f77032e0b3ee49d5b5b1a8e53b33344d of
+#: 17e3bf04bd3e436db94d294ffa4d5005 2327da258dc84e4da254682be0236d1e of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:40
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:104
 msgid "Dict[str, Any]"
 msgstr ""
 
-#: 5e268671afe6428bb9967423e27714cf edf7102a836041fdb11f498ab3cd5f99 of
+#: 36d0c6e7f3f049c0824c052aad8a2b66 aa2f137c56a645b599cc88e8ba59b8a9 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:46
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:128
 msgid "List[str]"
 msgstr ""
 
-#: d74339fc2be441a6bb2be18d3d8a65d5 of
+#: 0179a4697ce94a6fab585146d44b11f2 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:52
 msgid "List[Callback]"
 msgstr ""
 
-#: 1d1580bf2fbc4c1196b529c3d911e6bb 45044a94d0ae401782248a95bb34857a
-#: 705f96852c3346a1b9fbd2f244ac8471 7d3510deb932470a8629cec901fa88c3
-#: e6dcb5d56bb347299e9e9960ca90afda of
+#: 1c34abff42c3483fb7e10d65d10973a7 528cc0e062ad43dfbd94269ca37f2efc
+#: 56fc8e52581b431c889d6638859de51c 65b8943fb4bf48f88981304097a22aa2
+#: 82ecc0354f1b442398461d8cbd97d102 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:58
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:64
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:70
@@ -160,97 +159,97 @@ msgstr ""
 msgid "int"
 msgstr ""
 
-#: 7ae014b3e59b424ca107c099fbe678c3 of
+#: 91f12b32bb884bd9b8ad728506cb1c53 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:82
 msgid "int|None"
 msgstr ""
 
-#: 3a6bad60837d40beb4d3335ff7ad8a27 of
+#: b1eb98c2b20f49d1bbe6382e0aeddfd1 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:86
 msgid "ndarray of class labels, possibly strings"
 msgstr "分类类别，有可能是字符串组成的列表"
 
-#: 6746964584f14113a07459e378fe4cf7 of
+#: d03492c6a1794070acebb21951b66a4b of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:90
 msgid "number of unique labels"
 msgstr "分类的数量"
 
-#: 18caf100e65343b0bc9739378452a99c of
+#: 5dcd344e58614674ba2bad525c35357c of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:98
 msgid "bool"
 msgstr ""
 
-#: c000e73a3e08432b85928cfbb98f01dc of
+#: db073970e8b94fa887ccdd18354d72dc of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:102
 msgid "Infer parameters by TSdataset automatically."
 msgstr "根据TSDataset自动推断各种参数。"
 
-#: 6972879907484ad5916d1cbf9b1526fe of
+#: 36e715a4d6e64385ae92e2904884ff46 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:108
 msgid "Network structure."
 msgstr "网络结构。"
 
-#: 849172626b1c42f8a2837aa59e33d91a of
+#: 630468994bfc4d81b312c6b4442015aa of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:110
 msgid "paddle.nn.Layer"
 msgstr ""
 
-#: 9c484b3fb19c4bdb90a1d636fd90a811 of
+#: 1216dc8ec032496ab4be7dfc84dc9b1d of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:114
 msgid "Optimizer."
 msgstr ""
 
-#: ae12205261984543b0d99c1860cd4b37 of
+#: e8c046d4121e43bd9ab284bc0ab10a2b of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:116
 msgid "Optimizer"
 msgstr ""
 
-#: b65c55a72e564f5681dbbc510c87a8c5 of
+#: 2c474e5f157d418bb1d4188cc141d078 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:120
 msgid "List of metric instance."
 msgstr "评估方法实例列表。"
 
-#: dea08c11893a42318c4f06780fd6f54c of
+#: bd8a0cfed49144a5ad6ecebcfffc826d of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:122
 msgid "List[Metric]"
 msgstr ""
 
-#: 7603795e98084be3ade746cd1f24560e of
+#: 68abe0ce10a74c99a31eedd7e7456f9b of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:126
 msgid "List of metric names."
 msgstr "评估方法名称列表。"
 
-#: 6a8d4a9c00f342d4be48aed97725cd14 of
+#: 0f0a6c44d9b44b2b9d93b40a7bf62c50 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:132
 msgid "Dict of metric container."
 msgstr ""
 
-#: f6189f08fab84528843cddb6f0eef396 of
+#: 21e1b46fae9c4daab6e6f5dc168abde3 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:134
 msgid "Dict[str, MetricContainer]"
 msgstr "评估方法的容器。"
 
-#: 932244e653f447d4a4b47180f90235c1 of
+#: 12085b02a2074bb798945eae54224fad of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:138
 msgid "Callback that records events into a `History` object."
 msgstr "历史信息。"
 
-#: 513b3035cbd7418287d2028e2e79d764 of
+#: 1e98173e0fae4882a5c99825ac7ef10a of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:140
 msgid "History"
 msgstr ""
 
-#: 3f25eda375d94dfc8db742b0678caaeb of
+#: 40b1845f6a19441185edb8e8fb82859a of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:144
 msgid "Container holding a list of callbacks."
 msgstr "一个包含回调实例的容器"
 
-#: ae711601f2be4ab088242222abf5dfa3 of
+#: 41dcd73591314ae8a278bb66402e2ed3 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier:146
 msgid "CallbackContainer"
 msgstr ""
 
-#: e9e0823bda1342aeaff8f4ffdd16bc7a of
+#: 845f6ee2cef74bd6bb1c12c1c1b9ba3d of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset:1
 msgid ""
 "Ensure the robustness of input data (consistent feature order), at the "
@@ -258,68 +257,74 @@ msgid ""
 "processing logic is as follows."
 msgstr "确保输入数据的鲁棒性（一致的特征顺序），检查数据类型是否兼容。如果没有，处理逻辑如下。"
 
-#: adc74c5ebfce484b94727446e19c04b8 of
+#: f876786ee0264bc88508960b741f51c6 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset:4
 msgid "1> Floating: Convert to np.float32."
 msgstr ""
 
-#: 11affd2c2f2040c0bdf20b6db7de632d of
+#: 3739d1df11284951b2fc530f1abef5c2 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset:6
 msgid "2> Missing value: Warning."
 msgstr ""
 
-#: 401ef9703a9e49a6a7cc39f62f0963a6 of
+#: 332d1be7ac1a4d3987f8b15397b06d16 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset:8
 msgid "3> Other: Illegal."
 msgstr ""
 
-#: 6efe8d4a8944446aa9cdbb37e6b786e3 of
+#: a098f19a9e9e41cf9ebeb01dc500e631 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.check_tsdataset:10
 msgid "Data to be checked."
 msgstr "被检查的数据"
 
-#: a7894f47b2954ee4b77919512fc928a5 of
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:1
+#: ee861c2073c2466eb63cdfdfcaf1f55f of
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:2
+msgid "Train a neural network stored in self._network,"
+msgstr ""
+
+#: 87e9b6e4dd5644b897f7ee6b0d8e9f8c of
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:2
+#, fuzzy
 msgid ""
-"Train a neural network stored in self._network, using train_dataloader "
-"for training data and valid_dataloader for validation."
+"Using train_dataloader for training data and valid_dataloader for "
+"validation."
 msgstr "训练一个深度模型，存储在self._network中。使用train_dataloader做为训练集，valid_dataloader做为验证集。"
 
-#: 2f29f67fc95944ecaad01923b9b586c0 of
+#: f618cd594b24496696e434588efc70b7 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:4
 msgid "Train set."
 msgstr "训练集"
 
-#: 0f4004fd18614c6d8c9051189c33d2db of
+#: 14a576829e40435684796a4b18f0f77a of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:6
 msgid "(np.ndarray) : The train data class labels"
 msgstr "训练数据的标签"
 
-#: e9e69c4c7a69423faf91344374b15c3b of
+#: ad7a426bfdb34aba9205c518d54a6e45 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:7
 msgid "Eval set, used for early stopping."
 msgstr "验证集，用于早停"
 
-#: fa0c3d0731d140da8940c8a9129009d7 of
+#: ce4828c72af44792a7dd160c814f72e6 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.fit:9
 msgid "(np.ndarray) : The valid data class labels"
 msgstr "验证数据的标签"
 
-#: 1cbbca9e20c446b8a8531a3ca4dc9e73 of
+#: 17629c4b3d26488a8bcea5a339352646 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict:1
 msgid "Predict labels. the result are output as ndarray."
 msgstr "预测结果。以数组方式返回"
 
-#: 8bd4d61e5bf24b309364f883f3c11c1f 96e2f011da274053b7e1ad20f9640ab8
-#: a4a1087fa8cc4003bdf385af0b17fcfc of
+#: 2a6c5c6d765c48bc89b7fc0b5024cdcd b13be9b64e4d4ddfb38c269c8e3a8f92
+#: fafd129aba234bddbcc45a8586d9dc3b of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict:3
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict_proba:3
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.score:3
 msgid "Data to be predicted."
 msgstr "被预测数据"
 
-#: 1e21e3f2642a4236a79d1dd147a1b297 4e6c72814f8a4fb7ac76bf370c891a6e
-#: 94439f22d0284c5aa1742e10012a8fa9 fca1482e9e654da09c8371d607c97aae of
+#: 3f1d551826c94af1943fbf8497db01ba ace0edd8e467482cb712b7a7dce6c0bd
+#: ddd9ee4772a348078c9ec0e9d52fd739 ff893d7135e74266a5f738a65f2fa0a6 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict_proba
@@ -327,60 +332,63 @@ msgstr "被预测数据"
 msgid "Returns"
 msgstr "返回"
 
-#: 123ecc37a6374d07a18210317ae01324 d6538fffbf894021be30ce84b23b3f6e of
+#: 7c8ee69730214b8898ffe5132d59bc7b c491ff5a41644c07bc48356db3094333 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict:6
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict_proba:7
 msgid "np.ndarray."
 msgstr "多维数组"
 
-#: 6c14023b4aca491eb43016dac4ae840e of
+#: 151e86747d35458089f02bef551f572f of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict_proba:1
 msgid "Find probability estimates for each class for all cases."
 msgstr "获取每条样本在每个类别上的概率。"
 
-#: d1642bf257854624ac6d9d9fce6e5f50 e78a4231613e4809aeefb07726f5b35a of
+#: 52b1b49bdf5c47a8baaab56f7441450a ec9635b9fa674d65a7a312cae97afc56 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.predict_proba:5
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.score:5
 msgid "(np.ndarray) : The predicted data class labels"
 msgstr "预测数据的标签"
 
-#: 3ce2adc97b464d0ab69e56358df35412 of
+#: c74b79e21dc24083b8dfc9139a2e6c74 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.score:1
 msgid "Scores predicted labels against ground truth labels on X."
 msgstr "计算预测结果的准确率"
 
-#: 84b6510c19bf4a20b500a5d46f6c5a94 of
+#: c74a7baa519b4ddab56b4ce6b4086e3f of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.score:7
 msgid "float, accuracy score of predict(X) vs y"
 msgstr "float，预测结果准确率"
 
-#: 9557c800756344bca1fceb5b8fb92a9d of
+#: 7008d492ca5c4d319625439d81fb25a3 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.save:1
 msgid "Saves a PaddleBaseClassifier instance to a disk file."
 msgstr "将一个Paddle分类模型基类实例保存在磁盘文件中。"
 
-#: a24f5acc65824484baff7002f034c1cf feb2b3f926be4bd99daec092ffde68da of
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load:5
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.save:11
+#: 30bba488ef874ab79ad4038bd83cf762 5cc48a31bbee4227be185c48052413a9 of
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load:3
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.save:3
 msgid "A path string containing a model file name."
 msgstr "一个包含模型文件名的字符串格式的路径。"
 
-#: 74cbf149688a4ee785533493f7fec489 of
+#: ff50daa6dd0b495ca6677f5d57db1319 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.save
 msgid "Raises"
 msgstr ""
 
-#: fe6185d08129485bbe4ec0d27b0eb257 of
+#: 9d199a7b76674b72850e84a592768917 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load:1
 msgid "Loads a PaddleBaseClassifier from a file."
-msgstr "从给定的文件中加载 :class:`~/paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier` 模型实例。"
+msgstr ""
+"从给定的文件中加载 "
+":class:`~/paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier` "
+"模型实例。"
 
-#: e4320c351737448ba1041306247bac40 of
-#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load:8
+#: cef97f9a92ac4fed92eb4d75658a0e34 of
+#: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load:6
 msgid "the loaded PaddleBaseClassifier instance."
 msgstr "已加载的PaddleBaseClassifier模型实例"
 
-#: 7e651f17183142a0b6fe05e363c8482d of
+#: 77c8a09f4b044b2bb275e6b051be6d78 of
 #: paddlets.models.classify.dl.paddle_base.PaddleBaseClassifier.load
 msgid "Return type"
 msgstr "返回类型"

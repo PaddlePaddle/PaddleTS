@@ -8,17 +8,14 @@ import time
 
 import numpy as np
 
-from paddlets.models.common.callbacks import (
-    CallbackContainer,
-    EarlyStopping,
-    Callback,
-    History
-)
+from paddlets.models.common.callbacks import (CallbackContainer, EarlyStopping,
+                                              Callback, History)
 
 
 class CallbackHelper(Callback):
     """辅助测试
     """
+
     def __init__(self, name):
         """初始化函数
         """
@@ -104,12 +101,12 @@ class TestCallbackContainer(TestCase):
         cbk1 = CallbackHelper("cbk1")
         cbk2 = CallbackHelper("cbk2")
         cbks = CallbackContainer([cbk1])
-        self.assertEqual(cbk1, cbks._callbacks[0]) 
-        
+        self.assertEqual(cbk1, cbks._callbacks[0])
+
         # case2
         cbks.append(cbk2)
         self.assertEqual(cbk2, cbks._callbacks[1])
-        
+
         # case3
         model = mock.Mock(name="model")
         cbks.set_trainer(model)
@@ -146,8 +143,7 @@ class TestEarlyStopping(TestCase):
                 early_stopping_metric="acc",
                 is_maximize=tag,
                 tol=0.,
-                patience=1
-            )
+                patience=1)
             self.assertEqual(earlystopping._best_loss, ret)
 
         # case2
@@ -176,10 +172,7 @@ class TestEarlyStopping(TestCase):
 
         # case3
         earlystopping = EarlyStopping(
-            early_stopping_metric="acc", 
-            is_maximize=True,
-            patience=4
-        )
+            early_stopping_metric="acc", is_maximize=True, patience=4)
         model = mock.Mock(name="model")
         model._stop_training = False
         model._max_epoch = 3
@@ -244,4 +237,3 @@ class TestHistory(TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

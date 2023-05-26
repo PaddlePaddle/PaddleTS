@@ -16,8 +16,7 @@ import paddle
 from paddlets.models.common.callbacks import (
     CallbackContainer,
     Callback,
-    History,
-)
+    History, )
 from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import check_tsdataset
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
@@ -58,18 +57,18 @@ class ReprBaseModel(abc.ABC):
         _history(History): Callback that records events into a `History` object.
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
+
     def __init__(
-        self,
-        segment_size: int,
-        sampling_stride: int = 1,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        callbacks: List[Callback] = [], 
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        seed: Optional[int] = None,
-    ):
+            self,
+            segment_size: int,
+            sampling_stride: int=1,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            seed: Optional[int]=None, ):
         super(ReprBaseModel, self).__init__()
         self._segment_size = segment_size
         self._sampling_stride = sampling_stride
@@ -79,7 +78,7 @@ class ReprBaseModel(abc.ABC):
         self._batch_size = batch_size
         self._max_epochs = max_epochs
         self._verbose = verbose
-        
+
         self._fit_params = None
         self._network = None
         self._optimizer = None
@@ -89,7 +88,7 @@ class ReprBaseModel(abc.ABC):
         self._check_params()
         if seed is not None:
             paddle.seed(seed)
-        
+
     def _check_params(self):
         """Parameter validity verification, the check logic is as follow:
 
@@ -99,9 +98,12 @@ class ReprBaseModel(abc.ABC):
 
             verbose: verbose must be > 0.
         """
-        raise_if(self._batch_size <= 0, f"batch_size must be > 0, got {self._batch_size}.")
-        raise_if(self._max_epochs <= 0, f"max_epochs must be > 0, got {self._max_epochs}.")
-        raise_if(self._verbose <= 0, f"verbose must be > 0, got {self._verbose}.")
+        raise_if(self._batch_size <= 0,
+                 f"batch_size must be > 0, got {self._batch_size}.")
+        raise_if(self._max_epochs <= 0,
+                 f"max_epochs must be > 0, got {self._max_epochs}.")
+        raise_if(self._verbose <= 0,
+                 f"verbose must be > 0, got {self._verbose}.")
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
@@ -127,14 +129,10 @@ class ReprBaseModel(abc.ABC):
             Optimizer.
         """
         return self._optimizer_fn(
-            **self._optimizer_params,
-            parameters=self._network.parameters()
-        )
+            **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloader(
-        self, 
-        train_tsdataset: List[TSDataset]
-    ) -> paddle.io.DataLoader:
+            self, train_tsdataset: List[TSDataset]) -> paddle.io.DataLoader:
         """Generate dataloader for train set.
 
         Args: 
@@ -150,16 +148,13 @@ class ReprBaseModel(abc.ABC):
                 rawdataset=tsdataset,
                 in_chunk_len=self._segment_size,
                 sampling_stride=self._sampling_stride,
-                fill_last_value=np.nan
-            )
+                fill_last_value=np.nan)
             samples.extend(dataset.samples)
         dataset.samples = samples
         return data_adapter.to_paddle_dataloader(dataset, self._batch_size)
 
-    def _init_encode_dataloader(
-        self, 
-        tsdataset: TSDataset
-    ) -> paddle.io.DataLoader:
+    def _init_encode_dataloader(self,
+                                tsdataset: TSDataset) -> paddle.io.DataLoader:
         """Generate dataloader for data to be encoded.
 
         Args: 
@@ -174,8 +169,7 @@ class ReprBaseModel(abc.ABC):
             rawdataset=tsdataset,
             in_chunk_len=len(tsdataset.get_target().data),
             sampling_stride=self._sampling_stride,
-            fill_last_value=np.nan
-        )
+            fill_last_value=np.nan)
         return data_adapter.to_paddle_dataloader(dataset, self._batch_size)
 
     def _init_callbacks(self) -> Tuple[History, CallbackContainer]:
@@ -186,14 +180,14 @@ class ReprBaseModel(abc.ABC):
             CallbackContainer: Container holding a list of callbacks.
         """
         # Set callback functions, including history, etc..
-        history, callbacks = History(self._verbose), [] # nqa
+        history, callbacks = History(self._verbose), []  # nqa
         callbacks.append(history)
         if self._callbacks:
             callbacks.extend(self._callbacks)
         callback_container = CallbackContainer(callbacks)
         callback_container.set_trainer(self)
         return history, callback_container
-    
+
     def fit(self, train_tsdataset: Union[TSDataset, List[TSDataset]]):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data. 
@@ -204,9 +198,8 @@ class ReprBaseModel(abc.ABC):
         if isinstance(train_tsdataset, TSDataset):
             train_tsdataset = [train_tsdataset]
         raise_if_not(
-            len(train_tsdataset) != 0, 
-            "If the dataset is a list, it cannot be empty."
-        )
+            len(train_tsdataset) != 0,
+            "If the dataset is a list, it cannot be empty.")
         columns = list(map(lambda x: x.columns, train_tsdataset))
         raise_if_not(
             all(columns[0] == col for col in columns),
@@ -215,7 +208,7 @@ class ReprBaseModel(abc.ABC):
         self._fit_params = self._update_fit_params(train_tsdataset)
         train_dataloader = self._init_fit_dataloader(train_tsdataset)
         self._fit(train_dataloader)
-        
+
     def _fit(self, train_dataloader: paddle.io.DataLoader):
         """Fit function core logic. 
 
@@ -228,8 +221,7 @@ class ReprBaseModel(abc.ABC):
 
         # Call the `on_train_begin` method of each callback before the training starts.
         self._callback_container.on_train_begin(
-            logs={"start_time": time.time()}
-        )
+            logs={"start_time": time.time()})
         for epoch_idx in range(self._max_epochs):
 
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
@@ -239,18 +231,16 @@ class ReprBaseModel(abc.ABC):
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
-                epoch_idx, logs=self._history._epoch_metrics
-            )
+                epoch_idx, logs=self._history._epoch_metrics)
 
         # Call the `on_train_end` method of each callback at the end of the training.
         self._callback_container.on_train_end()
         self._network.eval()
 
     def encode(
-        self, 
-        tsdataset: TSDataset,
-        **encode_params,
-    ) -> np.ndarray:
+            self,
+            tsdataset: TSDataset,
+            **encode_params, ) -> np.ndarray:
         """Compute representations using the model.
 
         Args:
@@ -263,12 +253,11 @@ class ReprBaseModel(abc.ABC):
         dataloader = self._init_encode_dataloader(tsdataset)
         return self._encode(dataloader, **encode_params)
 
-    @abc.abstractmethod 
+    @abc.abstractmethod
     def _encode(
-        self, 
-        dataloader: paddle.io.DataLoader,
-        **encode_params,
-    ) -> TSDataset:
+            self,
+            dataloader: paddle.io.DataLoader,
+            **encode_params, ) -> TSDataset:
         """Encode function core logic.
 
         Args:
@@ -279,7 +268,7 @@ class ReprBaseModel(abc.ABC):
             np.ndarray.
         """
         pass
-    
+
     def _train_epoch(self, train_loader: paddle.io.DataLoader):
         """Trains one epoch of the network in self._network.
 
@@ -293,11 +282,8 @@ class ReprBaseModel(abc.ABC):
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Dict[str, Any]:
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -310,17 +296,11 @@ class ReprBaseModel(abc.ABC):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {
-            "batch_size": self._batch_size,
-            "loss": loss.item()
-        }
-        return batch_logs 
+        batch_logs = {"batch_size": self._batch_size, "loss": loss.item()}
+        return batch_logs
 
     @abc.abstractmethod
-    def _compute_loss(
-        self,
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def _compute_loss(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Compute the loss.
 
         Args:
@@ -332,10 +312,7 @@ class ReprBaseModel(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def _update_fit_params(
-        self, 
-        train_tsdataset: TSDataset
-    ) -> Dict[str, Any]:
+    def _update_fit_params(self, train_tsdataset: TSDataset) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args: 
@@ -378,18 +355,18 @@ class ReprBaseModel(abc.ABC):
         abs_root_path = os.path.dirname(abs_model_path)
         raise_if_not(
             os.path.exists(abs_root_path),
-            "failed to save model, path not exists: %s" % abs_root_path
-        )
+            "failed to save model, path not exists: %s" % abs_root_path)
         raise_if(
             os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" % abs_model_path
-        )
+            "failed to save model, path must be a file, not directory: %s" %
+            abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
-            "Failed to save model, target file already exists: %s" % abs_model_path
-        )
+            "Failed to save model, target file already exists: %s" %
+            abs_model_path)
 
-        raise_if(self._network is None, "failed to save model, model._network must not be None.")
+        raise_if(self._network is None,
+                 "failed to save model, model._network must not be None.")
         # raise_if(self._optimizer is None, "failed to save model, model._optimizer must not be None.")
 
         # path to save other internal files.
@@ -411,11 +388,12 @@ class ReprBaseModel(abc.ABC):
         }
 
         # internal files must not conflict with existing files.
-        conflict_files = {*internal_filename_map.values()} - set(os.listdir(abs_root_path))
+        conflict_files = {*internal_filename_map.values()} - set(
+            os.listdir(abs_root_path))
         raise_if(
             len(conflict_files) < len(internal_filename_map),
-            "failed to save model internal files, these files must not exist: %s" % conflict_files
-        )
+            "failed to save model internal files, these files must not exist: %s"
+            % conflict_files)
 
         # start to save
         # 1 save optimizer state dict (currently ignore optimizer logic.)
@@ -438,15 +416,13 @@ class ReprBaseModel(abc.ABC):
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
-            )
+                path=os.path.join(abs_root_path,
+                                  internal_filename_map["network_statedict"]))
         except Exception as e:
             raise_log(
-                ValueError(
-                    "error occurred while saving %s: %s, err: %s" %
-                    (internal_filename_map["network_statedict"], network_state_dict, str(e))
-                )
-            )
+                ValueError("error occurred while saving %s: %s, err: %s" %
+                           (internal_filename_map["network_statedict"],
+                            network_state_dict, str(e))))
 
         # 3 save model
         optimizer = self._optimizer
@@ -464,21 +440,27 @@ class ReprBaseModel(abc.ABC):
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
         except Exception as e:
-            raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (
+                    abs_model_path, str(e))))
 
         # 4 save model meta (e.g. classname)
         model_meta = {
             # [ChildModel, ReprBaseModel, ABC, object]
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "ancestor_classname_set":
+            [clazz.__name__ for clazz in self.__class__.mro()],
             "modulename": self.__module__
         }
         try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+            with open(
+                    os.path.join(abs_root_path,
+                                 internal_filename_map["model_meta"]),
+                    "w") as f:
                 json.dump(model_meta, f, ensure_ascii=False)
         except Exception as e:
             raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
+                ValueError("error occurred while saving %s, err: %s" % (
+                    internal_filename_map["model_meta"], str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
@@ -500,25 +482,31 @@ class ReprBaseModel(abc.ABC):
             PaddleBaseModel: the loaded ReprBaseModel instance.
         """
         abs_path = os.path.abspath(path)
-        raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
-        raise_if(os.path.isdir(abs_path), "path must be a file path, not a directory: %s" % abs_path)
+        raise_if_not(
+            os.path.exists(abs_path), "model file does not exist: %s" %
+            abs_path)
+        raise_if(
+            os.path.isdir(abs_path),
+            "path must be a file path, not a directory: %s" % abs_path)
 
         # 1.1 model
         with open(abs_path, "rb") as f:
             model = pickle.load(f)
         raise_if_not(
             isinstance(model, ReprBaseModel),
-            "loaded model type must be inherited from %s, but actual loaded model type: %s" %
-            (ReprBaseModel, model.__class__)
-        )
+            "loaded model type must be inherited from %s, but actual loaded model type: %s"
+            % (ReprBaseModel, model.__class__))
 
         # 1.2 - 1.4 model._network
         model._network = model._init_network()
-        raise_if(model._network is None, "model._network must not be None after calling _init_network()")
+        raise_if(
+            model._network is None,
+            "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
         network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
-        network_statedict_abs_path = os.path.join(os.path.dirname(abs_path), network_statedict_filename)
+        network_statedict_abs_path = os.path.join(
+            os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)
         model._network.set_state_dict(network_statedict)
 

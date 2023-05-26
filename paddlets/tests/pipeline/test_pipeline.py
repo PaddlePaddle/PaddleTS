@@ -34,23 +34,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -84,23 +85,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -115,7 +117,9 @@ class TestPipeline(TestCase):
             'max_epochs': 3,
         }
 
-        pipe = Pipeline([(KSigma, transform_params), (KSigma, transform_params_1), (MLPRegressor, nn_params)])
+        pipe = Pipeline([(KSigma, transform_params),
+                         (KSigma, transform_params_1),
+                         (MLPRegressor, nn_params)])
         pipe.fit(tsdataset, tsdataset)
         res = pipe.predict(tsdataset)
         self.assertIsInstance(res, TSDataset)
@@ -125,8 +129,9 @@ class TestPipeline(TestCase):
             'in_chunk_len': 10,
             'max_epochs': 3,
         }
-        anomaly_pipe = Pipeline(
-            [(KSigma, transform_params), (StandardScaler, transform_params_2), (AutoEncoder, nn_params)])
+        anomaly_pipe = Pipeline([(KSigma, transform_params),
+                                 (StandardScaler, transform_params_2),
+                                 (AutoEncoder, nn_params)])
         anomaly_tsdataset = tsdataset.copy()
         anomaly_tsdataset['a'] = anomaly_tsdataset['a'].astype(int)
         anomaly_pipe.fit(anomaly_tsdataset)
@@ -145,29 +150,32 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
         transform_params_1 = {"cols": ['c1'], "k": 0.7}
 
-        pipe = Pipeline([(KSigma, transform_params), (TimeFeatureGenerator, {}), (KSigma, transform_params_1)])
+        pipe = Pipeline([(KSigma, transform_params),
+                         (TimeFeatureGenerator, {}),
+                         (KSigma, transform_params_1)])
         pipe.fit(tsdataset, tsdataset)
         res = pipe.transform(tsdataset)
         self.assertIsInstance(res, TSDataset)
@@ -198,7 +206,8 @@ class TestPipeline(TestCase):
         # test inverse transform( this pipe would do nothing)
         inverse_res = pipe.inverse_transform(res)
         self.assertIsInstance(inverse_res, TSDataset)
-        self.assertEqual(inverse_res.get_all_cov().to_dataframe().shape, (2500, 4))
+        self.assertEqual(inverse_res.get_all_cov().to_dataframe().shape,
+                         (2500, 4))
         # test normaliztion case
         pipe = Pipeline([(KSigma, transform_params), (StandardScaler, {})])
         pipe.fit(tsdataset, tsdataset)
@@ -207,7 +216,8 @@ class TestPipeline(TestCase):
         self.assertEqual(res.get_all_cov().to_dataframe().shape, (2500, 4))
         inverse_res = pipe.inverse_transform(res)
         self.assertIsInstance(inverse_res, TSDataset)
-        self.assertEqual(inverse_res.get_all_cov().to_dataframe().shape, (2500, 4))
+        self.assertEqual(inverse_res.get_all_cov().to_dataframe().shape,
+                         (2500, 4))
 
     def test_recursive_predict(self):
         """
@@ -216,23 +226,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -259,8 +270,7 @@ class TestPipeline(TestCase):
         # unsupported index type
         tsdataset.get_target().reindex(
             pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
-            fill_value=np.nan
-        )
+            fill_value=np.nan)
         with self.assertRaises(Exception):
             res = pipe.recursive_predict(tsdataset, 201)
 
@@ -268,23 +278,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -309,23 +320,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -350,8 +362,7 @@ class TestPipeline(TestCase):
         # unsupported index type
         tsdataset.get_target().reindex(
             pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
-            fill_value=np.nan
-        )
+            fill_value=np.nan)
         with self.assertRaises(Exception):
             res = pipe.recursive_predict(tsdataset, 201)
 
@@ -359,23 +370,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -400,8 +412,7 @@ class TestPipeline(TestCase):
         # unsupported index type
         tsdataset.get_target().reindex(
             pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
-            fill_value=np.nan
-        )
+            fill_value=np.nan)
         with self.assertRaises(Exception):
             res = pipe.recursive_predict(tsdataset, 201)
 
@@ -409,23 +420,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -450,30 +462,30 @@ class TestPipeline(TestCase):
         # unsupported index type
         tsdataset.get_target().reindex(
             pd.CategoricalIndex(["a", "b", "c", "a", "b", "c"]),
-            fill_value=np.nan
-        )
+            fill_value=np.nan)
         with self.assertRaises(Exception):
             res = pipe.recursive_predict(tsdataset, 201)
 
         # case5
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         tsdataset.get_observed_cov()
@@ -495,23 +507,24 @@ class TestPipeline(TestCase):
             res = pipe.recursive_predict(tsdataset, 289)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2191, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2191, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2191, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         with self.assertRaises(RuntimeError):
@@ -519,23 +532,24 @@ class TestPipeline(TestCase):
         res = pipe.recursive_predict(tsdataset, 192)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2192, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2192, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2192, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2096, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2096, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2096, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         res = pipe.recursive_predict(tsdataset, 95)
@@ -552,23 +566,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -581,7 +596,9 @@ class TestPipeline(TestCase):
             'max_epochs': 3
         }
 
-        pipe = Pipeline([(KSigma, transform_params), (KSigma, transform_params_1), (MLPRegressor, nn_params)])
+        pipe = Pipeline([(KSigma, transform_params),
+                         (KSigma, transform_params_1),
+                         (MLPRegressor, nn_params)])
         pipe.fit(tsdataset, tsdataset)
         # test bad case
         with self.assertRaises(ValueError):
@@ -596,24 +613,28 @@ class TestPipeline(TestCase):
 
         label = pd.Series(
             np.random.randint(0, 2, 200),
-            index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
+            index=pd.date_range(
+                "2022-01-01", periods=200, freq="15T", name='timestamp'),
             name="label")
         feature = pd.DataFrame(
             np.random.randn(200, 2).astype(np.float32),
-            index=pd.date_range("2022-01-01", periods=200, freq="15T", name='timestamp'),
+            index=pd.date_range(
+                "2022-01-01", periods=200, freq="15T", name='timestamp'),
             columns=["a", "b"])
 
-        tsdataset = TSDataset.load_from_dataframe(pd.concat([label, feature], axis=1),
-                                                  target_cols='label', feature_cols=['a', 'b'])
+        tsdataset = TSDataset.load_from_dataframe(
+            pd.concat(
+                [label, feature], axis=1),
+            target_cols='label',
+            feature_cols=['a', 'b'])
 
         transform_params = {"cols": ['a'], "k": 0.5}
         transform_params_1 = {"cols": ['a', 'b']}
 
-        nn_params = {
-            'in_chunk_len': 10,
-            'max_epochs': 3
-        }
-        pipe = Pipeline([(KSigma, transform_params), (StandardScaler, transform_params_1), (AutoEncoder, nn_params)])
+        nn_params = {'in_chunk_len': 10, 'max_epochs': 3}
+        pipe = Pipeline([(KSigma, transform_params),
+                         (StandardScaler, transform_params_1),
+                         (AutoEncoder, nn_params)])
         pipe.fit(tsdataset)
         res = pipe.predict_score(tsdataset)
         self.assertIsInstance(res, TSDataset)
@@ -627,23 +648,24 @@ class TestPipeline(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1., "g": 2.}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         transform_params = {"cols": ['b1'], "k": 0.5}
@@ -684,12 +706,10 @@ class TestPipeline(TestCase):
                         .equals(res_after_save_load.get_target().to_dataframe()))
 
         # case2 (dl anomaly)
-        nn_params = {
-            'in_chunk_len': 10,
-            'max_epochs': 3
-        }
-        anomaly_pipe = Pipeline(
-            [(KSigma, transform_params), (StandardScaler, transform_params_2), (AutoEncoder, nn_params)])
+        nn_params = {'in_chunk_len': 10, 'max_epochs': 3}
+        anomaly_pipe = Pipeline([(KSigma, transform_params),
+                                 (StandardScaler, transform_params_2),
+                                 (AutoEncoder, nn_params)])
         anomaly_tsdataset = tsdataset.copy()
         anomaly_tsdataset['a'] = anomaly_tsdataset['a'].astype(int)
         anomaly_pipe.fit(anomaly_tsdataset)
@@ -701,25 +721,27 @@ class TestPipeline(TestCase):
             anomaly_pipe.save(self.tmp_dir)
         # path is not a directory
         with self.assertRaises(ValueError):
-            anomaly_pipe.save(os.path.join(self.tmp_dir, "pipeline-partial.pkl"))
+            anomaly_pipe.save(
+                os.path.join(self.tmp_dir, "pipeline-partial.pkl"))
         # load pipeline bad case
         with self.assertRaises(FileNotFoundError):
             Pipeline.load(self.tmp_dir + "hello")
         # load pipeline
         pipeline_after_save_load = Pipeline.load(self.tmp_dir)
         # test predict
-        res_after_save_load = pipeline_after_save_load.predict(anomaly_tsdataset)
+        res_after_save_load = pipeline_after_save_load.predict(
+            anomaly_tsdataset)
         # clear file
         # shutil.rmtree(self.tmp_dir)
         self.assertTrue(res_before_save_load.get_target().to_dataframe() \
                         .equals(res_after_save_load.get_target().to_dataframe()))
 
-
     def test_multiple_datasets_fit(self):
 
         # load multi time series
         tsdataset_1 = get_dataset("UNI_WTH")
-        _, tsdataset_1 = tsdataset_1.split(int(len(tsdataset_1.get_target()) * 0.95))
+        _, tsdataset_1 = tsdataset_1.split(
+            int(len(tsdataset_1.get_target()) * 0.95))
         tsdataset_2 = copy.deepcopy(tsdataset_1)
         valid_tsdataset = copy.deepcopy(tsdataset_1)
         tsdatasets = [tsdataset_1, tsdataset_2]
@@ -735,7 +757,9 @@ class TestPipeline(TestCase):
             'max_epochs': 3,
         }
 
-        pipe = Pipeline([(KSigma, transform_params), (KSigma, transform_params_1), (MLPRegressor, nn_params)])
+        pipe = Pipeline([(KSigma, transform_params),
+                         (KSigma, transform_params_1),
+                         (MLPRegressor, nn_params)])
         pipe.fit(tsdatasets, valid_tsdataset)
         pipe.fit(tsdatasets, tsdatasets)
         pipe.predict(valid_tsdataset)

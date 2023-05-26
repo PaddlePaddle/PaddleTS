@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 This implementation is based on the article `N-BEATS: Neural basis expansion analysis for interpretable time series forecasting <https://arxiv.org/pdf/1905.10437.pdf>`_ .
 
@@ -53,26 +52,22 @@ class _TrendGenerator(nn.Layer):
         expansion_coefficient_dim: max degree of polynomial
         target_length: forecasting horizon
     """
+
     def __init__(
-            self, 
+            self,
             expansion_coefficient_dim: int,
-            target_length: int,
-            ):
+            target_length: int, ):
         super().__init__()
         # basis is a vector of series of power functions of t, ie, basis = [1, t, t^2, ... t^p], where t refers to time point.
         # size: (expansion_coefficient_dim, target_length)
         self._basis = paddle.stack(
-            [
-                (paddle.arange(target_length) / target_length) ** i
-                for i in range(expansion_coefficient_dim)
-            ],
-            axis=1,
-        ).T
+            [(paddle.arange(target_length) / target_length)**i
+             for i in range(expansion_coefficient_dim)],
+            axis=1, ).T
 
     def forward(
             self,
-            x: paddle.Tensor,
-            ) -> paddle.Tensor:
+            x: paddle.Tensor, ) -> paddle.Tensor:
         """
         Forward trend generator.
 
@@ -92,30 +87,29 @@ class _SeasonalityGenerator(nn.Layer):
     Args:
         target_length: forecasting horizon.
     """
+
     def __init__(
             self,
-            target_length: int,
-            ):
+            target_length: int, ):
         super().__init__()
         half_minus_one = int(target_length / 2 - 1)
         cos_vectors = [
-            paddle.cos(paddle.arange(target_length) / target_length * 2 * np.pi * i)
+            paddle.cos(
+                paddle.arange(target_length) / target_length * 2 * np.pi * i)
             for i in range(1, half_minus_one + 1)
         ]
         sin_vectors = [
-            paddle.sin(paddle.arange(target_length) / target_length * 2 * np.pi * i)
+            paddle.sin(
+                paddle.arange(target_length) / target_length * 2 * np.pi * i)
             for i in range(1, half_minus_one + 1)
         ]
         # basis is a vector composed of a series of sin/cos functions, ie, basis = [1, cos(2*pi*t), cos(2*pi*2t),... sin(2*pi*t), sin(2*pi*2t), ...].
         # size: (2 * int(target_length / 2 - 1) + 1, target_length)
         self._basis = paddle.stack(
-            [paddle.ones([target_length])] + cos_vectors + sin_vectors, axis=1
-        ).T
+            [paddle.ones([target_length])] + cos_vectors + sin_vectors,
+            axis=1).T
 
-    def forward(
-            self,
-            x: paddle.Tensor
-            ) -> paddle.Tensor:
+    def forward(self, x: paddle.Tensor) -> paddle.Tensor:
         """
         Forward seasonality generator.
 
@@ -145,17 +139,17 @@ class _Block(nn.Layer):
         target_dim: The dimension of target
         g_type: The type of function that is implemented by the waveform generator.
     """
+
     def __init__(
-        self,
-        num_layers: int,
-        layer_width: int,
-        expansion_coefficient_dim: int,
-        backcast_length: int,
-        in_chunk_len: int,
-        target_length: int,
-        target_dim: int,
-        g_type: GTypes,
-    ):
+            self,
+            num_layers: int,
+            layer_width: int,
+            expansion_coefficient_dim: int,
+            backcast_length: int,
+            in_chunk_len: int,
+            target_length: int,
+            target_dim: int,
+            g_type: GTypes, ):
         super().__init__()
         self._target_dim = target_dim
         self._relu = nn.ReLU()
@@ -170,27 +164,28 @@ class _Block(nn.Layer):
         # The coefficients are emitted for each parameter of the likelihood.
         if g_type == _GType.SEASONALITY:
             self._backcast_linear_layer = nn.Linear(
-                layer_width,  (2 * int(backcast_length / 2 - 1) + 1) * target_dim
-            )
-            self._forecast_linear_layer = nn.Linear( 
-                layer_width, (2 * int(target_length / 2 - 1) + 1) * target_dim
-            )
+                layer_width,
+                (2 * int(backcast_length / 2 - 1) + 1) * target_dim)
+            self._forecast_linear_layer = nn.Linear(
+                layer_width, (2 * int(target_length / 2 - 1) + 1) * target_dim)
         else:
             self._backcast_linear_layer = nn.Linear(
-                layer_width, expansion_coefficient_dim * target_dim
-            )
-            self._forecast_linear_layer = nn.Linear( 
-                layer_width, expansion_coefficient_dim * target_dim
-            )
+                layer_width, expansion_coefficient_dim * target_dim)
+            self._forecast_linear_layer = nn.Linear(
+                layer_width, expansion_coefficient_dim * target_dim)
 
         # waveform generator functions
         if g_type == _GType.GENERIC:
-            self._backcast_g = nn.Linear(expansion_coefficient_dim, backcast_length)
-            self._forecast_g = nn.Linear(expansion_coefficient_dim, target_length)
+            self._backcast_g = nn.Linear(expansion_coefficient_dim,
+                                         backcast_length)
+            self._forecast_g = nn.Linear(expansion_coefficient_dim,
+                                         target_length)
 
         elif g_type == _GType.TREND:
-            self._backcast_g = _TrendGenerator(expansion_coefficient_dim, backcast_length)
-            self._forecast_g = _TrendGenerator(expansion_coefficient_dim, target_length)
+            self._backcast_g = _TrendGenerator(expansion_coefficient_dim,
+                                               backcast_length)
+            self._forecast_g = _TrendGenerator(expansion_coefficient_dim,
+                                               target_length)
 
         elif g_type == _GType.SEASONALITY:
             self._backcast_g = _SeasonalityGenerator(backcast_length)
@@ -198,12 +193,11 @@ class _Block(nn.Layer):
         else:
             raise ValueError("g_type not supported")
 
-    def forward(
-            self,
-            backcast: paddle.Tensor,
-            known_cov: paddle.Tensor,
-            observed_cov: paddle.Tensor
-            ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def forward(self,
+                backcast: paddle.Tensor,
+                known_cov: paddle.Tensor,
+                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
+                                                      paddle.Tensor]:
         """
         Forward block.
 
@@ -234,8 +228,10 @@ class _Block(nn.Layer):
         theta_forecast = self._forecast_linear_layer(x)
 
         # set the expansion coefs in last dimension for the forecasts
-        theta_forecast = theta_forecast.reshape([batch_size, self._target_dim, -1])
-        theta_backcast = theta_backcast.reshape([batch_size, self._target_dim, -1])
+        theta_forecast = theta_forecast.reshape(
+            [batch_size, self._target_dim, -1])
+        theta_backcast = theta_backcast.reshape(
+            [batch_size, self._target_dim, -1])
 
         # waveform generator applications (project the expansion coefs onto basis vectors)
         x_hat = self._backcast_g(theta_backcast)
@@ -263,18 +259,18 @@ class _Stack(nn.Layer):
         target_dim: The dimension of target.
         g_type: The function that is implemented by the waveform generators in each block.
     """
+
     def __init__(
-        self,
-        num_blocks: int,
-        num_layers: int,
-        layer_width: int,
-        expansion_coefficient_dim: int,
-        backcast_length: int,
-        in_chunk_len: int,
-        target_length: int,
-        target_dim: int,
-        g_type: GTypes,
-    ):
+            self,
+            num_blocks: int,
+            num_layers: int,
+            layer_width: int,
+            expansion_coefficient_dim: int,
+            backcast_length: int,
+            in_chunk_len: int,
+            target_length: int,
+            target_dim: int,
+            g_type: GTypes, ):
         super().__init__()
         self._target_length = target_length
         self._target_dim = target_dim
@@ -290,9 +286,7 @@ class _Stack(nn.Layer):
                     in_chunk_len,
                     target_length,
                     target_dim,
-                    g_type,
-                )
-                for _ in range(num_blocks)
+                    g_type, ) for _ in range(num_blocks)
             ]
         else:
             # same block instance is used for weight sharing
@@ -304,17 +298,15 @@ class _Stack(nn.Layer):
                 in_chunk_len,
                 target_length,
                 target_dim,
-                g_type,
-            )
+                g_type, )
             self._blocks_list = [interpretable_block] * num_blocks
         self._blocks = nn.LayerList(self._blocks_list)
 
-    def forward(
-            self,
-            backcast: paddle.Tensor,
-            known_cov: paddle.Tensor,
-            observed_cov: paddle.Tensor
-            ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def forward(self,
+                backcast: paddle.Tensor,
+                known_cov: paddle.Tensor,
+                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
+                                                      paddle.Tensor]:
         """
         Forward stack.
 
@@ -330,8 +322,7 @@ class _Stack(nn.Layer):
         #init stack_forecast as paddle.zeros
         stack_forecast = paddle.zeros(
             shape=(backcast.shape[0], self._target_length, self._target_dim),
-            dtype=backcast.dtype,
-        )
+            dtype=backcast.dtype, )
         for block in self._blocks_list:
             # pass input through block
             x_hat, y_hat = block(backcast, known_cov, observed_cov)
@@ -348,22 +339,22 @@ class _NBEATSModule(nn.Layer):
     """
     NBeats implementation, upgrade the origin version(univariate, no covarites) to more general version(multi-targets, known covariates, observed covariates).
     """
+
     def __init__(
-        self,
-        # general params:
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        known_cov_dim: int,
-        observed_cov_dim: int,
-        generic_architecture: bool,
-        num_stacks: int,
-        num_blocks: Union[int, List[int]],
-        num_layers: int,
-        layer_widths: Union[int, List[int]],
-        expansion_coefficient_dim: int,
-        trend_polynomial_degree: int,
-    ):
+            self,
+            # general params:
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            known_cov_dim: int,
+            observed_cov_dim: int,
+            generic_architecture: bool,
+            num_stacks: int,
+            num_blocks: Union[int, List[int]],
+            num_layers: int,
+            layer_widths: Union[int, List[int]],
+            expansion_coefficient_dim: int,
+            trend_polynomial_degree: int, ):
         """
         Args:
             in_chunk_len(int): The length of the input sequence fed to the model.
@@ -401,9 +392,7 @@ class _NBEATSModule(nn.Layer):
                     self._in_chunk_len_multi,
                     self._target_length,
                     self._target_dim,
-                    _GType.GENERIC,
-                )
-                for i in range(num_stacks)
+                    _GType.GENERIC, ) for i in range(num_stacks)
             ]
         # interpretable architecture
         else:
@@ -417,19 +406,17 @@ class _NBEATSModule(nn.Layer):
                 self._in_chunk_len_multi,
                 self._target_length,
                 self._target_dim,
-                _GType.TREND,
-            )
+                _GType.TREND, )
             seasonality_stack = _Stack(
                 num_blocks[1],
                 num_layers,
                 layer_widths[1],
-                -1, # no need to set in seasonality stack
+                -1,  # no need to set in seasonality stack
                 self._in_chunk_len,
                 self._in_chunk_len_multi,
                 self._target_length,
                 self._target_dim,
-                _GType.SEASONALITY,
-            )
+                _GType.SEASONALITY, )
             self._stacks_list = [trend_stack, seasonality_stack]
 
         self._stacks = nn.LayerList(self._stacks_list)
@@ -437,13 +424,11 @@ class _NBEATSModule(nn.Layer):
         # setting the last backcast "branch" to be not trainable (without next block/stack, it doesn't need to be
         # backpropagated). Removing this lines would cause logtensorboard to crash, since no gradient is stored
         # on this params (the last block backcast is not part of the final output of the net).
-        self._stacks_list[-1]._blocks[-1]._backcast_linear_layer.stop_gradient = True
+        self._stacks_list[-1]._blocks[
+            -1]._backcast_linear_layer.stop_gradient = True
         self._stacks_list[-1]._blocks[-1]._backcast_g.stop_gradient = True
 
-    def forward(
-            self,
-            data: Dict[str, paddle.Tensor]
-            ) -> paddle.Tensor:
+    def forward(self, data: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """
         Forward NBeats network.
 
@@ -454,14 +439,17 @@ class _NBEATSModule(nn.Layer):
             forecast(padle.Tensor): Tensor containing the output of the NBEATS model.
         """
         backcast = data["past_target"]
-        known_cov = data["known_cov_numeric"] if self._known_cov_dim > 0 else None
-        observed_cov = data["observed_cov_numeric"] if self._observed_cov_dim > 0 else None
+        known_cov = data[
+            "known_cov_numeric"] if self._known_cov_dim > 0 else None
+        observed_cov = data[
+            "observed_cov_numeric"] if self._observed_cov_dim > 0 else None
         # init forecast tensor
         forecast = paddle.zeros(
-            shape = (backcast.shape[0], self._target_length, self._target_dim))
+            shape=(backcast.shape[0], self._target_length, self._target_dim))
         for stack_index, stack in enumerate(self._stacks_list):
             # compute stack output
-            stack_residual, stack_forecast = stack(backcast, known_cov, observed_cov)
+            stack_residual, stack_forecast = stack(backcast, known_cov,
+                                                   observed_cov)
             # accumulate stack_forecast to final output
             forecast = forecast + stack_forecast
             # set current stack residual as input for next stack
@@ -477,10 +465,15 @@ class NBEATSModel(PaddleBaseModelImpl):
     Args:
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
         out_chunk_len(int): The size of the forecasting horizon, i.e., the number of time steps output by the model.
-        generic_architecture(bool, Optional): Boolean value indicating whether the generic architecture of N-BEATS is used. If not, the interpretable architecture outlined in the paper (consisting of one trend and one seasonality stack with appropriate waveform generator functions).
+        generic_architecture(bool, Optional): Boolean value indicating whether the generic architecture of N-BEATS is used. \
+                    If not, the interpretable architecture outlined in the paper (consisting of one trend and one seasonality stack \
+                    with appropriate waveform generator functions).
         num_stacks(int, Optional): The number of stacks that make up the whole model. Only used if `generic_architecture` is set to `True`.
-        num_blocks(Union[int, List[int]], Optional): The number of blocks making up each stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the corresponding stack. If an integer is passed, every stack will have the same number of blocks.
-        num_layers(int, Optional): The number of fully connected layers preceding the final forking layers in each block of every stack. Only used if `generic_architecture` is set to `True`.
+        num_blocks(Union[int, List[int]], Optional): The number of blocks making up each stack. \
+                    If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the corresponding stack.\
+                    If an integer is passed, every stack will have the same number of blocks.
+        num_layers(int, Optional): The number of fully connected layers preceding the final forking layers in each block of every stack. \
+                    Only used if `generic_architecture` is set to `True`.
         layer_widths(Union[int, List[int]], Optional): Determines the number of neurons that make up each fully connected layer in each block of every stack. If a list is passed, it must have a length equal to `num_stacks` and every entry in that list corresponds to the layer width of the corresponding stack. If an integer is passed, every stack will have blocks with FC layers of the same width.
         expansion_coefficient_dim(int, Optional): The dimensionality of the waveform generator parameters, also known as expansion coefficients. Only used if `generic_architecture` is set to `True`.
         trend_polynomial_degree(int, Optional): The degree of the polynomial used as waveform generator in trend stacks. Only used if `generic_architecture` is set to `False`.
@@ -497,32 +490,32 @@ class NBEATSModel(PaddleBaseModelImpl):
         patience(int, Optional): number of epochs with no improvement after which learning rate wil be reduced.
         seed(int, Optional): global random seed.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        generic_architecture: bool = True,
-        num_stacks: int = 2,
-        num_blocks: Union[int, List[int]] = 3,
-        num_layers: int = 4,
-        layer_widths: Union[int, List[int]] = 128,
-        expansion_coefficient_dim: int = 128,
-        trend_polynomial_degree: int = 4,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4), 
-        use_revin: bool = False,
-        revin_params: Dict[str, Any] = dict(eps=1e-5, affine=True),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: int = 0 
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 generic_architecture: bool=True,
+                 num_stacks: int=2,
+                 num_blocks: Union[int, List[int]]=3,
+                 num_layers: int=4,
+                 layer_widths: Union[int, List[int]]=128,
+                 expansion_coefficient_dim: int=128,
+                 trend_polynomial_degree: int=4,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+                 use_revin: bool=False,
+                 revin_params: Dict[str, Any]=dict(
+                     eps=1e-5, affine=True),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=10,
+                 seed: int=0):
         self._generic_architecture = generic_architecture
         self._num_stacks = num_stacks
         self._num_blocks = num_blocks
@@ -554,27 +547,25 @@ class NBEATSModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
     def _check_params(self):
         """
         Check validation of parameters.
         """
         raise_if(
-            isinstance(self._num_blocks, list) and len(self._num_blocks) != self._num_stacks,
+            isinstance(self._num_blocks, list) and
+            len(self._num_blocks) != self._num_stacks,
             "Stack number should be equal to the length of the List: num_blocks."
         )
         raise_if(
-            isinstance(self._layer_widths, list) and len(self._layer_widths) != self._num_stacks,
+            isinstance(self._layer_widths, list) and
+            len(self._layer_widths) != self._num_stacks,
             "Stack number should be equal to the length of the List: layer_widths."
         )
         super(NBEATSModel, self)._check_params()
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
         Rewrite _check_tsdataset to fit the specific model.
         For NBeats, all data variables are expected to be float32.
@@ -590,8 +581,7 @@ class NBEATSModel(PaddleBaseModelImpl):
     def _update_fit_params(
             self,
             train_tsdataset: List[TSDataset],
-            valid_tsdataset: Optional[List[TSDataset]] = None
-            ) -> Dict[str, Any]:
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """
         Infer parameters by TSDataset automatically.
 
@@ -603,14 +593,16 @@ class NBEATSModel(PaddleBaseModelImpl):
             Dict[str, Any]: model parameters
         """
         fit_params = {
-                "target_dim": train_tsdataset[0].get_target().data.shape[1],
-                "known_cov_dim": 0,
-                "observed_cov_dim": 0
-                }
+            "target_dim": train_tsdataset[0].get_target().data.shape[1],
+            "known_cov_dim": 0,
+            "observed_cov_dim": 0
+        }
         if train_tsdataset[0].get_known_cov() is not None:
-            fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov().data.shape[1]
+            fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov(
+            ).data.shape[1]
         if train_tsdataset[0].get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_tsdataset[0].get_observed_cov().data.shape[1]
+            fit_params["observed_cov_dim"] = train_tsdataset[
+                0].get_observed_cov().data.shape[1]
         return fit_params
 
     @revin_norm
@@ -622,16 +614,9 @@ class NBEATSModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _NBEATSModule(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params["target_dim"],
-            self._fit_params["known_cov_dim"],
-            self._fit_params["observed_cov_dim"],
-            self._generic_architecture,
-            self._num_stacks,
-            self._num_blocks,
-            self._num_layers,
-            self._layer_widths,
-            self._expansion_coefficient_dim,
-            self._trend_polynomial_degree
-        )
+            self._in_chunk_len, self._out_chunk_len,
+            self._fit_params["target_dim"], self._fit_params["known_cov_dim"],
+            self._fit_params["observed_cov_dim"], self._generic_architecture,
+            self._num_stacks, self._num_blocks, self._num_layers,
+            self._layer_widths, self._expansion_coefficient_dim,
+            self._trend_polynomial_degree)

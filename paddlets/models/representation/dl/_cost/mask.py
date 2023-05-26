@@ -5,10 +5,7 @@ import numpy as np
 import paddle
 
 
-def generate_true_mask(
-    batch_size: int, 
-    seq_len: int
-) -> paddle.Tensor:
+def generate_true_mask(batch_size: int, seq_len: int) -> paddle.Tensor:
     """Generate masks that are all `true`
 
     Args:
@@ -22,11 +19,8 @@ def generate_true_mask(
     return paddle.to_tensor(mask, dtype="bool")
 
 
-def generate_binomial_mask(
-    batch_size: int,
-    seq_len: int,
-    p: float = 0.5
-) -> paddle.Tensor:
+def generate_binomial_mask(batch_size: int, seq_len: int,
+                           p: float=0.5) -> paddle.Tensor:
     """Mask generation by Bernoulli distribution.
 
     Args:
@@ -41,11 +35,8 @@ def generate_binomial_mask(
     return paddle.to_tensor(mask, dtype="bool")
 
 
-def paddle_mask_fill(
-    tensor: paddle.Tensor,
-    mask: paddle.Tensor,
-    value: float
-) -> paddle.Tensor:
+def paddle_mask_fill(tensor: paddle.Tensor, mask: paddle.Tensor,
+                     value: float) -> paddle.Tensor:
     """Fills elements of tensor with value where mask is True.
 
     Args:

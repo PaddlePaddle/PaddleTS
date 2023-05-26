@@ -13,17 +13,16 @@ class BaseClassifier(abc.ABC):
     """
     Base class for all classifier.
     """
+
     def __init__(self):
         pass
 
     @abc.abstractmethod
-    def fit(
-        self,
-        train_tsdatasets: List[TSDataset],
-        train_labels: np.ndarray,
-        valid_tsdatasets: Optional[List[TSDataset]] = None,
-        valid_labels: Optional[np.ndarray] = None
-    ):
+    def fit(self,
+            train_tsdatasets: List[TSDataset],
+            train_labels: np.ndarray,
+            valid_tsdatasets: Optional[List[TSDataset]]=None,
+            valid_labels: Optional[np.ndarray]=None):
         """
         Fit a BaseClassifier instance.
 
@@ -38,10 +37,7 @@ class BaseClassifier(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def predict(
-        self,
-        tsdatasets: List[TSDataset]
-    ) -> np.ndarray:
+    def predict(self, tsdatasets: List[TSDataset]) -> np.ndarray:
         """
         Predict labels. Results are output as ndarray.
 
@@ -53,10 +49,7 @@ class BaseClassifier(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def predict_proba(
-        self,
-        tsdatasets: List[TSDataset]
-    ) -> np.ndarray:
+    def predict_proba(self, tsdatasets: List[TSDataset]) -> np.ndarray:
         """
         Find probability estimates for each class for all cases.
         Results are output as ndarray.

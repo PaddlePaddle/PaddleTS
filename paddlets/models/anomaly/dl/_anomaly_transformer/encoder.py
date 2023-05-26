@@ -21,29 +21,32 @@ class EncoderLayer(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList. 
     """
-    def __init__(
-        self, 
-        attention: Callable[..., paddle.Tensor], 
-        d_model: int, 
-        d_ff: int = None, 
-        dropout: float = 0.1, 
-        activation: Callable[..., paddle.Tensor] = F.gelu
-    ):
+
+    def __init__(self,
+                 attention: Callable[..., paddle.Tensor],
+                 d_model: int,
+                 d_ff: int=None,
+                 dropout: float=0.1,
+                 activation: Callable[..., paddle.Tensor]=F.gelu):
         super(EncoderLayer, self).__init__()
         d_ff = d_ff or 4 * d_model
         self.attention = attention
-        self.conv1 = paddle.nn.Conv1D(in_channels=d_model, out_channels=d_ff, kernel_size=1, data_format="NLC")
-        self.conv2 = paddle.nn.Conv1D(in_channels=d_ff, out_channels=d_model, kernel_size=1, data_format="NLC")
+        self.conv1 = paddle.nn.Conv1D(
+            in_channels=d_model,
+            out_channels=d_ff,
+            kernel_size=1,
+            data_format="NLC")
+        self.conv2 = paddle.nn.Conv1D(
+            in_channels=d_ff,
+            out_channels=d_model,
+            kernel_size=1,
+            data_format="NLC")
         self.norm1 = paddle.nn.LayerNorm(d_model)
         self.norm2 = paddle.nn.LayerNorm(d_model)
         self.dropout = paddle.nn.Dropout(dropout)
         self.activation = activation
 
-    def forward(
-        self, 
-        x, 
-        attn_mask = None
-    )-> paddle.Tensor:
+    def forward(self, x, attn_mask=None) -> paddle.Tensor:
         """ Encoder Forward.
 
         Args: 
@@ -52,9 +55,8 @@ class EncoderLayer(paddle.nn.Layer):
         
         Returns:
             paddle.Tensor: Output of EncoderLayer.
-        """   
-        new_x, attn, mask, sigma = self.attention(
-            x, x, x, attn_mask=attn_mask)
+        """
+        new_x, attn, mask, sigma = self.attention(x, x, x, attn_mask=attn_mask)
         x = x + self.dropout(new_x)
         y = x = self.norm1(x)
         y = self.dropout(self.activation(self.conv1(y)))
@@ -74,20 +76,16 @@ class Encoder(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList. 
     """
-    def __init__(
-        self, 
-        attn_layers, 
-        norm_layer = None
-    ):
+
+    def __init__(self, attn_layers, norm_layer=None):
         super(Encoder, self).__init__()
         self.attn_layers = paddle.nn.LayerList(attn_layers)
         self.norm = norm_layer
 
     def forward(
-        self, 
-        x: paddle.Tensor, 
-        attn_mask: Callable[..., paddle.Tensor] = None,
-    ) -> paddle.Tensor:
+            self,
+            x: paddle.Tensor,
+            attn_mask: Callable[..., paddle.Tensor]=None, ) -> paddle.Tensor:
         """Encoder Forward.
 
         Args: 
@@ -96,7 +94,7 @@ class Encoder(paddle.nn.Layer):
 
         Returns:
             paddle.Tensor: Output of model.
-        """ 
+        """
         # x [B, L, D]
         series_list = []
         prior_list = []
@@ -109,4 +107,3 @@ class Encoder(paddle.nn.Layer):
         if self.norm is not None:
             x = self.norm(x)
         return x, series_list, prior_list, sigma_list
-    

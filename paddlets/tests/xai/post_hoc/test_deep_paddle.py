@@ -16,6 +16,7 @@ from paddlets.pipeline.pipeline import Pipeline
 from paddlets.datasets.repository import dataset_list, get_dataset, DATASETS
 from paddlets.xai.post_hoc.deep_paddle import PaddleDeep
 
+
 class TestPaddleDeep(TestCase):
     def setUp(self):
         """
@@ -23,7 +24,11 @@ class TestPaddleDeep(TestCase):
         """
         super().setUp()
         data = get_dataset('ECL')
-        keep_cols = ['MT_320', 'MT_000', 'MT_001', ]
+        keep_cols = [
+            'MT_320',
+            'MT_000',
+            'MT_001',
+        ]
         ts_cols = data.columns
         remove_cols = []
         for col, types in ts_cols.items():
@@ -32,13 +37,15 @@ class TestPaddleDeep(TestCase):
 
         data.drop(remove_cols)
         self.data = data
-        
+
     def test_gradient(self):
         """
         unittest function
         """
         df = self.data.to_dataframe()
-        data = TSDataset.load_from_dataframe(df, target_cols=['MT_320'],)
+        data = TSDataset.load_from_dataframe(
+            df,
+            target_cols=['MT_320'], )
         # Sample
         data, _ = data.split('2014-06-30')
         train_data, test_data = data.split('2014-06-15')
@@ -51,13 +58,13 @@ class TestPaddleDeep(TestCase):
         max_epochs = 1
         patience = 5
         # Pipeline
-        pipeline_list = [(StandardScaler, {}), 
-                 (NBEATSModel, {'in_chunk_len': in_chunk_len, 
-                                'out_chunk_len': out_chunk_len, 
-                                'skip_chunk_len': skip_chunk_len, 
-                                'max_epochs': max_epochs, 
-                                'patience': patience})
-                ]
+        pipeline_list = [(StandardScaler, {}), (NBEATSModel, {
+            'in_chunk_len': in_chunk_len,
+            'out_chunk_len': out_chunk_len,
+            'skip_chunk_len': skip_chunk_len,
+            'max_epochs': max_epochs,
+            'patience': patience
+        })]
         # Fit
         pipe = Pipeline(pipeline_list)
         pipe.fit(train_data, val_data)
@@ -68,14 +75,16 @@ class TestPaddleDeep(TestCase):
         grad = pd.gradient(0, foreground)
 
         self.assertEqual(len(grad), 1)
-        self.assertEqual(grad[0]['past_target'].shape, (1,24,1))
-        
+        self.assertEqual(grad[0]['past_target'].shape, (1, 24, 1))
+
     def test_shap_values(self):
         """
         unittest function
         """
         df = self.data.to_dataframe()
-        data = TSDataset.load_from_dataframe(df, target_cols=['MT_320'],)
+        data = TSDataset.load_from_dataframe(
+            df,
+            target_cols=['MT_320'], )
         # Sample
         data, _ = data.split('2014-06-30')
         train_data, test_data = data.split('2014-06-15')
@@ -88,13 +97,13 @@ class TestPaddleDeep(TestCase):
         max_epochs = 1
         patience = 5
         # Pipeline
-        pipeline_list = [(StandardScaler, {}), 
-                 (NBEATSModel, {'in_chunk_len': in_chunk_len, 
-                                'out_chunk_len': out_chunk_len, 
-                                'skip_chunk_len': skip_chunk_len, 
-                                'max_epochs': max_epochs, 
-                                'patience': patience})
-                ]
+        pipeline_list = [(StandardScaler, {}), (NBEATSModel, {
+            'in_chunk_len': in_chunk_len,
+            'out_chunk_len': out_chunk_len,
+            'skip_chunk_len': skip_chunk_len,
+            'max_epochs': max_epochs,
+            'patience': patience
+        })]
         # Fit
         pipe = Pipeline(pipeline_list)
         pipe.fit(train_data, val_data)
@@ -105,10 +114,8 @@ class TestPaddleDeep(TestCase):
         sv = pd.shap_values(foreground)
 
         self.assertEqual(len(sv), 24)
-        self.assertEqual(sv[0]['past_target'].shape, (1,24,1))
+        self.assertEqual(sv[0]['past_target'].shape, (1, 24, 1))
 
-        
-        
 
 if __name__ == "__main__":
     unittest.main()

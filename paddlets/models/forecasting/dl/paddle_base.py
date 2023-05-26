@@ -31,27 +31,23 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         _callback_container(paddlets.models.dl.paddlepaddle.callbacks.CallbackContainer): a container containing one or more
             callback instance(s).
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0):
         super(PaddleBaseModel, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
-            skip_chunk_len=skip_chunk_len
-        )
+            skip_chunk_len=skip_chunk_len)
         self._network = None
         self._optimizer = None
         self._callback_container = None
 
     @abc.abstractmethod
-    def fit(
-        self,
-        train_data: Union[TSDataset, List[TSDataset]],
-        valid_data: Optional[Union[TSDataset, List[TSDataset]]] = None
-    ):
+    def fit(self,
+            train_data: Union[TSDataset, List[TSDataset]],
+            valid_data: Optional[Union[TSDataset, List[TSDataset]]]=None):
         """
         Fit a paddle deep learning model instance.
 
@@ -90,7 +86,11 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         """
         pass
 
-    def save(self, path: str, network_model: bool = False, dygraph_to_static = True, batch_size: Optional[int] = None) -> None:
+    def save(self,
+             path: str,
+             network_model: bool=False,
+             dygraph_to_static=True,
+             batch_size: Optional[int]=None) -> None:
         """
         Saves a PaddleBaseModel instance to a disk file.
 
@@ -115,18 +115,18 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         abs_root_path = os.path.dirname(abs_model_path)
         raise_if_not(
             os.path.exists(abs_root_path),
-            "failed to save model, path not exists: %s" % abs_root_path
-        )
+            "failed to save model, path not exists: %s" % abs_root_path)
         raise_if(
             os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" % abs_model_path
-        )
+            "failed to save model, path must be a file, not directory: %s" %
+            abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
-            "Failed to save model, target file already exists: %s" % abs_model_path
-        )
+            "Failed to save model, target file already exists: %s" %
+            abs_model_path)
 
-        raise_if(self._network is None, "failed to save model, model._network must not be None.")
+        raise_if(self._network is None,
+                 "failed to save model, model._network must not be None.")
         # raise_if(self._optimizer is None, "failed to save model, model._optimizer must not be None.")
 
         # path to save other internal files.
@@ -149,11 +149,12 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         }
 
         # internal files must not conflict with existing files.
-        conflict_files = {*internal_filename_map.values()} - set(os.listdir(abs_root_path))
+        conflict_files = {*internal_filename_map.values()} - set(
+            os.listdir(abs_root_path))
         raise_if(
             len(conflict_files) < len(internal_filename_map),
-            "failed to save model internal files, these files must not exist: %s" % conflict_files
-        )
+            "failed to save model internal files, these files must not exist: %s"
+            % conflict_files)
 
         # start to save
         # 1 save network model and params for paddle inference
@@ -165,26 +166,35 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             input_spec = build_network_input_spec(model_meta)
             try:
                 if dygraph_to_static:
-                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
-                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
+                    layer = paddle.jit.to_static(
+                        self._network, input_spec=input_spec)
+                    paddle.jit.save(
+                        layer,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]))
                 else:
-                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
+                    paddle.jit.save(
+                        self._network,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]),
+                        input_spec=input_spec)
             except Exception as e:
                 raise_log(
                     ValueError(
-                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
-                        (internal_filename_map["network_model"], str(e))
-                    )
-                )
+                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s"
+                        % (internal_filename_map["network_model"], str(e))))
 
         # 2 save model meta (e.g. classname)
         try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+            with open(
+                    os.path.join(abs_root_path,
+                                 internal_filename_map["model_meta"]),
+                    "w") as f:
                 json.dump(model_meta, f, ensure_ascii=False)
         except Exception as e:
             raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
+                ValueError("error occurred while saving %s, err: %s" % (
+                    internal_filename_map["model_meta"], str(e))))
 
         # 3 save optimizer state dict (currently ignore optimizer logic.)
         # optimizer_state_dict = self._optimizer.state_dict()
@@ -206,15 +216,14 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"]),
+                path=os.path.join(abs_root_path,
+                                  internal_filename_map["network_statedict"]),
             )
         except Exception as e:
             raise_log(
-                ValueError(
-                    "error occurred while saving %s: %s, err: %s" %
-                    (internal_filename_map["network_statedict"], network_state_dict, str(e))
-                )
-            )
+                ValueError("error occurred while saving %s: %s, err: %s" %
+                           (internal_filename_map["network_statedict"],
+                            network_state_dict, str(e))))
 
         # 5 save model
         optimizer = self._optimizer
@@ -236,7 +245,9 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
         except Exception as e:
-            raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (
+                    abs_model_path, str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
@@ -260,25 +271,31 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             PaddleBaseModel: the loaded PaddleBaseModel instance.
         """
         abs_path = os.path.abspath(path)
-        raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
-        raise_if(os.path.isdir(abs_path), "path must be a file path, not a directory: %s" % abs_path)
+        raise_if_not(
+            os.path.exists(abs_path), "model file does not exist: %s" %
+            abs_path)
+        raise_if(
+            os.path.isdir(abs_path),
+            "path must be a file path, not a directory: %s" % abs_path)
 
         # 1.1 model
         with open(abs_path, "rb") as f:
             model = pickle.load(f)
         raise_if_not(
             isinstance(model, PaddleBaseModel),
-            "loaded model type must be inherited from %s, but actual loaded model type: %s" %
-            (PaddleBaseModel, model.__class__)
-        )
+            "loaded model type must be inherited from %s, but actual loaded model type: %s"
+            % (PaddleBaseModel, model.__class__))
 
         # 1.2 - 1.4 model._network
         model._network = model._init_network()
-        raise_if(model._network is None, "model._network must not be None after calling _init_network()")
+        raise_if(
+            model._network is None,
+            "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
         network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
-        network_statedict_abs_path = os.path.join(os.path.dirname(abs_path), network_statedict_filename)
+        network_statedict_abs_path = os.path.join(
+            os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)
         model._network.set_state_dict(network_statedict)
 
@@ -296,7 +313,8 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
     def _build_meta(self):
         res = {
             "model_type": "forecasting",
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "ancestor_classname_set":
+            [clazz.__name__ for clazz in self.__class__.mro()],
             "modulename": self.__module__,
             "size": {
                 "in_chunk_len": self._in_chunk_len,

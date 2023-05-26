@@ -15,9 +15,8 @@ from paddlets.logger.logger import log_decorator
 
 logger = Logger(__name__)
 
-def _cal_year(
-    x: np.datetime64,
-):
+
+def _cal_year(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -27,9 +26,8 @@ def _cal_year(
     """
     return x.year
 
-def _cal_month(
-    x: np.datetime64,
-):
+
+def _cal_month(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -39,9 +37,8 @@ def _cal_month(
     """
     return x.month
 
-def _cal_day(
-    x: np.datetime64,
-):
+
+def _cal_day(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -51,9 +48,8 @@ def _cal_day(
     """
     return x.day
 
-def _cal_hour(
-    x: np.datetime64,
-):
+
+def _cal_hour(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -63,9 +59,8 @@ def _cal_hour(
     """
     return x.hour
 
-def _cal_weekday(
-    x: np.datetime64,
-):
+
+def _cal_weekday(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -75,9 +70,8 @@ def _cal_weekday(
     """
     return x.dayofweek
 
-def _cal_quarter(
-    x: np.datetime64,
-):
+
+def _cal_quarter(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -87,9 +81,8 @@ def _cal_quarter(
     """
     return x.quarter
 
-def _cal_dayofyear(
-    x: np.datetime64,
-):
+
+def _cal_dayofyear(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -99,9 +92,8 @@ def _cal_dayofyear(
     """
     return x.dayofyear
 
-def _cal_weekofyear(
-    x: np.datetime64,
-):
+
+def _cal_weekofyear(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -111,9 +103,8 @@ def _cal_weekofyear(
     """
     return x.weekofyear
 
-def _cal_holiday(
-    x: np.datetime64,
-):
+
+def _cal_holiday(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -123,9 +114,8 @@ def _cal_holiday(
     """
     return float(chinese_calendar.is_holiday(x))
 
-def _cal_workday(
-    x: np.datetime64,
-):
+
+def _cal_workday(x: np.datetime64, ):
     """
     Args:
         x(np.datetime64): time
@@ -135,19 +125,21 @@ def _cal_workday(
     """
     return float(chinese_calendar.is_workday(x))
 
+
 #THe method of date transform
 CAL_DATE_METHOD = {
-                'year': _cal_year,
-                'month': _cal_month,
-                'day': _cal_day,
-                'hour': _cal_hour,
-                'weekday': _cal_weekday,
-                'quarter': _cal_quarter,
-                'dayofyear': _cal_dayofyear,
-                'weekofyear': _cal_weekofyear,
-                'is_holiday': _cal_holiday,
-                'is_workday': _cal_workday
-              }
+    'year': _cal_year,
+    'month': _cal_month,
+    'day': _cal_day,
+    'hour': _cal_hour,
+    'weekday': _cal_weekday,
+    'quarter': _cal_quarter,
+    'dayofyear': _cal_dayofyear,
+    'weekofyear': _cal_weekofyear,
+    'is_holiday': _cal_holiday,
+    'is_workday': _cal_workday
+}
+
 
 class TimeFeatureGenerator(BaseTransform):
     """
@@ -163,14 +155,18 @@ class TimeFeatureGenerator(BaseTransform):
     Returns:
         None
     """
-    def __init__(self, 
-        feature_cols: Optional[List[str]] = ['year', 'month', 'day', 'weekday', 'hour', 'quarter', 'dayofyear', 'weekofyear', 'is_holiday', 'is_workday'], 
-        extend_points: int = 0,
-    ):
+
+    def __init__(
+            self,
+            feature_cols: Optional[List[str]]=[
+                'year', 'month', 'day', 'weekday', 'hour', 'quarter',
+                'dayofyear', 'weekofyear', 'is_holiday', 'is_workday'
+            ],
+            extend_points: int=0, ):
         super(TimeFeatureGenerator, self).__init__()
         self.feature_cols = feature_cols
         self.extend_points = extend_points
-        
+
     @log_decorator
     def fit_one(self, dataset: TSDataset):
         """
@@ -185,7 +181,8 @@ class TimeFeatureGenerator(BaseTransform):
         return self
 
     @log_decorator
-    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Transform time column to time features.
         
@@ -211,16 +208,24 @@ class TimeFeatureGenerator(BaseTransform):
         time_col = tf_kcov.columns[0]
         #Determine time column format
         if np.issubdtype(tf_kcov[time_col].dtype, np.integer):
-            raise_log(ValueError("The time_col can't be the type of numpy.integer, and it must be the type of numpy.datetime64"))
+            raise_log(
+                ValueError(
+                    "The time_col can't be the type of numpy.integer, and it must be the type of numpy.datetime64"
+                ))
         #If kcov == None, it need expand future time periods
         if not kcov:
             freq = new_ts.get_target().freq
-            extend_time = pd.date_range(start=tf_kcov[time_col][-1], freq=freq, periods=self.extend_points + 1, closed='right', name=time_col).to_frame()
+            extend_time = pd.date_range(
+                start=tf_kcov[time_col][-1],
+                freq=freq,
+                periods=self.extend_points + 1,
+                closed='right',
+                name=time_col).to_frame()
             tf_kcov = pd.concat([tf_kcov, extend_time])
         #Generate time index feature content
         for k in self.feature_cols:
             v = tf_kcov[time_col].apply(lambda x: CAL_DATE_METHOD[k](x))
             v.index = tf_kcov[time_col]
             new_ts.set_column(k, v, 'known_cov')
-                
+
         return new_ts

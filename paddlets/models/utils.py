@@ -31,6 +31,7 @@ INPUT_SPEC_NAME_DATA_MAPPING = {
     "static_cat_dim": "static_cov_categorical",
 }
 
+
 def get_target_from_tsdataset(tsdataset: TSDataset):
     """
     Just reserve target in tsdataset.
@@ -63,7 +64,7 @@ def check_tsdataset(tsdataset: TSDataset):
     for column, dtype in tsdataset.dtypes.items():
         if np.issubdtype(dtype, np.floating):
             new_dtypes.update({column: "float32"})
-        elif np.issubdtype(dtype, np.integer): 
+        elif np.issubdtype(dtype, np.integer):
             new_dtypes.update({column: "int64"})
         else:
             msg = f"{dtype} data type not supported, the illegal columns contains: " \
@@ -71,18 +72,18 @@ def check_tsdataset(tsdataset: TSDataset):
             raise_log(TypeError(msg))
 
         # Check whether the data contains NaN.
-        if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[column]).any():
+        if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[
+                column]).any():
             msg = f"np.inf or np.NaN, which may lead to unexpected results from the model"
             msg = f"Input `{column}` contains {msg}."
             logger.warning(msg)
 
     if new_dtypes:
         tsdataset.astype(new_dtypes)
-            
 
-def to_tsdataset(
-    scenario: str = "forecasting"
-) -> Callable[..., Callable[..., TSDataset]]:
+
+def to_tsdataset(scenario: str="forecasting") -> Callable[..., Callable[
+        ..., TSDataset]]:
     """A decorator, used for converting ndarray to tsdataset 
     (compatible with both DL and ML, compatible with both forecasting and anomaly).
 
@@ -92,13 +93,11 @@ def to_tsdataset(
     Returns:
         Callable[..., Callable[..., TSDataset]]: Wrapped core function.
     """
+
     def decorate(func) -> Callable[..., TSDataset]:
         @functools.wraps(func)
-        def wrapper(
-            obj: BaseModel,
-            tsdataset: TSDataset,
-            **kwargs
-        ) -> TSDataset:
+        def wrapper(obj: BaseModel, tsdataset: TSDataset,
+                    **kwargs) -> TSDataset:
             """Core processing logic.
 
             Args:
@@ -112,7 +111,7 @@ def to_tsdataset(
                 scenario in ("forecasting", "anomaly_label", "anomaly_score"),
                 f"{scenario} not supported, ['forecasting', 'anomaly_label', 'anomaly_score'] is optional."
             )
-            
+
             results = func(obj, tsdataset, **kwargs)
             if scenario == "anomaly_label" or scenario == "anomaly_score":
                 # Generate target cols
@@ -135,35 +134,42 @@ def to_tsdataset(
                     f"There is something wrong, anomaly predict size is 0, you'd better check the tsdataset or the predict logic."
                 )
                 target_index = target_index[-results_size:]
-                anomaly_target = pd.DataFrame(results, index=target_index, columns=target_cols)
+                anomaly_target = pd.DataFrame(
+                    results, index=target_index, columns=target_cols)
                 return TSDataset.load_from_dataframe(anomaly_target, freq=freq)
-                
+
             past_target_index = tsdataset.get_target().data.index
             if isinstance(past_target_index, pd.RangeIndex):
                 freq = past_target_index.step
                 future_target_index = pd.RangeIndex(
                     past_target_index[-1] + (1 + obj._skip_chunk_len) * freq,
-                    past_target_index[-1] + (1 + obj._skip_chunk_len + obj._out_chunk_len) * freq,
-                    step=freq
-                )
+                    past_target_index[-1] +
+                    (1 + obj._skip_chunk_len + obj._out_chunk_len) * freq,
+                    step=freq)
             else:
                 freq = past_target_index.freqstr
                 future_target_index = pd.date_range(
-                    past_target_index[-1] + (1 + obj._skip_chunk_len) * past_target_index.freq,
+                    past_target_index[-1] +
+                    (1 + obj._skip_chunk_len) * past_target_index.freq,
                     periods=obj._out_chunk_len,
-                    freq=freq
-                )
+                    freq=freq)
             target_cols = tsdataset.get_target().data.columns
             # for probability forecasting and quantile output
-            if hasattr(obj, "_output_mode") and obj._output_mode == QUANTILE_OUTPUT_MODE: 
-                target_cols = [x + "@" + "quantile" + str(y) for x in target_cols for y in obj._q_points]
+            if hasattr(obj, "_output_mode"
+                       ) and obj._output_mode == QUANTILE_OUTPUT_MODE:
+                target_cols = [
+                    x + "@" + "quantile" + str(y)
+                    for x in target_cols for y in obj._q_points
+                ]
             future_target = pd.DataFrame(
-                np.reshape(results, newshape=[obj._out_chunk_len, -1]),
+                np.reshape(
+                    results, newshape=[obj._out_chunk_len, -1]),
                 index=future_target_index,
-                columns=target_cols
-            )
+                columns=target_cols)
             return TSDataset.load_from_dataframe(future_target, freq=freq)
+
         return wrapper
+
     return decorate
 
 
@@ -180,19 +186,25 @@ def build_network_input_spec(meta_data: Dict[str, str]) -> List[type]:
     if meta_data['model_type'] == 'classification':
         for key, value in meta_data['input_data'].items():
             value = deepcopy(value)
-            input_spec[0][key] = InputSpec(shape=value, dtype="float32", name=key)
+            input_spec[0][key] = InputSpec(
+                shape=value, dtype="float32", name=key)
     else:
         new_meta_data = {}
         for key, value in meta_data["input_data"].items():
             if key not in INPUT_SPEC_NAME_DATA_MAPPING:
                 continue
             name = INPUT_SPEC_NAME_DATA_MAPPING[key]
-            time_len = meta_data['size']['in_chunk_len'] + meta_data['size']['out_chunk_len'] if 'known' in name else meta_data['size']['in_chunk_len']
+            time_len = meta_data['size']['in_chunk_len'] + meta_data['size'][
+                'out_chunk_len'] if 'known' in name else meta_data['size'][
+                    'in_chunk_len']
             if 'static' in name:
                 time_len = 1
             input_dtype = "int64" if 'cat' in name else "float32"
             batch_size = meta_data.get('batch_size', None)
-            input_spec[0][name] = InputSpec(shape=[batch_size, time_len, value], dtype=input_dtype, name=name)
+            input_spec[0][name] = InputSpec(
+                shape=[batch_size, time_len, value],
+                dtype=input_dtype,
+                name=name)
             new_meta_data[name] = (batch_size, time_len, value)
         meta_data["input_data"] = new_meta_data
     return input_spec

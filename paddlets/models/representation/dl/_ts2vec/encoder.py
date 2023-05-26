@@ -6,11 +6,8 @@ import numpy as np
 import paddle
 
 from paddlets.models.representation.dl._ts2vec.mask import (
-    generate_binomial_mask,
-    generate_true_mask,
-    generate_last_mask,
-    paddle_mask_fill
-)
+    generate_binomial_mask, generate_true_mask, generate_last_mask,
+    paddle_mask_fill)
 
 
 class SamePadConv(paddle.nn.Layer):
@@ -26,20 +23,19 @@ class SamePadConv(paddle.nn.Layer):
         _conv(paddle.nn.Layer): The conv1d layer.
         _remove(int): The tag whether to delete the last time step.
     """
+
     def __init__(
-        self, 
-        in_channels: int, 
-        out_channels: int, 
-        kernel_size: int, 
-        dilation: int, 
-    ):
+            self,
+            in_channels: int,
+            out_channels: int,
+            kernel_size: int,
+            dilation: int, ):
         super(SamePadConv, self).__init__()
         receptive_field = (kernel_size - 1) * dilation + 1
         padding = receptive_field // 2
         k = np.sqrt(1. / (in_channels * kernel_size))
         weight_attr = bias_attr = paddle.ParamAttr(
-            initializer=paddle.nn.initializer.Uniform(-k, k)
-        )
+            initializer=paddle.nn.initializer.Uniform(-k, k))
         self._conv = paddle.nn.Conv1D(
             in_channels=in_channels,
             out_channels=out_channels,
@@ -47,11 +43,8 @@ class SamePadConv(paddle.nn.Layer):
             padding=padding,
             dilation=dilation,
             weight_attr=weight_attr,
-            bias_attr=bias_attr,
-        )
-        self._remove = (
-            1 if receptive_field % 2 == 0 else 0
-        )
+            bias_attr=bias_attr, )
+        self._remove = (1 if receptive_field % 2 == 0 else 0)
 
     def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
@@ -84,28 +77,28 @@ class ConvLayer(paddle.nn.Layer):
         _out_proj(paddle.nn.Layer): The output projection layer.
 
     """
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        kernel_size: int,
-        dilation: int,
-        final: bool
-    ):
+
+    def __init__(self,
+                 in_channels: int,
+                 out_channels: int,
+                 kernel_size: int,
+                 dilation: int,
+                 final: bool):
         super(ConvLayer, self).__init__()
-        self._conv1 = SamePadConv(in_channels, out_channels, kernel_size, dilation)
-        self._conv2 = SamePadConv(out_channels, out_channels, kernel_size, dilation)
+        self._conv1 = SamePadConv(in_channels, out_channels, kernel_size,
+                                  dilation)
+        self._conv2 = SamePadConv(out_channels, out_channels, kernel_size,
+                                  dilation)
         k = np.sqrt(1. / (in_channels * 1))
         weight_attr = bias_attr = paddle.ParamAttr(
-            initializer=paddle.nn.initializer.Uniform(-k, k)
-        )
-        self._out_proj = (
-            paddle.nn.Conv1D(
-                in_channels, out_channels, 1, 
-                weight_attr=weight_attr, 
-                bias_attr=bias_attr
-            ) if (in_channels != out_channels or final) else None
-        )
+            initializer=paddle.nn.initializer.Uniform(-k, k))
+        self._out_proj = (paddle.nn.Conv1D(
+            in_channels,
+            out_channels,
+            1,
+            weight_attr=weight_attr,
+            bias_attr=bias_attr)
+                          if (in_channels != out_channels or final) else None)
 
     def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
@@ -116,9 +109,7 @@ class ConvLayer(paddle.nn.Layer):
         Returns:
             paddle.Tensor: Output of Layer.
         """
-        residual = (
-            self._out_proj(X) if self._out_proj else X
-        )
+        residual = (self._out_proj(X) if self._out_proj else X)
         out = F.gelu(X)
         out = self._conv1(out)
         out = F.gelu(out)
@@ -139,26 +130,25 @@ class DilatedConvLayer(paddle.nn.Layer):
     Attributes:
         _conv_layers(paddle.nn.Layer): A stacked LayerList containing `ConvLayer`.
     """
-    def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        hidden_channels: int,
-        kernel_size: int,
-        num_layers: int
-    ):
+
+    def __init__(self,
+                 in_channels: int,
+                 out_channels: int,
+                 hidden_channels: int,
+                 kernel_size: int,
+                 num_layers: int):
         super(DilatedConvLayer, self).__init__()
-        conv_layers = [] 
-        channels = [in_channels] + [hidden_channels] * num_layers + [out_channels]
+        conv_layers = []
+        channels = [in_channels] + [hidden_channels
+                                    ] * num_layers + [out_channels]
         for k, (in_channels, out_channels) in \
             enumerate(zip(channels[:-1], channels[1:])):
             conv_layer = ConvLayer(
                 in_channels=in_channels,
                 out_channels=out_channels,
                 kernel_size=kernel_size,
-                dilation=2 ** k,
-                final=(k == num_layers)
-            )
+                dilation=2**k,
+                final=(k == num_layers))
             conv_layers.append(conv_layer)
         self._conv_layers = paddle.nn.Sequential(*conv_layers)
 
@@ -188,37 +178,34 @@ class TSEncoder(paddle.nn.Layer):
         _repr_dropout(paddle.nn.Layer): The dropout layer.
         _dilated_conv(paddle.nn.Layer): A stacked LayerList containing `ConvLayer`.
     """
+
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        hidden_channels: int,
-        num_layers: int,
-    ):
+            self,
+            in_channels: int,
+            out_channels: int,
+            hidden_channels: int,
+            num_layers: int, ):
         super(TSEncoder, self).__init__()
         k = np.sqrt(1. / in_channels)
         weight_attr = bias_attr = paddle.ParamAttr(
-            initializer=paddle.nn.initializer.Uniform(-k, k)
-        )
+            initializer=paddle.nn.initializer.Uniform(-k, k))
         self._in_proj = paddle.nn.Linear(
-            in_channels, hidden_channels,
+            in_channels,
+            hidden_channels,
             weight_attr=weight_attr,
-            bias_attr=bias_attr,
-        )
+            bias_attr=bias_attr, )
         self._repr_dropout = paddle.nn.Dropout(0.1)
         self._dilated_conv = DilatedConvLayer(
             in_channels=hidden_channels,
             out_channels=out_channels,
             hidden_channels=hidden_channels,
             num_layers=num_layers,
-            kernel_size=3
-        )
+            kernel_size=3)
 
     def forward(
-        self, 
-        X: paddle.Tensor, 
-        mask: str,
-    ) -> paddle.Tensor:
+            self,
+            X: paddle.Tensor,
+            mask: str, ) -> paddle.Tensor:
         """Forward. 
         Args:
             X(paddle.Tensor): Feature tensor.
@@ -238,7 +225,7 @@ class TSEncoder(paddle.nn.Layer):
             mask = generate_true_mask(batch_size, seq_len)
         elif mask == "mask_last":
             mask = generate_last_mask(batch_size, seq_len)
-        
+
         mask &= (~nan_mask)
         out = paddle_mask_fill(out, ~mask, 0)
 

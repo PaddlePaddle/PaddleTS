@@ -16,14 +16,13 @@ class ClassifyDataAdapter(object):
     """
     Data adapter, converts `TSDataset` to `paddle.io.Dataset` and `paddle.io.DataLoader`.
     """
+
     def __init__(self):
         pass
 
-    def to_paddle_dataset(
-        self,
-        rawdatasets: List[TSDataset],
-        labels: np.ndarray
-    ) -> ClassifyPaddleDatasetImpl:
+    def to_paddle_dataset(self,
+                          rawdatasets: List[TSDataset],
+                          labels: np.ndarray) -> ClassifyPaddleDatasetImpl:
         """
         Converts :class:`TSDataset` to :class:`paddle.io.Dataset`.
 
@@ -35,17 +34,13 @@ class ClassifyDataAdapter(object):
             PaddleDatasetImpl: A built PaddleDatasetImpl.
         """
         return ClassifyPaddleDatasetImpl(
-            rawdatasets=rawdatasets,
-            labels = labels
-        )
+            rawdatasets=rawdatasets, labels=labels)
 
-    def to_paddle_dataloader(
-        self,
-        paddle_dataset: ClassifyPaddleDatasetImpl,
-        batch_size: int,
-        collate_fn: Callable = None,
-        shuffle: bool = True
-    ) -> PaddleDataLoader:
+    def to_paddle_dataloader(self,
+                             paddle_dataset: ClassifyPaddleDatasetImpl,
+                             batch_size: int,
+                             collate_fn: Callable=None,
+                             shuffle: bool=True) -> PaddleDataLoader:
         """
         Converts :class:`paddle.io.Dataset` to :class:`paddle.io.DataLoader`.
 
@@ -58,4 +53,8 @@ class ClassifyDataAdapter(object):
         Returns:
             PaddleDataLoader: A built paddle DataLoader.
         """
-        return PaddleDataLoader(dataset=paddle_dataset, batch_size=batch_size, collate_fn=collate_fn, shuffle=shuffle)
+        return PaddleDataLoader(
+            dataset=paddle_dataset,
+            batch_size=batch_size,
+            collate_fn=collate_fn,
+            shuffle=shuffle)

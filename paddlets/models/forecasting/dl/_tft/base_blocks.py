@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 Implements basic blocks for TFT model, which contains `GatedLinearUnit`, `GatedResidualNetwork` and `GateAddNorm`.
 """
@@ -11,6 +10,7 @@ import paddle
 from paddle import nn
 
 from paddlets.models.forecasting.dl._tft import TimeDistributed
+
 
 class GatedLinearUnit(nn.Layer):
     """
@@ -29,20 +29,14 @@ class GatedLinearUnit(nn.Layer):
         input_dim(int): The embedding size of the input.
     """
 
-    def __init__(
-        self, 
-        input_dim: int
-    ):
+    def __init__(self, input_dim: int):
         super(GatedLinearUnit, self).__init__()
         # Two dimension-preserving dense layers
         self.fc1 = nn.Linear(input_dim, input_dim)
         self.fc2 = nn.Linear(input_dim, input_dim)
         self.sigmoid = nn.Sigmoid()
 
-    def forward(
-        self, 
-        x: paddle.Tensor
-    ) -> paddle.Tensor:
+    def forward(self, x: paddle.Tensor) -> paddle.Tensor:
         """
         The forward computation of `GatedLinearUnit` layer.
         
@@ -75,15 +69,13 @@ class GatedResidualNetwork(nn.Layer):
         batch_first(bool, Optional): A boolean indicating whether the batch dimension is expected to be the first dimension of the input or not.
     """
 
-    def __init__(
-        self, 
-        input_dim: int, 
-        hidden_dim: int, 
-        output_dim: int,
-        dropout: Optional[float] = 0.05,
-        context_dim: Optional[int] = None,
-        batch_first: Optional[bool] = True
-    ):
+    def __init__(self,
+                 input_dim: int,
+                 hidden_dim: int,
+                 output_dim: int,
+                 dropout: Optional[float]=0.05,
+                 context_dim: Optional[int]=None,
+                 batch_first: Optional[bool]=True):
         super(GatedResidualNetwork, self).__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
@@ -97,14 +89,19 @@ class GatedResidualNetwork(nn.Layer):
         # otherwise, we'll need to project the input for creating this residual connection
         self.project_residual: bool = self.input_dim != self.output_dim
         if self.project_residual:
-            self.skip_layer = TimeDistributed(nn.Linear(self.input_dim, self.output_dim))
+            self.skip_layer = TimeDistributed(
+                nn.Linear(self.input_dim, self.output_dim))
 
         # A linear layer for projecting the primary input (acts across time if necessary)
-        self.fc1 = TimeDistributed(nn.Linear(self.input_dim, self.hidden_dim), batch_first=batch_first)
+        self.fc1 = TimeDistributed(
+            nn.Linear(self.input_dim, self.hidden_dim),
+            batch_first=batch_first)
         # In case we expect context input, an additional linear layer will project the context
         if self.context_dim is not None:
-            self.context_projection = TimeDistributed(nn.Linear(self.context_dim, self.hidden_dim, bias_attr=False),
-                                                      batch_first=batch_first)
+            self.context_projection = TimeDistributed(
+                nn.Linear(
+                    self.context_dim, self.hidden_dim, bias_attr=False),
+                batch_first=batch_first)
         # non-linearity to be applied on the sum of the projections
         self.elu1 = nn.ELU()
 
@@ -112,20 +109,21 @@ class GatedResidualNetwork(nn.Layer):
         # Further projection components (Eq.3 in the original paper)
         # ============================================================
         # additional projection on top of the non-linearity
-        self.fc2 = TimeDistributed(nn.Linear(self.hidden_dim, self.output_dim), batch_first=batch_first)
+        self.fc2 = TimeDistributed(
+            nn.Linear(self.hidden_dim, self.output_dim),
+            batch_first=batch_first)
 
         # ============================================================
         # Output gating components (Eq.2 in the original paper)
         # ============================================================
         self.dropout = nn.Dropout(self.dropout)
-        self.gate = TimeDistributed(GatedLinearUnit(self.output_dim), batch_first=batch_first)
-        self.layernorm = TimeDistributed(nn.LayerNorm(self.output_dim), batch_first=batch_first)
+        self.gate = TimeDistributed(
+            GatedLinearUnit(self.output_dim), batch_first=batch_first)
+        self.layernorm = TimeDistributed(
+            nn.LayerNorm(self.output_dim), batch_first=batch_first)
 
-    def forward(
-        self,
-        x: paddle.Tensor, 
-        context: Optional[paddle.Tensor]=None
-    ) -> paddle.Tensor:
+    def forward(self, x: paddle.Tensor,
+                context: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """
         The forward computation of `GatedResidualNetwork` layer.
         
@@ -169,8 +167,8 @@ class GatedResidualNetwork(nn.Layer):
         x = self.layernorm(x)
 
         return x
-    
-    
+
+
 class GateAddNorm(nn.Layer):
     """
     This module encapsulates an operation performed multiple times across the TemporalFusionTransformer model.
@@ -185,23 +183,18 @@ class GateAddNorm(nn.Layer):
         dropout(float, Optional): The dropout rate associated with the component.
     """
 
-    def __init__(
-        self, 
-        input_dim: int, 
-        dropout: Optional[float] = None
-    ):
+    def __init__(self, input_dim: int, dropout: Optional[float]=None):
         super(GateAddNorm, self).__init__()
         self.dropout_rate = dropout
         if dropout:
             self.dropout_layer = nn.Dropout(self.dropout_rate)
-        self.gate = TimeDistributed(GatedLinearUnit(input_dim), batch_first=True)
-        self.layernorm = TimeDistributed(nn.LayerNorm(input_dim), batch_first=True)
+        self.gate = TimeDistributed(
+            GatedLinearUnit(input_dim), batch_first=True)
+        self.layernorm = TimeDistributed(
+            nn.LayerNorm(input_dim), batch_first=True)
 
-    def forward(
-        self, 
-        x: paddle.Tensor, 
-        residual: Optional[paddle.Tensor]=None
-    ):
+    def forward(self, x: paddle.Tensor,
+                residual: Optional[paddle.Tensor]=None):
         """
         Args:
             x(paddle.Tensor): The input tensor.
@@ -219,4 +212,3 @@ class GateAddNorm(nn.Layer):
         # apply normalization layer
         x = self.layernorm(x)
         return x
-

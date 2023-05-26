@@ -13,6 +13,7 @@ from unittest import TestCase
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 from paddlets.analysis import Seasonality, Acf, Correlation
 
+
 class TestFrequencyDomain(TestCase):
     def setUp(self):
         """
@@ -51,21 +52,31 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
+        })
         res = Seasonality().analyze(df)
         self.assertEqual(np.shape(res), (2, ))
         self.assertEqual(res[0], {'target': 100, })
 
         #case5, input data is tsdataset
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Seasonality()(ts)
         self.assertEqual(np.shape(res), (2, ))
         self.assertEqual(res[0], {'target': 100, 'cov': 10})
 
         #case6, input data is tsdataset, select feature
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Seasonality()(ts, columns=['target'])
         self.assertEqual(np.shape(res), (2, ))
         self.assertEqual(res[0], {'target': 100, })
@@ -75,8 +86,12 @@ class TestFrequencyDomain(TestCase):
         self.assertEqual(res, "seasonality")
 
         #case8, test plot
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         sea = Seasonality()
         res = sea(ts)
         plot = sea.plot()
@@ -112,20 +127,30 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
+        })
         res = Acf().analyze(df)
         self.assertEqual(len(res['target']), 2)
 
         #case5, input data is tsdataset
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Acf()(ts)
         self.assertEqual(len(res), 2)
         self.assertEqual(len(res['target']), 2)
 
         #case6, input data is tsdataset, select feature
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Acf()(ts, columns=['target'])
         self.assertEqual(len(res), 1)
         self.assertEqual(len(res['target']), 2)
@@ -135,8 +160,12 @@ class TestFrequencyDomain(TestCase):
         self.assertEqual(res, "acf")
 
         #case8, test plot
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         sea = Acf()
         res = sea(ts)
         plot = sea.plot()
@@ -176,32 +205,46 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe and columns number = 1
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
+        })
         flag = False
         try:
             res = Correlation().analyze(df)
         except:
-            flag= True
+            flag = True
         self.assertTrue(flag)
 
         #case5, input data is tsdataset and columns number > 1
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Correlation()(ts)
         self.assertEqual(len(res), 2)
         self.assertEqual(len(res['target']), 2)
 
         #case6, input data is tsdataset and columns number > 1 and lag
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Correlation(lag=3, lag_cols=['cov'])(ts)
         self.assertEqual(len(res), 2)
         self.assertEqual(len(res['target']), 2)
 
         #case7, input data is tsdataset, select feature
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000)),
-                          'cov1': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000)),
+            'cov1': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         res = Correlation()(ts, columns=['target', 'cov'])
         self.assertEqual(len(res), 2)
         self.assertEqual(len(res['target']), 2)
@@ -211,8 +254,12 @@ class TestFrequencyDomain(TestCase):
         self.assertEqual(res, "correlation")
 
         #case9, test plot
-        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000)), 'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))})
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols='cov')
+        df = pd.DataFrame({
+            'target': np.sin(np.pi * 2 / 100 * np.arange(1000)),
+            'cov': np.sin(np.pi * 2 / 10 * np.arange(1000))
+        })
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols='cov')
         sea = Correlation()
         res = sea(ts)
         plot = sea.plot()

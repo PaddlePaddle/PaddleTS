@@ -30,30 +30,23 @@ class SklearnTransformWrapper(UdBaseTransform):
         sklearn_transform_params: Optional arguments passed to sklearn_transform_class.
 
     """
+
     def __init__(
-        self,
-        sklearn_transform_class,
-        in_col_names: Optional[Union[str, List[str]]]=None,
-        per_col_transform: bool=False,
-        drop_origin_columns: bool=False,
-        out_col_types: Optional[Union[str, List[str]]]=None,
-        out_col_names: Optional[List[str]]=None,
-        **sklearn_transform_params,
-    ):
-        ud_sklearn_transformer = sklearn_transform_class(**sklearn_transform_params)
-        super().__init__(
-            ud_sklearn_transformer,
-            in_col_names,
-            per_col_transform,
-            drop_origin_columns,
-            out_col_types,
-            out_col_names
-        )
-    
-    def _gen_output(
-        self,
-        raw_output
-    )->np.ndarray:
+            self,
+            sklearn_transform_class,
+            in_col_names: Optional[Union[str, List[str]]]=None,
+            per_col_transform: bool=False,
+            drop_origin_columns: bool=False,
+            out_col_types: Optional[Union[str, List[str]]]=None,
+            out_col_names: Optional[List[str]]=None,
+            **sklearn_transform_params, ):
+        ud_sklearn_transformer = sklearn_transform_class(
+            **sklearn_transform_params)
+        super().__init__(ud_sklearn_transformer, in_col_names,
+                         per_col_transform, drop_origin_columns, out_col_types,
+                         out_col_names)
+
+    def _gen_output(self, raw_output) -> np.ndarray:
         """
         Generate the np.ndarray output base on the raw_output from ud transform.
 
@@ -66,7 +59,7 @@ class SklearnTransformWrapper(UdBaseTransform):
         if isinstance(raw_output, scipy.sparse.csr.csr_matrix):
             return raw_output.toarray()
         else:
-            return super()._gen_output(raw_output) 
+            return super()._gen_output(raw_output)
 
     def _fit(self, input: pd.DataFrame):
         """
@@ -80,10 +73,7 @@ class SklearnTransformWrapper(UdBaseTransform):
         """
         self._ud_transformer.fit(input)
 
-    def _transform(
-        self, 
-        input: np.ndarray
-    ):
+    def _transform(self, input: np.ndarray):
         """
         Transform the dataset with the fitted transformer.
         
@@ -92,13 +82,13 @@ class SklearnTransformWrapper(UdBaseTransform):
          
         """
         if not self._fitted:
-            raise_log(ValueError("This encoder is not fitted yet. Call 'fit' before applying the transform method." ))
+            raise_log(
+                ValueError(
+                    "This encoder is not fitted yet. Call 'fit' before applying the transform method."
+                ))
         return self._ud_transformer.transform(input)
 
-    def _inverse_transform(
-            self, 
-            input: np.ndarray
-        ):
+    def _inverse_transform(self, input: np.ndarray):
         """
         Inversely transform the dataset output by the `transform` method.
 
@@ -107,10 +97,12 @@ class SklearnTransformWrapper(UdBaseTransform):
         
         """
         if not self._fitted:
-            raise_log(ValueError("This encoder is not fitted yet. Call 'fit' before applying the transform method." ))
+            raise_log(
+                ValueError(
+                    "This encoder is not fitted yet. Call 'fit' before applying the transform method."
+                ))
         if hasattr(self._ud_transformer, 'inverse_transform'):
             return self._ud_transformer.inverse_transform(input)
         else:
             raise_log(
-                NotImplementedError(f"inverse_transform not implemented")
-            )
+                NotImplementedError(f"inverse_transform not implemented"))

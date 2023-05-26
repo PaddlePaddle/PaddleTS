@@ -18,17 +18,16 @@ from paddlets.utils.utils import check_model_fitted
 logger = Logger(__name__)
 
 
-def backtest(
-        data: TSDataset,
-        model: Trainable,
-        start: Union[pd.Timestamp, int, str ,float] = None,
-        predict_window: Optional[int] = None,
-        stride: Optional[int] = None,
-        metric: Optional[Metric] = None,
-        return_predicts: bool = False,
-        reduction: Union[Callable[[np.ndarray], float], None] = np.mean,
-        verbose: bool = True
-) -> Union[float, Tuple[float, Union[TSDataset, List[TSDataset]]]]:
+def backtest(data: TSDataset,
+             model: Trainable,
+             start: Union[pd.Timestamp, int, str, float]=None,
+             predict_window: Optional[int]=None,
+             stride: Optional[int]=None,
+             metric: Optional[Metric]=None,
+             return_predicts: bool=False,
+             reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
+             verbose: bool=True) -> Union[float, Tuple[float, Union[
+                 TSDataset, List[TSDataset]]]]:
     """
     Backtest
     A repeated forecasting and validating process. It first use data with the length of predict_window, 
@@ -71,19 +70,30 @@ def backtest(
     def _check():
         # Check whether model fitted or not.
         check_model_fitted(model)
-        raise_if(start < model_in_chunk_len + model_skip_chunk_len, f"Parameter 'start' value should >= in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}")
-        raise_if(start > target_length, f"Parameter 'start' value should not exceed data target_len {target_length}")
-        raise_if(predict_window <= 0, "Parameter 'predict_window' should be positive integer")
+        raise_if(
+            start < model_in_chunk_len + model_skip_chunk_len,
+            f"Parameter 'start' value should >= in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}"
+        )
+        raise_if(
+            start > target_length,
+            f"Parameter 'start' value should not exceed data target_len {target_length}"
+        )
+        raise_if(predict_window <= 0,
+                 "Parameter 'predict_window' should be positive integer")
         raise_if(stride <= 0, "Parameter 'stride' should be positive integer")
         # When the prediction window is larger than output_chunk_len, recursive prediction is required.
         # Recursive prediction does not support skip_chunk_len !=0.
-        raise_if(model_skip_chunk_len != 0 and predict_window > model_out_chunk_len, "Backtest can not work when _skip_chunk_len!=0 and \
+        raise_if(model_skip_chunk_len != 0 and
+                 predict_window > model_out_chunk_len,
+                 "Backtest can not work when _skip_chunk_len!=0 and \
                 window > _out_chunk_len at same time.")
         # If skip_chunk_len !=0, prediction will start from start + skip_chunk_len.
         if model_skip_chunk_len != 0:
             if verbose:
-                logger.info(f"model.skip_chunk_len is {model_skip_chunk_len}, backtest will start at \
-                    index {start + model_skip_chunk_len} (start + skip_chunk_len)")
+                logger.info(
+                    f"model.skip_chunk_len is {model_skip_chunk_len}, backtest will start at \
+                    index {start + model_skip_chunk_len} (start + skip_chunk_len)"
+                )
 
     data = data.copy()
     all_target = data.get_target()
@@ -92,16 +102,22 @@ def backtest(
     if predict_window is None:
         predict_window = model_out_chunk_len
         if verbose:
-            logger.info(f"Parameter 'predict_window' not set, default set to model.out_chunk_len {model_out_chunk_len}")
+            logger.info(
+                f"Parameter 'predict_window' not set, default set to model.out_chunk_len {model_out_chunk_len}"
+            )
     if stride is None:
         stride = predict_window
         if verbose:
-            logger.info(f"Parameter 'stride' not set, default set to predict_window {predict_window}")
+            logger.info(
+                f"Parameter 'stride' not set, default set to predict_window {predict_window}"
+            )
     # If start is not set, set to model._in_chunk_len by default
     if start is None:
         start = model_in_chunk_len + model_skip_chunk_len
         if verbose:
-            logger.info(f"Parameter 'start' not set, default set to model_in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}")
+            logger.info(
+                f"Parameter 'start' not set, default set to model_in_chunk_len {model_in_chunk_len} + skip_chunk_len {model_skip_chunk_len}"
+            )
     start = all_target.get_index_at_point(start)
     # Parameter check
     _check()
@@ -117,16 +133,21 @@ def backtest(
     index = start
 
     TQDM_PREFIX = "Backtest Progress"
-    for _ in tqdm(range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
-        data._target, rest = all_target.split(index) 
-        data._observed_cov, _ = all_observe.split(index) if all_observe else (None, None)
+    for _ in tqdm(
+            range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
+        data._target, rest = all_target.split(index)
+        data._observed_cov, _ = all_observe.split(index) if all_observe else (
+            None, None)
         rest_len = len(rest)
 
         if rest_len < model_out_chunk_len + model_skip_chunk_len:
             if data.known_cov is not None:
                 target_end_time = data._target.end_time
-                known_index = data.known_cov.get_index_at_point(target_end_time)
-                if len(data.known_cov) - known_index - 1 < model_out_chunk_len + model_skip_chunk_len:
+                known_index = data.known_cov.get_index_at_point(
+                    target_end_time)
+                if len(
+                        data.known_cov
+                ) - known_index - 1 < model_out_chunk_len + model_skip_chunk_len:
                     break
 
         if rest_len < predict_window + model_skip_chunk_len:
@@ -135,14 +156,17 @@ def backtest(
 
         # Use recursive prediction if the prediction window is larger than the model output_chunk_len
         if predict_window > model_out_chunk_len:
-            output = model.recursive_predict(data, predict_length=predict_window)
+            output = model.recursive_predict(
+                data, predict_length=predict_window)
         else:
             output = model.predict(data)
             output.set_target(
-                TimeSeries(output.get_target().data[0: predict_window], output.freq)
-            )
+                TimeSeries(output.get_target().data[0:predict_window],
+                           output.freq))
         predicts.append(output)
-        real = TSDataset(target=TimeSeries(all_target.data[index + model_skip_chunk_len: index + predict_window + model_skip_chunk_len], output.freq))
+        real = TSDataset(target=TimeSeries(
+            all_target.data[index + model_skip_chunk_len:index + predict_window
+                            + model_skip_chunk_len], output.freq))
         predict = output
 
         if metric is None:
@@ -152,7 +176,8 @@ def backtest(
         index = index + stride
 
     if reduction:
-        if metric._TYPE == "quantile" and isinstance(list(scores[0].values())[0], dict):
+        if metric._TYPE == "quantile" and isinstance(
+                list(scores[0].values())[0], dict):
             target_cols = [x for x in scores[0].keys()]
 
             tmp = {}
@@ -179,7 +204,6 @@ def backtest(
 
             tmp = {k: reduction(v) for k, v in tmp.items()}
             scores = tmp
-
 
     if return_predicts:
         if return_tsdataset:

@@ -29,32 +29,31 @@ class InformerDecoderLayer(paddle.nn.Layer):
         _dropout(paddle.nn.Layer): The dropout layer.
         _activation(paddle.nn.Layer): ELU Activation.
     """
-    def __init__(
-        self, 
-        d_model: int, 
-        num_heads: int, 
-        ffn_channels: int, 
-        dropout_rate: float
-    ):
+
+    def __init__(self,
+                 d_model: int,
+                 num_heads: int,
+                 ffn_channels: int,
+                 dropout_rate: float):
         self._config = locals()
         self._config.pop("self")
         self._config.pop("__class__")
         super(InformerDecoderLayer, self).__init__()
-        self._selfAttn = ProbSparseAttention(d_model, d_model, d_model, num_heads, dropout_rate)
-        self._crossAttn = CrossAttention(d_model, d_model, d_model, num_heads, dropout_rate)
+        self._selfAttn = ProbSparseAttention(d_model, d_model, d_model,
+                                             num_heads, dropout_rate)
+        self._crossAttn = CrossAttention(d_model, d_model, d_model, num_heads,
+                                         dropout_rate)
         self._conv1 = paddle.nn.Conv1D(d_model, ffn_channels, 1)
         self._conv2 = paddle.nn.Conv1D(ffn_channels, d_model, 1)
         self._norm = paddle.nn.LayerNorm(d_model)
         self._dropout = paddle.nn.Dropout(dropout_rate)
         self._activation = paddle.nn.GELU()
 
-    def forward(
-        self,
-        tgt: paddle.Tensor, 
-        memory: paddle.Tensor,
-        tgt_mask: Optional[paddle.Tensor] = None,
-        memory_mask: Optional[paddle.Tensor] = None
-    ) -> paddle.Tensor:
+    def forward(self,
+                tgt: paddle.Tensor,
+                memory: paddle.Tensor,
+                tgt_mask: Optional[paddle.Tensor]=None,
+                memory_mask: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -94,23 +93,22 @@ class InformerDecoder(paddle.nn.Layer):
     Attributes:
         _decoder_layers(paddle.nn.LayerList): A stacked LayerList containing InformerDecoderLayer.
     """
-    def __init__(
-        self,
-        decoder_layer: paddle.nn.Layer,
-        num_layers: int,
-    ):
-        super(InformerDecoder, self).__init__()
-        self._decoder_layers = paddle.nn.LayerList(
-            [type(decoder_layer)(**decoder_layer._config) for _ in range(num_layers)]
-        )
 
-    def forward(
-        self,
-        tgt: paddle.Tensor, 
-        memory: paddle.Tensor,
-        tgt_mask: Optional[paddle.Tensor] = None,
-        memory_mask: Optional[paddle.Tensor] = None
-    ) -> paddle.Tensor:
+    def __init__(
+            self,
+            decoder_layer: paddle.nn.Layer,
+            num_layers: int, ):
+        super(InformerDecoder, self).__init__()
+        self._decoder_layers = paddle.nn.LayerList([
+            type(decoder_layer)(**decoder_layer._config)
+            for _ in range(num_layers)
+        ])
+
+    def forward(self,
+                tgt: paddle.Tensor,
+                memory: paddle.Tensor,
+                tgt_mask: Optional[paddle.Tensor]=None,
+                memory_mask: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """Forward.
 
         Args:

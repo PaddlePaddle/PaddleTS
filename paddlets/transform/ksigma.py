@@ -33,16 +33,18 @@ class KSigma(BaseTransform):
     Returns:
         None
     """
-    def __init__(self, cols: Union[str, List[str]], k: float = 3.0):
+
+    def __init__(self, cols: Union[str, List[str]], k: float=3.0):
         super(KSigma, self).__init__()
         self._cols = cols
         self._k = k
         if isinstance(cols, str):
             self._cols = [cols]
         if len(self._cols) < 1:
-            raise_log(ValueError("At least one column name should be specified."))
+            raise_log(
+                ValueError("At least one column name should be specified."))
         self._cols_stats_dict = {}
-    
+
     @log_decorator
     def fit_one(self, dataset: TSDataset):
         """
@@ -55,13 +57,15 @@ class KSigma(BaseTransform):
             self
         """
         self._cols_stats_dict = {}
-        
+
         #Compute mu, std, and interval and save the results in _cols_stats dict
         for col in self._cols:
             sub_data = dataset[col]
             #Skip columns that are not numerical
-            if not (np.issubdtype(sub_data.dtype, np.integer) or np.issubdtype(sub_data.dtype, np.floating)):
-                logger.warning("The values in the column %s should be numerical" % (col))
+            if not (np.issubdtype(sub_data.dtype, np.integer) or np.issubdtype(
+                    sub_data.dtype, np.floating)):
+                logger.warning(
+                    "The values in the column %s should be numerical" % (col))
                 continue
             mean = sub_data.mean()
             std = sub_data.std()
@@ -72,7 +76,8 @@ class KSigma(BaseTransform):
         return self
 
     @log_decorator
-    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Replace the outliers with mu
         
@@ -84,12 +89,15 @@ class KSigma(BaseTransform):
             TSDataset
         """
         if self._cols_stats_dict == {}:
-            raise_log(ValueError("The fit method must be called prior to calling the transform method."))
+            raise_log(
+                ValueError(
+                    "The fit method must be called prior to calling the transform method."
+                ))
 
         new_ts = dataset
         if not inplace:
             new_ts = dataset.copy()
-        
+
         #Replace outliers withe averages
         for col in self._cols:
             #If a column of data in fit stage is not executed normally, 
@@ -99,5 +107,6 @@ class KSigma(BaseTransform):
                 continue
             lower, upper, mean = self._cols_stats_dict[col]
             for i, value in enumerate(new_ts[col].astype(float)):
-                new_ts[col][i] = float(np.where(((value < lower)|(value > upper)), mean, value))                
+                new_ts[col][i] = float(
+                    np.where(((value < lower) | (value > upper)), mean, value))
         return new_ts

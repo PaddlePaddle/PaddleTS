@@ -16,7 +16,7 @@ from paddlets.models.anomaly.dl import utils as U
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
 
-       
+
 class _AEBlock(paddle.nn.Layer):
     """AE Network structure.
 
@@ -42,29 +42,27 @@ class _AEBlock(paddle.nn.Layer):
         _encoder(paddle.nn.Sequential): Dynamic graph LayerList for encoder.
         _decoder(paddle.nn.Sequential): Dynamic graph LayerList for decoder.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        ed_type: str,
-        fit_params: Dict[str, Any],
-        hidden_config: List[int],
-        activation: Callable[..., paddle.Tensor],
-        last_layer_activation: Callable[..., paddle.Tensor],
-        kernel_size: int,
-        dropout_rate: float,
-        use_bn: bool,
-        embedding_size: int,
-        pooling: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            ed_type: str,
+            fit_params: Dict[str, Any],
+            hidden_config: List[int],
+            activation: Callable[..., paddle.Tensor],
+            last_layer_activation: Callable[..., paddle.Tensor],
+            kernel_size: int,
+            dropout_rate: float,
+            use_bn: bool,
+            embedding_size: int,
+            pooling: bool, ):
         super(_AEBlock, self).__init__()
         raise_if_not(
-            ed_type in ("MLP", "CNN"), 
-            "`ae_type` must be either 'MLP' or 'CNN'"
-        )
+            ed_type in ("MLP", "CNN"),
+            "`ae_type` must be either 'MLP' or 'CNN'")
         raise_if(
             np.any(np.array(hidden_config) <= 0),
-            f"hidden_config must be > 0, got {hidden_config}."
-        )
+            f"hidden_config must be > 0, got {hidden_config}.")
         # embedding cate feature
         self._pooling = pooling
         self._cat_size = len(fit_params['observed_cat_cols'])
@@ -74,12 +72,13 @@ class _AEBlock(paddle.nn.Layer):
             observed_cat_cols = fit_params['observed_cat_cols']
             self._observed_cat_emb = []
             for col, col_size in observed_cat_cols.items():
-                self._observed_cat_emb.append(paddle.nn.Embedding(col_size, embedding_size))
+                self._observed_cat_emb.append(
+                    paddle.nn.Embedding(col_size, embedding_size))
             if pooling:
                 self._cat_dim = embedding_size
             else:
                 self._cat_dim = embedding_size * len(observed_cat_cols)
-                
+
         feature_dim = self._num_dim + self._cat_dim
         if ed_type == 'MLP':
             self._encoder = MLP(in_chunk_len, feature_dim, hidden_config, \
@@ -99,10 +98,8 @@ class _AEBlock(paddle.nn.Layer):
                                 dropout_rate, use_bn, is_encoder=True)
             self._decoder = CNN(hidden_config[-1], hidden_config[::-1][1:] + [feature_dim], \
                                 activation, last_layer_activation, kernel_size, dropout_rate, use_bn, is_encoder=False)
-    def forward(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args: 
@@ -110,25 +107,29 @@ class _AEBlock(paddle.nn.Layer):
 
         Returns:
             paddle.Tensor: Output of model.
-        """        
+        """
         x = paddle.transpose(X["observed_cov_numeric"], perm=[0, 2, 1])
         if self._cat_size > 0:
             feature_cat = []
-            observed_cat = paddle.transpose(X["observed_cov_categorical"], perm=[0, 2, 1])
+            observed_cat = paddle.transpose(
+                X["observed_cov_categorical"], perm=[0, 2, 1])
             for i in range(self._cat_size):
-                feature_cat.append(self._observed_cat_emb[i](observed_cat[:, i]))
+                feature_cat.append(self._observed_cat_emb[i](observed_cat[:,
+                                                                          i]))
             if self._pooling:
                 feature_cat = paddle.stack(feature_cat, axis=-1).mean(axis=-1)
             else:
                 feature_cat = paddle.concat(feature_cat, axis=-1)
             feature_cat = paddle.transpose(feature_cat, perm=[0, 2, 1])
             x = paddle.concat([x, feature_cat], axis=-2)
-            
+
         h = self._encoder(x)
         recon = self._decoder(h)
-        
-        return paddle.transpose(recon, perm=[0, 2, 1]), paddle.transpose(x, perm=[0, 2, 1])
-        
+
+        return paddle.transpose(
+            recon, perm=[0, 2, 1]), paddle.transpose(
+                x, perm=[0, 2, 1])
+
 
 class AutoEncoder(AnomalyBaseModel):
     """Auto encoder network for anomaly detection.
@@ -193,41 +194,39 @@ class AutoEncoder(AnomalyBaseModel):
         _embedding_size(int): The size of each embedding vector.
         _pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        threshold_fn: Callable[..., float] = U.percentile,
-        q: float = 100,
-        threshold: Optional[float] = None,
-        threshold_coeff: float = 1.0,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        pred_adjust: bool = False,
-        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        ed_type: str = 'MLP',
-        activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU,
-        last_layer_activation: Callable[..., paddle.Tensor] = paddle.nn.Identity,
-        use_bn: bool = False,
-        hidden_config: List[int] = None,
-        kernel_size: int = 3,
-        dropout_rate: float = 0.2,
-        embedding_size: int = 16,
-        pooling: bool = False,
-    ):
-        self._hidden_config = (
-            hidden_config if hidden_config else [32, 16]
-        )
+    def __init__(
+            self,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            threshold_fn: Callable[..., float]=U.percentile,
+            q: float=100,
+            threshold: Optional[float]=None,
+            threshold_coeff: float=1.0,
+            anomaly_score_fn: Callable[..., List[float]]=None,
+            pred_adjust: bool=False,
+            pred_adjust_fn: Callable[..., np.ndarray]=U.result_adjust,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            ed_type: str='MLP',
+            activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU,
+            last_layer_activation: Callable[...,
+                                            paddle.Tensor]=paddle.nn.Identity,
+            use_bn: bool=False,
+            hidden_config: List[int]=None,
+            kernel_size: int=3,
+            dropout_rate: float=0.2,
+            embedding_size: int=16,
+            pooling: bool=False, ):
+        self._hidden_config = (hidden_config if hidden_config else [32, 16])
         self._use_bn = use_bn
         self._kernel_size = kernel_size
         self._ed_type = ed_type
@@ -239,9 +238,9 @@ class AutoEncoder(AnomalyBaseModel):
         self._q = q
 
         super(AutoEncoder, self).__init__(
-            in_chunk_len=in_chunk_len, 
+            in_chunk_len=in_chunk_len,
             sampling_stride=sampling_stride,
-            loss_fn=loss_fn, 
+            loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
             threshold=threshold,
             threshold_coeff=threshold_coeff,
@@ -249,21 +248,19 @@ class AutoEncoder(AnomalyBaseModel):
             anomaly_score_fn=anomaly_score_fn,
             pred_adjust=pred_adjust,
             pred_adjust_fn=pred_adjust_fn,
-            optimizer_params=optimizer_params, 
-            eval_metrics=eval_metrics, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
-        
+            optimizer_params=optimizer_params,
+            eval_metrics=eval_metrics,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
+
     def _update_fit_params(
-        self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -283,38 +280,27 @@ class AutoEncoder(AnomalyBaseModel):
                 observed_cat_cols[col] = len(train_df[col].unique())
             else:
                 observed_num_cols.append(col)
-        
+
         fit_params = {
             "observed_cat_cols": observed_cat_cols,
             "observed_num_dim": len(observed_num_cols),
             "observed_cat_dim": len(observed_cat_cols),
         }
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
         Returns:
             paddle.nn.Layer.
         """
-        return _AEBlock(
-            self._in_chunk_len,
-            self._ed_type,
-            self._fit_params,
-            self._hidden_config,
-            self._activation,
-            self._last_layer_activation,
-            self._kernel_size,
-            self._dropout_rate,
-            self._use_bn,
-            self._embedding_size,
-            self._pooling
-        )
-    
-    def _get_threshold(
-        self,
-        anomaly_score: np.ndarray
-    ) -> float:
+        return _AEBlock(self._in_chunk_len, self._ed_type, self._fit_params,
+                        self._hidden_config, self._activation,
+                        self._last_layer_activation, self._kernel_size,
+                        self._dropout_rate, self._use_bn, self._embedding_size,
+                        self._pooling)
+
+    def _get_threshold(self, anomaly_score: np.ndarray) -> float:
         """Get the threshold value to judge anomaly.
         
         Args:

@@ -8,6 +8,7 @@ import paddle.nn.functional as F
 import numpy as np
 import paddle
 
+
 class MLP(paddle.nn.Layer):
     """MLP Network structure used in the encoder and decoder
     
@@ -24,17 +25,17 @@ class MLP(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self,
-        input_dim: int,
-        feature_dim: int,
-        hidden_config: List[int],
-        activation: Callable[..., paddle.Tensor],
-        last_layer_activation: Callable[..., paddle.Tensor],
-        dropout_rate: float = 0.5,
-        use_bn: bool = True,
-        use_drop: bool = True,
-    ):
+            self,
+            input_dim: int,
+            feature_dim: int,
+            hidden_config: List[int],
+            activation: Callable[..., paddle.Tensor],
+            last_layer_activation: Callable[..., paddle.Tensor],
+            dropout_rate: float=0.5,
+            use_bn: bool=True,
+            use_drop: bool=True, ):
         super(MLP, self).__init__()
         dims, layers = [input_dim] + hidden_config, []
         for i in range(1, len(dims)):
@@ -48,11 +49,11 @@ class MLP(paddle.nn.Layer):
             else:
                 layers.append(last_layer_activation())
         self._nn = paddle.nn.Sequential(*layers)
-        
+
     def forward(self, x):
         return self._nn(x)
 
-    
+
 class CNN(paddle.nn.Layer):
     """CNN Network structure used in the encoder and decoder
     
@@ -71,28 +72,40 @@ class CNN(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self,
-        input_dim: int,
-        hidden_config: List[int],
-        activation: Callable[..., paddle.Tensor],
-        last_layer_activation: Callable[..., paddle.Tensor],
-        kernel_size: int,
-        dropout_rate: float = 0.5,
-        use_bn: bool = True,
-        is_encoder: bool = True,
-        use_drop: bool = True,
-        data_format: str = 'NCL',
-    ):
+            self,
+            input_dim: int,
+            hidden_config: List[int],
+            activation: Callable[..., paddle.Tensor],
+            last_layer_activation: Callable[..., paddle.Tensor],
+            kernel_size: int,
+            dropout_rate: float=0.5,
+            use_bn: bool=True,
+            is_encoder: bool=True,
+            use_drop: bool=True,
+            data_format: str='NCL', ):
         super(CNN, self).__init__()
         dims, layers = [input_dim] + hidden_config, []
         for i in range(1, len(dims)):
             if is_encoder:
-                layers.append(paddle.nn.Conv1D(dims[i - 1], dims[i], kernel_size, data_format=data_format))
+                layers.append(
+                    paddle.nn.Conv1D(
+                        dims[i - 1],
+                        dims[i],
+                        kernel_size,
+                        data_format=data_format))
             else:
-                layers.append(paddle.nn.Conv1DTranspose(dims[i - 1], dims[i], kernel_size, data_format=data_format))
+                layers.append(
+                    paddle.nn.Conv1DTranspose(
+                        dims[i - 1],
+                        dims[i],
+                        kernel_size,
+                        data_format=data_format))
             if use_bn:
-                layers.append(paddle.nn.BatchNorm1D(dims[i], data_format=data_format))
+                layers.append(
+                    paddle.nn.BatchNorm1D(
+                        dims[i], data_format=data_format))
             if i < len(dims) - 1:
                 layers.append(activation())
                 if use_drop:
@@ -100,11 +113,11 @@ class CNN(paddle.nn.Layer):
             else:
                 layers.append(last_layer_activation())
         self._nn = paddle.nn.Sequential(*layers)
-        
+
     def forward(self, x):
         return self._nn(x)
 
-    
+
 class LSTM(paddle.nn.Layer):
     """LSTM Network structure used in the encoder and decoder
     
@@ -121,22 +134,27 @@ class LSTM(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self,
-        input_dim: int,
-        hidden_config: List[int],
-        activation: Callable[..., paddle.Tensor],
-        last_layer_activation: Callable[..., paddle.Tensor],
-        dropout_rate: float = 0,
-        use_drop: bool = True,
-        num_layers: int = 1,
-        direction: str = 'forward',
-        ):
+            self,
+            input_dim: int,
+            hidden_config: List[int],
+            activation: Callable[..., paddle.Tensor],
+            last_layer_activation: Callable[..., paddle.Tensor],
+            dropout_rate: float=0,
+            use_drop: bool=True,
+            num_layers: int=1,
+            direction: str='forward', ):
         super(LSTM, self).__init__()
         dims, layers = [input_dim] + hidden_config, []
         for i in range(1, len(dims)):
-            layers.append(paddle.nn.LSTM(dims[i - 1], dims[i], 
-                          num_layers=num_layers, dropout=dropout_rate, direction=direction))
+            layers.append(
+                paddle.nn.LSTM(
+                    dims[i - 1],
+                    dims[i],
+                    num_layers=num_layers,
+                    dropout=dropout_rate,
+                    direction=direction))
             if i < len(dims) - 1:
                 layers.append(activation())
                 if use_drop:
@@ -144,6 +162,6 @@ class LSTM(paddle.nn.Layer):
             else:
                 layers.append(last_layer_activation())
         self._nn = paddle.nn.Sequential(*layers)
-        
+
     def forward(self, x):
         return self._nn(x)

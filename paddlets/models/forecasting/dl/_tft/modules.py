@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 Implements modules of TFT model.
 """
@@ -36,15 +35,14 @@ class VariableSelectionNetwork(nn.Layer):
         context_dim(int, Optional): The embedding width of the context signal expected to be fed as an auxiliary input to this component.
         batch_first(bool, Optional): A boolean indicating whether the batch dimension is expected to be the first dimension of the input or not.
     """
-    def __init__(
-        self, 
-        input_dim: int, 
-        num_inputs: int, 
-        hidden_dim: int, 
-        dropout: float,
-        context_dim: Optional[int] = None,
-        batch_first: Optional[bool] = True
-    ):
+
+    def __init__(self,
+                 input_dim: int,
+                 num_inputs: int,
+                 hidden_dim: int,
+                 dropout: float,
+                 context_dim: Optional[int]=None,
+                 batch_first: Optional[bool]=True):
         super(VariableSelectionNetwork, self).__init__()
         self.hidden_dim = hidden_dim
         self.input_dim = input_dim
@@ -54,12 +52,13 @@ class VariableSelectionNetwork(nn.Layer):
 
         # A GRN to apply on the flat concatenation of the input representation (all inputs together),
         # possibly provided with context information
-        self.flattened_grn = GatedResidualNetwork(input_dim=self.num_inputs * self.input_dim,
-                                                  hidden_dim=self.hidden_dim,
-                                                  output_dim=self.num_inputs,
-                                                  dropout=self.dropout,
-                                                  context_dim=self.context_dim,
-                                                  batch_first=batch_first)
+        self.flattened_grn = GatedResidualNetwork(
+            input_dim=self.num_inputs * self.input_dim,
+            hidden_dim=self.hidden_dim,
+            output_dim=self.num_inputs,
+            dropout=self.dropout,
+            context_dim=self.context_dim,
+            batch_first=batch_first)
         # activation for transforming the GRN output to weights
         self.softmax = nn.Softmax(axis=1)
 
@@ -67,17 +66,17 @@ class VariableSelectionNetwork(nn.Layer):
         self.single_variable_grns = nn.LayerList()
         for _ in range(self.num_inputs):
             self.single_variable_grns.append(
-                GatedResidualNetwork(input_dim=self.input_dim,
-                                     hidden_dim=self.hidden_dim,
-                                     output_dim=self.hidden_dim,
-                                     dropout=self.dropout,
-                                     batch_first=batch_first))
+                GatedResidualNetwork(
+                    input_dim=self.input_dim,
+                    hidden_dim=self.hidden_dim,
+                    output_dim=self.hidden_dim,
+                    dropout=self.dropout,
+                    batch_first=batch_first))
 
-    def forward(
-        self,
-        flattened_embedding: paddle.Tensor,
-        context: Optional[paddle.Tensor]=None
-    ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def forward(self,
+                flattened_embedding: paddle.Tensor,
+                context: Optional[paddle.Tensor]=None) -> Tuple[paddle.Tensor,
+                                                                paddle.Tensor]:
         """
         Infer variable selection weights using the flattened representation GRN.
         
@@ -101,8 +100,9 @@ class VariableSelectionNetwork(nn.Layer):
         for i in range(self.num_inputs):
             # select slice of embedding belonging to a single input - and apply the variable-specific GRN
             # (the slice is taken from the flattened concatenated embedding)
-            processed_inputs.append(
-                self.single_variable_grns[i](flattened_embedding[..., (i * self.input_dim): (i + 1) * self.input_dim]))
+            processed_inputs.append(self.single_variable_grns[i](
+                flattened_embedding[..., (i * self.input_dim):(i + 1) *
+                                    self.input_dim]))
         # each element in the resulting list is of size: [(num_samples * num_temporal_steps) x state_size],
         # and each element corresponds to a single input variable
 
@@ -140,14 +140,13 @@ class InputChannelEmbedding(nn.Layer):
         categorical_cardinalities(List[int]): The quantity of categories associated with each of the categorical input variables.
         time_distribute(bool, Optional) A boolean indicating whether to wrap the composing transformations using the ``TimeDistributed`` module.
     """
-    def __init__(
-        self, 
-        state_size: int, 
-        num_numeric: int, 
-        num_categorical: int, 
-        categorical_cardinalities: List[int],
-        time_distribute: Optional[bool] = False
-    ):
+
+    def __init__(self,
+                 state_size: int,
+                 num_numeric: int,
+                 num_categorical: int,
+                 categorical_cardinalities: List[int],
+                 time_distribute: Optional[bool]=False):
         super(InputChannelEmbedding, self).__init__()
         self.state_size = state_size
         self.num_numeric = num_numeric
@@ -158,25 +157,30 @@ class InputChannelEmbedding(nn.Layer):
             self.numeric_transform = NullTransform()
         elif self.time_distribute:
             self.numeric_transform = TimeDistributed(
-                NumericInputTransformation(num_inputs=num_numeric, state_size=state_size), return_reshaped=False)
+                NumericInputTransformation(
+                    num_inputs=num_numeric, state_size=state_size),
+                return_reshaped=False)
         else:
-            self.numeric_transform = NumericInputTransformation(num_inputs=num_numeric, state_size=state_size)
-            
+            self.numeric_transform = NumericInputTransformation(
+                num_inputs=num_numeric, state_size=state_size)
+
         if num_categorical == 0:
             self.categorical_transform = NullTransform()
         elif self.time_distribute:
             self.categorical_transform = TimeDistributed(
-                CategoricalInputTransformation(num_inputs=num_categorical, state_size=state_size,
-                                               cardinalities=categorical_cardinalities), return_reshaped=False)
+                CategoricalInputTransformation(
+                    num_inputs=num_categorical,
+                    state_size=state_size,
+                    cardinalities=categorical_cardinalities),
+                return_reshaped=False)
         else:
-            self.categorical_transform = CategoricalInputTransformation(num_inputs=num_categorical,
-                                                                        state_size=state_size,
-                                                                        cardinalities=categorical_cardinalities)
-    def forward(
-        self, 
-        x_numeric: paddle.Tensor, 
-        x_categorical: paddle.Tensor
-    ) -> paddle.Tensor:
+            self.categorical_transform = CategoricalInputTransformation(
+                num_inputs=num_categorical,
+                state_size=state_size,
+                cardinalities=categorical_cardinalities)
+
+    def forward(self, x_numeric: paddle.Tensor,
+                x_categorical: paddle.Tensor) -> paddle.Tensor:
         """
         The forward computation of the layer, for numeric input, it uses `nn.Linear` as the projected layer, 
         and for categorical input, it uses `nn.Embedding` as the embedding layer.
@@ -188,7 +192,8 @@ class InputChannelEmbedding(nn.Layer):
         Returns:
             merged_transformations(paddle.Tensor): The result tensor which merged numeric and categorical embedding.
         """
-        batch_shape = paddle.shape(x_numeric) if sum(paddle.shape(x_numeric)) > 0 else paddle.shape(x_categorical)
+        batch_shape = paddle.shape(x_numeric) if sum(paddle.shape(
+            x_numeric)) > 0 else paddle.shape(x_categorical)
         processed_numeric = self.numeric_transform(x_numeric)
         processed_categorical = self.categorical_transform(x_categorical)
         # Both of the returned values, "processed_numeric" and "processed_categorical" are lists,
@@ -203,11 +208,13 @@ class InputChannelEmbedding(nn.Layer):
         # merged_transformations: [(num_samples * num_temporal_steps) x (state_size * total_input_variables)]
         # total_input_variables stands for the amount of all input variables in the specific input channel, i.e
         # num_numeric + num_categorical
-        merged_transformations = paddle.concat(processed_numeric + processed_categorical, axis=1)
+        merged_transformations = paddle.concat(
+            processed_numeric + processed_categorical, axis=1)
 
         # for temporal data we return the resulting tensor to its 3-dimensional shape
         if self.time_distribute:
-            merged_transformations = merged_transformations.reshape([batch_shape[0], batch_shape[1], -1])
+            merged_transformations = merged_transformations.reshape(
+                [batch_shape[0], batch_shape[1], -1])
             # In that case:
             # merged_transformations: [num_samples x num_temporal_steps x (state_size * total_input_variables)]
         return merged_transformations
@@ -225,23 +232,17 @@ class NumericInputTransformation(nn.Layer):
         state_size(int): The state size of the model, which determines the embedding dimension/width.
     """
 
-    def __init__(
-        self, 
-        num_inputs: int, 
-        state_size: int
-    ):
+    def __init__(self, num_inputs: int, state_size: int):
         super(NumericInputTransformation, self).__init__()
         self.num_inputs = num_inputs
         self.state_size = state_size
 
         self.numeric_projection_layers = nn.LayerList()
         for _ in range(self.num_inputs):
-            self.numeric_projection_layers.append(nn.Linear(1, self.state_size))
+            self.numeric_projection_layers.append(
+                nn.Linear(1, self.state_size))
 
-    def forward(
-        self, 
-        x: paddle.Tensor
-    ) -> List[paddle.Tensor]:
+    def forward(self, x: paddle.Tensor) -> List[paddle.Tensor]:
         """
         The forward computation of `InputChannelEmbedding`, every input variable is projected using its dedicated linear layer,
         the results are stored as a list.
@@ -254,7 +255,8 @@ class NumericInputTransformation(nn.Layer):
         """
         projections = []
         for i in range(self.num_inputs):
-            projections.append(self.numeric_projection_layers[i](x[:, i].unsqueeze(1)))
+            projections.append(self.numeric_projection_layers[i](
+                x[:, i].unsqueeze(1)))
 
         return projections
 
@@ -272,12 +274,10 @@ class CategoricalInputTransformation(nn.Layer):
         cardinalities(List[int]): The quantity of categories associated with each of the input variables.
     """
 
-    def __init__(
-        self, 
-        num_inputs: int, 
-        state_size: int, 
-        cardinalities: List[int]
-    ):
+    def __init__(self,
+                 num_inputs: int,
+                 state_size: int,
+                 cardinalities: List[int]):
         super(CategoricalInputTransformation, self).__init__()
         self.num_inputs = num_inputs
         self.state_size = state_size
@@ -286,12 +286,10 @@ class CategoricalInputTransformation(nn.Layer):
         # layers for processing the categorical inputs
         self.categorical_embedding_layers = nn.LayerList()
         for idx, cardinality in enumerate(self.cardinalities):
-            self.categorical_embedding_layers.append(nn.Embedding(cardinality, self.state_size))
+            self.categorical_embedding_layers.append(
+                nn.Embedding(cardinality, self.state_size))
 
-    def forward(
-        self, 
-        x: paddle.Tensor
-    )-> List[paddle.Tensor]:
+    def forward(self, x: paddle.Tensor) -> List[paddle.Tensor]:
         """
         The forward computation of `CategoricalInputTransformation`, every input variable is projected using its embedding layer,
         the results are stored as a list.
@@ -325,29 +323,30 @@ class InterpretableMultiHeadAttention(nn.Layer):
         num_heads(int): The number of attention heads composing the Multi-head attention component.
     """
 
-    def __init__(
-        self, 
-        embed_dim: int, 
-        num_heads: int
-    ):
+    def __init__(self, embed_dim: int, num_heads: int):
         super(InterpretableMultiHeadAttention, self).__init__()
         self.d_model = embed_dim  # the state_size (model_size) corresponding to the input and output dimension
         self.num_heads = num_heads  # the number of attention heads
         self.all_heads_dim = embed_dim * num_heads  # the width of the projection for the keys and queries
-        self.w_q = nn.Linear(embed_dim, self.all_heads_dim)  # multi-head projection for the queries
-        self.w_k = nn.Linear(embed_dim, self.all_heads_dim)  # multi-head projection for the keys
-        self.w_v = nn.Linear(embed_dim, embed_dim)  # a single, shared, projection for the values
+        self.w_q = nn.Linear(
+            embed_dim,
+            self.all_heads_dim)  # multi-head projection for the queries
+        self.w_k = nn.Linear(
+            embed_dim,
+            self.all_heads_dim)  # multi-head projection for the keys
+        self.w_v = nn.Linear(
+            embed_dim,
+            embed_dim)  # a single, shared, projection for the values
 
         # the last layer is used for final linear mapping (corresponds to W_H in the paper)
         self.out = nn.Linear(self.d_model, self.d_model)
 
     def forward(
-        self,
-        q: paddle.Tensor, 
-        k: paddle.Tensor,
-        v: paddle.Tensor, 
-        mask: Optional[paddle.Tensor]=None
-    ) -> Tuple[paddle.Tensor, ...]:
+            self,
+            q: paddle.Tensor,
+            k: paddle.Tensor,
+            v: paddle.Tensor,
+            mask: Optional[paddle.Tensor]=None) -> Tuple[paddle.Tensor, ...]:
         """
         The forward computation of `InterpretableMultiHeadAttention`.
         
@@ -368,17 +367,27 @@ class InterpretableMultiHeadAttention(nn.Layer):
         # values tensor - v: [num_samples x (num_total_steps) x state_size]
 
         # perform linear operation and split into h heads
-        q_proj = self.w_q(q).reshape([num_samples, -1, self.num_heads, self.d_model])
-        k_proj = self.w_k(k).reshape([num_samples, -1, self.num_heads, self.d_model])
-        v_proj = paddle.tile(self.w_v(v), [1, 1, self.num_heads]).reshape([num_samples, -1, self.num_heads, self.d_model])
+        q_proj = self.w_q(q).reshape(
+            [num_samples, -1, self.num_heads, self.d_model])
+        k_proj = self.w_k(k).reshape(
+            [num_samples, -1, self.num_heads, self.d_model])
+        v_proj = paddle.tile(self.w_v(v), [1, 1, self.num_heads]).reshape(
+            [num_samples, -1, self.num_heads, self.d_model])
 
         # transpose to get the following shapes
-        q_proj = q_proj.transpose([0, 2, 1, 3])  # (num_samples x num_future_steps x num_heads x state_size)
-        k_proj = k_proj.transpose([0, 2, 1, 3])  # (num_samples x num_total_steps x num_heads x state_size)
-        v_proj = v_proj.transpose([0, 2, 1, 3])  # (num_samples x num_total_steps x num_heads x state_size)
+        q_proj = q_proj.transpose(
+            [0, 2, 1, 3
+             ])  # (num_samples x num_future_steps x num_heads x state_size)
+        k_proj = k_proj.transpose(
+            [0, 2, 1, 3
+             ])  # (num_samples x num_total_steps x num_heads x state_size)
+        v_proj = v_proj.transpose(
+            [0, 2, 1, 3
+             ])  # (num_samples x num_total_steps x num_heads x state_size)
 
         # calculate attention using function we will define next
-        attn_outputs_all_heads, attn_scores_all_heads = self.attention(q_proj, k_proj, v_proj, mask)
+        attn_outputs_all_heads, attn_scores_all_heads = self.attention(
+            q_proj, k_proj, v_proj, mask)
         # Dimensions:
         # attn_scores_all_heads: [num_samples x num_heads x num_future_steps x num_total_steps]
         # attn_outputs_all_heads: [num_samples x num_heads x num_future_steps x state_size]
@@ -397,11 +406,10 @@ class InterpretableMultiHeadAttention(nn.Layer):
         return output, attention_outputs, attention_scores
 
     def masked_fill(
-        self,
-        x: paddle.Tensor, 
-        mask: paddle.Tensor, 
-        value: float,
-    ) -> paddle.Tensor:
+            self,
+            x: paddle.Tensor,
+            mask: paddle.Tensor,
+            value: float, ) -> paddle.Tensor:
         """
         Mask filling operation.
         
@@ -415,14 +423,13 @@ class InterpretableMultiHeadAttention(nn.Layer):
         """
         y = paddle.full(paddle.shape(x), value, x.dtype)
         return paddle.where(mask, y, x)
-        
-    def attention(
-        self, 
-        q: paddle.Tensor, 
-        k: paddle.Tensor,
-        v: paddle.Tensor, 
-        mask: Optional[paddle.Tensor]=None
-    ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+
+    def attention(self,
+                  q: paddle.Tensor,
+                  k: paddle.Tensor,
+                  v: paddle.Tensor,
+                  mask: Optional[paddle.Tensor]=None) -> Tuple[paddle.Tensor,
+                                                               paddle.Tensor]:
         """
         The computation of self-attention operation.
         
@@ -438,7 +445,8 @@ class InterpretableMultiHeadAttention(nn.Layer):
         # Applying the scaled dot product
         # Dimensions:
         # attention_scores: [num_samples x num_heads x num_future_steps x num_total_steps]
-        attention_scores = paddle.matmul(q, k.transpose([0,1,3,2])) / math.sqrt(self.d_model)
+        attention_scores = paddle.matmul(q, k.transpose(
+            [0, 1, 3, 2])) / math.sqrt(self.d_model)
 
         # Decoder masking is applied to the multi-head attention layer to ensure that each temporal dimension can only
         # attend to features preceding it
@@ -454,4 +462,3 @@ class InterpretableMultiHeadAttention(nn.Layer):
         # attention_outputs: [num_samples x num_heads x num_future_steps x state_size]
         attention_outputs = paddle.matmul(attention_scores, v)
         return attention_outputs, attention_scores
-    

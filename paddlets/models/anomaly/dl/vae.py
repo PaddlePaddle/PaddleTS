@@ -38,39 +38,57 @@ class stack(paddle.nn.Layer):
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     
     """
+
     def __init__(
-        self,
-        in_chunk_dim: int, 
-        hidden_config: List[int], 
-        feature_dim: int, 
-        is_encoder: bool = True, 
-        base_nn: str = 'MLP',
-        use_bn: bool = True, 
-        use_drop: bool = True, 
-        dropout_rate: float = 0.5,
-        kernel_size: int = 1, 
-        rnn_num_layers: int = 1, 
-        direction: str = 'forward',
-        activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6, 
-        last_layer_activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6,
-                ):
+            self,
+            in_chunk_dim: int,
+            hidden_config: List[int],
+            feature_dim: int,
+            is_encoder: bool=True,
+            base_nn: str='MLP',
+            use_bn: bool=True,
+            use_drop: bool=True,
+            dropout_rate: float=0.5,
+            kernel_size: int=1,
+            rnn_num_layers: int=1,
+            direction: str='forward',
+            activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
+            last_layer_activation: Callable[...,
+                                            paddle.Tensor]=paddle.nn.ReLU6, ):
         super(stack, self).__init__()
         if not is_encoder:
             hidden_config = [int(i) for i in reversed(hidden_config)]
-        if  base_nn=='MLP':
-            self._nn = MLP(input_dim=feature_dim, feature_dim=in_chunk_dim, hidden_config=hidden_config,
-                           activation=activation, last_layer_activation=last_layer_activation,
-                           dropout_rate=dropout_rate, use_bn=use_bn, use_drop=use_drop)
-        elif base_nn=='LSTM':
-            self._nn = LSTM(input_dim=feature_dim, hidden_config=hidden_config,
-                            num_layers=rnn_num_layers, direction=direction, activation=activation,
-                            last_layer_activation=last_layer_activation, dropout_rate=dropout_rate, 
-                            use_drop=use_drop)
-        elif base_nn=='CNN':
-            self._nn = CNN(input_dim=feature_dim, hidden_config=hidden_config, activation=activation,
-                           last_layer_activation=last_layer_activation, kernel_size=kernel_size,
-                           use_drop=use_drop, dropout_rate=dropout_rate, use_bn=use_bn, 
-                           is_encoder=True, data_format='NLC')
+        if base_nn == 'MLP':
+            self._nn = MLP(input_dim=feature_dim,
+                           feature_dim=in_chunk_dim,
+                           hidden_config=hidden_config,
+                           activation=activation,
+                           last_layer_activation=last_layer_activation,
+                           dropout_rate=dropout_rate,
+                           use_bn=use_bn,
+                           use_drop=use_drop)
+        elif base_nn == 'LSTM':
+            self._nn = LSTM(
+                input_dim=feature_dim,
+                hidden_config=hidden_config,
+                num_layers=rnn_num_layers,
+                direction=direction,
+                activation=activation,
+                last_layer_activation=last_layer_activation,
+                dropout_rate=dropout_rate,
+                use_drop=use_drop)
+        elif base_nn == 'CNN':
+            self._nn = CNN(input_dim=feature_dim,
+                           hidden_config=hidden_config,
+                           activation=activation,
+                           last_layer_activation=last_layer_activation,
+                           kernel_size=kernel_size,
+                           use_drop=use_drop,
+                           dropout_rate=dropout_rate,
+                           use_bn=use_bn,
+                           is_encoder=True,
+                           data_format='NLC')
+
     def forward(self, x):
         return self._nn(x)
 
@@ -97,61 +115,74 @@ class _VAEBlock(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self, 
-        in_chunk_dim: int, 
-        hidden_config: List[int], 
-        feature_dim: int, 
-        base_en: str = 'MLP', 
-        base_de: str = 'MLP', 
-        use_bn: bool = True, 
-        use_drop: bool = True, 
-        dropout_rate: float = 0.5,
-        kernel_size: int = 1, 
-        rnn_num_layers: int = 1, 
-        direction: str = 'forward',
-        activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6, 
-        last_layer_activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6,
-        stdev: float = 0.1,
-                ):
+            self,
+            in_chunk_dim: int,
+            hidden_config: List[int],
+            feature_dim: int,
+            base_en: str='MLP',
+            base_de: str='MLP',
+            use_bn: bool=True,
+            use_drop: bool=True,
+            dropout_rate: float=0.5,
+            kernel_size: int=1,
+            rnn_num_layers: int=1,
+            direction: str='forward',
+            activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
+            last_layer_activation: Callable[...,
+                                            paddle.Tensor]=paddle.nn.ReLU6,
+            stdev: float=0.1, ):
         super(_VAEBlock, self).__init__()
         raise_if_not(
-            base_en in ("MLP", "CNN", "LSTM"), 
-            "`base_en` must be in 'MLP', 'CNN', 'LSTM'."
-        )
+            base_en in ("MLP", "CNN", "LSTM"),
+            "`base_en` must be in 'MLP', 'CNN', 'LSTM'.")
         raise_if_not(
-            base_de in ("MLP", "CNN", "LSTM"), 
-            "`base_de` must be in 'MLP', 'CNN', 'LSTM'."
-        )
+            base_de in ("MLP", "CNN", "LSTM"),
+            "`base_de` must be in 'MLP', 'CNN', 'LSTM'.")
         raise_if(
             len(hidden_config) <= 0,
-            f"length of hidden_config must be > 0, got {hidden_config}."
-        )
+            f"length of hidden_config must be > 0, got {hidden_config}.")
         raise_if(
             np.any(np.array(hidden_config) <= 0),
-            f"anyone value in hidden_config must be > 0, got {hidden_config}."
-        )
+            f"anyone value in hidden_config must be > 0, got {hidden_config}.")
         self.stdev = stdev
         self.de_hidden_config = [int(i) for i in reversed(hidden_config)]
-        self.encoder = stack(in_chunk_dim, hidden_config, feature_dim, is_encoder=True, base_nn=base_en,
-                             use_bn=use_bn, use_drop=use_drop,dropout_rate=dropout_rate, kernel_size=kernel_size, 
-                             rnn_num_layers=rnn_num_layers, direction=direction, activation=paddle.nn.ReLU6, 
-                             last_layer_activation=paddle.nn.ReLU6)
-        self.decoder = stack(in_chunk_dim, hidden_config, feature_dim, is_encoder=False, base_nn=base_de,
-                             use_bn=use_bn, use_drop=use_drop, dropout_rate=dropout_rate, kernel_size=kernel_size, 
-                             rnn_num_layers=rnn_num_layers, direction=direction, activation=paddle.nn.ReLU6, 
-                             last_layer_activation=paddle.nn.ReLU6)
+        self.encoder = stack(
+            in_chunk_dim,
+            hidden_config,
+            feature_dim,
+            is_encoder=True,
+            base_nn=base_en,
+            use_bn=use_bn,
+            use_drop=use_drop,
+            dropout_rate=dropout_rate,
+            kernel_size=kernel_size,
+            rnn_num_layers=rnn_num_layers,
+            direction=direction,
+            activation=paddle.nn.ReLU6,
+            last_layer_activation=paddle.nn.ReLU6)
+        self.decoder = stack(
+            in_chunk_dim,
+            hidden_config,
+            feature_dim,
+            is_encoder=False,
+            base_nn=base_de,
+            use_bn=use_bn,
+            use_drop=use_drop,
+            dropout_rate=dropout_rate,
+            kernel_size=kernel_size,
+            rnn_num_layers=rnn_num_layers,
+            direction=direction,
+            activation=paddle.nn.ReLU6,
+            last_layer_activation=paddle.nn.ReLU6)
         # reparameterize
         self.mu = paddle.nn.Linear(hidden_config[-1], feature_dim)
         self.logvar = paddle.nn.Linear(hidden_config[-1], feature_dim)
         # reconstructed
         self.reconstructed = paddle.nn.Linear(hidden_config[0], feature_dim)
 
-    def reparameterize(
-        self, 
-        mu: paddle.Tensor, 
-        logvar: paddle.Tensor
-    ):
+    def reparameterize(self, mu: paddle.Tensor, logvar: paddle.Tensor):
         """The reparameterisation trick allows us to backpropagate through the encoder.
 
         Args:
@@ -187,7 +218,7 @@ class _VAEBlock(paddle.nn.Layer):
         # decoder
         z = self.decoder(z)
         recon = self.reconstructed(z)
-        return [recon, mu_, logvar_, x] 
+        return [recon, mu_, logvar_, x]
 
 
 class VAE(AnomalyBaseModel):
@@ -258,39 +289,40 @@ class VAE(AnomalyBaseModel):
         _last_layer_activation(Callable[..., paddle.Tensor]): The activation function for the last layers.
         _stdev(int): param for reparameterize.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = U.smooth_l1_loss_vae,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        threshold_fn: Callable[..., float] = U.percentile,
-        threshold: Optional[float] = None,
-        threshold_coeff: float = 1.0,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        pred_adjust: bool = False,
-        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
-        hidden_config: List[int]= [32, 16], 
-        base_en: str = 'MLP', 
-        base_de: str = 'MLP', 
-        use_bn: bool = True, 
-        use_drop: bool = True, 
-        dropout_rate: float = 0.5,
-        kernel_size: int = 1, 
-        rnn_num_layers: int = 1, 
-        direction: str = 'forward',
-        activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6, 
-        last_layer_activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU6,
-        stdev: float = 0.1, 
-        ):
+            self,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=U.smooth_l1_loss_vae,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            threshold_fn: Callable[..., float]=U.percentile,
+            threshold: Optional[float]=None,
+            threshold_coeff: float=1.0,
+            anomaly_score_fn: Callable[..., List[float]]=None,
+            pred_adjust: bool=False,
+            pred_adjust_fn: Callable[..., np.ndarray]=U.result_adjust,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            hidden_config: List[int]=[32, 16],
+            base_en: str='MLP',
+            base_de: str='MLP',
+            use_bn: bool=True,
+            use_drop: bool=True,
+            dropout_rate: float=0.5,
+            kernel_size: int=1,
+            rnn_num_layers: int=1,
+            direction: str='forward',
+            activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
+            last_layer_activation: Callable[...,
+                                            paddle.Tensor]=paddle.nn.ReLU6,
+            stdev: float=0.1, ):
         self._hidden_config = hidden_config
         self._in_chunk_len = in_chunk_len
         self._base_en = base_en
@@ -306,31 +338,29 @@ class VAE(AnomalyBaseModel):
         self._stdev = stdev
 
         super(VAE, self).__init__(
-            in_chunk_len=in_chunk_len, 
+            in_chunk_len=in_chunk_len,
             sampling_stride=sampling_stride,
-            loss_fn=loss_fn, 
-            optimizer_fn=optimizer_fn, 
+            loss_fn=loss_fn,
+            optimizer_fn=optimizer_fn,
             threshold=threshold,
             threshold_coeff=threshold_coeff,
             threshold_fn=threshold_fn,
             anomaly_score_fn=anomaly_score_fn,
             pred_adjust=pred_adjust,
             pred_adjust_fn=pred_adjust_fn,
-            optimizer_params=optimizer_params, 
-            eval_metrics=eval_metrics, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
+            optimizer_params=optimizer_params,
+            eval_metrics=eval_metrics,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
 
     def _update_fit_params(
-        self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -352,26 +382,13 @@ class VAE(AnomalyBaseModel):
             paddle.nn.Layer.
         """
         return _VAEBlock(
-        self._in_chunk_len,
-        self._hidden_config,
-        self._fit_params["observed_dim"],
-        self._base_en,
-        self._base_de,
-        self._use_bn,
-        self._use_drop,
-        self._dropout_rate,
-        self._kernel_size,
-        self._rnn_num_layers,
-        self._direction,
-        self._activation,
-        self._last_layer_activation,
-        self._stdev
-        )
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Dict[str, Any]:
+            self._in_chunk_len, self._hidden_config,
+            self._fit_params["observed_dim"], self._base_en, self._base_de,
+            self._use_bn, self._use_drop, self._dropout_rate,
+            self._kernel_size, self._rnn_num_layers, self._direction,
+            self._activation, self._last_layer_activation, self._stdev)
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -386,16 +403,10 @@ class VAE(AnomalyBaseModel):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {
-            "batch_size": output[-1].shape[0],
-            "loss": loss.item()
-        }
+        batch_logs = {"batch_size": output[-1].shape[0], "loss": loss.item()}
         return batch_logs
 
-    def _predict_batch(
-        self, 
-        X: paddle.Tensor
-    ) -> np.ndarray:
+    def _predict_batch(self, X: paddle.Tensor) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -407,10 +418,7 @@ class VAE(AnomalyBaseModel):
         recon, mu_, logvar_, x = self._network(X)
         return x.numpy(), recon.numpy()
 
-    def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader
-    ) -> np.ndarray:
+    def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -427,11 +435,10 @@ class VAE(AnomalyBaseModel):
             loss_list.extend(loss)
 
         return np.array(loss_list)
-    
+
     def _compute_loss(
-        self, 
-        output: List[paddle.Tensor], 
-    ) -> paddle.Tensor:
+            self,
+            output: List[paddle.Tensor], ) -> paddle.Tensor:
         """Compute the loss.
 
         Args:

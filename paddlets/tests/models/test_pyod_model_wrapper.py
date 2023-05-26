@@ -68,6 +68,7 @@ class TestPyodModelWrapper(unittest.TestCase):
     """
     test PyodModelWrapper.
     """
+
     def setUp(self):
         """
         unittest setup.
@@ -88,31 +89,9 @@ class TestPyodModelWrapper(unittest.TestCase):
         self._empty_init_params_template = dict()
 
         self._good_to_init_pyod_model_class_list = [
-            ABOD,
-            CBLOF,
-            CD,
-            COF,
-            COPOD,
-            ECOD,
-            GMM,
-            HBOS,
-            IForest,
-            INNE,
-            KDE,
-            KNN,
-            LMDD,
-            LOCI,
-            LODA,
-            LOF,
-            MAD,
-            MCD,
-            OCSVM,
-            PCA,
-            RGraph,
-            ROD,
-            Sampling,
-            SOD,
-            SOS
+            ABOD, CBLOF, CD, COF, COPOD, ECOD, GMM, HBOS, IForest, INNE, KDE,
+            KNN, LMDD, LOCI, LODA, LOF, MAD, MCD, OCSVM, PCA, RGraph, ROD,
+            Sampling, SOD, SOS
         ]
 
         # good cases for __init__ method.
@@ -130,7 +109,9 @@ class TestPyodModelWrapper(unittest.TestCase):
                 # init param != None, predict param = None
                 dict2 = {
                     "clazz": model_class,
-                    "init_params": {"contamination": 0.1},
+                    "init_params": {
+                        "contamination": 0.1
+                    },
                     "predict_params": dict()
                 }
                 self._good_to_init_pyod_model_list.append(dict2)
@@ -139,7 +120,9 @@ class TestPyodModelWrapper(unittest.TestCase):
             dict3 = {
                 "clazz": model_class,
                 "init_params": dict(),
-                "predict_params": {"return_confidence": False}
+                "predict_params": {
+                    "return_confidence": False
+                }
             }
             self._good_to_init_pyod_model_list.append(dict3)
 
@@ -147,8 +130,12 @@ class TestPyodModelWrapper(unittest.TestCase):
                 # init param != None, predict param != None
                 dict4 = {
                     "clazz": model_class,
-                    "init_params": {"contamination": 0.1},
-                    "predict_params": {"return_confidence": False}
+                    "init_params": {
+                        "contamination": 0.1
+                    },
+                    "predict_params": {
+                        "return_confidence": False
+                    }
                 }
                 self._good_to_init_pyod_model_list.append(dict4)
 
@@ -177,11 +164,13 @@ class TestPyodModelWrapper(unittest.TestCase):
         self._bad_to_predict_pyod_model_set = set()
 
         # Good cases for fit and predict and predict_score methods.
-        self._good_to_fit_and_predict_and_predict_score_pyod_model_list = list()
+        self._good_to_fit_and_predict_and_predict_score_pyod_model_list = list(
+        )
         for m in self._good_to_init_pyod_model_list:
             if (m["clazz"] not in self._bad_to_fit_pyod_model_set) and \
                     (m["clazz"] not in self._bad_to_predict_pyod_model_set):
-                self._good_to_fit_and_predict_and_predict_score_pyod_model_list.append(m)
+                self._good_to_fit_and_predict_and_predict_score_pyod_model_list.append(
+                    m)
         super().setUp()
 
     def test_init_model(self):
@@ -208,8 +197,7 @@ class TestPyodModelWrapper(unittest.TestCase):
                 _ = PyodModelWrapper(
                     in_chunk_len=self._default_in_chunk_len,
                     model_class=model["clazz"],
-                    model_init_params=model["init_params"]
-                )
+                    model_init_params=model["init_params"])
             except ValueError:
                 succeed = False
             self.assertTrue(succeed)
@@ -223,8 +211,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
-                model_class=bad_model_class
-            )
+                model_class=bad_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -238,8 +225,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
-                model_class=bad_model_class
-            )
+                model_class=bad_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -253,8 +239,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
-                model_class=bad_model_class
-            )
+                model_class=bad_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -269,8 +254,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = PyodModelWrapper(
                 in_chunk_len=bad_in_chunk_len,
-                model_class=self._default_model_class
-            )
+                model_class=self._default_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -285,8 +269,7 @@ class TestPyodModelWrapper(unittest.TestCase):
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 sampling_stride=bad_sampling_stride,
-                model_class=self._default_model_class
-            )
+                model_class=self._default_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -301,8 +284,7 @@ class TestPyodModelWrapper(unittest.TestCase):
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 sampling_stride=bad_sampling_stride,
-                model_class=self._default_model_class
-            )
+                model_class=self._default_model_class)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -317,8 +299,7 @@ class TestPyodModelWrapper(unittest.TestCase):
             _ = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 model_class=self._default_model_class,
-                model_init_params=bad_model_init_params
-            )
+                model_init_params=bad_model_init_params)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -333,8 +314,7 @@ class TestPyodModelWrapper(unittest.TestCase):
             _ = PyodModelWrapper(
                 model_class=self._default_model_class,
                 in_chunk_len=self._default_in_chunk_len,
-                predict_params=bad_model_predict_params
-            )
+                predict_params=bad_model_predict_params)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -357,13 +337,11 @@ class TestPyodModelWrapper(unittest.TestCase):
             ds = self._build_mock_ts_dataset(
                 target_periods=target_periods,
                 known_periods=known_periods,
-                observed_periods=observed_periods
-            )
+                observed_periods=observed_periods)
             model_wrapper = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 model_class=model["clazz"],
-                model_init_params=model["init_params"]
-            )
+                model_init_params=model["init_params"])
 
             # fit
             model_wrapper.fit(train_data=ds)
@@ -371,12 +349,14 @@ class TestPyodModelWrapper(unittest.TestCase):
             # predict
             predicted_ds = model_wrapper.predict(ds)
             self.assertIsNotNone(predicted_ds.get_target())
-            self.assertTrue("anomaly_label" in predicted_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_label" in predicted_ds.get_target().columns)
 
             # predict_score
             predict_score_ds = model_wrapper.predict_score(ds)
             self.assertIsNotNone(predict_score_ds.get_target())
-            self.assertTrue("anomaly_score" in predict_score_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_score" in predict_score_ds.get_target().columns)
 
             # predict_score_ndarray = model_wrapper.predict_score(ds)
             # self.assertTrue(0 < predict_score_ndarray.shape[0] <= observed_periods)
@@ -396,26 +376,26 @@ class TestPyodModelWrapper(unittest.TestCase):
             ds = self._build_mock_ts_dataset(
                 target_periods=target_periods,
                 known_periods=known_periods,
-                observed_periods=observed_periods
-            )
+                observed_periods=observed_periods)
             model_wrapper = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 model_class=model["clazz"],
                 model_init_params=model["init_params"],
-                predict_params=model["predict_params"]
-            )
+                predict_params=model["predict_params"])
             # fit
             model_wrapper.fit(train_data=ds)
 
             # predict
             predicted_ds = model_wrapper.predict(ds)
             self.assertIsNotNone(predicted_ds.get_target())
-            self.assertTrue("anomaly_label" in predicted_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_label" in predicted_ds.get_target().columns)
 
             # predict_score
             predict_score_ds = model_wrapper.predict_score(ds)
             self.assertIsNotNone(predict_score_ds.get_target())
-            self.assertTrue("anomaly_score" in predict_score_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_score" in predict_score_ds.get_target().columns)
 
         #################################################################
         # case 2 (good case)                                            #
@@ -431,44 +411,42 @@ class TestPyodModelWrapper(unittest.TestCase):
             ds = self._build_mock_ts_dataset(
                 target_periods=target_periods,
                 known_periods=known_periods,
-                observed_periods=observed_periods
-            )
+                observed_periods=observed_periods)
 
             model_wrapper = PyodModelWrapper(
                 in_chunk_len=self._default_in_chunk_len,
                 model_class=model["clazz"],
                 model_init_params=model["init_params"],
-                udf_ml_dataloader_to_fit_ndarray=self.udf_ml_dataloader_to_fit_ndarray,
-                udf_ml_dataloader_to_predict_ndarray=self.udf_ml_dataloader_to_predict_ndarray
-            )
+                udf_ml_dataloader_to_fit_ndarray=self.
+                udf_ml_dataloader_to_fit_ndarray,
+                udf_ml_dataloader_to_predict_ndarray=self.
+                udf_ml_dataloader_to_predict_ndarray)
             # fit
             model_wrapper.fit(train_data=ds)
 
             # predict
             predicted_ds = model_wrapper.predict(ds)
             self.assertIsNotNone(predicted_ds.get_target())
-            self.assertTrue("anomaly_label" in predicted_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_label" in predicted_ds.get_target().columns)
 
             # predict_score
             predict_score_ds = model_wrapper.predict_score(ds)
             self.assertIsNotNone(predict_score_ds.get_target())
-            self.assertTrue("anomaly_score" in predict_score_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_score" in predict_score_ds.get_target().columns)
 
         ############################
         # case 3 (bad case)        #
         # 1) observed_cov is None. #
         ############################
         ds = self._build_mock_ts_dataset(
-            target_periods=10,
-            known_periods=10,
-            observed_periods=10
-        )
+            target_periods=10, known_periods=10, observed_periods=10)
         ds.observed_cov = None
 
         model_wrapper = PyodModelWrapper(
             model_class=self._default_model_class,
-            in_chunk_len=self._default_in_chunk_len
-        )
+            in_chunk_len=self._default_in_chunk_len)
 
         succeed = True
         try:
@@ -491,15 +469,13 @@ class TestPyodModelWrapper(unittest.TestCase):
         ########################################
         model_wrapper = PyodModelWrapper(
             model_class=self._default_model_class,
-            in_chunk_len=self._default_in_chunk_len
-        )
+            in_chunk_len=self._default_in_chunk_len)
 
         observed_periods = 10
         ds = self._build_mock_ts_dataset(
             target_periods=0,
             known_periods=0,
-            observed_periods=observed_periods
-        )
+            observed_periods=observed_periods)
 
         # fit
         model_wrapper.fit(train_data=ds)
@@ -512,7 +488,8 @@ class TestPyodModelWrapper(unittest.TestCase):
         # predict_score
         predict_score_ds = model_wrapper.predict_score(ds)
         self.assertIsNotNone(predict_score_ds.get_target())
-        self.assertTrue("anomaly_score" in predict_score_ds.get_target().columns)
+        self.assertTrue(
+            "anomaly_score" in predict_score_ds.get_target().columns)
 
         # save
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -523,13 +500,18 @@ class TestPyodModelWrapper(unittest.TestCase):
         internal_filename_map = {
             "model_meta": "%s_%s" % (self._default_modelname, "model_meta")
         }
-        self.assertEqual(files, {self._default_modelname, *internal_filename_map.values()})
+        self.assertEqual(
+            files, {self._default_modelname, *internal_filename_map.values()})
 
         # model type
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
-        self.assertTrue(PyodModelWrapper.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(MLBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            PyodModelWrapper.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            MLBaseModel.__name__ in model_meta["ancestor_classname_set"])
         self.assertEqual(PyodModelWrapper.__module__, model_meta["modulename"])
         shutil.rmtree(path)
 
@@ -546,37 +528,34 @@ class TestPyodModelWrapper(unittest.TestCase):
         # build and fit the only model instance.
         model_wrapper = PyodModelWrapper(
             model_class=self._default_model_class,
-            in_chunk_len=self._default_in_chunk_len
-        )
+            in_chunk_len=self._default_in_chunk_len)
 
         observed_periods = 10
         ds = self._build_mock_ts_dataset(
             target_periods=0,
             known_periods=0,
-            observed_periods=observed_periods
-        )
+            observed_periods=observed_periods)
         model_wrapper.fit(train_data=ds)
 
         # save the first one.
         model_1_name = "a"
-        model_1_internal_filename_map = {"model_meta": "%s_%s" % (model_1_name, "model_meta")}
+        model_1_internal_filename_map = {
+            "model_meta": "%s_%s" % (model_1_name, "model_meta")
+        }
         model_wrapper.save(os.path.join(path, model_1_name))
 
         # save the second one.
         model_2_name = "b"
-        model_2_internal_filename_map = {"model_meta": "%s_%s" % (model_2_name, "model_meta")}
+        model_2_internal_filename_map = {
+            "model_meta": "%s_%s" % (model_2_name, "model_meta")
+        }
         model_wrapper.save(os.path.join(path, model_2_name))
 
         files = set(os.listdir(path))
-        self.assertEqual(
-            files,
-            {
-                model_1_name,
-                *model_1_internal_filename_map.values(),
-                model_2_name,
-                *model_2_internal_filename_map.values()
-            }
-        )
+        self.assertEqual(files, {
+            model_1_name, *model_1_internal_filename_map.values(),
+            model_2_name, *model_2_internal_filename_map.values()
+        })
 
         shutil.rmtree(path)
 
@@ -596,27 +575,27 @@ class TestPyodModelWrapper(unittest.TestCase):
         # build + fit + save
         model_wrapper = PyodModelWrapper(
             model_class=self._default_model_class,
-            in_chunk_len=self._default_in_chunk_len
-        )
+            in_chunk_len=self._default_in_chunk_len)
 
         observed_periods = 10
         ds = self._build_mock_ts_dataset(
             target_periods=0,
             known_periods=0,
-            observed_periods=observed_periods
-        )
+            observed_periods=observed_periods)
         model_wrapper.fit(train_data=ds)
 
         # store predict result before save & load
         # predict()
         pred_ds_before_load = model_wrapper.predict(ds)
         self.assertIsNotNone(pred_ds_before_load.get_target())
-        self.assertTrue("anomaly_label" in pred_ds_before_load.get_target().columns)
+        self.assertTrue(
+            "anomaly_label" in pred_ds_before_load.get_target().columns)
 
         # predict_score()
         pred_score_ds_before_load = model_wrapper.predict_score(ds)
         self.assertIsNotNone(pred_score_ds_before_load.get_target())
-        self.assertTrue("anomaly_score" in pred_score_ds_before_load.get_target().columns)
+        self.assertTrue(
+            "anomaly_score" in pred_score_ds_before_load.get_target().columns)
 
         # save
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -636,9 +615,9 @@ class TestPyodModelWrapper(unittest.TestCase):
         pred_score_ds_after_load = loaded_model_wrapper.predict_score(ds)
 
         # compare predicted result
-        self.assertTrue(np.alltrue(
-            pred_ds_after_load.get_target().to_numpy(False) == pred_score_ds_after_load.get_target().to_numpy(False)
-        ))
+        self.assertTrue(
+            np.alltrue(pred_ds_after_load.get_target().to_numpy(False) ==
+                       pred_score_ds_after_load.get_target().to_numpy(False)))
         shutil.rmtree(path)
 
         #############################################################################################################
@@ -651,26 +630,26 @@ class TestPyodModelWrapper(unittest.TestCase):
         # build + fit + save
         model_wrapper = PyodModelWrapper(
             model_class=self._default_model_class,
-            in_chunk_len=self._default_in_chunk_len
-        )
+            in_chunk_len=self._default_in_chunk_len)
 
         observed_periods = 10
         ds = self._build_mock_ts_dataset(
             target_periods=0,
             known_periods=0,
-            observed_periods=observed_periods
-        )
+            observed_periods=observed_periods)
         model_wrapper.fit(train_data=ds)
 
         # store predicted dataset before load
         pred_ds_before_load = model_wrapper.predict(ds)
         self.assertIsNotNone(pred_ds_before_load.get_target())
-        self.assertTrue("anomaly_label" in pred_ds_before_load.get_target().columns)
+        self.assertTrue(
+            "anomaly_label" in pred_ds_before_load.get_target().columns)
 
         # predict_score()
         pred_score_ds_before_load = model_wrapper.predict_score(ds)
         self.assertIsNotNone(pred_score_ds_before_load.get_target())
-        self.assertTrue("anomaly_score" in pred_score_ds_before_load.get_target().columns)
+        self.assertTrue(
+            "anomaly_score" in pred_score_ds_before_load.get_target().columns)
 
         # save
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -700,25 +679,27 @@ class TestPyodModelWrapper(unittest.TestCase):
         loaded_model_1_pred_ds = loaded_model_1.predict(ds)
         loaded_model_2_pred_ds = loaded_model_2.predict(ds)
 
-        self.assertTrue(np.alltrue(
-            loaded_model_1_pred_ds.get_target().to_numpy(False) == pred_ds_before_load.get_target().to_numpy(False)
-        ))
-        self.assertTrue(np.alltrue(
-            loaded_model_2_pred_ds.get_target().to_numpy(False) == pred_ds_before_load.get_target().to_numpy(False)
-        ))
+        self.assertTrue(
+            np.alltrue(loaded_model_1_pred_ds.get_target().to_numpy(False) ==
+                       pred_ds_before_load.get_target().to_numpy(False)))
+        self.assertTrue(
+            np.alltrue(loaded_model_2_pred_ds.get_target().to_numpy(False) ==
+                       pred_ds_before_load.get_target().to_numpy(False)))
 
         # assert predict_score() expected
         loaded_model_1_pred_score_ds = loaded_model_1.predict_score(ds)
         loaded_model_2_pred_score_ds = loaded_model_2.predict_score(ds)
 
-        loaded_model_1_pred_score_ds_target = loaded_model_1_pred_score_ds.get_target().to_numpy(False)
-        loaded_model_2_pred_score_ds_target = loaded_model_2_pred_score_ds.get_target().to_numpy(False)
-        self.assertTrue(np.alltrue(
-            loaded_model_1_pred_score_ds_target == pred_score_ds_before_load.get_target().to_numpy()
-        ))
-        self.assertTrue(np.alltrue(
-            loaded_model_2_pred_score_ds_target == pred_score_ds_before_load.get_target().to_numpy()
-        ))
+        loaded_model_1_pred_score_ds_target = loaded_model_1_pred_score_ds.get_target(
+        ).to_numpy(False)
+        loaded_model_2_pred_score_ds_target = loaded_model_2_pred_score_ds.get_target(
+        ).to_numpy(False)
+        self.assertTrue(
+            np.alltrue(loaded_model_1_pred_score_ds_target ==
+                       pred_score_ds_before_load.get_target().to_numpy()))
+        self.assertTrue(
+            np.alltrue(loaded_model_2_pred_score_ds_target ==
+                       pred_score_ds_before_load.get_target().to_numpy()))
 
         shutil.rmtree(path)
 
@@ -735,14 +716,12 @@ class TestPyodModelWrapper(unittest.TestCase):
             ds = self._build_mock_ts_dataset(
                 target_periods=0,
                 known_periods=0,
-                observed_periods=observed_periods
-            )
+                observed_periods=observed_periods)
 
             model_wrapper = make_ml_model(
                 in_chunk_len=self._default_in_chunk_len,
                 model_class=model["clazz"],
-                model_init_params=model["init_params"]
-            )
+                model_init_params=model["init_params"])
             assert isinstance(model_wrapper, PyodModelWrapper)
 
             # fit
@@ -751,12 +730,14 @@ class TestPyodModelWrapper(unittest.TestCase):
             # predict
             predicted_ds = model_wrapper.predict(ds)
             self.assertIsNotNone(predicted_ds.get_target())
-            self.assertTrue("anomaly_label" in predicted_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_label" in predicted_ds.get_target().columns)
 
             # predict_score
             predict_score_ds = model_wrapper.predict_score(ds)
             self.assertIsNotNone(predict_score_ds.get_target())
-            self.assertTrue("anomaly_score" in predict_score_ds.get_target().columns)
+            self.assertTrue(
+                "anomaly_score" in predict_score_ds.get_target().columns)
 
         ###########################
         # case 1 (bad case)       #
@@ -767,8 +748,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = make_ml_model(
                 model_class=bad_model_class,
-                in_chunk_len=self._default_in_chunk_len
-            )
+                in_chunk_len=self._default_in_chunk_len)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
@@ -782,24 +762,25 @@ class TestPyodModelWrapper(unittest.TestCase):
         try:
             _ = make_ml_model(
                 model_class=bad_model_class,
-                in_chunk_len=self._default_in_chunk_len
-            )
+                in_chunk_len=self._default_in_chunk_len)
         except ValueError:
             succeed = False
         self.assertFalse(succeed)
 
     def _build_mock_ts_dataset(
-        self,
-        target_periods: int = 10,
-        known_periods: int = 10,
-        observed_periods: int = 10,
-        target_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        known_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        observed_start_timestamp: pd.Timestamp = pd.Timestamp(datetime.datetime.now().date()),
-        freq: str = "1D",
-        numeric: bool = True,
-        categorical: bool = True
-    ):
+            self,
+            target_periods: int=10,
+            known_periods: int=10,
+            observed_periods: int=10,
+            target_start_timestamp: pd.Timestamp=pd.Timestamp(
+                datetime.datetime.now().date()),
+            known_start_timestamp: pd.Timestamp=pd.Timestamp(
+                datetime.datetime.now().date()),
+            observed_start_timestamp: pd.Timestamp=pd.Timestamp(
+                datetime.datetime.now().date()),
+            freq: str="1D",
+            numeric: bool=True,
+            categorical: bool=True):
         """
         Build mock dataset.
 
@@ -813,10 +794,12 @@ class TestPyodModelWrapper(unittest.TestCase):
             # target (pyod model wrapper requires target col num == 1, thus cannot both contain numeric + categorical).
             target_df = pd.Series(
                 [i for i in range(target_periods)],
-                index=pd.date_range(start=target_start_timestamp, periods=target_periods, freq=freq),
+                index=pd.date_range(
+                    start=target_start_timestamp,
+                    periods=target_periods,
+                    freq=freq),
                 name="target0",
-                dtype=numeric_dtype
-            )
+                dtype=numeric_dtype)
             target_ts = TimeSeries.load_from_dataframe(data=target_df)
 
         # known
@@ -826,64 +809,91 @@ class TestPyodModelWrapper(unittest.TestCase):
             known_numeric_df = None
             if numeric:
                 # numeric
-                known_numeric_data = np.array(known_raw_data, dtype=numeric_dtype)
+                known_numeric_data = np.array(
+                    known_raw_data, dtype=numeric_dtype)
                 known_numeric_df = pd.DataFrame(
                     data=known_numeric_data,
-                    index=pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq),
-                    columns=["known_numeric_0", "known_numeric_1"]
-                )
+                    index=pd.date_range(
+                        start=known_start_timestamp,
+                        periods=known_periods,
+                        freq=freq),
+                    columns=["known_numeric_0", "known_numeric_1"])
 
             known_categorical_df = None
             if categorical:
                 # categorical
-                known_categorical_data = np.array(known_raw_data, dtype=categorical_dtype)
+                known_categorical_data = np.array(
+                    known_raw_data, dtype=categorical_dtype)
                 known_categorical_df = pd.DataFrame(
                     data=known_categorical_data,
-                    index=pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq),
-                    columns=["known_categorical_0", "known_categorical_1"]
-                )
+                    index=pd.date_range(
+                        start=known_start_timestamp,
+                        periods=known_periods,
+                        freq=freq),
+                    columns=["known_categorical_0", "known_categorical_1"])
             if (known_numeric_df is None) and (known_categorical_df is None):
-                raise Exception(f"failed to build known cov data, both numeric df and categorical df are all None.")
-            if (known_numeric_df is not None) and (known_categorical_df is not None):
+                raise Exception(
+                    f"failed to build known cov data, both numeric df and categorical df are all None."
+                )
+            if (known_numeric_df is not None) and (
+                    known_categorical_df is not None):
                 # both are NOT None.
-                known_cov_df = pd.concat([known_numeric_df, known_categorical_df], axis=1)
+                known_cov_df = pd.concat(
+                    [known_numeric_df, known_categorical_df], axis=1)
             else:
-                known_cov_df = [known_numeric_df, known_categorical_df][1 if known_numeric_df is None else 0]
+                known_cov_df = [known_numeric_df, known_categorical_df][
+                    1 if known_numeric_df is None else 0]
             known_cov_ts = TimeSeries.load_from_dataframe(data=known_cov_df)
 
         # observed
         observed_cov_ts = None
         if observed_periods > 0:
-            observed_raw_data = [(i * -1, i * -10) for i in range(observed_periods)]
+            observed_raw_data = [(i * -1, i * -10)
+                                 for i in range(observed_periods)]
             observed_numeric_df = None
             if numeric:
                 # numeric
-                observed_numeric_data = np.array(observed_raw_data, dtype=numeric_dtype)
+                observed_numeric_data = np.array(
+                    observed_raw_data, dtype=numeric_dtype)
                 observed_numeric_df = pd.DataFrame(
                     data=observed_numeric_data,
-                    index=pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq),
-                    columns=["observed_numeric_0", "observed_numeric_1"]
-                )
+                    index=pd.date_range(
+                        start=observed_start_timestamp,
+                        periods=observed_periods,
+                        freq=freq),
+                    columns=["observed_numeric_0", "observed_numeric_1"])
 
             observed_categorical_df = None
             if categorical:
                 # categorical
-                observed_categorical_data = np.array(observed_raw_data, dtype=categorical_dtype)
+                observed_categorical_data = np.array(
+                    observed_raw_data, dtype=categorical_dtype)
                 observed_categorical_df = pd.DataFrame(
                     data=observed_categorical_data,
-                    index=pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq),
-                    columns=["observed_categorical_0", "observed_categorical_1"]
-                )
+                    index=pd.date_range(
+                        start=observed_start_timestamp,
+                        periods=observed_periods,
+                        freq=freq),
+                    columns=[
+                        "observed_categorical_0", "observed_categorical_1"
+                    ])
 
-            if (observed_numeric_df is None) and (observed_categorical_df is None):
-                raise Exception(f"failed to build observed cov data, both numeric df and categorical df are all None.")
-            if (observed_numeric_df is not None) and (observed_categorical_df is not None):
+            if (observed_numeric_df is None) and (
+                    observed_categorical_df is None):
+                raise Exception(
+                    f"failed to build observed cov data, both numeric df and categorical df are all None."
+                )
+            if (observed_numeric_df is not None) and (
+                    observed_categorical_df is not None):
                 # both are NOT None.
-                observed_cov_df = pd.concat([observed_numeric_df, observed_categorical_df], axis=1)
+                observed_cov_df = pd.concat(
+                    [observed_numeric_df, observed_categorical_df], axis=1)
             else:
-                observed_cov_df = [observed_numeric_df, observed_categorical_df][
-                    1 if observed_numeric_df is None else 0]
-            observed_cov_ts = TimeSeries.load_from_dataframe(data=observed_cov_df)
+                observed_cov_df = [
+                    observed_numeric_df, observed_categorical_df
+                ][1 if observed_numeric_df is None else 0]
+            observed_cov_ts = TimeSeries.load_from_dataframe(
+                data=observed_cov_df)
 
         # static
         static = dict()
@@ -898,15 +908,13 @@ class TestPyodModelWrapper(unittest.TestCase):
             target=target_ts,
             known_cov=known_cov_ts,
             observed_cov=observed_cov_ts,
-            static_cov=static
-        )
+            static_cov=static)
 
     @staticmethod
     def udf_ml_dataloader_to_fit_ndarray(
-        ml_dataloader: MLDataLoader,
-        model_init_params: Dict[str, Any],
-        in_chunk_len: int
-    ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+            ml_dataloader: MLDataLoader,
+            model_init_params: Dict[str, Any],
+            in_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
         data = next(ml_dataloader)
 
         # Please note that anomaly samples will NEVER contain the following keys:
@@ -918,7 +926,8 @@ class TestPyodModelWrapper(unittest.TestCase):
         # concatenated ndarray will follow the below ordered list rule:
         # [rule 1] left -> right = observed_cov_features, ..., static_cov_features.
         # [rule 2] left -> right = numeric features, ..., categorical features.
-        product_keys = product(["numeric", "categorical"], ["observed_cov", "static_cov"])
+        product_keys = product(["numeric", "categorical"],
+                               ["observed_cov", "static_cov"])
         full_ordered_x_key_list = [f"{t[1]}_{t[0]}" for t in product_keys]
 
         # For example, given:
@@ -953,7 +962,8 @@ class TestPyodModelWrapper(unittest.TestCase):
         for k in actual_ordered_x_key_list:
             ndarray = data[k]
             # 3-dim -> 2-dim
-            reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+            reshaped_ndarray = ndarray.reshape(
+                ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
             reshaped_x_ndarray_list.append(reshaped_ndarray)
         # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
         # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -962,8 +972,8 @@ class TestPyodModelWrapper(unittest.TestCase):
 
     @staticmethod
     def udf_ml_dataloader_to_predict_ndarray(
-        ml_dataloader: MLDataLoader,
-        model_init_params: Dict[str, Any],
-        in_chunk_len: int
-    ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
-        return TestPyodModelWrapper.udf_ml_dataloader_to_fit_ndarray(ml_dataloader, model_init_params, in_chunk_len)
+            ml_dataloader: MLDataLoader,
+            model_init_params: Dict[str, Any],
+            in_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        return TestPyodModelWrapper.udf_ml_dataloader_to_fit_ndarray(
+            ml_dataloader, model_init_params, in_chunk_len)

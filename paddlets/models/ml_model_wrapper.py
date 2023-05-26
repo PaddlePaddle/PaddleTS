@@ -38,28 +38,28 @@ class MLModelBaseWrapper(MLBaseModel, metaclass=abc.ABCMeta):
         fit_params(Dict[str, Any], optional): All params for fitting third party model except x_train / y_train.
         predict_params(Dict[str, Any], optional): All params for forecasting third party model except x_test / y_test.
     """
-    def __init__(
-        self,
-        model_class: Type,
-        in_chunk_len: int,
-        out_chunk_len: int = 1,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        model_init_params: Dict[str, Any] = None,
-        fit_params: Dict[str, Any] = None,
-        predict_params: Dict[str, Any] = None
-    ):
+
+    def __init__(self,
+                 model_class: Type,
+                 in_chunk_len: int,
+                 out_chunk_len: int=1,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 model_init_params: Dict[str, Any]=None,
+                 fit_params: Dict[str, Any]=None,
+                 predict_params: Dict[str, Any]=None):
         super(MLModelBaseWrapper, self).__init__(
             in_chunk_len=in_chunk_len,
             skip_chunk_len=skip_chunk_len,
-            out_chunk_len=out_chunk_len
-        )
+            out_chunk_len=out_chunk_len)
         self._sampling_stride = sampling_stride
 
         self._model_class = model_class
-        self._model_init_params = model_init_params if model_init_params is not None else dict()
+        self._model_init_params = model_init_params if model_init_params is not None else dict(
+        )
         self._fit_params = fit_params if fit_params is not None else dict()
-        self._predict_params = predict_params if predict_params is not None else dict()
+        self._predict_params = predict_params if predict_params is not None else dict(
+        )
 
 
 class SklearnModelWrapper(MLModelBaseWrapper):
@@ -85,27 +85,28 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         udf_ml_dataloader_to_predict_ndarray(Callable, optional): User defined function for converting MLDataLoader
             object to a numpy.ndarray object that can be processed by `predict` method of the third party model.
     """
+
     def __init__(
-        self,
-        model_class: Type,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        model_init_params: Dict[str, Any] = None,
-        fit_params: Dict[str, Any] = None,
-        predict_params: Dict[str, Any] = None,
-        udf_ml_dataloader_to_fit_ndarray: Optional[Callable] = None,
-        udf_ml_dataloader_to_predict_ndarray: Optional[Callable] = None
-    ):
+            self,
+            model_class: Type,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            model_init_params: Dict[str, Any]=None,
+            fit_params: Dict[str, Any]=None,
+            predict_params: Dict[str, Any]=None,
+            udf_ml_dataloader_to_fit_ndarray: Optional[Callable]=None,
+            udf_ml_dataloader_to_predict_ndarray: Optional[Callable]=None):
         raise_if(in_chunk_len < 0, f"in_chunk_len ({in_chunk_len}) must >= 0.")
-        raise_if(skip_chunk_len < 0, f"skip_chunk_len ({skip_chunk_len}) must >= 0.")
-        raise_if(
-            out_chunk_len != 1,
-            f"""out_chunk_len ({out_chunk_len}) must == 1. 
+        raise_if(skip_chunk_len < 0,
+                 f"skip_chunk_len ({skip_chunk_len}) must >= 0.")
+        raise_if(out_chunk_len != 1,
+                 f"""out_chunk_len ({out_chunk_len}) must == 1. 
             Please refer to {BaseModel}.recursive_predict for multistep time series forecasting."""
-        )
-        raise_if(sampling_stride < 1, f"sampling_stride ({sampling_stride}) must >= 1.")
+                 )
+        raise_if(sampling_stride < 1,
+                 f"sampling_stride ({sampling_stride}) must >= 1.")
 
         super(SklearnModelWrapper, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -115,10 +116,11 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             sampling_stride=sampling_stride,
             model_init_params=model_init_params,
             fit_params=fit_params,
-            predict_params=predict_params
-        )
+            predict_params=predict_params)
         raise_if(self._model_class is None, "model_class must not be None.")
-        raise_if_not(isinstance(self._model_class, type), "isinstance(model_class, type) must be True.")
+        raise_if_not(
+            isinstance(self._model_class, type),
+            "isinstance(model_class, type) must be True.")
 
         self._model = self._init_model()
         self._data_adapter = self._init_data_adapter()
@@ -131,7 +133,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         if udf_ml_dataloader_to_predict_ndarray is not None:
             self._udf_ml_dataloader_to_predict_ndarray = udf_ml_dataloader_to_predict_ndarray
 
-    def fit(self, train_data: TSDataset, valid_data: Optional[TSDataset] = None) -> None:
+    def fit(self, train_data: TSDataset,
+            valid_data: Optional[TSDataset]=None) -> None:
         """
         Fit a machine learning model.
 
@@ -142,7 +145,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         self._validate_train_data(train_data)
 
         train_ml_dataset = self._tsdataset_to_ml_dataset(train_data)
-        train_ml_dataloader = self._ml_dataset_to_ml_dataloader(train_ml_dataset)
+        train_ml_dataloader = self._ml_dataset_to_ml_dataloader(
+            train_ml_dataset)
 
         train_x, train_y = None, None
         try:
@@ -151,20 +155,21 @@ class SklearnModelWrapper(MLModelBaseWrapper):
                 model_init_params=self._model_init_params,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
-                skip_chunk_len=self._skip_chunk_len
-            )
+                skip_chunk_len=self._skip_chunk_len)
         except Exception as e:
             raise_log(
                 ValueError(
                     f"""failed to convert train_data to sklearn model trainable numpy array. 
                     Please check udf_ml_dataloader_to_fit_ndarray function. Error: {str(e)}"""
-                )
-            )
+                ))
 
-        if hasattr(self._model, "fit") and callable(getattr(self._model, "fit")):
+        if hasattr(self._model,
+                   "fit") and callable(getattr(self._model, "fit")):
             self._model.fit(train_x, train_y, **self._fit_params)
             return
-        raise_log(ValueError(f"{self._model_class} must implement callable fit method."))
+        raise_log(
+            ValueError(
+                f"{self._model_class} must implement callable fit method."))
 
     @to_tsdataset(scenario="forecasting")
     def predict(self, tsdataset: TSDataset) -> TSDataset:
@@ -179,12 +184,15 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         """
         self._validate_predict_data(tsdataset)
 
-        w0 = len(tsdataset.get_target().time_index) - 1 + self._skip_chunk_len + self._out_chunk_len
+        w0 = len(tsdataset.get_target()
+                 .time_index) - 1 + self._skip_chunk_len + self._out_chunk_len
         w1 = w0
         time_window = (w0, w1)
 
-        test_ml_dataset = self._tsdataset_to_ml_dataset(tsdataset, time_window=time_window)
-        test_ml_dataloader = self._data_adapter.to_ml_dataloader(test_ml_dataset, batch_size=len(test_ml_dataset))
+        test_ml_dataset = self._tsdataset_to_ml_dataset(
+            tsdataset, time_window=time_window)
+        test_ml_dataloader = self._data_adapter.to_ml_dataloader(
+            test_ml_dataset, batch_size=len(test_ml_dataset))
 
         test_x, test_y = None, None
         try:
@@ -193,19 +201,21 @@ class SklearnModelWrapper(MLModelBaseWrapper):
                 model_init_params=self._model_init_params,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
-                skip_chunk_len=self._skip_chunk_len
-            )
+                skip_chunk_len=self._skip_chunk_len)
         except Exception as e:
             raise_log(
                 ValueError(
                     f"""failed to convert train_data to sklearn model predictable numpy array. 
                     Please check udf_ml_dataloader_to_predict_ndarray function. Error: {str(e)}"""
-                )
-            )
+                ))
 
-        if hasattr(self._model, "predict") and callable(getattr(self._model, "predict")):
+        if hasattr(self._model,
+                   "predict") and callable(getattr(self._model, "predict")):
             return self._model.predict(test_x, **self._predict_params)
-        raise_log(ValueError(f"original model {self._model_class} must have callable predict method."))
+        raise_log(
+            ValueError(
+                f"original model {self._model_class} must have callable predict method."
+            ))
 
     def _init_model(self) -> sklearn.base.BaseEstimator:
         """
@@ -232,8 +242,7 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             raise_log(
                 ValueError(
                     f"init model failed: {self._model_class}, model_init_params: {self._model_init_params}, error: {e}."
-                )
-            )
+                ))
 
         # It is possible that the class has "predict" method, but the initialized model object does NOT have one.
         # Given this scenario, we need to check the initialized object rather than the class type.
@@ -246,7 +255,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         # True
         not_implemented_method_set = set()
         for method in {"fit", "predict"}:
-            if (hasattr(model, method) and callable(getattr(model, method))) is not True:
+            if (hasattr(model, method) and callable(getattr(model, method))
+                ) is not True:
                 not_implemented_method_set.add(method)
         raise_if(
             len(not_implemented_method_set) > 0,
@@ -264,10 +274,9 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         return DataAdapter()
 
     def _tsdataset_to_ml_dataset(
-        self,
-        tsdataset: TSDataset,
-        time_window: Optional[Tuple[int, int]] = None
-    ) -> SampleDataset:
+            self,
+            tsdataset: TSDataset,
+            time_window: Optional[Tuple[int, int]]=None) -> SampleDataset:
         """
         Internal method, convert TSDataset to MLDataset.
 
@@ -280,17 +289,18 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
             sampling_stride=self._sampling_stride,
-            time_window=time_window
-        )
+            time_window=time_window)
 
-    def _ml_dataset_to_ml_dataloader(self, ml_dataset: SampleDataset) -> MLDataLoader:
+    def _ml_dataset_to_ml_dataloader(
+            self, ml_dataset: SampleDataset) -> MLDataLoader:
         """
         Internal method, convert MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
         """
-        return self._data_adapter.to_ml_dataloader(ml_dataset, batch_size=len(ml_dataset))
+        return self._data_adapter.to_ml_dataloader(
+            ml_dataset, batch_size=len(ml_dataset))
 
     def _validate_train_data(self, train_data: TSDataset) -> None:
         """
@@ -300,7 +310,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             train_data(TSDataset): Training data to be validated.
         """
         raise_if(train_data is None, "training dataset must not be None.")
-        raise_if(train_data.get_target() is None, "target timeseries must not be None.")
+        raise_if(train_data.get_target() is None,
+                 "target timeseries must not be None.")
 
         check_tsdataset(train_data)
         target_ts = train_data.get_target()
@@ -324,8 +335,10 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         Args:
             tsdataset(TSDataset): Predict data to be validated.
         """
-        raise_if(tsdataset is None, "The dataset to be predicted must not be None.")
-        raise_if(tsdataset.get_target() is None, "target timeseries to be predicted must not be None.")
+        raise_if(tsdataset is None,
+                 "The dataset to be predicted must not be None.")
+        raise_if(tsdataset.get_target() is None,
+                 "target timeseries to be predicted must not be None.")
 
         check_tsdataset(tsdataset)
         target_ts = tsdataset.get_target()
@@ -344,12 +357,11 @@ class SklearnModelWrapper(MLModelBaseWrapper):
 
 
 def default_sklearn_ml_dataloader_to_fit_ndarray(
-    ml_dataloader: MLDataLoader,
-    model_init_params: Dict[str, Any],
-    in_chunk_len: int,
-    skip_chunk_len: int,
-    out_chunk_len: int
-) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        ml_dataloader: MLDataLoader,
+        model_init_params: Dict[str, Any],
+        in_chunk_len: int,
+        skip_chunk_len: int,
+        out_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
     Default function for converting MLDataLoader to a numpy array that can be used for fitting the sklearn model.
 
@@ -378,9 +390,11 @@ def default_sklearn_ml_dataloader_to_fit_ndarray(
     # [rule 1] left -> right = target features, ..., known features, ..., observed features, ..., static_cov_features.
     # [rule 2] left -> right = numeric features, ..., categorical features.
     full_ordered_x_key_list = ["past_target"]
-    full_ordered_x_key_list.extend(
-        [f"{t[1]}_{t[0]}" for t in product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])]
-    )
+    full_ordered_x_key_list.extend([
+        f"{t[1]}_{t[0]}"
+        for t in product(["numeric", "categorical"],
+                         ["known_cov", "observed_cov", "static_cov"])
+    ])
 
     # For example, given:
     # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
@@ -418,7 +432,8 @@ def default_sklearn_ml_dataloader_to_fit_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
+                                           ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -437,12 +452,11 @@ def default_sklearn_ml_dataloader_to_fit_ndarray(
 
 
 def default_sklearn_ml_dataloader_to_predict_ndarray(
-    ml_dataloader: MLDataLoader,
-    model_init_params: Dict[str, Any],
-    in_chunk_len: int,
-    skip_chunk_len: int,
-    out_chunk_len: int
-) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        ml_dataloader: MLDataLoader,
+        model_init_params: Dict[str, Any],
+        in_chunk_len: int,
+        skip_chunk_len: int,
+        out_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
     Default function for converting MLDataLoader to a numpy array that can be predicted by the sklearn model.
 
@@ -471,9 +485,11 @@ def default_sklearn_ml_dataloader_to_predict_ndarray(
     # [rule 1] left -> right = target features, ..., known features, ..., observed features, ..., static_cov_features.
     # [rule 2] left -> right = numeric features, ..., categorical features.
     full_ordered_x_key_list = ["past_target"]
-    full_ordered_x_key_list.extend(
-        [f"{t[1]}_{t[0]}" for t in product(["numeric", "categorical"], ["known_cov", "observed_cov", "static_cov"])]
-    )
+    full_ordered_x_key_list.extend([
+        f"{t[1]}_{t[0]}"
+        for t in product(["numeric", "categorical"],
+                         ["known_cov", "observed_cov", "static_cov"])
+    ])
 
     # For example, given:
     # sample_keys (un-ordered) = {"static_cov_categorical", "known_cov_numeric", "observed_cov_categorical"}
@@ -511,7 +527,8 @@ def default_sklearn_ml_dataloader_to_predict_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
+                                           ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -537,29 +554,31 @@ class PyodModelWrapper(MLModelBaseWrapper):
         udf_ml_dataloader_to_predict_ndarray(Callable, optional): User defined function for converting MLDataLoader
             object to a numpy.ndarray object that can be processed by `predict` method of the third party model.
     """
+
     def __init__(
-        self,
-        model_class: Type,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        model_init_params: Dict[str, Any] = None,
-        predict_params: Dict[str, Any] = None,
-        udf_ml_dataloader_to_fit_ndarray: Optional[Callable] = None,
-        udf_ml_dataloader_to_predict_ndarray: Optional[Callable] = None
-    ):
+            self,
+            model_class: Type,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            model_init_params: Dict[str, Any]=None,
+            predict_params: Dict[str, Any]=None,
+            udf_ml_dataloader_to_fit_ndarray: Optional[Callable]=None,
+            udf_ml_dataloader_to_predict_ndarray: Optional[Callable]=None):
         raise_if(in_chunk_len <= 0, f"in_chunk_len ({in_chunk_len}) must > 0.")
-        raise_if(sampling_stride < 1, f"sampling_stride ({sampling_stride}) must >= 1.")
+        raise_if(sampling_stride < 1,
+                 f"sampling_stride ({sampling_stride}) must >= 1.")
 
         super(PyodModelWrapper, self).__init__(
             in_chunk_len=in_chunk_len,
             model_class=model_class,
             sampling_stride=sampling_stride,
             model_init_params=model_init_params,
-            predict_params=predict_params
-        )
+            predict_params=predict_params)
 
         raise_if(self._model_class is None, "model_class must not be None.")
-        raise_if_not(isinstance(self._model_class, type), "isinstance(model_class, type) must be True.")
+        raise_if_not(
+            isinstance(self._model_class, type),
+            "isinstance(model_class, type) must be True.")
         raise_if(
             self._predict_params.get("return_confidence", False) is True,
             "predict method does NOT support return_confidence=True, please set to False or do not pass it."
@@ -598,21 +617,20 @@ class PyodModelWrapper(MLModelBaseWrapper):
             x, y = self._udf_ml_dataloader_to_predict_ndarray(
                 ml_dataloader=ml_dataloader,
                 model_init_params=self._model_init_params,
-                in_chunk_len=self._in_chunk_len
-            )
+                in_chunk_len=self._in_chunk_len)
         except Exception as e:
             raise_log(
                 ValueError(
                     f"""failed to convert train_data to numpy array as pyod model.decision_function's input. 
                     Please check _udf_ml_dataloader_to_predict_ndarray function. Error: {str(e)}"""
-                )
-            )
+                ))
 
         # As pyod.BaseDetector uses @abc.abstractmethod to decorate decision_function method, thus we can ensure that
         # any classes inherited from BaseDetector must implement it, thus below call is safe, no need to try-except.
         return self._model.decision_function(x)
 
-    def fit(self, train_data: TSDataset, valid_data: Optional[TSDataset] = None) -> None:
+    def fit(self, train_data: TSDataset,
+            valid_data: Optional[TSDataset]=None) -> None:
         """
         Fit a machine learning model.
 
@@ -622,26 +640,27 @@ class PyodModelWrapper(MLModelBaseWrapper):
         """
         if valid_data is not None:
             # currently validation dataset is not supported.
-            logger.logger.warning("valid_data is CURRENTLY NOT used in fit method, pass this parameter has no effect.")
+            logger.logger.warning(
+                "valid_data is CURRENTLY NOT used in fit method, pass this parameter has no effect."
+            )
         self._validate_train_data(train_data)
 
         train_ml_dataset = self._tsdataset_to_ml_dataset(train_data)
-        train_ml_dataloader = self._ml_dataset_to_ml_dataloader(train_ml_dataset)
+        train_ml_dataloader = self._ml_dataset_to_ml_dataloader(
+            train_ml_dataset)
 
         train_x, train_y = None, None
         try:
             train_x, train_y = self._udf_ml_dataloader_to_fit_ndarray(
                 ml_dataloader=train_ml_dataloader,
                 model_init_params=self._model_init_params,
-                in_chunk_len=self._in_chunk_len
-            )
+                in_chunk_len=self._in_chunk_len)
         except Exception as e:
             raise_log(
                 ValueError(
                     f"""failed to convert train_data to pyod model trainable numpy array. 
                     Please check udf_ml_dataloader_to_fit_ndarray function. Error: {str(e)}"""
-                )
-            )
+                ))
 
         # As pyod.BaseDetector uses @abc.abstractmethod to decorate fit method, thus we can ensure that
         # any classes inherited from BaseDetector must implement it, thus below call is safe, no need to try-except.
@@ -661,22 +680,21 @@ class PyodModelWrapper(MLModelBaseWrapper):
         self._validate_predict_data(tsdataset)
 
         test_ml_dataset = self._tsdataset_to_ml_dataset(tsdataset)
-        test_ml_dataloader = self._data_adapter.to_ml_dataloader(test_ml_dataset, batch_size=len(test_ml_dataset))
+        test_ml_dataloader = self._data_adapter.to_ml_dataloader(
+            test_ml_dataset, batch_size=len(test_ml_dataset))
 
         test_x, test_y = None, None
         try:
             test_x, test_y = self._udf_ml_dataloader_to_predict_ndarray(
                 ml_dataloader=test_ml_dataloader,
                 model_init_params=self._model_init_params,
-                in_chunk_len=self._in_chunk_len
-            )
+                in_chunk_len=self._in_chunk_len)
         except Exception as e:
             raise_log(
                 ValueError(
                     f"""failed to convert train_data to pyod model predictable numpy array. 
                     Please check udf_ml_dataloader_to_predict_ndarray function. Error: {str(e)}"""
-                )
-            )
+                ))
 
         # As pyod.BaseDetector uses @abc.abstractmethod to decorate predict method, thus we can ensure that
         # any classes inherited from BaseDetector must implement it, thus below call is safe, no need to try-except.
@@ -706,8 +724,7 @@ class PyodModelWrapper(MLModelBaseWrapper):
             raise_log(
                 ValueError(
                     f"init model failed: {self._model_class}, model_init_params: {self._model_init_params}, error: {e}."
-                )
-            )
+                ))
 
     def _init_data_adapter(self) -> DataAdapter:
         """
@@ -728,17 +745,18 @@ class PyodModelWrapper(MLModelBaseWrapper):
         return self._data_adapter.to_sample_dataset(
             rawdataset=tsdataset,
             in_chunk_len=self._in_chunk_len,
-            sampling_stride=self._sampling_stride
-        )
+            sampling_stride=self._sampling_stride)
 
-    def _ml_dataset_to_ml_dataloader(self, ml_dataset: SampleDataset) -> MLDataLoader:
+    def _ml_dataset_to_ml_dataloader(
+            self, ml_dataset: SampleDataset) -> MLDataLoader:
         """
         Internal method, convert MLDataset to MLDataLoader.
 
         Returns:
             MLDataLoader: Converted MLDataLoader object.
         """
-        return self._data_adapter.to_ml_dataloader(sample_dataset=ml_dataset, batch_size=len(ml_dataset))
+        return self._data_adapter.to_ml_dataloader(
+            sample_dataset=ml_dataset, batch_size=len(ml_dataset))
 
     def _validate_train_data(self, train_data: TSDataset) -> None:
         """
@@ -748,7 +766,8 @@ class PyodModelWrapper(MLModelBaseWrapper):
             train_data(TSDataset): Training data to be validated.
         """
         raise_if(train_data is None, "training dataset must not be None.")
-        raise_if(train_data.get_observed_cov() is None, "observed_cov timeseries must not be None.")
+        raise_if(train_data.get_observed_cov() is None,
+                 "observed_cov timeseries must not be None.")
 
         check_tsdataset(train_data)
 
@@ -760,16 +779,16 @@ class PyodModelWrapper(MLModelBaseWrapper):
             tsdataset(TSDataset): Predictable data to be validated.
         """
         raise_if(tsdataset is None, "predict dataset must not be None.")
-        raise_if(tsdataset.get_observed_cov() is None, "observed_cov timeseries must not be None.")
+        raise_if(tsdataset.get_observed_cov() is None,
+                 "observed_cov timeseries must not be None.")
 
         check_tsdataset(tsdataset)
 
 
 def default_pyod_ml_dataloader_to_fit_ndarray(
-    ml_dataloader: MLDataLoader,
-    model_init_params: Dict[str, Any],
-    in_chunk_len: int
-) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        ml_dataloader: MLDataLoader,
+        model_init_params: Dict[str, Any],
+        in_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
     Default function for converting MLDataLoader to a numpy array that can be used for fitting the pyod model.
 
@@ -801,7 +820,8 @@ def default_pyod_ml_dataloader_to_fit_ndarray(
     # concatenated ndarray will follow the below ordered list rule:
     # [rule 1] left -> right = observed_cov_features, ..., static_cov_features.
     # [rule 2] left -> right = numeric features, ..., categorical features.
-    product_keys = product(["numeric", "categorical"], ["observed_cov", "static_cov"])
+    product_keys = product(["numeric", "categorical"],
+                           ["observed_cov", "static_cov"])
     full_ordered_x_key_list = [f"{t[1]}_{t[0]}" for t in product_keys]
 
     # For example, given:
@@ -836,7 +856,8 @@ def default_pyod_ml_dataloader_to_fit_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] * ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
+                                           ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -845,10 +866,9 @@ def default_pyod_ml_dataloader_to_fit_ndarray(
 
 
 def default_pyod_ml_dataloader_to_predict_ndarray(
-    ml_dataloader: MLDataLoader,
-    model_init_params: Dict[str, Any],
-    in_chunk_len: int
-) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        ml_dataloader: MLDataLoader,
+        model_init_params: Dict[str, Any],
+        in_chunk_len: int) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
     Default function for converting MLDataLoader to a numpy array that can be predicted by the pyod model.
 
@@ -866,22 +886,20 @@ def default_pyod_ml_dataloader_to_predict_ndarray(
     return default_pyod_ml_dataloader_to_fit_ndarray(
         ml_dataloader=ml_dataloader,
         model_init_params=model_init_params,
-        in_chunk_len=in_chunk_len
-    )
+        in_chunk_len=in_chunk_len)
 
 
-def make_ml_model(
-    model_class: Type,
-    in_chunk_len: int,
-    out_chunk_len: int = 1,
-    skip_chunk_len: int = 0,
-    sampling_stride: int = 1,
-    model_init_params: Dict[str, Any] = None,
-    fit_params: Dict[str, Any] = None,
-    predict_params: Dict[str, Any] = None,
-    udf_ml_dataloader_to_fit_ndarray: Optional[Callable] = None,
-    udf_ml_dataloader_to_predict_ndarray: Optional[Callable] = None
-) -> MLModelBaseWrapper:
+def make_ml_model(model_class: Type,
+                  in_chunk_len: int,
+                  out_chunk_len: int=1,
+                  skip_chunk_len: int=0,
+                  sampling_stride: int=1,
+                  model_init_params: Dict[str, Any]=None,
+                  fit_params: Dict[str, Any]=None,
+                  predict_params: Dict[str, Any]=None,
+                  udf_ml_dataloader_to_fit_ndarray: Optional[Callable]=None,
+                  udf_ml_dataloader_to_predict_ndarray: Optional[Callable]=None
+                  ) -> MLModelBaseWrapper:
     """
     Make Wrapped time series model based on the third-party model.
 
@@ -912,7 +930,9 @@ def make_ml_model(
         PyodModelWrapper.
     """
     raise_if(model_class is None, "model_class must not be None.")
-    raise_if_not(isinstance(model_class, type), "isinstance(model_class, type) must be True.")
+    raise_if_not(
+        isinstance(model_class, type),
+        "isinstance(model_class, type) must be True.")
 
     module = model_class.__module__.split(".")[0]
 

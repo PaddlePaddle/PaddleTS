@@ -1,14 +1,15 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from ray.tune.suggest import BasicVariantGenerator
-from ray.tune.suggest.optuna import OptunaSearch
-from ray.tune.suggest.flaml import CFO
-from ray.tune.suggest.flaml import BlendSearch
-from ray.tune.suggest.bohb import TuneBOHB
+from ray.tune.search import BasicVariantGenerator
+from ray.tune.search.optuna import OptunaSearch
+from ray.tune.search.flaml import CFO
+from ray.tune.search.flaml import BlendSearch
+from ray.tune.search.bohb import TuneBOHB
 from optuna.samplers import CmaEsSampler
 from optuna.samplers import TPESampler
-from ray.tune.suggest import ConcurrencyLimiter
+from ray.tune.search import ConcurrencyLimiter
+
 
 class Searcher:
     """

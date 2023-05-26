@@ -20,22 +20,22 @@
 PaddleTS - PaddlePaddle-based Time Series Modeling in Python
 
 PaddleTS is an easy-to-use Python library for deep time series modeling,
-    focusing on the state-of-the-art deep neural network models based on 
-    PaddlePaddle deep learning framework. It aims to provide great flexibility 
+    focusing on the state-of-the-art deep neural network models based on
+    PaddlePaddle deep learning framework. It aims to provide great flexibility
     and excellent user experiences for practitioners and professionals. It’s featured with:
 
-* A unified data structure named TSDataset for representing time series data with one 
-    or multiple target variables and optional different kinds of covariates 
+* A unified data structure named TSDataset for representing time series data with one
+    or multiple target variables and optional different kinds of covariates
     (e.g. known covariates, observed covariates, static covariates, etc.)
-* A base model class named PaddleBaseModelImpl , which inherits from the PaddleBaseModel 
-    and further encapsulates some routine procedures (e.g. data loading, callbacks setup, 
-    loss computation, training loop control, etc.) and allows developers to focus on 
+* A base model class named PaddleBaseModelImpl , which inherits from the PaddleBaseModel
+    and further encapsulates some routine procedures (e.g. data loading, callbacks setup,
+    loss computation, training loop control, etc.) and allows developers to focus on
     the implementation of network architectures when developing new models
 * A set of state-of-the-art deep learning models containing
-    NBEATS, NHiTS, LSTNet, TCN, Transformer, DeepAR, Informer, etc. for forecasting, 
+    NBEATS, NHiTS, LSTNet, TCN, Transformer, DeepAR, Informer, etc. for forecasting,
     TS2Vec, CoST, etc. for representation,
     AutoEncoder, VAE, AnomalyTransformer, etc. for anomaly detection
-* A set of transformation operators for data preprocessing (e.g. missing values/outliers handling, 
+* A set of transformation operators for data preprocessing (e.g. missing values/outliers handling,
     one-hot encoding, normalization, and automatic date/time-related covariates generation, etc.)
 * A set of analysis operators for quick data exploration (e.g. basic statistics and summary)
 * Automatic time series modeling module (AutoTS) which supports mainstream Hyper Parameter Optimization algorithms and shows significant improvement on multiple models and datasets
@@ -45,9 +45,9 @@ PaddleTS is an easy-to-use Python library for deep time series modeling,
 Recently updated:
 
 * PaddleTS now supports time series classification
-* PaddleTS releases 6 new time series models. 
+* PaddleTS releases 6 new time series models.
   USAD(UnSupervised Anomaly Detection) and MTAD-GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network) for anomaly detection,
-  CNN and Inception Time for time series classification, 
+  CNN and Inception Time for time series classification,
   SCINet(Sample Convolution and Interaction Network) and TFT(Temporal Fusion Transformer) for forecasting
 * [Paddle Inference](https://www.paddlepaddle.org.cn/paddle/paddleinference) is now available for PaddleTS time series forecasting and anomaly detection
 * PaddleTS now supports both model-agnostic and model-specific explanation

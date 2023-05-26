@@ -29,17 +29,19 @@ class _MockPaddleNetwork(paddle.nn.Layer):
         _network(paddle.nn.Layer): The network to use with SWA.
         _avg_fn(Callable[..., paddle.Tensor]): The averaging function used to update parameters.
     """
+
     def __init__(
-        self,
-        network: paddle.nn.Layer,
-        avg_fn: Optional[Callable[..., paddle.Tensor]] = None,
-    ):
+            self,
+            network: paddle.nn.Layer,
+            avg_fn: Optional[Callable[..., paddle.Tensor]]=None, ):
         super(_MockPaddleNetwork, self).__init__()
         self._network = deepcopy(network)
         self.register_buffer("_num_averaged", paddle.to_tensor(0))
 
         def default_avg_fn(averaged_model_params, model_params, num_averaged):
-            return averaged_model_params + (model_params - averaged_model_params) / (num_averaged + 1)
+            return averaged_model_params + (
+                model_params - averaged_model_params) / (num_averaged + 1)
+
         self._avg_fn = default_avg_fn if avg_fn is None else avg_fn
 
     def forward(self, *args, **kwargs) -> paddle.Tensor:
@@ -57,13 +59,12 @@ class _MockNotPaddleModel(object):
 
     This class implements save / load / _init_network / _init_optimizer, but not inherited from ReprBaseModel.
     """
-    def __init__(
-        self,
-        in_chunk_len: int = 1,
-        out_chunk_len: int = 1,
-        skip_chunk_len: int = 0,
-        hidden_config: List[int] = None
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int=1,
+                 out_chunk_len: int=1,
+                 skip_chunk_len: int=0,
+                 hidden_config: List[int]=None):
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._skip_chunk_len = skip_chunk_len
@@ -73,7 +74,9 @@ class _MockNotPaddleModel(object):
         self._optimizer = None
         self._callback_container = None
 
-    def fit(self, train_tsdataset: TSDataset, valid_tsdataset: Optional[TSDataset] = None):
+    def fit(self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None):
         self._network = self._init_network()
         self._optimizer = self._init_optimizer()
 
@@ -111,7 +114,8 @@ class _MockNotPaddleModel(object):
         with open(abs_path, "wb") as f:
             pickle.dump(self, f)
         model_meta = {
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "ancestor_classname_set":
+            [clazz.__name__ for clazz in self.__class__.mro()],
             "modulename": self.__module__
         }
 
@@ -122,12 +126,14 @@ class _MockNotPaddleModel(object):
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
-        with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+        with open(
+                os.path.join(abs_root_path,
+                             internal_filename_map["model_meta"]), "w") as f:
             json.dump(model_meta, f, ensure_ascii=False)
         paddle.save(
             obj=network_ref_copy.state_dict(),
-            path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
-        )
+            path=os.path.join(abs_root_path,
+                              internal_filename_map["network_statedict"]))
         self._network = network_ref_copy
         self._optimizer = optimizer_ref_copy
         self._callback_container = callback_container_ref_copy
@@ -140,6 +146,7 @@ class TestReprBaseModel(unittest.TestCase):
 
     Currently, no need to test optimizer related logic.
     """
+
     def setUp(self):
         """
         unittest setup
@@ -158,14 +165,14 @@ class TestReprBaseModel(unittest.TestCase):
         ###################################
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         # no validation dataset
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
@@ -176,7 +183,8 @@ class TestReprBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict":
+            "%s_%s" % (self.default_modelname, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -185,13 +193,18 @@ class TestReprBaseModel(unittest.TestCase):
         self.assertTrue(model._optimizer is not None)
 
         files = set(os.listdir(path))
-        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+        self.assertEqual(
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
-        self.assertTrue(TS2Vec.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(ReprBaseModel.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            TS2Vec.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            ReprBaseModel.__name__ in model_meta["ancestor_classname_set"])
         self.assertEqual(TS2Vec.__module__, model_meta["modulename"])
         shutil.rmtree(path)
 
@@ -217,14 +230,14 @@ class TestReprBaseModel(unittest.TestCase):
         # build and fit the only model instance.
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
         self.assertTrue(model._optimizer is not None)
@@ -250,15 +263,10 @@ class TestReprBaseModel(unittest.TestCase):
         model.save(os.path.join(path, model_2_name))
 
         files = set(os.listdir(path))
-        self.assertEqual(
-            files,
-            {
-                model_1_name,
-                *model_1_internal_filename_map.values(),
-                model_2_name,
-                *model_2_internal_filename_map.values()
-            }
-        )
+        self.assertEqual(files, {
+            model_1_name, *model_1_internal_filename_map.values(),
+            model_2_name, *model_2_internal_filename_map.values()
+        })
 
         shutil.rmtree(path)
 
@@ -267,14 +275,14 @@ class TestReprBaseModel(unittest.TestCase):
         ############################################
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
 
@@ -289,14 +297,14 @@ class TestReprBaseModel(unittest.TestCase):
         ###############################################################
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
 
@@ -313,14 +321,14 @@ class TestReprBaseModel(unittest.TestCase):
         ##########################################################################
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
 
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
@@ -366,14 +374,14 @@ class TestReprBaseModel(unittest.TestCase):
         #################################################################################
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         model.fit(train_tsdataset=tsdataset)
         self.assertTrue(model._network is not None)
 
@@ -389,7 +397,9 @@ class TestReprBaseModel(unittest.TestCase):
         }
         # create some dup files conflict with internal files.
         dup_model_meta_content = "this is a file dup with model_meta."
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "w") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "w") as f:
             f.write(dup_model_meta_content)
 
         with self.assertRaises(ValueError):
@@ -407,14 +417,14 @@ class TestReprBaseModel(unittest.TestCase):
         # build + fit + save
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
         model.fit(train_tsdataset=tsdataset)
         model_network = model._network
 
@@ -435,10 +445,8 @@ class TestReprBaseModel(unittest.TestCase):
         self.assertIsInstance(loaded_model._network, model_network.__class__)
 
         # network state_dict expected
-        self.assertEqual(
-            model_network.state_dict().keys(),
-            loaded_model._network.state_dict().keys()
-        )
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model._network.state_dict().keys())
         common_network_state_dict_keys = model_network.state_dict().keys()
         for k in common_network_state_dict_keys:
             # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
@@ -446,11 +454,14 @@ class TestReprBaseModel(unittest.TestCase):
             loaded = loaded_model._network.state_dict()[k]
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy()
+                               .astype(np.float64)))
 
         # encoded result expected.
         loaded_model_encoded_ndarray = loaded_model.encode(tsdataset)
-        self.assertTrue(np.alltrue(encoded_ndarray == loaded_model_encoded_ndarray))
+        self.assertTrue(
+            np.alltrue(encoded_ndarray == loaded_model_encoded_ndarray))
         shutil.rmtree(path)
 
         # ############################################################
@@ -459,14 +470,14 @@ class TestReprBaseModel(unittest.TestCase):
         # build + fit + save
         segment_size = 300
         sampling_stride = 300
-        model = self._build_ts2vec_model(segment_size=segment_size, sampling_stride=sampling_stride)
+        model = self._build_ts2vec_model(
+            segment_size=segment_size, sampling_stride=sampling_stride)
 
         tsdataset = self._build_mock_ts_dataset(
             target_periods=segment_size,
             known_periods=segment_size,
             observed_periods=segment_size,
-            random_data=True
-        )
+            random_data=True)
 
         model.fit(tsdataset)
         model_network = model._network
@@ -495,12 +506,16 @@ class TestReprBaseModel(unittest.TestCase):
         self.assertEqual(model.__class__, loaded_model_2.__class__)
 
         # network type expected
-        self.assertEqual(model_network.__class__, loaded_model_1._network.__class__)
-        self.assertEqual(model_network.__class__, loaded_model_2._network.__class__)
+        self.assertEqual(model_network.__class__,
+                         loaded_model_1._network.__class__)
+        self.assertEqual(model_network.__class__,
+                         loaded_model_2._network.__class__)
 
         # network state_dict expected
-        self.assertEqual(model_network.state_dict().keys(), loaded_model_1._network.state_dict().keys())
-        self.assertEqual(model_network.state_dict().keys(), loaded_model_2._network.state_dict().keys())
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model_1._network.state_dict().keys())
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model_2._network.state_dict().keys())
         common_network_state_dict_keys = model_network.state_dict().keys()
         for k in common_network_state_dict_keys:
             # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
@@ -509,14 +524,20 @@ class TestReprBaseModel(unittest.TestCase):
             loaded_2 = loaded_model_2._network.state_dict()[k]
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy().astype(np.float64)))
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) ==
+                               loaded_1.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) ==
+                               loaded_2.numpy().astype(np.float64)))
 
         # prediction results expected.
         loaded_model_1_encoded_ndarray = loaded_model_1.encode(tsdataset)
         loaded_model_2_encoded_ndarray = loaded_model_2.encode(tsdataset)
-        self.assertTrue(np.alltrue(encoded_ndarray == loaded_model_1_encoded_ndarray))
-        self.assertTrue(np.alltrue(encoded_ndarray == loaded_model_2_encoded_ndarray))
+        self.assertTrue(
+            np.alltrue(encoded_ndarray == loaded_model_1_encoded_ndarray))
+        self.assertTrue(
+            np.alltrue(encoded_ndarray == loaded_model_2_encoded_ndarray))
         shutil.rmtree(path)
 
         ###############################################################
@@ -557,29 +578,28 @@ class TestReprBaseModel(unittest.TestCase):
         with self.assertRaises(ValueError):
             _ = ReprBaseModel.load(path)
         shutil.rmtree(path)
-    
-    def _build_ts2vec_model(
-        self,
-        segment_size=300,
-        sampling_stride=300,
-        max_epochs=1
-    ) -> TS2Vec:
+
+    def _build_ts2vec_model(self,
+                            segment_size=300,
+                            sampling_stride=300,
+                            max_epochs=1) -> TS2Vec:
         """
         Internal-only method, used for building a model. The model is inherited from ReprBaseModel.
 
         Returns:
             TS2Vec: the built model instance.
         """
-        return TS2Vec(segment_size=segment_size, sampling_stride=sampling_stride, max_epochs=max_epochs)
+        return TS2Vec(
+            segment_size=segment_size,
+            sampling_stride=sampling_stride,
+            max_epochs=max_epochs)
 
     @staticmethod
-    def _build_mock_ts_dataset(
-        target_periods: int = 200,
-        known_periods: int = 300,
-        observed_periods: int = 200,
-        random_data: bool = False,
-        seed: bool = False
-    ):
+    def _build_mock_ts_dataset(target_periods: int=200,
+                               known_periods: int=300,
+                               observed_periods: int=200,
+                               random_data: bool=False,
+                               seed: bool=False):
         """
         build TSDataset instance.
 
@@ -592,40 +612,46 @@ class TestReprBaseModel(unittest.TestCase):
 
         target_cols = ["target0"]
         if random_data:
-            target_data = np.random.randn(target_periods, len(target_cols)).astype(np.float64)
+            target_data = np.random.randn(target_periods,
+                                          len(target_cols)).astype(np.float64)
         else:
-            target_data = [[i for _ in range(len(target_cols))] for i in range(target_periods)]
+            target_data = [[i for _ in range(len(target_cols))]
+                           for i in range(target_periods)]
         target_df = pd.DataFrame(
             target_data,
-            index=pd.date_range("2022-01-01", periods=target_periods, freq="1D"),
-            columns=target_cols
-        )
+            index=pd.date_range(
+                "2022-01-01", periods=target_periods, freq="1D"),
+            columns=target_cols)
 
         known_cols = ["known0", "known1"]
         if random_data:
-            known_data = np.random.randn(known_periods, len(known_cols)).astype(np.float64)
+            known_data = np.random.randn(known_periods,
+                                         len(known_cols)).astype(np.float64)
         else:
-            known_data = [(i * 10 for _ in range(len(known_cols))) for i in range(known_periods)]
+            known_data = [(i * 10 for _ in range(len(known_cols)))
+                          for i in range(known_periods)]
         known_cov_df = pd.DataFrame(
             known_data,
-            index=pd.date_range("2022-01-01", periods=known_periods, freq="1D"),
-            columns=known_cols
-        )
+            index=pd.date_range(
+                "2022-01-01", periods=known_periods, freq="1D"),
+            columns=known_cols)
 
         observed_cols = ["past0", "past1"]
         if random_data:
-            known_data = np.random.randn(observed_periods, len(observed_cols)).astype(np.float64)
+            known_data = np.random.randn(observed_periods,
+                                         len(observed_cols)).astype(np.float64)
         else:
-            known_data = [(i * -1 for _ in range(len(observed_cols))) for i in range(observed_periods)]
+            known_data = [(i * -1 for _ in range(len(observed_cols)))
+                          for i in range(observed_periods)]
         observed_cov_df = pd.DataFrame(
             known_data,
-            index=pd.date_range("2022-01-01", periods=observed_periods, freq="1D"),
-            columns=observed_cols
-        )
+            index=pd.date_range(
+                "2022-01-01", periods=observed_periods, freq="1D"),
+            columns=observed_cols)
 
         return TSDataset(
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov={"static0": 1.0, "static1": 2.0}
-        )
+            static_cov={"static0": 1.0,
+                        "static1": 2.0})

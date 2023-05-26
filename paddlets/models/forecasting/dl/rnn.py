@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-
 from typing import List, Dict, Any, Callable, Optional, Tuple
 import collections
 
@@ -19,6 +18,7 @@ from paddlets.logger import raise_if_not, Logger
 
 logger = Logger(__name__)
 
+
 class _RNNBlock(nn.Layer):
     """
     RNN model implemented by Paddle
@@ -35,19 +35,19 @@ class _RNNBlock(nn.Layer):
         dropout(float): The fraction of neurons that are dropped in all-but-last RNN layers.
         pooling: Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        fit_params: dict,
-        rnn_type: str,
-        hidden_dim: int,
-        embedding_dim: int,
-        num_layers_recurrent: int = 1,
-        out_fcn_config: Optional[List] = None,
-        dropout: float = 0.0,
-        pooling: bool = False,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            fit_params: dict,
+            rnn_type: str,
+            hidden_dim: int,
+            embedding_dim: int,
+            num_layers_recurrent: int=1,
+            out_fcn_config: Optional[List]=None,
+            dropout: float=0.0,
+            pooling: bool=False, ):
         super().__init__()
         self.in_chunk_len = in_chunk_len
         self.out_chunk_len = out_chunk_len
@@ -66,16 +66,20 @@ class _RNNBlock(nn.Layer):
         if fit_params["known_cat_size"]:
             self._known_embedding = []
             for col, col_size in fit_params["known_cat_size"].items():
-                self._known_embedding.append(nn.Embedding(col_size, embedding_dim))
+                self._known_embedding.append(
+                    nn.Embedding(col_size, embedding_dim))
         if fit_params["observed_cat_size"]:
             self._observed_embedding = []
             for col, col_size in fit_params["observed_cat_size"].items():
-                self._observed_embedding.append(nn.Embedding(col_size, embedding_dim))
+                self._observed_embedding.append(
+                    nn.Embedding(col_size, embedding_dim))
         if fit_params["static_cat_size"]:
             self._static_embedding = []
             for col, col_size in fit_params["static_cat_size"].items():
-                self._static_embedding.append(nn.Embedding(col_size, embedding_dim))       
-        if fit_params["known_cat_size"] or fit_params["observed_cat_size"] or fit_params["static_cat_size"]:
+                self._static_embedding.append(
+                    nn.Embedding(col_size, embedding_dim))
+        if fit_params["known_cat_size"] or fit_params[
+                "observed_cat_size"] or fit_params["static_cat_size"]:
             if self._pooling:
                 self._cat_size = self._embedding_dim
             else:
@@ -86,7 +90,10 @@ class _RNNBlock(nn.Layer):
         else:
             self._cat_size = 0
         self._input_size = self._num_size + self._cat_size
-        self._rnn = getattr(nn, self._rnn_type)(self._input_size, hidden_dim, num_layers_recurrent, dropout=dropout)
+        self._rnn = getattr(nn, self._rnn_type)(self._input_size,
+                                                hidden_dim,
+                                                num_layers_recurrent,
+                                                dropout=dropout)
         # Defining projection layer
         # The RNN module is followed by a fully connected network(FCN),
         # which maps the last hidden layer to the output of desired length
@@ -97,10 +104,7 @@ class _RNNBlock(nn.Layer):
             last = feature
         self.fc = nn.Sequential(*feats)
 
-    def forward(
-            self,
-            data: Dict[str, paddle.Tensor]
-            ) -> paddle.Tensor:
+    def forward(self, data: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """
         Forward network.
 
@@ -119,27 +123,33 @@ class _RNNBlock(nn.Layer):
             observed_num = data["observed_cov_numeric"]
             feature.append(observed_num)
         if self._static_num_dim > 0:
-            static_num = data["static_cov_numeric"].tile([1, self.in_chunk_len, 1])
+            static_num = data["static_cov_numeric"].tile(
+                [1, self.in_chunk_len, 1])
             feature.append(static_num)
         feature = paddle.concat(feature, axis=-1)
-        
+
         # process categorical feature
         cat_feature = []
         if self._known_cat_dim > 0:
-            past_known_cat = data["known_cov_categorical"][:, :self.in_chunk_len]
+            past_known_cat = data["known_cov_categorical"][:, :
+                                                           self.in_chunk_len]
             for i in range(self._known_cat_dim):
-                cat_feature.append(self._known_embedding[i](past_known_cat[..., i]))
+                cat_feature.append(self._known_embedding[i](past_known_cat[...,
+                                                                           i]))
         if self._observed_cat_dim > 0:
             observed_cat = data["observed_cov_categorical"]
             for i in range(self._observed_cat_dim):
-                cat_feature.append(self._observed_embedding[i](observed_cat[..., i]))
+                cat_feature.append(self._observed_embedding[i](observed_cat[
+                    ..., i]))
         if self._static_cat_dim > 0:
-            static_cat = data["static_cov_categorical"].tile([1, self.in_chunk_len, 1])
+            static_cat = data["static_cov_categorical"].tile(
+                [1, self.in_chunk_len, 1])
             for i in range(self._static_cat_dim):
-                cat_feature.append(self._static_embedding[i](static_cat[..., i]))
+                cat_feature.append(self._static_embedding[i](static_cat[...,
+                                                                        i]))
         if cat_feature:
             if self._pooling:
-                cat_feature = paddle.stack(cat_feature, axis = -1).mean(axis= -1)
+                cat_feature = paddle.stack(cat_feature, axis=-1).mean(axis=-1)
             else:
                 cat_feature = paddle.concat(cat_feature, axis=-1)
             x = paddle.concat([feature, cat_feature], axis=-1)
@@ -152,10 +162,12 @@ class _RNNBlock(nn.Layer):
 
         #apply the FC network only on the last output point (at the final time step)
         if self._rnn_type == "LSTM":
-            hidden = hidden[0] # for LSTM, hidden[0] shape: [num_layers, batch_size, hidden_dim]
+            hidden = hidden[
+                0]  # for LSTM, hidden[0] shape: [num_layers, batch_size, hidden_dim]
         predictions = hidden[-1, :, :]
         predictions = self.fc(predictions)
-        predictions = predictions.reshape([predictions.shape[0], self.out_chunk_len, self._target_dim])
+        predictions = predictions.reshape(
+            [predictions.shape[0], self.out_chunk_len, self._target_dim])
         return predictions
 
 
@@ -187,30 +199,28 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         seed(int, Optional): global random seed.
     """
 
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        rnn_type_or_module: str = "SimpleRNN",
-        fcn_out_config: List[int] = None,
-        hidden_size: int = 128,
-        embedding_size: int = 128,
-        num_layers_recurrent: int = 1,
-        dropout: float = 0.0,
-        pooling: bool = True,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
-        eval_metrics: List[str] = [],
-        callbacks: List[Callback] = [],
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: int = 0
-    ):
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 rnn_type_or_module: str="SimpleRNN",
+                 fcn_out_config: List[int]=None,
+                 hidden_size: int=128,
+                 embedding_size: int=128,
+                 num_layers_recurrent: int=1,
+                 dropout: float=0.0,
+                 pooling: bool=True,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=128,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 seed: int=0):
         self._rnn_type_or_module = rnn_type_or_module
         self._fcn_out_config = fcn_out_config
         self._hidden_size = hidden_size
@@ -221,9 +231,9 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
 
         #check parameters validation
         raise_if_not(
-                self._rnn_type_or_module in {"SimpleRNN", "LSTM", "GRU"},
-                "A valid RNN type should be specified, currently SimpleRNN, LSTM, and GRU are supported."
-                )
+            self._rnn_type_or_module in {"SimpleRNN", "LSTM", "GRU"},
+            "A valid RNN type should be specified, currently SimpleRNN, LSTM, and GRU are supported."
+        )
 
         super(RNNBlockRegressor, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -239,13 +249,9 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """
         Rewrite _check_tsdataset to fit the specific model.
         For RNN, all data variables are expected to be float32.
@@ -264,13 +270,12 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
                     f"rnn's covariates' dtype only support float and integer," \
                     f"but received {column}: {dtype}."
                 )
-        super(RNNBlockRegressor, self)._check_tsdataset(tsdataset)        
+        super(RNNBlockRegressor, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """
         Infer parameters by TSdataset automatically.
 
@@ -293,7 +298,7 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
                     df[col] = val
             df_list.append(df)
         df_all = pd.concat(df_list)
-        
+
         train_ts0 = train_tsdataset[0]
         train_ts0.sort_columns()
         target_dim = train_ts0.get_target().data.shape[1]
@@ -326,11 +331,12 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         static_num_cols = []
         if static_dic:
             for col, val in static_dic.items():
-                if np.issubdtype(type(val), np.integer) or isinstance(val, int):
+                if np.issubdtype(type(val), np.integer) or isinstance(val,
+                                                                      int):
                     static_cat_size[col] = len(df_all[col].unique())
                 else:
                     static_num_cols.append(col)
-                
+
         fit_params = {
             "target_dim": target_dim,
             "known_num_dim": len(known_num_cols),
@@ -342,9 +348,9 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
             "known_cat_size": known_cat_size,
             "observed_cat_size": observed_cat_size,
             "static_cat_size": static_cat_size,
-            }
+        }
         return fit_params
-                
+
     def _init_network(self) -> paddle.nn.Layer:
         """
         Init network.
@@ -352,15 +358,8 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         Returns:
             paddle.nn.Layer
         """
-        return _RNNBlock(
-            self._in_chunk_len,
-            self._out_chunk_len,
-            self._fit_params,
-            self._rnn_type_or_module,
-            self._hidden_size,
-            self._embedding_size,
-            self._num_layers_recurrent,
-            self._fcn_out_config,
-            self._dropout,
-            self._pooling
-        )
+        return _RNNBlock(self._in_chunk_len, self._out_chunk_len,
+                         self._fit_params, self._rnn_type_or_module,
+                         self._hidden_size, self._embedding_size,
+                         self._num_layers_recurrent, self._fcn_out_config,
+                         self._dropout, self._pooling)

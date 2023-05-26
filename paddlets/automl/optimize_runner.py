@@ -9,7 +9,7 @@ import inspect
 from abc import ABCMeta
 import ray
 from ray import tune
-from ray.tune.sample import Categorical
+from ray.tune.search.sample import Categorical
 from ray.tune import choice
 
 from paddlets.logger import Logger
@@ -27,6 +27,7 @@ logger = Logger(__name__)
 MODEL_SETUP_SEED = 2022
 NEED_METRIC_PROB_ESTIMATORS = ["DeepARModel", "TFTModel"]
 
+
 class OptimizeRunner:
     """
     Optimize runner is for experiment execution and hyperparameter tuning.
@@ -37,7 +38,7 @@ class OptimizeRunner:
 
     """
 
-    def __init__(self, search_alg: str = "Random"):
+    def __init__(self, search_alg: str="Random"):
         self.search_alg = search_alg
         self.paddlets_configer = SearchSpaceConfiger()
         self.report_metric = "loss"
@@ -45,12 +46,12 @@ class OptimizeRunner:
 
     def setup_estimator(self,
                         config: dict,
-                        paddlets_estimator: Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]],
+                        paddlets_estimator: Union[Type[BaseModel], List[Union[
+                            Type[BaseTransform], Type[BaseModel]]]],
                         in_chunk_len: int,
                         out_chunk_len: int,
                         skip_chunk_len: int,
-                        sampling_stride: int
-                        ):
+                        sampling_stride: int):
         """
 
         Build a paddlets estimator with config.
@@ -72,9 +73,11 @@ class OptimizeRunner:
         self._preprocess_config(running_config, self._track_choice_mapping)
         # model param
         if isinstance(paddlets_estimator, list):
-            model_init_signature = inspect.signature(paddlets_estimator[-1].__init__)
+            model_init_signature = inspect.signature(paddlets_estimator[-1]
+                                                     .__init__)
         else:
-            model_init_signature = inspect.signature(paddlets_estimator.__init__)
+            model_init_signature = inspect.signature(
+                paddlets_estimator.__init__)
         model_init_param = list(model_init_signature.parameters)
         model_base_param = {
             "in_chunk_len": in_chunk_len,
@@ -93,10 +96,12 @@ class OptimizeRunner:
             # Requires python version >= 3.6 to ensure the order-preserving of dict
             # Refer to https://mail.python.org/pipermail/python-dev/2017-December/151283.html
             for idx, estimator_name in enumerate(running_config):
-                pipeline_param.append((paddlets_estimator[idx], running_config[estimator_name]))
+                pipeline_param.append(
+                    (paddlets_estimator[idx], running_config[estimator_name]))
 
             pipeline_param[-1][1].update(model_base_param)
-            logger.info(f"setup_estimator: init pipeline. Params: {pipeline_param}")
+            logger.info(
+                f"setup_estimator: init pipeline. Params: {pipeline_param}")
             estimator = Pipeline(pipeline_param)
         else:
             model_param = running_config
@@ -106,26 +111,27 @@ class OptimizeRunner:
 
         return estimator
 
-    def optimize(self,
-                 paddlets_estimator: Union[Type[BaseModel], List[Union[Type[BaseTransform], Type[BaseModel]]]],
-                 in_chunk_len: int,
-                 out_chunk_len: int,
-                 train_tsdataset: Union[TSDataset, List[TSDataset]],
-                 valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
-                 sampling_stride: int = 1,
-                 skip_chunk_len: int = 0,
-                 search_space: Optional[dict] = None,
-                 metric: ABCMeta = MAE,
-                 mode: str = "min",
-                 resampling_strategy: str = "holdout",
-                 split_ratio: float = 0.1,
-                 k_fold: int = 3,  # cv的fold切分数, 默认5折切分
-                 n_trials: int = 5,
-                 cpu_resource: float = 1.0,
-                 gpu_resource: float = 0,
-                 max_concurrent_trials: int = 1,
-                 local_dir: Optional[str] = None,
-                 ):
+    def optimize(
+            self,
+            paddlets_estimator: Union[Type[BaseModel], List[Union[Type[
+                BaseTransform], Type[BaseModel]]]],
+            in_chunk_len: int,
+            out_chunk_len: int,
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Union[TSDataset, List[TSDataset]]=None,
+            sampling_stride: int=1,
+            skip_chunk_len: int=0,
+            search_space: Optional[dict]=None,
+            metric: ABCMeta=MAE,
+            mode: str="min",
+            resampling_strategy: str="holdout",
+            split_ratio: float=0.1,
+            k_fold: int=3,  # cv的fold切分数, 默认5折切分
+            n_trials: int=5,
+            cpu_resource: float=1.0,
+            gpu_resource: float=0,
+            max_concurrent_trials: int=1,
+            local_dir: Optional[str]=None, ):
         """
         Execute optimization.
 
@@ -165,12 +171,13 @@ class OptimizeRunner:
             logger.info(f"trial config: {config}")
 
             # setup estimator
-            estimator = self.setup_estimator(config=config,
-                                             paddlets_estimator=paddlets_estimator,
-                                             in_chunk_len=in_chunk_len,
-                                             out_chunk_len=out_chunk_len,
-                                             skip_chunk_len=skip_chunk_len,
-                                             sampling_stride=sampling_stride)
+            estimator = self.setup_estimator(
+                config=config,
+                paddlets_estimator=paddlets_estimator,
+                in_chunk_len=in_chunk_len,
+                out_chunk_len=out_chunk_len,
+                skip_chunk_len=skip_chunk_len,
+                sampling_stride=sampling_stride)
             score = None
             metric_instance = None
             if estimator.__class__.__name__ in NEED_METRIC_PROB_ESTIMATORS:
@@ -178,22 +185,25 @@ class OptimizeRunner:
             else:
                 metric_instance = metric()
             if valid_tsdataset:
-                logger.info("Got user-defined valid_tsdataset.If trian and valid dataset are not continious.\n"
-                            "The first input_chunk_len target value of valid_tsdataset will be used to build the feature, "
-                            "but not be used to calculate the optimization target.")
-                score = fit_and_score(train_data=train_tsdataset,
-                                      valid_data=valid_tsdataset,
-                                      estimator=estimator,
-                                      metric=metric_instance)["score"]
+                logger.info(
+                    "Got user-defined valid_tsdataset.If trian and valid dataset are not continious.\n"
+                    "The first input_chunk_len target value of valid_tsdataset will be used to build the feature, "
+                    "but not be used to calculate the optimization target.")
+                score = fit_and_score(
+                    train_data=train_tsdataset,
+                    valid_data=valid_tsdataset,
+                    estimator=estimator,
+                    metric=metric_instance)["score"]
             else:
                 if resampling_strategy == "holdout":
                     splitter = HoldoutSplitter(test_size=split_ratio)
                 if resampling_strategy == "cv":
                     splitter = ExpandingWindowSplitter(n_splits=k_fold)
-                score = cross_validate(data=train_tsdataset,
-                                       splitter=splitter,
-                                       estimator=estimator,
-                                       metric=metric_instance)
+                score = cross_validate(
+                    data=train_tsdataset,
+                    splitter=splitter,
+                    estimator=estimator,
+                    metric=metric_instance)
 
             tune.report(**{self.report_metric: score})
 
@@ -203,17 +213,22 @@ class OptimizeRunner:
         if isinstance(train_tsdataset, list):
             # check valid tsdataset exist
             if valid_tsdataset is None:
-                raise NotImplementedError("When the train_tsdataset is a list, valid_tsdataset is required!")
+                raise NotImplementedError(
+                    "When the train_tsdataset is a list, valid_tsdataset is required!"
+                )
 
         # 若sp不存在，则获取默认search space
         # if sp is None, get default search space using paddlets_configer
         if search_space is None:
-            search_space = self.paddlets_configer.get_default_search_space(paddlets_estimator)
+            search_space = self.paddlets_configer.get_default_search_space(
+                paddlets_estimator)
 
-        searcher = Searcher.get_searcher(self.search_alg, max_concurrent=max_concurrent_trials)
+        searcher = Searcher.get_searcher(
+            self.search_alg, max_concurrent=max_concurrent_trials)
 
         running_search_space = copy.deepcopy(search_space)
-        self._track_choice_mapping = self._preprocess_search_space(running_search_space)
+        self._track_choice_mapping = self._preprocess_search_space(
+            running_search_space)
 
         # 将ray临时文件夹修改为用户自定义文件夹
         # 临时文件夹的设置会导致ray启动错误 https://github.com/ray-project/ray/issues/30650
@@ -221,19 +236,20 @@ class OptimizeRunner:
         # The setting of _temp_dir will cause ray startup error, issue: https://github.com/ray-project/ray/issues/30650
         # os.environ['RAY_TMPDIR'] = local_dir + "/ray_log/"
 
-        return tune.run(run_trial, num_samples=n_trials, config=running_search_space,
-                        metric=self.report_metric,
-                        mode=mode,
-                        search_alg=searcher,
-                        fail_fast=True,
-                        resources_per_trial={
-                            "cpu": cpu_resource,
-                            "gpu": gpu_resource
-                        },
-                        local_dir=local_dir+"/ray_results",
-                        )
+        return tune.run(
+            run_trial,
+            num_samples=n_trials,
+            config=running_search_space,
+            metric=self.report_metric,
+            mode=mode,
+            search_alg=searcher,
+            fail_fast=True,
+            resources_per_trial={"cpu": cpu_resource,
+                                 "gpu": gpu_resource},
+            local_dir=local_dir + "/ray_results", )
 
-    def _backtrack_traverse_search_space(self, sp, track, track_choice_mapping):
+    def _backtrack_traverse_search_space(self, sp, track,
+                                         track_choice_mapping):
         """
         _backtrack_traverse_search_space
         """
@@ -242,7 +258,10 @@ class OptimizeRunner:
             for e in choice_list:
                 if isinstance(e, list):
                     # build mapping
-                    str_choice = ["Choice_%d: %s" % (idx, str(e)) for idx, e in enumerate(choice_list)]
+                    str_choice = [
+                        "Choice_%d: %s" % (idx, str(e))
+                        for idx, e in enumerate(choice_list)
+                    ]
                     str_choice_mapping = {}
                     for idx, value in enumerate(str_choice):
                         str_choice_mapping[value] = choice_list[idx]
@@ -253,7 +272,8 @@ class OptimizeRunner:
             if not isinstance(v, dict) and not isinstance(v, Categorical):
                 continue
             track.append(k)
-            traverse_res = self._backtrack_traverse_search_space(sp[k], track, track_choice_mapping)
+            traverse_res = self._backtrack_traverse_search_space(
+                sp[k], track, track_choice_mapping)
             if isinstance(traverse_res, list):
                 # Traverse to leaf nodes
                 sp[k] = choice(traverse_res)

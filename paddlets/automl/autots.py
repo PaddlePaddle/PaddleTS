@@ -18,14 +18,9 @@ from paddlets.utils import check_train_valid_continuity
 from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
 
-
 logger = Logger(__name__)
 
-METRICS = {
-    "mae": MAE,
-    "mse": MSE,
-    "logloss": LogLoss
-}
+METRICS = {"mae": MAE, "mse": MSE, "logloss": LogLoss}
 DEFAULT_SPLIT_RATIO = 0.1
 DEFAULT_K_FOLD = 3
 DEFAULT_DL_REFIT_TRAIN_PROPORTION = 0.9
@@ -88,32 +83,30 @@ class AutoTS(BaseModel):
         >>> best_param = autots_model.best_param
     """
 
-    def __init__(
-            self,
-            estimator: Union[str, Type[BaseModel], List[Union[str, Type[BaseTransform], Type[BaseModel]]]],
-            in_chunk_len: int,
-            out_chunk_len: int,
-            skip_chunk_len: int = 0,
-            sampling_stride: int = 1,
-            search_space: Union[str, dict] = 'auto',
-            search_alg: str = 'auto',
-            resampling_strategy: str = 'auto',
-            split_ratio: Union[str, float] = 'auto',
-            k_fold: Union[str, int] = 'auto',
-            metric: str = 'auto',
-            mode: str = 'auto',
-            refit: bool = True,
-            ensemble: bool = False,
-            local_dir: Optional[str] = None,
-            n_jobs: int = -1,
-            verbose: int = 4
-    ):
+    def __init__(self,
+                 estimator: Union[str, Type[BaseModel], List[Union[str, Type[
+                     BaseTransform], Type[BaseModel]]]],
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 search_space: Union[str, dict]='auto',
+                 search_alg: str='auto',
+                 resampling_strategy: str='auto',
+                 split_ratio: Union[str, float]='auto',
+                 k_fold: Union[str, int]='auto',
+                 metric: str='auto',
+                 mode: str='auto',
+                 refit: bool=True,
+                 ensemble: bool=False,
+                 local_dir: Optional[str]=None,
+                 n_jobs: int=-1,
+                 verbose: int=4):
         np.random.seed(NP_RANDOM_SEED)
         super(AutoTS, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
-            skip_chunk_len=skip_chunk_len
-        )
+            skip_chunk_len=skip_chunk_len)
         self._sampling_stride = sampling_stride
         self._paddlets_configer = SearchSpaceConfiger()
         self._best_param = None
@@ -127,9 +120,12 @@ class AutoTS(BaseModel):
         if search_space == 'auto':
             if self._is_pipeline:
                 # search space cannot be 'auto' when estimator is a pipeline
-                raise NotImplementedError("\nSearch space cannot be 'auto' when estimator is a pipeline.\n"
-                                          + self._paddlets_configer.recommend(estimator, verbose=False))
-            self._search_space = self._paddlets_configer.get_default_search_space(self._estimator)
+                raise NotImplementedError(
+                    "\nSearch space cannot be 'auto' when estimator is a pipeline.\n"
+                    + self._paddlets_configer.recommend(
+                        estimator, verbose=False))
+            self._search_space = self._paddlets_configer.get_default_search_space(
+                self._estimator)
         else:
             self._search_space = search_space
 
@@ -145,7 +141,8 @@ class AutoTS(BaseModel):
         if resampling_strategy == 'auto':
             self._resampling_strategy = 'holdout'
             self._split_ratio = DEFAULT_SPLIT_RATIO if split_ratio == 'auto' else split_ratio
-            raise_if(self._split_ratio > 1 or self._split_ratio < 0, "split_ratio out of range (0, 1)")
+            raise_if(self._split_ratio > 1 or self._split_ratio < 0,
+                     "split_ratio out of range (0, 1)")
         elif resampling_strategy in ['cv', 'holdout']:
             self._resampling_strategy = resampling_strategy
             if self._resampling_strategy == 'cv':
@@ -183,12 +180,11 @@ class AutoTS(BaseModel):
     def fit(
             self,
             train_tsdataset: Union[TSDataset, List[TSDataset]],
-            valid_tsdataset: Union[TSDataset, List[TSDataset]] = None,
-            n_trials: int = 20,
-            cpu_resource: float = 1.0,
-            gpu_resource: float = 0,
-            max_concurrent_trials: int = 1,
-    ):
+            valid_tsdataset: Union[TSDataset, List[TSDataset]]=None,
+            n_trials: int=20,
+            cpu_resource: float=1.0,
+            gpu_resource: float=0,
+            max_concurrent_trials: int=1, ):
         """
         Fit the estimator with the given tsdataset.
         The way fit is done is that the search algorithm will suggest configurations from the hyperparameter search
@@ -209,61 +205,74 @@ class AutoTS(BaseModel):
             Optional(BaseModel, Pipeline): Refitted estimator.
         """
         if cpu_resource < 0 or gpu_resource < 0 or max_concurrent_trials <= 0:
-            raise NotImplementedError("invalid cpu_resource || gpu_resource || max_concurrent_trials")
+            raise NotImplementedError(
+                "invalid cpu_resource || gpu_resource || max_concurrent_trials")
         if isinstance(train_tsdataset, list):
             # check valid tsdataset exist
             if valid_tsdataset is None:
-                raise NotImplementedError("When the train_tsdataset is a list, valid_tsdataset is required!")
-        analysis = self._optimize_runner.optimize(self._estimator,
-                                                  self._in_chunk_len,
-                                                  self._out_chunk_len,
-                                                  train_tsdataset,
-                                                  valid_tsdataset=valid_tsdataset,
-                                                  sampling_stride=self._sampling_stride,
-                                                  skip_chunk_len=self._skip_chunk_len,
-                                                  metric=self._metric,
-                                                  search_space=self._search_space,
-                                                  mode=self._mode,
-                                                  resampling_strategy=self._resampling_strategy,
-                                                  split_ratio=self._split_ratio,
-                                                  k_fold=self._k_fold,  # cv的fold切分数, 默认DEFAULT_K_FOLD折切分
-                                                  n_trials=n_trials,
-                                                  cpu_resource=cpu_resource,
-                                                  gpu_resource=gpu_resource,
-                                                  local_dir=self._local_dir,
-                                                  max_concurrent_trials=max_concurrent_trials,
-                                                  )
+                raise NotImplementedError(
+                    "When the train_tsdataset is a list, valid_tsdataset is required!"
+                )
+        analysis = self._optimize_runner.optimize(
+            self._estimator,
+            self._in_chunk_len,
+            self._out_chunk_len,
+            train_tsdataset,
+            valid_tsdataset=valid_tsdataset,
+            sampling_stride=self._sampling_stride,
+            skip_chunk_len=self._skip_chunk_len,
+            metric=self._metric,
+            search_space=self._search_space,
+            mode=self._mode,
+            resampling_strategy=self._resampling_strategy,
+            split_ratio=self._split_ratio,
+            k_fold=self._k_fold,  # cv的fold切分数, 默认DEFAULT_K_FOLD折切分
+            n_trials=n_trials,
+            cpu_resource=cpu_resource,
+            gpu_resource=gpu_resource,
+            local_dir=self._local_dir,
+            max_concurrent_trials=max_concurrent_trials, )
         self._best_param = analysis.best_config
         if self._refit:
             logger.info("AutoTS: start refit")
-            self._best_estimator = self._optimize_runner.setup_estimator(config=self._best_param,
-                                                   paddlets_estimator=self._estimator,
-                                                   in_chunk_len=self._in_chunk_len,
-                                                   out_chunk_len=self._out_chunk_len,
-                                                   skip_chunk_len=self._skip_chunk_len,
-                                                   sampling_stride=self._sampling_stride)
+            self._best_estimator = self._optimize_runner.setup_estimator(
+                config=self._best_param,
+                paddlets_estimator=self._estimator,
+                in_chunk_len=self._in_chunk_len,
+                out_chunk_len=self._out_chunk_len,
+                skip_chunk_len=self._skip_chunk_len,
+                sampling_stride=self._sampling_stride)
 
-            estimator_model = self._estimator[-1] if self._is_pipeline else self._estimator
-            if hasattr(estimator_model, "__mro__") and PaddleBaseModel in estimator_model.__mro__:
+            estimator_model = self._estimator[
+                -1] if self._is_pipeline else self._estimator
+            if hasattr(
+                    estimator_model,
+                    "__mro__") and PaddleBaseModel in estimator_model.__mro__:
                 if valid_tsdataset is None:
                     if self._resampling_strategy == "holdout":
-                        train_tsdataset, valid_tsdataset = train_tsdataset.split(1 - self._split_ratio)
-                        self._best_estimator.fit(train_tsdataset, valid_tsdataset)
+                        train_tsdataset, valid_tsdataset = train_tsdataset.split(
+                            1 - self._split_ratio)
+                        self._best_estimator.fit(train_tsdataset,
+                                                 valid_tsdataset)
                     elif len(train_tsdataset.get_target()) * (1 - DEFAULT_DL_REFIT_TRAIN_PROPORTION) \
                             > self._in_chunk_len + self._skip_chunk_len:
-                        train_tsdataset, valid_tsdataset = train_tsdataset.split(DEFAULT_DL_REFIT_TRAIN_PROPORTION)
-                        self._best_estimator.fit(train_tsdataset, valid_tsdataset)
+                        train_tsdataset, valid_tsdataset = train_tsdataset.split(
+                            DEFAULT_DL_REFIT_TRAIN_PROPORTION)
+                        self._best_estimator.fit(train_tsdataset,
+                                                 valid_tsdataset)
                     else:
                         self._best_estimator.fit(train_tsdataset)
                 else:
                     self._best_estimator.fit(train_tsdataset, valid_tsdataset)
-            elif hasattr(estimator_model, "__mro__") and MLBaseModel in estimator_model.__mro__:
+            elif hasattr(estimator_model,
+                         "__mro__") and MLBaseModel in estimator_model.__mro__:
                 # if is ml model && data is continuity, concat
                 if valid_tsdataset is not None \
                         and not isinstance(train_tsdataset, list)\
                         and not isinstance(valid_tsdataset, list)\
                         and check_train_valid_continuity(train_tsdataset, valid_tsdataset):
-                    train_tsdataset = TSDataset.concat([train_tsdataset, valid_tsdataset])
+                    train_tsdataset = TSDataset.concat(
+                        [train_tsdataset, valid_tsdataset])
                 self._best_estimator.fit(train_tsdataset)
             self._refitted = True
             logger.info("AutoTS: refitted")
@@ -333,11 +342,13 @@ class AutoTS(BaseModel):
         _check_estimator_valid
         """
         if hasattr(estimator, "__mro__"):
-            if not (BaseTransform in estimator.__mro__ or BaseModel in estimator.__mro__):
+            if not (BaseTransform in estimator.__mro__ or
+                    BaseModel in estimator.__mro__):
                 raise NotImplementedError("Unknown estimator")
         elif isinstance(estimator, str):
             # str form is not supported yet
-            raise NotImplementedError("Estimator in str form is not supported yet")
+            raise NotImplementedError(
+                "Estimator in str form is not supported yet")
         elif isinstance(estimator, list):
             # todo: 必须要有模型
             if len(estimator) == 0:
@@ -345,7 +356,8 @@ class AutoTS(BaseModel):
             for e in estimator:
                 if isinstance(estimator, str):
                     # str form is not supported yet
-                    raise NotImplementedError("Estimator in str form is not supported yet")
+                    raise NotImplementedError(
+                        "Estimator in str form is not supported yet")
                 if not (BaseTransform in e.__mro__ or BaseModel in e.__mro__):
                     raise NotImplementedError("Unknown estimator")
             # The last estimator must be model

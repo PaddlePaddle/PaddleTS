@@ -18,33 +18,35 @@ class TestTS2Vec(TestCase):
         """
         np.random.seed(2022)
         target1 = pd.Series(
-                np.random.randn(800).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                name="a")
+            np.random.randn(800).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            name="a")
         target2 = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["a1", "a2"])
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["a1", "a2"])
         observed_cov = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["b", "c"])
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["b", "c"])
         known_cov = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["b1", "c1"])
-        
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["b1", "c1"])
+
         # index为DatetimeIndex类型
         self.tsdataset1 = TSDataset(
             TimeSeries.load_from_dataframe(target1),
             TimeSeries.load_from_dataframe(observed_cov),
-            TimeSeries.load_from_dataframe(known_cov),
-        )
+            TimeSeries.load_from_dataframe(known_cov), )
         self.tsdataset2 = TSDataset(
             TimeSeries.load_from_dataframe(target2),
             TimeSeries.load_from_dataframe(observed_cov),
-            TimeSeries.load_from_dataframe(known_cov),
-        )
+            TimeSeries.load_from_dataframe(known_cov), )
         super().setUp()
 
     def test_init(self):
@@ -56,11 +58,7 @@ class TestTS2Vec(TestCase):
             "max_epochs": 1,
             "verbose": 1,
         }
-        ts2vec = TS2Vec(
-            segment_size=300,
-            sampling_stride=300,
-            **param1
-        )
+        ts2vec = TS2Vec(segment_size=300, sampling_stride=300, **param1)
 
         # case2 (batch_size 不合法)
         param2 = {
@@ -69,11 +67,7 @@ class TestTS2Vec(TestCase):
             "verbose": 1,
         }
         with self.assertRaises(ValueError):
-            ts2vec = TS2Vec(
-                segment_size=300,
-                sampling_stride=300,
-                **param2
-            )
+            ts2vec = TS2Vec(segment_size=300, sampling_stride=300, **param2)
 
         # case3 (max_epochs 不合法)
         param3 = {
@@ -82,11 +76,7 @@ class TestTS2Vec(TestCase):
             "verbose": 1,
         }
         with self.assertRaises(ValueError):
-            ts2vec = TS2Vec(
-                segment_size=300,
-                sampling_stride=300,
-                **param3
-            )
+            ts2vec = TS2Vec(segment_size=300, sampling_stride=300, **param3)
 
         # case4 (verbose 不合法)
         param4 = {
@@ -95,20 +85,12 @@ class TestTS2Vec(TestCase):
             "verbose": 0,
         }
         with self.assertRaises(ValueError):
-            ts2vec = TS2Vec(
-                segment_size=300,
-                sampling_stride=300,
-                **param4
-            )
+            ts2vec = TS2Vec(segment_size=300, sampling_stride=300, **param4)
 
     def test_init_fit_dataloader(self):
         """unittest function
         """
-        ts2vec = TS2Vec(
-            segment_size=300,
-            sampling_stride=300,
-            max_epochs=1
-        )
+        ts2vec = TS2Vec(segment_size=300, sampling_stride=300, max_epochs=1)
 
         # case1 (训练集包含非int64 和 非float32)
         tsdataset = self.tsdataset1.copy()
@@ -135,30 +117,22 @@ class TestTS2Vec(TestCase):
         tsdataset["a"][0] = np.NaN
         with self.assertLogs("paddlets", level="WARNING") as captured:
             ts2vec.fit(tsdataset)
-            self.assertEqual(
-                captured.records[0].getMessage(), 
-                "Input `a` contains np.inf or np.NaN, which may lead to unexpected results from the model."
-            )
-            
+            self.assertEqual(captured.records[0].getMessage(
+            ), "Input `a` contains np.inf or np.NaN, which may lead to unexpected results from the model."
+                             )
+
     def test_init_callbacks(self):
         """unittest function
         """
         # case1 (用户未传入callbacks)
-        ts2vec = TS2Vec(
-            segment_size=300,
-            sampling_stride=300,
-            max_epochs=1
-        )
+        ts2vec = TS2Vec(segment_size=300, sampling_stride=300, max_epochs=1)
         _, callback_container = ts2vec._init_callbacks()
         self.assertEqual(len(callback_container._callbacks), 1)
 
         # case4 (用户传入callbacks)
         callback = Callback()
         ts2vec = TS2Vec(
-            segment_size=300,
-            sampling_stride=300,
-            callbacks=[callback]
-        )
+            segment_size=300, sampling_stride=300, callbacks=[callback])
         _, callback_container = ts2vec._init_callbacks()
         self.assertEqual(len(callback_container._callbacks), 2)
 
@@ -169,10 +143,9 @@ class TestTS2Vec(TestCase):
         ts2vec = TS2Vec(
             segment_size=300,
             sampling_stride=300,
-            max_epochs=1,
-        )
+            max_epochs=1, )
         ts2vec.fit(self.tsdataset1)
-        
+
         # case2 (用户传入多组时序数据用于多实例训练)
         ts2vec.fit([self.tsdataset1, self.tsdataset1])
 
@@ -183,8 +156,7 @@ class TestTS2Vec(TestCase):
         ts2vec = TS2Vec(
             segment_size=300,
             sampling_stride=300,
-            max_epochs=1,
-        )
+            max_epochs=1, )
         ts2vec.fit(self.tsdataset1)
         res = ts2vec.encode(self.tsdataset1)
         self.assertIsInstance(res, np.ndarray)
@@ -207,12 +179,14 @@ class TestTS2Vec(TestCase):
         self.assertEqual(res.shape, (1, 320))
 
         # case5 (index为DatetimeIndex的多变量/sliding+full_series)
-        res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="full_series")
+        res = ts2vec.encode(
+            self.tsdataset2, sliding_len=50, encoding_type="full_series")
         self.assertIsInstance(res, np.ndarray)
         self.assertEqual(res.shape, (1, 320))
 
         # case6 (index为DatetimeIndex的多变量/sliding+multiscale)
-        res = ts2vec.encode(self.tsdataset2, sliding_len=50, encoding_type="multiscale")
+        res = ts2vec.encode(
+            self.tsdataset2, sliding_len=50, encoding_type="multiscale")
         self.assertIsInstance(res, np.ndarray)
         self.assertEqual(res.shape, (1, 800, 1920))
 

@@ -21,19 +21,16 @@ class TriangularCausalMask():
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.  
     """
-    def __init__(
-        self, 
-        batch_size: int, 
-        length: int
-    ):
+
+    def __init__(self, batch_size: int, length: int):
         mask_shape = [batch_size, 1, length, length]
         with paddle.no_grad():
-            self._mask = paddle.triu(paddle.ones(shape=mask_shape, dtype="bool"), diagonal=1)
+            self._mask = paddle.triu(
+                paddle.ones(
+                    shape=mask_shape, dtype="bool"), diagonal=1)
 
     @property
-    def mask(
-        self
-    ):
+    def mask(self):
         return self._mask
 
 
@@ -53,14 +50,14 @@ class AnomalyAttention(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.    
     """
+
     def __init__(
-        self, 
-        win_size: int, 
-        mask_flag: bool = True, 
-        scale: bool = None, 
-        attention_dropout: float = 0.0, 
-        output_attention: bool = False,
-    ):
+            self,
+            win_size: int,
+            mask_flag: bool=True,
+            scale: bool=None,
+            attention_dropout: float=0.0,
+            output_attention: bool=False, ):
         super(AnomalyAttention, self).__init__()
         self.scale = scale
         self.mask_flag = mask_flag
@@ -72,13 +69,12 @@ class AnomalyAttention(paddle.nn.Layer):
                 self.distances[i][j] = abs(i - j)
 
     def forward(
-        self, 
-        queries: paddle.Tensor, 
-        keys: paddle.Tensor, 
-        values: paddle.Tensor, 
-        sigma: paddle.Tensor, 
-        attn_mask: Callable[..., paddle.Tensor],
-    ) -> paddle.Tensor:
+            self,
+            queries: paddle.Tensor,
+            keys: paddle.Tensor,
+            values: paddle.Tensor,
+            sigma: paddle.Tensor,
+            attn_mask: Callable[..., paddle.Tensor], ) -> paddle.Tensor:
         """
         The prior-association result from Gaussian kernel branch. the series-association result from self attention branch.
 
@@ -111,15 +107,20 @@ class AnomalyAttention(paddle.nn.Layer):
         sigma = paddle.transpose(sigma, perm=[0, 2, 1])  # B L H ->  B H L
         sigma = paddle.nn.functional.sigmoid(sigma * 5) + 1e-5
         sigma = paddle.pow(paddle.to_tensor(3.), sigma)  # - 1
-        sigma = paddle.tile(sigma.unsqueeze(-1), repeat_times=[1, 1, 1, window_size])  # B H L L
-        prior = paddle.tile(self.distances.unsqueeze(0).unsqueeze(0), [sigma.shape[0], sigma.shape[1], 1, 1])
-        prior = 1.0 / (math.sqrt(2 * math.pi) * sigma) * paddle.exp(-prior ** 2 / 2 / (sigma ** 2))
+        sigma = paddle.tile(
+            sigma.unsqueeze(-1),
+            repeat_times=[1, 1, 1, window_size])  # B H L L
+        prior = paddle.tile(
+            self.distances.unsqueeze(0).unsqueeze(0),
+            [sigma.shape[0], sigma.shape[1], 1, 1])
+        prior = 1.0 / (math.sqrt(2 * math.pi) * sigma) * paddle.exp(
+            -prior**2 / 2 / (sigma**2))
         if self.output_attention:
             return (V, series, prior, sigma)
         else:
             return (V, None)
 
-        
+
 class AttentionLayer(paddle.nn.Layer):
     """
     AttentionLayer for anomaly transformer.
@@ -134,14 +135,13 @@ class AttentionLayer(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList. 
     """
-    def __init__(
-        self, 
-        attention: Callable[..., paddle.Tensor], 
-        d_model: int, 
-        n_heads: int, 
-        d_keys: int = None,
-        d_values: int = None
-    ):
+
+    def __init__(self,
+                 attention: Callable[..., paddle.Tensor],
+                 d_model: int,
+                 n_heads: int,
+                 d_keys: int=None,
+                 d_values: int=None):
         super(AttentionLayer, self).__init__()
         d_keys = d_keys or (d_model // n_heads)
         d_values = d_values or (d_model // n_heads)
@@ -155,12 +155,11 @@ class AttentionLayer(paddle.nn.Layer):
         self.n_heads = n_heads
 
     def forward(
-        self, 
-        queries: paddle.Tensor,
-        keys: paddle.Tensor,
-        values: paddle.Tensor,
-        attn_mask: Callable[..., paddle.Tensor],
-    )-> paddle.Tensor:
+            self,
+            queries: paddle.Tensor,
+            keys: paddle.Tensor,
+            values: paddle.Tensor,
+            attn_mask: Callable[..., paddle.Tensor], ) -> paddle.Tensor:
         """ The series-association and the prior-association forward.
         
         Args: 
@@ -182,8 +181,9 @@ class AttentionLayer(paddle.nn.Layer):
         x = queries
         queries = paddle.reshape(self.query_projection(queries), [B, L, H, -1])
         keys = paddle.reshape(self.key_projection(keys), [B, S, H, -1])
-        values =  paddle.reshape(self.value_projection(values), [B, S, H, -1])
+        values = paddle.reshape(self.value_projection(values), [B, S, H, -1])
         sigma = paddle.reshape(self.sigma_projection(x), [B, L, H])
-        out, series, prior, sigma = self.inner_attention(queries, keys, values, sigma, attn_mask)
+        out, series, prior, sigma = self.inner_attention(queries, keys, values,
+                                                         sigma, attn_mask)
         out = paddle.reshape(out, [B, L, -1])
         return self.out_projection(out), series, prior, sigma

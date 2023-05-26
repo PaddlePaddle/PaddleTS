@@ -15,6 +15,7 @@ class PositionalEmbedding(paddle.nn.Layer):
     Attributes:
         _position_embedding(paddle.Tensor): positional encoding as buffer into the layer.
     """
+
     def __init__(self, d_model: int, max_len: int):
         super(PositionalEmbedding, self).__init__()
         # The calculation formula of the positional encodeing is as follows.
@@ -26,11 +27,12 @@ class PositionalEmbedding(paddle.nn.Layer):
         #   2i/2i + 1: odd/even index of d_model.
         position_embedding = paddle.zeros((max_len, d_model))
         position = paddle.unsqueeze(
-            paddle.arange(0, max_len, dtype="float32"), axis=1
-        )
+            paddle.arange(
+                0, max_len, dtype="float32"), axis=1)
         div_term = paddle.exp(
-            paddle.arange(0, d_model, 2, dtype="float32") * (-1. * np.log2(1e4) / d_model)
-        )
+            paddle.arange(
+                0, d_model, 2, dtype="float32") *
+            (-1. * np.log2(1e4) / d_model))
         position_embedding[:, 0::2] = paddle.sin(position * div_term)
         position_embedding[:, 1::2] = paddle.cos(position * div_term)
         self.register_buffer("_position_embedding", position_embedding)
@@ -57,6 +59,7 @@ class TimeFeatureEmbedding(paddle.nn.Layer):
     Attributes:
         _timefeat_embedding(paddle.nn.Layer): time feature embedding.
     """
+
     def __init__(self, d_stamp: int, d_model: int):
         super(TimeFeatureEmbedding, self).__init__()
         self._timefeat_embedding = paddle.nn.Linear(d_stamp, d_model)
@@ -84,19 +87,18 @@ class TokenEmbedding(paddle.nn.Layer):
     Attributes:
         _token_embedding(paddle.nn.Layer): token embedding.
     """
+
     def __init__(self, target_dim: int, d_model: int):
         super(TokenEmbedding, self).__init__()
         _weight_attr = paddle.ParamAttr(
-            initializer=paddle.nn.initializer.KaimingNormal()
-        )
+            initializer=paddle.nn.initializer.KaimingNormal())
         self._token_embedding = paddle.nn.Conv1D(
-            in_channels=target_dim, 
+            in_channels=target_dim,
             out_channels=d_model,
             kernel_size=3,
             padding=1,
             padding_mode="circular",
-            weight_attr=_weight_attr
-        )
+            weight_attr=_weight_attr)
 
     def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
@@ -126,17 +128,17 @@ class MixedEmbedding(paddle.nn.Layer):
         _token_embedding(paddle.nn.Layer): token embedding.
         _position_embedding(paddle.Tensor): position embedding.
     """
+
     def __init__(self,
-        target_dim: int,
-        d_model: int,
-        max_len: int,
-        dropout_rate: float = 0.1
-    ):
+                 target_dim: int,
+                 d_model: int,
+                 max_len: int,
+                 dropout_rate: float=0.1):
         super(MixedEmbedding, self).__init__()
         self._token_embedding = TokenEmbedding(target_dim, d_model)
         self._position_embedding = PositionalEmbedding(d_model, max_len)
         self._dropout = paddle.nn.Dropout(dropout_rate)
-    
+
     def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
         

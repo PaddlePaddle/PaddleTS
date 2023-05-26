@@ -8,6 +8,7 @@ import paddle.nn.functional as F
 import numpy as np
 import paddle
 
+
 class FeatOrTempAttention(paddle.nn.Layer):
     """Feature/Temporal Graph Attention Layer.
 
@@ -38,17 +39,16 @@ class FeatOrTempAttention(paddle.nn.Layer):
         _sigmoid(paddle.nn.Layer): The Sigmoid layer.
        
     """
-    def __init__(
-        self,
-        feature_dim: int,
-        in_chunk_len: int,
-        dropout: float,
-        alpha: int,
-        embed_dim: Optional[int] = None,
-        use_gatv2: bool = True,
-        use_bias: bool = True,
-        name: str = 'feature'
-    ):
+
+    def __init__(self,
+                 feature_dim: int,
+                 in_chunk_len: int,
+                 dropout: float,
+                 alpha: int,
+                 embed_dim: Optional[int]=None,
+                 use_gatv2: bool=True,
+                 use_bias: bool=True,
+                 name: str='feature'):
         super(FeatOrTempAttention, self).__init__()
         if name == "temporal":
             feature_dim, in_chunk_len = in_chunk_len, feature_dim
@@ -61,7 +61,7 @@ class FeatOrTempAttention(paddle.nn.Layer):
         self._use_bias = use_bias
         self._name = name
         self._nodes_num = feature_dim
-        
+
         # Because linear transformation is done after concatenation in GATv2
         if self._use_gatv2:
             self._embed_dim *= 2
@@ -70,7 +70,7 @@ class FeatOrTempAttention(paddle.nn.Layer):
         else:
             lin_input_dim = in_chunk_len
             att_input_dim = 2 * self._embed_dim
-        
+
         self._lin = paddle.nn.Linear(lin_input_dim, self._embed_dim)
         param = paddle.empty(shape=[att_input_dim, 1])
         self._att = paddle.create_parameter(shape=param.shape, dtype=str(param.numpy().dtype), \
@@ -79,14 +79,11 @@ class FeatOrTempAttention(paddle.nn.Layer):
             bias_param = paddle.empty(shape=[feature_dim, feature_dim])
             self._bias = paddle.create_parameter(shape=bias_param.shape, dtype=str(bias_param.numpy().dtype), \
                                          default_initializer=paddle.nn.initializer.Assign(bias_param))
-            
+
         self._leakyrelu = paddle.nn.LeakyReLU(alpha)
         self._sigmoid = paddle.nn.Sigmoid()
-        
-    def _prepare_attention_input(
-        self, 
-        v: paddle.Tensor
-    )-> paddle.Tensor:
+
+    def _prepare_attention_input(self, v: paddle.Tensor) -> paddle.Tensor:
         """Preparing the feature/temporal attention mechanism. Creating matrix with all possible combinations of concatenations of node.
         if feature graph attention, each node consists of all values of that node within the in_chunk_len:
             v1 || v1,
@@ -120,17 +117,17 @@ class FeatOrTempAttention(paddle.nn.Layer):
         # Right-side of the matrix
         blocks_alternating = paddle.tile(v, repeat_times=(1, K, 1))
         # [batch_size, feature_dim*feature_dim/in_chunk_len*in_chunk_len, 2*in_chunk_len/2*feature_dim]
-        combined = paddle.concat([blocks_repeating, blocks_alternating], axis=2)
-        
+        combined = paddle.concat(
+            [blocks_repeating, blocks_alternating], axis=2)
+
         if self._use_gatv2:
-            return paddle.reshape(combined, (combined.shape[0], K, K, 2 * self._in_chunk_len))
+            return paddle.reshape(combined, (combined.shape[0], K, K, 2 *
+                                             self._in_chunk_len))
         else:
-            return paddle.reshape(combined, (combined.shape[0], K, K, 2 * self._embed_dim))
-                 
-    def forward(
-        self, 
-        x
-    ) -> paddle.Tensor:
+            return paddle.reshape(combined, (combined.shape[0], K, K, 2 *
+                                             self._embed_dim))
+
+    def forward(self, x) -> paddle.Tensor:
         """Feature extraction based on graph attention network
 
         Args:
@@ -154,7 +151,7 @@ class FeatOrTempAttention(paddle.nn.Layer):
             #[batch_size, feature_dim/in_chunk_len, feature_dim/in_chunk_len, embed_dim]
             att_input = self._leakyrelu(self._lin(att_input))
             #[batch_size, feature_dim/in_chunk_len, feature_dim/in_chunk_len, 1]
-            e = paddle.matmul(att_input, self._att).squeeze(3)   
+            e = paddle.matmul(att_input, self._att).squeeze(3)
         # Original GAT attention
         else:
             #[batch_size, feature_dim/in_chunk_len, feature_dim/in_chunk_len, embed_dim]
@@ -165,15 +162,15 @@ class FeatOrTempAttention(paddle.nn.Layer):
             e = self._leakyrelu(paddle.matmul(att_input, self._att)).squeeze(3)
         if self._use_bias:
             e += self._bias
-        
+
         # Attention weights
         attention = paddle.nn.Softmax(axis=2)(e)
         dropout = paddle.nn.Dropout(p=self._dropout)
         attention = dropout(attention)
-        
+
         # Computing new node features using the attention
         h = self._sigmoid(paddle.matmul(attention, x))
-        
+
         if self._name == "feature":
             return paddle.transpose(h, perm=[0, 2, 1])
         else:

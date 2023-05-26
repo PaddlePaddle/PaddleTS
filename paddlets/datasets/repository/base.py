@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 """
 内置时序数据集相关操作
 """
@@ -14,7 +13,9 @@ import numpy as np
 from paddlets.logger import raise_if_not
 from paddlets import TSDataset, TimeSeries
 from paddlets.datasets.repository._data_config import ETTh1Dataset
+from paddlets.datasets.repository._data_config import ETTh2Dataset
 from paddlets.datasets.repository._data_config import ETTm1Dataset
+from paddlets.datasets.repository._data_config import ETTm2Dataset
 from paddlets.datasets.repository._data_config import ECLDataset
 from paddlets.datasets.repository._data_config import WTHDataset
 from paddlets.datasets.repository._data_config import UNIWTHDataset
@@ -51,13 +52,47 @@ from paddlets.datasets.repository._data_config import SpokenArabicDigitsTrainDat
 from paddlets.datasets.repository._data_config import SpokenArabicDigitsTestDataset
 from paddlets.datasets.repository._data_config import UWaveGestureLibraryTrainDataset
 from paddlets.datasets.repository._data_config import UWaveGestureLibraryTestDataset
+from paddlets.datasets.repository._data_config import TrafficDataset
+from paddlets.datasets.repository._data_config import ILIDataset
+from paddlets.datasets.repository._data_config import ExchangeDataset
+from paddlets.datasets.repository._data_config import WeatherDataset
+from paddlets.datasets.repository._data_config import M4YearTrainDataset
+from paddlets.datasets.repository._data_config import M4YearTestDataset
+from paddlets.datasets.repository._data_config import M4WeekTrainDataset
+from paddlets.datasets.repository._data_config import M4WeekTestDataset
+from paddlets.datasets.repository._data_config import M4QuarterTrainDataset
+from paddlets.datasets.repository._data_config import M4QuarterTestDataset
+from paddlets.datasets.repository._data_config import M4MonthTrainDataset
+from paddlets.datasets.repository._data_config import M4MonthTestDataset
+from paddlets.datasets.repository._data_config import M4DaiTrainDataset
+from paddlets.datasets.repository._data_config import M4DaiTestDataset
+from paddlets.datasets.repository._data_config import M4HourTrainDataset
+from paddlets.datasets.repository._data_config import M4HourTestDataset
 
 DATASETS = {
     UNIWTHDataset.name: UNIWTHDataset,
     ETTh1Dataset.name: ETTh1Dataset,
+    ETTh2Dataset.name: ETTh2Dataset,
     ETTm1Dataset.name: ETTm1Dataset,
+    ETTm2Dataset.name: ETTm2Dataset,
     ECLDataset.name: ECLDataset,
     WTHDataset.name: WTHDataset,
+    TrafficDataset.name: TrafficDataset,
+    ILIDataset.name: ILIDataset,
+    ExchangeDataset.name: ExchangeDataset,
+    WeatherDataset.name: WeatherDataset,
+    M4YearTrainDataset.name: M4YearTrainDataset,
+    M4YearTestDataset.name: M4YearTestDataset,
+    M4WeekTrainDataset.name: M4WeekTrainDataset,
+    M4WeekTestDataset.name: M4WeekTestDataset,
+    M4QuarterTrainDataset.name: M4QuarterTrainDataset,
+    M4QuarterTestDataset.name: M4QuarterTestDataset,
+    M4MonthTrainDataset.name: M4MonthTrainDataset,
+    M4MonthTestDataset.name: M4MonthTestDataset,
+    M4HourTrainDataset.name: M4HourTrainDataset,
+    M4HourTestDataset.name: M4HourTestDataset,
+    M4DaiTrainDataset.name: M4DaiTrainDataset,
+    M4DaiTestDataset.name: M4DaiTestDataset,
     NABTEMPDataset.name: NABTEMPDataset,
     PSMTRAINDataset.name: PSMTRAINDataset,
     PSMTESTDataset.name: PSMTESTDataset,
@@ -92,11 +127,8 @@ DATASETS = {
     UWaveGestureLibraryTrainDataset.name: UWaveGestureLibraryTrainDataset,
     UWaveGestureLibraryTestDataset.name: UWaveGestureLibraryTestDataset,
 
-
-
-
-
 }
+
 
 def dataset_list() -> List[str]:
     """
@@ -107,7 +139,9 @@ def dataset_list() -> List[str]:
     """
     return list(DATASETS.keys())
 
-def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List["TSDataset"], List[Any]]]:
+
+def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List[
+        "TSDataset"], List[Any]]]:
     """
     基于名称获取内置数据集
     
@@ -118,10 +152,7 @@ def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List["
         Union["TSDataset", List["TSDataset"], Tuple[List["TSDataset"], List[Any]]]: 基于内置数据集构建好的TSDataset对象或者对象列表
         
     """
-    raise_if_not(
-        name in DATASETS,
-        f"Invaild dataset name: {name}"
-    )
+    raise_if_not(name in DATASETS, f"Invaild dataset name: {name}")
     dataset = DATASETS[name]
     path = dataset.path
     df = pd.read_csv(path)

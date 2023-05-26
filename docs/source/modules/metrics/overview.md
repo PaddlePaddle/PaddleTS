@@ -21,7 +21,7 @@ result = mse(tsdataset_true, tsdataset_score)
 ```
 
 ### Customize Metric
-    
+
 To implement a customized metric, it simply takes the following steps:
 1. Create a class that inherits from paddlets.metric.base.Metric.
 2. Set two class members, `_NAME(metric name)` and `_MAXIMIZE(optimization direction)`.

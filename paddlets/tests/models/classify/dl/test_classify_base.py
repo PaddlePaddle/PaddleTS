@@ -24,6 +24,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
     Currently, no need to test optimizer related logic.
     """
+
     def setUp(self):
         """
         unittest setup
@@ -53,7 +54,8 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict":
+            "%s_%s" % (self.default_modelname, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -62,14 +64,19 @@ class TestClassifyBaseModel(unittest.TestCase):
         self.assertTrue(model._optimizer is not None)
 
         files = set(os.listdir(path))
-        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+        self.assertEqual(
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type CNNClassifier
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
         # CNNClassifier,ClassifyBaseModel,Trainable,ABC,object
-        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in
+                        model_meta["ancestor_classname_set"])
         # paddlets.models.anomaly.dl.CNNClassifier
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         shutil.rmtree(path)
@@ -83,11 +90,15 @@ class TestClassifyBaseModel(unittest.TestCase):
         ############################################
         model = self._build_cnn_model()
 
-        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
-        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(
+            random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(
+            random_data=True)
         # use validation dataset.
-        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
-                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        model.fit(train_tsdatasets=train_paddlets_ds,
+                  train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds,
+                  valid_labels=valid_labels)
         self.assertTrue(model._network is not None)
         self.assertTrue(model._optimizer is not None)
 
@@ -96,7 +107,8 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict":
+            "%s_%s" % (self.default_modelname, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -105,14 +117,19 @@ class TestClassifyBaseModel(unittest.TestCase):
         self.assertTrue(model._optimizer is not None)
 
         files = set(os.listdir(path))
-        self.assertEqual(files, {self.default_modelname, *internal_filename_map.values()})
+        self.assertEqual(
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type CNNClassifier
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "r") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
         # CNNClassifier,ClassifyBaseModel,Trainable,ABC,object
-        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in
+                        model_meta["ancestor_classname_set"])
         # paddlets.models.dl.anomaly.CNNClassifier
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         shutil.rmtree(path)
@@ -165,15 +182,10 @@ class TestClassifyBaseModel(unittest.TestCase):
         model.save(os.path.join(path, model_2_name))
 
         files = set(os.listdir(path))
-        self.assertEqual(
-            files,
-            {
-                model_1_name,
-                *model_1_internal_filename_map.values(),
-                model_2_name,
-                *model_2_internal_filename_map.values()
-            }
-        )
+        self.assertEqual(files, {
+            model_1_name, *model_1_internal_filename_map.values(),
+            model_2_name, *model_2_internal_filename_map.values()
+        })
 
         shutil.rmtree(path)
 
@@ -295,7 +307,9 @@ class TestClassifyBaseModel(unittest.TestCase):
         }
         # create some dup files conflict with internal files.
         dup_model_meta_content = "this is a file dup with model_meta."
-        with open(os.path.join(path, internal_filename_map["model_meta"]), "w") as f:
+        with open(
+                os.path.join(path, internal_filename_map["model_meta"]),
+                "w") as f:
             f.write(dup_model_meta_content)
 
         succeed = True
@@ -328,28 +342,39 @@ class TestClassifyBaseModel(unittest.TestCase):
         # save the first one.
         model_1_name = "a"
         model_1_internal_filename_map = {
-            "network_model":"%s.pdmodel" % (model_1_name),
-            "network_model_params":"%s.pdiparams" % (model_1_name),
-            "network_model_params_info":"%s.pdiparams.info" % (model_1_name),
+            "network_model": "%s.pdmodel" % (model_1_name),
+            "network_model_params": "%s.pdiparams" % (model_1_name),
+            "network_model_params_info": "%s.pdiparams.info" % (model_1_name),
             "model_meta": "%s_%s" % (model_1_name, "model_meta"),
             "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
         }
-        model.save(os.path.join(path, model_1_name), network_model=True, dygraph_to_static=True)
-        
-        files = set(os.listdir(path))
-        self.assertEqual(files, {model_1_name, *model_1_internal_filename_map.values()})
+        model.save(
+            os.path.join(path, model_1_name),
+            network_model=True,
+            dygraph_to_static=True)
 
-        with open(os.path.join(path, model_1_internal_filename_map["model_meta"]), "r") as f:
+        files = set(os.listdir(path))
+        self.assertEqual(
+            files, {model_1_name, *model_1_internal_filename_map.values()})
+
+        with open(
+                os.path.join(path,
+                             model_1_internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
         # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
-        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in
+                        model_meta["ancestor_classname_set"])
         # paddlets.models.anomaly.dl.autoencoder
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         self.assertEqual("classification", model_meta['model_type'])
-        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
+        self.assertEqual({
+            "features": [None, 200, 5]
+        }, model_meta["input_data"])
 
         shutil.rmtree(path)
 
@@ -374,28 +399,39 @@ class TestClassifyBaseModel(unittest.TestCase):
         # save the first one.
         model_1_name = "a"
         model_1_internal_filename_map = {
-            "network_model":"%s.pdmodel" % (model_1_name),
-            "network_model_params":"%s.pdiparams" % (model_1_name),
-            "network_model_params_info":"%s.pdiparams.info" % (model_1_name),
+            "network_model": "%s.pdmodel" % (model_1_name),
+            "network_model_params": "%s.pdiparams" % (model_1_name),
+            "network_model_params_info": "%s.pdiparams.info" % (model_1_name),
             "model_meta": "%s_%s" % (model_1_name, "model_meta"),
             "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
         }
-        model.save(os.path.join(path, model_1_name), network_model=True, dygraph_to_static=False)
-        
-        files = set(os.listdir(path))
-        self.assertEqual(files, {model_1_name, *model_1_internal_filename_map.values()})
+        model.save(
+            os.path.join(path, model_1_name),
+            network_model=True,
+            dygraph_to_static=False)
 
-        with open(os.path.join(path, model_1_internal_filename_map["model_meta"]), "r") as f:
+        files = set(os.listdir(path))
+        self.assertEqual(
+            files, {model_1_name, *model_1_internal_filename_map.values()})
+
+        with open(
+                os.path.join(path,
+                             model_1_internal_filename_map["model_meta"]),
+                "r") as f:
             model_meta = json.load(f)
         # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
-        self.assertTrue(CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
-        self.assertTrue(PaddleBaseClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(
+            CNNClassifier.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(PaddleBaseClassifier.__name__ in
+                        model_meta["ancestor_classname_set"])
         # paddlets.models.anomaly.dl.autoencoder
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         self.assertEqual("classification", model_meta['model_type'])
-        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
+        self.assertEqual({
+            "features": [None, 200, 5]
+        }, model_meta["input_data"])
 
         shutil.rmtree(path)
 
@@ -428,13 +464,12 @@ class TestClassifyBaseModel(unittest.TestCase):
         # model type expected
         self.assertTrue(isinstance(loaded_model, CNNClassifier))
         # network type expected
-        self.assertTrue(isinstance(loaded_model._network, model_network.__class__))
+        self.assertTrue(
+            isinstance(loaded_model._network, model_network.__class__))
 
         # network state_dict expected
-        self.assertEqual(
-            model_network.state_dict().keys(),
-            loaded_model._network.state_dict().keys()
-        )
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model._network.state_dict().keys())
         common_network_state_dict_keys = model_network.state_dict().keys()
         for k in common_network_state_dict_keys:
             # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
@@ -442,13 +477,13 @@ class TestClassifyBaseModel(unittest.TestCase):
             loaded = loaded_model._network.state_dict()[k]
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy()
+                               .astype(np.float64)))
 
         # prediction results expected.
         loaded_model_preds = loaded_model.predict(paddlets_ds)
-        self.assertTrue(np.alltrue(
-            preds == loaded_model_preds
-        ))
+        self.assertTrue(np.alltrue(preds == loaded_model_preds))
         shutil.rmtree(path)
 
         ###############################
@@ -459,10 +494,14 @@ class TestClassifyBaseModel(unittest.TestCase):
         # build + fit + save an CNN Model.
         model = self._build_cnn_model()
 
-        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
-        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
-        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
-                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(
+            random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(
+            random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds,
+                  train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds,
+                  valid_labels=valid_labels)
         model_network = model._network
 
         preds = model.predict(paddlets_ds)
@@ -480,13 +519,12 @@ class TestClassifyBaseModel(unittest.TestCase):
         # model type expected
         self.assertTrue(isinstance(loaded_model, CNNClassifier))
         # network type expected
-        self.assertTrue(isinstance(loaded_model._network, model_network.__class__))
+        self.assertTrue(
+            isinstance(loaded_model._network, model_network.__class__))
 
         # network state_dict expected
-        self.assertEqual(
-            model_network.state_dict().keys(),
-            loaded_model._network.state_dict().keys()
-        )
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model._network.state_dict().keys())
         common_network_state_dict_keys = model_network.state_dict().keys()
         for k in common_network_state_dict_keys:
             # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
@@ -494,13 +532,13 @@ class TestClassifyBaseModel(unittest.TestCase):
             loaded = loaded_model._network.state_dict()[k]
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded.numpy()
+                               .astype(np.float64)))
 
         # prediction results expected.
         loaded_model_preds = loaded_model.predict(paddlets_ds)
-        self.assertTrue(np.alltrue(
-            preds == loaded_model_preds
-        ))
+        self.assertTrue(np.alltrue(preds == loaded_model_preds))
         shutil.rmtree(path)
 
         ############################################################
@@ -509,10 +547,14 @@ class TestClassifyBaseModel(unittest.TestCase):
         # build + fit + save an AE Model.
         model = self._build_cnn_model()
 
-        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
-        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
-        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
-                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(
+            random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(
+            random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds,
+                  train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds,
+                  valid_labels=valid_labels)
         model_network = model._network
 
         preds = model.predict(paddlets_ds)
@@ -540,12 +582,16 @@ class TestClassifyBaseModel(unittest.TestCase):
         self.assertEqual(model.__class__, loaded_model_2.__class__)
 
         # network type expected
-        self.assertEqual(model_network.__class__, loaded_model_1._network.__class__)
-        self.assertEqual(model_network.__class__, loaded_model_2._network.__class__)
+        self.assertEqual(model_network.__class__,
+                         loaded_model_1._network.__class__)
+        self.assertEqual(model_network.__class__,
+                         loaded_model_2._network.__class__)
 
         # network state_dict expected
-        self.assertEqual(model_network.state_dict().keys(), loaded_model_1._network.state_dict().keys())
-        self.assertEqual(model_network.state_dict().keys(), loaded_model_2._network.state_dict().keys())
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model_1._network.state_dict().keys())
+        self.assertEqual(model_network.state_dict().keys(),
+                         loaded_model_2._network.state_dict().keys())
         common_network_state_dict_keys = model_network.state_dict().keys()
         for k in common_network_state_dict_keys:
             # {"_nn.0.weight": Tensor(shape=(xx, xx)), ...}
@@ -554,18 +600,18 @@ class TestClassifyBaseModel(unittest.TestCase):
             loaded_2 = loaded_model_2._network.state_dict()[k]
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy().astype(np.float64)))
-                self.assertTrue(np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) ==
+                               loaded_1.numpy().astype(np.float64)))
+                self.assertTrue(
+                    np.alltrue(raw.numpy().astype(np.float64) ==
+                               loaded_2.numpy().astype(np.float64)))
 
         # prediction results expected.
         loaded_model_1_preds = loaded_model_1.predict(paddlets_ds)
         loaded_model_2_preds = loaded_model_2.predict(paddlets_ds)
-        self.assertTrue(np.alltrue(
-            preds == loaded_model_1_preds
-        ))
-        self.assertTrue(np.alltrue(
-            preds == loaded_model_2_preds
-        ))
+        self.assertTrue(np.alltrue(preds == loaded_model_1_preds))
+        self.assertTrue(np.alltrue(preds == loaded_model_2_preds))
         shutil.rmtree(path)
 
         ############################################################
@@ -602,10 +648,14 @@ class TestClassifyBaseModel(unittest.TestCase):
         ###############################
         model = self._build_cnn_model()
 
-        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
-        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
-        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
-                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(
+            random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(
+            random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds,
+                  train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds,
+                  valid_labels=valid_labels)
         model_network = model._network
 
         preds = model.predict(paddlets_ds)
@@ -617,22 +667,31 @@ class TestClassifyBaseModel(unittest.TestCase):
         # use same mode instance to save the first model file.
         model_1_name = "a"
         abs_model_1_path = os.path.join(path, model_1_name)
-        model.save(abs_model_1_path, network_model=True, dygraph_to_static=True)
+        model.save(
+            abs_model_1_path, network_model=True, dygraph_to_static=True)
 
         with open(os.path.join(path, "a_model_meta"), "r") as f:
             model_meta = json.load(f)
 
         import paddle.inference as paddle_infer
-        config = paddle_infer.Config(abs_model_1_path + ".pdmodel", abs_model_1_path + ".pdiparams")
+        config = paddle_infer.Config(abs_model_1_path + ".pdmodel",
+                                     abs_model_1_path + ".pdiparams")
         predictor = paddle_infer.create_predictor(config)
         input_names = predictor.get_input_names()
         self.assertEqual(len(input_names), len(model_meta['input_data']))
-        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+        self.assertEqual(input_names[0],
+                         list(model_meta['input_data'].keys())[0])
 
         input_handle = predictor.get_input_handle(input_names[0])
-        input_handle.reshape([100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+        input_handle.reshape([
+            100, list(model_meta['input_data'].values())[0][-2],
+            list(model_meta['input_data'].values())[0][-1]
+        ])
 
-        input_data = np.random.randn(100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1])
+        input_data = np.random.randn(
+            100,
+            list(model_meta['input_data'].values())[0][-2],
+            list(model_meta['input_data'].values())[0][-1])
         input_data = input_data.astype(np.float32)
 
         input_handle.copy_from_cpu(input_data)
@@ -643,7 +702,7 @@ class TestClassifyBaseModel(unittest.TestCase):
         output_data = output_handle.copy_to_cpu()
 
         self.assertEqual(output_data.shape, (100, 4))
-      
+
         shutil.rmtree(path)
 
         ###############################
@@ -653,10 +712,14 @@ class TestClassifyBaseModel(unittest.TestCase):
         ###############################
         model = self._build_cnn_model()
 
-        train_paddlets_ds, train_labels = self._build_mock_data_and_label(random_data=True)
-        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(random_data=True)
-        model.fit(train_tsdatasets=train_paddlets_ds, train_labels=train_labels,
-                  valid_tsdatasets=valid_paddlets_ds, valid_labels=valid_labels)
+        train_paddlets_ds, train_labels = self._build_mock_data_and_label(
+            random_data=True)
+        valid_paddlets_ds, valid_labels = self._build_mock_data_and_label(
+            random_data=True)
+        model.fit(train_tsdatasets=train_paddlets_ds,
+                  train_labels=train_labels,
+                  valid_tsdatasets=valid_paddlets_ds,
+                  valid_labels=valid_labels)
         model_network = model._network
 
         preds = model.predict(paddlets_ds)
@@ -668,22 +731,31 @@ class TestClassifyBaseModel(unittest.TestCase):
         # use same mode instance to save the first model file.
         model_1_name = "a"
         abs_model_1_path = os.path.join(path, model_1_name)
-        model.save(abs_model_1_path, network_model=True, dygraph_to_static=False)
+        model.save(
+            abs_model_1_path, network_model=True, dygraph_to_static=False)
 
         with open(os.path.join(path, "a_model_meta"), "r") as f:
             model_meta = json.load(f)
 
         import paddle.inference as paddle_infer
-        config = paddle_infer.Config(abs_model_1_path + ".pdmodel", abs_model_1_path + ".pdiparams")
+        config = paddle_infer.Config(abs_model_1_path + ".pdmodel",
+                                     abs_model_1_path + ".pdiparams")
         predictor = paddle_infer.create_predictor(config)
         input_names = predictor.get_input_names()
         self.assertEqual(len(input_names), len(model_meta['input_data']))
-        self.assertEqual(input_names[0], list(model_meta['input_data'].keys())[0])
+        self.assertEqual(input_names[0],
+                         list(model_meta['input_data'].keys())[0])
 
         input_handle = predictor.get_input_handle(input_names[0])
-        input_handle.reshape([100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1]])
+        input_handle.reshape([
+            100, list(model_meta['input_data'].values())[0][-2],
+            list(model_meta['input_data'].values())[0][-1]
+        ])
 
-        input_data = np.random.randn(100, list(model_meta['input_data'].values())[0][-2], list(model_meta['input_data'].values())[0][-1])
+        input_data = np.random.randn(
+            100,
+            list(model_meta['input_data'].values())[0][-2],
+            list(model_meta['input_data'].values())[0][-1])
         input_data = input_data.astype(np.float32)
 
         input_handle.copy_from_cpu(input_data)
@@ -694,13 +766,10 @@ class TestClassifyBaseModel(unittest.TestCase):
         output_data = output_handle.copy_to_cpu()
 
         self.assertEqual(output_data.shape, (100, 4))
-      
+
         shutil.rmtree(path)
 
-
-    def _build_cnn_model(
-        self
-    ) -> CNNClassifier:
+    def _build_cnn_model(self) -> CNNClassifier:
         """
         Internal-only method, used for building an CNN model. The model is inherited from ClassifyBaseModel.
 
@@ -710,15 +779,13 @@ class TestClassifyBaseModel(unittest.TestCase):
         return CNNClassifier()
 
     @staticmethod
-    def _build_mock_data_and_label(
-            target_periods: int = 200,
-            target_dims: int = 5,
-            n_classes: int = 4,
-            instance_cnt: int = 100,
-            random_data: bool = True,
-            range_index: bool = False,
-            seed: bool = False
-    ):
+    def _build_mock_data_and_label(target_periods: int=200,
+                                   target_dims: int=5,
+                                   n_classes: int=4,
+                                   instance_cnt: int=100,
+                                   random_data: bool=True,
+                                   range_index: bool=False,
+                                   seed: bool=False):
         """
         build train datasets and labels.
         todo:not equal target_periods?
@@ -727,29 +794,32 @@ class TestClassifyBaseModel(unittest.TestCase):
             np.random.seed(2022)
 
         target_cols = [f"dim_{k}" for k in range(target_dims)]
-        labels = [f"class" + str(item) for item in np.random.randint(0, n_classes, instance_cnt)]
+        labels = [
+            f"class" + str(item)
+            for item in np.random.randint(0, n_classes, instance_cnt)
+        ]
 
         ts_datasets = []
         for i in range(instance_cnt):
             if random_data:
-                target_data = np.random.randint(0, 10, (target_periods, target_dims))
+                target_data = np.random.randint(0, 10,
+                                                (target_periods, target_dims))
             else:
                 target_data = target_periods * [target_dims * [0]]
             if range_index:
                 target_df = pd.DataFrame(
                     target_data,
                     index=pd.RangeIndex(0, target_periods, 1),
-                    columns=target_cols
-                )
+                    columns=target_cols)
             else:
                 target_df = pd.DataFrame(
                     target_data,
-                    index=pd.date_range("2022-01-01", periods=target_periods, freq="1D"),
-                    columns=target_cols
-                )
+                    index=pd.date_range(
+                        "2022-01-01", periods=target_periods, freq="1D"),
+                    columns=target_cols)
             ts_datasets.append(
-                TSDataset(target=TimeSeries.load_from_dataframe(data=target_df).astype(np.float32))
-            )
+                TSDataset(target=TimeSeries.load_from_dataframe(data=target_df)
+                          .astype(np.float32)))
 
         return ts_datasets, labels
 

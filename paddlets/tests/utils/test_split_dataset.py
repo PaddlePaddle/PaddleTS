@@ -27,23 +27,24 @@ class TestUtils(TestCase):
         np.random.seed(2022)
 
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
         # case1
@@ -82,26 +83,30 @@ class TestUtils(TestCase):
         #RangeIndex
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                    #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                    index=pd.RangeIndex(start=10, stop=4010, step=2),
-                    name="a"
-                    ), freq = 2)
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                index=pd.RangeIndex(
+                    start=10, stop=4010, step=2),
+                name="a"),
+            freq=2)
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=4010, step=2),
-                columns=["b", "c"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=4010, step=2),
+                columns=["b", "c"]),
+            freq=2)
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=5010, step=2),
-                columns=["b1", "c1"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=5010, step=2),
+                columns=["b1", "c1"]),
+            freq=2)
         static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
@@ -138,30 +143,33 @@ class TestUtils(TestCase):
         with self.assertRaises(Exception):
             pre, after = split_dataset(tsdataset, "2000")
 
-
         #RangeIndex (different start point)
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                    #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                    index=pd.RangeIndex(start=1010, stop=5010, step=2),
-                    name="a"
-                    ), freq = 2)
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                index=pd.RangeIndex(
+                    start=1010, stop=5010, step=2),
+                name="a"),
+            freq=2)
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=4010, step=2),
-                columns=["b", "c"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=4010, step=2),
+                columns=["b", "c"]),
+            freq=2)
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=5010, step=2),
-                columns=["b1", "c1"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=5010, step=2),
+                columns=["b1", "c1"]),
+            freq=2)
         static_cov = {"f": 1.0, "g": 2.0}
         tsdataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
@@ -197,5 +205,7 @@ class TestUtils(TestCase):
         # case6
         with self.assertRaises(Exception):
             pre, after = split_dataset(tsdataset, "2000")
+
+
 if __name__ == "__main__":
     unittest.main()
