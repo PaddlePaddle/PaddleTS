@@ -36,6 +36,10 @@ msgstr "安装"
 msgid "Dataset"
 msgstr "数据集定义、加载以及操作"
 
+#: ../../index.rst:71
+msgid "Supported Datasets"
+msgstr "支持的数据集"
+
 #: ../../index.rst:79
 msgid "Transform"
 msgstr "数据转换"
