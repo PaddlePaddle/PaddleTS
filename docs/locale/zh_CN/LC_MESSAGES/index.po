@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PaddleTS \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 15:11+0800\n"
+"POT-Creation-Date: 2023-05-26 16:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -305,4 +305,7 @@ msgstr "以及更多"
 #: ../../index.rst:54 a1a495603ea345f5abc3e8f492cc83c4
 msgid "Project GitHub: https://github.com/PaddlePaddle/PaddleTS"
 msgstr "项目 Github: https://github.com/PaddlePaddle/PaddleTS"
+
+#~ msgid "Supported Datasets"
+#~ msgstr "支持的数据集"
 
