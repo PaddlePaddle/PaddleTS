@@ -23,7 +23,34 @@ from paddlets.datasets.repository._data_config import PSMTRAINDataset
 from paddlets.datasets.repository._data_config import PSMTESTDataset
 from paddlets.datasets.repository._data_config import BasicMotionsTrainTDataset
 from paddlets.datasets.repository._data_config import BasicMotionsTestDataset
-
+from paddlets.datasets.repository._data_config import SMDTestDataset
+from paddlets.datasets.repository._data_config import SMDTrainDataset
+from paddlets.datasets.repository._data_config import SMAPTrainDataset
+from paddlets.datasets.repository._data_config import SMAPTestDataset
+from paddlets.datasets.repository._data_config import MSLTrainDataset
+from paddlets.datasets.repository._data_config import MSLTestDataset
+from paddlets.datasets.repository._data_config import SWATTrainDataset
+from paddlets.datasets.repository._data_config import SWATTestDataset
+from paddlets.datasets.repository._data_config import EthanolConcentrationTrainTDataset
+from paddlets.datasets.repository._data_config import EthanolConcentrationTestTDataset
+from paddlets.datasets.repository._data_config import FaceDetectionTrainDataset
+from paddlets.datasets.repository._data_config import FaceDetectionTestDataset
+from paddlets.datasets.repository._data_config import HandwritingTrainDataset
+from paddlets.datasets.repository._data_config import HandwritingTestDataset
+from paddlets.datasets.repository._data_config import HeartbeatTrainDataset
+from paddlets.datasets.repository._data_config import HeartbeatTestDataset
+from paddlets.datasets.repository._data_config import JapaneseVowelsTrainDataset
+from paddlets.datasets.repository._data_config import JapaneseVowelsTestDataset
+from paddlets.datasets.repository._data_config import PEMSSFTrainDataset
+from paddlets.datasets.repository._data_config import PEMSSFTestDataset
+from paddlets.datasets.repository._data_config import SelfRegulationSCP1TrainDataset
+from paddlets.datasets.repository._data_config import SelfRegulationSCP1TestDataset
+from paddlets.datasets.repository._data_config import SelfRegulationSCP2TrainDataset
+from paddlets.datasets.repository._data_config import SelfRegulationSCP2TestDataset
+from paddlets.datasets.repository._data_config import SpokenArabicDigitsTrainDataset
+from paddlets.datasets.repository._data_config import SpokenArabicDigitsTestDataset
+from paddlets.datasets.repository._data_config import UWaveGestureLibraryTrainDataset
+from paddlets.datasets.repository._data_config import UWaveGestureLibraryTestDataset
 
 DATASETS = {
     UNIWTHDataset.name: UNIWTHDataset,
@@ -34,8 +61,41 @@ DATASETS = {
     NABTEMPDataset.name: NABTEMPDataset,
     PSMTRAINDataset.name: PSMTRAINDataset,
     PSMTESTDataset.name: PSMTESTDataset,
+    SMDTrainDataset.name: SMDTrainDataset,
+    SMDTestDataset.name: SMDTestDataset,
+    SMAPTrainDataset.name: SMAPTrainDataset,
+    SMAPTestDataset.name: SMAPTestDataset,
+    MSLTrainDataset.name: MSLTrainDataset,
+    MSLTestDataset.name: MSLTestDataset,
     BasicMotionsTrainTDataset.name: BasicMotionsTrainTDataset,
-    BasicMotionsTestDataset.name: BasicMotionsTestDataset
+    BasicMotionsTestDataset.name: BasicMotionsTestDataset,
+    SWATTrainDataset.name: SWATTrainDataset,
+    SWATTestDataset.name: SWATTestDataset,
+    EthanolConcentrationTrainTDataset.name: EthanolConcentrationTrainTDataset,
+    EthanolConcentrationTestTDataset.name: EthanolConcentrationTestTDataset,
+    FaceDetectionTrainDataset.name: FaceDetectionTrainDataset,
+    FaceDetectionTestDataset.name: FaceDetectionTestDataset,
+    HandwritingTrainDataset.name: HandwritingTrainDataset,
+    HandwritingTestDataset.name: HandwritingTestDataset,
+    HeartbeatTrainDataset.name: HeartbeatTrainDataset,
+    HeartbeatTestDataset.name: HeartbeatTestDataset,
+    JapaneseVowelsTrainDataset.name: JapaneseVowelsTrainDataset,
+    JapaneseVowelsTestDataset.name: JapaneseVowelsTestDataset,
+    PEMSSFTrainDataset.name: PEMSSFTrainDataset,
+    PEMSSFTestDataset.name: PEMSSFTestDataset,
+    SelfRegulationSCP1TrainDataset.name: SelfRegulationSCP1TrainDataset,
+    SelfRegulationSCP1TestDataset.name: SelfRegulationSCP1TestDataset,
+    SelfRegulationSCP2TrainDataset.name: SelfRegulationSCP2TrainDataset,
+    SelfRegulationSCP2TestDataset.name: SelfRegulationSCP2TestDataset,
+    SpokenArabicDigitsTrainDataset.name: SpokenArabicDigitsTrainDataset,
+    SpokenArabicDigitsTestDataset.name: SpokenArabicDigitsTestDataset,
+    UWaveGestureLibraryTrainDataset.name: UWaveGestureLibraryTrainDataset,
+    UWaveGestureLibraryTestDataset.name: UWaveGestureLibraryTestDataset,
+
+
+
+
+
 }
 
 def dataset_list() -> List[str]:
