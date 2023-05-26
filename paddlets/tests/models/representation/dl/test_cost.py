@@ -18,60 +18,48 @@ class TestCoST(TestCase):
         """
         np.random.seed(2022)
         target1 = pd.Series(
-                np.random.randn(800).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                name="a")
+            np.random.randn(800).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            name="a")
         target2 = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["a1", "a2"])
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["a1", "a2"])
         observed_cov = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["b", "c"])
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["b", "c"])
         known_cov = pd.DataFrame(
-                np.random.randn(800, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=800, freq="15T"),
-                columns=["b1", "c1"])
-        
+            np.random.randn(800, 2).astype(np.float32),
+            index=pd.date_range(
+                "2022-01-01", periods=800, freq="15T"),
+            columns=["b1", "c1"])
+
         # index为DatetimeIndex类型
         self.tsdataset1 = TSDataset(
             TimeSeries.load_from_dataframe(target1),
             TimeSeries.load_from_dataframe(observed_cov),
-            TimeSeries.load_from_dataframe(known_cov),
-        )
+            TimeSeries.load_from_dataframe(known_cov), )
         self.tsdataset2 = TSDataset(
             TimeSeries.load_from_dataframe(target2),
             TimeSeries.load_from_dataframe(observed_cov),
-            TimeSeries.load_from_dataframe(known_cov),
-        )
+            TimeSeries.load_from_dataframe(known_cov), )
         super().setUp()
 
     def test_init(self):
         """unittest function
         """
         # case1 (参数合法)
-        param1 = {
-            "batch_size": 2,
-            "queue_size": 32
-        }
-        cost = CoST(
-            segment_size=300,
-            sampling_stride=300,
-            **param1
-        )
+        param1 = {"batch_size": 2, "queue_size": 32}
+        cost = CoST(segment_size=300, sampling_stride=300, **param1)
 
         # case1 (参数非法: queue_size不能被batch_size整除)
-        param1 = {
-            "batch_size": 3,
-            "queue_size": 32
-        }
+        param1 = {"batch_size": 3, "queue_size": 32}
         with self.assertRaises(ValueError):
-            cost = CoST(
-                segment_size=300,
-                sampling_stride=300,
-                **param1
-            )
+            cost = CoST(segment_size=300, sampling_stride=300, **param1)
 
     def test_init_fit_dataloader(self):
         """unittest function
@@ -81,8 +69,7 @@ class TestCoST(TestCase):
             sampling_stride=300,
             num_layers=1,
             batch_size=1,
-            max_epochs=1
-        )
+            max_epochs=1)
 
         # case1 (训练集包含非int64 和 非float32)
         tsdataset = self.tsdataset1.copy()
@@ -109,11 +96,10 @@ class TestCoST(TestCase):
         tsdataset["a"][0] = np.NaN
         with self.assertLogs("paddlets", level="WARNING") as captured:
             cost.fit(tsdataset)
-            self.assertEqual(
-                captured.records[0].getMessage(), 
-                "Input `a` contains np.inf or np.NaN, which may lead to unexpected results from the model."
-            )
-            
+            self.assertEqual(captured.records[0].getMessage(
+            ), "Input `a` contains np.inf or np.NaN, which may lead to unexpected results from the model."
+                             )
+
     def test_init_callbacks(self):
         """unittest function
         """
@@ -123,8 +109,7 @@ class TestCoST(TestCase):
             sampling_stride=300,
             num_layers=1,
             batch_size=1,
-            max_epochs=1
-        )
+            max_epochs=1)
         _, callback_container = cost._init_callbacks()
         self.assertEqual(len(callback_container._callbacks), 1)
 
@@ -136,8 +121,7 @@ class TestCoST(TestCase):
             callbacks=[callback],
             num_layers=1,
             batch_size=1,
-            max_epochs=1
-        )
+            max_epochs=1)
         _, callback_container = cost._init_callbacks()
         self.assertEqual(len(callback_container._callbacks), 2)
 
@@ -150,8 +134,7 @@ class TestCoST(TestCase):
             sampling_stride=300,
             num_layers=1,
             batch_size=1,
-            max_epochs=1,
-        )
+            max_epochs=1, )
         cost.fit(self.tsdataset1)
 
         # case2 (用户传入多组时序数据用于多实例训练)
@@ -166,8 +149,7 @@ class TestCoST(TestCase):
             sampling_stride=300,
             num_layers=1,
             batch_size=1,
-            max_epochs=1,
-        )
+            max_epochs=1, )
         cost.fit(self.tsdataset1)
         res = cost.encode(self.tsdataset1, batch_size=128)
         self.assertIsInstance(res, np.ndarray)

@@ -27,45 +27,47 @@ class TestRNNRegressor(TestCase):
         single_target = TimeSeries.load_from_dataframe(
             pd.Series(
                 np.random.randn(2000).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                name="a"
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
         multi_target = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["a1", "a2"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["a1", "a2"]))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 3).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b1", "b2", "b3"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b1", "b2", "b3"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["c1", "c2"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["c1", "c2"]))
 
         int_target = TimeSeries.load_from_dataframe(
             pd.Series(
                 np.random.randint(0, 10, 2000).astype(np.int32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                name="a"
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
         category_known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.choice([0], [2500, 2]),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["c1", "c2"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["c1", "c2"]))
 
         static_cov = {"f": 0, "g": 2.0}
-        self.tsdataset1 = TSDataset(single_target, observed_cov, known_cov, static_cov)
-        self.tsdataset2 = TSDataset(multi_target, observed_cov, category_known_cov, static_cov)
+        self.tsdataset1 = TSDataset(single_target, observed_cov, known_cov,
+                                    static_cov)
+        self.tsdataset2 = TSDataset(multi_target, observed_cov,
+                                    category_known_cov, static_cov)
         self.tsdataset3 = TSDataset(int_target, None, category_known_cov, None)
         super().setUp()
 
@@ -88,8 +90,7 @@ class TestRNNRegressor(TestCase):
             out_chunk_len=5,
             skip_chunk_len=4 * 4,
             eval_metrics=["mse", "mae"],
-            **param1
-        )
+            **param1)
 
         # case 2: rnn type invalid
         param2 = {
@@ -105,8 +106,7 @@ class TestRNNRegressor(TestCase):
                 out_chunk_len=5,
                 skip_chunk_len=4 * 4,
                 eval_metrics=["mse", "mae"],
-                **param2
-            )
+                **param2)
 
     def test_fit(self):
         """
@@ -118,8 +118,7 @@ class TestRNNRegressor(TestCase):
             in_chunk_len=10,
             out_chunk_len=5,
             skip_chunk_len=4 * 4,
-            eval_metrics=["mse", "mae"]
-        )
+            eval_metrics=["mse", "mae"])
         reg1.fit(self.tsdataset1)
         reg1.fit(self.tsdataset1, self.tsdataset1)
 
@@ -130,8 +129,7 @@ class TestRNNRegressor(TestCase):
             rnn_type_or_module="LSTM",
             fcn_out_config=[64],
             skip_chunk_len=4 * 4,
-            eval_metrics=["mse", "mae"]
-        )
+            eval_metrics=["mse", "mae"])
         reg2.fit(self.tsdataset1, self.tsdataset1)
 
         # case3: multi_target
@@ -139,8 +137,7 @@ class TestRNNRegressor(TestCase):
             in_chunk_len=10,
             out_chunk_len=5,
             skip_chunk_len=4 * 4,
-            eval_metrics=["mse", "mae"]
-        )
+            eval_metrics=["mse", "mae"])
         reg3.fit(self.tsdataset2, self.tsdataset2)
 
         # case4: multi_target, known_cov, observed_cov
@@ -150,8 +147,7 @@ class TestRNNRegressor(TestCase):
             rnn_type_or_module="GRU",
             fcn_out_config=[64],
             skip_chunk_len=4 * 4,
-            eval_metrics=["mse", "mae"]
-        )
+            eval_metrics=["mse", "mae"])
         reg4.fit(self.tsdataset2, self.tsdataset2)
 
         # case5: invalid dtypes
@@ -162,8 +158,7 @@ class TestRNNRegressor(TestCase):
                 rnn_type_or_module="GRU",
                 fcn_out_config=[64],
                 skip_chunk_len=4 * 4,
-                eval_metrics=["mse", "mae"],
-            )
+                eval_metrics=["mse", "mae"], )
             reg5.fit(self.tsdataset3, self.tsdataset3)
 
     def test_predict(self):
@@ -176,8 +171,7 @@ class TestRNNRegressor(TestCase):
             rnn_type_or_module="SimpleRNN",
             fcn_out_config=[32],
             skip_chunk_len=4 * 4,
-            eval_metrics=["mse", "mae"]
-        )
+            eval_metrics=["mse", "mae"])
         # case1: single_target
         reg.fit(self.tsdataset1, self.tsdataset1)
         res = reg.predict(self.tsdataset1)

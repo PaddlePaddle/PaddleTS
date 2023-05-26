@@ -21,6 +21,7 @@ class ConvLayer(paddle.nn.Layer):
         _activation(paddle.nn.Layer): ELU Activation.
         _downconv(paddle.nn.Layer): 1D convolution.
     """
+
     def __init__(self, d_model: int):
         self._config = locals()
         self._config.pop("self")
@@ -34,8 +35,7 @@ class ConvLayer(paddle.nn.Layer):
             out_channels=d_model,
             kernel_size=3,
             padding=1,
-            padding_mode="circular"
-        )
+            padding_mode="circular")
 
     def forward(self, src: paddle.Tensor) -> paddle.Tensor:
         """Forward.
@@ -74,32 +74,29 @@ class InformerEncoderLayer(paddle.nn.Layer):
         _dropout(paddle.nn.Layer): The dropout layer.
         _activation(paddle.nn.Layer): ELU Activation.
     """
-    def __init__(
-        self, 
-        d_model: int, 
-        num_heads: int, 
-        ffn_channels: int,
-        activation: str,
-        dropout_rate: float
-    ):
+
+    def __init__(self,
+                 d_model: int,
+                 num_heads: int,
+                 ffn_channels: int,
+                 activation: str,
+                 dropout_rate: float):
         self._config = locals()
         self._config.pop("self")
         self._config.pop("__class__")
         super(InformerEncoderLayer, self).__init__()
-        self._attn = ProbSparseAttention(d_model, d_model, d_model, num_heads, dropout_rate)
+        self._attn = ProbSparseAttention(d_model, d_model, d_model, num_heads,
+                                         dropout_rate)
         self._conv1 = paddle.nn.Conv1D(d_model, ffn_channels, 1)
         self._conv2 = paddle.nn.Conv1D(ffn_channels, d_model, 1)
         self._norm = paddle.nn.LayerNorm(d_model)
         self._dropout = paddle.nn.Dropout(dropout_rate)
-        self._activation = (
-            paddle.nn.GELU() if activation == "gelu" else paddle.nn.ReLU()
-        )
+        self._activation = (paddle.nn.GELU()
+                            if activation == "gelu" else paddle.nn.ReLU())
 
-    def forward(
-        self, 
-        src: paddle.Tensor, 
-        src_mask: Optional[paddle.Tensor] = None
-    ) -> paddle.Tensor:
+    def forward(self,
+                src: paddle.Tensor,
+                src_mask: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -139,25 +136,25 @@ class InformerEncoder(paddle.nn.Layer):
         _encoder_layers(paddle.nn.LayerList): A stacked LayerList containing InformerEncoderLayer.
         _conv_layers(paddle.nn.LayerList): A stacked LayerList containing ConvLayer.
     """
-    def __init__(
-        self,
-        encoder_layer: paddle.nn.Layer,
-        conv_layer: paddle.nn.Layer,
-        num_layers: int,
-    ):
-        super(InformerEncoder, self).__init__()
-        self._encoder_layers = paddle.nn.LayerList(
-            [type(encoder_layer)(**encoder_layer._config) for _ in range(num_layers)]
-        )
-        self._conv_layers = paddle.nn.LayerList(
-            [type(conv_layer)(**conv_layer._config) for _ in range(num_layers - 1)]
-        )
 
-    def forward(
-        self, 
-        src: paddle.Tensor, 
-        src_mask: Optional[paddle.Tensor] = None
-    ) -> paddle.Tensor:
+    def __init__(
+            self,
+            encoder_layer: paddle.nn.Layer,
+            conv_layer: paddle.nn.Layer,
+            num_layers: int, ):
+        super(InformerEncoder, self).__init__()
+        self._encoder_layers = paddle.nn.LayerList([
+            type(encoder_layer)(**encoder_layer._config)
+            for _ in range(num_layers)
+        ])
+        self._conv_layers = paddle.nn.LayerList([
+            type(conv_layer)(**conv_layer._config)
+            for _ in range(num_layers - 1)
+        ])
+
+    def forward(self,
+                src: paddle.Tensor,
+                src_mask: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -169,7 +166,8 @@ class InformerEncoder(paddle.nn.Layer):
             paddle.Tensor: Output of layer. 
         """
         # src [batch_size, in_chunk_len, d_model]
-        for enc_layer, conv_layer in zip(self._encoder_layers[:-1], self._conv_layers):
+        for enc_layer, conv_layer in zip(self._encoder_layers[:-1],
+                                         self._conv_layers):
             src = enc_layer(src, src_mask)
             src = conv_layer(src)
         src = self._encoder_layers[-1](src, src_mask)

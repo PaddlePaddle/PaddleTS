@@ -9,6 +9,7 @@ import math
 
 from paddlets import TSDataset, TimeSeries
 from paddlets.logger import raise_if, raise_log, raise_if_not
+
 # WARN: import paddlets.models.utils here would cause circular reference, below is raised error:
 # ImportError: cannot import name 'BaseModel' from 'paddlets.models' (/home/work/paddlets/paddlets/models/__init__.py)
 
@@ -20,15 +21,12 @@ class Trainable(object, metaclass=abc.ABCMeta):
     Any classes need to be fitted (e.g. :class:`~paddlets.models.base.BaseModel`, :class:`~paddlets.pipeline.Pipeline`, etc.) may 
     inherit from this base class and optionally implement :func:`fit` method.
     """
+
     def __init__(self):
         pass
 
     @abc.abstractmethod
-    def fit(
-        self,
-        train_data: TSDataset,
-        valid_data: Optional[TSDataset] = None
-    ):
+    def fit(self, train_data: TSDataset, valid_data: Optional[TSDataset]=None):
         """
         Fit a trainable instance.
 
@@ -73,12 +71,11 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
         _skip_chunk_len(int): The length of time series chunk between past target and future target for a single sample.
              The skip chunk are neither used as feature (i.e. X) nor label (i.e. Y) for a single sample.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int):
         super(BaseModel, self).__init__()
 
         self._in_chunk_len = in_chunk_len
@@ -92,22 +89,16 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
         Args:
             datasets(List[TSDataset]): Training datasets.
         """
-        raise_if(
-            len(datasets) == 0,
-            "The Length of datasets cannot be 0!"
-        )
-        columns_set = set(tuple(sorted(dataset.columns.items())) for dataset in datasets)
+        raise_if(len(datasets) == 0, "The Length of datasets cannot be 0!")
+        columns_set = set(
+            tuple(sorted(dataset.columns.items())) for dataset in datasets)
         raise_if_not(
             len(columns_set) == 1,
             "The schema of datasets is not same! Cannot be combined for conversion!"
         )
 
     @abc.abstractmethod
-    def fit(
-        self,
-        train_data: TSDataset,
-        valid_data: Optional[TSDataset] = None
-    ):
+    def fit(self, train_data: TSDataset, valid_data: Optional[TSDataset]=None):
         """
         Fit a BaseModel instance.
 
@@ -165,8 +156,7 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
     def recursive_predict(
             self,
             tsdataset: TSDataset,
-            predict_length: int,
-    ) -> TSDataset:
+            predict_length: int, ) -> TSDataset:
         """
         Apply `self.predict` method iteratively for multi-step time series forecasting, the predicted results from the
         current call will be appended to the `TSDataset` object and will appear in the loopback window for next call.
@@ -181,7 +171,8 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
             TSDataset: Predicted results.
         """
         # Not supported when _skip_chunk !=0
-        raise_if(self._skip_chunk_len != 0, f"recursive_predict not supported when \
+        raise_if(self._skip_chunk_len != 0,
+                 f"recursive_predict not supported when \
             _skip_chunk_len!=0, got {self._skip_chunk_len}.")
         # raise_if(predict_length < self._out_chunk_len, f"predict_length must be >= \
         #    self._out_chunk_len, got {predict_length}.")
@@ -214,47 +205,51 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
                     else tsdataset_copy.get_target().start_time
             )
         else:
-            raise_log(ValueError(f"time col type not support, \
+            raise_log(
+                ValueError(f"time col type not support, \
                 index type:{type(tsdataset.get_target().data.index)}"))
         # Reindex data and the default fill value is np.nan
         fill_value = np.nan
         if tsdataset_copy.get_known_cov() is not None:
-            if isinstance(tsdataset_copy.get_known_cov().data.index, pd.RangeIndex):
+            if isinstance(tsdataset_copy.get_known_cov().data.index,
+                          pd.RangeIndex):
                 tsdataset_copy.get_known_cov().reindex(
-                    pd.RangeIndex(start=tsdataset_copy.get_known_cov().start_time,
-                                  stop=dataset_end_time + 1,
-                                  step=tsdataset_copy.get_known_cov().time_index.step),
-                    fill_value=fill_value
-                )
+                    pd.RangeIndex(
+                        start=tsdataset_copy.get_known_cov().start_time,
+                        stop=dataset_end_time + 1,
+                        step=tsdataset_copy.get_known_cov().time_index.step),
+                    fill_value=fill_value)
             else:
                 tsdataset_copy.get_known_cov().reindex(
-                    pd.date_range(start=tsdataset_copy.get_known_cov().start_time,
-                                  end=dataset_end_time,
-                                  freq=tsdataset_copy.get_known_cov().time_index.freq),
-                    fill_value=fill_value
-                )
+                    pd.date_range(
+                        start=tsdataset_copy.get_known_cov().start_time,
+                        end=dataset_end_time,
+                        freq=tsdataset_copy.get_known_cov().time_index.freq),
+                    fill_value=fill_value)
         if tsdataset_copy.get_observed_cov() is not None:
-            if isinstance(tsdataset_copy.get_observed_cov().data.index, pd.RangeIndex):
+            if isinstance(tsdataset_copy.get_observed_cov().data.index,
+                          pd.RangeIndex):
                 tsdataset_copy.get_observed_cov().reindex(
-                    pd.RangeIndex(start=tsdataset_copy.get_observed_cov().start_time,
-                                  stop=dataset_end_time + 1,
-                                  step=tsdataset_copy.get_observed_cov().time_index.step),
-                    fill_value=fill_value
-                )
+                    pd.RangeIndex(
+                        start=tsdataset_copy.get_observed_cov().start_time,
+                        stop=dataset_end_time + 1,
+                        step=tsdataset_copy.get_observed_cov()
+                        .time_index.step),
+                    fill_value=fill_value)
             else:
                 tsdataset_copy.get_observed_cov().reindex(
-                    pd.date_range(start=tsdataset_copy.get_observed_cov().start_time,
-                                  end=dataset_end_time,
-                                  freq=tsdataset_copy.get_observed_cov().time_index.freq),
-                    fill_value=fill_value
-                )
+                    pd.date_range(
+                        start=tsdataset_copy.get_observed_cov().start_time,
+                        end=dataset_end_time,
+                        freq=tsdataset_copy.get_observed_cov()
+                        .time_index.freq),
+                    fill_value=fill_value)
         return self._recursive_predict(tsdataset_copy, predict_length)
 
     def _recursive_predict(
             self,
             tsdataset: TSDataset,
-            predict_length: int,
-    ) -> np.ndarray:
+            predict_length: int, ) -> np.ndarray:
         """
         Recursive predict core.
 
@@ -277,6 +272,6 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
         result = TSDataset.concat(results)
         # Resize result
         result.set_target(
-            TimeSeries(result.get_target().data[0: predict_length], result.freq)
-        )
+            TimeSeries(result.get_target().data[0:predict_length],
+                       result.freq))
         return result

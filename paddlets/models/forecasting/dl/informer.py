@@ -45,25 +45,25 @@ class _InformerModule(paddle.nn.Layer):
             and an instance `InformerDecoder`
         _out_proj(paddle.nn.Layer): The projection layer.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        start_token_len: int,
-        target_dim: int,
-        d_model: int,
-        nhead: int,
-        ffn_channels: int,
-        num_encoder_layers: int,
-        num_decoder_layers: int,
-        activation: str,
-        dropout_rate: float,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            start_token_len: int,
+            target_dim: int,
+            d_model: int,
+            nhead: int,
+            ffn_channels: int,
+            num_encoder_layers: int,
+            num_decoder_layers: int,
+            activation: str,
+            dropout_rate: float, ):
         super(_InformerModule, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._start_token_len = start_token_len
-        self._target_dim = target_dim 
+        self._target_dim = target_dim
         raise_if_not(
             in_chunk_len >= start_token_len,
             f"`in_chunk_len` must be greater than or equal to `start_token_len`\n" \
@@ -72,8 +72,10 @@ class _InformerModule(paddle.nn.Layer):
 
         # Encoding step.
         #   1> Adding relative position/timfeat/token information to the input sequence.
-        self._src_embedding = MixedEmbedding(target_dim, d_model, in_chunk_len, dropout_rate)
-        self._tgt_embedding = MixedEmbedding(target_dim, d_model, start_token_len + out_chunk_len, dropout_rate)
+        self._src_embedding = MixedEmbedding(target_dim, d_model, in_chunk_len,
+                                             dropout_rate)
+        self._tgt_embedding = MixedEmbedding(
+            target_dim, d_model, start_token_len + out_chunk_len, dropout_rate)
 
         # Informer(interact features using prob_sparse_attention and cross_attention) step.
         #   1> Interact src sequence features using prob_sparse_attention.
@@ -86,16 +88,13 @@ class _InformerModule(paddle.nn.Layer):
             num_encoder_layers=num_encoder_layers,
             num_decoder_layers=num_decoder_layers,
             activation=activation,
-            dropout_rate=dropout_rate,
-        )
+            dropout_rate=dropout_rate, )
 
         # Projection step.
         self._out_proj = paddle.nn.Linear(d_model, target_dim)
 
-    def _create_informer_inputs(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def _create_informer_inputs(self, X: Dict[str, paddle.Tensor]) -> Tuple[
+            paddle.Tensor, paddle.Tensor]:
         """`TSDataset` stores time series in the (batch_size, in_chunk_len, target_dim) format.
             Take [X[batch_size, -out_chunk_len:, target_dim], paddle.zeros([batch_size, -out_chunk_len:, target_dim])] 
             as input to decoder.
@@ -113,10 +112,7 @@ class _InformerModule(paddle.nn.Layer):
         tgt = paddle.concat([tgt, padding], axis=1)
         return src, tgt
 
-    def forward(
-        self,
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -201,34 +197,34 @@ class InformerModel(PaddleBaseModelImpl):
             ["relu", "gelu"] is optional.
         _dropout_rate(float): Fraction of neurons affected by Dropout.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        start_token_len: int = 0,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3), 
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: Optional[int] = None,
-        
-        d_model: int = 512,
-        nhead: int = 8,
-        ffn_channels: int = 2048,
-        num_encoder_layers: int = 2,
-        num_decoder_layers: int = 1,
-        activation: str = "relu",
-        dropout_rate: float = 0.1,
-        use_revin: bool = False,
-        revin_params: Dict[str, Any] = dict(eps=1e-5, affine=True),
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            start_token_len: int=0,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: Optional[int]=None,
+            d_model: int=512,
+            nhead: int=8,
+            ffn_channels: int=2048,
+            num_encoder_layers: int=2,
+            num_decoder_layers: int=1,
+            activation: str="relu",
+            dropout_rate: float=0.1,
+            use_revin: bool=False,
+            revin_params: Dict[str, Any]=dict(
+                eps=1e-5, affine=True), ):
         self._start_token_len = start_token_len
         self._d_model = d_model
         self._nhead = nhead
@@ -254,13 +250,9 @@ class InformerModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows:
 
@@ -290,12 +282,11 @@ class InformerModel(PaddleBaseModelImpl):
                 f"but received {column}: {dtype}."
             )
         super(InformerModel, self)._check_tsdataset(tsdataset)
-        
+
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -306,11 +297,9 @@ class InformerModel(PaddleBaseModelImpl):
             Dict[str, Any]: model parameters.
         """
         target_dim = train_tsdataset[0].get_target().data.shape[1]
-        fit_params = {
-            "target_dim": target_dim
-        }
+        fit_params = {"target_dim": target_dim}
         return fit_params
-        
+
     @revin_norm
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
@@ -329,5 +318,4 @@ class InformerModel(PaddleBaseModelImpl):
             num_encoder_layers=self._num_encoder_layers,
             num_decoder_layers=self._num_decoder_layers,
             activation=self._activation,
-            dropout_rate=self._dropout_rate,
-        )
+            dropout_rate=self._dropout_rate, )

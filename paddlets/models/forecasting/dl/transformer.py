@@ -29,12 +29,12 @@ class _PositionalEncoding(paddle.nn.Layer):
         _dropout(paddle.nn.Layer): Fraction of neurons affected by Dropout.
         _pe(paddle.nn.Tensor): positional encoding as buffer into the layer.
     """
+
     def __init__(
-        self,
-        d_model: int,
-        max_len: int,
-        dropout_rate,
-    ):
+            self,
+            d_model: int,
+            max_len: int,
+            dropout_rate, ):
         super(_PositionalEncoding, self).__init__()
         self._dropout = paddle.nn.Dropout(dropout_rate)
 
@@ -47,19 +47,17 @@ class _PositionalEncoding(paddle.nn.Layer):
         #   2i/2i + 1: odd/even index of d_model.
         pe = paddle.zeros((max_len, d_model))
         position = paddle.unsqueeze(
-            paddle.arange(0, max_len, dtype="float32"), axis=1
-        )
+            paddle.arange(
+                0, max_len, dtype="float32"), axis=1)
         div_term = paddle.exp(
-            paddle.arange(0, d_model, 2, dtype="float32") * (-1. * np.log2(1e4) / d_model)
-        )
+            paddle.arange(
+                0, d_model, 2, dtype="float32") *
+            (-1. * np.log2(1e4) / d_model))
         pe[:, 0::2] = paddle.sin(position * div_term)
         pe[:, 1::2] = paddle.cos(position * div_term)
         self.register_buffer("_pe", pe)
 
-    def forward(
-        self, 
-        X: paddle.Tensor
-    ) -> paddle.Tensor:
+    def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -72,7 +70,7 @@ class _PositionalEncoding(paddle.nn.Layer):
                 Tensor containing the embedded time series enhanced with positional encoding.
                 Output of shape `(batch_size, input_size, d_model)`
         """
-        out = X + self._pe[: X.shape[1], :]
+        out = X + self._pe[:X.shape[1], :]
         return self._dropout(out)
 
 
@@ -105,35 +103,34 @@ class _TransformerModule(paddle.nn.Layer):
         _transformer(paddle.nn.Layer): Transformer is a state-of-the-art deep learning model.
         _decoder(paddle.nn.Layer): The decoder projection layer.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        input_dim: int,
-        d_model: int,
-        nhead: int,
-        num_encoder_layers: int,
-        num_decoder_layers: int,
-        dim_feedforward: int,
-        activation: str,
-        dropout_rate: float,
-        custom_encoder: Optional[paddle.nn.Layer] = None,
-        custom_decoder: Optional[paddle.nn.Layer] = None,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            input_dim: int,
+            d_model: int,
+            nhead: int,
+            num_encoder_layers: int,
+            num_decoder_layers: int,
+            dim_feedforward: int,
+            activation: str,
+            dropout_rate: float,
+            custom_encoder: Optional[paddle.nn.Layer]=None,
+            custom_decoder: Optional[paddle.nn.Layer]=None, ):
         super(_TransformerModule, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
-        self._target_dim = target_dim 
+        self._target_dim = target_dim
         self._input_dim = input_dim
 
         # Encoding step.
         #   1> Mapping the target_dim to d_model with a linear layer.
         #   2> Adding relative position information to the input sequence using PositionalEncoding.
         self._encoder = paddle.nn.Linear(input_dim, d_model)
-        self._positional_encoding = _PositionalEncoding(
-            d_model, in_chunk_len, dropout_rate
-        )
+        self._positional_encoding = _PositionalEncoding(d_model, in_chunk_len,
+                                                        dropout_rate)
 
         # Transformer(interact features using self-attention) step.
         #   1> Interact input sequence features using self-attention
@@ -149,21 +146,16 @@ class _TransformerModule(paddle.nn.Layer):
             dropout=dropout_rate,
             activation=activation,
             custom_encoder=custom_encoder,
-            custom_decoder=custom_decoder,
-        )
+            custom_decoder=custom_decoder, )
 
         # Decoding step.
         # Since the length of the decoded sequence is 1 (with shape [batch_size, 1, d_model]), 
         # we need to use linear to map it to out_chunk_len(with shape [batch_size, out_chunk_len, target_dim]) 
         # to get the final prediction result.
-        self._decoder = paddle.nn.Linear(
-            d_model, out_chunk_len * target_dim
-        )
+        self._decoder = paddle.nn.Linear(d_model, out_chunk_len * target_dim)
 
-    def _create_transformer_inputs(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def _create_transformer_inputs(self, X: Dict[str, paddle.Tensor]) -> Tuple[
+            paddle.Tensor, paddle.Tensor]:
         """`TSDataset` stores time series in the (batch_size, in_chunk_len, target_dim) format.
             Take X[batch_size, -1:, target_dim] as input to decoder.
 
@@ -173,18 +165,13 @@ class _TransformerModule(paddle.nn.Layer):
         Returns:
             Tuple[paddle.Tensor, paddle.Tensor]: The inputs for the encoder and decoder
         """
-        covs = [
-            X[cov][:, :self._in_chunk_len, :] for cov in COVS if cov in X
-        ]
+        covs = [X[cov][:, :self._in_chunk_len, :] for cov in COVS if cov in X]
         feats = [X[PAST_TARGET]] + covs
         src = paddle.concat(feats, axis=-1)
         tgt = src[:, -1:, :]
         return src, tgt
 
-    def forward(
-        self,
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -201,7 +188,7 @@ class _TransformerModule(paddle.nn.Layer):
         # see section 3.2.1 in 'Attention is All you Need' by Vaswani et al. (2017)
         src = self._encoder(src) * np.sqrt(self._input_dim)
         src = self._positional_encoding(src)
-        
+
         tgt = self._encoder(tgt) * np.sqrt(self._input_dim)
         tgt = self._positional_encoding(tgt)
 
@@ -210,7 +197,8 @@ class _TransformerModule(paddle.nn.Layer):
         # Here we change the data format
         # from (batch_size, 1, out_chunk_len * target_dim)
         # to (batch_size, out_chunk_len, target_dim)
-        out = paddle.reshape(out[:, 0, :], shape=[-1, self._out_chunk_len, self._target_dim])
+        out = paddle.reshape(
+            out[:, 0, :], shape=[-1, self._out_chunk_len, self._target_dim])
         return out
 
 
@@ -279,33 +267,32 @@ class TransformerModel(PaddleBaseModelImpl):
         _custom_encoder(paddle.nn.Layer|None): A custom user-provided encoder module for the transformer.
         _custom_decoder(paddle.nn.Layer|None): A custom user-provided decoder module for the transformer.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3), 
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: Optional[int] = None,
 
-        d_model: int = 8,
-        nhead: int = 4,
-        num_encoder_layers: int = 1,
-        num_decoder_layers: int = 1,
-        dim_feedforward: int = 64,
-        activation: str = "relu",
-        dropout_rate: float = 0.1,
-        custom_encoder: Optional[paddle.nn.Layer] = None,
-        custom_decoder: Optional[paddle.nn.Layer] = None,
-    ):
+    def __init__(
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: Optional[int]=None,
+            d_model: int=8,
+            nhead: int=4,
+            num_encoder_layers: int=1,
+            num_decoder_layers: int=1,
+            dim_feedforward: int=64,
+            activation: str="relu",
+            dropout_rate: float=0.1,
+            custom_encoder: Optional[paddle.nn.Layer]=None,
+            custom_decoder: Optional[paddle.nn.Layer]=None, ):
         self._d_model = d_model
         self._nhead = nhead
         self._num_encoder_layers = num_encoder_layers
@@ -329,13 +316,9 @@ class TransformerModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows:
 
@@ -365,12 +348,11 @@ class TransformerModel(PaddleBaseModelImpl):
                 f"but received {column}: {dtype}."
             )
         super(TransformerModel, self)._check_tsdataset(tsdataset)
-        
+
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -384,7 +366,8 @@ class TransformerModel(PaddleBaseModelImpl):
         observed_num_dim = 0
         input_dim = target_dim = train_tsdataset[0].get_target().data.shape[1]
         if train_tsdataset[0].get_observed_cov():
-            observed_num_dim = train_tsdataset[0].get_observed_cov().data.shape[1]
+            observed_num_dim = train_tsdataset[0].get_observed_cov(
+            ).data.shape[1]
             input_dim += observed_num_dim
         if train_tsdataset[0].get_known_cov():
             known_num_dim = train_tsdataset[0].get_known_cov().data.shape[1]
@@ -396,7 +379,7 @@ class TransformerModel(PaddleBaseModelImpl):
             "observed_num_dim": observed_num_dim,
         }
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -416,5 +399,4 @@ class TransformerModel(PaddleBaseModelImpl):
             activation=self._activation,
             dropout_rate=self._dropout_rate,
             custom_encoder=self._custom_encoder,
-            custom_decoder=self._custom_decoder
-        )
+            custom_decoder=self._custom_decoder)

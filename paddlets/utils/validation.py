@@ -19,15 +19,14 @@ logger = Logger(__name__)
 def cross_validate(
         data: TSDataset,
         estimator: Trainable,
-        splitter: SplitterBase = ExpandingWindowSplitter(),
-        use_backtest: bool = True,
-        predict_window: int = None,
-        stride: int = None,
-        metric: Optional[Metric] = None,
+        splitter: SplitterBase=ExpandingWindowSplitter(),
+        use_backtest: bool=True,
+        predict_window: int=None,
+        stride: int=None,
+        metric: Optional[Metric]=None,
         return_score=True,
-        reduction: Union[Callable[[np.ndarray], float], None] = np.mean,
-        verbose: bool = False,
-) -> Union[float, List[dict]]:
+        reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
+        verbose: bool=False, ) -> Union[float, List[dict]]:
     """
     Cross validate
     Evaluate forecaster using timeseries cross-validation.
@@ -53,24 +52,19 @@ def cross_validate(
         ValueError
 
     """
-    raise_if_not(isinstance(estimator, Trainable), "Estimator not right, check instructions to get valid estimators.")
-    raise_if_not(isinstance(splitter, SplitterBase), "Splitter not right, check instructions to get valid splitters.")
+    raise_if_not(
+        isinstance(estimator, Trainable),
+        "Estimator not right, check instructions to get valid estimators.")
+    raise_if_not(
+        isinstance(splitter, SplitterBase),
+        "Splitter not right, check instructions to get valid splitters.")
     splits = splitter.split(data)
 
-    res = [fit_and_score(train_data,
-                         test_data,
-                         estimator,
-                         use_backtest,
-                         predict_window,
-                         stride,
-                         metric,
-                         True,
-                         True,
-                         True,
-                         reduction,
-                         verbose
-                         )
-           for train_data, test_data in splits]
+    res = [
+        fit_and_score(train_data, test_data, estimator, use_backtest,
+                      predict_window, stride, metric, True, True, True,
+                      reduction, verbose) for train_data, test_data in splits
+    ]
     if return_score:
 
         return np.mean([dict["score"] for dict in res])
@@ -82,16 +76,15 @@ def fit_and_score(
         train_data: Union[TSDataset, List[TSDataset]],
         valid_data: Union[TSDataset, List[TSDataset]],
         estimator: Trainable,
-        use_backtest: bool = True,
-        predict_window: int = None,
-        stride: int = None,
-        metric: Optional[Metric] = None,
+        use_backtest: bool=True,
+        predict_window: int=None,
+        stride: int=None,
+        metric: Optional[Metric]=None,
         return_score=True,
         return_estimator=True,
         return_predicts=True,
-        reduction: Union[Callable[[np.ndarray], float], None] = np.mean,
-        verbose: bool = False
-) -> dict:
+        reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
+        verbose: bool=False) -> dict:
     """
     Fit and score
 
@@ -119,7 +112,9 @@ def fit_and_score(
     """
     if not use_backtest \
             and (isinstance(train_data, list) or isinstance(valid_data, list)):
-        raise NotImplementedError("Use backtest is False, train data will be used for prediction, it cannot be a list.")
+        raise NotImplementedError(
+            "Use backtest is False, train data will be used for prediction, it cannot be a list."
+        )
 
     if metric is None:
         metric = MAE()
@@ -133,42 +128,32 @@ def fit_and_score(
             start = None
             if not isinstance(train_data, list) \
                     and check_train_valid_continuity(train_data, valid_data):
-                data = TSDataset.concat([train_data, valid_data], drop_duplicates=True)
+                data = TSDataset.concat(
+                    [train_data, valid_data], drop_duplicates=True)
                 start = len(train_data.get_target())
             else:
                 data = valid_data
                 if verbose:
                     logger.info(
-                        "Train and valid are not continious, the initial in_chunk_len points of valid data will use as model input")
+                        "Train and valid are not continious, the initial in_chunk_len points of valid data will use as model input"
+                    )
 
-            score_dict, predicts = backtest(data,
-                                            estimator,
-                                            start,
-                                            predict_window,
-                                            stride,
-                                            metric,
-                                            True,
-                                            reduction,
-                                            verbose
-                                            )
+            score_dict, predicts = backtest(data, estimator, start,
+                                            predict_window, stride, metric,
+                                            True, reduction, verbose)
             score = _get_score_from_score_dict(metric, score_dict)
         else:
             # valid_data is a list
 
             for e in valid_data:
                 if verbose:
-                    logger.info("Train and valid are not continious, the initial in_"
-                                "chunk_len points of valid data will use as model input")
-                score_dict, tmp_prediction = backtest(e,
-                                                      estimator,
-                                                      None,
-                                                      predict_window,
-                                                      stride,
-                                                      metric,
-                                                      True,
-                                                      reduction,
-                                                      verbose
-                                                      )
+                    logger.info(
+                        "Train and valid are not continious, the initial in_"
+                        "chunk_len points of valid data will use as model input"
+                    )
+                score_dict, tmp_prediction = backtest(
+                    e, estimator, None, predict_window, stride, metric, True,
+                    reduction, verbose)
                 tmp_score = _get_score_from_score_dict(metric, score_dict)
                 score = tmp_score if score is None else score + tmp_score
                 if predicts is None:
@@ -202,7 +187,8 @@ def _get_score_from_score_dict(metric, score_dict):
 
     """
     # quantile metric(get mean value temporary, need to be optimized.)
-    if metric._TYPE == "quantile" and isinstance(list(score_dict[0].values())[0], dict):
+    if metric._TYPE == "quantile" and isinstance(
+            list(score_dict[0].values())[0], dict):
         score = np.mean([list(x.values()) for x in score_dict.values()])
     else:
         # multi-targets(get mean value temporary, need to be optimized.)

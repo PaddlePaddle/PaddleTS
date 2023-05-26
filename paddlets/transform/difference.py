@@ -25,12 +25,12 @@ class DifferenceFeatureGenerator(BaseTransform):
     Returns:
         None
     """
+
     def __init__(self,
-        cols: Union[str, List[str]],
-        difference_points: int = 0,
-        down_samples: int = 1,
-        suffix: str = '_diff'
-    ):
+                 cols: Union[str, List[str]],
+                 difference_points: int=0,
+                 down_samples: int=1,
+                 suffix: str='_diff'):
         super(DifferenceFeatureGenerator, self).__init__()
         self.difference_points = difference_points
         self.down_samples = down_samples
@@ -38,7 +38,7 @@ class DifferenceFeatureGenerator(BaseTransform):
         self.suffix = suffix
         self.need_previous_data = True
         self.n_rows_pre_data_need = difference_points
-        
+
     def fit_one(self, dataset: TSDataset):
         """
         This transformer does not need to be fitted.
@@ -51,7 +51,8 @@ class DifferenceFeatureGenerator(BaseTransform):
         """
         return self
 
-    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Transform target column to difference features.
         
@@ -72,9 +73,11 @@ class DifferenceFeatureGenerator(BaseTransform):
             #Get series
             tcov = new_ts.get_item_from_column(feature_name)
             #Adjust whether to be target
-            raise_if(feature_name in new_ts.target.columns, "The target value should't be differentiated!")
+            raise_if(feature_name in new_ts.target.columns,
+                     "The target value should't be differentiated!")
             #Generate difference feature content
-            for index in range(self.down_samples, self.difference_points + 1, self.down_samples):
+            for index in range(self.down_samples, self.difference_points + 1,
+                               self.down_samples):
                 v = tcov.data[feature_name].diff(index)
                 tcov.data[feature_name + '%s_%d' % (self.suffix, index)] = v
         return new_ts

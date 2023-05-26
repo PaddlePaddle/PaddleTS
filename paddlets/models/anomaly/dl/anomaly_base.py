@@ -18,12 +18,8 @@ from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
     Callback,
-    History,
-)
-from paddlets.metrics import (
-    MetricContainer, 
-    Metric
-)
+    History, )
+from paddlets.metrics import (MetricContainer, Metric)
 from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import check_tsdataset, to_tsdataset, build_network_input_spec
 from paddlets.datasets import TSDataset
@@ -84,27 +80,27 @@ class AnomalyBaseModel(abc.ABC):
         _history(History): Callback that records events into a `History` object.
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = None,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        threshold: Optional[float] = None,
-        threshold_fn: Callable[..., float] = None,
-        threshold_coeff: float = 1.0,
-        pred_adjust: bool = False,
-        pred_adjust_fn: Callable[..., np.ndarray] = None,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: Optional[int] = None,
-    ):
+            self,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=None,
+            anomaly_score_fn: Callable[..., List[float]]=None,
+            threshold: Optional[float]=None,
+            threshold_fn: Callable[..., float]=None,
+            threshold_coeff: float=1.0,
+            pred_adjust: bool=False,
+            pred_adjust_fn: Callable[..., np.ndarray]=None,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: Optional[int]=None, ):
         super(AnomalyBaseModel, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._sampling_stride = sampling_stride
@@ -124,7 +120,7 @@ class AnomalyBaseModel(abc.ABC):
         self._verbose = verbose
         self._patience = patience
         self._stop_training = False
-        
+
         self._fit_params = None
         self._network = None
         self._optimizer = None
@@ -138,7 +134,7 @@ class AnomalyBaseModel(abc.ABC):
         self._check_params()
         if seed is not None:
             paddle.seed(seed)
-        
+
     def _check_params(self):
         """Parameter validity verification.
 
@@ -152,18 +148,19 @@ class AnomalyBaseModel(abc.ABC):
 
             patience: patience must be >= 0.
         """
-        raise_if(self._batch_size <= 0, f"batch_size must be > 0, got {self._batch_size}.")
-        raise_if(self._max_epochs <= 0, f"max_epochs must be > 0, got {self._max_epochs}.")
-        raise_if(self._verbose <= 0, f"verbose must be > 0, got {self._verbose}.")
-        raise_if(self._patience < 0, f"patience must be >= 0, got {self._patience}.")
+        raise_if(self._batch_size <= 0,
+                 f"batch_size must be > 0, got {self._batch_size}.")
+        raise_if(self._max_epochs <= 0,
+                 f"max_epochs must be > 0, got {self._max_epochs}.")
+        raise_if(self._verbose <= 0,
+                 f"verbose must be > 0, got {self._verbose}.")
+        raise_if(self._patience < 0,
+                 f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
-        if not self._eval_metrics: 
+        if not self._eval_metrics:
             self._eval_metrics = ["mse"]
 
-    def _check_tsdataset(
-        self, 
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
 
@@ -212,7 +209,8 @@ class AnomalyBaseModel(abc.ABC):
         )
         illegal_cols = []
         for col, dtype in observed.dtypes.items():
-            if not (np.issubdtype(dtype, np.floating) or np.issubdtype(dtype, np.integer)):
+            if not (np.issubdtype(dtype, np.floating) or np.issubdtype(
+                    dtype, np.integer)):
                 illegal_cols.append(col)
         raise_if(
             len(illegal_cols) > 0,
@@ -238,16 +236,14 @@ class AnomalyBaseModel(abc.ABC):
             Optimizer.
         """
         return self._optimizer_fn(
-            **self._optimizer_params,
-            parameters=self._network.parameters()
-        )
+            **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
-        self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None,
-        shuffle: bool = True
-    ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None,
+            shuffle: bool=True) -> Tuple[paddle.io.DataLoader, List[
+                paddle.io.DataLoader]]:
         """Generate dataloaders for train and eval set.
 
         Args: 
@@ -263,26 +259,25 @@ class AnomalyBaseModel(abc.ABC):
         train_dataset = data_adapter.to_sample_dataset(
             train_tsdataset,
             in_chunk_len=self._in_chunk_len,
-            sampling_stride=self._sampling_stride,
-        )
-        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size, shuffle=shuffle)
-       
+            sampling_stride=self._sampling_stride, )
+        train_dataloader = data_adapter.to_paddle_dataloader(
+            train_dataset, self._batch_size, shuffle=shuffle)
+
         valid_dataloaders = []
         if valid_tsdataset is not None:
             valid_dataset = data_adapter.to_sample_dataset(
                 valid_tsdataset,
                 in_chunk_len=self._in_chunk_len,
-                sampling_stride=self._sampling_stride,
-            )
-            valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size, shuffle=shuffle)
+                sampling_stride=self._sampling_stride, )
+            valid_dataloader = data_adapter.to_paddle_dataloader(
+                valid_dataset, self._batch_size, shuffle=shuffle)
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
 
     def _init_predict_dataloader(
-        self, 
-        tsdataset: TSDataset,
-        sampling_stride: int = 1,
-    ) -> paddle.io.DataLoader:
+            self,
+            tsdataset: TSDataset,
+            sampling_stride: int=1, ) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
         Args: 
@@ -297,15 +292,13 @@ class AnomalyBaseModel(abc.ABC):
         dataset = data_adapter.to_sample_dataset(
             tsdataset,
             in_chunk_len=self._in_chunk_len,
-            sampling_stride=sampling_stride,
-        )
-        dataloader = data_adapter.to_paddle_dataloader(dataset, self._batch_size, shuffle=False)
+            sampling_stride=sampling_stride, )
+        dataloader = data_adapter.to_paddle_dataloader(
+            dataset, self._batch_size, shuffle=False)
         return dataloader
 
-    def _init_metrics(
-        self, 
-        eval_names: List[str] 
-    ) -> Tuple[List[Metric], List[str], Dict[str, MetricContainer]]:
+    def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
+            str], Dict[str, MetricContainer]]:
         """Set attributes relative to the metrics.
 
         Args:
@@ -320,7 +313,8 @@ class AnomalyBaseModel(abc.ABC):
         metric_container_dict = OrderedDict()
         for name in eval_names:
             metric_container_dict.update({
-                name: MetricContainer(metrics, prefix=f"{name}_")
+                name: MetricContainer(
+                    metrics, prefix=f"{name}_")
             })
         metrics, metrics_names = [], []
         for _, metric_container in metric_container_dict.items():
@@ -336,33 +330,31 @@ class AnomalyBaseModel(abc.ABC):
             CallbackContainer: Container holding a list of callbacks.
         """
         # Use the last metric in the container as the standard for early stopping.
-        early_stopping_metric = (
-            self._metrics_names[-1] if len(self._metrics_names) > 0 else None
-        )
+        early_stopping_metric = (self._metrics_names[-1]
+                                 if len(self._metrics_names) > 0 else None)
         # Set callback functions, including history, early stopping, etc..
-        history, callbacks = History(self._verbose), [] # nqa
+        history, callbacks = History(self._verbose), []  # nqa
         callbacks.append(history)
         if (early_stopping_metric is not None) and (self._patience > 0):
             early_stopping = EarlyStopping(
                 early_stopping_metric=early_stopping_metric,
-                is_maximize=self._metrics[-1]._MAXIMIZE, 
-                patience=self._patience
-            )
+                is_maximize=self._metrics[-1]._MAXIMIZE,
+                patience=self._patience)
             callbacks.append(early_stopping)
         else:
-            logger.warning("No early stopping will be performed, last training weights will be used.")
+            logger.warning(
+                "No early stopping will be performed, last training weights will be used."
+            )
 
         if self._callbacks:
             callbacks.extend(self._callbacks)
         callback_container = CallbackContainer(callbacks)
         callback_container.set_trainer(self)
         return history, callback_container
-    
-    def fit(
-        self,
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
-    ):
+
+    def fit(self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data and valid_dataloader for validation.
 
@@ -373,21 +365,23 @@ class AnomalyBaseModel(abc.ABC):
         self._check_tsdataset(train_tsdataset)
         if valid_tsdataset is not None:
             self._check_tsdataset(valid_tsdataset)
-        self._fit_params = self._update_fit_params(train_tsdataset, valid_tsdataset)
-        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
+        self._fit_params = self._update_fit_params(train_tsdataset,
+                                                   valid_tsdataset)
+        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(
+            train_tsdataset, valid_tsdataset)
         self._fit(train_dataloader, valid_dataloaders)
-        
+
         # Get threshold
         if self._threshold is None:
-            dataloader, _ = self._init_fit_dataloaders(train_tsdataset, shuffle=False)
+            dataloader, _ = self._init_fit_dataloaders(
+                train_tsdataset, shuffle=False)
             anomaly_score = self._get_anomaly_score(dataloader)
-            self._threshold = self._threshold_coeff * self._get_threshold(anomaly_score)
-        
-    def _fit(
-        self, 
-        train_dataloader: paddle.io.DataLoader,
-        valid_dataloaders: List[paddle.io.DataLoader] = None
-    ):
+            self._threshold = self._threshold_coeff * self._get_threshold(
+                anomaly_score)
+
+    def _fit(self,
+             train_dataloader: paddle.io.DataLoader,
+             valid_dataloaders: List[paddle.io.DataLoader]=None):
         """Fit function core logic. 
 
         Args: 
@@ -410,13 +404,13 @@ class AnomalyBaseModel(abc.ABC):
             self._train_epoch(train_dataloader)
 
             # Predict for each eval set.
-            for eval_name, valid_dataloader in zip(valid_names, valid_dataloaders):
+            for eval_name, valid_dataloader in zip(valid_names,
+                                                   valid_dataloaders):
                 self._predict_epoch(eval_name, valid_dataloader)
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
-                epoch_idx, logs=self._history._epoch_metrics
-            )
+                epoch_idx, logs=self._history._epoch_metrics)
             if self._stop_training:
                 break
 
@@ -424,11 +418,9 @@ class AnomalyBaseModel(abc.ABC):
         self._callback_container.on_train_end()
         self._network.eval()
 
-    def _get_anomaly_score(
-        self,
-        dataloader: paddle.io.DataLoader,
-        **predict_kwargs
-    ) -> np.ndarray:
+    def _get_anomaly_score(self,
+                           dataloader: paddle.io.DataLoader,
+                           **predict_kwargs) -> np.ndarray:
         """Get anomaly score on a batch.
 
         Args:
@@ -443,13 +435,9 @@ class AnomalyBaseModel(abc.ABC):
         if self._anomaly_score_fn is not None:
             anomaly_score = self._anomaly_score_fn(anomaly_score)
         return anomaly_score
-    
+
     @to_tsdataset(scenario="anomaly_label")
-    def predict(
-        self,
-        tsdataset: TSDataset,
-        **predict_kwargs
-    ) -> TSDataset:
+    def predict(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
         """Get anomaly label on a batch. the result are output as tsdataset.
 
         Args:
@@ -461,20 +449,18 @@ class AnomalyBaseModel(abc.ABC):
         """
         dataloader = self._init_predict_dataloader(tsdataset)
         anomaly_score = self._get_anomaly_score(dataloader, **predict_kwargs)
-        anomaly_label = (anomaly_score >= self._threshold) + 0 
+        anomaly_label = (anomaly_score >= self._threshold) + 0
         # adjust pred 
         target = tsdataset.get_target()
         if self._pred_adjust and target is not None:
             true_label = np.squeeze(tsdataset.get_target().to_numpy())
-            anomaly_label = self._pred_adjust_fn(anomaly_label, true_label[-len(anomaly_label):])
+            anomaly_label = self._pred_adjust_fn(
+                anomaly_label, true_label[-len(anomaly_label):])
         return anomaly_label
-    
+
     @to_tsdataset(scenario="anomaly_score")
-    def predict_score(
-        self,
-        tsdataset: TSDataset,
-        **predict_kwargs
-    ) -> TSDataset:
+    def predict_score(self, tsdataset: TSDataset,
+                      **predict_kwargs) -> TSDataset:
         """Get anomaly score on a batch. the result are output as tsdataset.
 
         Args:
@@ -486,12 +472,9 @@ class AnomalyBaseModel(abc.ABC):
         """
         dataloader = self._init_predict_dataloader(tsdataset)
         return self._get_anomaly_score(dataloader, **predict_kwargs)
-    
-    def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader,
-        **predict_kwargs
-    ) -> np.ndarray:
+
+    def _predict(self, dataloader: paddle.io.DataLoader,
+                 **predict_kwargs) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -507,14 +490,11 @@ class AnomalyBaseModel(abc.ABC):
             y_pred, y_true = self._network(data)
             loss = self._get_loss(y_pred, y_true)
             loss_list.extend(loss)
-            
+
         return np.array(loss_list)
-    
-    def _get_loss(
-        self,
-        y_pred: paddle.Tensor,
-        y_true: paddle.Tensor
-    ) -> np.ndarray:
+
+    def _get_loss(self, y_pred: paddle.Tensor,
+                  y_true: paddle.Tensor) -> np.ndarray:
         """Get the loss for anomaly label and anomaly score.
 
         Note:
@@ -528,13 +508,13 @@ class AnomalyBaseModel(abc.ABC):
             np.ndarray.
 
         """
-        loss = paddle.mean(paddle.square(paddle.subtract(y_pred, y_true)), axis=[1, 2], keepdim=False)
+        loss = paddle.mean(
+            paddle.square(paddle.subtract(y_pred, y_true)),
+            axis=[1, 2],
+            keepdim=False)
         return loss.numpy()
 
-    def _train_epoch(
-        self, 
-        train_loader: paddle.io.DataLoader
-    ):
+    def _train_epoch(self, train_loader: paddle.io.DataLoader):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -547,11 +527,8 @@ class AnomalyBaseModel(abc.ABC):
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Dict[str, Any]:
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -566,17 +543,10 @@ class AnomalyBaseModel(abc.ABC):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {
-            "batch_size": y_true.shape[0],
-            "loss": loss.item()
-        }
+        batch_logs = {"batch_size": y_true.shape[0], "loss": loss.item()}
         return batch_logs
 
-    def _predict_epoch(
-        self, 
-        name: str, 
-        loader: paddle.io.DataLoader
-    ):
+    def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
         """Predict an epoch and update metrics.
 
         Args:
@@ -593,11 +563,8 @@ class AnomalyBaseModel(abc.ABC):
         metrics_logs = self._metric_container_dict[name](y_pred, y_true)
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
-    
-    def _predict_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> np.ndarray:
+
+    def _predict_batch(self, X: Dict[str, paddle.Tensor]) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -610,11 +577,8 @@ class AnomalyBaseModel(abc.ABC):
         y_pred, y_true = self._network(X)
         return y_pred.numpy(), y_true.numpy()
 
-    def _compute_loss(
-        self, 
-        y_pred: paddle.Tensor, 
-        y_true: paddle.Tensor
-    ) -> paddle.Tensor:
+    def _compute_loss(self, y_pred: paddle.Tensor,
+                      y_true: paddle.Tensor) -> paddle.Tensor:
         """Compute the loss.
 
         Note:
@@ -628,11 +592,8 @@ class AnomalyBaseModel(abc.ABC):
             paddle.Tensor: Loss value.
         """
         return self._loss_fn(y_pred, y_true)
-    
-    def _get_threshold(
-        self,
-        anomaly_score: np.ndarray
-    ) -> float:
+
+    def _get_threshold(self, anomaly_score: np.ndarray) -> float:
         """Get the threshold value to judge anomaly.
         
         Note:
@@ -648,10 +609,9 @@ class AnomalyBaseModel(abc.ABC):
 
     @abc.abstractmethod
     def _update_fit_params(
-        self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args: 
@@ -675,7 +635,8 @@ class AnomalyBaseModel(abc.ABC):
     def _build_meta(self):
         res = {
             "model_type": "anomaly",
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "ancestor_classname_set":
+            [clazz.__name__ for clazz in self.__class__.mro()],
             "modulename": self.__module__,
             "model_threshold": self._threshold,
             "size": {
@@ -685,12 +646,16 @@ class AnomalyBaseModel(abc.ABC):
         }
         for key, value in self._fit_params.items():
             if not isinstance(value, int):
-                continue 
+                continue
             if value != 0:
                 res['input_data'][key] = value
         return res
-    
-    def save(self, path: str, network_model: bool = False, dygraph_to_static: bool = True, batch_size: Optional[int] = None) -> None:
+
+    def save(self,
+             path: str,
+             network_model: bool=False,
+             dygraph_to_static: bool=True,
+             batch_size: Optional[int]=None) -> None:
         """
         Saves a AnomalyBaseModel instance to a disk file.
 
@@ -715,18 +680,18 @@ class AnomalyBaseModel(abc.ABC):
         abs_root_path = os.path.dirname(abs_model_path)
         raise_if_not(
             os.path.exists(abs_root_path),
-            "failed to save model, path not exists: %s" % abs_root_path
-        )
+            "failed to save model, path not exists: %s" % abs_root_path)
         raise_if(
             os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" % abs_model_path
-        )
+            "failed to save model, path must be a file, not directory: %s" %
+            abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
-            "Failed to save model, target file already exists: %s" % abs_model_path
-        )
+            "Failed to save model, target file already exists: %s" %
+            abs_model_path)
 
-        raise_if(self._network is None, "failed to save model, model._network must not be None.")
+        raise_if(self._network is None,
+                 "failed to save model, model._network must not be None.")
         # raise_if(self._optimizer is None, "failed to save model, model._optimizer must not be None.")
 
         # path to save other internal files.
@@ -749,11 +714,12 @@ class AnomalyBaseModel(abc.ABC):
         }
 
         # internal files must not conflict with existing files.
-        conflict_files = {*internal_filename_map.values()} - set(os.listdir(abs_root_path))
+        conflict_files = {*internal_filename_map.values()} - set(
+            os.listdir(abs_root_path))
         raise_if(
             len(conflict_files) < len(internal_filename_map),
-            "failed to save model internal files, these files must not exist: %s" % conflict_files
-        )
+            "failed to save model internal files, these files must not exist: %s"
+            % conflict_files)
 
         # start to save
         # 1 save network model and params for paddle inference
@@ -765,26 +731,35 @@ class AnomalyBaseModel(abc.ABC):
             input_spec = build_network_input_spec(model_meta)
             try:
                 if dygraph_to_static:
-                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
-                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
+                    layer = paddle.jit.to_static(
+                        self._network, input_spec=input_spec)
+                    paddle.jit.save(
+                        layer,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]))
                 else:
-                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
+                    paddle.jit.save(
+                        self._network,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]),
+                        input_spec=input_spec)
             except Exception as e:
                 raise_log(
                     ValueError(
-                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
-                        (internal_filename_map["network_model"], str(e))
-                    )
-                )
+                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s"
+                        % (internal_filename_map["network_model"], str(e))))
 
         # 2 save model meta (e.g. classname)
         try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+            with open(
+                    os.path.join(abs_root_path,
+                                 internal_filename_map["model_meta"]),
+                    "w") as f:
                 json.dump(model_meta, f, ensure_ascii=False)
         except Exception as e:
             raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
+                ValueError("error occurred while saving %s, err: %s" % (
+                    internal_filename_map["model_meta"], str(e))))
 
         # 3 save optimizer state dict (currently ignore optimizer logic.)
         # optimizer_state_dict = self._optimizer.state_dict()
@@ -806,15 +781,13 @@ class AnomalyBaseModel(abc.ABC):
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"])
-            )
+                path=os.path.join(abs_root_path,
+                                  internal_filename_map["network_statedict"]))
         except Exception as e:
             raise_log(
-                ValueError(
-                    "error occurred while saving %s: %s, err: %s" %
-                    (internal_filename_map["network_statedict"], network_state_dict, str(e))
-                )
-            )
+                ValueError("error occurred while saving %s: %s, err: %s" %
+                           (internal_filename_map["network_statedict"],
+                            network_state_dict, str(e))))
 
         # 5 save model
         optimizer = self._optimizer
@@ -836,7 +809,9 @@ class AnomalyBaseModel(abc.ABC):
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
         except Exception as e:
-            raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (
+                    abs_model_path, str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
@@ -859,25 +834,31 @@ class AnomalyBaseModel(abc.ABC):
             AnomalyBaseModel: the loaded AnomalyBaseModel instance.
         """
         abs_path = os.path.abspath(path)
-        raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
-        raise_if(os.path.isdir(abs_path), "path must be a file path, not a directory: %s" % abs_path)
+        raise_if_not(
+            os.path.exists(abs_path), "model file does not exist: %s" %
+            abs_path)
+        raise_if(
+            os.path.isdir(abs_path),
+            "path must be a file path, not a directory: %s" % abs_path)
 
         # 1.1 model
         with open(abs_path, "rb") as f:
             model = pickle.load(f)
         raise_if_not(
             isinstance(model, AnomalyBaseModel),
-            "loaded model type must be inherited from %s, but actual loaded model type: %s" %
-            (AnomalyBaseModel, model.__class__)
-        )
+            "loaded model type must be inherited from %s, but actual loaded model type: %s"
+            % (AnomalyBaseModel, model.__class__))
 
         # 1.2 - 1.4 model._network
         model._network = model._init_network()
-        raise_if(model._network is None, "model._network must not be None after calling _init_network()")
+        raise_if(
+            model._network is None,
+            "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
         network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
-        network_statedict_abs_path = os.path.join(os.path.dirname(abs_path), network_statedict_filename)
+        network_statedict_abs_path = os.path.join(
+            os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)
         model._network.set_state_dict(network_statedict)
 

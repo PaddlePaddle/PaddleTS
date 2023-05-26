@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 This implementation is based on the article `USAD : UnSupervised Anomaly Detection on Multivariate Time Series <https://dl.acm.org/doi/pdf/10.1145/3394486.3403392>`_ .
 
@@ -26,7 +25,7 @@ from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
 from paddlets.models.utils import to_tsdataset
 
-       
+
 class _USAModule(paddle.nn.Layer):
     """USAD Network structure.
 
@@ -44,30 +43,28 @@ class _USAModule(paddle.nn.Layer):
         pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
 
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        ed_type: str,
-        fit_params: Dict[str, Any],
-        hidden_config: List[int],
-        activation: Callable[..., paddle.Tensor],
-        last_layer_activation: Callable[..., paddle.Tensor],
-        kernel_size: int,
-        dropout_rate: float,
-        use_bn: bool,
-        embedding_size: int,
-        pooling: bool,
-        flatten: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            ed_type: str,
+            fit_params: Dict[str, Any],
+            hidden_config: List[int],
+            activation: Callable[..., paddle.Tensor],
+            last_layer_activation: Callable[..., paddle.Tensor],
+            kernel_size: int,
+            dropout_rate: float,
+            use_bn: bool,
+            embedding_size: int,
+            pooling: bool,
+            flatten: bool, ):
         super().__init__()
         raise_if_not(
-            ed_type in ("MLP", "CNN"), 
-            "`ed_type` must be either 'MLP' or 'CNN'"
-        )
+            ed_type in ("MLP", "CNN"),
+            "`ed_type` must be either 'MLP' or 'CNN'")
         raise_if(
             np.any(np.array(hidden_config) <= 0),
-            f"hidden_config must be > 0, got {hidden_config}."
-        )
+            f"hidden_config must be > 0, got {hidden_config}.")
         # embedding cate feature
         self._pooling = pooling
         self._cat_size = len(fit_params['observed_cat_cols'])
@@ -79,12 +76,13 @@ class _USAModule(paddle.nn.Layer):
             observed_cat_cols = fit_params['observed_cat_cols']
             self._observed_cat_emb = []
             for _, col_size in observed_cat_cols.items():
-                self._observed_cat_emb.append(paddle.nn.Embedding(col_size, embedding_size))
+                self._observed_cat_emb.append(
+                    paddle.nn.Embedding(col_size, embedding_size))
             if pooling:
                 self._cat_dim = embedding_size
             else:
                 self._cat_dim = embedding_size * len(observed_cat_cols)
-                
+
         feature_dim = self._num_dim + self._cat_dim
         self._feature_dim = feature_dim
         if ed_type == 'MLP':
@@ -113,10 +111,7 @@ class _USAModule(paddle.nn.Layer):
             self._decoder2 = CNN(hidden_config[-1], hidden_config[::-1][1:] + [feature_dim], \
                                 activation, last_layer_activation, kernel_size, dropout_rate, use_bn, is_encoder=False)
 
-    def forward(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args: 
@@ -124,20 +119,22 @@ class _USAModule(paddle.nn.Layer):
 
         Returns:
             paddle.Tensor: Output of model.
-        """        
+        """
         x = paddle.transpose(X["observed_cov_numeric"], perm=[0, 2, 1])
         if self._cat_size > 0:
             feature_cat = []
-            observed_cat = paddle.transpose(X["observed_cov_categorical"], perm=[0, 2, 1])
+            observed_cat = paddle.transpose(
+                X["observed_cov_categorical"], perm=[0, 2, 1])
             for i in range(self._cat_size):
-                feature_cat.append(self._observed_cat_emb[i](observed_cat[:, i]))
+                feature_cat.append(self._observed_cat_emb[i](observed_cat[:,
+                                                                          i]))
             if self._pooling:
                 feature_cat = paddle.stack(feature_cat, axis=-1).mean(axis=-1)
             else:
                 feature_cat = paddle.concat(feature_cat, axis=-1)
             feature_cat = paddle.transpose(feature_cat, perm=[0, 2, 1])
             x = paddle.concat([x, feature_cat], axis=-2)
-        
+
         if self._flatten:
             x = paddle.reshape(x, [paddle.shape(x)[0], -1])
 
@@ -145,9 +142,9 @@ class _USAModule(paddle.nn.Layer):
         w1 = self._decoder1(z)
         w2 = self._decoder2(z)
         w3 = self._decoder2(self._encoder(w1))
-    
+
         return x, w1, w2, w3
-        
+
 
 class USAD(AnomalyBaseModel):
     """USAD model for anomaly detection.
@@ -214,42 +211,40 @@ class USAD(AnomalyBaseModel):
         _pooling(bool): Whether to use average pooling to aggregate embeddings, if False, concat each embedding.
         _flatten(bool): Whether to flatten the in_chunk_len and feature_dim.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        threshold_fn: Callable[..., float] = U.percentile,
-        q: float = 100,
-        threshold: Optional[float] = None,
-        threshold_coeff: float = 1.0,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        pred_adjust: bool = False,
-        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        ed_type: str = 'MLP',
-        activation: Callable[..., paddle.Tensor] = paddle.nn.ReLU,
-        last_layer_activation: Callable[..., paddle.Tensor] = paddle.nn.Sigmoid,
-        use_bn: bool = False,
-        hidden_config: List[int] = None,
-        kernel_size: int = 3,
-        dropout_rate: float = 0.2,
-        embedding_size: int = 16,
-        pooling: bool = False,
-        flatten: bool = True,
-    ):
-        self._hidden_config = (
-            hidden_config if hidden_config else [32, 16]
-        )
+    def __init__(
+            self,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            threshold_fn: Callable[..., float]=U.percentile,
+            q: float=100,
+            threshold: Optional[float]=None,
+            threshold_coeff: float=1.0,
+            anomaly_score_fn: Callable[..., List[float]]=None,
+            pred_adjust: bool=False,
+            pred_adjust_fn: Callable[..., np.ndarray]=U.result_adjust,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            ed_type: str='MLP',
+            activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU,
+            last_layer_activation: Callable[...,
+                                            paddle.Tensor]=paddle.nn.Sigmoid,
+            use_bn: bool=False,
+            hidden_config: List[int]=None,
+            kernel_size: int=3,
+            dropout_rate: float=0.2,
+            embedding_size: int=16,
+            pooling: bool=False,
+            flatten: bool=True, ):
+        self._hidden_config = (hidden_config if hidden_config else [32, 16])
         self._use_bn = use_bn
         self._kernel_size = kernel_size
         self._ed_type = ed_type
@@ -262,9 +257,9 @@ class USAD(AnomalyBaseModel):
         self._flatten = flatten
 
         super().__init__(
-            in_chunk_len=in_chunk_len, 
+            in_chunk_len=in_chunk_len,
             sampling_stride=sampling_stride,
-            loss_fn=loss_fn, 
+            loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
             threshold=threshold,
             threshold_coeff=threshold_coeff,
@@ -272,21 +267,19 @@ class USAD(AnomalyBaseModel):
             anomaly_score_fn=anomaly_score_fn,
             pred_adjust=pred_adjust,
             pred_adjust_fn=pred_adjust_fn,
-            optimizer_params=optimizer_params, 
-            eval_metrics=eval_metrics, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
-        
+            optimizer_params=optimizer_params,
+            eval_metrics=eval_metrics,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
+
     def _update_fit_params(
-        self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -306,14 +299,14 @@ class USAD(AnomalyBaseModel):
                 observed_cat_cols[col] = len(train_df[col].unique())
             else:
                 observed_num_cols.append(col)
-        
+
         fit_params = {
             "observed_cat_cols": observed_cat_cols,
             "observed_num_dim": len(observed_num_cols),
             "observed_cat_dim": len(observed_cat_cols),
         }
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -332,13 +325,9 @@ class USAD(AnomalyBaseModel):
             self._use_bn,
             self._embedding_size,
             self._pooling,
-            self._flatten,
-        )
-    
-    def _get_threshold(
-        self,
-        anomaly_score: np.ndarray
-    ) -> float:
+            self._flatten, )
+
+    def _get_threshold(self, anomaly_score: np.ndarray) -> float:
         """Get the threshold value to judge anomaly.
         
         Args:
@@ -357,20 +346,19 @@ class USAD(AnomalyBaseModel):
         """
         opt1 = self._optimizer_fn(
             **self._optimizer_params,
-            parameters=(self._network._encoder.parameters() + self._network._decoder1.parameters())
-        )
+            parameters=(self._network._encoder.parameters() +
+                        self._network._decoder1.parameters()))
         opt2 = self._optimizer_fn(
             **self._optimizer_params,
-            parameters=(self._network._encoder.parameters() + self._network._decoder2.parameters())
-        )
+            parameters=(self._network._encoder.parameters() +
+                        self._network._decoder2.parameters()))
         return (opt1, opt2)
 
     def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader,
-        alpha: float = .5,
-        beta: float = .5, 
-    ) -> np.ndarray:
+            self,
+            dataloader: paddle.io.DataLoader,
+            alpha: float=.5,
+            beta: float=.5, ) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -385,16 +373,14 @@ class USAD(AnomalyBaseModel):
         loss_list = []
         for _, data in enumerate(dataloader):
             y_true, w1, _, w3 = self._network(data)
-            loss = alpha * self._get_loss(w1, y_true) + beta * self._get_loss(w3, y_true)
+            loss = alpha * self._get_loss(w1, y_true) + beta * self._get_loss(
+                w3, y_true)
             loss_list.extend(loss)
-            
+
         return np.array(loss_list)
 
-    def _get_loss(
-        self,
-        y_pred: paddle.Tensor,
-        y_true: paddle.Tensor
-    ) -> np.ndarray:
+    def _get_loss(self, y_pred: paddle.Tensor,
+                  y_true: paddle.Tensor) -> np.ndarray:
         """Get the loss for anomaly label and anomaly score.
 
         Note:
@@ -409,15 +395,18 @@ class USAD(AnomalyBaseModel):
 
         """
         if self._flatten and self._ed_type == 'MLP':
-            loss = paddle.mean(paddle.square(paddle.subtract(y_pred, y_true)), axis=1, keepdim=False)
+            loss = paddle.mean(
+                paddle.square(paddle.subtract(y_pred, y_true)),
+                axis=1,
+                keepdim=False)
         else:
-            loss = paddle.mean(paddle.square(paddle.subtract(y_pred, y_true)), axis=[1, 2], keepdim=False)
+            loss = paddle.mean(
+                paddle.square(paddle.subtract(y_pred, y_true)),
+                axis=[1, 2],
+                keepdim=False)
         return loss.numpy()
 
-    def _train_epoch(
-        self, 
-        train_loader: paddle.io.DataLoader
-    ):
+    def _train_epoch(self, train_loader: paddle.io.DataLoader):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -430,12 +419,9 @@ class USAD(AnomalyBaseModel):
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer[0].get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor],
-        batch_idx: int
-    ) -> Dict[str, Any]:
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor],
+                     batch_idx: int) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -447,13 +433,15 @@ class USAD(AnomalyBaseModel):
         """
         batch_idx = batch_idx + 1
         y_true, w1, w2, w3 = self._network(X)
-        loss1 = 1 / batch_idx * self._compute_loss(y_true, w1) + (1 - 1/batch_idx) * self._compute_loss(y_true, w3)
+        loss1 = 1 / batch_idx * self._compute_loss(y_true, w1) + (
+            1 - 1 / batch_idx) * self._compute_loss(y_true, w3)
         loss1.backward()
         self._optimizer[0].step()
         self._optimizer[0].clear_grad()
 
         y_true, w1, w2, w3 = self._network(X)
-        loss2 = 1 / batch_idx * self._compute_loss(y_true, w2) - (1 - 1/batch_idx) * self._compute_loss(y_true, w3)
+        loss2 = 1 / batch_idx * self._compute_loss(y_true, w2) - (
+            1 - 1 / batch_idx) * self._compute_loss(y_true, w3)
         loss2.backward()
         self._optimizer[1].step()
         self._optimizer[1].clear_grad()
@@ -464,10 +452,7 @@ class USAD(AnomalyBaseModel):
         }
         return batch_logs
 
-    def _predict_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> np.ndarray:
+    def _predict_batch(self, X: Dict[str, paddle.Tensor]) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 

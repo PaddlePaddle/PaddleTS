@@ -35,7 +35,8 @@ class TestClassifyDataAdapter(unittest.TestCase):
         # case 1                                                                #
         # 1) train scenario. Built paddle ds with X and Y. #
         #########################################################################
-        train_paddle_ds = self._adapter.to_paddle_dataset(self._paddlets_ds, self._labels)
+        train_paddle_ds = self._adapter.to_paddle_dataset(self._paddlets_ds,
+                                                          self._labels)
         # self.assertEqual(len(train_paddle_ds), self._paddlets_ds.shape[0], len(self._labels))
 
         #########################################################################
@@ -62,20 +63,20 @@ class TestClassifyDataAdapter(unittest.TestCase):
         # case 1 (Typical usage for forcasting and representation) #
         # 1) target, known_cov, observed_cov, static_cov NOT None. #
         ############################################################
-        paddle_ds = self._adapter.to_paddle_dataset(self._paddlets_ds, self._labels)
+        paddle_ds = self._adapter.to_paddle_dataset(self._paddlets_ds,
+                                                    self._labels)
         batch_size = 2
-        _ = self._adapter.to_paddle_dataloader(paddle_ds, batch_size, shuffle=False)
+        _ = self._adapter.to_paddle_dataloader(
+            paddle_ds, batch_size, shuffle=False)
 
     @staticmethod
-    def _build_mock_data_and_label(
-            target_periods: int = 200,
-            target_dims: int = 5,
-            n_classes: int = 4,
-            instance_cnt: int = 100,
-            random_data: bool = True,
-            range_index: bool = False,
-            seed: bool = False
-    ):
+    def _build_mock_data_and_label(target_periods: int=200,
+                                   target_dims: int=5,
+                                   n_classes: int=4,
+                                   instance_cnt: int=100,
+                                   random_data: bool=True,
+                                   range_index: bool=False,
+                                   seed: bool=False):
         """
         build train datasets and labels.
         todo:not equal target_periods?
@@ -84,28 +85,31 @@ class TestClassifyDataAdapter(unittest.TestCase):
             np.random.seed(2022)
 
         target_cols = [f"dim_{k}" for k in range(target_dims)]
-        labels = [f"class" + str(item) for item in np.random.randint(0, n_classes, instance_cnt)]
+        labels = [
+            f"class" + str(item)
+            for item in np.random.randint(0, n_classes, instance_cnt)
+        ]
 
         ts_datasets = []
         for i in range(instance_cnt):
             if random_data:
-                target_data = np.random.randint(0, 10, (target_periods, target_dims))
+                target_data = np.random.randint(0, 10,
+                                                (target_periods, target_dims))
             else:
                 target_data = target_periods * [target_dims * [0]]
             if range_index:
                 target_df = pd.DataFrame(
                     target_data,
                     index=pd.RangeIndex(0, target_periods, 1),
-                    columns=target_cols
-                )
+                    columns=target_cols)
             else:
                 target_df = pd.DataFrame(
                     target_data,
-                    index=pd.date_range("2022-01-01", periods=target_periods, freq="1D"),
-                    columns=target_cols
-                )
+                    index=pd.date_range(
+                        "2022-01-01", periods=target_periods, freq="1D"),
+                    columns=target_cols)
             ts_datasets.append(
-                TSDataset(target=TimeSeries.load_from_dataframe(data=target_df).astype(np.float32))
-            )
+                TSDataset(target=TimeSeries.load_from_dataframe(data=target_df)
+                          .astype(np.float32)))
 
         return ts_datasets, labels

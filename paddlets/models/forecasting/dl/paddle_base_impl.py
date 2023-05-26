@@ -15,12 +15,8 @@ from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
     Callback,
-    History,
-)
-from paddlets.metrics import (
-    MetricContainer, 
-    Metric
-)
+    History, )
+from paddlets.metrics import (MetricContainer, Metric)
 from paddlets.models.forecasting.dl.paddle_base import PaddleBaseModel
 from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import to_tsdataset, check_tsdataset
@@ -79,28 +75,27 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         _history(History): Callback that records events into a `History` object.
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = None,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: Union[List[str], List[Metric]] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: Optional[int] = None,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=None,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: Union[List[str], List[Metric]]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: Optional[int]=None, ):
         super(PaddleBaseModelImpl, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
-            skip_chunk_len=skip_chunk_len
-        )
+            skip_chunk_len=skip_chunk_len)
         self._sampling_stride = sampling_stride
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
@@ -112,7 +107,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._verbose = verbose
         self._patience = patience
         self._stop_training = False
-        
+
         self._fit_params = None
         self._network = None
         self._optimizer = None
@@ -126,7 +121,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._check_params()
         if seed is not None:
             paddle.seed(seed)
-        
+
     def _check_params(self):
         """Parameter validity verification.
 
@@ -140,18 +135,19 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
             patience: patience must be >= 0.
         """
-        raise_if(self._batch_size <= 0, f"batch_size must be > 0, got {self._batch_size}.")
-        raise_if(self._max_epochs <= 0, f"max_epochs must be > 0, got {self._max_epochs}.")
-        raise_if(self._verbose <= 0, f"verbose must be > 0, got {self._verbose}.")
-        raise_if(self._patience < 0, f"patience must be >= 0, got {self._patience}.")
+        raise_if(self._batch_size <= 0,
+                 f"batch_size must be > 0, got {self._batch_size}.")
+        raise_if(self._max_epochs <= 0,
+                 f"max_epochs must be > 0, got {self._max_epochs}.")
+        raise_if(self._verbose <= 0,
+                 f"verbose must be > 0, got {self._verbose}.")
+        raise_if(self._patience < 0,
+                 f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
-        if not self._eval_metrics: 
+        if not self._eval_metrics:
             self._eval_metrics = ["mae"]
 
-    def _check_tsdataset(
-        self, 
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
 
@@ -177,14 +173,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             Optimizer.
         """
         return self._optimizer_fn(
-            **self._optimizer_params,
-            parameters=self._network.parameters()
-        )
+            **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
-        self, 
-        train_tsdataset: Union[TSDataset, List[TSDataset]], 
-        valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None
+            self,
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]]=None
     ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
         """Generate dataloaders for train and eval set.
 
@@ -207,14 +201,14 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
                 skip_chunk_len=self._skip_chunk_len,
-                sampling_stride=self._sampling_stride
-            )
+                sampling_stride=self._sampling_stride)
             if train_dataset is None:
                 train_dataset = dataset
             else:
                 train_dataset.samples = train_dataset.samples + dataset.samples
         #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
-        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size)
+        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset,
+                                                             self._batch_size)
         valid_dataloaders = []
         if valid_tsdataset is not None:
             valid_dataset = None
@@ -227,20 +221,19 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                     in_chunk_len=self._in_chunk_len,
                     out_chunk_len=self._out_chunk_len,
                     skip_chunk_len=self._skip_chunk_len,
-                    sampling_stride=self._sampling_stride
-                )
+                    sampling_stride=self._sampling_stride)
                 if valid_dataset is None:
                     valid_dataset = dataset
                 else:
                     valid_dataset.samples = valid_dataset.samples + dataset.samples
-            valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size)
+            valid_dataloader = data_adapter.to_paddle_dataloader(
+                valid_dataset, self._batch_size)
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
 
     def _init_predict_dataloader(
-        self, 
-        tsdataset: TSDataset, 
-    ) -> paddle.io.DataLoader:
+            self,
+            tsdataset: TSDataset, ) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
         Args: 
@@ -250,9 +243,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             paddle.io.DataLoader: dataloader. 
         """
         self._check_tsdataset(tsdataset)
-        boundary = (
-            len(tsdataset.get_target().data) - 1 + self._skip_chunk_len + self._out_chunk_len
-        )
+        boundary = (len(tsdataset.get_target().data) - 1 + self._skip_chunk_len
+                    + self._out_chunk_len)
         data_adapter = DataAdapter()
         dataset = data_adapter.to_sample_dataset(
             tsdataset,
@@ -260,15 +252,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
             sampling_stride=self._sampling_stride,
-            time_window=(boundary, boundary)
-        )
-        dataloader = data_adapter.to_paddle_dataloader(dataset, self._batch_size)
+            time_window=(boundary, boundary))
+        dataloader = data_adapter.to_paddle_dataloader(dataset,
+                                                       self._batch_size)
         return dataloader
 
-    def _init_metrics(
-        self, 
-        eval_names: List[str] 
-    ) -> Tuple[List[Metric], List[str], Dict[str, MetricContainer]]:
+    def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
+            str], Dict[str, MetricContainer]]:
         """Set attributes relative to the metrics.
 
         Args:
@@ -283,7 +273,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         metric_container_dict = OrderedDict()
         for name in eval_names:
             metric_container_dict.update({
-                name: MetricContainer(metrics, prefix=f"{name}_")
+                name: MetricContainer(
+                    metrics, prefix=f"{name}_")
             })
         metrics, metrics_names = [], []
         for _, metric_container in metric_container_dict.items():
@@ -299,33 +290,31 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             CallbackContainer: Container holding a list of callbacks.
         """
         # Use the last metric in the container as the standard for early stopping.
-        early_stopping_metric = (
-            self._metrics_names[-1] if len(self._metrics_names) > 0 else None
-        )
+        early_stopping_metric = (self._metrics_names[-1]
+                                 if len(self._metrics_names) > 0 else None)
         # Set callback functions, including history, early stopping, etc..
-        history, callbacks = History(self._verbose), [] # nqa
+        history, callbacks = History(self._verbose), []  # nqa
         callbacks.append(history)
         if (early_stopping_metric is not None) and (self._patience > 0):
             early_stopping = EarlyStopping(
                 early_stopping_metric=early_stopping_metric,
-                is_maximize=self._metrics[-1]._MAXIMIZE, 
-                patience=self._patience
-            )
+                is_maximize=self._metrics[-1]._MAXIMIZE,
+                patience=self._patience)
             callbacks.append(early_stopping)
         else:
-            logger.warning("No early stopping will be performed, last training weights will be used.")
+            logger.warning(
+                "No early stopping will be performed, last training weights will be used."
+            )
 
         if self._callbacks:
             callbacks.extend(self._callbacks)
         callback_container = CallbackContainer(callbacks)
         callback_container.set_trainer(self)
         return history, callback_container
-    
-    def fit(
-        self,
-        train_tsdataset: Union[TSDataset, List[TSDataset]], 
-        valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None
-    ):
+
+    def fit(self,
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]]=None):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data and valid_dataloader for validation.
 
@@ -338,18 +327,18 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         if isinstance(valid_tsdataset, TSDataset):
             valid_tsdataset = [valid_tsdataset]
         self._check_multi_tsdataset(train_tsdataset)
-        self._fit_params = self._update_fit_params(train_tsdataset, valid_tsdataset)
-        
+        self._fit_params = self._update_fit_params(train_tsdataset,
+                                                   valid_tsdataset)
+
         if isinstance(valid_tsdataset, list):
             self._check_multi_tsdataset(valid_tsdataset)
-        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(train_tsdataset, valid_tsdataset)
+        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(
+            train_tsdataset, valid_tsdataset)
         self._fit(train_dataloader, valid_dataloaders)
-        
-    def _fit(
-        self, 
-        train_dataloader: paddle.io.DataLoader,
-        valid_dataloaders: List[paddle.io.DataLoader] = None
-    ):
+
+    def _fit(self,
+             train_dataloader: paddle.io.DataLoader,
+             valid_dataloaders: List[paddle.io.DataLoader]=None):
         """Fit function core logic. 
 
         Args: 
@@ -372,25 +361,22 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             self._train_epoch(train_dataloader)
 
             # Predict for each eval set.
-            for eval_name, valid_dataloader in zip(valid_names, valid_dataloaders):
+            for eval_name, valid_dataloader in zip(valid_names,
+                                                   valid_dataloaders):
                 self._predict_epoch(eval_name, valid_dataloader)
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
-                epoch_idx, logs=self._history._epoch_metrics
-            )
+                epoch_idx, logs=self._history._epoch_metrics)
             if self._stop_training:
                 break
 
         # Call the `on_train_end` method of each callback at the end of the training.
         self._callback_container.on_train_end()
         self._network.eval()
-    
+
     @to_tsdataset(scenario="forecasting")
-    def predict(
-        self,
-        tsdataset: TSDataset
-    ) -> TSDataset:
+    def predict(self, tsdataset: TSDataset) -> TSDataset:
         """Make predictions on a batch. the result are output as tsdataset.
 
         Args:
@@ -402,10 +388,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         dataloader = self._init_predict_dataloader(tsdataset)
         return self._predict(dataloader)
 
-    def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader
-    ) -> np.ndarray:
+    def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -424,10 +407,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         results = np.vstack(results)
         return results
 
-    def _train_epoch(
-        self, 
-        train_loader: paddle.io.DataLoader
-    ):
+    def _train_epoch(self, train_loader: paddle.io.DataLoader):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -441,12 +421,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor], 
-        y: paddle.Tensor
-    ) -> Dict[str, Any]:
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor],
+                     y: paddle.Tensor) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -461,17 +438,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {
-            "batch_size": y.shape[0],
-            "loss": loss.item()
-        }
+        batch_logs = {"batch_size": y.shape[0], "loss": loss.item()}
         return batch_logs
 
-    def _predict_epoch(
-        self, 
-        name: str, 
-        loader: paddle.io.DataLoader
-    ):
+    def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
         """Predict an epoch and update metrics.
 
         Args:
@@ -489,11 +459,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         metrics_logs = self._metric_container_dict[name](y_true, scores)
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
-    
-    def _predict_batch(
-        self, 
-        X: paddle.Tensor
-    ) -> np.ndarray:
+
+    def _predict_batch(self, X: paddle.Tensor) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -505,9 +472,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         scores = self._network(X)
         return scores.numpy()
 
-    def _prepare_X_y(self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Tuple[Dict[str, paddle.Tensor], paddle.Tensor]:
+    def _prepare_X_y(self, X: Dict[str, paddle.Tensor]) -> Tuple[Dict[
+            str, paddle.Tensor], paddle.Tensor]:
         """Split the packet into X, y.
 
         Note:
@@ -525,11 +491,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             return X, y
         return X, None
 
-    def _compute_loss(
-        self, 
-        y_score: paddle.Tensor, 
-        y_true: paddle.Tensor
-    ) -> paddle.Tensor:
+    def _compute_loss(self, y_score: paddle.Tensor,
+                      y_true: paddle.Tensor) -> paddle.Tensor:
         """Compute the loss.
 
         Note:
@@ -546,10 +509,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
     @abc.abstractmethod
     def _update_fit_params(
-        self, 
-        train_tsdataset: TSDataset, 
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args: 
@@ -574,8 +536,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         res = super()._build_meta()
         for key, value in self._fit_params.items():
             if not isinstance(value, int):
-                continue 
+                continue
             if value != 0:
                 res['input_data'][key] = value
         return res
-

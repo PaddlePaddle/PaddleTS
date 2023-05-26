@@ -15,6 +15,7 @@ from paddlets.logger.logger import log_decorator
 
 TSDATASET_COL_TYPES = ['target', 'observed_cov', 'known_cov']
 
+
 class BaseTransform(object, metaclass=abc.ABCMeta):
     """
     Base class for all data transformation classes (named `transformers` in this module)
@@ -22,6 +23,7 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
     Any subclass or transformer needs to inherit from this base class and
     implement :func:`fit`, :func:`transform` and :func:`fit_transform` methods.
     """
+
     def __init__(self):
         #if transformer need previous data to generate features
         self.need_previous_data = False
@@ -34,11 +36,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         Args:
             datasets(List[TSDataset]): datasets from which to fit or transform the transformer.
         """
-        raise_if(
-            len(datasets) == 0,
-            "The Length of datasets cannot be 0!"
-        )
-        columns_set = set(tuple(sorted(dataset.columns.items())) for dataset in datasets)
+        raise_if(len(datasets) == 0, "The Length of datasets cannot be 0!")
+        columns_set = set(
+            tuple(sorted(dataset.columns.items())) for dataset in datasets)
         raise_if_not(
             len(columns_set) == 1,
             f"Invalid tsdatasets. The given tsdataset column schema ({[ts.columns for ts in datasets]}) must be same."
@@ -64,14 +64,15 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
             for attr in attr_list:
                 if getattr(dataset[0], attr) is not None:
                     ts_build_param[attr] = TimeSeries(
-                        pd.concat([getattr(data, attr).data for data in dataset]).reset_index(drop=True),
-                        1
-                    )
+                        pd.concat(
+                            [getattr(data, attr).data
+                             for data in dataset]).reset_index(drop=True),
+                        1)
                 else:
                     ts_build_param[attr] = None
             #new_dataset is not a standard TSDataset, only use fit
             new_dataset = TSDataset(**ts_build_param)
-            return self.fit_one(new_dataset) 
+            return self.fit_one(new_dataset)
         else:
             return self.fit_one(dataset)
 
@@ -91,11 +92,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         """
         pass
 
-    def transform(
-        self,
-        dataset: Union[TSDataset, List[TSDataset]],
-        inplace: bool = False
-    ) -> Union[TSDataset, List[TSDataset]]:
+    def transform(self,
+                  dataset: Union[TSDataset, List[TSDataset]],
+                  inplace: bool=False) -> Union[TSDataset, List[TSDataset]]:
         """
         Apply the fitted transformer on the dataset
 
@@ -115,11 +114,8 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
             return self.transform_one(dataset, inplace)
 
     @abc.abstractmethod
-    def transform_one(
-        self,
-        dataset: TSDataset,
-        inplace: bool = False
-    ) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Apply the fitted transformer on the dataset
 
@@ -137,9 +133,8 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
     def transform_n_rows(
             self,
             dataset: TSDataset,
-            n_rows:int,
-            inplace: bool = False,
-    ) -> TSDataset:
+            n_rows: int,
+            inplace: bool=False, ) -> TSDataset:
         """
         Apply the fitted transformer on the part of the dataset
 
@@ -157,18 +152,18 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
             return self.transform_one(dataset, inplace)
         if self.n_rows_pre_data_need == -1:
             transformed_dataset = self.transform_one(dataset, inplace)
-            _, res = split_dataset(transformed_dataset , data_len - n_rows)
+            _, res = split_dataset(transformed_dataset, data_len - n_rows)
         else:
-            _, dataset = split_dataset(dataset, data_len - n_rows - self.n_rows_pre_data_need)
+            _, dataset = split_dataset(
+                dataset, data_len - n_rows - self.n_rows_pre_data_need)
             transformed_dataset = self.transform_one(dataset, inplace)
-            _, res = split_dataset(transformed_dataset, self.n_rows_pre_data_need)
+            _, res = split_dataset(transformed_dataset,
+                                   self.n_rows_pre_data_need)
         return res
 
     def fit_transform(
-        self,
-        dataset: Union[TSDataset, List[TSDataset]],
-        inplace: bool = False
-    ) -> Union[TSDataset, List[TSDataset]]:
+            self, dataset: Union[TSDataset, List[TSDataset]],
+            inplace: bool=False) -> Union[TSDataset, List[TSDataset]]:
         """
         Combine the above fit and transform into one method, firstly fitting the transformer from the dataset 
         and then applying the fitted transformer on the dataset.
@@ -185,10 +180,8 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         return self.fit(dataset).transform(dataset, inplace)
 
     def inverse_transform(
-        self,
-        dataset: Union[TSDataset, List[TSDataset]],
-        inplace: bool = False
-    ) -> Union[TSDataset, List[TSDataset]]:
+            self, dataset: Union[TSDataset, List[TSDataset]],
+            inplace: bool=False) -> Union[TSDataset, List[TSDataset]]:
         """
         Inversely transform the dataset output by the `transform` method.
 
@@ -214,15 +207,14 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         """
         if isinstance(dataset, list):
             self._check_multi_tsdataset(dataset)
-            return [self.inverse_transform_one(data, inplace) for data in dataset]
+            return [
+                self.inverse_transform_one(data, inplace) for data in dataset
+            ]
         else:
             return self.inverse_transform_one(dataset, inplace)
 
-    def inverse_transform_one(
-        self,
-        dataset: TSDataset,
-        inplace: bool = False
-    ) -> TSDataset:
+    def inverse_transform_one(self, dataset: TSDataset,
+                              inplace: bool=False) -> TSDataset:
         """
         Inversely transform the dataset output by the `transform` method.
 
@@ -248,6 +240,7 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
         """
         raise NotImplementedError
 
+
 class UdBaseTransform(BaseTransform):
     """
     User define base transform.
@@ -263,31 +256,29 @@ class UdBaseTransform(BaseTransform):
     """
 
     def __init__(
-        self,
-        ud_transformer: object,
-        in_col_names: Optional[Union[str, List[str]]]=None,
-        per_col_transform: bool=False,
-        drop_origin_columns: bool=False,
-        out_col_types: Optional[Union[str, List[str]]]=None,
-        out_col_names: Optional[List[str]]=None,
-    ):
+            self,
+            ud_transformer: object,
+            in_col_names: Optional[Union[str, List[str]]]=None,
+            per_col_transform: bool=False,
+            drop_origin_columns: bool=False,
+            out_col_types: Optional[Union[str, List[str]]]=None,
+            out_col_names: Optional[List[str]]=None, ):
         super().__init__()
         self._ud_transformer = ud_transformer
         self._drop_origin_columns = drop_origin_columns
         self._out_col_types = out_col_types
         self._out_col_names = out_col_names
-        self._cols = [in_col_names] if isinstance(in_col_names, str) else in_col_names
+        self._cols = [in_col_names] if isinstance(in_col_names,
+                                                  str) else in_col_names
         self._fitted = False
         self._per_col_transform = per_col_transform
         if self._per_col_transform:
             self._ud_transformer_col_list = {}
 
-    def _check_output(
-        self,
-        raw_dataset: TSDataset,
-        input: pd.DataFrame,
-        output: np.ndarray
-    ):
+    def _check_output(self,
+                      raw_dataset: TSDataset,
+                      input: pd.DataFrame,
+                      output: np.ndarray):
         """
         Check the legitimacy of the output.
 
@@ -302,42 +293,37 @@ class UdBaseTransform(BaseTransform):
         Raises:
             ValueError
         """
-        raise_if_not(
-            input.shape[0] == output.shape[0],
-            "The row of input is not equal to the row of output!"
-        )
+        raise_if_not(input.shape[0] == output.shape[0],
+                     "The row of input is not equal to the row of output!")
 
-        output_col_num = output.shape[1] if len(output.shape) >= 2 else output.shape[0]
+        output_col_num = output.shape[1] if len(
+            output.shape) >= 2 else output.shape[0]
 
         if self._out_col_names:
             if isinstance(self._out_col_names, list):
                 raise_if_not(
                     len(self._out_col_names) == output_col_num,
-                    "The out_col_names does not match the actual output!"
-                )                
-        
+                    "The out_col_names does not match the actual output!")
+
         def check_start_time():
-            start_time_set = set(raw_dataset.get_item_from_column(column).start_time for column in input.columns)
+            start_time_set = set(
+                raw_dataset.get_item_from_column(column).start_time
+                for column in input.columns)
             return len(start_time_set) == 1
 
         def get_input_col_type():
             return set(raw_dataset.columns[column] for column in input.columns)
 
         if self._out_col_types:
-            raise_if_not(
-                check_start_time(),
-                "The start time point of input cols is different!"
-            )
+            raise_if_not(check_start_time(),
+                         "The start time point of input cols is different!")
             if isinstance(self._out_col_types, list):
                 raise_if_not(
                     len(self._out_col_types) == output_col_num,
-                    "The out_col_types does not match the actual output"
-                )
+                    "The out_col_types does not match the actual output")
                 for type in self._out_col_types:
-                    raise_if(
-                        type not in TSDATASET_COL_TYPES,
-                        f"Invalid col type: {type}"
-                    )
+                    raise_if(type not in TSDATASET_COL_TYPES,
+                             f"Invalid col type: {type}")
         else:
             if len(get_input_col_type()) != 1:
                 raise_if_not(
@@ -348,10 +334,9 @@ class UdBaseTransform(BaseTransform):
                 )
 
     def _infer_output_column_types(
-        self,
-        raw_dataset: TSDataset,
-        input: pd.DataFrame,
-    )-> Union[str, List[str]]:
+            self,
+            raw_dataset: TSDataset,
+            input: pd.DataFrame, ) -> Union[str, List[str]]:
         """
         Infer output column's types.
 
@@ -366,17 +351,15 @@ class UdBaseTransform(BaseTransform):
         if self._out_col_types:
             return self._out_col_types
         else:
-            columns = list(raw_dataset.columns[column] for column in input.columns)
+            columns = list(raw_dataset.columns[column]
+                           for column in input.columns)
             if len(set(columns)) == 1:
                 return columns[0]
             else:
                 return columns
 
-    def _get_output_column_names(
-        self,
-        input: pd.DataFrame,
-        output: np.ndarray
-    )-> List[str]:
+    def _get_output_column_names(self, input: pd.DataFrame,
+                                 output: np.ndarray) -> List[str]:
         """
         Get output column's names.
 
@@ -393,23 +376,18 @@ class UdBaseTransform(BaseTransform):
             if input.shape == output.shape and self._drop_origin_columns:
                 return list(input.columns)
             else:
-                name_prefix = "_".join(
-                    [
-                        self._ud_transformer.__class__.__name__,
-                        "-".join(
-                            [column for column in input.columns]
-                        )
-                    ]
-                )
-                output_col_num = output.shape[1] if len(output.shape) >= 2 else output.shape[0]
+                name_prefix = "_".join([
+                    self._ud_transformer.__class__.__name__,
+                    "-".join([column for column in input.columns])
+                ])
+                output_col_num = output.shape[1] if len(
+                    output.shape) >= 2 else output.shape[0]
                 return [f"{name_prefix}_{i}" for i in range(output_col_num)]
 
-    def _gen_input(
-        self,
-        raw_dataset: TSDataset,
-        cols: Union[str, List[str]],
-        strict: bool=True
-    )->pd.DataFrame:
+    def _gen_input(self,
+                   raw_dataset: TSDataset,
+                   cols: Union[str, List[str]],
+                   strict: bool=True) -> pd.DataFrame:
         """
         Generate the input to ud transformer base on raw_dataset.
 
@@ -426,19 +404,13 @@ class UdBaseTransform(BaseTransform):
             input = raw_dataset[cols]
         else:
             cols = [col for col in cols if col in raw_dataset.columns]
-            raise_if(
-                len(cols) == 0,
-                "No cols was matched!"
-            )
+            raise_if(len(cols) == 0, "No cols was matched!")
             input = raw_dataset[cols]
         if isinstance(input, pd.Series):
             input = input.to_frame()
         return input
 
-    def _gen_output(
-        self,
-        raw_output
-    )->np.ndarray:
+    def _gen_output(self, raw_output) -> np.ndarray:
         """
         Generate the np.ndarray output base on the raw_output from ud transform.
 
@@ -451,9 +423,7 @@ class UdBaseTransform(BaseTransform):
         if isinstance(raw_output, np.ndarray):
             return raw_output
         else:
-            raise_log(
-                TypeError(f"Invalid output type: {type(raw_output)}")
-            )
+            raise_log(TypeError(f"Invalid output type: {type(raw_output)}"))
 
     @log_decorator
     def fit_one(self, dataset: TSDataset):
@@ -481,12 +451,10 @@ class UdBaseTransform(BaseTransform):
         self._fitted = True
         return self
 
-    def _transform_logic(
-        self, 
-        dataset: TSDataset, 
-        cols: Union[str, List[str]],
-        transform_func: Callable
-    ) -> TSDataset:
+    def _transform_logic(self,
+                         dataset: TSDataset,
+                         cols: Union[str, List[str]],
+                         transform_func: Callable) -> TSDataset:
         """
         Transform or inverse_transform the dataset with the fitted transformer.
         
@@ -505,53 +473,52 @@ class UdBaseTransform(BaseTransform):
         raw_output = transform_func(input)
 
         output = self._gen_output(raw_output)
-        
+
         self._check_output(dataset, input, output)
 
         col_names = self._get_output_column_names(input, output)
         col_types = self._infer_output_column_types(dataset, input)
-    
+
         insert_col_name = []
+
         def set_columns(output, col_types):
             for col in output.columns:
                 dataset.set_column(col, output[col], col_types)
                 insert_col_name.append(col)
-        
+
         def gen_index():
             start_time = dataset.get_item_from_column(cols[0]).start_time
             if isinstance(dataset.freq, str):
                 return pd.date_range(
-                    start=start_time, 
-                    periods=output.shape[0], 
-                    freq=dataset.freq
-                )
+                    start=start_time,
+                    periods=output.shape[0],
+                    freq=dataset.freq)
             else:
                 return pd.RangeIndex(
-                    start=start_time, 
+                    start=start_time,
                     stop=start_time + output.shape[0] * dataset.freq,
-                    step=dataset.freq
-                )
+                    step=dataset.freq)
+
         time_index = gen_index()
 
         if isinstance(col_types, str):
-            tmp_output = pd.DataFrame(output, index=time_index, columns=col_names)
+            tmp_output = pd.DataFrame(
+                output, index=time_index, columns=col_names)
             set_columns(tmp_output, col_types)
         else:
             for i in range(output.shape[1]):
-                tmp_output = pd.DataFrame(output[:, i], index=time_index, columns=[col_names[i]])
+                tmp_output = pd.DataFrame(
+                    output[:, i], index=time_index, columns=[col_names[i]])
                 set_columns(tmp_output, col_types[i])
         if self._drop_origin_columns:
             for col in input.columns:
                 if col not in insert_col_name:
-                    dataset.drop(col)        
+                    dataset.drop(col)
         return dataset
 
     @log_decorator
-    def transform_one(
-        self, 
-        dataset: TSDataset, 
-        inplace: bool = False
-    ) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Transform or inverse_transform the dataset with the fitted transformer.
         
@@ -574,11 +541,8 @@ class UdBaseTransform(BaseTransform):
             return self._transform_logic(new_ts, self._cols, self._transform)
 
     @log_decorator
-    def inverse_transform_one(
-        self, 
-        dataset: TSDataset,
-        inplace: bool=False
-    ) -> TSDataset:
+    def inverse_transform_one(self, dataset: TSDataset,
+                              inplace: bool=False) -> TSDataset:
         """
         Inversely transform the dataset output by the `transform` method.
 
@@ -598,7 +562,8 @@ class UdBaseTransform(BaseTransform):
                 self._transform_logic(new_ts, col, self._inverse_transform)
             return new_ts
         else:
-            return self._transform_logic(dataset, self._cols, self._inverse_transform)
+            return self._transform_logic(dataset, self._cols,
+                                         self._inverse_transform)
 
     @abc.abstractmethod
     def _fit(self, input: pd.DataFrame):
@@ -614,10 +579,7 @@ class UdBaseTransform(BaseTransform):
         pass
 
     @abc.abstractmethod
-    def _transform(
-        self, 
-        input: pd.DataFrame
-    ):
+    def _transform(self, input: pd.DataFrame):
         """
         Transform the dataset with the fitted transformer.
         
@@ -627,10 +589,7 @@ class UdBaseTransform(BaseTransform):
         """
         pass
 
-    def _inverse_transform(
-            self, 
-            input: pd.DataFrame
-        ):
+    def _inverse_transform(self, input: pd.DataFrame):
         """
         Inversely transform the dataset output by the `transform` method.
 

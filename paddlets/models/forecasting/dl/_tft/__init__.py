@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 """
 paddlets paddle forecasting model tft
 """
@@ -15,4 +14,3 @@ from paddlets.models.forecasting.dl._tft.modules import NumericInputTransformati
 from paddlets.models.forecasting.dl._tft.modules import CategoricalInputTransformation
 from paddlets.models.forecasting.dl._tft.modules import InterpretableMultiHeadAttention
 from paddlets.models.forecasting.dl._tft.tft import TemporalFusionTransformer
-

@@ -12,6 +12,7 @@ from paddlets.logger import Logger, raise_if, raise_if_not
 
 logger = Logger(__file__)
 
+
 class SplitterBase(metaclass=ABCMeta):
     """
     Base class for all splitter.
@@ -28,14 +29,12 @@ class SplitterBase(metaclass=ABCMeta):
     
     """
 
-    def __init__(self,
-                 skip_size: int = 0,
-                 verbose: bool = True) -> None:
+    def __init__(self, skip_size: int=0, verbose: bool=True) -> None:
         self._skip_size = skip_size
         self._verbose = verbose
 
-    def split(self, dataset: TSDataset,
-              return_index: bool = False) -> Union[TSDataset, pd.DatetimeIndex, pd.RangeIndex]:
+    def split(self, dataset: TSDataset, return_index: bool=False) -> Union[
+            TSDataset, pd.DatetimeIndex, pd.RangeIndex]:
         """
         Split TSdataset.
         
@@ -64,8 +63,12 @@ class SplitterBase(metaclass=ABCMeta):
                 train_index.freq = indices.freqstr
                 test_index.freq = indices.freqstr
             elif isinstance(indices, pd.RangeIndex):
-                train_index = pd.RangeIndex(indices[0] + train[0] * indices.step, indices[0] + train[-1] * indices.step + indices.step, indices.step)
-                test_index = pd.RangeIndex(indices[0] + test[0] * indices.step, indices[0] + test[-1] * indices.step + indices.step, indices.step)
+                train_index = pd.RangeIndex(
+                    indices[0] + train[0] * indices.step, indices[0] +
+                    train[-1] * indices.step + indices.step, indices.step)
+                test_index = pd.RangeIndex(indices[0] + test[0] * indices.step,
+                                           indices[0] + test[-1] * indices.step
+                                           + indices.step, indices.step)
             if return_index:
                 yield (train_index, test_index)
             else:
@@ -73,11 +76,14 @@ class SplitterBase(metaclass=ABCMeta):
                 static_cov = dataset.get_static_cov()
                 target_train = target[train_index]
                 target_test = target[test_index]
-                observed_cov_train = observed_cov[train_index] if observed_cov else None
-                observed_cov_test = observed_cov[test_index] if observed_cov else None
-                yield (TSDataset(target_train, observed_cov_train, known_cov, static_cov),
-                       TSDataset(target_test, observed_cov_test, known_cov, static_cov)
-                       )
+                observed_cov_train = observed_cov[
+                    train_index] if observed_cov else None
+                observed_cov_test = observed_cov[
+                    test_index] if observed_cov else None
+                yield (TSDataset(target_train, observed_cov_train, known_cov,
+                                 static_cov),
+                       TSDataset(target_test, observed_cov_test, known_cov,
+                                 static_cov))
 
     @abstractclassmethod
     def _get_splits(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -96,7 +102,6 @@ class SplitterBase(metaclass=ABCMeta):
         """
         pass
 
-
     def _check_params(self):
         """
         Check params
@@ -112,17 +117,20 @@ class SplitterBase(metaclass=ABCMeta):
         
         """
 
-        raise_if_not(isinstance(self._skip_size, numbers.Integral),
-                     "The number of skip_size must be of Integral type. "
-                     "%s of type %s was passed." % (self._skip_size, type(self._skip_size))
-                     )
-        raise_if(self._skip_size < 0,
-                 "skip_size should not be a  negitive integer, got skip_size={0} instead.".format(self._skip_size))
+        raise_if_not(
+            isinstance(self._skip_size, numbers.Integral),
+            "The number of skip_size must be of Integral type. "
+            "%s of type %s was passed." %
+            (self._skip_size, type(self._skip_size)))
+        raise_if(
+            self._skip_size < 0,
+            "skip_size should not be a  negitive integer, got skip_size={0} instead.".
+            format(self._skip_size))
 
-        raise_if_not(isinstance(self._verbose, bool),
-                     "Param verbose must be of bool type. "
-                     "%s of type %s was passed." % (self._verbose, type(self._verbose))
-                     )
+        raise_if_not(
+            isinstance(self._verbose, bool),
+            "Param verbose must be of bool type. "
+            "%s of type %s was passed." % (self._verbose, type(self._verbose)))
 
 
 class HoldoutSplitter(SplitterBase):
@@ -164,8 +172,8 @@ class HoldoutSplitter(SplitterBase):
 
     def __init__(self,
                  test_size: Union[int, float],
-                 skip_size: int = 0,
-                 verbose: bool = True) -> None:
+                 skip_size: int=0,
+                 verbose: bool=True) -> None:
         super().__init__(skip_size, verbose)
         self._test_size = test_size
         self._check_params()
@@ -190,15 +198,16 @@ class HoldoutSplitter(SplitterBase):
         if isinstance(self._test_size, float):
             test_size = self._convert_test(test_size, n_samples)
 
-        raise_if(n_samples <= test_size, "Test size should <= data target length")
-        raise_if(n_samples <= test_size + skip_size, "Test size + skip size should <= data target length")
+        raise_if(n_samples <= test_size,
+                 "Test size should <= data target length")
+        raise_if(n_samples <= test_size + skip_size,
+                 "Test size + skip size should <= data target length")
 
         split_point = n_samples - test_size
         indices = np.arange(n_samples)
         yield (
             indices[:split_point],
-            indices[split_point + skip_size:],
-        )
+            indices[split_point + skip_size:], )
 
     def _convert_test(self, test_size: float, n_samples: int):
         """
@@ -215,10 +224,8 @@ class HoldoutSplitter(SplitterBase):
             ValueError
         
         """
-        raise_if_not(
-            0.0 < test_size < 1.0,
-            "`test_size` (float) should be between 0.0 and 1.0."
-        )
+        raise_if_not(0.0 < test_size < 1.0,
+                     "`test_size` (float) should be between 0.0 and 1.0.")
         return int(n_samples * test_size)
 
     def _check_params(self):
@@ -306,11 +313,12 @@ class ExpandingWindowSplitter(SplitterBase):
         
     """
 
-    def __init__(self, n_splits: int = 5,
-                 test_size: Union[int, None] = None,
-                 skip_size: int = 0,
-                 max_train_size: int = None,
-                 verbose: bool = True) -> None:
+    def __init__(self,
+                 n_splits: int=5,
+                 test_size: Union[int, None]=None,
+                 skip_size: int=0,
+                 max_train_size: int=None,
+                 verbose: bool=True) -> None:
 
         super().__init__(skip_size, verbose)
         self._test_size = test_size
@@ -340,29 +348,36 @@ class ExpandingWindowSplitter(SplitterBase):
         if not test_size:
             test_size = n_samples // (n_splits + 1)
             if self._verbose:
-                logger.info(f"Did not set test_size, set to data.len// (n_splits+1) by default,test_size = {test_size}")
+                logger.info(
+                    f"Did not set test_size, set to data.len// (n_splits+1) by default,test_size = {test_size}"
+                )
 
-        raise_if(n_samples <= test_size, "Test size should <= data target length")
-        raise_if(n_samples <= test_size + skip_size, "Test size + skip size should <= data target length")
-        raise_if(n_splits > n_samples,
-                 f"Cannot have number of folds={n_splits} greater than the number of samples={n_samples}.")
-        raise_if(n_samples - test_size * n_splits - skip_size <= 0,
-                 f"(test_size({test_size}) - skip_size({skip_size}))*n_splits({n_splits}) can not equal or greater than the number of samples({n_samples})")
+        raise_if(n_samples <= test_size,
+                 "Test size should <= data target length")
+        raise_if(n_samples <= test_size + skip_size,
+                 "Test size + skip size should <= data target length")
+        raise_if(
+            n_splits > n_samples,
+            f"Cannot have number of folds={n_splits} greater than the number of samples={n_samples}."
+        )
+        raise_if(
+            n_samples - test_size * n_splits - skip_size <= 0,
+            f"(test_size({test_size}) - skip_size({skip_size}))*n_splits({n_splits}) can not equal or greater than the number of samples({n_samples})"
+        )
 
         indices = np.arange(n_samples)
-        test_starts = range(n_samples - test_size * n_splits - skip_size, n_samples, test_size)
+        test_starts = range(n_samples - test_size * n_splits - skip_size,
+                            n_samples, test_size)
 
         for start in test_starts:
             if max_train_size is not None and max_train_size < start:
                 yield (
                     indices[:max_train_size],
-                    indices[start + skip_size: start + skip_size + test_size],
-                )
+                    indices[start + skip_size:start + skip_size + test_size], )
             else:
                 yield (
                     indices[:start],
-                    indices[start + skip_size: start + skip_size + test_size],
-                )
+                    indices[start + skip_size:start + skip_size + test_size], )
 
     def _check_params(self):
         """
@@ -380,22 +395,29 @@ class ExpandingWindowSplitter(SplitterBase):
         """
         super()._check_params()
         if self._max_train_size:
-            raise_if_not(isinstance(self._test_size, numbers.Integral),
-                         "The number of max_train_size must be of Integral type. "
-                         "%s of type %s was passed." % (self._max_train_size, type(self._max_train_size))
-                         )
-            raise_if(self._max_train_size <= 0,
-                     "max_train_size should be a positive integer, got max_train_size={0} instead.".format(
-                         self._max_train_size))
+            raise_if_not(
+                isinstance(self._test_size, numbers.Integral),
+                "The number of max_train_size must be of Integral type. "
+                "%s of type %s was passed." %
+                (self._max_train_size, type(self._max_train_size)))
+            raise_if(
+                self._max_train_size <= 0,
+                "max_train_size should be a positive integer, got max_train_size={0} instead.".
+                format(self._max_train_size))
             if self._skip_size != 0:
-                raise_if(self._max_train_size, "skip size and max train size can not set simultaneously")
+                raise_if(
+                    self._max_train_size,
+                    "skip size and max train size can not set simultaneously")
 
-        raise_if_not(isinstance(self._n_splits, numbers.Integral),
-                     "The number of folds must be of Integral type. "
-                     "%s of type %s was passed." % (self._n_splits, type(self._n_splits))
-                     )
-        raise_if(self._n_splits < 1,
-                 "cross-validation requires at least 1 splits, got n_splits={0} instead.".format(self._n_splits))
+        raise_if_not(
+            isinstance(self._n_splits, numbers.Integral),
+            "The number of folds must be of Integral type. "
+            "%s of type %s was passed." %
+            (self._n_splits, type(self._n_splits)))
+        raise_if(
+            self._n_splits < 1,
+            "cross-validation requires at least 1 splits, got n_splits={0} instead.".
+            format(self._n_splits))
 
     @property
     def get_n_splits(self) -> int:
@@ -479,9 +501,9 @@ class SlideWindowSplitter(SplitterBase):
     def __init__(self,
                  train_size: int,
                  test_size: int,
-                 step_size: int = None,
-                 skip_size: int = 0,
-                 verbose: bool = True) -> None:
+                 step_size: int=None,
+                 skip_size: int=0,
+                 verbose: bool=True) -> None:
 
         super().__init__(skip_size, verbose)
         self._test_size = test_size
@@ -491,7 +513,9 @@ class SlideWindowSplitter(SplitterBase):
         else:
             self._step_size = test_size
             if self._verbose:
-                logger.info(f"Did not set window move step_size, set step_size = test_size by default, step_size= {step_size}")
+                logger.info(
+                    f"Did not set window move step_size, set step_size = test_size by default, step_size= {step_size}"
+                )
         self._check_params()
 
     def _get_splits(self, n_samples: int) -> Tuple[np.ndarray, np.ndarray]:
@@ -513,13 +537,15 @@ class SlideWindowSplitter(SplitterBase):
         test_size = self._test_size
         step_size = self._step_size
 
-        raise_if(n_samples <= test_size, "Test size should <= data target length")
-        raise_if(n_samples <= test_size + skip_size, "Test size + skip size should <= data target length")
+        raise_if(n_samples <= test_size,
+                 "Test size should <= data target length")
+        raise_if(n_samples <= test_size + skip_size,
+                 "Test size + skip size should <= data target length")
         raise_if(train_size > n_samples, "Train size exceed the data length!")
         raise_if(train_size + test_size > n_samples,
-                     "Train size + Test size exceed the data length!")
+                 "Train size + Test size exceed the data length!")
         raise_if(train_size + test_size + skip_size > n_samples,
-                     "Train size + Test size + skip_size exceed the data length!")
+                 "Train size + Test size + skip_size exceed the data length!")
 
         test_starts = range(train_size + skip_size, n_samples, step_size)
 
@@ -527,8 +553,7 @@ class SlideWindowSplitter(SplitterBase):
         for start in test_starts:
             yield (
                 indices[start - train_size:start],
-                indices[start + skip_size: start + skip_size + test_size],
-            )
+                indices[start + skip_size:start + skip_size + test_size], )
 
     def _check_params(self):
         """
@@ -545,25 +570,32 @@ class SlideWindowSplitter(SplitterBase):
         
         """
         super()._check_params()
-        raise_if_not(isinstance(self._test_size, numbers.Integral),
-                     "Test size must be of Integral type. "
-                     "%s of type %s was passed." % (self._test_size, type(self._test_size))
-                     )
-        raise_if(self._test_size < 1,
-                 "Test size should be a positive integer, got test_size={0} instead.".format(self._test_size))
+        raise_if_not(
+            isinstance(self._test_size, numbers.Integral),
+            "Test size must be of Integral type. "
+            "%s of type %s was passed." %
+            (self._test_size, type(self._test_size)))
+        raise_if(
+            self._test_size < 1,
+            "Test size should be a positive integer, got test_size={0} instead.".
+            format(self._test_size))
 
-        raise_if_not(isinstance(self._train_size, numbers.Integral),
-                     "Trian size must be of Integral type. "
-                     "%s of type %s was passed." % (self._train_size, type(self._train_size))
-                     )
-        raise_if(self._train_size < 1,
-                 "Trian size should be a positive integer, got train_size={0} instead.".format(self._train_size))
+        raise_if_not(
+            isinstance(self._train_size, numbers.Integral),
+            "Trian size must be of Integral type. "
+            "%s of type %s was passed." %
+            (self._train_size, type(self._train_size)))
+        raise_if(
+            self._train_size < 1,
+            "Trian size should be a positive integer, got train_size={0} instead.".
+            format(self._train_size))
 
-        raise_if_not(isinstance(self._step_size, numbers.Integral),
-                     "Step must be of Integral type. "
-                     "%s of type %s was passed." % (self._step_size, type(self._step_size))
-                     )
-        raise_if(self._step_size < 1,
-                 "step should be a positive integer, got step_size={0} instead.".format(self._step_size))
-
-
+        raise_if_not(
+            isinstance(self._step_size, numbers.Integral),
+            "Step must be of Integral type. "
+            "%s of type %s was passed." %
+            (self._step_size, type(self._step_size)))
+        raise_if(
+            self._step_size < 1,
+            "step should be a positive integer, got step_size={0} instead.".
+            format(self._step_size))

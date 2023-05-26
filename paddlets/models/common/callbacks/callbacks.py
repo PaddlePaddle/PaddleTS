@@ -24,13 +24,11 @@ class Callback(object):
     Attributes:
         _trainer(PaddleBaseModel): A model instance.
     """
+
     def __init__(self):
         pass
 
-    def set_trainer(
-        self, 
-        model: "PaddleBaseModel"
-    ):
+    def set_trainer(self, model: "PaddleBaseModel"):
         """Set model instance.
 
         Args:
@@ -38,11 +36,7 @@ class Callback(object):
         """
         self._trainer = model
 
-    def on_epoch_begin(
-        self, 
-        epoch: int, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_begin(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the beginning of each epoch.
 
         Args:
@@ -51,11 +45,7 @@ class Callback(object):
         """
         pass
 
-    def on_epoch_end(
-        self, 
-        epoch: int, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_end(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each epoch.
 
         Args:
@@ -65,11 +55,7 @@ class Callback(object):
         """
         pass
 
-    def on_batch_begin(
-        self, 
-        batch: int, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_batch_begin(self, batch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the beginning of each batch in training.
 
         Args:
@@ -78,11 +64,7 @@ class Callback(object):
         """
         pass
 
-    def on_batch_end(
-        self, 
-        batch: int, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_batch_end(self, batch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each batch in training.
 
         Args:
@@ -92,10 +74,7 @@ class Callback(object):
         """
         pass
 
-    def on_train_begin(
-        self, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_begin(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the start of training.
 
         Args:
@@ -103,10 +82,7 @@ class Callback(object):
         """
         pass
 
-    def on_train_end(
-        self, 
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_end(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of training.
 
         Args:
@@ -124,16 +100,11 @@ class CallbackContainer(object):
     Attributes:
         _callbacks(List[Callback]): List of callbacks.
     """
-    def __init__(
-        self, 
-        callbacks: List[Callback]
-    ):
+
+    def __init__(self, callbacks: List[Callback]):
         self._callbacks = callbacks
 
-    def append(
-        self, 
-        callback: Callback
-    ):
+    def append(self, callback: Callback):
         """Append callback to the container.
 
         Args:
@@ -141,10 +112,7 @@ class CallbackContainer(object):
         """
         self._callbacks.append(callback)
 
-    def set_trainer(
-        self, 
-        model: "PaddleBaseModel"
-    ):
+    def set_trainer(self, model: "PaddleBaseModel"):
         """Set model instance.
 
         Args:
@@ -154,11 +122,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.set_trainer(model)
 
-    def on_epoch_begin(
-        self,
-        epoch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_begin(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the beginning of each epoch.
 
         Args:
@@ -169,11 +133,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.on_epoch_begin(epoch, logs)
 
-    def on_epoch_end(
-        self,
-        epoch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_end(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each epoch.
 
         Args:
@@ -185,11 +145,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.on_epoch_end(epoch, logs)
 
-    def on_batch_begin(
-        self,
-        batch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_batch_begin(self, batch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the beginning of each batch in training.
 
         Args:
@@ -200,11 +156,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.on_batch_begin(batch, logs)
 
-    def on_batch_end(
-        self,
-        batch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_batch_end(self, batch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each batch in training.
 
         Args:
@@ -216,10 +168,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.on_batch_end(batch, logs)
 
-    def on_train_begin(
-        self,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_begin(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the start of training.
 
         Args:
@@ -229,10 +178,7 @@ class CallbackContainer(object):
         for callback in self._callbacks:
             callback.on_train_begin(logs)
 
-    def on_train_end(
-        self,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_end(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of training.
 
         Args:
@@ -265,13 +211,12 @@ class EarlyStopping(Callback):
         _best_loss(float): Best loss.
         _wait(int): Number of times that the early_stopping_metric failed to improve.
     """
-    def __init__(
-        self, 
-        early_stopping_metric: str,
-        is_maximize: bool,
-        tol: float = 0.,
-        patience: int = 1
-    ):
+
+    def __init__(self,
+                 early_stopping_metric: str,
+                 is_maximize: bool,
+                 tol: float=0.,
+                 patience: int=1):
         super(EarlyStopping, self).__init__()
         self._early_stopping_metric = early_stopping_metric
         self._is_maximize = is_maximize
@@ -285,11 +230,7 @@ class EarlyStopping(Callback):
         if self._is_maximize:
             self._best_loss = -self._best_loss
 
-    def on_epoch_end(
-        self,
-        epoch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_end(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each epoch.
 
         Args:
@@ -300,13 +241,14 @@ class EarlyStopping(Callback):
         current_loss = logs.get(self._early_stopping_metric)
         if current_loss is None:
             # raise KeyError(f"{self._early_stopping_metric} is not available, choose in {self._trainer._metrics_names}.")
-            return 
+            return
 
         loss_change = current_loss - self._best_loss
         max_improved = self._is_maximize and loss_change > self._tol
         min_improved = (not self._is_maximize) and (-loss_change > self._tol)
         if max_improved or min_improved:
-            self._best_weights = copy.deepcopy(self._trainer._network.state_dict())
+            self._best_weights = copy.deepcopy(
+                self._trainer._network.state_dict())
             self._best_loss = current_loss
             self._best_epoch = epoch
             self._wait = 0
@@ -316,10 +258,7 @@ class EarlyStopping(Callback):
                 self._trainer._stop_training = True
                 self._stopped_epoch = epoch
 
-    def on_train_end(
-        self,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_end(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of training.
 
         Args:
@@ -340,7 +279,7 @@ class EarlyStopping(Callback):
             msg = (
                 f"Stop training because you reached max_epochs = {self._trainer._max_epochs}" \
                 + f" with best_epoch = {self._best_epoch} and " \
-                + f"best_{self._early_stopping_metric} = {self._best_loss:.6f}" 
+                + f"best_{self._early_stopping_metric} = {self._best_loss:.6f}"
             )
             logger.info(msg)
         logger.info("Best weights from best epoch are automatically used!")
@@ -360,17 +299,12 @@ class History(Callback):
         _epoch_metrics(Dict[str, Any]): Record all information of metrics of each epoch.
         _samples_seen(int): Traversed samples.
     """
-    def __init__(
-        self, 
-        verbose: int = 1
-    ):
+
+    def __init__(self, verbose: int=1):
         super(History, self).__init__()
         self._verbose = verbose
 
-    def on_train_begin(
-        self,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_train_begin(self, logs: Optional[Dict[str, Any]]=None):
         """Called at the start of training.
 
         Args:
@@ -378,27 +312,19 @@ class History(Callback):
         """
         self._history = {"loss": [], "lr": []}
         self._start_time = logs["start_time"]
-        self._epoch_loss = 0. # nqa
+        self._epoch_loss = 0.  # nqa
 
-    def on_epoch_begin(
-        self,
-        epoch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_begin(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the beginning of each epoch.
 
         Args:
             epoch(int): The index of epoch.
             logs(Dict[str, Any]|None): The logs is a dict or None.
         """
-        self._epoch_metrics = {"loss": 0.} # nqa
+        self._epoch_metrics = {"loss": 0.}  # nqa
         self._samples_seen = 0.
 
-    def on_epoch_end(
-        self,
-        epoch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_epoch_end(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each epoch.
 
         Args:
@@ -423,11 +349,7 @@ class History(Callback):
         msg += f"| {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
         logger.info(msg)
 
-    def on_batch_end(
-        self,
-        batch: int,
-        logs: Optional[Dict[str, Any]] = None
-    ):
+    def on_batch_end(self, batch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each batch in training.
 
         Args:

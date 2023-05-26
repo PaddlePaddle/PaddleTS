@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 This implementation is based on the article `Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting <https://arxiv.org/abs/1912.09363>`_.
 """
@@ -54,26 +53,25 @@ class TFTModel(PaddleBaseModelImpl):
     """
 
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        hidden_size: int = 64,
-        lstm_layers_num: int = 1,
-        attention_heads_num: int = 1,
-        output_quantiles: List[float] = [0.1, 0.5, 0.9],
-        dropout: float = 0.0,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = QuantileRegression().loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4),
-        callbacks: List[Callback] = [],
-        batch_size: int = 128,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: int = 0
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            hidden_size: int=64,
+            lstm_layers_num: int=1,
+            attention_heads_num: int=1,
+            output_quantiles: List[float]=[0.1, 0.5, 0.9],
+            dropout: float=0.0,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=QuantileRegression().loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: int=0):
         self._hidden_size = hidden_size
         self._lstm_layers_num = lstm_layers_num
         self._attention_heads_num = attention_heads_num
@@ -95,9 +93,8 @@ class TFTModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
-        
+            seed=seed, )
+
     def _check_params(self):
         """
         Parameter validity verification
@@ -110,21 +107,24 @@ class TFTModel(PaddleBaseModelImpl):
             patience: patience must be >= 0.
             output_quantiles: each quantile should on [0, 1].
         """
-        raise_if(self._batch_size <= 0, f"batch_size must be > 0, got {self._batch_size}.")
-        raise_if(self._max_epochs <= 0, f"max_epochs must be > 0, got {self._max_epochs}.")
-        raise_if(self._verbose <= 0, f"verbose must be > 0, got {self._verbose}.")
-        raise_if(self._patience < 0, f"patience must be >= 0, got {self._patience}.")
+        raise_if(self._batch_size <= 0,
+                 f"batch_size must be > 0, got {self._batch_size}.")
+        raise_if(self._max_epochs <= 0,
+                 f"max_epochs must be > 0, got {self._max_epochs}.")
+        raise_if(self._verbose <= 0,
+                 f"verbose must be > 0, got {self._verbose}.")
+        raise_if(self._patience < 0,
+                 f"patience must be >= 0, got {self._patience}.")
         raise_if_not((np.array(self._output_quantiles) >= 0).all() and \
                  (np.array(self._output_quantiles) <= 1).all(),
                 f"each quantile should on [0, 1], got {self._output_quantiles}.")
         if sorted(self._output_quantiles) != self._output_quantiles:
-            logger.warning(f"output_quantiles should be sorted, got {self._output_quantiles}.")
+            logger.warning(
+                f"output_quantiles should be sorted, got {self._output_quantiles}."
+            )
             self._output_quantiles = sorted(self._output_quantiles)
-            
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """
         Rewrite _check_tsdataset to fit the specific model.
         """
@@ -142,14 +142,14 @@ class TFTModel(PaddleBaseModelImpl):
                     f"TFT's covariates' dtype only support float and integer," \
                     f"but received {column}: {dtype}."
                 )
-        raise_if_not(tsdataset.get_known_cov(), f"Known covariates are necessary to build TFT model.")
-        super(TFTModel, self)._check_tsdataset(tsdataset)        
+        raise_if_not(tsdataset.get_known_cov(),
+                     f"Known covariates are necessary to build TFT model.")
+        super(TFTModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """
         Infer parameters by TSdataset automatically.
 
@@ -172,7 +172,7 @@ class TFTModel(PaddleBaseModelImpl):
                     df[col] = val
             df_list.append(df)
         df_all = pd.concat(df_list)
-        
+
         train_ts0 = train_tsdataset[0]
         target_dim = train_ts0.get_target().data.shape[1]
         self.target_cols = list(train_ts0.get_target().data.columns)
@@ -214,13 +214,14 @@ class TFTModel(PaddleBaseModelImpl):
         static_cat_cols = []
         if static_dic:
             for col, val in static_dic.items():
-                if np.issubdtype(type(val), np.integer) or isinstance(val, int):
+                if np.issubdtype(type(val), np.integer) or isinstance(val,
+                                                                      int):
                     static_cat_size.append(len(df_all[col].unique()))
                     static_cat_cols.append(col)
                 else:
                     static_num_cols.append(col)
         self.static_num_cols = static_num_cols
-        self.static_cat_cols = static_cat_cols                
+        self.static_cat_cols = static_cat_cols
         fit_params = {
             "target_dim": target_dim,
             "known_num_dim": len(known_num_cols),
@@ -232,9 +233,9 @@ class TFTModel(PaddleBaseModelImpl):
             "known_cat_size": known_cat_size,
             "observed_cat_size": observed_cat_size,
             "static_cat_size": static_cat_size,
-            }
+        }
         return fit_params
-                
+
     def _init_network(self) -> paddle.nn.Layer:
         """
         Init network.
@@ -250,13 +251,10 @@ class TFTModel(PaddleBaseModelImpl):
             self._lstm_layers_num,
             self._attention_heads_num,
             self._output_quantiles,
-            self._dropout,
-        )
-    
-    def predict_interpretable(
-        self, 
-        tsdataset: TSDataset
-    ) -> Dict[str, np.ndarray]:
+            self._dropout, )
+
+    def predict_interpretable(self,
+                              tsdataset: TSDataset) -> Dict[str, np.ndarray]:
         """
         For interpretable use.
         
@@ -274,17 +272,17 @@ class TFTModel(PaddleBaseModelImpl):
             X, _ = self._prepare_X_y(data)
             output = self._network(X)
             for key in output:
-                weights = output[key].numpy() if output[key] is not None else np.empty([0, 0])
+                weights = output[key].numpy() if output[
+                    key] is not None else np.empty([0, 0])
                 results.setdefault(key, [])
                 results[key].append(weights)
         for key in results:
             results[key] = np.vstack(results[key])
-        return results        
-        
+        return results
+
     def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader,
-    ) -> np.ndarray:
+            self,
+            dataloader: paddle.io.DataLoader, ) -> np.ndarray:
         """
         Predict function core logic.
 
@@ -296,4 +294,3 @@ class TFTModel(PaddleBaseModelImpl):
         """
         self._network._interpretable_output = False
         return super(TFTModel, self)._predict(dataloader)
-        

@@ -12,7 +12,7 @@ from unittest import TestCase
 
 from paddlets import TimeSeries, TSDataset
 from paddlets.analysis import summary
-from paddlets.analysis import max 
+from paddlets.analysis import max
 
 
 class TestAnalysis(TestCase):
@@ -29,15 +29,15 @@ class TestAnalysis(TestCase):
         #case1
         a = pd.Series(np.random.randn(5))
         res = summary.analyze(a)
-        self.assertEqual(res.shape, (9,))
-     
+        self.assertEqual(res.shape, (9, ))
+
         #case2
         periods = 100
         df = pd.DataFrame(
             [1 for i in range(periods)],
-            index = pd.date_range('2022-01-01', periods=periods, freq='1D'),
-            columns=['target']
-        )
+            index=pd.date_range(
+                '2022-01-01', periods=periods, freq='1D'),
+            columns=['target'])
         ts = TSDataset.load_from_dataframe(df, target_cols="target")
         ts['target2'] = ts['target'] + 1
         self.assertEqual(summary(ts).shape, (9, 2))
@@ -51,7 +51,8 @@ class TestAnalysis(TestCase):
         self.assertEqual(ts.summary(['target', 'target2']).shape, (9, 2))
         flag = False
         try:
-            self.assertEqual(ts.summary_no_exists(['target', 'target2']).shape, (9, 2))
+            self.assertEqual(
+                ts.summary_no_exists(['target', 'target2']).shape, (9, 2))
         except:
             flag = True
         self.assertTrue(flag)
@@ -59,7 +60,6 @@ class TestAnalysis(TestCase):
         #case5: 
         res = summary.get_properties().get("name")
         self.assertEqual(res, "summary")
-
 
     def test_Max(self):
         """
@@ -69,16 +69,18 @@ class TestAnalysis(TestCase):
         s = pd.Series(range(100))
         res = max.analyze(s)
         self.assertEqual(res, 99)
-        
+
         #case2
         df = pd.DataFrame(np.array(range(100)).reshape(20, 5))
         res = max.analyze(df)
         self.assertCountEqual(res, pd.Series([95, 96, 97, 98, 99]))
 
         #case3
-        cov_cols = ['c%d' % i for i in range(4)] 
-        df = pd.DataFrame(np.array(range(100)).reshape(20, 5), columns=['target'] + cov_cols)
-        ts = TSDataset.load_from_dataframe(df, target_cols="target", observed_cov_cols=cov_cols)
+        cov_cols = ['c%d' % i for i in range(4)]
+        df = pd.DataFrame(
+            np.array(range(100)).reshape(20, 5), columns=['target'] + cov_cols)
+        ts = TSDataset.load_from_dataframe(
+            df, target_cols="target", observed_cov_cols=cov_cols)
         res = max(ts, ['target', 'c0', 'c3'])
         self.assertCountEqual(res, pd.Series([95, 96, 99]))
 
@@ -91,7 +93,7 @@ class TestAnalysis(TestCase):
         except:
             flag = True
         self.assertTrue(flag)
-                    
+
         #case5: 
         res = max.get_properties().get("name")
         self.assertEqual(res, "max")

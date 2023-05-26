@@ -30,31 +30,32 @@ class Informer(paddle.nn.Layer):
         _decoder(paddle.nn.Layer): A decoder module for the informer.
 
     """
+
     def __init__(
-        self,
-        d_model: int,
-        nhead: int,
-        ffn_channels: int,
-        num_encoder_layers: int,
-        num_decoder_layers: int,
-        activation: str,
-        dropout_rate: float = 0.1,
-    ):
-        super(Informer, self).__init__() 
+            self,
+            d_model: int,
+            nhead: int,
+            ffn_channels: int,
+            num_encoder_layers: int,
+            num_decoder_layers: int,
+            activation: str,
+            dropout_rate: float=0.1, ):
+        super(Informer, self).__init__()
         conv_layer = ConvLayer(d_model)
-        encoder_layer = InformerEncoderLayer(d_model, nhead, ffn_channels, activation, dropout_rate)
-        decoder_layer = InformerDecoderLayer(d_model, nhead, ffn_channels, dropout_rate)
-        self._encoder = InformerEncoder(encoder_layer, conv_layer, num_encoder_layers)
+        encoder_layer = InformerEncoderLayer(d_model, nhead, ffn_channels,
+                                             activation, dropout_rate)
+        decoder_layer = InformerDecoderLayer(d_model, nhead, ffn_channels,
+                                             dropout_rate)
+        self._encoder = InformerEncoder(encoder_layer, conv_layer,
+                                        num_encoder_layers)
         self._decoder = InformerDecoder(decoder_layer, num_decoder_layers)
 
-    def forward(
-        self,
-        src: paddle.Tensor,
-        tgt: paddle.Tensor,
-        src_mask: Optional[paddle.Tensor] = None, 
-        tgt_mask: Optional[paddle.Tensor] = None,
-        memory_mask: Optional[paddle.Tensor] = None
-    ) -> paddle.Tensor:
+    def forward(self,
+                src: paddle.Tensor,
+                tgt: paddle.Tensor,
+                src_mask: Optional[paddle.Tensor]=None,
+                tgt_mask: Optional[paddle.Tensor]=None,
+                memory_mask: Optional[paddle.Tensor]=None) -> paddle.Tensor:
         """Forward.
         Args:
             src(paddle.Tensor): The input of Informer encoder.

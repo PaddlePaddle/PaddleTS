@@ -1,10 +1,9 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-
 import abc
 from typing import Union
-from typing import List 
+from typing import List
 
 import pandas as pd
 import numpy as np
@@ -50,17 +49,26 @@ class Fill(BaseTransform):
     Returns:
         None
     """
-    def __init__(self, cols: Union[str, List[str]], method: str='pre', value: int=0, window_size: int=10, min_num_non_missing_values: int=1):
+
+    def __init__(self,
+                 cols: Union[str, List[str]],
+                 method: str='pre',
+                 value: int=0,
+                 window_size: int=10,
+                 min_num_non_missing_values: int=1):
         super(Fill, self).__init__()
         self._cols = cols
         self.method = method
         self.value = value
         self.window_size = window_size
         self.min_num_non_missing_values = min_num_non_missing_values
-        self.methods = ['max', 'min', 'mean', 'median', 'pre', 'next', 'zero', 'default']
-        if isinstance(cols, str):self._cols = [cols]
+        self.methods = [
+            'max', 'min', 'mean', 'median', 'pre', 'next', 'zero', 'default'
+        ]
+        if isinstance(cols, str): self._cols = [cols]
         raise_if_not(self._cols, "No column is specified")
-        raise_if(method not in self.methods, "The specified filling method doesn't exist.")
+        raise_if(method not in self.methods,
+                 "The specified filling method doesn't exist.")
         self._cols_lost_dict = {}
 
         self.need_previous_data = True
@@ -81,7 +89,8 @@ class Fill(BaseTransform):
         return self
 
     @log_decorator
-    def transform_one(self, dataset: TSDataset, inplace: bool=False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Fill missing values.
 
@@ -93,23 +102,43 @@ class Fill(BaseTransform):
             new_ts(TSDataset): Transformed TSDataset.
 
         """
-        raise_if_not(dataset is not None, "The specified dataset is None, please check your data!")
+        raise_if_not(dataset is not None,
+                     "The specified dataset is None, please check your data!")
         new_ts = dataset
         if not inplace:
-            new_ts = dataset.copy()  
-        all_method={'pre':{'method':'ffill', 'value':None}, 'next':{'method':'bfill', 'value':None}, 
-                   'zero':{'method':None, 'value':self.value}, 'default':{'method':None, 'value':self.value}}
+            new_ts = dataset.copy()
+        all_method = {
+            'pre': {
+                'method': 'ffill',
+                'value': None
+            },
+            'next': {
+                'method': 'bfill',
+                'value': None
+            },
+            'zero': {
+                'method': None,
+                'value': self.value
+            },
+            'default': {
+                'method': None,
+                'value': self.value
+            }
+        }
 
         for col in self._cols:
-            sub_data = dataset[col] #.astype(float)
+            sub_data = dataset[col]  #.astype(float)
             lack_index = dataset[col][dataset[col].isnull()].index
             self._cols_lost_dict[col] = lack_index
             if self.method in all_method:
-                    new_ts[col].fillna(method=all_method[self.method]['method'], 
-                                        value=all_method[self.method]['value'], inplace=True)  
+                new_ts[col].fillna(
+                    method=all_method[self.method]['method'],
+                    value=all_method[self.method]['value'],
+                    inplace=True)
             else:
                 roll_window = pd.Series.rolling(new_ts[col], window=self.window_size, \
                                                 min_periods=self.min_num_non_missing_values)
                 for index in lack_index:
-                    new_ts[col].loc[index]  = roll_window.__getattribute__(self.method)()[index]           
+                    new_ts[col].loc[index] = roll_window.__getattribute__(
+                        self.method)()[index]
         return new_ts

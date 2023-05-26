@@ -18,23 +18,24 @@ class TestSplitter(TestCase):
     def test_holdout_splitter(self):
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1, "g": 2}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
@@ -85,23 +86,24 @@ class TestSplitter(TestCase):
     def test_expanding_window_splitter(self):
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1, "g": 2}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
@@ -134,7 +136,8 @@ class TestSplitter(TestCase):
         assert tmp.__len__() == 1000
 
         # case 4
-        splitter = ExpandingWindowSplitter(n_splits=10, test_size=100, max_train_size=50)
+        splitter = ExpandingWindowSplitter(
+            n_splits=10, test_size=100, max_train_size=50)
         splits = splitter.split(dataset)
         for train, test in splits:
             tmp = train.target
@@ -142,7 +145,8 @@ class TestSplitter(TestCase):
         assert tmp.__len__() == 50
 
         # case 5
-        splitter = ExpandingWindowSplitter(n_splits=10, test_size=100, skip_size=100)
+        splitter = ExpandingWindowSplitter(
+            n_splits=10, test_size=100, skip_size=100)
         splits = splitter.split(dataset)
         for train, test in splits:
             tmp = train.target
@@ -176,23 +180,24 @@ class TestSplitter(TestCase):
     def test_sliding_window_splitter(self):
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(2000).astype(np.float32),
-                      index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                      name="a"
-                      ))
+            pd.Series(
+                np.random.randn(2000).astype(np.float32),
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                name="a"))
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2000, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                columns=["b", "c"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2000, freq="15T"),
+                columns=["b", "c"]))
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(2500, 2).astype(np.float32),
-                index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                columns=["b1", "c1"]
-            ))
+                index=pd.date_range(
+                    "2022-01-01", periods=2500, freq="15T"),
+                columns=["b1", "c1"]))
         static_cov = {"f": 1, "g": 2}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
 
@@ -217,7 +222,8 @@ class TestSplitter(TestCase):
         assert tmp.__len__() == 200
 
         # case 3
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, step_size=400)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, step_size=400)
         splits = splitter.split(dataset)
         for train, test in splits:
             tmp = train.target
@@ -225,7 +231,8 @@ class TestSplitter(TestCase):
         assert tmp.__len__() == 200
 
         # case 4
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, skip_size=100)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, skip_size=100)
         splits = splitter.split(dataset)
         for train, test in splits:
             tmp = train.target
@@ -233,7 +240,8 @@ class TestSplitter(TestCase):
         assert tmp.__len__() == 200
 
         # case 5
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, skip_size=100)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, skip_size=100)
         splits = splitter.split(dataset)
         for train, test in splits:
             tmp = train.target
@@ -250,7 +258,8 @@ class TestSplitter(TestCase):
 
         # case 7
         with self.assertRaises(ValueError):
-            splitter = SlideWindowSplitter(train_size=100, test_size=100, skip_size=20000)
+            splitter = SlideWindowSplitter(
+                train_size=100, test_size=100, skip_size=20000)
             splits = splitter.split(dataset)
             for train, test in splits:
                 tmp = train.target
@@ -259,26 +268,30 @@ class TestSplitter(TestCase):
     def test_range_index(self):
         np.random.seed(2022)
         target = TimeSeries.load_from_dataframe(
-            pd.Series(np.random.randn(1000).astype(np.float32),
-                    #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                    index=pd.RangeIndex(start=10, stop=2010, step=2),
-                    name="a"
-                    ), freq = 2)
+            pd.Series(
+                np.random.randn(1000).astype(np.float32),
+                #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
+                index=pd.RangeIndex(
+                    start=10, stop=2010, step=2),
+                name="a"),
+            freq=2)
 
         observed_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(1000, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2000, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=2010, step=2),
-                columns=["b", "c"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=2010, step=2),
+                columns=["b", "c"]),
+            freq=2)
         known_cov = TimeSeries.load_from_dataframe(
             pd.DataFrame(
                 np.random.randn(1250, 2).astype(np.float32),
                 #index=pd.date_range("2022-01-01", periods=2500, freq="15T"),
-                index=pd.RangeIndex(start=10, stop=2510, step=2),
-                columns=["b1", "c1"]
-            ), freq = 2)
+                index=pd.RangeIndex(
+                    start=10, stop=2510, step=2),
+                columns=["b1", "c1"]),
+            freq=2)
         static_cov = {"f": 1, "g": 2}
         dataset = TSDataset(target, observed_cov, known_cov, static_cov)
         # case 0
@@ -301,9 +314,10 @@ class TestSplitter(TestCase):
             break
         assert train.__len__() == 200
         assert test.__len__() == 100
-        
+
         # case 3
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, step_size=400)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, step_size=400)
         splits = splitter.split(dataset)
         for train, test in splits:
             train = train.target
@@ -313,7 +327,8 @@ class TestSplitter(TestCase):
         assert test.__len__() == 100
 
         # case 4
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, skip_size=100)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, skip_size=100)
         splits = splitter.split(dataset)
         for train, test in splits:
             train = train.target
@@ -323,7 +338,8 @@ class TestSplitter(TestCase):
         assert test.__len__() == 100
 
         # case 5
-        splitter = SlideWindowSplitter(train_size=200, test_size=100, skip_size=100)
+        splitter = SlideWindowSplitter(
+            train_size=200, test_size=100, skip_size=100)
         splits = splitter.split(dataset)
         for train, test in splits:
             train = train.target
@@ -340,12 +356,13 @@ class TestSplitter(TestCase):
                 break
         # case 7
         with self.assertRaises(ValueError):
-            splitter = SlideWindowSplitter(train_size=100, test_size=100, skip_size=20000)
+            splitter = SlideWindowSplitter(
+                train_size=100, test_size=100, skip_size=20000)
             splits = splitter.split(dataset)
             for train, test in splits:
                 tmp = train.target
                 break
 
+
 if __name__ == "__main__":
     unittest.main()
-

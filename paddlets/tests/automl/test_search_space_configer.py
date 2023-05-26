@@ -48,13 +48,15 @@ class TestSearchSpaceConfiger(TestCase):
             sp = configer.get_default_search_space("fake")
         # empty pipeline
         with self.assertRaises(NotImplementedError):
-            sp = configer.get_default_search_space(["fake-1", "fake-2", "fake-2-1"])
+            sp = configer.get_default_search_space(
+                ["fake-1", "fake-2", "fake-2-1"])
         # partial empty
         sp = configer.get_default_search_space(["fake-0", "MLPRegressor"])
         sp_str = configer.search_space_to_str(sp)
         sp = configer.get_default_search_space(["fake-0", MLPRegressor])
         sp_str = configer.search_space_to_str(sp)
-        sp = configer.get_default_search_space([SearchSpaceConfiger, MLPRegressor])
+        sp = configer.get_default_search_space(
+            [SearchSpaceConfiger, MLPRegressor])
         sp_str = configer.search_space_to_str(sp)
 
 

@@ -22,16 +22,16 @@ class ConvLayer(paddle.nn.Layer):
         _conv(paddle.nn.Layer): The conv layer.
         _relu(paddle.nn.Layer): The relu layer.
     """
-    def __init__(
-        self,
-        feature_dim: int,
-        kernel_size: int = 7
-    ):
+
+    def __init__(self, feature_dim: int, kernel_size: int=7):
         super(ConvLayer, self).__init__()
         self._pad = paddle.nn.Pad1D((kernel_size - 1) // 2, mode="constant")
-        self._conv = paddle.nn.Conv1D(in_channels=feature_dim, out_channels=feature_dim, kernel_size=kernel_size)
+        self._conv = paddle.nn.Conv1D(
+            in_channels=feature_dim,
+            out_channels=feature_dim,
+            kernel_size=kernel_size)
         self._relu = paddle.nn.ReLU()
-        
+
     def forward(self, x):
         """Forward
         
@@ -44,9 +44,9 @@ class ConvLayer(paddle.nn.Layer):
         x = paddle.transpose(x, perm=[0, 2, 1])
         x = self._pad(x)
         x = self._relu(self._conv(x))
-                
+
         return paddle.transpose(x, perm=[0, 2, 1])
-            
+
 
 class GRULayer(paddle.nn.Layer):
     """GRU layer.
@@ -62,16 +62,17 @@ class GRULayer(paddle.nn.Layer):
         _gru(paddle.nn.Layer): The gru layer.
     """
 
-    def __init__(
-        self, 
-        input_size: int, 
-        hidden_size: int,
-        num_layers: int,
-        dropout: float
-    ):
+    def __init__(self,
+                 input_size: int,
+                 hidden_size: int,
+                 num_layers: int,
+                 dropout: float):
         super(GRULayer, self).__init__()
         self._dropout = 0.0 if num_layers == 1 else dropout
-        self._gru = paddle.nn.GRU(input_size, hidden_size, num_layers=num_layers, dropout=self._dropout)
+        self._gru = paddle.nn.GRU(input_size,
+                                  hidden_size,
+                                  num_layers=num_layers,
+                                  dropout=self._dropout)
 
     def forward(self, x):
         """Forward

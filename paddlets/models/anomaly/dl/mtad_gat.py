@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 This implementation is based on the article `Multivariate Time-series Anomaly Detection via Graph Attention Network <https://arxiv.org/pdf/2009.02040.pdf>`_ .
 
@@ -38,7 +37,7 @@ from paddlets.models.utils import to_tsdataset
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
 
-       
+
 class _MTADGATBlock(paddle.nn.Layer):
     """MTADGAT Network structure.
 
@@ -71,53 +70,59 @@ class _MTADGATBlock(paddle.nn.Layer):
         _forec_model(paddle.nn.Layer): The FC-based Forecasting Model.
         _recon_model(paddle.nn.Layer): The GRU-based Reconstruction Model.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        fit_params: Dict[str, Any],
-        target_dims: Optional[List[int]], 
-        kernel_size: int,
-        feat_gat_embed_dim: Optional[int],
-        time_gat_embed_dim: Optional[int],
-        use_gatv2: bool,
-        use_bias: bool,
-        gru_n_layers: int,
-        gru_hid_size: int,
-        forecast_n_layers: int,
-        forecast_hid_size: int,
-        recon_n_layers: int,
-        recon_hid_size: int,
-        dropout: float,
-        alpha: float,
-    ):
+            self,
+            in_chunk_len: int,
+            fit_params: Dict[str, Any],
+            target_dims: Optional[List[int]],
+            kernel_size: int,
+            feat_gat_embed_dim: Optional[int],
+            time_gat_embed_dim: Optional[int],
+            use_gatv2: bool,
+            use_bias: bool,
+            gru_n_layers: int,
+            gru_hid_size: int,
+            forecast_n_layers: int,
+            forecast_hid_size: int,
+            recon_n_layers: int,
+            recon_hid_size: int,
+            dropout: float,
+            alpha: float, ):
         super(_MTADGATBlock, self).__init__()
-        
+
         raise_if(
             in_chunk_len < 2,
             f"In mtad_gat model, the in_chunk_len must >= 2, got {in_chunk_len}."
-        )         
-        raise_if(
-            target_dims is not None and (np.any(np.array(target_dims) < 0) or len(target_dims) == 0),
-            f"target_dims must be > 0, got {target_dims}."
         )
-        
+        raise_if(
+            target_dims is not None and
+            (np.any(np.array(target_dims) < 0) or len(target_dims) == 0),
+            f"target_dims must be > 0, got {target_dims}.")
+
         self._in_chunk_len = in_chunk_len
         self._num_dim = fit_params['observed_num_dim']
         self._out_dim = self._num_dim
         if target_dims is not None:
             self._out_dim = len(target_dims)
-                
+
         self._conv = ConvLayer(self._num_dim, kernel_size)
-        self._feature_gat = FeatOrTempAttention(self._num_dim, in_chunk_len - 1, dropout, alpha, feat_gat_embed_dim, use_gatv2, use_bias, 'feature')
-        self._temporal_gat = FeatOrTempAttention(self._num_dim, in_chunk_len - 1, dropout, alpha, time_gat_embed_dim, use_gatv2, use_bias, 'temporal')
-        self._gru = GRULayer(3 * self._num_dim, gru_hid_size, gru_n_layers, dropout)
-        self._forec_model = Forecasting(gru_hid_size, forecast_hid_size, self._out_dim, forecast_n_layers, dropout)
-        self._recon_model = Reconstruction(in_chunk_len - 1, gru_hid_size, recon_hid_size, self._out_dim, recon_n_layers, dropout)
-        
-    def forward(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+        self._feature_gat = FeatOrTempAttention(
+            self._num_dim, in_chunk_len - 1, dropout, alpha,
+            feat_gat_embed_dim, use_gatv2, use_bias, 'feature')
+        self._temporal_gat = FeatOrTempAttention(
+            self._num_dim, in_chunk_len - 1, dropout, alpha,
+            time_gat_embed_dim, use_gatv2, use_bias, 'temporal')
+        self._gru = GRULayer(3 * self._num_dim, gru_hid_size, gru_n_layers,
+                             dropout)
+        self._forec_model = Forecasting(gru_hid_size, forecast_hid_size,
+                                        self._out_dim, forecast_n_layers,
+                                        dropout)
+        self._recon_model = Reconstruction(in_chunk_len - 1, gru_hid_size,
+                                           recon_hid_size, self._out_dim,
+                                           recon_n_layers, dropout)
+
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args: 
@@ -131,24 +136,24 @@ class _MTADGATBlock(paddle.nn.Layer):
         x = self._conv(x)
         h_feat = self._feature_gat(x)
         h_temp = self._temporal_gat(x)
-        
+
         #x: [batch_size, in_chunk_len, 3 * feature_dim]
         h_cat = paddle.concat([x, h_feat, h_temp], axis=2)
-        
+
         _, h_end = self._gru(h_cat)
         # Extracting from last layer
-        h_end = h_end[-1,:, :]
+        h_end = h_end[-1, :, :]
         # Hidden state for last timestamp
         h_end = h_end.reshape((x.shape[0], -1))
-        
+
         #forecasting-based model
         preds = self._forec_model(h_end)
         #reconstruction-based model
         recons = self._recon_model(h_end)
-        
+
         return preds, recons
-    
-    
+
+
 class MTADGAT(AnomalyBaseModel):
     """Multivariate Time-series Anomaly Detection via Graph Attention Network.
 
@@ -222,43 +227,42 @@ class MTADGAT(AnomalyBaseModel):
         _dropout(float): Dropout regularization parameter.
         _alpha(float): The negative slope used in the LeakyReLU activation function.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        threshold_fn: Callable[..., float] = U.epsilon_th,
-        q: float = 100,
-        threshold: Optional[float] = None,
-        threshold_coeff: float = 1.0,
-        anomaly_score_fn: Callable[..., List[float]] = None,
-        pred_adjust: bool = True,
-        pred_adjust_fn: Callable[..., np.ndarray] = U.result_adjust,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        callbacks: List[Callback] = [], 
-        batch_size: int = 256,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        target_dims: Optional[List[int]] = None,
-        kernel_size: int = 7,
-        feat_gat_embed_dim: Optional[int] = None,
-        time_gat_embed_dim: Optional[int] = None,
-        use_gatv2: bool = False,
-        use_bias: bool = False,
-        gru_n_layers: int = 1,
-        gru_hid_size: int = 150,
-        forecast_n_layers: int = 1,
-        forecast_hid_size: int = 150,
-        recon_n_layers: int = 1,
-        recon_hid_size: int = 150,
-        dropout: float = 0.2,
-        alpha: float = 0.2,
-    ):
-        
+    def __init__(
+            self,
+            in_chunk_len: int,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            threshold_fn: Callable[..., float]=U.epsilon_th,
+            q: float=100,
+            threshold: Optional[float]=None,
+            threshold_coeff: float=1.0,
+            anomaly_score_fn: Callable[..., List[float]]=None,
+            pred_adjust: bool=True,
+            pred_adjust_fn: Callable[..., np.ndarray]=U.result_adjust,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            callbacks: List[Callback]=[],
+            batch_size: int=256,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            target_dims: Optional[List[int]]=None,
+            kernel_size: int=7,
+            feat_gat_embed_dim: Optional[int]=None,
+            time_gat_embed_dim: Optional[int]=None,
+            use_gatv2: bool=False,
+            use_bias: bool=False,
+            gru_n_layers: int=1,
+            gru_hid_size: int=150,
+            forecast_n_layers: int=1,
+            forecast_hid_size: int=150,
+            recon_n_layers: int=1,
+            recon_hid_size: int=150,
+            dropout: float=0.2,
+            alpha: float=0.2, ):
+
         self._target_dims = target_dims
         self._kernel_size = kernel_size
         self._dropout = dropout
@@ -275,11 +279,11 @@ class MTADGAT(AnomalyBaseModel):
         self._recon_hid_size = recon_hid_size
         self._dropout = dropout
         self._alpha = alpha
-       
+
         super(MTADGAT, self).__init__(
-            in_chunk_len=in_chunk_len, 
+            in_chunk_len=in_chunk_len,
             sampling_stride=sampling_stride,
-            loss_fn=loss_fn, 
+            loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
             threshold=threshold,
             threshold_coeff=threshold_coeff,
@@ -287,20 +291,18 @@ class MTADGAT(AnomalyBaseModel):
             anomaly_score_fn=anomaly_score_fn,
             pred_adjust=pred_adjust,
             pred_adjust_fn=pred_adjust_fn,
-            optimizer_params=optimizer_params, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
-        
+            optimizer_params=optimizer_params,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
+
     def _update_fit_params(
-        self,
-        train_tsdataset: TSDataset,
-        valid_tsdataset: Optional[TSDataset] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -321,13 +323,13 @@ class MTADGAT(AnomalyBaseModel):
                 observed_cat_cols[col] = len(train_df[col].unique())
             else:
                 observed_num_cols.append(col)
-        
+
         fit_params = {
             "observed_cat_cols": observed_cat_cols,
             "observed_num_dim": len(observed_num_cols),
         }
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -350,13 +352,11 @@ class MTADGAT(AnomalyBaseModel):
             self._recon_n_layers,
             self._recon_hid_size,
             self._dropout,
-            self._alpha,
-        )
-       
+            self._alpha, )
+
     def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor], 
-    ) -> Dict[str, Any]:
+            self,
+            X: Dict[str, paddle.Tensor], ) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -368,20 +368,17 @@ class MTADGAT(AnomalyBaseModel):
         """
         self._optimizer.clear_grad()
         preds, recons = self._network(X)
-        total_loss, forecast_loss, recon_loss = self._compute_loss(X, preds, recons)
-        total_loss.backward() 
+        total_loss, forecast_loss, recon_loss = self._compute_loss(X, preds,
+                                                                   recons)
+        total_loss.backward()
         self._optimizer.step()
         batch_logs = {
             "batch_size": X['observed_cov_numeric'].shape[0],
-            "loss": total_loss.item(),       
+            "loss": total_loss.item(),
         }
         return batch_logs
-    
-    def _predict_epoch(
-        self, 
-        name: str, 
-        loader: paddle.io.DataLoader
-    ):
+
+    def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
         """Predict an epoch and update metrics.
 
         Args:
@@ -397,11 +394,8 @@ class MTADGAT(AnomalyBaseModel):
         metrics_logs = {name + '_loss': np.mean(loss_list)}
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
-    
-    def _predict_batch(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> np.ndarray:
+
+    def _predict_batch(self, X: Dict[str, paddle.Tensor]) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -411,15 +405,14 @@ class MTADGAT(AnomalyBaseModel):
             total_loss(paddle.Tensor): Total loss.
         """
         preds, recons = self._network(X)
-        total_loss, forecast_loss, recon_loss = self._compute_loss(X, preds, recons)
+        total_loss, forecast_loss, recon_loss = self._compute_loss(X, preds,
+                                                                   recons)
         return total_loss
-    
-    def _compute_loss(
-        self, 
-        X: Dict[str, paddle.Tensor],
-        preds: paddle.Tensor,
-        recons: paddle.Tensor
-    ) -> paddle.Tensor:
+
+    def _compute_loss(self,
+                      X: Dict[str, paddle.Tensor],
+                      preds: paddle.Tensor,
+                      recons: paddle.Tensor) -> paddle.Tensor:
         """Compute the loss.
 
         Args:
@@ -432,7 +425,7 @@ class MTADGAT(AnomalyBaseModel):
         """
         x = X["observed_cov_numeric"][:, :self._in_chunk_len - 1, :]
         y = X["observed_cov_numeric"][:, self._in_chunk_len - 1:, :]
-     
+
         if self._target_dims is not None:
             x = paddle.to_tensor(x.numpy()[:, :, self._target_dims])
             y = paddle.to_tensor(y.numpy()[:, :, self._target_dims])
@@ -441,17 +434,14 @@ class MTADGAT(AnomalyBaseModel):
             preds = preds.squeeze(1)
         if y.ndim == 3:
             y = y.squeeze(1)
-        
+
         forecast_loss = paddle.sqrt(self._loss_fn(y, preds))
         recon_loss = paddle.sqrt(self._loss_fn(x, recons))
         total_loss = forecast_loss + recon_loss
-        
+
         return total_loss, forecast_loss, recon_loss
-      
-    def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader
-    ) -> np.ndarray:
+
+    def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -468,28 +458,29 @@ class MTADGAT(AnomalyBaseModel):
             x = data["observed_cov_numeric"][:, :self._in_chunk_len - 1, :]
             y = data["observed_cov_numeric"][:, self._in_chunk_len - 1:, :]
             recon_x = paddle.concat([x[:, 1:, :], y, x[:, 0:1, :]], axis=1)
-            
+
             X = {'observed_cov_numeric': recon_x}
             # get recon result
             _, recons = self._network(X)
             pred_list.append(preds.numpy())
             recon_list.append(recons[:, -1, :].numpy())
-            
+
             # the true value
             y_value = y.reshape((-1, y.shape[-1])).numpy()
             if self._target_dims is not None:
                 y_value = y_value[:, self._target_dims]
             true_list.append(y_value)
-        
+
         pred_list = np.concatenate(pred_list, axis=0)
         recon_list = np.concatenate(recon_list, axis=0)
         true_list = np.concatenate(true_list, axis=0)
-              
+
         anomaly_scores = np.zeros_like(true_list)
-        for i in range(pred_list.shape[1]):  
-            a_score = np.sqrt((pred_list[:, i] - true_list[:, i]) ** 2) + np.sqrt(
-                (recon_list[:, i] - true_list[:, i]) ** 2)         
-            anomaly_scores[:, i] = a_score       
+        for i in range(pred_list.shape[1]):
+            a_score = np.sqrt((pred_list[:, i] - true_list[:, i])**
+                              2) + np.sqrt((recon_list[:, i] - true_list[:, i])
+                                           **2)
+            anomaly_scores[:, i] = a_score
         anomaly_scores = np.mean(anomaly_scores, 1)
-        
+
         return anomaly_scores

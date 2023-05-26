@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 Implements util classes of TFT model.
 """
@@ -20,21 +19,16 @@ class TimeDistributed(nn.Layer):
         return_reshaped(bool): A boolean indicating whether to return the output in the corresponding original shape or not.
     """
 
-    def __init__(
-        self, 
-        module: nn.Layer, 
-        batch_first: bool = True, 
-        return_reshaped: bool = True
-    ):
+    def __init__(self,
+                 module: nn.Layer,
+                 batch_first: bool=True,
+                 return_reshaped: bool=True):
         super(TimeDistributed, self).__init__()
         self.module: nn.Layer = module  # the wrapped module
         self.batch_first: bool = batch_first  # indicates the dimensions order of the sequential data.
         self.return_reshaped: bool = return_reshaped
 
-    def forward(
-        self, 
-        x: paddle.Tensor
-    ) -> paddle.Tensor:
+    def forward(self, x: paddle.Tensor) -> paddle.Tensor:
         """
         The forward computation of time distributed layer.
         
@@ -51,7 +45,8 @@ class TimeDistributed(nn.Layer):
             return self.module(x)
 
         # Squash samples and time-steps into a single axis
-        x_reshape = x.reshape([-1, x.shape[-1]]) # (samples * time-steps, input_size)
+        x_reshape = x.reshape(
+            [-1, x.shape[-1]])  # (samples * time-steps, input_size)
         # apply the module on each time-step separately
         y = self.module(x_reshape)
 
@@ -61,7 +56,8 @@ class TimeDistributed(nn.Layer):
                 #y = y.contiguous().view(x.size(0), -1, y.size(-1))  # (samples, time-steps, output_size)
                 y = y.reshape([paddle.shape(x)[0], -1, y.shape[-1]])
             else:
-                y = y.reshape([-1, x.shape[1], y.shape[-1]])  # (time-steps, samples, output_size)
+                y = y.reshape([-1, x.shape[1], y.shape[-1]
+                               ])  # (time-steps, samples, output_size)
         return y
 
 
@@ -69,6 +65,7 @@ class NullTransform(nn.Layer):
     """
     Define the null transformation operation for the case that input data is empty tensor.
     """
+
     def __init__(self):
         super(NullTransform, self).__init__()
 
@@ -84,4 +81,3 @@ class NullTransform(nn.Layer):
             list: The empty list of Null transform.
         """
         return []
-

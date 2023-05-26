@@ -21,10 +21,10 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         verbose(bool): Turn on Verbose mode,set to False by default.
 
     """
+
     def __init__(self,
-                 estimators: List[Tuple[object, dict]] = None,
-                 verbose: bool = False
-                 ) -> None:
+                 estimators: List[Tuple[object, dict]]=None,
+                 verbose: bool=False) -> None:
         self._check_estimators(estimators)
         self._set_params(estimators)
         self._verbose = verbose
@@ -43,16 +43,12 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         # when estimator is type of int, skip check, use for model save and load
         if isinstance(estimators, int):
             return
-        if (
-                estimators is None
-                or len(estimators) == 0
-                or not isinstance(estimators, list)
-                or not all([len(estimator) == 2 for estimator in estimators])
-        ):
+        if (estimators is None or len(estimators) == 0 or
+                not isinstance(estimators, list) or
+                not all([len(estimator) == 2 for estimator in estimators])):
             raise ValueError(
                 "Invalid 'estimators' attribute, 'estimators' should be a list"
-                " of (model_class,model_params) tuples."
-            )
+                " of (model_class,model_params) tuples.")
 
     def _set_params(self, estimators: List[Tuple[object, dict]]) -> List:
         """
@@ -78,7 +74,7 @@ class EnsembleBase(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def fit(self,
             train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None) -> None:
+            valid_tsdataset: Optional[TSDataset]=None) -> None:
         """
         Fit
 
@@ -90,7 +86,7 @@ class EnsembleBase(metaclass=abc.ABCMeta):
 
     def _fit_estimators(self,
                         train_tsdataset: TSDataset,
-                        valid_tsdataset: Optional[TSDataset] = None) -> None:
+                        valid_tsdataset: Optional[TSDataset]=None) -> None:
         """
         Fit estimators
 
@@ -112,8 +108,7 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         """
         pass
 
-    def _predict_estimators(self,
-                            tsdataset: TSDataset) -> List[TSDataset]:
+    def _predict_estimators(self, tsdataset: TSDataset) -> List[TSDataset]:
         """
         Predict estimators
 
@@ -126,7 +121,9 @@ class EnsembleBase(metaclass=abc.ABCMeta):
             predictions.append(estimator.predict(tsdataset))
         return predictions
 
-    def save(self, path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> None:
+    def save(self,
+             path: str,
+             ensemble_file_name: str="paddlets-ensemble-partial.pkl") -> None:
         """
         Save the ensemble model to a directory.
 
@@ -142,7 +139,10 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         # Check file not exist
         ensemble_file_path = os.path.join(path, ensemble_file_name)
         if os.path.exists(ensemble_file_path):
-            raise_log(FileExistsError(f"paddlets-ensemble-partial file already exist, path : {ensemble_file_path}"))
+            raise_log(
+                FileExistsError(
+                    f"paddlets-ensemble-partial file already exist, path : {ensemble_file_path}"
+                ))
         # 1.Save model
         for i in range(len(self._estimators)):
             model = self._estimators[i]
@@ -160,7 +160,9 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         self._estimators = model_tmp
 
     @staticmethod
-    def load(path: str, ensemble_file_name: str = "paddlets-ensemble-partial.pkl") -> "EnsembleBase":
+    def load(path: str,
+             ensemble_file_name: str="paddlets-ensemble-partial.pkl"
+             ) -> "EnsembleBase":
         """
         Load the ensemble model from a directory.
 
@@ -179,21 +181,25 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         # Check file exist
         ensemble_file_path = os.path.join(path, ensemble_file_name)
         if not os.path.exists(ensemble_file_path):
-            raise_log(FileExistsError(f"paddlets-ensemble-partial file not exist, path : {ensemble_file_path}"))
+            raise_log(
+                FileExistsError(
+                    f"paddlets-ensemble-partial file not exist, path : {ensemble_file_path}"
+                ))
         try:
             with open(ensemble_file_path, "rb") as f:
                 ensemble = pickle.load(f)
         except Exception as e:
-            raise_log(RuntimeError(
-                "error occurred while loading ensemble, path: %s, error: %s" % (ensemble_file_path, str(e))))
+            raise_log(
+                RuntimeError(
+                    "error occurred while loading ensemble, path: %s, error: %s"
+                    % (ensemble_file_path, str(e))))
         # 2.Load model
         model_number = ensemble._estimators
         estimators = []
         for i in range(model_number):
-            model = paddlets_model_load(os.path.join(path, "paddlets-ensemble-model" + str(i)))
+            model = paddlets_model_load(
+                os.path.join(path, "paddlets-ensemble-model" + str(i)))
             estimators.append(model)
         # Add model to ensemble
         ensemble._estimators = estimators
         return ensemble
-
-        

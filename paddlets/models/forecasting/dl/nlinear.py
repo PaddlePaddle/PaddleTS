@@ -33,16 +33,16 @@ class _NLinearModel(paddle.nn.Layer):
         hidden_config(List[int]): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty.
         use_bn(bool): Whether to use batch normalization. Only used if `hidden_config` is not empty.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        known_cov_dim: int,
-        observed_cov_dim: int,
-        hidden_config: List[int],
-        use_bn: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            known_cov_dim: int,
+            observed_cov_dim: int,
+            hidden_config: List[int],
+            use_bn: bool, ):
         super(_NLinearModel, self).__init__()
         self._target_dim = target_dim
         self._known_cov_dim = known_cov_dim
@@ -73,7 +73,8 @@ class _NLinearModel(paddle.nn.Layer):
         """
         backcast = data[PAST_TARGET]
         known_cov = data[KNOWN_COV] if self._known_cov_dim > 0 else None
-        observed_cov = data[OBSERVED_COV] if self._observed_cov_dim > 0 else None
+        observed_cov = data[
+            OBSERVED_COV] if self._observed_cov_dim > 0 else None
         batch_size = paddle.shape(backcast)[0]
 
         # normalize
@@ -120,25 +121,25 @@ class NLinearModel(PaddleBaseModelImpl):
         hidden_config(List[int], Optional): The ith element represents the number of neurons in the ith hidden layer. There is no hidden layer when it is empty by default.
         use_bn(bool, Optional): Whether to use batch normalization. Only used if `hidden_config` is not empty.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [],
-        callbacks: List[Callback] = [],
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
-        hidden_config: List[int] = [],
-        use_bn: bool = False,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            hidden_config: List[int]=[],
+            use_bn: bool=False, ):
         self._hidden_config = hidden_config
         self._use_bn = use_bn
         super(NLinearModel, self).__init__(
@@ -155,8 +156,7 @@ class NLinearModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """
@@ -167,15 +167,14 @@ class NLinearModel(PaddleBaseModelImpl):
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
                 f"NLinear variables' dtype only supports [float16, float32, float64], "
-                f"but received {column}: {dtype}.",
-            )
+                f"but received {column}: {dtype}.", )
         super(NLinearModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None,
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None, ) -> Dict[str,
+                                                                       Any]:
         """
         Infer parameters by TSDataset automatically.
 
@@ -193,12 +192,10 @@ class NLinearModel(PaddleBaseModelImpl):
         }
         if train_tsdataset[0].get_known_cov() is not None:
             fit_params["known_cov_dim"] = (
-                train_tsdataset[0].get_known_cov().data.shape[1]
-            )
+                train_tsdataset[0].get_known_cov().data.shape[1])
         if train_tsdataset[0].get_observed_cov() is not None:
             fit_params["observed_cov_dim"] = (
-                train_tsdataset[0].get_observed_cov().data.shape[1]
-            )
+                train_tsdataset[0].get_observed_cov().data.shape[1])
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:
@@ -215,5 +212,4 @@ class NLinearModel(PaddleBaseModelImpl):
             self._fit_params["known_cov_dim"],
             self._fit_params["observed_cov_dim"],
             self._hidden_config,
-            self._use_bn,
-        )
+            self._use_bn, )

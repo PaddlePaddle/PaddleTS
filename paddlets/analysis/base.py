@@ -6,7 +6,7 @@ from typing import Any, Callable, List, Optional, Sequence, Tuple, Union, Dict
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot 
+import matplotlib.pyplot
 
 from paddlets import TimeSeries, TSDataset
 from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
@@ -24,16 +24,15 @@ class Analyzer(ABC):
         kwargs: Argument positions left for sub-classes.
 
     """
+
     def __init__(self, **kwargs):
         self._res = None
         self._kwargs = kwargs
 
-    def _build_analysis_data(
-        self,
-        tsdataset: "TSDataset",
-        columns: Optional[Union[str, List[str]]] = None,
-        **kwargs
-    ) -> Union[pd.Series, pd.DataFrame]:
+    def _build_analysis_data(self,
+                             tsdataset: "TSDataset",
+                             columns: Optional[Union[str, List[str]]]=None,
+                             **kwargs) -> Union[pd.Series, pd.DataFrame]:
         """
         Build a pd.Series or pd.DataFrame From a TSDataset or specific columns in a TSDataset.
         
@@ -50,25 +49,25 @@ class Analyzer(ABC):
 
         """
         if columns is None:
-            if tsdataset.get_target() is None and tsdataset.get_all_cov() is None:
-                raise_log(
-                    ValueError('tsdataset is empty!')
-                )
+            if tsdataset.get_target() is None and tsdataset.get_all_cov(
+            ) is None:
+                raise_log(ValueError('tsdataset is empty!'))
             elif tsdataset.get_all_cov() is None:
                 return tsdataset.get_target().data
             elif tsdataset.get_target() is None:
                 return tsdataset.get_all_cov().data
             else:
-                return pd.concat([tsdataset.get_target().data, tsdataset.get_all_cov().data], axis=1)
+                return pd.concat(
+                    [
+                        tsdataset.get_target().data, tsdataset.get_all_cov()
+                        .data
+                    ],
+                    axis=1)
         else:
             return tsdataset[columns]
 
     @abstractmethod
-    def analyze(
-        self, 
-        X: Union[pd.Series, pd.DataFrame],
-        **kwargs
-    ) -> Any:
+    def analyze(self, X: Union[pd.Series, pd.DataFrame], **kwargs) -> Any:
         """
         Analyze data, need to be implemented by sub-classes. 
 
@@ -130,13 +129,10 @@ class Analyzer(ABC):
 
         """
         return None
-    
-    
-    def __call__(
-        self,
-        tsdataset: "TSDataset",
-        columns: Optional[Union[str, List[str]]] = None
-    )-> Any:
+
+    def __call__(self,
+                 tsdataset: "TSDataset",
+                 columns: Optional[Union[str, List[str]]]=None) -> Any:
         """
         Compute analysis's value from TSDataset
         

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 """
 logger file
 """
@@ -42,14 +41,13 @@ class Logger(object):
         lvl(Enum): log level
 
     """
-    level = Enum('level',
-                 {'debug': logging.DEBUG,
-                  'info': logging.INFO,
-                  'warning': logging.WARNING,
-                  'error': logging.ERROR,
-                  'critical': logging.CRITICAL
-                  }
-                 )
+    level = Enum('level', {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL
+    })
     logger = None
     lvl = None
 
@@ -89,7 +87,7 @@ class Logger(object):
         self.logger.log(self.lvl, msg)
 
 
-def raise_log(exception: Exception, logger: Logger = Logger(DEFAULT_LOGGER)):
+def raise_log(exception: Exception, logger: Logger=Logger(DEFAULT_LOGGER)):
     """
     Can be used to replace "raise" when throwing an exception to ensure the logging
     of the exception. After logging it, the exception is raised.
@@ -114,9 +112,8 @@ def raise_log(exception: Exception, logger: Logger = Logger(DEFAULT_LOGGER)):
 
 def raise_if_not(
         condition: bool,
-        message: str = "",
-        logger: Logger = Logger(DEFAULT_LOGGER),
-):
+        message: str="",
+        logger: Logger=Logger(DEFAULT_LOGGER), ):
     """
     Args:
         condition(bool): The boolean condition to be checked.
@@ -137,9 +134,8 @@ def raise_if_not(
 
 def raise_if(
         condition: bool,
-        message: str = "",
-        logger: Logger = Logger(DEFAULT_LOGGER),
-):
+        message: str="",
+        logger: Logger=Logger(DEFAULT_LOGGER), ):
     """
     Args:
         condition(bool): The boolean condition to be checked.
