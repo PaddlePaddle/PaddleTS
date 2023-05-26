@@ -51,13 +51,11 @@ class AnalysisReport(object):
 
     """
 
-    def __init__(
-            self,
-            dataset: TSDataset,
-            names: Union[str, List[str]] = None,
-            params: Dict = None,
-            columns: Optional[Union[str, List[str]]] = None
-    ) -> None:
+    def __init__(self,
+                 dataset: TSDataset,
+                 names: Union[str, List[str]]=None,
+                 params: Dict=None,
+                 columns: Optional[Union[str, List[str]]]=None) -> None:
 
         if names == None:
             names = DEFAULT_ANALYZERS
@@ -69,7 +67,9 @@ class AnalysisReport(object):
         self._columns = columns
         self._analyzers = self._get_analyzers(names, params)
 
-    def export_docx_report(self, path: str = ".", file_name: str = "analysis_report.docx") -> None:
+    def export_docx_report(self,
+                           path: str=".",
+                           file_name: str="analysis_report.docx") -> None:
         """
         Export a report in the docx format
         
@@ -103,7 +103,7 @@ class AnalysisReport(object):
             report_description = properties.get("report_description")
             document.add_heading(report_heading, level=2)
             document.add_paragraph(report_description)
-            
+
             # Display the analysis result
             document.add_paragraph("Analysis Results", style='ListBullet')
             analysis_result = analyzer(self._dataset, self._columns)
@@ -112,18 +112,20 @@ class AnalysisReport(object):
             # Dataframe to table
             if isinstance(analysis_result, pd.DataFrame):
                 indexes = analysis_result.index.to_list()
-                t = document.add_table(analysis_result.shape[0]+1, analysis_result.shape[1]+1)
+                t = document.add_table(analysis_result.shape[0] + 1,
+                                       analysis_result.shape[1] + 1)
                 # Add the header rows.
-                t.cell(0,1).text = ""
+                t.cell(0, 1).text = ""
                 for j in range(analysis_result.shape[-1]):
-                    t.cell(0,j+1).text = str(analysis_result.columns[j])
+                    t.cell(0, j + 1).text = str(analysis_result.columns[j])
                     # Add the rest of the data frame
                 for i in range(analysis_result.shape[0]):
-                    t.cell(i+1,0).text = str(indexes[i])
+                    t.cell(i + 1, 0).text = str(indexes[i])
                     for j in range(analysis_result.shape[-1]):
-                        t.cell(i+1,j+1).text = str(analysis_result.values[i,j])
+                        t.cell(i + 1,
+                               j + 1).text = str(analysis_result.values[i, j])
                 t.style = "Table Grid"
-            else: 
+            else:
                 document.add_paragraph(str(analysis_result))
 
             # Add figures
@@ -138,8 +140,8 @@ class AnalysisReport(object):
         path = path + "/" + file_name
         document.save(path)
         logger.info(f"save report succcess, save at {path}")
-    
-    def export_json_report(self, log: bool = True) -> Dict:
+
+    def export_json_report(self, log: bool=True) -> Dict:
         """
         Export a report in the Json format
         
@@ -153,7 +155,7 @@ class AnalysisReport(object):
         json_report = {}
 
         for analyzer in self._analyzers:
-            analyzer_report =  {}
+            analyzer_report = {}
             properties = analyzer.get_properties()
             report_heading = properties.get("report_heading")
             report_description = properties.get("report_description")
@@ -163,17 +165,18 @@ class AnalysisReport(object):
 
             analysis_res = analyzer(self._dataset, self._columns)
 
-            if isinstance(analysis_res, pd.DataFrame) or isinstance(analysis_res, pd.Series):
+            if isinstance(analysis_res, pd.DataFrame) or isinstance(
+                    analysis_res, pd.Series):
                 analyzer_report["analysis_results"] = analysis_res.to_json()
             else:
                 analyzer_report["analysis_results"] = analysis_res
 
             analyzer_name = properties.get("name")
-            json_report[analyzer_name] = analyzer_report 
-                
+            json_report[analyzer_name] = analyzer_report
+
         if log:
             logger.info(json_report)
-        
+
         return json_report
 
     def _report_formating(self, document: Document) -> None:
@@ -189,14 +192,20 @@ class AnalysisReport(object):
         """
         document.add_heading(u' Data Analysis Report ', 0)
         # Add_aragraph
-        document.add_paragraph(u'This report shows some analysis results in the form of tables and charts')
-        document.add_paragraph(u'It is designed to give users a brief overview about the dataset')
-        document.add_paragraph(u'Currently, the following analysis methods are supported, including:')
+        document.add_paragraph(
+            u'This report shows some analysis results in the form of tables and charts'
+        )
+        document.add_paragraph(
+            u'It is designed to give users a brief overview about the dataset')
+        document.add_paragraph(
+            u'Currently, the following analysis methods are supported, including:'
+        )
         # ListBullet
         document.add_paragraph(
             u'summary, max, fft, stft, cwt', style='ListBullet')
 
-    def _get_analyzers(self, names: Union[str, List[str]], params: Dict = None) -> List[Analyzer]:
+    def _get_analyzers(self, names: Union[str, List[str]],
+                       params: Dict=None) -> List[Analyzer]:
         """
         Get analyzer objects
         
@@ -233,7 +242,7 @@ class AnalysisReport(object):
 
         return analyzers
 
-    def get_all_analyzers_names(self, log: bool = True) -> List[str]:
+    def get_all_analyzers_names(self, log: bool=True) -> List[str]:
         """
         Get the names of analyzers
         This method can be called internally or externally, and the parameter log is set to False or True accordingly.
@@ -250,7 +259,8 @@ class AnalysisReport(object):
         for key, value in analyzers_mapping.items():
             analyzers_names.append(key)
         if log:
-            logger.info("current support analyzers:" + ','.join(analyzers_names))
+            logger.info("current support analyzers:" + ','.join(
+                analyzers_names))
 
         return analyzers_names
 
@@ -274,7 +284,8 @@ class AnalysisReport(object):
 
         return analyzers_mapping
 
-    def _validate_analyzers_names(self, names: Union[str, List[str]] = None) -> None:
+    def _validate_analyzers_names(self,
+                                  names: Union[str, List[str]]=None) -> None:
         """
         Validate the names of analyzer input by the user 
         If the analyzer names entered by the user do not exist in the library, an error will be reported
@@ -292,5 +303,7 @@ class AnalysisReport(object):
         analyzer_names = self.get_all_analyzers_names(log=False)
 
         missing_names = set(names) - set(analyzer_names)
-        raise_if_not(len(missing_names) == 0,
-            f"Invalid analyzer names, analyzer {missing_names} do not exist, please use get_all_analyzers_names() method to get currently supported analyzers!")
+        raise_if_not(
+            len(missing_names) == 0,
+            f"Invalid analyzer names, analyzer {missing_names} do not exist, please use get_all_analyzers_names() method to get currently supported analyzers!"
+        )

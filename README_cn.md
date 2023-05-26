@@ -25,7 +25,7 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
   Autoencoder、VAE、AnomalyTransformer等时序异常检测模型
 * 内置多样化的数据转换算子，支持数据处理与转换，包括缺失值填充、异常值处理、归一化、时间相关的协变量提取等
 * 内置经典的数据分析算子，帮助开发者便捷实现数据探索，包括数据统计量信息及数据摘要等功能
-* 自动模型调优AutoTS，支持多类型HPO(Hyper Parameter Optimization)算法，在多个模型和数据集上展现显著调优效果 
+* 自动模型调优AutoTS，支持多类型HPO(Hyper Parameter Optimization)算法，在多个模型和数据集上展现显著调优效果
 * 第三方机器学习模型及数据转换模块自动集成，支持包括sklearn、[pyod](https://github.com/yzhao062/pyod)等第三方库的时序应用
 * 支持在GPU设备上运行基于PaddlePaddle的时序模型
 * 时序模型集成学习能力
@@ -39,7 +39,7 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 新发布[Paddle Inference](https://www.paddlepaddle.org.cn/paddle/paddleinference)支持，已适配时序预测与时序异常检测
 * 新增模型可解释性能力。包括模型无关的可解释性与模型相关的可解释性
 * 新增支持基于表征的聚类与分类
-  
+
 您也可以参考[发布说明](https://github.com/PaddlePaddle/PaddleTS/wiki/Release-Notes)获取更详尽的更新列表。
 
 未来，更多的高级特性会进一步发布，包括但不限于：

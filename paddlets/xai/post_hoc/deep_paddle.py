@@ -25,33 +25,38 @@ class PaddleDeep(Explainer):
         model(PaddleBaseModel): A model object that supports `forward` function.
         data(Dict[str, Tensor]):  A dict tensor for training the deep explainer
     """
+
     def __init__(
-                self, 
-                model: Optional[Union[PaddleBaseModel,]],
-                data: Dict[str, Tensor],
-    ) -> None:
+            self,
+            model: Optional[Union[PaddleBaseModel, ]],
+            data: Dict[str, Tensor], ) -> None:
         self.data = [data]
         # To keep the DeepExplainer base value
-        self.expected_value = None 
+        self.expected_value = None
         # Get module(nn.Layer)
         if not issubclass(type(model), PaddleBaseModel):
-            raise_log(f"The model type ({type(model)}) is not supported by deep explainer.")
+            raise_log(
+                f"The model type ({type(model)}) is not supported by deep explainer."
+            )
         self.model = model._network
         if not issubclass(type(self.model), paddle.nn.Layer):
-            raise_log("Only the type(paddle.nn.Layer) is supported. Please check the type of model._network!")
-            
+            raise_log(
+                "Only the type(paddle.nn.Layer) is supported. Please check the type of model._network!"
+            )
+
         self.multi_output = False
         self.num_outputs = 1
-        
+
         with paddle.no_grad():
             outputs = self.model(*self.data)
-            
+
             if outputs.shape[1] > 1:
                 self.multi_output = True
                 self.num_outputs = outputs.shape[1]
             self.expected_value = outputs.mean(0).cpu().numpy()
 
-    def gradient(self, idx: int, inputs: Dict[str, Tensor]) -> List[Dict[str, np.ndarray]]:
+    def gradient(self, idx: int,
+                 inputs: Dict[str, Tensor]) -> List[Dict[str, np.ndarray]]:
         """
         Calculate the gradient of input and output on each output step.
 
@@ -63,16 +68,16 @@ class PaddleDeep(Explainer):
             List[Dict[str, np.ndarray]]: gradient values.
         """
         self.model.clear_gradients()
-        
+
         X = []
         for input_ in inputs:
             for key in input_.keys():
                 input_[key].stop_gradient = False
             X.append(input_)
-            
+
         # Convert model mode to compute grad
         self.model.train()
-        
+
         outputs = self.model(*X)
 
         selected = [val for val in outputs[:, idx]]
@@ -85,9 +90,11 @@ class PaddleDeep(Explainer):
                     continue
                 if i == len(x.keys()) - 1 and idx == len(X) - 1:
                     retain_graph = None
-                grad = paddle.autograd.grad(selected, x[key],
-                                           retain_graph=retain_graph,
-                                           allow_unused=True)[0]
+                grad = paddle.autograd.grad(
+                    selected,
+                    x[key],
+                    retain_graph=retain_graph,
+                    allow_unused=True)[0]
 
                 if grad is not None:
                     grad = grad.cpu().numpy()
@@ -109,7 +116,9 @@ class PaddleDeep(Explainer):
         Returns:
             List[Dict[str, np.ndarray]]: shap values.
         """
-        raise_if_not(isinstance(X, Dict) and 'past_target' in X, 'Input(X) must be dict[str, tensor] and past_target in X!')
+        raise_if_not(
+            isinstance(X, Dict) and 'past_target' in X,
+            'Input(X) must be dict[str, tensor] and past_target in X!')
         # Now just one input
         X = [X]
         model_output_ranks = (paddle.ones((X[0]['past_target'].shape[0], self.num_outputs)).astype('int') * \
@@ -142,4 +151,3 @@ class PaddleDeep(Explainer):
                                            * (X[l][key][j: j + 1] - self.data[l][key])).cpu().detach().numpy().mean(0)
             output_phis.append(phis[0])
         return output_phis
-

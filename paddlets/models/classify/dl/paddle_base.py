@@ -21,12 +21,8 @@ from paddlets.models.common.callbacks import (
     CallbackContainer,
     EarlyStopping,
     Callback,
-    History,
-)
-from paddlets.metrics import (
-    MetricContainer, 
-    Metric
-)
+    History, )
+from paddlets.metrics import (MetricContainer, Metric)
 
 from paddlets.models.utils import build_network_input_spec
 from paddlets.models.classify.dl.adapter.data_adapter import ClassifyDataAdapter
@@ -75,19 +71,19 @@ class PaddleBaseClassifier(BaseClassifier):
         _history(History): Callback that records events into a `History` object.
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
+
     def __init__(
-        self,
-        loss_fn: Callable[..., paddle.Tensor] = None,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: Optional[int] = None,
-    ):
+            self,
+            loss_fn: Callable[..., paddle.Tensor]=None,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: Optional[int]=None, ):
         super(PaddleBaseClassifier, self).__init__()
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
@@ -100,7 +96,7 @@ class PaddleBaseClassifier(BaseClassifier):
         self._patience = patience
         self._seed = seed
         self._stop_training = False
-        
+
         self._fit_params = None
         self._network = None
         self._optimizer = None
@@ -116,7 +112,7 @@ class PaddleBaseClassifier(BaseClassifier):
         self._check_params()
         if seed is not None:
             paddle.seed(seed)
-        
+
     def _check_params(self):
         """Parameter validity verification.
 
@@ -130,19 +126,21 @@ class PaddleBaseClassifier(BaseClassifier):
 
             patience: patience must be >= 0.
         """
-        raise_if(self._batch_size <= 0, f"batch_size must be > 0, got {self._batch_size}.")
-        raise_if(self._max_epochs <= 0, f"max_epochs must be > 0, got {self._max_epochs}.")
-        raise_if(self._verbose <= 0, f"verbose must be > 0, got {self._verbose}.")
-        raise_if(self._patience < 0, f"patience must be >= 0, got {self._patience}.")
+        raise_if(self._batch_size <= 0,
+                 f"batch_size must be > 0, got {self._batch_size}.")
+        raise_if(self._max_epochs <= 0,
+                 f"max_epochs must be > 0, got {self._max_epochs}.")
+        raise_if(self._verbose <= 0,
+                 f"verbose must be > 0, got {self._verbose}.")
+        raise_if(self._patience < 0,
+                 f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
-        if not self._eval_metrics: 
+        if not self._eval_metrics:
             self._eval_metrics = ["mse"]
 
-    def _check_tsdatasets(
-        self, 
-        tsdatasets: List[TSDataset],
-        labels: np.ndarray
-    ):
+    def _check_tsdatasets(self,
+                          tsdatasets: List[TSDataset],
+                          labels: np.ndarray):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
 
@@ -185,7 +183,8 @@ class PaddleBaseClassifier(BaseClassifier):
                 raise_log(TypeError(msg))
 
             # Check whether the data contains NaN.
-            if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[column]).any():
+            if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[
+                    column]).any():
                 msg = f"np.inf or np.NaN, which may lead to unexpected results from the model"
                 msg = f"Input `{column}` contains {msg}."
                 logger.warning(msg)
@@ -200,18 +199,16 @@ class PaddleBaseClassifier(BaseClassifier):
             Optimizer.
         """
         return self._optimizer_fn(
-            **self._optimizer_params,
-            parameters=self._network.parameters()
-        )
+            **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
-        self, 
-        train_tsdatasets: List[TSDataset],
-        train_labels: np.ndarray,
-        valid_tsdatasets: List[TSDataset] = None,
-        valid_labels: np.ndarray = None,
-        shuffle: bool = True
-    ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
+            self,
+            train_tsdatasets: List[TSDataset],
+            train_labels: np.ndarray,
+            valid_tsdatasets: List[TSDataset]=None,
+            valid_labels: np.ndarray=None,
+            shuffle: bool=True) -> Tuple[paddle.io.DataLoader, List[
+                paddle.io.DataLoader]]:
         """Generate dataloaders for train and eval set.
 
         Args: 
@@ -229,11 +226,11 @@ class PaddleBaseClassifier(BaseClassifier):
         data_adapter = ClassifyDataAdapter()
         train_dataset = data_adapter.to_paddle_dataset(
             train_tsdatasets,
-            train_labels,
-        )
+            train_labels, )
         self._n_classes = train_dataset.n_classes_
         self._classes_ = train_dataset.classes_
-        train_dataloader = data_adapter.to_paddle_dataloader(train_dataset, self._batch_size, shuffle=shuffle)
+        train_dataloader = data_adapter.to_paddle_dataloader(
+            train_dataset, self._batch_size, shuffle=shuffle)
 
         if valid_tsdatasets is None:
             valid_dataloader = None
@@ -241,17 +238,15 @@ class PaddleBaseClassifier(BaseClassifier):
             self._check_tsdatasets(valid_tsdatasets, valid_labels)
             valid_dataset = data_adapter.to_paddle_dataset(
                 valid_tsdatasets,
-                valid_labels,
-            )
-            valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size, shuffle=shuffle)
+                valid_labels, )
+            valid_dataloader = data_adapter.to_paddle_dataloader(
+                valid_dataset, self._batch_size, shuffle=shuffle)
 
         return train_dataloader, valid_dataloader
 
     def _init_predict_dataloader(
-        self, 
-        tsdatasets: List[TSDataset],
-        labels: np.ndarray = None
-    ) -> paddle.io.DataLoader:
+            self, tsdatasets: List[TSDataset],
+            labels: np.ndarray=None) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
         Args: 
@@ -265,15 +260,13 @@ class PaddleBaseClassifier(BaseClassifier):
         data_adapter = ClassifyDataAdapter()
         dataset = data_adapter.to_paddle_dataset(
             tsdatasets,
-            labels,
-        )
-        dataloader = data_adapter.to_paddle_dataloader(dataset, self._batch_size, shuffle=False)
+            labels, )
+        dataloader = data_adapter.to_paddle_dataloader(
+            dataset, self._batch_size, shuffle=False)
         return dataloader
 
-    def _init_metrics(
-        self,
-        eval_names: List[str]
-    ) -> Tuple[List[Metric], List[str], Dict[str, MetricContainer]]:
+    def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
+            str], Dict[str, MetricContainer]]:
         """Set attributes relative to the metrics.
 
         Args:
@@ -288,7 +281,8 @@ class PaddleBaseClassifier(BaseClassifier):
         metric_container_dict = OrderedDict()
         for name in eval_names:
             metric_container_dict.update({
-                name: MetricContainer(metrics, prefix=f"{name}_")
+                name: MetricContainer(
+                    metrics, prefix=f"{name}_")
             })
         metrics, metrics_names = [], []
         for _, metric_container in metric_container_dict.items():
@@ -304,35 +298,33 @@ class PaddleBaseClassifier(BaseClassifier):
             CallbackContainer: Container holding a list of callbacks.
         """
         # Use the last metric in the container as the standard for early stopping.
-        early_stopping_metric = (
-            self._metrics_names[-1] if len(self._metrics_names) > 0 else None
-        )
+        early_stopping_metric = (self._metrics_names[-1]
+                                 if len(self._metrics_names) > 0 else None)
         # Set callback functions, including history, early stopping, etc..
-        history, callbacks = History(self._verbose), [] # nqa
+        history, callbacks = History(self._verbose), []  # nqa
         callbacks.append(history)
         if (early_stopping_metric is not None) and (self._patience > 0):
             early_stopping = EarlyStopping(
                 early_stopping_metric=early_stopping_metric,
-                is_maximize=self._metrics[-1]._MAXIMIZE, 
-                patience=self._patience
-            )
+                is_maximize=self._metrics[-1]._MAXIMIZE,
+                patience=self._patience)
             callbacks.append(early_stopping)
         else:
-            logger.warning("No early stopping will be performed, last training weights will be used.")
+            logger.warning(
+                "No early stopping will be performed, last training weights will be used."
+            )
 
         if self._callbacks:
             callbacks.extend(self._callbacks)
         callback_container = CallbackContainer(callbacks)
         callback_container.set_trainer(self)
         return history, callback_container
-    
-    def fit(
-        self,
-        train_tsdatasets: List[TSDataset],
-        train_labels: np.ndarray,
-        valid_tsdatasets: List[TSDataset] = None,
-        valid_labels: np.ndarray = None
-    ):
+
+    def fit(self,
+            train_tsdatasets: List[TSDataset],
+            train_labels: np.ndarray,
+            valid_tsdatasets: List[TSDataset]=None,
+            valid_labels: np.ndarray=None):
         """Train a neural network stored in self._network, 
             Using train_dataloader for training data and valid_dataloader for validation.
 
@@ -342,15 +334,15 @@ class PaddleBaseClassifier(BaseClassifier):
             valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
             valid_labels:(np.ndarray) : The valid data class labels
         """
-        self._fit_params = self._update_fit_params(train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
-        train_dataloader, valid_dataloader = self._init_fit_dataloaders(train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
+        self._fit_params = self._update_fit_params(
+            train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
+        train_dataloader, valid_dataloader = self._init_fit_dataloaders(
+            train_tsdatasets, train_labels, valid_tsdatasets, valid_labels)
         self._fit(train_dataloader, valid_dataloader)
-        
-    def _fit(
-        self, 
-        train_dataloader: paddle.io.DataLoader,
-        valid_dataloader: List[paddle.io.DataLoader] = None
-    ):
+
+    def _fit(self,
+             train_dataloader: paddle.io.DataLoader,
+             valid_dataloader: List[paddle.io.DataLoader]=None):
         """Fit function core logic. 
 
         Args: 
@@ -378,8 +370,7 @@ class PaddleBaseClassifier(BaseClassifier):
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
-                epoch_idx, logs=self._history._epoch_metrics
-            )
+                epoch_idx, logs=self._history._epoch_metrics)
             if self._stop_training:
                 break
 
@@ -388,9 +379,8 @@ class PaddleBaseClassifier(BaseClassifier):
         self._network.eval()
 
     def predict(
-        self,
-        tsdatasets: List[TSDataset],
-    ) -> np.ndarray:
+            self,
+            tsdatasets: List[TSDataset], ) -> np.ndarray:
         """Predict labels. the result are output as ndarray.
 
         Args:
@@ -402,17 +392,13 @@ class PaddleBaseClassifier(BaseClassifier):
         probs = self._predict(dataloader)
         # np.save('probs',probs)
         rng = check_random_state(self._seed)
-        return np.array(
-            [
-                self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
-                for prob in probs
-            ]
-        )
-    
-    def predict_proba(
-        self,
-        tsdatasets: List[TSDataset]
-    ) -> np.ndarray:
+        return np.array([
+            self._classes_[int(
+                rng.choice(np.flatnonzero(prob == prob.max())))]
+            for prob in probs
+        ])
+
+    def predict_proba(self, tsdatasets: List[TSDataset]) -> np.ndarray:
         """Find probability estimates for each class for all cases.
 
         Args:
@@ -424,10 +410,7 @@ class PaddleBaseClassifier(BaseClassifier):
         dataloader = self._init_predict_dataloader(tsdatasets)
         return self._predict(dataloader)
 
-    def _predict(
-        self, 
-        dataloader: paddle.io.DataLoader
-    ) -> np.ndarray:
+    def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.
 
         Args:
@@ -453,10 +436,7 @@ class PaddleBaseClassifier(BaseClassifier):
 
         return results
 
-    def _train_epoch(
-        self, 
-        train_loader: paddle.io.DataLoader
-    ):
+    def _train_epoch(self, train_loader: paddle.io.DataLoader):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -470,12 +450,9 @@ class PaddleBaseClassifier(BaseClassifier):
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
-    
-    def _train_batch(
-        self, 
-        X: Dict[str, paddle.Tensor], 
-        y: paddle.Tensor
-    ) -> Dict[str, Any]:
+
+    def _train_batch(self, X: Dict[str, paddle.Tensor],
+                     y: paddle.Tensor) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -490,17 +467,10 @@ class PaddleBaseClassifier(BaseClassifier):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {
-            "batch_size": y.shape[0],
-            "loss": loss.item()
-        }
+        batch_logs = {"batch_size": y.shape[0], "loss": loss.item()}
         return batch_logs
 
-    def _predict_epoch(
-        self, 
-        name: str, 
-        loader: paddle.io.DataLoader
-    ):
+    def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
         """Predict an epoch and update metrics.
 
         Args:
@@ -518,11 +488,8 @@ class PaddleBaseClassifier(BaseClassifier):
         metrics_logs = self._metric_container_dict[name](y_true, scores)
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
-    
-    def _predict_batch(
-        self, 
-        X: paddle.Tensor
-    ) -> np.ndarray:
+
+    def _predict_batch(self, X: paddle.Tensor) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -534,9 +501,8 @@ class PaddleBaseClassifier(BaseClassifier):
         scores = self._network(X)
         return scores.numpy()
 
-    def _prepare_X_y(self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> Tuple[Dict[str, paddle.Tensor], paddle.Tensor]:
+    def _prepare_X_y(self, X: Dict[str, paddle.Tensor]) -> Tuple[Dict[
+            str, paddle.Tensor], paddle.Tensor]:
         """Split the packet into X, y.
 
         Note:
@@ -552,11 +518,8 @@ class PaddleBaseClassifier(BaseClassifier):
         y = X['label']
         return X, y
 
-    def _compute_loss(
-        self, 
-        y_score: paddle.Tensor, 
-        y_true: paddle.Tensor
-    ) -> paddle.Tensor:
+    def _compute_loss(self, y_score: paddle.Tensor,
+                      y_true: paddle.Tensor) -> paddle.Tensor:
         """Compute the loss.
 
         Note:
@@ -570,15 +533,12 @@ class PaddleBaseClassifier(BaseClassifier):
             paddle.Tensor: Loss value.
         """
         if self._loss_fn == paddle.nn.functional.cross_entropy:
-            return paddle.nn.functional.cross_entropy(y_score, y_true, soft_label=True)
+            return paddle.nn.functional.cross_entropy(
+                y_score, y_true, soft_label=True)
         else:
             return self._loss_fn(y_score, y_true)
 
-    def score(
-        self,
-        tsdatasets: List[TSDataset],
-        labels: np.ndarray
-    ) -> float:
+    def score(self, tsdatasets: List[TSDataset], labels: np.ndarray) -> float:
         """Scores predicted labels against ground truth labels on X.
 
         Args:
@@ -592,13 +552,11 @@ class PaddleBaseClassifier(BaseClassifier):
         return accuracy_score(labels, preds, normalize=True)
 
     @abc.abstractmethod
-    def _update_fit_params(
-        self,
-        train_tsdatasets: List[TSDataset],
-        train_labels: np.ndarray,
-        valid_tsdatasets: List[TSDataset],
-        valid_labels: np.ndarray
-    ) -> Dict[str, Any]:
+    def _update_fit_params(self,
+                           train_tsdatasets: List[TSDataset],
+                           train_labels: np.ndarray,
+                           valid_tsdatasets: List[TSDataset],
+                           valid_labels: np.ndarray) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args: 
@@ -619,8 +577,12 @@ class PaddleBaseClassifier(BaseClassifier):
             paddle.nn.Layer.
         """
         pass
-    
-    def save(self, path: str, network_model: bool = False, dygraph_to_static = True, batch_size: Optional[int] = None) -> None:
+
+    def save(self,
+             path: str,
+             network_model: bool=False,
+             dygraph_to_static=True,
+             batch_size: Optional[int]=None) -> None:
         """
         Saves a PaddleBaseClassifier instance to a disk file.
 
@@ -634,18 +596,18 @@ class PaddleBaseClassifier(BaseClassifier):
         abs_root_path = os.path.dirname(abs_model_path)
         raise_if_not(
             os.path.exists(abs_root_path),
-            "failed to save model, path not exists: %s" % abs_root_path
-        )
+            "failed to save model, path not exists: %s" % abs_root_path)
         raise_if(
             os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" % abs_model_path
-        )
+            "failed to save model, path must be a file, not directory: %s" %
+            abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
-            "Failed to save model, target file already exists: %s" % abs_model_path
-        )
+            "Failed to save model, target file already exists: %s" %
+            abs_model_path)
 
-        raise_if(self._network is None, "failed to save model, model._network must not be None.")
+        raise_if(self._network is None,
+                 "failed to save model, model._network must not be None.")
         # raise_if(self._optimizer is None, "failed to save model, model._optimizer must not be None.")
 
         # path to save other internal files.
@@ -668,11 +630,12 @@ class PaddleBaseClassifier(BaseClassifier):
         }
 
         # internal files must not conflict with existing files.
-        conflict_files = {*internal_filename_map.values()} - set(os.listdir(abs_root_path))
+        conflict_files = {*internal_filename_map.values()} - set(
+            os.listdir(abs_root_path))
         raise_if(
             len(conflict_files) < len(internal_filename_map),
-            "failed to save model internal files, these files must not exist: %s" % conflict_files
-        )
+            "failed to save model internal files, these files must not exist: %s"
+            % conflict_files)
 
         # start to save
         # 1 save network model and params for paddle inference
@@ -685,41 +648,49 @@ class PaddleBaseClassifier(BaseClassifier):
             input_spec = build_network_input_spec(model_meta)
             try:
                 if dygraph_to_static:
-                    layer = paddle.jit.to_static(self._network, input_spec=input_spec)
-                    paddle.jit.save(layer, os.path.join(abs_root_path, internal_filename_map["network_model"]))
+                    layer = paddle.jit.to_static(
+                        self._network, input_spec=input_spec)
+                    paddle.jit.save(
+                        layer,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]))
                 else:
-                    paddle.jit.save(self._network, os.path.join(abs_root_path, internal_filename_map["network_model"]), input_spec=input_spec)
+                    paddle.jit.save(
+                        self._network,
+                        os.path.join(abs_root_path,
+                                     internal_filename_map["network_model"]),
+                        input_spec=input_spec)
             except Exception as e:
                 raise_log(
                     ValueError(
-                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s" %
-                        (internal_filename_map["network_model"], str(e))
-                    )
-                )
+                        "error occurred while saving or dygraph_to_static network_model: %s, err: %s"
+                        % (internal_filename_map["network_model"], str(e))))
 
         # 2 save model meta (e.g. classname)
         try:
-            with open(os.path.join(abs_root_path, internal_filename_map["model_meta"]), "w") as f:
+            with open(
+                    os.path.join(abs_root_path,
+                                 internal_filename_map["model_meta"]),
+                    "w") as f:
                 json.dump(model_meta, f, ensure_ascii=False)
         except Exception as e:
             raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (internal_filename_map["model_meta"], str(e)))
-            )
+                ValueError("error occurred while saving %s, err: %s" % (
+                    internal_filename_map["model_meta"], str(e))))
 
         # 3 save network state dict
         network_state_dict = self._network.state_dict()
         try:
             paddle.save(
                 obj=network_state_dict,
-                path=os.path.join(abs_root_path, internal_filename_map["network_statedict"]),
+                path=os.path.join(abs_root_path,
+                                  internal_filename_map["network_statedict"]),
             )
         except Exception as e:
             raise_log(
-                ValueError(
-                    "error occurred while saving %s: %s, err: %s" %
-                    (internal_filename_map["network_statedict"], network_state_dict, str(e))
-                )
-            )
+                ValueError("error occurred while saving %s: %s, err: %s" %
+                           (internal_filename_map["network_statedict"],
+                            network_state_dict, str(e))))
 
         # 4 save model
         optimizer = self._optimizer
@@ -741,7 +712,9 @@ class PaddleBaseClassifier(BaseClassifier):
             with open(abs_model_path, "wb") as f:
                 pickle.dump(self, f)
         except Exception as e:
-            raise_log(ValueError("error occurred while saving %s, err: %s" % (abs_model_path, str(e))))
+            raise_log(
+                ValueError("error occurred while saving %s, err: %s" % (
+                    abs_model_path, str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
@@ -762,25 +735,31 @@ class PaddleBaseClassifier(BaseClassifier):
             PaddleBaseClassifier: the loaded PaddleBaseClassifier instance.
         """
         abs_path = os.path.abspath(path)
-        raise_if_not(os.path.exists(abs_path), "model file does not exist: %s" % abs_path)
-        raise_if(os.path.isdir(abs_path), "path must be a file path, not a directory: %s" % abs_path)
+        raise_if_not(
+            os.path.exists(abs_path), "model file does not exist: %s" %
+            abs_path)
+        raise_if(
+            os.path.isdir(abs_path),
+            "path must be a file path, not a directory: %s" % abs_path)
 
         # 1.1 model
         with open(abs_path, "rb") as f:
             model = pickle.load(f)
         raise_if_not(
             isinstance(model, PaddleBaseClassifier),
-            "loaded model type must be inherited from %s, but actual loaded model type: %s" %
-            (PaddleBaseClassifier, model.__class__)
-        )
+            "loaded model type must be inherited from %s, but actual loaded model type: %s"
+            % (PaddleBaseClassifier, model.__class__))
 
         # 1.2 - 1.4 model._network
         model._network = model._init_network()
-        raise_if(model._network is None, "model._network must not be None after calling _init_network()")
+        raise_if(
+            model._network is None,
+            "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
         network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
-        network_statedict_abs_path = os.path.join(os.path.dirname(abs_path), network_statedict_filename)
+        network_statedict_abs_path = os.path.join(
+            os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)
         model._network.set_state_dict(network_statedict)
 
@@ -797,15 +776,22 @@ class PaddleBaseClassifier(BaseClassifier):
 
     def _build_meta(self):
         raise_if_not(
-            "feature_dim" in self._fit_params and "input_lens" in self._fit_params,
+            "feature_dim" in self._fit_params and
+            "input_lens" in self._fit_params,
             f"feature_dim or input_lens not in model._fit_params: {self._fit_params}, the model: {self.__module__} not support build_meta and save!"
         )
         res = {
             "model_type": "classification",
-            "ancestor_classname_set": [clazz.__name__ for clazz in self.__class__.mro()],
+            "ancestor_classname_set":
+            [clazz.__name__ for clazz in self.__class__.mro()],
             "modulename": self.__module__,
             "size": {},
-            "input_data": {"features": [None, self._fit_params["input_lens"], self._fit_params["feature_dim"]]},
+            "input_data": {
+                "features": [
+                    None, self._fit_params["input_lens"], self._fit_params[
+                        "feature_dim"]
+                ]
+            },
         }
 
         return res

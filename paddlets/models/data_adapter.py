@@ -231,31 +231,34 @@ class SampleDataset(paddle.io.Dataset):
             # However, the tail index of the calculated in_chunk 11 is beyond the max target time series
             # (i.e. tsdataset.target[-1] = 10), so current target timeseries cannot provide 11 to build this sample.
         """
+
     def __init__(
-        self,
-        rawdataset: TSDataset,
-        in_chunk_len: int = 1,
-        out_chunk_len: int = 0,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        fill_last_value: Optional[Union[np.floating, np.integer]] = None,
-        time_window: Optional[Tuple[int, int]] = None
-    ):
+            self,
+            rawdataset: TSDataset,
+            in_chunk_len: int=1,
+            out_chunk_len: int=0,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            fill_last_value: Optional[Union[np.floating, np.integer]]=None,
+            time_window: Optional[Tuple[int, int]]=None):
         super(SampleDataset, self).__init__()
 
         raise_if(rawdataset is None, "rawdataset must not be None.")
-        raise_if(
-            (rawdataset.target is None) and (rawdataset.observed_cov is None),
-            "TSDataset.target and TSDataset.observed_cov cannot be None at same time."
-        )
+        raise_if((rawdataset.target is None) and (
+            rawdataset.observed_cov is None
+        ), "TSDataset.target and TSDataset.observed_cov cannot be None at same time."
+                 )
         raise_if(in_chunk_len <= 0, f"in_chunk_len ({in_chunk_len}) must > 0.")
-        raise_if(skip_chunk_len < 0, f"skip_chunk_len ({skip_chunk_len}) must >= 0.")
-        raise_if(out_chunk_len < 0, f"out_chunk_len ({out_chunk_len}) must >= 0.")
-        raise_if(sampling_stride <= 0, f"sampling_stride ({sampling_stride}) must > 0.")
-        raise_if(
-            (time_window is not None) and (fill_last_value is not None),
-            f"time_window ({time_window}) must not be set if fill_last_value ({fill_last_value}) is not None."
-        )
+        raise_if(skip_chunk_len < 0,
+                 f"skip_chunk_len ({skip_chunk_len}) must >= 0.")
+        raise_if(out_chunk_len < 0,
+                 f"out_chunk_len ({out_chunk_len}) must >= 0.")
+        raise_if(sampling_stride <= 0,
+                 f"sampling_stride ({sampling_stride}) must > 0.")
+        raise_if((time_window is not None) and (
+            fill_last_value is not None
+        ), f"time_window ({time_window}) must not be set if fill_last_value ({fill_last_value}) is not None."
+                 )
 
         # models.utils::check_tsdataset() already guarantee that all float-like type will be converted
         # to the standard np.float32, similarly, all int-like type will be converted to the standard np.int64.
@@ -269,25 +272,27 @@ class SampleDataset(paddle.io.Dataset):
         self._skip_chunk_len = skip_chunk_len
         self._sampling_stride = sampling_stride
         self._fill_last_value = fill_last_value
-        self._std_timeseries_name, self._std_timeindex = self._compute_std_timeindex()
+        self._std_timeseries_name, self._std_timeindex = self._compute_std_timeindex(
+        )
         self._validate_std_timeindex(time_window=time_window)
-        self._time_window = time_window if time_window is not None else self._compute_default_time_window()
+        self._time_window = time_window if time_window is not None else self._compute_default_time_window(
+        )
         self._validate_time_window()
 
         # validate dtype before filling timeseries.
         # [Rule 1] cannot fill int-like data in float-like timeseries.
         # [Rule 2] Similarly, cannot fill float-like data in int-like timeseries.
-        ts_list = [
-            ("target", self._rawdataset.target),
-            ("known_cov", self._rawdataset.known_cov),
-            ("observed_cov", self._rawdataset.observed_cov)
-        ]
+        ts_list = [("target", self._rawdataset.target),
+                   ("known_cov", self._rawdataset.known_cov),
+                   ("observed_cov", self._rawdataset.observed_cov)]
         for ts_tuple in ts_list:
             if ts_tuple[1] is None:
                 continue
             ts_name, ts = ts_tuple
-            numeric_df = ts.to_dataframe(copy=False).select_dtypes(include=self._numeric_dtype)
-            categorical_df = ts.to_dataframe(copy=False).select_dtypes(include=self._categorical_dtype)
+            numeric_df = ts.to_dataframe(copy=False).select_dtypes(
+                include=self._numeric_dtype)
+            categorical_df = ts.to_dataframe(copy=False).select_dtypes(
+                include=self._categorical_dtype)
             # Reason why use np.issubdtype (but not use builtin isinstance) is that for all int-like / float-like
             # types, numpy.issubdtype will always return True (good), while isinstance will return False for python
             # builtin int/float type, along with np.int / np.float dtype (bad). So np.issubdtype() is more generic than
@@ -312,22 +317,26 @@ class SampleDataset(paddle.io.Dataset):
             if np.issubdtype(type(self._fill_last_value), np.integer):
                 raise_if(
                     len(numeric_df.columns) > 0,
-                    f"If numpy.issubdtype(fill_last_value, np.integer) is True, then " +
-                    f"TSDataset.{ts_name} must not contain such float-like dtype columns: {numeric_df.columns}. " +
+                    f"If numpy.issubdtype(fill_last_value, np.integer) is True, then "
+                    +
+                    f"TSDataset.{ts_name} must not contain such float-like dtype columns: {numeric_df.columns}. "
+                    +
                     f"actual fill_last_value type: {type(self._fill_last_value)}"
                 )
             if np.issubdtype(type(self._fill_last_value), np.floating):
                 raise_if(
                     len(categorical_df.columns) > 0,
                     f"If numpy.issubdtype(fill_last_value, np.floating) is True, then "
-                    f"TSDataset.{ts_name} must not contain such int-like dtype columns: {categorical_df.columns}. " +
+                    f"TSDataset.{ts_name} must not contain such int-like dtype columns: {categorical_df.columns}. "
+                    +
                     f"actual fill_last_value type: {type(self._fill_last_value)}"
                 )
 
         # fill timeseries.
         if self._fill_last_value is not None:
             # call TSDataset.copy() to avoid inplace fill.
-            self._rawdataset = self._fill_tsdataset(TSDataset.copy(self._rawdataset))
+            self._rawdataset = self._fill_tsdataset(
+                TSDataset.copy(self._rawdataset))
             # after filled, std time index and time window must be re-computed based on filled timeseries.
             # Note that self._std_timeseries_name no need to be re computed.
             _, self._std_timeindex = self._compute_std_timeindex()
@@ -689,11 +698,10 @@ class SampleDataset(paddle.io.Dataset):
         target_timeindex_offset = 0
         target_ndarray = None
         if target_ts is not None:
-            target_timeindex_offset = self._compute_timeindex_offset(target_ts.time_index)
+            target_timeindex_offset = self._compute_timeindex_offset(
+                target_ts.time_index)
             target_ndarray = self._build_ndarray_from_timeseries_by_dtype(
-                timeseries=target_ts,
-                dtype=self._numeric_dtype
-            )
+                timeseries=target_ts, dtype=self._numeric_dtype)
 
         # known cov (possibly be None)
         known_cov_ts = self._rawdataset.known_cov
@@ -701,15 +709,12 @@ class SampleDataset(paddle.io.Dataset):
         known_cov_numeric_ndarray = None
         known_cov_categorical_ndarray = None
         if known_cov_ts is not None:
-            known_cov_timeindex_offset = self._compute_timeindex_offset(known_cov_ts.time_index)
+            known_cov_timeindex_offset = self._compute_timeindex_offset(
+                known_cov_ts.time_index)
             known_cov_numeric_ndarray = self._build_ndarray_from_timeseries_by_dtype(
-                timeseries=known_cov_ts,
-                dtype=self._numeric_dtype
-            )
+                timeseries=known_cov_ts, dtype=self._numeric_dtype)
             known_cov_categorical_ndarray = self._build_ndarray_from_timeseries_by_dtype(
-                timeseries=known_cov_ts,
-                dtype=self._categorical_dtype
-            )
+                timeseries=known_cov_ts, dtype=self._categorical_dtype)
 
         # observed cov (possibly be None)
         observed_cov_ts = self._rawdataset.observed_cov
@@ -717,15 +722,12 @@ class SampleDataset(paddle.io.Dataset):
         observed_cov_numeric_ndarray = None
         observed_cov_categorical_ndarray = None
         if observed_cov_ts is not None:
-            observed_cov_timeindex_offset = self._compute_timeindex_offset(observed_cov_ts.time_index)
+            observed_cov_timeindex_offset = self._compute_timeindex_offset(
+                observed_cov_ts.time_index)
             observed_cov_numeric_ndarray = self._build_ndarray_from_timeseries_by_dtype(
-                timeseries=observed_cov_ts,
-                dtype=self._numeric_dtype
-            )
+                timeseries=observed_cov_ts, dtype=self._numeric_dtype)
             observed_cov_categorical_ndarray = self._build_ndarray_from_timeseries_by_dtype(
-                timeseries=observed_cov_ts,
-                dtype=self._categorical_dtype
-            )
+                timeseries=observed_cov_ts, dtype=self._categorical_dtype)
 
         # static cov (possibly be None)
         static_cov = self._rawdataset.static_cov
@@ -743,11 +745,9 @@ class SampleDataset(paddle.io.Dataset):
                     static_cov_categorical[k] = self._categorical_dtype(v)
 
             pre_computed_static_cov_numeric_for_single_sample = self._build_static_cov_for_single_sample(
-                static_cov_dict=static_cov_numeric
-            )
+                static_cov_dict=static_cov_numeric)
             pre_computed_static_cov_categorical_for_single_sample = self._build_static_cov_for_single_sample(
-                static_cov_dict=static_cov_categorical
-            )
+                static_cov_dict=static_cov_categorical)
 
         samples = []
         curr_sample_tail = self._time_window[0]
@@ -759,63 +759,67 @@ class SampleDataset(paddle.io.Dataset):
             if target_ts is not None:
                 if 0 not in target_ndarray.shape:
                     # future target
-                    if (self._time_window[1] <= len(self._std_timeindex) - 1) and (self._out_chunk_len > 0):
+                    if (self._time_window[1] <= len(self._std_timeindex) - 1
+                        ) and (self._out_chunk_len > 0):
                         # ONLY fit api needs future_target, predict api does not need it.
-                        sample["future_target"] = self._build_future_target_for_single_sample(
-                            curr_sample_tail=curr_sample_tail,
-                            timeindex_offset=target_timeindex_offset,
-                            target_ndarray=target_ndarray
-                        )
+                        sample[
+                            "future_target"] = self._build_future_target_for_single_sample(
+                                curr_sample_tail=curr_sample_tail,
+                                timeindex_offset=target_timeindex_offset,
+                                target_ndarray=target_ndarray)
 
                     # past target
-                    sample["past_target"] = self._build_past_target_for_single_sample(
-                        curr_sample_tail=curr_sample_tail,
-                        timeindex_offset=target_timeindex_offset,
-                        target_ndarray=target_ndarray
-                    )
+                    sample[
+                        "past_target"] = self._build_past_target_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=target_timeindex_offset,
+                            target_ndarray=target_ndarray)
 
             # known_cov
             if known_cov_ts is not None:
                 # numeric
                 if 0 not in known_cov_numeric_ndarray.shape:
-                    sample["known_cov_numeric"] = self._build_known_cov_for_single_sample(
-                        curr_sample_tail=curr_sample_tail,
-                        timeindex_offset=known_cov_timeindex_offset,
-                        known_cov_ndarray=known_cov_numeric_ndarray
-                    )
+                    sample[
+                        "known_cov_numeric"] = self._build_known_cov_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=known_cov_timeindex_offset,
+                            known_cov_ndarray=known_cov_numeric_ndarray)
                 # categorical
                 if 0 not in known_cov_categorical_ndarray.shape:
-                    sample["known_cov_categorical"] = self._build_known_cov_for_single_sample(
-                        curr_sample_tail=curr_sample_tail,
-                        timeindex_offset=known_cov_timeindex_offset,
-                        known_cov_ndarray=known_cov_categorical_ndarray
-                    )
+                    sample[
+                        "known_cov_categorical"] = self._build_known_cov_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=known_cov_timeindex_offset,
+                            known_cov_ndarray=known_cov_categorical_ndarray)
 
             # observed_cov
             if observed_cov_ts is not None:
                 # numeric
                 if 0 not in observed_cov_numeric_ndarray.shape:
-                    sample["observed_cov_numeric"] = self._build_observed_cov_for_single_sample(
-                        curr_sample_tail=curr_sample_tail,
-                        timeindex_offset=observed_cov_timeindex_offset,
-                        observed_cov_ndarray=observed_cov_numeric_ndarray
-                    )
+                    sample[
+                        "observed_cov_numeric"] = self._build_observed_cov_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=observed_cov_timeindex_offset,
+                            observed_cov_ndarray=observed_cov_numeric_ndarray)
                 # categorical
                 if 0 not in observed_cov_categorical_ndarray.shape:
-                    sample["observed_cov_categorical"] = self._build_observed_cov_for_single_sample(
-                        curr_sample_tail=curr_sample_tail,
-                        timeindex_offset=observed_cov_timeindex_offset,
-                        observed_cov_ndarray=observed_cov_categorical_ndarray
-                    )
+                    sample[
+                        "observed_cov_categorical"] = self._build_observed_cov_for_single_sample(
+                            curr_sample_tail=curr_sample_tail,
+                            timeindex_offset=observed_cov_timeindex_offset,
+                            observed_cov_ndarray=observed_cov_categorical_ndarray
+                        )
 
             # static_cov
             if static_cov is not None:
                 # numeric
                 if 0 not in pre_computed_static_cov_numeric_for_single_sample.shape:
-                    sample["static_cov_numeric"] = pre_computed_static_cov_numeric_for_single_sample
+                    sample[
+                        "static_cov_numeric"] = pre_computed_static_cov_numeric_for_single_sample
                 # categorical
                 if 0 not in pre_computed_static_cov_categorical_for_single_sample.shape:
-                    sample["static_cov_categorical"] = pre_computed_static_cov_categorical_for_single_sample
+                    sample[
+                        "static_cov_categorical"] = pre_computed_static_cov_categorical_for_single_sample
 
             samples.append(sample)
 
@@ -841,7 +845,8 @@ class SampleDataset(paddle.io.Dataset):
             return "target", self._rawdataset.target.time_index
         return "observed_cov", self._rawdataset.observed_cov.time_index
 
-    def _validate_std_timeindex(self, time_window: Optional[Tuple[int, int]]) -> None:
+    def _validate_std_timeindex(
+            self, time_window: Optional[Tuple[int, int]]) -> None:
         """
         Internal method, ensuring the standard time index must be long enough to build at least one sample, raises
         if invalid.
@@ -854,9 +859,8 @@ class SampleDataset(paddle.io.Dataset):
         valid_time_index_type = {pd.DatetimeIndex, pd.RangeIndex}
         raise_if(
             type(self._std_timeindex) not in valid_time_index_type,
-            f"type(TSDataset.{self._std_timeseries_name}.time_index) ({type(self._std_timeindex)}) must be one of " +
-            f"{valid_time_index_type}."
-        )
+            f"type(TSDataset.{self._std_timeseries_name}.time_index) ({type(self._std_timeindex)}) must be one of "
+            + f"{valid_time_index_type}.")
 
         if time_window is None:
             # indicates that user did NOT explicitly set a valid time_window, thus no further check, return.
@@ -869,15 +873,14 @@ class SampleDataset(paddle.io.Dataset):
             (time_window[1] < max_std_timeindex_idx) and
             (self._fill_last_value is None) and
             (len(self._std_timeindex) < one_sample_len),
-            f"If time_window[1] ({time_window[1]}) <= len(TSDataset.{self._std_timeseries_name}) - 1 " +
-            f"({len(self._std_timeindex) - 1}) and "
+            f"If time_window[1] ({time_window[1]}) <= len(TSDataset.{self._std_timeseries_name}) - 1 "
+            + f"({len(self._std_timeindex) - 1}) and "
             f"fill_last_value ({self._fill_last_value}) is None, then " +
-            f"TSDataset.{self._std_timeseries_name} length ({len(self._std_timeindex)}) must >= " +
-            f"in_chunk_len ({self._in_chunk_len}) + " +
+            f"TSDataset.{self._std_timeseries_name} length ({len(self._std_timeindex)}) must >= "
+            + f"in_chunk_len ({self._in_chunk_len}) + " +
             f"skip_chunk_len ({self._skip_chunk_len}) + " +
             f"out_chunk_len ({self._out_chunk_len}) " +
-            f"to ensure that at least one sample can be built."
-        )
+            f"to ensure that at least one sample can be built.")
 
     def _compute_default_time_window(self) -> Tuple[int, int]:
         """
@@ -905,8 +908,10 @@ class SampleDataset(paddle.io.Dataset):
 
         # adapter does NOT fill samples for predict api, but will only fill samples for fit api.
         raise_if(
-            (self._fill_last_value is not None) and (self._time_window[1] > max_std_idx),
-            f"If fill_last_value ({self._fill_last_value}) is not None, time_window[1] ({self._time_window[1]}) must " +
+            (self._fill_last_value is not None) and
+            (self._time_window[1] > max_std_idx),
+            f"If fill_last_value ({self._fill_last_value}) is not None, time_window[1] ({self._time_window[1]}) must "
+            +
             f"<= len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx})."
         )
 
@@ -914,20 +919,24 @@ class SampleDataset(paddle.io.Dataset):
             # case 1 - samples ONLY contain X, not contain Y.
             only_allowed_window_not_contain_y = max_std_idx + self._skip_chunk_len + self._out_chunk_len
             raise_if_not(
-                self._time_window[0] == self._time_window[1] == only_allowed_window_not_contain_y,
+                self._time_window[0] == self._time_window[1] ==
+                only_allowed_window_not_contain_y,
                 f"if time_window[1] ({self._time_window[1]}) > " +
-                f"len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx}), then " +
+                f"len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx}), then "
+                +
                 f"(time_window[0] == time_window[1] == {only_allowed_window_not_contain_y}) must be True."
             )
         else:
             # case 2 - samples contain X and Y.
             min_allowed_window_contain_y = self._in_chunk_len + self._skip_chunk_len + self._out_chunk_len - 1
             raise_if_not(
-                min_allowed_window_contain_y <= self._time_window[0] <= self._time_window[1] <= max_std_idx,
+                min_allowed_window_contain_y <= self._time_window[0] <=
+                self._time_window[1] <= max_std_idx,
                 f"if time_window[1] ({self._time_window[1]}) <= " +
-                f"len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx}), then " +
-                f"{min_allowed_window_contain_y} <= time_window[0] ({self._time_window[0]}) <= " +
-                f"time_window[1] ({self._time_window[1]}) <= " +
+                f"len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx}), then "
+                +
+                f"{min_allowed_window_contain_y} <= time_window[0] ({self._time_window[0]}) <= "
+                + f"time_window[1] ({self._time_window[1]}) <= " +
                 f"len(TSDataset.{self._std_timeseries_name}) - 1 ({max_std_idx}) must be True."
             )
 
@@ -936,7 +945,8 @@ class SampleDataset(paddle.io.Dataset):
         max_std_idx = len(self._std_timeindex) - 1
         if target_ts is not None:
             # 1 target must be long enough to build samples based on the range specified by time_window.
-            sample_end_std_time = self._std_timeindex[min(self._time_window[1], max_std_idx)]
+            sample_end_std_time = self._std_timeindex[min(self._time_window[1],
+                                                          max_std_idx)]
             sample_start_std_idx = \
                 self._time_window[0] - \
                 self._out_chunk_len - \
@@ -946,17 +956,17 @@ class SampleDataset(paddle.io.Dataset):
 
             sample_start_std_time = self._std_timeindex[sample_start_std_idx]
             raise_if_not(
-                target_ts.start_time <= sample_start_std_time <= sample_end_std_time <= target_ts.end_time,
+                target_ts.start_time <= sample_start_std_time <=
+                sample_end_std_time <= target_ts.end_time,
                 f"The inequality must hold: " +
                 f"TSDataset.target.start_time ({target_ts.start_time}) <= " +
                 f"TSDataset.{self._std_timeseries_name}.time_index" +
-                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] " +
-                f"({sample_start_std_time}) <= " +
+                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] "
+                + f"({sample_start_std_time}) <= " +
                 f"TSDataset.{self._std_timeseries_name}.time_index" +
-                f"[min(time_window[1], len(TSDataset.{self._std_timeseries_name}.time_index) - 1)] " +
-                f"({sample_end_std_time}) <= " +
-                f"TSDataset.target.end_time ({target_ts.end_time})."
-            )
+                f"[min(time_window[1], len(TSDataset.{self._std_timeseries_name}.time_index) - 1)] "
+                + f"({sample_end_std_time}) <= " +
+                f"TSDataset.target.end_time ({target_ts.end_time}).")
 
     def _validate_known_cov_timeseries(self) -> None:
         known_cov_ts = self._rawdataset.known_cov
@@ -973,8 +983,7 @@ class SampleDataset(paddle.io.Dataset):
                     exceeded_timeindex = pd.date_range(
                         start=self._std_timeindex[-1],
                         periods=exceeded_timesteps + 1,
-                        freq=pd.infer_freq(self._std_timeindex)
-                    )
+                        freq=pd.infer_freq(self._std_timeindex))
                 else:
                     # RangeIndex
                     # Note: RangeIndex.stop is right-opened, but time_window is right-closed, so stop param must + 1.
@@ -982,8 +991,7 @@ class SampleDataset(paddle.io.Dataset):
                     exceeded_timeindex = pd.RangeIndex(
                         start=self._std_timeindex[-1],
                         stop=(self._time_window[1] + 1) * step,
-                        step=step
-                    )
+                        step=step)
 
                 sample_end_std_time = exceeded_timeindex[-1]
 
@@ -996,22 +1004,23 @@ class SampleDataset(paddle.io.Dataset):
 
             sample_start_std_time = self._std_timeindex[sample_start_std_idx]
             raise_if_not(
-                known_cov_ts.start_time <= sample_start_std_time <= sample_end_std_time <= known_cov_ts.end_time,
+                known_cov_ts.start_time <= sample_start_std_time <=
+                sample_end_std_time <= known_cov_ts.end_time,
                 f"The inequality must hold: " +
-                f"TSDataset.known_cov.start_time ({known_cov_ts.start_time}) <= " +
-                f"TSDataset.{self._std_timeseries_name}.time_index" +
-                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] " +
-                f"({sample_start_std_time}) <= " +
-                f"TSDataset.{self._std_timeseries_name}.time_index[time_window[1]] " +
-                f"({sample_end_std_time}) <= " +
-                f"TSDataset.known_cov.end_time ({known_cov_ts.end_time})."
-            )
+                f"TSDataset.known_cov.start_time ({known_cov_ts.start_time}) <= "
+                + f"TSDataset.{self._std_timeseries_name}.time_index" +
+                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] "
+                + f"({sample_start_std_time}) <= " +
+                f"TSDataset.{self._std_timeseries_name}.time_index[time_window[1]] "
+                + f"({sample_end_std_time}) <= " +
+                f"TSDataset.known_cov.end_time ({known_cov_ts.end_time}).")
 
     def _validate_observed_cov_timeseries(self) -> None:
         observed_cov_ts = self._rawdataset.get_observed_cov()
         if observed_cov_ts is not None:
             # 1 observed_cov must be long enough to build samples based on the range specified by time_window.
-            sample_end_std_idx = self._time_window[1] - self._out_chunk_len - self._skip_chunk_len
+            sample_end_std_idx = self._time_window[
+                1] - self._out_chunk_len - self._skip_chunk_len
             sample_end_std_time = self._std_timeindex[sample_end_std_idx]
 
             sample_start_std_idx = \
@@ -1023,15 +1032,16 @@ class SampleDataset(paddle.io.Dataset):
             sample_start_std_time = self._std_timeindex[sample_start_std_idx]
 
             raise_if_not(
-                observed_cov_ts.start_time <= sample_start_std_time <= sample_end_std_time <= observed_cov_ts.end_time,
+                observed_cov_ts.start_time <= sample_start_std_time <=
+                sample_end_std_time <= observed_cov_ts.end_time,
                 f"The inequality must hold:" +
-                f"TSDataset.observed_cov.start_time ({observed_cov_ts.start_time}) <= " +
+                f"TSDataset.observed_cov.start_time ({observed_cov_ts.start_time}) <= "
+                + f"TSDataset.{self._std_timeseries_name}.time_index" +
+                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] "
+                + f"({sample_start_std_time}) <= " +
                 f"TSDataset.{self._std_timeseries_name}.time_index" +
-                f"[(time_window[0] - out_chunk_len - skip_chunk_len - in_chunk_len + 1)] " +
-                f"({sample_start_std_time}) <= " +
-                f"TSDataset.{self._std_timeseries_name}.time_index" +
-                f"[min(time_window[1], len(TSDataset.{self._std_timeseries_name}.time_index) - 1)] " +
-                f"({sample_end_std_time}) <= " +
+                f"[min(time_window[1], len(TSDataset.{self._std_timeseries_name}.time_index) - 1)] "
+                + f"({sample_end_std_time}) <= " +
                 f"TSDataset.observed_cov.end_time ({observed_cov_ts.end_time})."
             )
 
@@ -1048,7 +1058,8 @@ class SampleDataset(paddle.io.Dataset):
 
         # Third(Last), fill observed cov
         if tsdataset.observed_cov is not None:
-            filled_observed_cov_ts = self._fill_timeseries(tsdataset.observed_cov)
+            filled_observed_cov_ts = self._fill_timeseries(
+                tsdataset.observed_cov)
             tsdataset.set_observed_cov(observed_cov=filled_observed_cov_ts)
         return tsdataset
 
@@ -1079,8 +1090,7 @@ class SampleDataset(paddle.io.Dataset):
             extra_timeindex = pd.date_range(
                 start=raw_timeindex[-1],
                 end=last_sample_tail_timestamp,
-                freq=freq
-            )
+                freq=freq)
         else:
             # pd.RangeIndex
             step = raw_timeindex.step
@@ -1088,28 +1098,24 @@ class SampleDataset(paddle.io.Dataset):
                 start=raw_timeindex[-1],
                 # pd.date_range::end param is right-closed, but pd.RangeIndex::stop param is right-opened, so need + 1.
                 stop=last_sample_tail_timestamp + 1,
-                step=step
-            )
+                step=step)
         # remove first timestamp as it is duplicated with the last timestamp in the raw time index.
         extra_timeindex = extra_timeindex[1:]
 
         extra_ndarray = np.zeros(
             shape=(len(extra_timeindex), len(raw_cols)),
-            dtype=raw_df.to_numpy(copy=False).dtype
-        )
+            dtype=raw_df.to_numpy(copy=False).dtype)
         extra_ndarray.fill(self._fill_last_value)
         extra_df = pd.DataFrame(
-            data=extra_ndarray,
-            index=extra_timeindex,
-            columns=raw_cols
-        )
+            data=extra_ndarray, index=extra_timeindex, columns=raw_cols)
 
         filled_df = pd.concat([raw_df, extra_df])
         return TimeSeries.load_from_dataframe(
             data=filled_df,
-            freq=raw_timeindex.step if isinstance(self._std_timeindex, pd.RangeIndex) else pd.infer_freq(raw_timeindex),
-            drop_tail_nan=False
-        )
+            freq=raw_timeindex.step
+            if isinstance(self._std_timeindex, pd.RangeIndex) else
+            pd.infer_freq(raw_timeindex),
+            drop_tail_nan=False)
 
     def _compute_last_sample_tail_timestamp(self) -> Union[pd.Timestamp, int]:
         """
@@ -1146,8 +1152,10 @@ class SampleDataset(paddle.io.Dataset):
         """
         max_std_idx = len(self._std_timeindex) - 1
         first_sample_tail_idx = self._time_window[0]
-        sample_cnt = math.floor((max_std_idx - first_sample_tail_idx) / self._sampling_stride) + 1
-        last_sample_tail_idx = first_sample_tail_idx + self._sampling_stride * (sample_cnt - 1)
+        sample_cnt = math.floor(
+            (max_std_idx - first_sample_tail_idx) / self._sampling_stride) + 1
+        last_sample_tail_idx = first_sample_tail_idx + self._sampling_stride * (
+            sample_cnt - 1)
 
         if last_sample_tail_idx == max_std_idx:
             # no need to fill.
@@ -1159,7 +1167,8 @@ class SampleDataset(paddle.io.Dataset):
 
         # need fill.
         sample_cnt += 1
-        last_sample_tail_idx = first_sample_tail_idx + self._sampling_stride * (sample_cnt - 1)
+        last_sample_tail_idx = first_sample_tail_idx + self._sampling_stride * (
+            sample_cnt - 1)
         if isinstance(self._std_timeindex, pd.DatetimeIndex):
             freq = pd.infer_freq(self._std_timeindex)
             # Here are 2 operations worth noticing:
@@ -1172,19 +1181,23 @@ class SampleDataset(paddle.io.Dataset):
             extra_timeindex = pd.date_range(
                 start=self._std_timeindex[-1],
                 periods=last_sample_tail_idx - max_std_idx + 1,
-                freq=freq
-            )
+                freq=freq)
         # precheck already guarantee that type(std_timeindex) can only be one of DatetimeIndex, RangeIndex.
         # Refers to _validate_std_timeindex().
         else:
             step = self._std_timeindex.step
             # Because RangeIndex is left-closed-right-opened, so stop param must + 1
-            extra_timeindex = pd.RangeIndex(start=self._std_timeindex[-1], stop=last_sample_tail_idx + 1, step=step)
+            extra_timeindex = pd.RangeIndex(
+                start=self._std_timeindex[-1],
+                stop=last_sample_tail_idx + 1,
+                step=step)
 
         # return type can either be pd.Timestamp or int, depends on type(extra_timeindex).
         return extra_timeindex[-1]
 
-    def _build_ndarray_from_timeseries_by_dtype(self, timeseries: TimeSeries, dtype: type) -> np.ndarray:
+    def _build_ndarray_from_timeseries_by_dtype(self,
+                                                timeseries: TimeSeries,
+                                                dtype: type) -> np.ndarray:
         """
         Internal method, extract dataframe from given timeseries with specified dtype, then return the converted
         numpy.ndarray.
@@ -1219,7 +1232,8 @@ class SampleDataset(paddle.io.Dataset):
         extracted_df = full_df.select_dtypes(include=dtype)
         return extracted_df.to_numpy(copy=False)
 
-    def _compute_timeindex_offset(self, time_index: Union[pd.DatetimeIndex, pd.RangeIndex]) -> int:
+    def _compute_timeindex_offset(
+            self, time_index: Union[pd.DatetimeIndex, pd.RangeIndex]) -> int:
         """
         Internal method, compute the offset between given timeseries.time_index and std_timeindex.
 
@@ -1240,11 +1254,10 @@ class SampleDataset(paddle.io.Dataset):
         return time_index.get_loc(self._std_timeindex[0])
 
     def _build_future_target_for_single_sample(
-        self,
-        curr_sample_tail: int,
-        timeindex_offset: int,
-        target_ndarray: np.ndarray
-    ) -> np.ndarray:
+            self,
+            curr_sample_tail: int,
+            timeindex_offset: int,
+            target_ndarray: np.ndarray) -> np.ndarray:
         """
         Internal method, builds a future_target chunk for a single sample.
 
@@ -1262,11 +1275,10 @@ class SampleDataset(paddle.io.Dataset):
         return target_ndarray[start:end]
 
     def _build_past_target_for_single_sample(
-        self,
-        curr_sample_tail: int,
-        timeindex_offset: int,
-        target_ndarray: np.ndarray
-    ) -> np.ndarray:
+            self,
+            curr_sample_tail: int,
+            timeindex_offset: int,
+            target_ndarray: np.ndarray) -> np.ndarray:
         """
         Internal method, builds a past_target chunk for a single sample.
 
@@ -1284,11 +1296,10 @@ class SampleDataset(paddle.io.Dataset):
         return target_ndarray[start:end]
 
     def _build_known_cov_for_single_sample(
-        self,
-        curr_sample_tail: int,
-        timeindex_offset: int,
-        known_cov_ndarray: np.ndarray
-    ) -> np.ndarray:
+            self,
+            curr_sample_tail: int,
+            timeindex_offset: int,
+            known_cov_ndarray: np.ndarray) -> np.ndarray:
         """
         Internal method, builds a known_cov chunk for a single sample.
 
@@ -1305,16 +1316,17 @@ class SampleDataset(paddle.io.Dataset):
         right_end = timeindex_offset + curr_sample_tail + 1
         right_start = (right_end - 1) - self._out_chunk_len + 1
 
-        left_end = (right_end - 1) - self._out_chunk_len - self._skip_chunk_len + 1
+        left_end = (right_end - 1
+                    ) - self._out_chunk_len - self._skip_chunk_len + 1
         left_start = (left_end - 1) - self._in_chunk_len + 1
-        return np.vstack(tup=(known_cov_ndarray[left_start:left_end], known_cov_ndarray[right_start:right_end]))
+        return np.vstack(tup=(known_cov_ndarray[left_start:left_end],
+                              known_cov_ndarray[right_start:right_end]))
 
     def _build_observed_cov_for_single_sample(
-        self,
-        curr_sample_tail: int,
-        timeindex_offset: int,
-        observed_cov_ndarray: np.ndarray
-    ) -> np.ndarray:
+            self,
+            curr_sample_tail: int,
+            timeindex_offset: int,
+            observed_cov_ndarray: np.ndarray) -> np.ndarray:
         """
         Internal method, builds an observed_cov chunk for a single sample.
 
@@ -1333,9 +1345,8 @@ class SampleDataset(paddle.io.Dataset):
         return observed_cov_ndarray[start:end]
 
     def _build_static_cov_for_single_sample(
-        self,
-        static_cov_dict: Dict[str, Union[np.float32, np.int64]]
-    ) -> np.ndarray:
+            self, static_cov_dict: Dict[str, Union[np.float32,
+                                                   np.int64]]) -> np.ndarray:
         """
         Internal method, build a numeric or categorical static_cov chunk for a single sample.
 
@@ -1347,7 +1358,8 @@ class SampleDataset(paddle.io.Dataset):
             np.ndarray: built numeric or categorical static cov chunk for the current single sample.
         """
         # [(k1, v1), (k2, v2)]
-        sorted_static_cov_list = sorted(static_cov_dict.items(), key=lambda t: t[0], reverse=False)
+        sorted_static_cov_list = sorted(
+            static_cov_dict.items(), key=lambda t: t[0], reverse=False)
 
         # [[v1, v2]]
         return np.array([[t[1] for t in sorted_static_cov_list]])
@@ -1365,12 +1377,12 @@ class MLDataLoader(object):
         batch_size(int): The number of samples for each batch.
         collate_fn(Callable, optional): A user defined collate function for each batch, optional.
     """
-    def __init__(
-        self,
-        dataset: SampleDataset,
-        batch_size: int,
-        collate_fn: Optional[Callable[[List[Dict[str, np.ndarray]]], Dict[str, np.ndarray]]] = None
-    ):
+
+    def __init__(self,
+                 dataset: SampleDataset,
+                 batch_size: int,
+                 collate_fn: Optional[Callable[[List[Dict[str, np.ndarray]]],
+                                               Dict[str, np.ndarray]]]=None):
         self.dataset = dataset
         self.batch_size = batch_size
         self.collate_fn = self._default_collate_fn if collate_fn is None else collate_fn
@@ -1401,10 +1413,12 @@ class MLDataLoader(object):
         # third batch = [7]
         # After iterating the second batch, the remaining number of samples (i.e. 1) is less than batch_size (i.e. 3),
         # thus the last batch returns only 1 sample (i.e. [7]).
-        return self._start + min(self.batch_size, len(self.dataset.samples[self._start:]))
+        return self._start + min(self.batch_size,
+                                 len(self.dataset.samples[self._start:]))
 
     @staticmethod
-    def _default_collate_fn(batch: List[Dict[str, np.ndarray]]) -> Dict[str, np.ndarray]:
+    def _default_collate_fn(
+            batch: List[Dict[str, np.ndarray]]) -> Dict[str, np.ndarray]:
         """
         Internal method that takes in a batch of data and puts the elements within the batch
         into a container (e.g. python built-in dict container) with an additional outer dimension - batch size.
@@ -1426,9 +1440,9 @@ class MLDataLoader(object):
             for k in sample.keys():
                 if k not in collated_batch.keys():
                     collated_batch[k] = np.zeros(
-                        shape=(batch_size, sample[k].shape[0], sample[k].shape[1]),
-                        dtype=sample[k].dtype
-                    )
+                        shape=(batch_size, sample[k].shape[0],
+                               sample[k].shape[1]),
+                        dtype=sample[k].dtype)
                 collated_batch[k][sidx] = batch[sidx][k]
         return collated_batch
 
@@ -1437,19 +1451,19 @@ class DataAdapter(object):
     """
     Data adapter for dl and ml models, converts TSDataset to SampleDataset and DataLoader.
     """
+
     def __init__(self):
         pass
 
     def to_sample_dataset(
-        self,
-        rawdataset: TSDataset,
-        in_chunk_len: int = 1,
-        out_chunk_len: int = 0,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        fill_last_value: Optional[Union[np.floating, np.integer]] = None,
-        time_window: Optional[Tuple[int, int]] = None
-    ) -> SampleDataset:
+            self,
+            rawdataset: TSDataset,
+            in_chunk_len: int=1,
+            out_chunk_len: int=0,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            fill_last_value: Optional[Union[np.floating, np.integer]]=None,
+            time_window: Optional[Tuple[int, int]]=None) -> SampleDataset:
         """
         Convert TSDataset to SampleDataset.
 
@@ -1511,17 +1525,14 @@ class DataAdapter(object):
             skip_chunk_len=skip_chunk_len,
             sampling_stride=sampling_stride,
             time_window=time_window,
-            fill_last_value=fill_last_value
-        )
+            fill_last_value=fill_last_value)
 
-    def to_paddle_dataloader(
-        self,
-        sample_dataset: SampleDataset,
-        batch_size: int,
-        collate_fn: Callable = None,
-        shuffle: bool = True,
-        drop_last: bool = False
-    ) -> paddle.io.DataLoader:
+    def to_paddle_dataloader(self,
+                             sample_dataset: SampleDataset,
+                             batch_size: int,
+                             collate_fn: Callable=None,
+                             shuffle: bool=True,
+                             drop_last: bool=False) -> paddle.io.DataLoader:
         """
         Convert SampleDataset to paddle DataLoader.
 
@@ -1575,15 +1586,12 @@ class DataAdapter(object):
             batch_size=batch_size,
             collate_fn=collate_fn,
             shuffle=shuffle,
-            drop_last=drop_last
-        )
+            drop_last=drop_last)
 
-    def to_ml_dataloader(
-        self,
-        sample_dataset: SampleDataset,
-        batch_size: int,
-        collate_fn: Callable = None
-    ) -> MLDataLoader:
+    def to_ml_dataloader(self,
+                         sample_dataset: SampleDataset,
+                         batch_size: int,
+                         collate_fn: Callable=None) -> MLDataLoader:
         """
         Convert SampleDataset to MLDataLoader.
 
@@ -1630,4 +1638,7 @@ class DataAdapter(object):
                     # ...
                 ]
         """
-        return MLDataLoader(dataset=sample_dataset, batch_size=batch_size, collate_fn=collate_fn)
+        return MLDataLoader(
+            dataset=sample_dataset,
+            batch_size=batch_size,
+            collate_fn=collate_fn)

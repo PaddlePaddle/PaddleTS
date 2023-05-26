@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 """
 Implementation of different frequency domain and time-frequency domain analysis operators, including FFT, STFT, CWT.
 """
@@ -43,20 +42,19 @@ class FFT(Analyzer):
         None
     """
 
-    def __init__(self, fs: float = 0, norm: bool = True, half: bool = True, **kwargs):
+    def __init__(self, fs: float=0, norm: bool=True, half: bool=True,
+                 **kwargs):
         super(FFT, self).__init__(**kwargs)
         self._fs = fs
         self._norm = norm
         self._half = half
         if self._fs == 0:
-            logger.warning("It's suggested to assign a positive number to the fs parameter.")
+            logger.warning(
+                "It's suggested to assign a positive number to the fs parameter."
+            )
         self._columns = []
 
-
-    def analyze(
-        self,
-        X: Union[pd.Series, pd.DataFrame]
-    ) -> pd.DataFrame:
+    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> pd.DataFrame:
         """
         Implementation logic of fast Fourier transform analysis operator
 
@@ -126,8 +124,11 @@ class FFT(Analyzer):
                 self._columns.append(col_name)
                 col = X[col_name]
                 #Skip columns that are not numerical
-                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
-                    logger.warning("The values in the column %s should be numerical." % (col_name))
+                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(
+                        col.dtype, np.floating)):
+                    logger.warning(
+                        "The values in the column %s should be numerical." %
+                        (col_name))
                     continue
                 x, col_amplitude, col_phase = _compute_fft(col)
                 col_name = str(col_name)
@@ -136,11 +137,16 @@ class FFT(Analyzer):
                 fft_dict[col_name + '_phase'] = col_phase
 
             if len(fft_dict) == 0:
-                raise_log(ValueError("All the values in the columns are invalid, please check the data."))
-            
+                raise_log(
+                    ValueError(
+                        "All the values in the columns are invalid, please check the data."
+                    ))
+
             return pd.DataFrame(fft_dict)
         else:
-            raise_log(ValueError("The data format must be pd.Series or pd.DataFrame."))
+            raise_log(
+                ValueError(
+                    "The data format must be pd.Series or pd.DataFrame."))
 
     @classmethod
     def get_properties(cls) -> Dict:
@@ -150,7 +156,8 @@ class FFT(Analyzer):
         return {
             "name": "fft",
             "report_heading": "FFT",
-            "report_description": "Frequency domain analysis of signal based on fast Fourier transform."
+            "report_description":
+            "Frequency domain analysis of signal based on fast Fourier transform."
         }
 
     def plot(self) -> "pyplot":
@@ -176,9 +183,9 @@ class FFT(Analyzer):
             ax[i, 0].set_title(col_name + ' FFT Magnitude')
             ax[i, 0].set_xlabel('Frequency')
             ax[i, 0].set_ylabel('Amplitude')
-        
+
         plt.tight_layout()
-        
+
         return plt
 
 
@@ -223,20 +230,18 @@ class STFT(Analyzer):
         None
     """
 
-    def __init__(
-        self,
-        fs: float = 1.0,
-        window: Union[str, Tuple[str], List[str]] = 'hann',
-        nperseg: int = 256,
-        noverlap: Union[None, int] = None,
-        nfft: Union[None, int] = None,
-        detrend: Union[str, bool] = False,
-        return_onesided: bool = True,
-        boundary: Union[str, None] = 'zeros',
-        padded: bool = True,
-        axis: int = -1,
-        **kwargs
-        ):
+    def __init__(self,
+                 fs: float=1.0,
+                 window: Union[str, Tuple[str], List[str]]='hann',
+                 nperseg: int=256,
+                 noverlap: Union[None, int]=None,
+                 nfft: Union[None, int]=None,
+                 detrend: Union[str, bool]=False,
+                 return_onesided: bool=True,
+                 boundary: Union[str, None]='zeros',
+                 padded: bool=True,
+                 axis: int=-1,
+                 **kwargs):
         super(STFT, self).__init__(**kwargs)
         self._fs = fs
         self._window = window
@@ -254,10 +259,7 @@ class STFT(Analyzer):
             raise_log(ValueError("fs parameter can't be 0."))
         self._columns = []
 
-    def analyze(
-        self,
-        X: Union[pd.Series, pd.DataFrame]
-    ) -> Dict:
+    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> Dict:
         """
         Implementation logic of short-time Fourier transform analysis operator
 
@@ -296,7 +298,9 @@ class STFT(Analyzer):
             col_len = len(col)
             #It is best to ensure that the set nperseg is less than the length of the data
             if col_len < self._nperseg:
-                logger.warning("nperseg = %s is greater than input length = %s, please using nperseg < %s." % (self._nperseg, col_len, col_len))
+                logger.warning(
+                    "nperseg = %s is greater than input length = %s, please using nperseg < %s."
+                    % (self._nperseg, col_len, col_len))
             f, t, Zxx = stft(col.values, fs=self._fs, window=self._window, nperseg=self._nperseg, noverlap=self._noverlap,\
                     nfft=self._nfft, detrend=self._detrend, return_onesided=self._return_onesided, boundary=self._boundary,\
                     padded=self._padded, axis=self._axis)
@@ -313,8 +317,11 @@ class STFT(Analyzer):
                 col = X[col_name]
                 self._columns.append(col_name)
                 #Skip columns that are not numerical
-                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
-                    logger.warning("The values in the column %s should be numerical." % (col_name))
+                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(
+                        col.dtype, np.floating)):
+                    logger.warning(
+                        "The values in the column %s should be numerical." %
+                        (col_name))
                     continue
                 f, t, Zxx = _compute_stft(col)
                 col_name = str(col_name)
@@ -323,11 +330,16 @@ class STFT(Analyzer):
                 stft_dict[col_name + '_Zxx'] = Zxx
 
             if len(stft_dict) == 0:
-                raise_log(ValueError("All the values in the columns are invalid, please check the data."))
+                raise_log(
+                    ValueError(
+                        "All the values in the columns are invalid, please check the data."
+                    ))
 
             return stft_dict
         else:
-            raise_log(ValueError("The data format must be pd.Series or pd.DataFrame."))
+            raise_log(
+                ValueError(
+                    "The data format must be pd.Series or pd.DataFrame."))
 
     @classmethod
     def get_properties(cls) -> Dict:
@@ -337,9 +349,10 @@ class STFT(Analyzer):
         return {
             "name": "stft",
             "report_heading": "STFT",
-            "report_description": "Time-frequency analysis of signal based on short-time Fourier transform."
+            "report_description":
+            "Time-frequency analysis of signal based on short-time Fourier transform."
         }
-    
+
     def plot(self) -> "pyplot":
         """
         display stft result.
@@ -364,9 +377,9 @@ class STFT(Analyzer):
             ax[i, 0].set_title(col_name + ' STFT Magnitude')
             ax[i, 0].set_xlabel('Time')
             ax[i, 0].set_ylabel('Frequency')
-        
+
         plt.tight_layout()
-        
+
         return plt
 
 
@@ -402,15 +415,13 @@ class CWT(Analyzer):
         None
     """
 
-    def __init__(
-        self,
-        scales: int = 64,
-        wavelet: str = 'cgau8',
-        fs: float = 1.0,
-        method: str = 'conv',
-        axis: int = -1,
-        **kwargs
-        ):
+    def __init__(self,
+                 scales: int=64,
+                 wavelet: str='cgau8',
+                 fs: float=1.0,
+                 method: str='conv',
+                 axis: int=-1,
+                 **kwargs):
         super(CWT, self).__init__(**kwargs)
         self._scales = scales
         self._wavelet = wavelet
@@ -424,10 +435,7 @@ class CWT(Analyzer):
             raise_log(ValueError("fs parameter can't be 0."))
         self._columns = []
 
-    def analyze(
-        self,
-        X: Union[pd.Series, pd.DataFrame]
-    ) -> Dict:
+    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> Dict:
         """
         Implementation logic of continuous wavelet transform
 
@@ -465,7 +473,12 @@ class CWT(Analyzer):
             """
             col_len = len(col)
             scales_list = np.arange(1, self._scales)
-            coefs, frequencies = cwt(col.values, scales=scales_list, wavelet=self._wavelet, sampling_period=1.0/self._fs, method=self._method, axis=self._axis)
+            coefs, frequencies = cwt(col.values,
+                                     scales=scales_list,
+                                     wavelet=self._wavelet,
+                                     sampling_period=1.0 / self._fs,
+                                     method=self._method,
+                                     axis=self._axis)
             #Time coordinate
             t = np.linspace(0, 1, col_len, endpoint=False)
 
@@ -481,8 +494,11 @@ class CWT(Analyzer):
                 self._columns.append(col_name)
                 col = X[col_name]
                 #Skip columns that are not numerical
-                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(col.dtype, np.floating)):
-                    logger.warning("The values in the column %s should be numerical." % (col_name))
+                if not (np.issubdtype(col.dtype, np.integer) or np.issubdtype(
+                        col.dtype, np.floating)):
+                    logger.warning(
+                        "The values in the column %s should be numerical." %
+                        (col_name))
                     continue
                 t, coefs, frequencies = _compute_cwt(col)
                 col_name = str(col_name)
@@ -491,11 +507,16 @@ class CWT(Analyzer):
                 cwt_dict[col_name + '_frequencies'] = frequencies
 
             if len(cwt_dict) == 0:
-                raise_log(ValueError("All the values in the columns are invalid, please check the data."))
+                raise_log(
+                    ValueError(
+                        "All the values in the columns are invalid, please check the data."
+                    ))
 
             return cwt_dict
         else:
-            raise_log(ValueError("The data format must be pd.Series or pd.DataFrame."))
+            raise_log(
+                ValueError(
+                    "The data format must be pd.Series or pd.DataFrame."))
 
     @classmethod
     def get_properties(cls) -> Dict:
@@ -505,9 +526,10 @@ class CWT(Analyzer):
         return {
             "name": "cwt",
             "report_heading": "CWT",
-            "report_description": "Time-frequency analysis of signal based on continuous wavelet transform."
+            "report_description":
+            "Time-frequency analysis of signal based on continuous wavelet transform."
         }
-    
+
     def plot(self) -> "pyplot":
         """
         display cwt result.
@@ -532,7 +554,7 @@ class CWT(Analyzer):
             ax[i, 0].set_title(col_name + ' CWT Magnitude')
             ax[i, 0].set_xlabel('Time')
             ax[i, 0].set_ylabel('Frequency')
-        
+
         plt.tight_layout()
-        
+
         return plt

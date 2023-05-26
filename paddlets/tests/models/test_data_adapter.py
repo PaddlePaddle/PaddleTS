@@ -57,141 +57,186 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         target_len = len(tsdataset.get_target().data)
 
         # training dataset
         train_window_min = 0 + window_bias
         train_window_max = math.ceil(target_len * sum(ratio[:1]))
-        train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **train_param)
-        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        train_param = {
+            **
+            common_param,
+            "time_window": (train_window_min, train_window_max)
+        }
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          train_param)
+        self.assertEqual(train_param["time_window"],
+                         train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=train_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # validation dataset
         valid_window_min = train_window_max + 1
         valid_window_max = math.ceil(target_len * sum(ratio[:2]))
-        valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **valid_param)
+        valid_param = {
+            **
+            common_param,
+            "time_window": (valid_window_min, valid_window_max)
+        }
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          valid_param)
 
-        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self.assertEqual(valid_param["time_window"],
+                         valid_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=valid_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # test dataset
         test_window_min = valid_window_max + 1
-        test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
-        test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **test_param)
+        test_window_max = min(
+            math.ceil(target_len * sum(ratio[:3])), target_len - 1)
+        test_param = {
+            **
+            common_param,
+            "time_window": (test_window_min, test_window_max)
+        }
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                         test_param)
 
-        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"],
+                         test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         target_len = len(tsdataset.get_target().data)
 
         # training dataset
         train_window_min = 0 + window_bias
         train_window_max = math.ceil(target_len * sum(ratio[:1]))
-        train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **train_param)
-        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        train_param = {
+            **
+            common_param,
+            "time_window": (train_window_min, train_window_max)
+        }
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          train_param)
+        self.assertEqual(train_param["time_window"],
+                         train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=train_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # validation dataset
         valid_window_min = train_window_max + 1
         valid_window_max = math.ceil(target_len * sum(ratio[:2]))
-        valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **valid_param)
+        valid_param = {
+            **
+            common_param,
+            "time_window": (valid_window_min, valid_window_max)
+        }
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          valid_param)
 
-        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self.assertEqual(valid_param["time_window"],
+                         valid_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=valid_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # test dataset
         test_window_min = valid_window_max + 1
-        test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
-        test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **test_param)
+        test_window_max = min(
+            math.ceil(target_len * sum(ratio[:3])), target_len - 1)
+        test_param = {
+            **
+            common_param,
+            "time_window": (test_window_min, test_window_max)
+        }
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                         test_param)
 
-        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"],
+                         test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         target_len = len(tsdataset.get_target().data)
 
         # training dataset
         train_window_min = 0 + window_bias
         train_window_max = math.ceil(target_len * sum(ratio[:1]))
-        train_param = {**common_param, "time_window": (train_window_min, train_window_max)}
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **train_param)
-        self.assertEqual(train_param["time_window"], train_sample_ds._time_window)
+        train_param = {
+            **
+            common_param,
+            "time_window": (train_window_min, train_window_max)
+        }
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          train_param)
+        self.assertEqual(train_param["time_window"],
+                         train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=train_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # validation dataset
         valid_window_min = train_window_max + 1
         valid_window_max = math.ceil(target_len * sum(ratio[:2]))
-        valid_param = {**common_param, "time_window": (valid_window_min, valid_window_max)}
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **valid_param)
+        valid_param = {
+            **
+            common_param,
+            "time_window": (valid_window_min, valid_window_max)
+        }
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                          valid_param)
 
-        self.assertEqual(valid_param["time_window"], valid_sample_ds._time_window)
+        self.assertEqual(valid_param["time_window"],
+                         valid_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=valid_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         # test dataset
         test_window_min = valid_window_max + 1
-        test_window_max = min(math.ceil(target_len * sum(ratio[:3])), target_len - 1)
-        test_param = {**common_param, "time_window": (test_window_min, test_window_max)}
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **test_param)
+        test_window_max = min(
+            math.ceil(target_len * sum(ratio[:3])), target_len - 1)
+        test_param = {
+            **
+            common_param,
+            "time_window": (test_window_min, test_window_max)
+        }
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                         test_param)
 
-        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"],
+                         test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         #########################################################################
         # case 2                                                                #
@@ -206,8 +251,7 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
 
         max_target_idx = len(tsdataset.get_target().data) - 1
         param = {
@@ -219,8 +263,7 @@ class TestDataAdapter(unittest.TestCase):
             "time_window": (
                 # max_target_idx + skip + chunk
                 max_target_idx + 1 + 2,
-                max_target_idx + 1 + 2
-            )
+                max_target_idx + 1 + 2)
         }
         # Build sample.
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
@@ -229,16 +272,14 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         max_target_idx = len(tsdataset.get_target().data) - 1
         param = {
@@ -250,8 +291,7 @@ class TestDataAdapter(unittest.TestCase):
             "time_window": (
                 # max_target_idx + skip + chunk
                 max_target_idx + 1 + 2,
-                max_target_idx + 1 + 2
-            )
+                max_target_idx + 1 + 2)
         }
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
 
@@ -259,16 +299,14 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (c) ONLY categorical features
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         max_target_idx = len(tsdataset.get_target().data) - 1
         param = {
@@ -280,8 +318,7 @@ class TestDataAdapter(unittest.TestCase):
             "time_window": (
                 # max_target_idx + skip + chunk
                 max_target_idx + 1 + 2,
-                max_target_idx + 1 + 2
-            )
+                max_target_idx + 1 + 2)
         }
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
 
@@ -289,8 +326,7 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         ####################################################
         # case 3                                           #
@@ -306,8 +342,7 @@ class TestDataAdapter(unittest.TestCase):
             known_periods=known_periods,
             observed_periods=observed_periods,
             # because all cov is None in this case, so this cov_dtypes_bits param does not matter.
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None
         tsdataset.known_cov = None
         tsdataset.observed_cov = None
@@ -320,8 +355,7 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=True
-        )
+            has_future_target_key=True)
 
         ##############################################
         # case 4                                     #
@@ -338,8 +372,7 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -352,16 +385,14 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         # Explicitly set to None
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -374,16 +405,14 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         # Explicitly set to None
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -396,8 +425,7 @@ class TestDataAdapter(unittest.TestCase):
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         ##################################################
         # case 5                                         #
@@ -420,60 +448,57 @@ class TestDataAdapter(unittest.TestCase):
         }
 
         # (5.1) do not fill last sample.
-        not_fill_param = {**param, "fill_last_value": None}
+        not_fill_param = { ** param, "fill_last_value": None}
         # (a) Both numeric and categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                    not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
             # because out_chunk_len = 0, so no future_target key.
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                    not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
             # because out_chunk_len = 0, so no future_target key.
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                    not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=sample_ds,
             # because out_chunk_len = 0, so no future_target key.
-            has_future_target_key=False
-        )
+            has_future_target_key=False)
 
         # (5.2) fill last sample.
         target_periods = 10
@@ -487,26 +512,29 @@ class TestDataAdapter(unittest.TestCase):
             "sampling_stride": 3
         }
 
-        for fill_value in [t(99.9) for t in [float, np.float, np.float16, np.float32, np.float64]]:
-            fill_param = {**param, "fill_last_value": fill_value}
+        for fill_value in [
+                t(99.9)
+                for t in
+            [float, np.float, np.float16, np.float32, np.float64]
+        ]:
+            fill_param = { ** param, "fill_last_value": fill_value}
             # (a) fill value is numeric, samples also only contain numeric too.
             # currently fill categorical data is not supported, so no need to test, so ignore (b) and (c).
             tsdataset = self._build_mock_ts_dataset(
                 target_periods=target_periods,
                 known_periods=known_periods,
                 observed_periods=observed_periods,
-                cov_dtypes_bits=self._only_numeric_dtype_bits
-            )
+                cov_dtypes_bits=self._only_numeric_dtype_bits)
 
             # Build sample.
-            sample_ds = self._adapter.to_sample_dataset(tsdataset, **fill_param)
+            sample_ds = self._adapter.to_sample_dataset(tsdataset, **
+                                                        fill_param)
 
             self._compare_tsdataset_and_sample_dataset(
                 tsdataset=tsdataset,
                 sample_ds=sample_ds,
                 # because out_chunk_len = 0, so no future_target key.
-                has_future_target_key=False
-            )
+                has_future_target_key=False)
 
     def test_to_sample_dataset_bad_case(self):
         """to_sample_dataset bad cases."""
@@ -517,7 +545,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
         # Explicitly set target and observed_cov to None.
         tsdataset.target = None
         tsdataset.observed_cov = None
@@ -532,7 +561,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, in_chunk_len=0)
@@ -544,7 +574,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, skip_chunk_len=-1)
@@ -556,7 +587,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, out_chunk_len=-1)
@@ -568,7 +600,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, sampling_stride=0)
@@ -581,7 +614,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         with self.assertRaises(ValueError):
             param = {
@@ -590,10 +624,8 @@ class TestDataAdapter(unittest.TestCase):
                 "out_chunk_len": 4,
                 "fill_last_value": 10.1,
                 # time windows > max_target_idx, too large.
-                "time_window": (
-                    (target_periods - 1) + (3 + 4),
-                    (target_periods - 1) + (3 + 4)
-                )
+                "time_window": ((target_periods - 1) + (3 + 4),
+                                (target_periods - 1) + (3 + 4))
             }
             _ = self._adapter.to_sample_dataset(rawdataset=tsdataset, **param)
 
@@ -604,7 +636,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 12
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         # Given the following params, the min allowed time_window[0] can be calculated as follows:
         # min_allowed_time_window_lower_bound = (in + skip + out - 1) = 5 - 1 = 4.
@@ -617,22 +650,38 @@ class TestDataAdapter(unittest.TestCase):
         }
 
         # time_window[0] = 3, too small.
-        param = {**common_param, "time_window": (3, len(tsdataset.get_target().data) - 1)}
+        param = {
+            **
+            common_param,
+            "time_window": (3, len(tsdataset.get_target().data) - 1)
+        }
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, **param)
 
         # time_window[0] = 2, too small.
-        param = {**common_param, "time_window": (2, len(tsdataset.get_target().data) - 1)}
+        param = {
+            **
+            common_param,
+            "time_window": (2, len(tsdataset.get_target().data) - 1)
+        }
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, **param)
 
         # time_window[0] = 1, too small.
-        param = {**common_param, "time_window": (1, len(tsdataset.get_target().data) - 1)}
+        param = {
+            **
+            common_param,
+            "time_window": (1, len(tsdataset.get_target().data) - 1)
+        }
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, **param)
 
         # time_window[0] = 0, too small.
-        param = {**common_param, "time_window": (0, len(tsdataset.get_target().data) - 1)}
+        param = {
+            **
+            common_param,
+            "time_window": (0, len(tsdataset.get_target().data) - 1)
+        }
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, **param)
 
@@ -643,7 +692,8 @@ class TestDataAdapter(unittest.TestCase):
         target_periods = 10
         known_periods = target_periods + 10
         observed_periods = target_periods
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         # Given the following params, the max allowed time_window upper bound can be calculated as follows:
         # max_allowed_time_window_lower_bound = (target_ts_len + skip + out - 1) = 10 + 1 + 2 - 1 = 12
@@ -656,8 +706,7 @@ class TestDataAdapter(unittest.TestCase):
             "time_window": (
                 2,
                 # 13 > 12, too large.
-                len(tsdataset.get_target().data) + 1 + 2 - 1 + 1
-            )
+                len(tsdataset.get_target().data) + 1 + 2 - 1 + 1)
         }
         with self.assertRaises(ValueError):
             _ = self._adapter.to_sample_dataset(tsdataset, **param)
@@ -698,7 +747,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = target_periods - 1
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         param = {
             "in_chunk_len": 1,
@@ -746,7 +796,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = target_periods - 1
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         param = {
             "in_chunk_len": 1,
@@ -795,7 +846,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given known_ts is too small to build samples.
         # End.
         known_periods = target_periods + 1
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         param = {
             "in_chunk_len": 1,
@@ -843,7 +895,8 @@ class TestDataAdapter(unittest.TestCase):
         # According to the compare result, the max timestamp of the given observed_ts is too small to build samples.
         # End.
         observed_periods = target_periods - 1
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         param = {
             "in_chunk_len": 1,
@@ -894,7 +947,8 @@ class TestDataAdapter(unittest.TestCase):
         # End.
         observed_periods = 5
         known_periods = target_periods + 10
-        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods, observed_periods)
+        tsdataset = self._build_mock_ts_dataset(target_periods, known_periods,
+                                                observed_periods)
 
         param = {
             "in_chunk_len": 1,
@@ -917,8 +971,15 @@ class TestDataAdapter(unittest.TestCase):
         # int-like data.
         target_periods = known_periods = observed_periods = 10
         bad_contain_data_map = {
-            "float": [t(1.1) for t in [float, np.float, np.float16, np.float32, np.float64]],
-            "int": [t(1) for t in [int, np.int, np.int8, np.int16, np.int32, np.int64]]
+            "float": [
+                t(1.1)
+                for t in
+                [float, np.float, np.float16, np.float32, np.float64]
+            ],
+            "int": [
+                t(1)
+                for t in [int, np.int, np.int8, np.int16, np.int32, np.int64]
+            ]
         }
         for bad_contain_type in bad_contain_data_map.keys():
             for bad_ts_name in ["target", "known_cov", "observed_cov"]:
@@ -953,13 +1014,15 @@ class TestDataAdapter(unittest.TestCase):
                     target_periods=target_periods,
                     known_periods=known_periods,
                     observed_periods=observed_periods,
-                    cov_dtypes_bits=cov_dtypes_bits
-                )
+                    cov_dtypes_bits=cov_dtypes_bits)
                 if target_none:
                     tsdataset.target = None
 
                 for bad_fill_value in bad_contain_data_map[bad_contain_type]:
-                    param = {"fill_last_value": bad_fill_value, "time_window": None}
+                    param = {
+                        "fill_last_value": bad_fill_value,
+                        "time_window": None
+                    }
                     with self.assertRaises(ValueError):
                         _ = self._adapter.to_sample_dataset(tsdataset, **param)
 
@@ -974,8 +1037,13 @@ class TestDataAdapter(unittest.TestCase):
         observed_keys = {"observed_cov_numeric", "observed_cov_categorical"}
         static_keys = {"static_cov_numeric", "static_cov_categorical"}
 
-        numeric_keys = {"known_cov_numeric", "observed_cov_numeric", "static_cov_numeric"}
-        categorical_keys = {"known_cov_categorical", "observed_cov_categorical", "static_cov_categorical"}
+        numeric_keys = {
+            "known_cov_numeric", "observed_cov_numeric", "static_cov_numeric"
+        }
+        categorical_keys = {
+            "known_cov_categorical", "observed_cov_categorical",
+            "static_cov_categorical"
+        }
         ############################################################
         # case 1 (Typical usage for forcasting and representation) #
         # 1) target, known_cov, observed_cov, static_cov NOT None. #
@@ -989,57 +1057,54 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys)
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys))
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys)
-        )
+            good_keys=target_keys.union(numeric_keys))
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, out_chunk_len=1)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys)
-        )
+            good_keys=target_keys.union(categorical_keys))
 
         ############################################################
         # case 2 (Typical usage for forcasting and representation) #
@@ -1055,63 +1120,61 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys) - known_keys
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys) -
+            known_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         # Explicitly set to None.
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, out_chunk_len=1)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys) - known_keys
-        )
+            good_keys=target_keys.union(numeric_keys) - known_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys) - known_keys
-        )
+            good_keys=target_keys.union(categorical_keys) - known_keys)
 
         ############################################################
         # case 3 (Typical usage for forcasting and representation) #
@@ -1127,63 +1190,61 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys) - observed_keys
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys) -
+            observed_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         # Explicitly set to None.
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys) - observed_keys
-        )
+            good_keys=target_keys.union(numeric_keys) - observed_keys)
 
         # 2.3 ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys) - observed_keys
-        )
+            good_keys=target_keys.union(categorical_keys) - observed_keys)
 
         ############################################################
         # case 4 (Typical usage for forcasting and representation) #
@@ -1199,63 +1260,61 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys) - static_keys
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys) -
+            static_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         # Explicitly set to None.
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys) - static_keys
-        )
+            good_keys=target_keys.union(numeric_keys) - static_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys) - static_keys
-        )
+            good_keys=target_keys.union(categorical_keys) - static_keys)
 
         ############################################################
         # case 5 (Typical usage for forcasting and representation) #
@@ -1271,8 +1330,7 @@ class TestDataAdapter(unittest.TestCase):
             known_periods=known_periods,
             observed_periods=observed_periods,
             # cov_dtypes_bits does not matter because all covariates will be set to None.
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set known and observed timeseries to None.
         tsdataset.known_cov = None
         tsdataset.observed_cov = None
@@ -1280,14 +1338,14 @@ class TestDataAdapter(unittest.TestCase):
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys - known_keys - observed_keys - static_keys
-        )
+            good_keys=target_keys - known_keys - observed_keys - static_keys)
 
         ##############################################
         # case 6 (Typical usage for anomaly)         #
@@ -1303,8 +1361,7 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -1312,22 +1369,21 @@ class TestDataAdapter(unittest.TestCase):
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - target_keys - known_keys - static_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         # Explicitly set target, known_cov and static_cov to None.
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -1335,22 +1391,22 @@ class TestDataAdapter(unittest.TestCase):
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - categorical_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - categorical_keys - target_keys -
+            known_keys - static_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         # Explicitly set to None.
         tsdataset.target = None
         tsdataset.known_cov = None
@@ -1358,14 +1414,15 @@ class TestDataAdapter(unittest.TestCase):
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_paddle_dataloader(sample_ds, batch_size, shuffle=False)
+        sample_dataloader = self._adapter.to_paddle_dataloader(
+            sample_ds, batch_size, shuffle=False)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - numeric_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - numeric_keys - target_keys - known_keys -
+            static_keys)
 
     def test_to_ml_dataloader_good_case(self):
         """
@@ -1384,8 +1441,13 @@ class TestDataAdapter(unittest.TestCase):
         observed_keys = {"observed_cov_numeric", "observed_cov_categorical"}
         static_keys = {"static_cov_numeric", "static_cov_categorical"}
 
-        numeric_keys = {"known_cov_numeric", "observed_cov_numeric", "static_cov_numeric"}
-        categorical_keys = {"known_cov_categorical", "observed_cov_categorical", "static_cov_categorical"}
+        numeric_keys = {
+            "known_cov_numeric", "observed_cov_numeric", "static_cov_numeric"
+        }
+        categorical_keys = {
+            "known_cov_categorical", "observed_cov_categorical",
+            "static_cov_categorical"
+        }
         ############################################################
         # case 1 (Typical usage for forcasting and representation) #
         # 1) target, known_cov, observed_cov, static_cov NOT None. #
@@ -1399,56 +1461,53 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys)
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys))
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys)
-        )
+            good_keys=target_keys.union(numeric_keys))
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys)
-        )
+            good_keys=target_keys.union(categorical_keys))
 
         ############################################################
         # case 2 (Typical usage for forcasting and representation) #
@@ -1460,60 +1519,58 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys) - known_keys
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys) -
+            known_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys) - known_keys
-        )
+            good_keys=target_keys.union(numeric_keys) - known_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         tsdataset.known_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys) - known_keys
-        )
+            good_keys=target_keys.union(categorical_keys) - known_keys)
 
         ############################################################
         # case 3 (Typical usage for forcasting and representation) #
@@ -1525,60 +1582,58 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys).union(categorical_keys) - observed_keys
-        )
+            good_keys=target_keys.union(numeric_keys).union(categorical_keys) -
+            observed_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(numeric_keys) - observed_keys
-        )
+            good_keys=target_keys.union(numeric_keys) - observed_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         tsdataset.observed_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=target_keys.union(categorical_keys) - observed_keys
-        )
+            good_keys=target_keys.union(categorical_keys) - observed_keys)
 
         ##############################################
         # case 4 (Typical usage for anomaly)         #
@@ -1590,80 +1645,78 @@ class TestDataAdapter(unittest.TestCase):
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
         tsdataset.target = None
         tsdataset.known_cov = None
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - target_keys - known_keys - static_keys)
 
         # (b) ONLY numeric cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_numeric_dtype_bits
-        )
+            cov_dtypes_bits=self._only_numeric_dtype_bits)
         tsdataset.target = None
         tsdataset.known_cov = None
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - categorical_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - categorical_keys - target_keys -
+            known_keys - static_keys)
 
         # (c) ONLY categorical cov features.
         tsdataset = self._build_mock_ts_dataset(
             target_periods=target_periods,
             known_periods=known_periods,
             observed_periods=observed_periods,
-            cov_dtypes_bits=self._only_categorical_dtype_bits
-        )
+            cov_dtypes_bits=self._only_categorical_dtype_bits)
         tsdataset.target = None
         tsdataset.known_cov = None
         tsdataset.static_cov = None
 
         sample_ds = self._adapter.to_sample_dataset(tsdataset, **param)
         batch_size = 2
-        sample_dataloader = self._adapter.to_ml_dataloader(sample_dataset=sample_ds, batch_size=batch_size)
+        sample_dataloader = self._adapter.to_ml_dataloader(
+            sample_dataset=sample_ds, batch_size=batch_size)
 
         self._compare_sample_dataset_and_sample_dataloader(
             sample_ds=sample_ds,
             sample_dataloader=sample_dataloader,
             batch_size=batch_size,
-            good_keys=observed_keys - numeric_keys - target_keys - known_keys - static_keys
-        )
+            good_keys=observed_keys - numeric_keys - target_keys - known_keys -
+            static_keys)
 
     def _build_mock_ts_dataset(
-        self,
-        target_periods: int,
-        known_periods: int,
-        observed_periods: int,
-        target_start_timestamp: pd.Timestamp = None,
-        known_start_timestamp: pd.Timestamp = None,
-        observed_start_timestamp: pd.Timestamp = None,
-        target_timeindex_type: str = pd.DatetimeIndex.__name__,
-        known_timeindex_type: str = pd.DatetimeIndex.__name__,
-        observed_timeindex_type: str = pd.DatetimeIndex.__name__,
-        cov_dtypes_bits: int = 2**0 + 2**2 + 2**4
-    ):
+            self,
+            target_periods: int,
+            known_periods: int,
+            observed_periods: int,
+            target_start_timestamp: pd.Timestamp=None,
+            known_start_timestamp: pd.Timestamp=None,
+            observed_start_timestamp: pd.Timestamp=None,
+            target_timeindex_type: str=pd.DatetimeIndex.__name__,
+            known_timeindex_type: str=pd.DatetimeIndex.__name__,
+            observed_timeindex_type: str=pd.DatetimeIndex.__name__,
+            cov_dtypes_bits: int=2**0 + 2**2 + 2**4):
         """
         Build mock dataset.
 
@@ -1694,7 +1747,8 @@ class TestDataAdapter(unittest.TestCase):
         categorical_dtype = np.int64
         freq: str = "1D"
 
-        if (target_start_timestamp and known_start_timestamp and observed_start_timestamp) is not True:
+        if (target_start_timestamp and known_start_timestamp and
+                observed_start_timestamp) is not True:
             # default_timestamp = pd.Timestamp(datetime.datetime.now().date())
             default_timestamp = pd.Timestamp("2022-01-01")
             target_start_timestamp = default_timestamp
@@ -1702,102 +1756,126 @@ class TestDataAdapter(unittest.TestCase):
             observed_start_timestamp = default_timestamp
 
         # target
-        self.assertTrue(target_timeindex_type in {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
+        self.assertTrue(target_timeindex_type in
+                        {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
         if target_timeindex_type == pd.DatetimeIndex.__name__:
-            target_index = pd.date_range(start=target_start_timestamp, periods=target_periods, freq=freq)
+            target_index = pd.date_range(
+                start=target_start_timestamp,
+                periods=target_periods,
+                freq=freq)
         else:
             target_index = pd.RangeIndex(start=0, stop=target_periods, step=1)
         target_df = pd.DataFrame(
-            data=np.array([i for i in range(target_periods)], dtype=numeric_dtype),
+            data=np.array(
+                [i for i in range(target_periods)], dtype=numeric_dtype),
             index=target_index,
-            columns=["target_numeric_0"]
-        )
+            columns=["target_numeric_0"])
 
         # known
-        self.assertTrue(known_timeindex_type in {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
+        self.assertTrue(known_timeindex_type in
+                        {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
         if known_timeindex_type == pd.DatetimeIndex.__name__:
-            known_index = pd.date_range(start=known_start_timestamp, periods=known_periods, freq=freq)
+            known_index = pd.date_range(
+                start=known_start_timestamp, periods=known_periods, freq=freq)
         else:
             known_index = pd.RangeIndex(start=0, stop=known_periods, step=1)
         known_raw_data = [(i * 10, i * 100) for i in range(known_periods)]
         known_numeric_df = None
-        if (cov_dtypes_bits & known_contain_numeric_bit) == known_contain_numeric_bit:
+        if (cov_dtypes_bits & known_contain_numeric_bit
+            ) == known_contain_numeric_bit:
             known_numeric_data = np.array(known_raw_data, dtype=numeric_dtype)
             known_numeric_df = pd.DataFrame(
                 data=known_numeric_data,
                 index=known_index,
-                columns=["known_numeric_0", "known_numeric_1"]
-            )
+                columns=["known_numeric_0", "known_numeric_1"])
 
         known_categorical_df = None
-        if (cov_dtypes_bits & known_contain_categorical_bit) == known_contain_categorical_bit:
-            known_categorical_data = np.array(known_raw_data, dtype=categorical_dtype)
+        if (cov_dtypes_bits & known_contain_categorical_bit
+            ) == known_contain_categorical_bit:
+            known_categorical_data = np.array(
+                known_raw_data, dtype=categorical_dtype)
             known_categorical_df = pd.DataFrame(
                 data=known_categorical_data,
                 index=known_index,
-                columns=["known_categorical_0", "known_categorical_1"]
-            )
+                columns=["known_categorical_0", "known_categorical_1"])
         if (known_numeric_df is None) and (known_categorical_df is None):
-            raise Exception(f"failed to build known cov data, both numeric df and categorical df are all None.")
-        if (known_numeric_df is not None) and (known_categorical_df is not None):
+            raise Exception(
+                f"failed to build known cov data, both numeric df and categorical df are all None."
+            )
+        if (known_numeric_df is not None) and (
+                known_categorical_df is not None):
             # both are NOT None.
-            known_cov_df = pd.concat([known_numeric_df, known_categorical_df], axis=1)
+            known_cov_df = pd.concat(
+                [known_numeric_df, known_categorical_df], axis=1)
         else:
-            known_cov_df = [known_numeric_df, known_categorical_df][1 if known_numeric_df is None else 0]
+            known_cov_df = [known_numeric_df, known_categorical_df][
+                1 if known_numeric_df is None else 0]
 
         # observed
-        self.assertTrue(observed_timeindex_type in {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
+        self.assertTrue(observed_timeindex_type in
+                        {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
         if observed_timeindex_type == pd.DatetimeIndex.__name__:
-            observed_index = pd.date_range(start=observed_start_timestamp, periods=observed_periods, freq=freq)
+            observed_index = pd.date_range(
+                start=observed_start_timestamp,
+                periods=observed_periods,
+                freq=freq)
         else:
             observed_index = pd.RangeIndex(start=0, stop=known_periods, step=1)
-        observed_raw_data = [(i * -1, i * -10) for i in range(observed_periods)]
+        observed_raw_data = [(i * -1, i * -10)
+                             for i in range(observed_periods)]
         observed_numeric_df = None
-        if (cov_dtypes_bits & observed_contain_numeric_bit) == observed_contain_numeric_bit:
-            observed_numeric_data = np.array(observed_raw_data, dtype=numeric_dtype)
+        if (cov_dtypes_bits & observed_contain_numeric_bit
+            ) == observed_contain_numeric_bit:
+            observed_numeric_data = np.array(
+                observed_raw_data, dtype=numeric_dtype)
             observed_numeric_df = pd.DataFrame(
                 data=observed_numeric_data,
                 index=observed_index,
-                columns=["observed_numeric_0", "observed_numeric_1"]
-            )
+                columns=["observed_numeric_0", "observed_numeric_1"])
 
         observed_categorical_df = None
-        if (cov_dtypes_bits & observed_contain_categorical_bit) == observed_contain_categorical_bit:
-            observed_categorical_data = np.array(observed_raw_data, dtype=categorical_dtype)
+        if (cov_dtypes_bits & observed_contain_categorical_bit
+            ) == observed_contain_categorical_bit:
+            observed_categorical_data = np.array(
+                observed_raw_data, dtype=categorical_dtype)
             observed_categorical_df = pd.DataFrame(
                 data=observed_categorical_data,
                 index=observed_index,
-                columns=["observed_categorical_0", "observed_categorical_1"]
-            )
+                columns=["observed_categorical_0", "observed_categorical_1"])
 
         if (observed_numeric_df is None) and (observed_categorical_df is None):
-            raise Exception(f"failed to build observed cov data, both numeric df and categorical df are all None.")
-        if (observed_numeric_df is not None) and (observed_categorical_df is not None):
+            raise Exception(
+                f"failed to build observed cov data, both numeric df and categorical df are all None."
+            )
+        if (observed_numeric_df is not None) and (
+                observed_categorical_df is not None):
             # both are NOT None.
-            observed_cov_df = pd.concat([observed_numeric_df, observed_categorical_df], axis=1)
+            observed_cov_df = pd.concat(
+                [observed_numeric_df, observed_categorical_df], axis=1)
         else:
-            observed_cov_df = [observed_numeric_df, observed_categorical_df][1 if observed_numeric_df is None else 0]
+            observed_cov_df = [observed_numeric_df, observed_categorical_df][
+                1 if observed_numeric_df is None else 0]
 
         # static
         static = dict()
-        if (cov_dtypes_bits & static_contain_numeric_bit) == static_contain_numeric_bit:
+        if (cov_dtypes_bits & static_contain_numeric_bit
+            ) == static_contain_numeric_bit:
             static["static_numeric"] = np.float32(1)
-        if (cov_dtypes_bits & static_contain_categorical_bit) == static_contain_categorical_bit:
+        if (cov_dtypes_bits & static_contain_categorical_bit
+            ) == static_contain_categorical_bit:
             static["static_categorical"] = np.int64(2)
 
         return TSDataset(
             target=TimeSeries.load_from_dataframe(data=target_df),
             known_cov=TimeSeries.load_from_dataframe(data=known_cov_df),
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-            static_cov=static
-        )
+            static_cov=static)
 
     def _compare_tsdataset_and_sample_dataset(
-        self,
-        tsdataset: TSDataset,
-        sample_ds: SampleDataset,
-        has_future_target_key: bool = True
-    ) -> None:
+            self,
+            tsdataset: TSDataset,
+            sample_ds: SampleDataset,
+            has_future_target_key: bool=True) -> None:
         """
         Given a TSDataset and a built sample Dataset, compare if these data are matched.
 
@@ -1823,9 +1901,12 @@ class TestDataAdapter(unittest.TestCase):
 
         # As target/known cov/observed cov might start with different timestamp, thus needs to compute offset.
         std_start_timestamp = sample_ds._std_timeindex[0]
-        target_offset = 0 if target_ts is None else target_ts.time_index.get_loc(std_start_timestamp)
-        known_offset = 0 if known_ts is None else known_ts.time_index.get_loc(std_start_timestamp)
-        observed_offset = 0 if observed_ts is None else observed_ts.time_index.get_loc(std_start_timestamp)
+        target_offset = 0 if target_ts is None else target_ts.time_index.get_loc(
+            std_start_timestamp)
+        known_offset = 0 if known_ts is None else known_ts.time_index.get_loc(
+            std_start_timestamp)
+        observed_offset = 0 if observed_ts is None else observed_ts.time_index.get_loc(
+            std_start_timestamp)
 
         # validate samples EXCEPT last sample.
         while sidx < len(sample_ds.samples) - 1:
@@ -1837,11 +1918,14 @@ class TestDataAdapter(unittest.TestCase):
                 # past_target #
                 ###############
                 ndarray_tail = target_offset + curr_sample_tail - skip_chunk_len - out_chunk_len
-                ndarray = df.to_numpy(copy=False)[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                ndarray = df.to_numpy(copy=False)[ndarray_tail - in_chunk_len +
+                                                  1:ndarray_tail + 1]
                 # data ok.
-                self.assertTrue(np.alltrue(ndarray == curr_sample["past_target"]))
+                self.assertTrue(
+                    np.alltrue(ndarray == curr_sample["past_target"]))
                 # dtype ok.
-                self.assertEqual(ndarray.dtype, curr_sample["past_target"].dtype)
+                self.assertEqual(ndarray.dtype,
+                                 curr_sample["past_target"].dtype)
 
                 #################
                 # future_target #
@@ -1853,11 +1937,14 @@ class TestDataAdapter(unittest.TestCase):
                 else:
                     ndarray_tail = target_offset + curr_sample_tail + 1
                     ndarray_head = ndarray_tail - out_chunk_len
-                    ndarray = df.to_numpy(copy=False)[ndarray_head:ndarray_tail]
+                    ndarray = df.to_numpy(
+                        copy=False)[ndarray_head:ndarray_tail]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == curr_sample["future_target"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == curr_sample["future_target"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, curr_sample["future_target"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     curr_sample["future_target"].dtype)
 
             #############
             # known_cov #
@@ -1872,36 +1959,47 @@ class TestDataAdapter(unittest.TestCase):
                 ndarray_left_head = ndarray_left_tail - in_chunk_len
                 # numeric
                 if "known_cov_numeric" in curr_sample.keys():
-                    numeric_ndarray = df.select_dtypes(include=self._numeric_dtype).to_numpy(copy=False)
+                    numeric_ndarray = df.select_dtypes(
+                        include=self._numeric_dtype).to_numpy(copy=False)
                     ndarray = np.vstack(tup=(
                         numeric_ndarray[ndarray_left_head:ndarray_left_tail],
                         numeric_ndarray[ndarray_right_head:ndarray_right_tail]
                     ))
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == curr_sample["known_cov_numeric"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == curr_sample[
+                            "known_cov_numeric"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, curr_sample["known_cov_numeric"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     curr_sample["known_cov_numeric"].dtype)
 
                 # categorical
                 if "known_cov_categorical" in curr_sample.keys():
-                    categorical_ndarray = df.select_dtypes(include=self._categorical_dtype).to_numpy(copy=False)
-                    ndarray = np.vstack(tup=(
-                        categorical_ndarray[ndarray_left_head:ndarray_left_tail],
-                        categorical_ndarray[ndarray_right_head:ndarray_right_tail]
-                    ))
+                    categorical_ndarray = df.select_dtypes(
+                        include=self._categorical_dtype).to_numpy(copy=False)
+                    ndarray = np.vstack(
+                        tup=(categorical_ndarray[ndarray_left_head:
+                                                 ndarray_left_tail],
+                             categorical_ndarray[ndarray_right_head:
+                                                 ndarray_right_tail]))
                     # categorical_df = known_df.select_dtypes(include=categorical_dtype)
                     # categorical_ndarray = categorical_df.to_numpy(copy=False)
                     # categorical_right_ndarray = categorical_ndarray[known_right_head:known_right_tail]
                     # categorical_left_ndarray = categorical_ndarray[known_left_head:known_left_tail]
                     # known_categorical_ndarray = np.vstack((categorical_left_ndarray, categorical_right_ndarray))
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == curr_sample["known_cov_categorical"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == curr_sample[
+                            "known_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, curr_sample["known_cov_categorical"].dtype)
+                    self.assertEqual(
+                        ndarray.dtype,
+                        curr_sample["known_cov_categorical"].dtype)
             # known_cov is None.
             else:
                 self.assertTrue("known_cov_numeric" not in curr_sample.keys())
-                self.assertTrue("known_cov_categorical" not in curr_sample.keys())
+                self.assertTrue(
+                    "known_cov_categorical" not in curr_sample.keys())
 
             ################
             # observed_cov #
@@ -1911,58 +2009,88 @@ class TestDataAdapter(unittest.TestCase):
                 ndarray_tail = observed_offset + curr_sample_tail - skip_chunk_len - out_chunk_len
                 # numeric
                 if "observed_cov_numeric" in curr_sample.keys():
-                    numeric_ndarray = df.select_dtypes(include=self._numeric_dtype).to_numpy(copy=False)
+                    numeric_ndarray = df.select_dtypes(
+                        include=self._numeric_dtype).to_numpy(copy=False)
                     # numeric_ndarray = numeric_df.to_numpy(copy=False)
-                    ndarray = numeric_ndarray[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                    ndarray = numeric_ndarray[ndarray_tail - in_chunk_len + 1:
+                                              ndarray_tail + 1]
                     # observed_numeric_ndarray = numeric_ndarray[observed_tail - in_chunk_len + 1:observed_tail + 1]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == curr_sample["observed_cov_numeric"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == curr_sample[
+                            "observed_cov_numeric"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, curr_sample["observed_cov_numeric"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     curr_sample["observed_cov_numeric"].dtype)
                 # categorical
                 if "observed_cov_categorical" in curr_sample.keys():
-                    categorical_ndarray = df.select_dtypes(include=self._categorical_dtype).to_numpy(copy=False)
+                    categorical_ndarray = df.select_dtypes(
+                        include=self._categorical_dtype).to_numpy(copy=False)
                     # categorical_ndarray = categorical_df.to_numpy(copy=False)
-                    ndarray = categorical_ndarray[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                    ndarray = categorical_ndarray[ndarray_tail - in_chunk_len +
+                                                  1:ndarray_tail + 1]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == curr_sample["observed_cov_categorical"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == curr_sample[
+                            "observed_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, curr_sample["observed_cov_categorical"].dtype)
+                    self.assertEqual(
+                        ndarray.dtype,
+                        curr_sample["observed_cov_categorical"].dtype)
             # observed_cov is None.
             else:
-                self.assertTrue("observed_cov_numeric" not in curr_sample.keys())
-                self.assertTrue("observed_cov_categorical" not in curr_sample.keys())
+                self.assertTrue(
+                    "observed_cov_numeric" not in curr_sample.keys())
+                self.assertTrue(
+                    "observed_cov_categorical" not in curr_sample.keys())
 
             ##############
             # static_cov #
             ##############
             if static_cov is not None:
                 # unsorted dict -> sorted list
-                sorted_static_cov = sorted(static_cov.items(), key=lambda t: t[0])
+                sorted_static_cov = sorted(
+                    static_cov.items(), key=lambda t: t[0])
                 # numeric
                 if "static_cov_numeric" in curr_sample.keys():
-                    numeric = [t[1] for t in sorted_static_cov if isinstance(t[1], self._numeric_dtype)]
+                    numeric = [
+                        t[1] for t in sorted_static_cov
+                        if isinstance(t[1], self._numeric_dtype)
+                    ]
                     # data ok.
-                    self.assertTrue(np.alltrue(numeric == curr_sample["static_cov_numeric"][0]))
+                    self.assertTrue(
+                        np.alltrue(numeric == curr_sample["static_cov_numeric"]
+                                   [0]))
                     # dtype ok.
-                    self.assertEqual(numeric[0].dtype, curr_sample["static_cov_numeric"][0].dtype)
+                    self.assertEqual(
+                        numeric[0].dtype,
+                        curr_sample["static_cov_numeric"][0].dtype)
                 # categorical
                 if "static_cov_categorical" in curr_sample.keys():
-                    categorical = [t[1] for t in sorted_static_cov if isinstance(t[1], self._categorical_dtype)]
+                    categorical = [
+                        t[1] for t in sorted_static_cov
+                        if isinstance(t[1], self._categorical_dtype)
+                    ]
                     # data ok.
-                    self.assertTrue(np.alltrue(categorical == curr_sample["static_cov_categorical"][0]))
+                    self.assertTrue(
+                        np.alltrue(categorical == curr_sample[
+                            "static_cov_categorical"][0]))
                     # dtype ok.
-                    self.assertEqual(categorical[0].dtype, curr_sample["static_cov_categorical"][0].dtype)
+                    self.assertEqual(
+                        categorical[0].dtype,
+                        curr_sample["static_cov_categorical"][0].dtype)
             # static_cov is None
             else:
                 self.assertTrue("static_cov_numeric" not in curr_sample.keys())
-                self.assertTrue("static_cov_categorical" not in curr_sample.keys())
+                self.assertTrue(
+                    "static_cov_categorical" not in curr_sample.keys())
 
             sidx += 1
 
         # check last sample, possibly be filled.
         last_sample = sample_ds.samples[sidx]
-        last_sample_tail_timestamp = sample_ds._compute_last_sample_tail_timestamp()
+        last_sample_tail_timestamp = sample_ds._compute_last_sample_tail_timestamp(
+        )
 
         # because fill_last_value has no effect for static_cov, so check this part first.
         ##############
@@ -1973,18 +2101,31 @@ class TestDataAdapter(unittest.TestCase):
             sorted_static_cov = sorted(static_cov.items(), key=lambda t: t[0])
             # numeric
             if "static_cov_numeric" in last_sample.keys():
-                numeric = [t[1] for t in sorted_static_cov if isinstance(t[1], self._numeric_dtype)]
+                numeric = [
+                    t[1] for t in sorted_static_cov
+                    if isinstance(t[1], self._numeric_dtype)
+                ]
                 # data ok.
-                self.assertTrue(np.alltrue(numeric == last_sample["static_cov_numeric"][0]))
+                self.assertTrue(
+                    np.alltrue(numeric == last_sample["static_cov_numeric"][
+                        0]))
                 # dtype ok.
-                self.assertEqual(numeric[0].dtype, last_sample["static_cov_numeric"][0].dtype)
+                self.assertEqual(numeric[0].dtype,
+                                 last_sample["static_cov_numeric"][0].dtype)
             # categorical
             if "static_cov_categorical" in last_sample.keys():
-                categorical = [t[1] for t in sorted_static_cov if isinstance(t[1], self._categorical_dtype)]
+                categorical = [
+                    t[1] for t in sorted_static_cov
+                    if isinstance(t[1], self._categorical_dtype)
+                ]
                 # data ok.
-                self.assertTrue(np.alltrue(categorical == last_sample["static_cov_categorical"][0]))
+                self.assertTrue(
+                    np.alltrue(categorical == last_sample[
+                        "static_cov_categorical"][0]))
                 # dtype ok.
-                self.assertEqual(categorical[0].dtype, last_sample["static_cov_categorical"][0].dtype)
+                self.assertEqual(
+                    categorical[0].dtype,
+                    last_sample["static_cov_categorical"][0].dtype)
         # static_cov is None
         else:
             self.assertTrue("static_cov_numeric" not in last_sample.keys())
@@ -2000,11 +2141,14 @@ class TestDataAdapter(unittest.TestCase):
                 # past_target for last_sample #
                 ###############################
                 ndarray_tail = target_offset + last_sample_tail - skip_chunk_len - out_chunk_len
-                ndarray = df.to_numpy(copy=False)[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                ndarray = df.to_numpy(copy=False)[ndarray_tail - in_chunk_len +
+                                                  1:ndarray_tail + 1]
                 # data ok.
-                self.assertTrue(np.alltrue(ndarray == last_sample["past_target"]))
+                self.assertTrue(
+                    np.alltrue(ndarray == last_sample["past_target"]))
                 # dtype ok.
-                self.assertEqual(ndarray.dtype, last_sample["past_target"].dtype)
+                self.assertEqual(ndarray.dtype,
+                                 last_sample["past_target"].dtype)
 
                 #################################
                 # future_target for last_sample #
@@ -2016,11 +2160,14 @@ class TestDataAdapter(unittest.TestCase):
                 else:
                     ndarray_tail = target_offset + last_sample_tail + 1
                     ndarray_head = ndarray_tail - out_chunk_len
-                    ndarray = df.to_numpy(copy=False)[ndarray_head:ndarray_tail]
+                    ndarray = df.to_numpy(
+                        copy=False)[ndarray_head:ndarray_tail]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == last_sample["future_target"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == last_sample["future_target"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, last_sample["future_target"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     last_sample["future_target"].dtype)
 
             #############################
             # known_cov for last_sample #
@@ -2035,36 +2182,47 @@ class TestDataAdapter(unittest.TestCase):
                 ndarray_left_head = ndarray_left_tail - in_chunk_len
                 # numeric
                 if "known_cov_numeric" in last_sample.keys():
-                    numeric_ndarray = df.select_dtypes(include=self._numeric_dtype).to_numpy(copy=False)
+                    numeric_ndarray = df.select_dtypes(
+                        include=self._numeric_dtype).to_numpy(copy=False)
                     ndarray = np.vstack(tup=(
                         numeric_ndarray[ndarray_left_head:ndarray_left_tail],
                         numeric_ndarray[ndarray_right_head:ndarray_right_tail]
                     ))
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == last_sample["known_cov_numeric"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == last_sample[
+                            "known_cov_numeric"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, last_sample["known_cov_numeric"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     last_sample["known_cov_numeric"].dtype)
 
                 # categorical
                 if "known_cov_categorical" in last_sample.keys():
-                    categorical_ndarray = df.select_dtypes(include=self._categorical_dtype).to_numpy(copy=False)
-                    ndarray = np.vstack(tup=(
-                        categorical_ndarray[ndarray_left_head:ndarray_left_tail],
-                        categorical_ndarray[ndarray_right_head:ndarray_right_tail]
-                    ))
+                    categorical_ndarray = df.select_dtypes(
+                        include=self._categorical_dtype).to_numpy(copy=False)
+                    ndarray = np.vstack(
+                        tup=(categorical_ndarray[ndarray_left_head:
+                                                 ndarray_left_tail],
+                             categorical_ndarray[ndarray_right_head:
+                                                 ndarray_right_tail]))
                     # categorical_df = known_df.select_dtypes(include=categorical_dtype)
                     # categorical_ndarray = categorical_df.to_numpy(copy=False)
                     # categorical_right_ndarray = categorical_ndarray[known_right_head:known_right_tail]
                     # categorical_left_ndarray = categorical_ndarray[known_left_head:known_left_tail]
                     # known_categorical_ndarray = np.vstack((categorical_left_ndarray, categorical_right_ndarray))
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == last_sample["known_cov_categorical"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == last_sample[
+                            "known_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, last_sample["known_cov_categorical"].dtype)
+                    self.assertEqual(
+                        ndarray.dtype,
+                        last_sample["known_cov_categorical"].dtype)
             # known_cov is None.
             else:
                 self.assertTrue("known_cov_numeric" not in last_sample.keys())
-                self.assertTrue("known_cov_categorical" not in last_sample.keys())
+                self.assertTrue(
+                    "known_cov_categorical" not in last_sample.keys())
 
             ################################
             # observed_cov for last_sample #
@@ -2074,27 +2232,40 @@ class TestDataAdapter(unittest.TestCase):
                 ndarray_tail = observed_offset + last_sample_tail - skip_chunk_len - out_chunk_len
                 # numeric
                 if "observed_cov_numeric" in last_sample.keys():
-                    numeric_ndarray = df.select_dtypes(include=self._numeric_dtype).to_numpy(copy=False)
+                    numeric_ndarray = df.select_dtypes(
+                        include=self._numeric_dtype).to_numpy(copy=False)
                     # numeric_ndarray = numeric_df.to_numpy(copy=False)
-                    ndarray = numeric_ndarray[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                    ndarray = numeric_ndarray[ndarray_tail - in_chunk_len + 1:
+                                              ndarray_tail + 1]
                     # observed_numeric_ndarray = numeric_ndarray[observed_tail - in_chunk_len + 1:observed_tail + 1]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == last_sample["observed_cov_numeric"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == last_sample[
+                            "observed_cov_numeric"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, last_sample["observed_cov_numeric"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     last_sample["observed_cov_numeric"].dtype)
                 # categorical
                 if "observed_cov_categorical" in last_sample.keys():
-                    categorical_ndarray = df.select_dtypes(include=self._categorical_dtype).to_numpy(copy=False)
+                    categorical_ndarray = df.select_dtypes(
+                        include=self._categorical_dtype).to_numpy(copy=False)
                     # categorical_ndarray = categorical_df.to_numpy(copy=False)
-                    ndarray = categorical_ndarray[ndarray_tail - in_chunk_len + 1:ndarray_tail + 1]
+                    ndarray = categorical_ndarray[ndarray_tail - in_chunk_len +
+                                                  1:ndarray_tail + 1]
                     # data ok.
-                    self.assertTrue(np.alltrue(ndarray == last_sample["observed_cov_categorical"]))
+                    self.assertTrue(
+                        np.alltrue(ndarray == last_sample[
+                            "observed_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(ndarray.dtype, last_sample["observed_cov_categorical"].dtype)
+                    self.assertEqual(
+                        ndarray.dtype,
+                        last_sample["observed_cov_categorical"].dtype)
             # observed_cov is None.
             else:
-                self.assertTrue("observed_cov_numeric" not in last_sample.keys())
-                self.assertTrue("observed_cov_categorical" not in last_sample.keys())
+                self.assertTrue(
+                    "observed_cov_numeric" not in last_sample.keys())
+                self.assertTrue(
+                    "observed_cov_categorical" not in last_sample.keys())
         # last sample filled
         else:
             ###############
@@ -2133,8 +2304,8 @@ class TestDataAdapter(unittest.TestCase):
                     std_timeindex=sample_ds._std_timeindex,
                     fill_last_value=fill_last_value,
                     sidx=sidx,
-                    one_sample_len=in_chunk_len + skip_chunk_len + out_chunk_len
-                )
+                    one_sample_len=in_chunk_len + skip_chunk_len +
+                    out_chunk_len)
             else:
                 self.assertTrue("past_target" not in last_sample.keys())
             #############
@@ -2151,8 +2322,8 @@ class TestDataAdapter(unittest.TestCase):
                         std_timeindex=sample_ds._std_timeindex,
                         fill_last_value=fill_last_value,
                         sidx=sidx,
-                        one_sample_len=in_chunk_len + skip_chunk_len + out_chunk_len
-                    )
+                        one_sample_len=in_chunk_len + skip_chunk_len +
+                        out_chunk_len)
                 if "known_cov_categorical" in last_sample.keys():
                     self._compare_tsdataset_and_filled_last_sample(
                         timeseries=known_ts,
@@ -2163,11 +2334,12 @@ class TestDataAdapter(unittest.TestCase):
                         std_timeindex=sample_ds._std_timeindex,
                         fill_last_value=fill_last_value,
                         sidx=sidx,
-                        one_sample_len=in_chunk_len + skip_chunk_len + out_chunk_len
-                    )
+                        one_sample_len=in_chunk_len + skip_chunk_len +
+                        out_chunk_len)
             else:
                 self.assertTrue("known_cov_numeric" not in last_sample.keys())
-                self.assertTrue("known_cov_categorical" not in last_sample.keys())
+                self.assertTrue(
+                    "known_cov_categorical" not in last_sample.keys())
             ################
             # observed_cov #
             ################
@@ -2182,8 +2354,8 @@ class TestDataAdapter(unittest.TestCase):
                         std_timeindex=sample_ds._std_timeindex,
                         fill_last_value=fill_last_value,
                         sidx=sidx,
-                        one_sample_len=in_chunk_len + skip_chunk_len + out_chunk_len
-                    )
+                        one_sample_len=in_chunk_len + skip_chunk_len +
+                        out_chunk_len)
                 if "observed_cov_categorical" in last_sample.keys():
                     self._compare_tsdataset_and_filled_last_sample(
                         timeseries=observed_ts,
@@ -2194,42 +2366,44 @@ class TestDataAdapter(unittest.TestCase):
                         std_timeindex=sample_ds._std_timeindex,
                         fill_last_value=fill_last_value,
                         sidx=sidx,
-                        one_sample_len=in_chunk_len + skip_chunk_len + out_chunk_len
-                    )
+                        one_sample_len=in_chunk_len + skip_chunk_len +
+                        out_chunk_len)
             else:
-                self.assertTrue("observed_cov_numeric" not in last_sample.keys())
-                self.assertTrue("observed_cov_categorical" not in last_sample.keys())
+                self.assertTrue(
+                    "observed_cov_numeric" not in last_sample.keys())
+                self.assertTrue(
+                    "observed_cov_categorical" not in last_sample.keys())
 
     def _compare_tsdataset_and_filled_last_sample(
-        self,
-        timeseries: TimeSeries,
-        last_sample: Dict[str, np.ndarray],
-        sample_key: str,
-        offset: int,
-        last_sample_tail_timestamp: pd.Timestamp,
-        std_timeindex: pd.DatetimeIndex,
-        fill_last_value: Optional[Union[np.float32, np.int64]],
-        sidx: int,
-        one_sample_len: int
-    ):
+            self,
+            timeseries: TimeSeries,
+            last_sample: Dict[str, np.ndarray],
+            sample_key: str,
+            offset: int,
+            last_sample_tail_timestamp: pd.Timestamp,
+            std_timeindex: pd.DatetimeIndex,
+            fill_last_value: Optional[Union[np.float32, np.int64]],
+            sidx: int,
+            one_sample_len: int):
         visited_sample_cnt = sidx
         if np.issubdtype(type(fill_last_value), np.integer):
             std_fill_last_value = self._numeric_dtype(fill_last_value)
-        elif np.issubdtype(type(fill_last_value), np.floating) :
+        elif np.issubdtype(type(fill_last_value), np.floating):
             std_fill_last_value = self._numeric_dtype(fill_last_value)
         else:
-            raise ValueError(f"fill_last_value type {type(fill_last_value)} not valid.")
+            raise ValueError(
+                f"fill_last_value type {type(fill_last_value)} not valid.")
 
         extra_timeindex = pd.date_range(
             start=timeseries.time_index[-1],
             end=last_sample_tail_timestamp,
-            freq=pd.infer_freq(std_timeindex)
-        )
+            freq=pd.infer_freq(std_timeindex))
         extra_timeindex = extra_timeindex[1:]
         # sample = (left, right), where left = raw, right = filled.
         # right
         last_sample_len_for_curr_key = len(last_sample[sample_key])
-        sample_right_start = (last_sample_len_for_curr_key - 1) - len(extra_timeindex) + 1
+        sample_right_start = (last_sample_len_for_curr_key - 1
+                              ) - len(extra_timeindex) + 1
         sample_right = last_sample[sample_key][sample_right_start:]
         self.assertTrue(np.alltrue(sample_right == std_fill_last_value))
         # left
@@ -2237,28 +2411,24 @@ class TestDataAdapter(unittest.TestCase):
         ndarray_left_start = offset + (visited_sample_cnt * one_sample_len)
         ndarray_left_end = ndarray_left_start + sample_left.shape[0]
         df = timeseries.to_dataframe(copy=False)
-        ndarray_left = df.to_numpy(copy=False)[ndarray_left_start:ndarray_left_end]
+        ndarray_left = df.to_numpy(
+            copy=False)[ndarray_left_start:ndarray_left_end]
         # data ok.
         self.assertTrue(np.alltrue(ndarray_left == sample_left))
         # dtype ok.
         self.assertEqual(ndarray_left.dtype, sample_left.dtype)
 
     def _compare_sample_dataset_and_sample_dataloader(
-        self,
-        sample_ds: SampleDataset,
-        sample_dataloader: Union[paddle.io.DataLoader, MLDataLoader],
-        batch_size: int,
-        good_keys: Set[str]
-    ):
+            self,
+            sample_ds: SampleDataset,
+            sample_dataloader: Union[paddle.io.DataLoader, MLDataLoader],
+            batch_size: int,
+            good_keys: Set[str]):
         """Check if sample dataset matches batched sample dataloader."""
         all_keys = {
-            "past_target",
-            "future_target",
-            "known_cov_numeric",
-            "known_cov_categorical",
-            "observed_cov_numeric",
-            "observed_cov_categorical",
-            "static_cov_numeric",
+            "past_target", "future_target", "known_cov_numeric",
+            "known_cov_categorical", "observed_cov_numeric",
+            "observed_cov_categorical", "static_cov_numeric",
             "static_cov_categorical"
         }
         none_keys = all_keys - good_keys
@@ -2274,7 +2444,11 @@ class TestDataAdapter(unittest.TestCase):
                     # good keys
                     dataloader_ndarray_sample = batch_dict[key][sample_idx]
                     if isinstance(sample_dataloader, paddle.io.DataLoader):
-                        dataloader_ndarray_sample = dataloader_ndarray_sample.numpy()
+                        dataloader_ndarray_sample = dataloader_ndarray_sample.numpy(
+                        )
                     dataset_ndarray_sample = dataset_sample[key]
-                    self.assertTrue(np.alltrue(dataloader_ndarray_sample == dataset_ndarray_sample))
-                    self.assertEqual(dataloader_ndarray_sample.dtype, dataset_ndarray_sample.dtype)
+                    self.assertTrue(
+                        np.alltrue(dataloader_ndarray_sample ==
+                                   dataset_ndarray_sample))
+                    self.assertEqual(dataloader_ndarray_sample.dtype,
+                                     dataset_ndarray_sample.dtype)

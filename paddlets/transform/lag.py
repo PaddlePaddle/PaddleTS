@@ -25,12 +25,12 @@ class LagFeatureGenerator(BaseTransform):
     Returns:
         None
     """
+
     def __init__(self,
-        cols: Union[str, List[str]]=None,
-        lag_points: int = 0,
-        down_samples: int = 1,
-        suffix: str = '_before'
-    ):
+                 cols: Union[str, List[str]]=None,
+                 lag_points: int=0,
+                 down_samples: int=1,
+                 suffix: str='_before'):
         super(LagFeatureGenerator, self).__init__()
         self.lag_points = lag_points
         self.down_samples = down_samples
@@ -51,7 +51,8 @@ class LagFeatureGenerator(BaseTransform):
         """
         return self
 
-    def transform_one(self, dataset: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, dataset: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Transform target column to lag features.
         
@@ -74,10 +75,13 @@ class LagFeatureGenerator(BaseTransform):
             #Get series
             tcov = new_ts.get_item_from_column(feature_name)
             #Generate lag feature content
-            for index in range(self.down_samples, self.lag_points + 1, self.down_samples):
+            for index in range(self.down_samples, self.lag_points + 1,
+                               self.down_samples):
                 v = tcov.data[feature_name].shift(index)
                 if feature_name in target_cols:
-                    new_ts.set_column(feature_name + '%s_%d' % (self.suffix, index), v, 'observed_cov')
+                    new_ts.set_column(feature_name + '%s_%d' %
+                                      (self.suffix, index), v, 'observed_cov')
                 else:
-                    tcov.data[feature_name + '%s_%d' % (self.suffix, index)] = v
+                    tcov.data[feature_name + '%s_%d' % (self.suffix, index
+                                                        )] = v
         return new_ts

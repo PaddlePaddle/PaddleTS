@@ -17,6 +17,7 @@ from paddlets.logger import raise_if
 from paddlets.ensemble.base import EnsembleBase
 from paddlets.models.utils import to_tsdataset
 
+
 class StackingEnsembleBase(EnsembleBase):
     """
     The StackingEnsembleBase Class.
@@ -28,19 +29,18 @@ class StackingEnsembleBase(EnsembleBase):
         verbose(bool): Turn on Verbose mode,set to true by default.
 
     """
+
     def __init__(self,
                  estimators: List[Tuple[object, dict]],
-                 final_learner: Callable = None,
-                 verbose: bool = False
-                 ) -> None:
+                 final_learner: Callable=None,
+                 verbose: bool=False) -> None:
 
         super().__init__(estimators, verbose)
         self._final_learner = self._check_final_learner(final_learner)
 
-
     def fit(self,
             train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None) -> None:
+            valid_tsdataset: Optional[TSDataset]=None) -> None:
         """
         fit 
 
@@ -48,13 +48,16 @@ class StackingEnsembleBase(EnsembleBase):
             train_tsdataset(TSDataset): Train dataset.
             valid_tsdataset(TSDataset, optional): Valid dataset.
         """
-        X_meta, y_meta = self._generate_fit_meta_data(train_tsdataset, valid_tsdataset)
+        X_meta, y_meta = self._generate_fit_meta_data(train_tsdataset,
+                                                      valid_tsdataset)
         self._final_learner.fit(X_meta, y_meta)
         self._fitted = True
 
     @abc.abstractmethod
-    def _generate_fit_meta_data(self, train_tsdataset: TSDataset,
-                            valid_tsdataset: Optional[TSDataset] = None) -> Tuple[np.ndarray, np.ndarray]:
+    def _generate_fit_meta_data(self,
+                                train_tsdataset: TSDataset,
+                                valid_tsdataset: Optional[TSDataset]=None
+                                ) -> Tuple[np.ndarray, np.ndarray]:
         """
         generate fit meta data
         generate fit meta data needed for level 2
@@ -98,8 +101,10 @@ class StackingEnsembleBase(EnsembleBase):
         return y_pred
 
     @abc.abstractmethod
-    def _generate_predict_meta_data(self, train_tsdataset: TSDataset,
-                            valid_tsdataset: Optional[TSDataset] = None) -> np.ndarray:
+    def _generate_predict_meta_data(
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> np.ndarray:
         """
         generate predict meta data
         generate predict meta data needed for level 2
@@ -132,25 +137,25 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
         verbose(bool): Turn on Verbose mode,set to true by default.
 
     """
+
     def __init__(self,
                  in_chunk_len: int,
                  out_chunk_len: int,
                  skip_chunk_len: int,
                  estimators: List[Tuple[object, dict]],
-                 final_learner: Callable = None,
-                 use_backtest: bool = True,
-                 resampling_strategy: str = 'cv',
-                 split_ratio: Union[str, float] = 0.1,
-                 k_fold: Union[str, int] = 3,
-                 verbose: bool = False
-                 ) -> None:
+                 final_learner: Callable=None,
+                 use_backtest: bool=True,
+                 resampling_strategy: str='cv',
+                 split_ratio: Union[str, float]=0.1,
+                 k_fold: Union[str, int]=3,
+                 verbose: bool=False) -> None:
 
         self._use_backtest = use_backtest
         self._resampling_strategy = resampling_strategy
         self._split_ratio = split_ratio
         self._k_fold = k_fold
         BaseModel.__init__(self, in_chunk_len, out_chunk_len, skip_chunk_len)
-        StackingEnsembleBase.__init__(self, estimators,final_learner,verbose)
+        StackingEnsembleBase.__init__(self, estimators, final_learner, verbose)
 
     def _check_estimators(self, estimators) -> None:
         """
@@ -164,11 +169,15 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
 
         """
         super()._check_estimators(estimators)
-        if all([issubclass(e[0], BaseModel) or issubclass(e[0], Pipeline) for e in estimators]):
+        if all([
+                issubclass(e[0], BaseModel) or issubclass(e[0], Pipeline)
+                for e in estimators
+        ]):
             pass
-        
+
         else:
-            raise ValueError("Estimators have unsupported or uncompatible models")
+            raise ValueError(
+                "Estimators have unsupported or uncompatible models")
 
     def _set_params(self, estimators) -> List:
         """
@@ -195,7 +204,7 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
 
     def fit(self,
             train_tsdataset: TSDataset,
-            valid_tsdataset: Optional[TSDataset] = None) -> None:
+            valid_tsdataset: Optional[TSDataset]=None) -> None:
         """
         fit 
 
@@ -205,8 +214,10 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
         """
         super().fit(train_tsdataset, valid_tsdataset)
 
-    def _generate_fit_meta_data(self, train_tsdataset: TSDataset,
-                            valid_tsdataset: Optional[TSDataset] = None) -> Tuple[np.ndarray, np.ndarray]:
+    def _generate_fit_meta_data(self,
+                                train_tsdataset: TSDataset,
+                                valid_tsdataset: Optional[TSDataset]=None
+                                ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Generate fit meta data needed for level 2
 
@@ -220,13 +231,18 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
 
         if valid_tsdataset:
             for estimator in self._estimators:
-                prediction = fit_and_score(train_data=train_tsdataset, valid_data=valid_tsdataset, estimator=estimator,
-                                           use_backtest=self._use_backtest)["predicts"]
+                prediction = fit_and_score(
+                    train_data=train_tsdataset,
+                    valid_data=valid_tsdataset,
+                    estimator=estimator,
+                    use_backtest=self._use_backtest)["predicts"]
                 predictions.append(prediction)
-            y_meta = np.array(valid_tsdataset.target.data.loc[predictions[0].target.data.index])
+            y_meta = np.array(valid_tsdataset.target.data.loc[predictions[
+                0].target.data.index])
         else:
             if self._resampling_strategy == 'holdout':
-                raise_if(self._split_ratio > 1 or self._split_ratio < 0, "split_ratio out of range (0, 1)")
+                raise_if(self._split_ratio > 1 or self._split_ratio < 0,
+                         "split_ratio out of range (0, 1)")
                 splitter = HoldoutSplitter(test_size=1 - self._split_ratio)
             elif self._resampling_strategy == 'cv':
                 if self._k_fold > 10 or self._k_fold <= 0:
@@ -236,18 +252,26 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
                 raise NotImplementedError("Unknown resampling_strategy")
 
             for estimator in self._estimators:
-                cv_predictions = [res["predicts"] for res in
-                                  cross_validate(data=train_tsdataset, estimator=estimator, splitter=splitter,
-                                                 return_score=False, use_backtest=self._use_backtest,
-                                                 verbose=self._verbose)]
+                cv_predictions = [
+                    res["predicts"]
+                    for res in cross_validate(
+                        data=train_tsdataset,
+                        estimator=estimator,
+                        splitter=splitter,
+                        return_score=False,
+                        use_backtest=self._use_backtest,
+                        verbose=self._verbose)
+                ]
                 prediction = TSDataset.concat(cv_predictions, axis=0)
                 predictions.append(prediction)
 
-            y_meta = np.array(train_tsdataset.target.data.loc[predictions[0].target.data.index])
-        X_meta = np.concatenate([np.array(prediction.target.data) for prediction in predictions], axis=1)
+            y_meta = np.array(train_tsdataset.target.data.loc[predictions[
+                0].target.data.index])
+        X_meta = np.concatenate(
+            [np.array(prediction.target.data) for prediction in predictions],
+            axis=1)
 
         return X_meta, y_meta
-
 
     def _check_final_learner(self, final_learner) -> "MultiOutputRegressor":
         """
@@ -270,8 +294,7 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
             if not is_regressor(final_learner):
                 raise ValueError(
                     f"`final learner` should be a sklearn-like regressor, "
-                    f"but found: {final_learner}"
-                )
+                    f"but found: {final_learner}")
             final_learner = clone(final_learner)
         return MultiOutputRegressor(final_learner)
 
@@ -294,11 +317,16 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
             tsdataset(TSDataset): Predcit dataset.
         """
         predictions = self._predict_estimators(tsdataset)
-        X_meta = np.concatenate([np.array(prediction.target.data) for prediction in predictions], axis=1)
+        X_meta = np.concatenate(
+            [np.array(prediction.target.data) for prediction in predictions],
+            axis=1)
 
         return X_meta
 
-    def save(self, path: str, ensemble_file_name: str = "paddlets-stacking-forecaster-partial.pkl") -> None:
+    def save(self,
+             path: str,
+             ensemble_file_name: str="paddlets-stacking-forecaster-partial.pkl"
+             ) -> None:
         """
         Save the ensemble model to a directory.
 
@@ -309,7 +337,9 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
         return super().save(path, ensemble_file_name)
 
     @staticmethod
-    def load(path: str, ensemble_file_name: str = "paddlets-stacking-forecaster-partial.pkl") -> "StackingEnsembleForecaster":
+    def load(path: str,
+             ensemble_file_name: str="paddlets-stacking-forecaster-partial.pkl"
+             ) -> "StackingEnsembleForecaster":
         """
         Load the ensemble model from a directory.
 
@@ -321,5 +351,3 @@ class StackingEnsembleForecaster(StackingEnsembleBase, BaseModel):
             The loaded ensemble model.
         """
         return EnsembleBase.load(path, ensemble_file_name)
-
-

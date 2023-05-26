@@ -39,7 +39,10 @@ class Pipeline(Trainable):
         raise_if(steps is None, ValueError("steps must not be None"))
         for e in steps:
             if 2 != len(e):
-                raise_log(ValueError("The expected length of the tuple is 2, but actual element len: %s" % len(e)))
+                raise_log(
+                    ValueError(
+                        "The expected length of the tuple is 2, but actual element len: %s"
+                        % len(e)))
 
         self._steps = steps
         self._fitted = False
@@ -67,10 +70,9 @@ class Pipeline(Trainable):
             self._model = last_object
 
     @log_decorator
-    def fit(
-            self,
+    def fit(self,
             train_tsdataset: Union[TSDataset, List[TSDataset]],
-            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]] = None):
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]]=None):
         """
         Fit transformers and transform the data then fit the model.
 
@@ -87,14 +89,18 @@ class Pipeline(Trainable):
             train_tsdataset_copy = train_tsdataset.copy()
         if valid_tsdataset:
             if isinstance(valid_tsdataset, list):
-                valid_tsdataset_copy = [data.copy() for data in valid_tsdataset]
+                valid_tsdataset_copy = [
+                    data.copy() for data in valid_tsdataset
+                ]
             else:
                 valid_tsdataset_copy = valid_tsdataset.copy()
         # Transform
         for transform in self._transform_list:
-            train_tsdataset_copy = transform.fit_transform(train_tsdataset_copy)
+            train_tsdataset_copy = transform.fit_transform(
+                train_tsdataset_copy)
             if valid_tsdataset:
-                valid_tsdataset_copy = transform.fit_transform(valid_tsdataset_copy)
+                valid_tsdataset_copy = transform.fit_transform(
+                    valid_tsdataset_copy)
         # Final model
         if self._model:
             if valid_tsdataset:
@@ -106,9 +112,10 @@ class Pipeline(Trainable):
 
     def transform(self,
                   tsdataset: Union[TSDataset, List[TSDataset]],
-                  inplace: bool = False,
-                  cache_transform_steps: bool = False,
-                  previous_caches: List[TSDataset] = None) -> Union[TSDataset, Tuple[TSDataset, List[TSDataset]]]:
+                  inplace: bool=False,
+                  cache_transform_steps: bool=False,
+                  previous_caches: List[TSDataset]=None) -> Union[
+                      TSDataset, Tuple[TSDataset, List[TSDataset]]]:
         """
         Transform the `TSDataset` using the fitted transformers in the pipeline.
 
@@ -123,8 +130,10 @@ class Pipeline(Trainable):
                 transformed results and each transform step's caches if set cache_transform_steps = True.
         """
         self._check_fitted()
-        raise_if(cache_transform_steps is True and isinstance(tsdataset, list),
-                 "Not implement error. Not support cache when input tsdataset is a list.")
+        raise_if(
+            cache_transform_steps is True and isinstance(tsdataset, list),
+            "Not implement error. Not support cache when input tsdataset is a list."
+        )
         tsdataset_transformed = tsdataset
         if not inplace:
             if isinstance(tsdataset, list):
@@ -134,7 +143,8 @@ class Pipeline(Trainable):
         if cache_transform_steps is False:
             # normal transform
             for transform in self._transform_list:
-                tsdataset_transformed = transform.transform(tsdataset_transformed)
+                tsdataset_transformed = transform.transform(
+                    tsdataset_transformed)
             return tsdataset_transformed
 
         # Recursive predict Transform
@@ -142,7 +152,8 @@ class Pipeline(Trainable):
         # Init transform copys with same length as tansform list, fill with None
         transform_caches = [None] * tansform_list_length
         # the first transformer's cache is the origin data
-        if cache_transform_steps and self._transform_list[0].need_previous_data:
+        if cache_transform_steps and self._transform_list[
+                0].need_previous_data:
             transform_caches[0] = tsdataset_transformed
 
         for i in range(tansform_list_length):
@@ -151,8 +162,10 @@ class Pipeline(Trainable):
             transformer = self._transform_list[i]
 
             if data_pre:
-                tsdataset_transformed = TSDataset.concat([data_pre, tsdataset_transformed])
-            tsdataset_transformed = transformer.transform_n_rows(tsdataset_transformed, transformed_data_len)
+                tsdataset_transformed = TSDataset.concat(
+                    [data_pre, tsdataset_transformed])
+            tsdataset_transformed = transformer.transform_n_rows(
+                tsdataset_transformed, transformed_data_len)
 
             # caches
             if cache_transform_steps:
@@ -162,15 +175,17 @@ class Pipeline(Trainable):
                 if i == last_transformer_index:
                     break
                 # next transformer's cache is this transformer's results
-                if self._transform_list[next_transformer_index].need_previous_data:
-                    transform_caches[next_transformer_index] = tsdataset_transformed
+                if self._transform_list[
+                        next_transformer_index].need_previous_data:
+                    transform_caches[
+                        next_transformer_index] = tsdataset_transformed
 
         res = tsdataset_transformed
         return (res, transform_caches) if cache_transform_steps else res
 
     def inverse_transform(self,
                           tsdataset: Union[TSDataset, List[TSDataset]],
-                          inplace: bool = False) -> TSDataset:
+                          inplace: bool=False) -> TSDataset:
         """
         The inverse transformation of `self.transform`.
         Apply `inverse_transform` using the fitted transformers in the pipeline.
@@ -197,10 +212,14 @@ class Pipeline(Trainable):
                 tmp_ts = transform.inverse_transform(tsdataset_transformed)
                 tsdataset_transformed = tmp_ts
             except NotImplementedError:
-                logger.debug("%s not implement inverse_transform, continue" % (transform.__class__.__name__))
+                logger.debug("%s not implement inverse_transform, continue" %
+                             (transform.__class__.__name__))
                 continue
             except Exception as e:
-                raise_log(RuntimeError("error occurred while inverse_transform, error: %s" % (str(e))))
+                raise_log(
+                    RuntimeError(
+                        "error occurred while inverse_transform, error: %s" % (
+                            str(e))))
 
         return tsdataset_transformed
 
@@ -261,11 +280,8 @@ class Pipeline(Trainable):
                      "predict_score is only valid if the final model implements predict_score")
         return self._model.predict_score(tsdataset_transformed)
 
-    def recursive_predict(
-            self,
-            tsdataset: TSDataset,
-            predict_length: int
-    ) -> TSDataset:
+    def recursive_predict(self, tsdataset: TSDataset,
+                          predict_length: int) -> TSDataset:
         """
         Apply `self.predict` method iteratively for multi-step time series forecasting, the predicted results from the
         current call will be appended to the `TSDataset` object and will appear in the loopback window for next call.
@@ -284,8 +300,7 @@ class Pipeline(Trainable):
     def recursive_predict_proba(
             self,
             tsdataset: TSDataset,
-            predict_length: int,
-    ) -> TSDataset:
+            predict_length: int, ) -> TSDataset:
         """
         Apply `self.predict_proba` method iteratively for multi-step time series forecasting, the predicted results
         from the current call will be appended to the `TSDataset` object and will appear in the loopback window for
@@ -299,14 +314,13 @@ class Pipeline(Trainable):
         Returns:
             TSDataset: Predicted results.
         """
-        return self._recursive_predict(tsdataset, predict_length, need_proba=True)
+        return self._recursive_predict(
+            tsdataset, predict_length, need_proba=True)
 
-    def _recursive_predict(
-            self,
-            tsdataset: TSDataset,
-            predict_length: int,
-            need_proba: bool = False
-    ) -> TSDataset:
+    def _recursive_predict(self,
+                           tsdataset: TSDataset,
+                           predict_length: int,
+                           need_proba: bool=False) -> TSDataset:
         """
         _recursive_predict
 
@@ -322,10 +336,11 @@ class Pipeline(Trainable):
         self._check_fitted()
         raise_if(
             "anomaly" in str(self._model),
-            "The anomaly detection model does not support recursive_predict."
-        )
-        self._check_recursive_predict_valid(predict_length, need_proba=need_proba)
-        recursive_rounds = math.ceil(predict_length / self._model._out_chunk_len)
+            "The anomaly detection model does not support recursive_predict.")
+        self._check_recursive_predict_valid(
+            predict_length, need_proba=need_proba)
+        recursive_rounds = math.ceil(predict_length /
+                                     self._model._out_chunk_len)
         """
         Use recursive_transform , which means:
         Use the predicted value of the current time 
@@ -341,27 +356,31 @@ class Pipeline(Trainable):
             out_chunk_time_freq = self._model._out_chunk_len * \
                                   (tsdataset_copy.get_target().time_index.freq)
         else:
-            raise_log(ValueError(f"time col type not support, \
-                                                 index type:{type(tsdataset.get_target().data.index)}"))
+            raise_log(
+                ValueError(f"time col type not support, \
+                                                 index type:{type(tsdataset.get_target().data.index)}"
+                           ))
 
         target_res_end_time = tsdataset_copy.get_target().end_time + \
                               recursive_rounds * out_chunk_time_freq
         if tsdataset_copy.get_known_cov() is not None \
                 and target_res_end_time > tsdataset_copy.get_known_cov().end_time:
-            raise_log(RuntimeError(
-                "recursive_rounds is %s, "
-                "recursive predict output end time : %s, while no enough known_cov can be used as in_chunk, "
-                "known_cov's end_time must >= %s'" % (str(recursive_rounds),
-                                                      str(target_res_end_time),
-                                                      str(target_res_end_time))))
+            raise_log(
+                RuntimeError(
+                    "recursive_rounds is %s, "
+                    "recursive predict output end time : %s, while no enough known_cov can be used as in_chunk, "
+                    "known_cov's end_time must >= %s'" % (str(
+                        recursive_rounds), str(target_res_end_time), str(
+                            target_res_end_time))))
         if tsdataset_copy.get_observed_cov() is not None \
                 and target_res_end_time > tsdataset_copy.get_observed_cov().end_time + out_chunk_time_freq:
-            raise_log(RuntimeError(
-                "recursive_rounds is %s, "
-                "recursive predict output end time : %s, while no enough observed_cov can be used as in_chunk, "
-                "observed_cov's end_time must >= %s'" % (str(recursive_rounds),
-                                                         str(target_res_end_time),
-                                                         str(target_res_end_time - out_chunk_time_freq))))
+            raise_log(
+                RuntimeError(
+                    "recursive_rounds is %s, "
+                    "recursive predict output end time : %s, while no enough observed_cov can be used as in_chunk, "
+                    "observed_cov's end_time must >= %s'" % (str(
+                        recursive_rounds), str(target_res_end_time), str(
+                            target_res_end_time - out_chunk_time_freq))))
 
         # Reindex data and the default fill value is np.nan
         # fill_value = np.nan
@@ -399,11 +418,12 @@ class Pipeline(Trainable):
 
         # feature process on pre data
         if tsdataset_copy.known_cov:
-            pre_data, _ = split_dataset(tsdataset_copy, target_length + self._model._out_chunk_len)
+            pre_data, _ = split_dataset(
+                tsdataset_copy, target_length + self._model._out_chunk_len)
         else:
             pre_data = tsdataset_copy
-        data_pre_transformed, data_pre_transformed_caches = self.transform(tsdataset=pre_data,
-                                                                           cache_transform_steps=True)
+        data_pre_transformed, data_pre_transformed_caches = self.transform(
+            tsdataset=pre_data, cache_transform_steps=True)
 
         results = []
 
@@ -422,38 +442,48 @@ class Pipeline(Trainable):
                 break
 
             # predict concat to origindata
-            tsdataset_copy = TSDataset.concat([tsdataset_copy, predictions], keep="last")
+            tsdataset_copy = TSDataset.concat(
+                [tsdataset_copy, predictions], keep="last")
             target_length = target_length + self._model._out_chunk_len
 
             # split new predict chunk
-            _, new_chunk = tsdataset_copy.split(target_length - self._model._out_chunk_len)
+            _, new_chunk = tsdataset_copy.split(target_length -
+                                                self._model._out_chunk_len)
             if tsdataset_copy.known_cov:
-                new_chunk, _ = split_dataset(new_chunk, 2 * self._model._out_chunk_len)
+                new_chunk, _ = split_dataset(new_chunk, 2 *
+                                             self._model._out_chunk_len)
 
             # transform one chunk
-            chunk_transformed, chunk_transformed_caches = self.transform(new_chunk,
-                                                                         cache_transform_steps=True,
-                                                                         previous_caches=data_pre_transformed_caches,
-                                                                         inplace=False)
+            chunk_transformed, chunk_transformed_caches = self.transform(
+                new_chunk,
+                cache_transform_steps=True,
+                previous_caches=data_pre_transformed_caches,
+                inplace=False)
 
             # concate transform results
-            data_pre_transformed = TSDataset.concat([data_pre_transformed, chunk_transformed], keep="last")
+            data_pre_transformed = TSDataset.concat(
+                [data_pre_transformed, chunk_transformed], keep="last")
 
             # concat transform caches
             for i in range(len(data_pre_transformed_caches)):
                 if data_pre_transformed_caches[i]:
-                    data_pre_transformed_caches[i] = TSDataset.concat(
-                        [data_pre_transformed_caches[i], chunk_transformed_caches[i]])
+                    data_pre_transformed_caches[i] = TSDataset.concat([
+                        data_pre_transformed_caches[i],
+                        chunk_transformed_caches[i]
+                    ])
 
         # Concat results
         result = TSDataset.concat(results)
         # Resize result
         result.set_target(
-            TimeSeries(result.get_target().data[0: predict_length], result.freq)
-        )
+            TimeSeries(result.get_target().data[0:predict_length],
+                       result.freq))
         return result
 
-    def save(self, path: str, pipeline_file_name: str = "pipeline-partial.pkl", model_file_name: str = "paddlets_model"):
+    def save(self,
+             path: str,
+             pipeline_file_name: str="pipeline-partial.pkl",
+             model_file_name: str="paddlets_model"):
         """
         Save the pipeline to a directory.
 
@@ -471,7 +501,10 @@ class Pipeline(Trainable):
         # Check file not exist
         pipeline_file_path = os.path.join(path, pipeline_file_name)
         if os.path.exists(pipeline_file_path):
-            raise_log(FileExistsError(f"pipeline-partial file already exist, path : {pipeline_file_path}"))
+            raise_log(
+                FileExistsError(
+                    f"pipeline-partial file already exist, path : {pipeline_file_path}"
+                ))
         # 1.Save model
         if self._model is not None:
             self._model.save(os.path.join(path, model_file_name))
@@ -488,7 +521,10 @@ class Pipeline(Trainable):
         self._model = model_tmp
 
     @classmethod
-    def load(cls, path: str, pipeline_file_name: str = "pipeline-partial.pkl", model_file_name: str = "paddlets_model"):
+    def load(cls,
+             path: str,
+             pipeline_file_name: str="pipeline-partial.pkl",
+             model_file_name: str="paddlets_model"):
         """
         Load the pipeline from a directory.
 
@@ -509,13 +545,18 @@ class Pipeline(Trainable):
         # Check file exist
         pipeline_file_path = os.path.join(path, pipeline_file_name)
         if not os.path.exists(pipeline_file_path):
-            raise_log(FileExistsError(f"pipeline-partial file not exist, path : {pipeline_file_path}"))
+            raise_log(
+                FileExistsError(
+                    f"pipeline-partial file not exist, path : {pipeline_file_path}"
+                ))
         try:
             with open(pipeline_file_path, "rb") as f:
                 pipeline = pickle.load(f)
         except Exception as e:
-            raise_log(RuntimeError(
-                "error occurred while loading pipeline, path: %s, error: %s" % (pipeline_file_path, str(e))))
+            raise_log(
+                RuntimeError(
+                    "error occurred while loading pipeline, path: %s, error: %s"
+                    % (pipeline_file_path, str(e))))
         # 2.Load model
         if pipeline._model_exist is True:
             model = paddlets_model_load(os.path.join(path, model_file_name))
@@ -539,7 +580,9 @@ class Pipeline(Trainable):
         if self._model is None:
             raise_log(RuntimeError("model not exist"))
 
-    def _check_recursive_predict_valid(self, predict_length: int, need_proba: bool = False):
+    def _check_recursive_predict_valid(self,
+                                       predict_length: int,
+                                       need_proba: bool=False):
         """
         Check that `recursive_predict` is valid.
         Raise error if `recursive_predict` is invalid.
@@ -548,7 +591,8 @@ class Pipeline(Trainable):
             raise_if_not(hasattr(self._model, "recursive_predict_proba"), \
                          "predict_proba is only valid if the final model implements predict_proba")
         # Not supported when _skip_chunk !=0
-        raise_if(self._model._skip_chunk_len != 0, f"recursive_predict not supported when \
+        raise_if(self._model._skip_chunk_len != 0,
+                 f"recursive_predict not supported when \
             _skip_chunk_len!=0, got {self._model._skip_chunk_len}.")
         raise_if(predict_length <= 0, f"predict_length must be > \
             0, got {predict_length}.")

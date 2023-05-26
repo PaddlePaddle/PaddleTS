@@ -19,12 +19,10 @@ class Likelihood(ABC):
     Args:
         mode(str): The default value is "distribution" for probability distributional regression, for quantile regression, set "quantiles".
     """
-    def __init__(
-        self,
-        mode: str="distribution"
-    ):
+
+    def __init__(self, mode: str="distribution"):
         self.mode = mode
-    
+
     @property
     @abstractmethod
     def num_params(self) -> int:
@@ -35,13 +33,10 @@ class Likelihood(ABC):
             int: The number of parameters.
         """
         pass
-    
+
     @abstractmethod
-    def loss(
-        self, 
-        model_output: paddle.Tensor, 
-        target: paddle.Tensor
-    ) -> paddle.Tensor:
+    def loss(self, model_output: paddle.Tensor,
+             target: paddle.Tensor) -> paddle.Tensor:
         """
         Compute NLL loss by predicted distrbution parameters and ground truth target.
 
@@ -55,20 +50,20 @@ class Likelihood(ABC):
             paddle.Tensor: The loss computed by distribution parameters and ground truth.
         """
         pass
-        
+
 
 class GaussianLikelihood(Likelihood):
     """
     Univariate Gaussian distribution.
     """
+
     def __init__(self):
         super(GaussianLikelihood, self).__init__(mode="distribution")
         self.rescale = nn.Softplus()
-        
+
     def output_to_params(
-        self,
-        model_output: paddle.Tensor,
-    ) -> paddle.Tensor:
+            self,
+            model_output: paddle.Tensor, ) -> paddle.Tensor:
         """
         Use softplus to rescale sigma parameter as it should be positive.
 
@@ -81,11 +76,10 @@ class GaussianLikelihood(Likelihood):
         mu = model_output[..., 0].unsqueeze(-1)
         sigma = self.rescale(model_output[..., 1]).unsqueeze(-1)
         return paddle.concat([mu, sigma], axis=-1)
-        
+
     def params_to_distr(
-        self,
-        distr_params: paddle.Tensor,
-        ) -> "Distribution":
+            self,
+            distr_params: paddle.Tensor, ) -> "Distribution":
         """
         Construct Normal instance by parameters: mu and sigma.
 
@@ -97,11 +91,8 @@ class GaussianLikelihood(Likelihood):
         """
         mu, sigma = distr_params[..., 0], distr_params[..., 1]
         return Normal(mu, sigma)
-    
-    def get_mean(
-        self,
-        distr_params: paddle.Tensor
-    ) -> paddle.Tensor:
+
+    def get_mean(self, distr_params: paddle.Tensor) -> paddle.Tensor:
         """
         Return mean of the distribution.
         
@@ -113,7 +104,7 @@ class GaussianLikelihood(Likelihood):
 
         """
         return distr_params[..., 0]
-        
+
     @property
     def num_params(self) -> int:
         """
@@ -125,10 +116,9 @@ class GaussianLikelihood(Likelihood):
         return 2
 
     def sample(
-        self,
-        model_output: paddle.Tensor,
-        num_samples: int = 1,
-    ) -> paddle.Tensor:
+            self,
+            model_output: paddle.Tensor,
+            num_samples: int=1, ) -> paddle.Tensor:
         """
         Samples a prediction from the model output：
 
@@ -148,12 +138,9 @@ class GaussianLikelihood(Likelihood):
         distr_params = self.output_to_params(model_output)
         distr = self.params_to_distr(distr_params)
         return distr.sample([num_samples])
-    
-    def loss(
-        self, 
-        model_output: paddle.Tensor, 
-        target: paddle.Tensor
-    ) -> paddle.Tensor:
+
+    def loss(self, model_output: paddle.Tensor,
+             target: paddle.Tensor) -> paddle.Tensor:
         """
         Compute NLL loss by predicted distrbution parameters and ground truth target.
 
@@ -170,19 +157,17 @@ class GaussianLikelihood(Likelihood):
         distr = self.params_to_distr(distr_params)
         losses = -distr.log_prob(target)
         return losses.mean()
-    
-    
+
+
 class QuantileRegression(Likelihood):
     """
     Quantile regression.
     """
-    def __init__(
-        self,
-        quantiles: Optional[List[float]] = [0.1, 0.5, 0.9]
-    ):
+
+    def __init__(self, quantiles: Optional[List[float]]=[0.1, 0.5, 0.9]):
         super(QuantileRegression, self).__init__(mode="quantiles")
         self.quantiles = paddle.to_tensor(np.sort(quantiles))
-        
+
     @property
     def num_params(self) -> int:
         """
@@ -192,12 +177,9 @@ class QuantileRegression(Likelihood):
             int: length of quantiles
         """
         return len(self.quantiles)
-    
-    def loss(
-        self, 
-        model_output: paddle.Tensor, 
-        target: paddle.Tensor
-    ) -> paddle.Tensor:
+
+    def loss(self, model_output: paddle.Tensor,
+             target: paddle.Tensor) -> paddle.Tensor:
         """
         Compute quantile loss.
         
@@ -209,7 +191,8 @@ class QuantileRegression(Likelihood):
             paddle.Tensor: The loss computed by model output and ground truth.
         """
         errors = target.unsqueeze(-1) - model_output
-        losses_array = 2 * paddle.max(paddle.stack([(self.quantiles - 1) * errors, self.quantiles * errors]), axis=0)
+        losses_array = 2 * paddle.max(paddle.stack(
+            [(self.quantiles - 1) * errors, self.quantiles * errors]),
+                                      axis=0)
         q_loss = (losses_array.sum(axis=-1)).mean(axis=-1).mean()
         return q_loss
-

@@ -8,9 +8,11 @@ from setuptools import find_packages, setup
 from pathlib import Path
 import paddlets
 
+
 def read_requirements(path):
     """read requirements"""
     return list(Path(path).read_text().splitlines())
+
 
 base_reqs = read_requirements("requirements/core.txt")
 paddle_reqs = read_requirements("requirements/paddle.txt")
@@ -44,5 +46,4 @@ setup(
         'Programming Language :: Python :: 3.9',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
-    ]
-)
+    ])

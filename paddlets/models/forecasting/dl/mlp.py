@@ -29,33 +29,26 @@ class _MLPModule(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
-    def __init__(
-        self,
-        in_chunk_dim: int,
-        out_chunk_dim: int,
-        target_dim: int,
-        hidden_config: List[int],
-        use_bn: bool = False
-    ):
+
+    def __init__(self,
+                 in_chunk_dim: int,
+                 out_chunk_dim: int,
+                 target_dim: int,
+                 hidden_config: List[int],
+                 use_bn: bool=False):
         super(_MLPModule, self).__init__()
         raise_if(
             np.any(np.array(hidden_config) <= 0),
-            f"hidden_config must be > 0, got {hidden_config}."
-        )       
+            f"hidden_config must be > 0, got {hidden_config}.")
         dimensions, layers = [in_chunk_dim] + hidden_config, []
         for in_dim, out_dim in zip(dimensions[:-1], dimensions[1:]):
             layers.append(paddle.nn.Linear(in_dim, out_dim))
             if use_bn: layers.append(paddle.nn.BatchNorm1D(target_dim))
             layers.append(paddle.nn.ReLU())
-        layers.append(
-            paddle.nn.Linear(dimensions[-1], out_chunk_dim)
-        )
+        layers.append(paddle.nn.Linear(dimensions[-1], out_chunk_dim))
         self._nn = paddle.nn.Sequential(*layers)
 
-    def forward(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args: 
@@ -116,51 +109,43 @@ class MLPRegressor(PaddleBaseModelImpl):
         _hidden_config(List[int]|None): The ith element represents the number of neurons in the ith hidden layer.
         _use_bn(bool): Whether to use batch normalization.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        hidden_config: List[int] = None,
-        use_bn: bool = False
-    ):
-        self._hidden_config = (
-            hidden_config if hidden_config else [100]
-        )
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=100,
+                 verbose: int=1,
+                 patience: int=10,
+                 seed: Optional[int]=None,
+                 hidden_config: List[int]=None,
+                 use_bn: bool=False):
+        self._hidden_config = (hidden_config if hidden_config else [100])
         self._use_bn = use_bn
         super(MLPRegressor, self).__init__(
-            in_chunk_len=in_chunk_len, 
-            out_chunk_len=out_chunk_len, 
-            skip_chunk_len=skip_chunk_len, 
+            in_chunk_len=in_chunk_len,
+            out_chunk_len=out_chunk_len,
+            skip_chunk_len=skip_chunk_len,
             sampling_stride=sampling_stride,
-            loss_fn=loss_fn, 
-            optimizer_fn=optimizer_fn, 
-            optimizer_params=optimizer_params, 
-            eval_metrics=eval_metrics, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
+            loss_fn=loss_fn,
+            optimizer_fn=optimizer_fn,
+            optimizer_params=optimizer_params,
+            eval_metrics=eval_metrics,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows:
 
@@ -190,12 +175,11 @@ class MLPRegressor(PaddleBaseModelImpl):
                 f"but received {column}: {dtype}."
             )
         super(MLPRegressor, self)._check_tsdataset(tsdataset)
-        
+
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -206,11 +190,9 @@ class MLPRegressor(PaddleBaseModelImpl):
             Dict[str, Any]: model parameters.
         """
         target_dim = train_tsdataset[0].get_target().data.shape[1]
-        fit_params = {
-            "target_dim": target_dim
-        }
+        fit_params = {"target_dim": target_dim}
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -222,5 +204,4 @@ class MLPRegressor(PaddleBaseModelImpl):
             out_chunk_dim=self._out_chunk_len,
             target_dim=self._fit_params["target_dim"],
             hidden_config=self._hidden_config,
-            use_bn=self._use_bn
-        )
+            use_bn=self._use_bn)

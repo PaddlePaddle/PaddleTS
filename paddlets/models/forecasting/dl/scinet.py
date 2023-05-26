@@ -77,14 +77,12 @@ class _Interactor(paddle.nn.Layer):
         hidden_size(int): The number of features in hidden state.
     """
 
-    def __init__(
-        self,
-        in_planes: int,
-        kernel_size: int,
-        dropout_rate: float,
-        num_group: int,
-        hidden_size: int
-    ):
+    def __init__(self,
+                 in_planes: int,
+                 kernel_size: int,
+                 dropout_rate: float,
+                 num_group: int,
+                 hidden_size: int):
         super(_Interactor, self).__init__()
 
         self._in_planes = in_planes
@@ -119,14 +117,18 @@ class _Interactor(paddle.nn.Layer):
         x_even = paddle.transpose(x_even, perm=[0, 2, 1])
         x_odd = paddle.transpose(x_odd, perm=[0, 2, 1])
 
-        x_scaled_even = paddle.multiply(x=x_even, y=paddle.exp(self._phi(x_odd)))
-        x_scaled_odd = paddle.multiply(x=x_odd, y=paddle.exp(self._psi(x_even)))
+        x_scaled_even = paddle.multiply(
+            x=x_even, y=paddle.exp(self._phi(x_odd)))
+        x_scaled_odd = paddle.multiply(
+            x=x_odd, y=paddle.exp(self._psi(x_even)))
 
         x_even_update = x_scaled_even + self._eta(x_scaled_odd)
         x_odd_update = x_scaled_odd - self._rho(x_scaled_even)
 
         # Return shape: (Batch_size, in_chunk_len, in_dim), (Batch_size, in_chunk_len, in_dim)
-        return paddle.transpose(x_even_update, perm=[0, 2, 1]), paddle.transpose(x_odd_update, perm=[0, 2, 1])
+        return paddle.transpose(
+            x_even_update, perm=[0, 2, 1]), paddle.transpose(
+                x_odd_update, perm=[0, 2, 1])
 
     def _build_single_internal_module(self) -> paddle.nn.Sequential:
         """
@@ -151,25 +153,20 @@ class _Interactor(paddle.nn.Layer):
 
         prev_size = 1
         layers = [
-            paddle.nn.Pad1D((pad_l, pad_r)),
-            paddle.nn.Conv1D(
+            paddle.nn.Pad1D((pad_l, pad_r)), paddle.nn.Conv1D(
                 in_channels=self._in_planes * prev_size,
                 out_channels=self._in_planes * self._hidden_size,
                 kernel_size=self._kernel_size,
                 dilation=self._dilation,
                 stride=1,
-                groups=self._num_group
-            ),
+                groups=self._num_group),
             paddle.nn.LeakyReLU(negative_slope=0.01),
-            paddle.nn.Dropout(p=self._dropout_rate),
-            paddle.nn.Conv1D(
+            paddle.nn.Dropout(p=self._dropout_rate), paddle.nn.Conv1D(
                 in_channels=self._in_planes * self._hidden_size,
                 out_channels=self._in_planes,
                 kernel_size=3,
                 stride=1,
-                groups=self._num_group
-            ),
-            paddle.nn.Tanh()
+                groups=self._num_group), paddle.nn.Tanh()
         ]
         return paddle.nn.Sequential(*layers)
 
@@ -187,15 +184,13 @@ class _SCINetTree(paddle.nn.Layer):
         hidden_size(int): The number of features in hidden state.
     """
 
-    def __init__(
-        self,
-        in_planes: int,
-        current_level: int,
-        kernel_size: int,
-        dropout_rate: float,
-        num_group: int,
-        hidden_size: int
-    ):
+    def __init__(self,
+                 in_planes: int,
+                 current_level: int,
+                 kernel_size: int,
+                 dropout_rate: float,
+                 num_group: int,
+                 hidden_size: int):
         super(_SCINetTree, self).__init__()
         self._current_level = current_level
 
@@ -204,8 +199,7 @@ class _SCINetTree(paddle.nn.Layer):
             kernel_size=kernel_size,
             dropout_rate=dropout_rate,
             num_group=num_group,
-            hidden_size=hidden_size
-        )
+            hidden_size=hidden_size)
 
         if self._current_level != 0:
             self._scinet_tree_even = _SCINetTree(
@@ -214,8 +208,7 @@ class _SCINetTree(paddle.nn.Layer):
                 kernel_size=kernel_size,
                 dropout_rate=dropout_rate,
                 num_group=num_group,
-                hidden_size=hidden_size
-            )
+                hidden_size=hidden_size)
 
             self._scinet_tree_odd = _SCINetTree(
                 in_planes=in_planes,
@@ -223,8 +216,7 @@ class _SCINetTree(paddle.nn.Layer):
                 kernel_size=kernel_size,
                 dropout_rate=dropout_rate,
                 num_group=num_group,
-                hidden_size=hidden_size
-            )
+                hidden_size=hidden_size)
 
     def _concat_and_realign(self, even, odd) -> paddle.Tensor:
         """
@@ -277,7 +269,9 @@ class _SCINetTree(paddle.nn.Layer):
             return self._concat_and_realign(x_even_update, x_odd_update)
         else:
             # non-leaf nodes, call zip_up recursively until reach leaf nodes.
-            return self._concat_and_realign(self._scinet_tree_even(x_even_update), self._scinet_tree_odd(x_odd_update))
+            return self._concat_and_realign(
+                self._scinet_tree_even(x_even_update),
+                self._scinet_tree_odd(x_odd_update))
 
 
 class _StackedSCINetModule(paddle.nn.Layer):
@@ -299,20 +293,18 @@ class _StackedSCINetModule(paddle.nn.Layer):
         hidden_size(int): The number of features in hidden state.
     """
 
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        in_dim: int,
-        num_stack: int = 1,
-        num_level: int = 3,
-        num_decoder_layer: int = 1,
-        concat_len: int = 0,
-        kernel_size: int = 5,
-        dropout_rate: float = 0.5,
-        num_group: int = 1,
-        hidden_size: int = 1
-    ):
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 in_dim: int,
+                 num_stack: int=1,
+                 num_level: int=3,
+                 num_decoder_layer: int=1,
+                 concat_len: int=0,
+                 kernel_size: int=5,
+                 dropout_rate: float=0.5,
+                 num_group: int=1,
+                 hidden_size: int=1):
         super(_StackedSCINetModule, self).__init__()
 
         self._in_chunk_len = in_chunk_len
@@ -337,8 +329,7 @@ class _StackedSCINetModule(paddle.nn.Layer):
             kernel_size=self._kernel_size,
             dropout_rate=self._dropout_rate,
             num_group=self._num_group,
-            hidden_size=self._hidden_size
-        )
+            hidden_size=self._hidden_size)
 
         # only implement two stacks at most.
         if self._num_stack == 2:
@@ -348,24 +339,25 @@ class _StackedSCINetModule(paddle.nn.Layer):
                 kernel_size=self._kernel_size,
                 dropout_rate=self._dropout_rate,
                 num_group=self._num_group,
-                hidden_size=self._hidden_size
-            )
+                hidden_size=self._hidden_size)
 
         self._decoder1 = paddle.nn.Conv1D(
             in_channels=self._in_chunk_len,
             out_channels=self._out_chunk_len,
             kernel_size=1,
-            stride=1
-        )
+            stride=1)
 
         self._div_projection = paddle.nn.LayerList()
         if self._num_decoder_layer > 1:
-            self._decoder1 = paddle.nn.Linear(self._in_chunk_len, self._out_chunk_len)
+            self._decoder1 = paddle.nn.Linear(self._in_chunk_len,
+                                              self._out_chunk_len)
             for layer_idx in range(self._num_decoder_layer - 1):
                 div_projection = paddle.nn.LayerList()
                 for i in range(div_num):
-                    lens = min(i * self._div_len + self._overlap_len, self._in_chunk_len) - i * self._div_len
-                    div_projection.append(paddle.nn.Linear(lens, self._div_len))
+                    lens = min(i * self._div_len + self._overlap_len,
+                               self._in_chunk_len) - i * self._div_len
+                    div_projection.append(
+                        paddle.nn.Linear(lens, self._div_len))
                 self._div_projection.append(div_projection)
 
         if self._num_stack == 2:
@@ -376,10 +368,10 @@ class _StackedSCINetModule(paddle.nn.Layer):
             self._decoder2 = paddle.nn.Conv1D(
                 in_channels=in_channels,
                 out_channels=self._out_chunk_len,
-                kernel_size=1
-            )
+                kernel_size=1)
 
-    def forward(self, x_dict: Dict[str, paddle.Tensor]) -> Tuple[paddle.Tensor, Optional[paddle.Tensor]]:
+    def forward(self, x_dict: Dict[str, paddle.Tensor]) -> Tuple[
+            paddle.Tensor, Optional[paddle.Tensor]]:
         """
         Stacked SCINet network.
 
@@ -413,8 +405,11 @@ class _StackedSCINetModule(paddle.nn.Layer):
             for div_projection in self._div_projection:
                 output = paddle.zeros(x.shape, dtype=x.dtype)
                 for i, div_layer in enumerate(div_projection):
-                    div_x = x[:, :, i * self._div_len:min(i * self._div_len + self._overlap_len, self._in_chunk_len)]
-                    output[:, :, i * self._div_len:(i + 1) * self._div_len] = div_layer(div_x)
+                    div_x = x[:, :, i * self._div_len:
+                              min(i * self._div_len + self._overlap_len,
+                                  self._in_chunk_len)]
+                    output[:, :, i * self._div_len:(i + 1) *
+                           self._div_len] = div_layer(div_x)
                 x = output
             x = self._decoder1(x)
             x = paddle.transpose(x, perm=[0, 2, 1])
@@ -472,31 +467,32 @@ class SCINetModel(PaddleBaseModelImpl):
         num_group(int): group number for Conv1D layer groups parameter.
         hidden_size(int): The number of features in hidden state for SCINet Interactor module.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = paddle.nn.functional.mse_loss,
-        optimizer_fn: Callable[..., paddle.optimizer.Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Optional[Dict[str, Any]] = None,
-        eval_metrics: Optional[List[str]] = None,
-        callbacks: Optional[List[Callback]] = None,
-        batch_size: int = 8,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
-        num_stack: int = 1,
-        num_level: int = 3,
-        num_decoder_layer: int = 1,
-        concat_len: int = 0,
-        kernel_size: int = 5,
-        dropout_rate: float = 0.5,
-        num_group: int = 1,
-        hidden_size: int = 1
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[
+                     ..., paddle.Tensor]=paddle.nn.functional.mse_loss,
+                 optimizer_fn: Callable[
+                     ..., paddle.optimizer.Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Optional[Dict[str, Any]]=None,
+                 eval_metrics: Optional[List[str]]=None,
+                 callbacks: Optional[List[Callback]]=None,
+                 batch_size: int=8,
+                 max_epochs: int=100,
+                 verbose: int=1,
+                 patience: int=10,
+                 seed: Optional[int]=None,
+                 num_stack: int=1,
+                 num_level: int=3,
+                 num_decoder_layer: int=1,
+                 concat_len: int=0,
+                 kernel_size: int=5,
+                 dropout_rate: float=0.5,
+                 num_group: int=1,
+                 hidden_size: int=1):
         super(SCINetModel, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -511,8 +507,7 @@ class SCINetModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed
-        )
+            seed=seed)
         if self._optimizer_params is None:
             self._optimizer_params = dict(learning_rate=1e-3)
         if self._eval_metrics is None:
@@ -529,7 +524,9 @@ class SCINetModel(PaddleBaseModelImpl):
         self._kernel_size = kernel_size
         self._dropout_rate = dropout_rate
 
-        raise_if_not(0 < num_stack <= 2, f"The number of stack can only be 1 or 2, got {num_stack}.")
+        raise_if_not(
+            0 < num_stack <= 2,
+            f"The number of stack can only be 1 or 2, got {num_stack}.")
         # limit the recursion depth.
         raise_if(
             self._in_chunk_len % (np.power(2, self._num_level)) != 0,
@@ -550,15 +547,13 @@ class SCINetModel(PaddleBaseModelImpl):
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
                 f"scinet variables' dtype only supports [float16, float32, float64], "
-                f"but received {column}: {dtype}."
-            )
+                f"but received {column}: {dtype}.")
         super(SCINetModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """
         Build fit parameters.
 
@@ -610,10 +605,10 @@ class SCINetModel(PaddleBaseModelImpl):
             kernel_size=self._kernel_size,
             dropout_rate=self._dropout_rate,
             num_group=self._num_group,
-            hidden_size=self._hidden_size
-        )
+            hidden_size=self._hidden_size)
 
-    def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[str], Dict[str, MetricContainer]]:
+    def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
+            str], Dict[str, MetricContainer]]:
         """
         Set attributes relative to the metrics.
 
@@ -628,21 +623,25 @@ class SCINetModel(PaddleBaseModelImpl):
         metrics = self._eval_metrics
         metric_container_dict = OrderedDict()
         for name in eval_names:
-            metric_container_dict.update({name: MetricContainer(metrics, prefix=f"{name}_")})
+            metric_container_dict.update({
+                name: MetricContainer(
+                    metrics, prefix=f"{name}_")
+            })
             if self._num_stack == 2:
                 # add metric container for SCINet mid predict output.
-                metric_container_dict.update({f"{name}_mid": MetricContainer(metrics, prefix=f"{name}_mid_")})
+                metric_container_dict.update({
+                    f"{name}_mid": MetricContainer(
+                        metrics, prefix=f"{name}_mid_")
+                })
         metrics, metrics_names = [], []
         for _, metric_container in metric_container_dict.items():
             metrics.extend(metric_container._metrics)
             metrics_names.extend(metric_container._names)
         return metrics, metrics_names, metric_container_dict
 
-    def _compute_loss(
-        self,
-        y_score: Tuple[paddle.Tensor, Optional[paddle.Tensor]],
-        y_true: paddle.Tensor
-    ) -> paddle.Tensor:
+    def _compute_loss(self,
+                      y_score: Tuple[paddle.Tensor, Optional[paddle.Tensor]],
+                      y_true: paddle.Tensor) -> paddle.Tensor:
         """
         Internal method, compute loss for current batch.
 
@@ -655,16 +654,21 @@ class SCINetModel(PaddleBaseModelImpl):
         """
         # y_score = tuple, where tuple[0] is final pred res, tuple[1] is intermediate pred res from previous stack.
         y_pred, mid_pred = y_score
-        loss = self._loss_fn(y_pred[:, :, :self._fit_params["target_dim"]], y_true)
+        loss = self._loss_fn(y_pred[:, :, :self._fit_params["target_dim"]],
+                             y_true)
         # pre-check already guarantee that num_stack can only be either 1 or 2.
         if self._num_stack == 1:
             # not contain mid output
             return loss
         if self._num_stack == 2:
             # contain mid output
-            mid_loss = self._loss_fn(mid_pred[:, :, :self._fit_params["target_dim"]], y_true)
+            mid_loss = self._loss_fn(
+                mid_pred[:, :, :self._fit_params["target_dim"]], y_true)
             return loss + mid_loss
-        raise_log(exception=ValueError(f"num_stack ({self._num_stack}) must be either 1 or 2."), logger=logger)
+        raise_log(
+            exception=ValueError(
+                f"num_stack ({self._num_stack}) must be either 1 or 2."),
+            logger=logger)
 
     def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """
@@ -729,13 +733,16 @@ class SCINetModel(PaddleBaseModelImpl):
         self._history._epoch_metrics.update(y_pred_metrics_logs)
 
         if self._num_stack == 2:
-            mid_pred = np.vstack(mid_pred_list)[:, :, :self._fit_params["target_dim"]]
-            mid_pred_metrics_logs = self._metric_container_dict[f"{name}_mid"](y_true, mid_pred)
+            mid_pred = np.vstack(mid_pred_list)[:, :, :self._fit_params[
+                "target_dim"]]
+            mid_pred_metrics_logs = self._metric_container_dict[f"{name}_mid"](
+                y_true, mid_pred)
             self._history._epoch_metrics.update(mid_pred_metrics_logs)
 
         self._network.train()
 
-    def _predict_batch(self, X: paddle.Tensor) -> Tuple[np.ndarray, np.ndarray]:
+    def _predict_batch(self,
+                       X: paddle.Tensor) -> Tuple[np.ndarray, np.ndarray]:
         """
         Predict one batch of data.
 

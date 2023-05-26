@@ -15,6 +15,7 @@ logger = Logger(__name__)
 
 STATISTICS = ['median', 'mean', 'max', 'min', 'std']
 
+
 class StatsTransform(BaseTransform):
     """
     Statistical features: 'median', 'mean', 'max', 'min', 'std'
@@ -58,14 +59,15 @@ class StatsTransform(BaseTransform):
                 4 2.5
     """
 
-    def __init__(self, cols: Union[str, List],
-                 start: int = 0,
-                 end: int = 1,
-                 statistics: List = STATISTICS):
+    def __init__(self,
+                 cols: Union[str, List],
+                 start: int=0,
+                 end: int=1,
+                 statistics: List=STATISTICS):
         super(StatsTransform, self).__init__()
         self._cols = cols
         if isinstance(cols, str):
-            self._cols=[cols]
+            self._cols = [cols]
         if len(self._cols) < 1:
             raise_log(ValueError("The feature column is not specified!"))
 
@@ -73,19 +75,20 @@ class StatsTransform(BaseTransform):
         if len(self._statistics) < 1:
             raise_log(ValueError("The statistics are not specified!"))
         if not set(self._statistics) <= set(STATISTICS):
-            raise_log(ValueError("%s not in %s" % (self._statistics, STATISTICS)))
-        
+            raise_log(
+                ValueError("%s not in %s" % (self._statistics, STATISTICS)))
+
         if start < 0 or end < 0:
             raise_log(ValueError("Start or end index less than 0"))
         if end <= start:
             raise_log(ValueError("Start index greater than end"))
-        
+
         self._start = start
         self._end = end
         self._map = {}
         for e in STATISTICS:
             self._map[e] = []
-        
+
         self.need_previous_data = True
         self.n_rows_pre_data_need = self._end
 
@@ -103,7 +106,8 @@ class StatsTransform(BaseTransform):
         return self
 
     @log_decorator
-    def transform_one(self, tsdata: TSDataset, inplace: bool = False) -> TSDataset:
+    def transform_one(self, tsdata: TSDataset,
+                      inplace: bool=False) -> TSDataset:
         """
         Transform dataset to statstransform codes.
         
@@ -117,7 +121,7 @@ class StatsTransform(BaseTransform):
         new_ts = tsdata
         if not inplace:
             new_ts = tsdata.copy()
-        
+
         statics_df = tsdata[self._cols]
         if isinstance(statics_df, pd.core.series.Series):
             statics_df = statics_df.to_frame()
@@ -126,15 +130,16 @@ class StatsTransform(BaseTransform):
             try:
                 cur_series = statics_df[col].astype('float')
             except ValueError:
-                logger.warning("Values in the column %s should be numerical" % (col))
-            
+                logger.warning("Values in the column %s should be numerical" %
+                               (col))
+
             start_old = self._start
             end_old = self._end
             for i in range(len(cur_series)):
                 end = i - start_old + 1
                 start = i - end_old + 1
                 for e in self._statistics:
-                    self._map[e].append(cur_series[start: end].__getattr__(e)())
+                    self._map[e].append(cur_series[start:end].__getattr__(e)())
 
             for e in self._statistics:
                 new_name = '%s_%s' % (col, e)

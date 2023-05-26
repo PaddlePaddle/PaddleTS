@@ -37,7 +37,6 @@ source_suffix = [".rst", ".md"]
 # html_static_path = ["_static"]
 # html_logo = "picture.png"
 
-
 # Localization of Documentation.
 # https://docs.readthedocs.io/en/stable/localization.html
 locale_dirs = ["locale/"]
@@ -45,7 +44,6 @@ gettext_compact = False
 language = "en"
 add_module_names = False
 gettext_uuid = True
-
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ["_templates"]

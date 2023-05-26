@@ -10,7 +10,7 @@ import paddle
 from paddlets.models.classify.dl.paddle_base import PaddleBaseClassifier
 from paddlets.models.common.callbacks import Callback
 from paddlets.datasets import TSDataset
-from paddlets.logger import raise_if,raise_if_not
+from paddlets.logger import raise_if, raise_if_not
 
 ACTIVATIONS = [
     "ReLU",
@@ -25,6 +25,7 @@ ACTIVATIONS = [
     "GELU",
 ]
 
+
 class _InceptionModule(paddle.nn.Layer):
     """
     InceptionModule.
@@ -36,39 +37,49 @@ class _InceptionModule(paddle.nn.Layer):
         activation: The activation function.
         use_bottleneck: If use bottleneck layer or not, Set to True by default.
     """
+
     def __init__(self,
-                 input_len:int,
-                 conv_out_size:int,
-                 kernel_size:int = 40,
-                 activation:Callable = paddle.nn.ReLU(),
-                 use_bottleneck:bool = True):
+                 input_len: int,
+                 conv_out_size: int,
+                 kernel_size: int=40,
+                 activation: Callable=paddle.nn.ReLU(),
+                 use_bottleneck: bool=True):
 
         super().__init__()
 
         # compute kernel size
-        kernel_size = [kernel_size // (2 ** i) for i in range(3)]
-        kernel_size = [k if k % 2 != 0 else k - 1 for k in kernel_size]  # ensure odd ks
+        kernel_size = [kernel_size // (2**i) for i in range(3)]
+        kernel_size = [k if k % 2 != 0 else k - 1
+                       for k in kernel_size]  # ensure odd ks
 
         # init bottleneck layer
         use_bottleneck = use_bottleneck if input_len > 1 else False
-        self.bottleneck = paddle.nn.Conv1D(input_len, conv_out_size, 1, bias_attr=False,
-                                           padding="SAME") if use_bottleneck else None
+        self.bottleneck = paddle.nn.Conv1D(
+            input_len, conv_out_size, 1, bias_attr=False,
+            padding="SAME") if use_bottleneck else None
 
         # init conv layers
         self.convs = paddle.nn.LayerList([
-            paddle.nn.Conv1D(conv_out_size if use_bottleneck else input_len, conv_out_size, k, bias_attr=False,
-                             padding="SAME") for k in kernel_size])
+            paddle.nn.Conv1D(
+                conv_out_size if use_bottleneck else input_len,
+                conv_out_size,
+                k,
+                bias_attr=False,
+                padding="SAME") for k in kernel_size
+        ])
 
         #init pooling layer
-        self.maxconvpool = paddle.nn.Sequential(*[paddle.nn.MaxPool1D(3, stride=1, padding="SAME"),
-                                                  paddle.nn.Conv1D(input_len, conv_out_size, 1, bias_attr=False)])
+        self.maxconvpool = paddle.nn.Sequential(*[
+            paddle.nn.MaxPool1D(
+                3, stride=1, padding="SAME"), paddle.nn.Conv1D(
+                    input_len, conv_out_size, 1, bias_attr=False)
+        ])
 
         #init BN layer
         self.bn = paddle.nn.BatchNorm1D(conv_out_size * 4)
         self.act = activation
 
-    def forward(self, 
-                x:paddle.Tensor) -> paddle.Tensor:
+    def forward(self, x: paddle.Tensor) -> paddle.Tensor:
         """
         InceptionModule forward function.
         
@@ -83,8 +94,12 @@ class _InceptionModule(paddle.nn.Layer):
         if self.bottleneck:
             x = self.bottleneck(input_tensor)
 
-        x = paddle.concat([conv(x) for conv in self.convs] + [self.maxconvpool(input_tensor)],axis=1)
+        x = paddle.concat(
+            [conv(x) for conv in self.convs] +
+            [self.maxconvpool(input_tensor)],
+            axis=1)
         return self.act(self.bn(x))
+
 
 class _InceptionBlock(paddle.nn.Layer):
     """
@@ -99,7 +114,8 @@ class _InceptionBlock(paddle.nn.Layer):
         use_residual: If add residuals between Inception modules.
         use_bottleneck: If use bottleneck layer or not, Set to True by default.
     """
-    def __init__(self, 
+
+    def __init__(self,
                  input_len,
                  output_len=128,
                  kernel_size=40,
@@ -109,14 +125,24 @@ class _InceptionBlock(paddle.nn.Layer):
                  use_bottleneck=True):
         super().__init__()
         self.residual, self.depth = use_residual, depth
-        self.inception, self.shortcut = paddle.nn.LayerList(), paddle.nn.LayerList()
+        self.inception, self.shortcut = paddle.nn.LayerList(
+        ), paddle.nn.LayerList()
         for d in range(depth):
-            self.inception.append(_InceptionModule(input_len if d == 0 else output_len ,int(output_len/4),kernel_size=kernel_size,activation=activation,use_bottleneck=use_bottleneck))
-            if self.residual and d % 3 == 2: 
-                n_in, n_out = input_len if d == 2 else output_len , output_len 
-                self.shortcut.append(paddle.nn.BatchNorm1D(n_in) if n_in == n_out else paddle.nn.Conv1D(n_in, n_out, 1,padding="SAME"))
+            self.inception.append(
+                _InceptionModule(
+                    input_len if d == 0 else output_len,
+                    int(output_len / 4),
+                    kernel_size=kernel_size,
+                    activation=activation,
+                    use_bottleneck=use_bottleneck))
+            if self.residual and d % 3 == 2:
+                n_in, n_out = input_len if d == 2 else output_len, output_len
+                self.shortcut.append(
+                    paddle.nn.BatchNorm1D(n_in)
+                    if n_in == n_out else paddle.nn.Conv1D(
+                        n_in, n_out, 1, padding="SAME"))
         self.act = paddle.nn.ReLU()
-        
+
     def forward(self, x):
         """
         forward function.
@@ -129,8 +155,10 @@ class _InceptionBlock(paddle.nn.Layer):
         res = x
         for d, l in enumerate(range(self.depth)):
             x = self.inception[d](x)
-            if self.residual and d % 3 == 2: res = x = self.act(x.add(self.shortcut[d//3](res)))
+            if self.residual and d % 3 == 2:
+                res = x = self.act(x.add(self.shortcut[d // 3](res)))
         return x
+
 
 class _InceptionTime(paddle.nn.Layer):
     """
@@ -146,6 +174,7 @@ class _InceptionTime(paddle.nn.Layer):
         use_residual: If add residuals between Inception modules.
         use_bottleneck: If use bottleneck layer or not, Set to True by default.
     """
+
     def __init__(self,
                  channel_in,
                  channel_out,
@@ -156,8 +185,9 @@ class _InceptionTime(paddle.nn.Layer):
                  use_residual=True,
                  use_bottleneck=True):
         super().__init__()
-        self.inceptionblock = _InceptionBlock(channel_in, block_out_size, kernel_size, block_depth,
-                                             activation, use_residual, use_bottleneck)
+        self.inceptionblock = _InceptionBlock(
+            channel_in, block_out_size, kernel_size, block_depth, activation,
+            use_residual, use_bottleneck)
         self.gap = paddle.nn.AdaptiveAvgPool1D(1)
         self.flatten = paddle.nn.Flatten()
         self.fc = paddle.nn.Linear(block_out_size, channel_out)
@@ -178,6 +208,7 @@ class _InceptionTime(paddle.nn.Layer):
         x = self.flatten(x)
         x = self.fc(x)
         return x
+
 
 class InceptionTimeClassifier(PaddleBaseClassifier):
     """InceptionTime\[1\] is a time series Classification model introduced in 2019.
@@ -205,29 +236,25 @@ class InceptionTimeClassifier(PaddleBaseClassifier):
         use_residual(bool): If use bottleneck layer or not, Set to True by default.
     """
 
-    def __init__(
-            self,
-            loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-            optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-            optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-            eval_metrics: List[str] = [],
-            callbacks: List[Callback] = [],
-            batch_size: int = 32,
-            max_epochs: int = 100,
-            verbose: int = 1,
-            patience: int = 10,
-            seed: Optional[int] = None,
-
-            activation: str = "ReLU",
-            kernel_size=40,
-            block_out_size=128,
-            block_depth=6,
-            use_bottleneck=True,
-            use_residual=True
-    ):
-        raise_if_not(
-            activation in ACTIVATIONS, f"'{activation}' is not in {ACTIVATIONS}"
-        )
+    def __init__(self,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=100,
+                 verbose: int=1,
+                 patience: int=10,
+                 seed: Optional[int]=None,
+                 activation: str="ReLU",
+                 kernel_size=40,
+                 block_out_size=128,
+                 block_depth=6,
+                 use_bottleneck=True,
+                 use_residual=True):
+        raise_if_not(activation in ACTIVATIONS,
+                     f"'{activation}' is not in {ACTIVATIONS}")
 
         self._activation = getattr(paddle.nn, activation)()
         self._kernel_size = kernel_size
@@ -246,32 +273,43 @@ class InceptionTimeClassifier(PaddleBaseClassifier):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
     def _check_params(self):
         """
         Parameter validity verification.
         """
-        raise_if_not(isinstance(self._kernel_size, int), "kernel_size should be in type of int")
-        raise_if_not(isinstance(self._block_out_size, int), "block_out_size should be in type of int")
-        raise_if_not(isinstance(self._block_depth, int), "block_depth should be in type of int")
-        raise_if_not(isinstance(self.use_bottleneck, bool), "use_bottlneck should be in type of bool")
-        raise_if_not(isinstance(self.use_residual, bool), "use_residual should be in type of bool")
+        raise_if_not(
+            isinstance(self._kernel_size, int),
+            "kernel_size should be in type of int")
+        raise_if_not(
+            isinstance(self._block_out_size, int),
+            "block_out_size should be in type of int")
+        raise_if_not(
+            isinstance(self._block_depth, int),
+            "block_depth should be in type of int")
+        raise_if_not(
+            isinstance(self.use_bottleneck, bool),
+            "use_bottlneck should be in type of bool")
+        raise_if_not(
+            isinstance(self.use_residual, bool),
+            "use_residual should be in type of bool")
 
-        raise_if_not(self._block_depth > 0, "block_depth should be larger than 0 ")
-        raise_if_not(self._kernel_size > 0, "kernel_size should be larger than 0 ")
-        raise_if_not(self._block_out_size % 4 == 0,
-                     "block_out_size should be a multiple of 4, because inception moudle has 4 banches")
+        raise_if_not(self._block_depth > 0,
+                     "block_depth should be larger than 0 ")
+        raise_if_not(self._kernel_size > 0,
+                     "kernel_size should be larger than 0 ")
+        raise_if_not(
+            self._block_out_size % 4 == 0,
+            "block_out_size should be a multiple of 4, because inception moudle has 4 banches"
+        )
         super()._check_params()
 
-    def _update_fit_params(
-            self,
-            train_tsdatasets: List[TSDataset],
-            train_labels: np.ndarray,
-            valid_tsdatasets: List[TSDataset],
-            valid_labels: np.ndarray
-    ) -> Dict[str, Any]:
+    def _update_fit_params(self,
+                           train_tsdatasets: List[TSDataset],
+                           train_labels: np.ndarray,
+                           valid_tsdatasets: List[TSDataset],
+                           valid_labels: np.ndarray) -> Dict[str, Any]:
         """
         Infer parameters by TSdataset automatically.
 
@@ -297,13 +335,7 @@ class InceptionTimeClassifier(PaddleBaseClassifier):
             paddle.nn.Layer.
         """
 
-        return _InceptionTime(
-            self._fit_params["feature_dim"],
-            self._n_classes,
-            self._kernel_size,
-            self._block_out_size,
-            self._block_depth,
-            self._activation,
-            self.use_residual,
-            self.use_bottleneck
-        )
+        return _InceptionTime(self._fit_params["feature_dim"], self._n_classes,
+                              self._kernel_size, self._block_out_size,
+                              self._block_depth, self._activation,
+                              self.use_residual, self.use_bottleneck)

@@ -19,24 +19,21 @@ class PositionalEmbedding(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
-    def __init__(
-        self, 
-        d_model: int, 
-        max_len: int = 5000
-    ):
+
+    def __init__(self, d_model: int, max_len: int=5000):
         super(PositionalEmbedding, self).__init__()
         pe = paddle.zeros(shape=[max_len, d_model], dtype='float32')
         position = paddle.arange(0, max_len, dtype='float32').unsqueeze(1)
-        div_term = (paddle.arange(0, d_model, 2) * -(math.log(10000.0) / d_model)).exp()
+        div_term = (paddle.arange(0, d_model, 2) * -(math.log(10000.0) /
+                                                     d_model)).exp()
         pe[:, 0::2] = paddle.sin(position * div_term)
         pe[:, 1::2] = paddle.cos(position * div_term)
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
     def forward(
-        self, 
-        x: paddle.Tensor,
-    ) -> paddle.Tensor:
+            self,
+            x: paddle.Tensor, ) -> paddle.Tensor:
         """PositionalEmbedding Forward.
         
         Args:
@@ -60,23 +57,25 @@ class TokenEmbedding(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self, 
-        c_in: int, 
-        d_model: int,
-    ):
+            self,
+            c_in: int,
+            d_model: int, ):
         super(TokenEmbedding, self).__init__()
         padding = 1
-        self.tokenConv = paddle.nn.Conv1D(in_channels=c_in, out_channels=d_model,
-                                   kernel_size=3, padding=padding, padding_mode='circular',
-                                   weight_attr=paddle.nn.initializer.KaimingNormal(),
-                                   data_format="NLC",
-                                  )
+        self.tokenConv = paddle.nn.Conv1D(
+            in_channels=c_in,
+            out_channels=d_model,
+            kernel_size=3,
+            padding=padding,
+            padding_mode='circular',
+            weight_attr=paddle.nn.initializer.KaimingNormal(),
+            data_format="NLC", )
 
     def forward(
-        self, 
-        x: paddle.Tensor,
-    )-> paddle.Tensor:
+            self,
+            x: paddle.Tensor, ) -> paddle.Tensor:
         """TokenEmbedding Forward.
         
         Args:
@@ -101,21 +100,16 @@ class DataEmbedding(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
-    def __init__(
-        self, 
-        c_in: int, 
-        d_model: int, 
-        dropout: int = 0.0
-    ):
+
+    def __init__(self, c_in: int, d_model: int, dropout: int=0.0):
         super(DataEmbedding, self).__init__()
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
         self.position_embedding = PositionalEmbedding(d_model=d_model)
         self.dropout = paddle.nn.Dropout(p=dropout)
 
     def forward(
-        self, 
-        x: paddle.Tensor,
-    ) -> paddle.Tensor:
+            self,
+            x: paddle.Tensor, ) -> paddle.Tensor:
         """DataEmbedding Forward.
         
         Args:

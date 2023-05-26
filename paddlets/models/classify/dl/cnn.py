@@ -13,7 +13,7 @@ from paddlets.models.common.callbacks import Callback
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not
 
-       
+
 class _CNNBlock(paddle.nn.Layer):
     """CNN Network structure.
 
@@ -33,29 +33,37 @@ class _CNNBlock(paddle.nn.Layer):
     Attributes:
         _nn(paddle.nn.Sequential): Dynamic graph LayerList.
     """
+
     def __init__(
-        self,
-        in_chunk_dim: int,
-        in_chunk_lens: int,
-        n_classes: int,
-        hidden_config: List[int]=[6, 12],
-        activation: Callable[..., paddle.Tensor]=paddle.nn.Sigmoid,
-        last_activation: Callable[..., paddle.Tensor] = paddle.nn.Softmax,
-        kernel_size=7,
-        avg_pool_size=3,
-        use_bn: bool = False,
-        use_drop: bool = False,
-        dropout_rate: float = 0.5,
-    ):
+            self,
+            in_chunk_dim: int,
+            in_chunk_lens: int,
+            n_classes: int,
+            hidden_config: List[int]=[6, 12],
+            activation: Callable[..., paddle.Tensor]=paddle.nn.Sigmoid,
+            last_activation: Callable[..., paddle.Tensor]=paddle.nn.Softmax,
+            kernel_size=7,
+            avg_pool_size=3,
+            use_bn: bool=False,
+            use_drop: bool=False,
+            dropout_rate: float=0.5, ):
         super(_CNNBlock, self).__init__()
         self._n_classes = n_classes
         self.padding = "valid"
         self.data_format = 'NCL'
         dims, layers = [in_chunk_dim] + hidden_config, []
         for i in range(1, len(dims)):
-            layers.append(paddle.nn.Conv1D(dims[i - 1], dims[i], kernel_size, padding=self.padding, data_format=self.data_format))
+            layers.append(
+                paddle.nn.Conv1D(
+                    dims[i - 1],
+                    dims[i],
+                    kernel_size,
+                    padding=self.padding,
+                    data_format=self.data_format))
             if use_bn:
-                layers.append(paddle.nn.BatchNorm1D(dims[i], data_format=self.data_format))
+                layers.append(
+                    paddle.nn.BatchNorm1D(
+                        dims[i], data_format=self.data_format))
             layers.append(activation())
             layers.append(paddle.nn.AvgPool1D(avg_pool_size))
             if use_drop:
@@ -64,19 +72,13 @@ class _CNNBlock(paddle.nn.Layer):
         raise_if(
             in_chunk_lens < 1,
             "Conv1d output size must be greater than or equal to 1, "
-            "Please choose a smaller `kernel_size` or bigger `in_chunk_len`"
-        )
+            "Please choose a smaller `kernel_size` or bigger `in_chunk_len`")
         layers.append(paddle.nn.Flatten())
-        layers.append(
-            paddle.nn.Linear(in_chunk_lens * dims[-1], n_classes)
-        )
+        layers.append(paddle.nn.Linear(in_chunk_lens * dims[-1], n_classes))
         layers.append(last_activation())
         self._nn = paddle.nn.Sequential(*layers)
 
-    def forward(
-        self, 
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args: 
@@ -89,7 +91,7 @@ class _CNNBlock(paddle.nn.Layer):
         out = paddle.transpose(out, perm=[0, 2, 1])
         out = self._nn(out)
         return out
-        
+
 
 class CNNClassifier(PaddleBaseClassifier):
     """CNNClassifier.
@@ -132,28 +134,27 @@ class CNNClassifier(PaddleBaseClassifier):
         _dropout_rate(float): Dropout regularization parameter.
         _use_bn(bool): Whether to use batch normalization.
     """
-    def __init__(
-        self,
-        loss_fn: Callable[..., paddle.Tensor] = F.cross_entropy,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        activation: Callable[..., paddle.Tensor] = paddle.nn.Sigmoid,
-        last_activation: Callable[..., paddle.Tensor] = paddle.nn.Softmax,
-        use_bn: bool = False,
-        hidden_config: List[int] = [6, 12],
-        kernel_size: int = 7,
-        avg_pool_size=3,
-        dropout_rate: float = 0.2,
-        use_drop: bool = False,
-    ):
+    def __init__(
+            self,
+            loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            activation: Callable[..., paddle.Tensor]=paddle.nn.Sigmoid,
+            last_activation: Callable[..., paddle.Tensor]=paddle.nn.Softmax,
+            use_bn: bool=False,
+            hidden_config: List[int]=[6, 12],
+            kernel_size: int=7,
+            avg_pool_size=3,
+            dropout_rate: float=0.2,
+            use_drop: bool=False, ):
         self._hidden_config = hidden_config
         self._use_bn = use_bn
         self._kernel_size = kernel_size
@@ -165,25 +166,22 @@ class CNNClassifier(PaddleBaseClassifier):
         self._dropout_rate = dropout_rate
 
         super(CNNClassifier, self).__init__(
-            loss_fn=loss_fn, 
+            loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
             optimizer_params=optimizer_params,
-            eval_metrics=eval_metrics, 
-            callbacks=callbacks, 
-            batch_size=batch_size, 
-            max_epochs=max_epochs, 
-            verbose=verbose, 
-            patience=patience, 
-            seed=seed,
-        )
-        
-    def _update_fit_params(
-        self,
-        train_tsdatasets: List[TSDataset],
-        train_labels: np.ndarray,
-        valid_tsdatasets: List[TSDataset],
-        valid_labels: np.ndarray
-    ) -> Dict[str, Any]:
+            eval_metrics=eval_metrics,
+            callbacks=callbacks,
+            batch_size=batch_size,
+            max_epochs=max_epochs,
+            verbose=verbose,
+            patience=patience,
+            seed=seed, )
+
+    def _update_fit_params(self,
+                           train_tsdatasets: List[TSDataset],
+                           train_labels: np.ndarray,
+                           valid_tsdatasets: List[TSDataset],
+                           valid_labels: np.ndarray) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -196,10 +194,10 @@ class CNNClassifier(PaddleBaseClassifier):
         """
         fit_params = {
             "feature_dim": train_tsdatasets[0].get_target().data.shape[1],
-            "input_lens" : train_tsdatasets[0].get_target().data.shape[0]
+            "input_lens": train_tsdatasets[0].get_target().data.shape[0]
         }
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -217,5 +215,4 @@ class CNNClassifier(PaddleBaseClassifier):
             self._avg_pool_size,
             self._use_bn,
             self._use_drop,
-            self._dropout_rate,
-        )
+            self._dropout_rate, )

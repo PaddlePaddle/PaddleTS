@@ -7,12 +7,10 @@ import paddle.nn.functional as F
 import paddle
 
 
-def time_contrastive_loss(
-    anchor: paddle.Tensor,
-    pos: paddle.Tensor,
-    neg: paddle.Tensor,
-    temperature: float
-) -> paddle.Tensor:
+def time_contrastive_loss(anchor: paddle.Tensor,
+                          pos: paddle.Tensor,
+                          neg: paddle.Tensor,
+                          temperature: float) -> paddle.Tensor:
     """The time domain contrastive loss.
 
     Args:
@@ -33,10 +31,8 @@ def time_contrastive_loss(
     return loss
 
 
-def frequency_contrastive_loss(
-    repr1: paddle.Tensor,
-    repr2: paddle.Tensor
-) -> paddle.Tensor:
+def frequency_contrastive_loss(repr1: paddle.Tensor,
+                               repr2: paddle.Tensor) -> paddle.Tensor:
     """The frequency domain contrastive loss.
 
     Args:
@@ -47,20 +43,26 @@ def frequency_contrastive_loss(
         paddle.Tensor: The loss value.
     """
     batch_size, seq_len = repr1.shape[:2]
-    repr = paddle.concat([repr1, repr2], axis=0)      # [2 * batch_size, seq_len, d_model]
-    repr = paddle.transpose(repr, perm=[1, 0, 2])     # [seq_len, 2 * batch_size, d_model]
-    sim = paddle.matmul(repr, repr, transpose_y=True) # [seq_len, 2 * batch_size, 2 * batch_size]
-    logits = paddle.tril(sim, diagonal=-1)[:, :, :-1] # [seq_len, 2 * batch_size, 2 * batch_size - 1]
-    logits += paddle.triu(sim, diagonal=1)[:, :, 1:] 
+    repr = paddle.concat(
+        [repr1, repr2], axis=0)  # [2 * batch_size, seq_len, d_model]
+    repr = paddle.transpose(
+        repr, perm=[1, 0, 2])  # [seq_len, 2 * batch_size, d_model]
+    sim = paddle.matmul(
+        repr, repr,
+        transpose_y=True)  # [seq_len, 2 * batch_size, 2 * batch_size]
+    logits = paddle.tril(
+        sim, diagonal=-1)[:, :, :
+                          -1]  # [seq_len, 2 * batch_size, 2 * batch_size - 1]
+    logits += paddle.triu(sim, diagonal=1)[:, :, 1:]
     logits = -1. * F.log_softmax(logits, axis=-1)
-    loss = paddle.mean(logits[:, :batch_size, batch_size - 1: 2 * batch_size - 1])
-    loss += paddle.mean(logits[:, batch_size: 2 * batch_size, :batch_size])
+    loss = paddle.mean(logits[:, :batch_size, batch_size - 1:2 * batch_size -
+                              1])
+    loss += paddle.mean(logits[:, batch_size:2 * batch_size, :batch_size])
     return loss / 2.
 
 
 def convert_coefficient(
-    tensor: paddle.Tensor
-) -> Tuple[paddle.Tensor, paddle.Tensor]:
+        tensor: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
     """Compute amplitude and phase in frequency domain.
 
     Args:
@@ -71,7 +73,7 @@ def convert_coefficient(
         paddle.Tensor: The phase.
     """
     amp = paddle.sqrt(
-        paddle.square(paddle.real(tensor)) + paddle.square(paddle.imag(tensor))
-    )
+        paddle.square(paddle.real(tensor)) + paddle.square(
+            paddle.imag(tensor)))
     phase = paddle.atan2(paddle.imag(tensor), paddle.real(tensor))
     return amp, phase

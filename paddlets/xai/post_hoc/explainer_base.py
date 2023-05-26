@@ -17,24 +17,24 @@ class BaseExplainer(ABC):
         Initialization
         """
         pass
-    
+
     @abstractmethod
     def explain(self) -> np.ndarray:
         """
         Calculate the explanatory value of the test sample.
         """
         pass
-        
+
     @abstractmethod
     def plot(self) -> 'plt':
         """
         Display the explanatory value.
         """
         pass
-    
-    def _out_vs_in_plot(self, 
+
+    def _out_vs_in_plot(self,
                         attribution: np.ndarray,
-                        out_cols: List[int], 
+                        out_cols: List[int],
                         in_cols: List[int],
                         unique_cols: List[str],
                         **kwargs) -> None:
@@ -66,18 +66,24 @@ class BaseExplainer(ABC):
         if 'figsize' in kwargs:
             del kwargs['figsize']
         plt.figure(figsize=figsize)
-        g = sns.heatmap(values_df, square=True, annot=True, fmt='0.2f', linewidths=1, **kwargs)
+        g = sns.heatmap(
+            values_df,
+            square=True,
+            annot=True,
+            fmt='0.2f',
+            linewidths=1,
+            **kwargs)
         plt.xlabel('in_chunk_len')
         plt.ylabel('out_chunk_len')
         plt.title('OI')
         plt.show()
-        
-    def _out_vs_feature_plot(self, 
-                              attribution: np.ndarray,
-                              out_cols: List[int], 
-                              in_cols: List[int],
-                              unique_cols: List[str],
-                              **kwargs) -> None:
+
+    def _out_vs_feature_plot(self,
+                             attribution: np.ndarray,
+                             out_cols: List[int],
+                             in_cols: List[int],
+                             unique_cols: List[str],
+                             **kwargs) -> None:
         """
         Display the attribution of each feature for each output time step. Such as:
         
@@ -100,24 +106,31 @@ class BaseExplainer(ABC):
             None
         """
         values_np = attribution.sum(axis=1)
-        values_df = pd.DataFrame(values_np, index=out_cols, columns=unique_cols).transpose()
-        
+        values_df = pd.DataFrame(
+            values_np, index=out_cols, columns=unique_cols).transpose()
+
         figsize = kwargs.get('figsize', (30, 10))
         if 'figsize' in kwargs:
             del kwargs['figsize']
         plt.figure(figsize=figsize)
-        g = sns.heatmap(values_df, square=True, annot=True, fmt='0.2f', linewidths=1, **kwargs)
+        g = sns.heatmap(
+            values_df,
+            square=True,
+            annot=True,
+            fmt='0.2f',
+            linewidths=1,
+            **kwargs)
         plt.xlabel('out_chunk_len')
         plt.ylabel('feature')
         plt.title('OV')
         plt.show()
-        
-    def _in_vs_feature_plot(self, 
-                             attribution: np.ndarray,
-                             out_cols: List[int], 
-                             in_cols: List[int],
-                             unique_cols: List[str],
-                             **kwargs) -> None:
+
+    def _in_vs_feature_plot(self,
+                            attribution: np.ndarray,
+                            out_cols: List[int],
+                            in_cols: List[int],
+                            unique_cols: List[str],
+                            **kwargs) -> None:
         """
         Display the attribution of each input time step for each feature. Such as:
         
@@ -140,21 +153,28 @@ class BaseExplainer(ABC):
             None
         """
         values_np = attribution.sum(axis=0)
-        values_df = pd.DataFrame(values_np, index=in_cols, columns=unique_cols).transpose()
-        
+        values_df = pd.DataFrame(
+            values_np, index=in_cols, columns=unique_cols).transpose()
+
         figsize = kwargs.get('figsize', (30, 10))
         if 'figsize' in kwargs:
             del kwargs['figsize']
         plt.figure(figsize=figsize)
-        g = sns.heatmap(values_df, square=True, annot=True, fmt='0.2f', linewidths=1, **kwargs)
+        g = sns.heatmap(
+            values_df,
+            square=True,
+            annot=True,
+            fmt='0.2f',
+            linewidths=1,
+            **kwargs)
         plt.xlabel('in_chunk_len')
         plt.ylabel('feature')
         plt.title('IV')
         plt.show()
-        
-    def _in_plot(self, 
+
+    def _in_plot(self,
                  attribution: np.ndarray,
-                 out_cols: List[int], 
+                 out_cols: List[int],
                  in_cols: List[int],
                  unique_cols: List[str],
                  **kwargs) -> None:
@@ -176,20 +196,21 @@ class BaseExplainer(ABC):
             None
         """
         values_np = abs(attribution.sum(axis=0).sum(axis=1))
-        
+
         kwargs['show'] = False
-        kwargs['plot_type'] = 'bar' if not 'plot_type' in kwargs else kwargs['plot_type']
+        kwargs['plot_type'] = 'bar' if not 'plot_type' in kwargs else kwargs[
+            'plot_type']
         shap.summary_plot(values_np.reshape(1, -1), in_cols, **kwargs)
         plt.ylabel('in_chunk_len')
         plt.title('I')
         plt.show()
-        
-    def _feature_plot(self, 
-                       attribution: np.ndarray,
-                       out_cols: List[int], 
-                       in_cols: List[int],
-                       unique_cols: List[str],
-                       **kwargs) -> None:
+
+    def _feature_plot(self,
+                      attribution: np.ndarray,
+                      out_cols: List[int],
+                      in_cols: List[int],
+                      unique_cols: List[str],
+                      **kwargs) -> None:
         """
         Display the attribution of each feature. Such as:
         
@@ -210,7 +231,8 @@ class BaseExplainer(ABC):
         values_np = attribution.sum(axis=0).sum(axis=0)
 
         kwargs['show'] = False
-        kwargs['plot_type'] = 'bar' if not 'plot_type' in kwargs else kwargs['plot_type']
+        kwargs['plot_type'] = 'bar' if not 'plot_type' in kwargs else kwargs[
+            'plot_type']
         shap.summary_plot(values_np.reshape(1, -1), unique_cols, **kwargs)
         plt.title('V')
         plt.show()

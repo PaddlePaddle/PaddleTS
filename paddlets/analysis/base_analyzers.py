@@ -21,13 +21,12 @@ class Summary(Analyzer):
         kwargs: Argument positions left for sub-classes.
 
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
-    def analyze(
-        self, 
-        X: Union[pd.Series, pd.DataFrame]
-    ) -> Union[pd.Series, pd.DataFrame]:
+
+    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> Union[
+            pd.Series, pd.DataFrame]:
         """
         Calculate Statistical indicators.
 
@@ -45,10 +44,11 @@ class Summary(Analyzer):
         #TODO Add more Statistical indicators.
         # Add missing percentage indicator.
         if isinstance(X, pd.DataFrame):
-            missing = (X.isna().sum()/X.shape[0]).rename('missing').to_frame().T
+            missing = (X.isna().sum() /
+                       X.shape[0]).rename('missing').to_frame().T
             return pd.concat([missing, des])
         else:
-            des['missing'] = X.isna().sum()/X.shape[0]
+            des['missing'] = X.isna().sum() / X.shape[0]
             return des
 
     @classmethod
@@ -63,7 +63,8 @@ class Summary(Analyzer):
         return {
             "name": "summary",
             "report_heading": "SUMMARY",
-            "report_description": "Specified statistical indicators, currently support: numbers, mean, \
+            "report_description":
+            "Specified statistical indicators, currently support: numbers, mean, \
                 variance, minimum, 25% median, 50% median, 75% median, maximum value, missing percentage, stationarity p value"
         }
 
@@ -80,13 +81,12 @@ class Max(Analyzer):
         kwargs: Argument positions left for sub-classes.
 
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
-    def analyze(
-        self, 
-        X: Union[pd.Series, pd.DataFrame]
-    ) -> Union[Any, pd.Series]:
+
+    def analyze(self,
+                X: Union[pd.Series, pd.DataFrame]) -> Union[Any, pd.Series]:
         """
         Compute the maximum values of given columns
 
@@ -103,7 +103,6 @@ class Max(Analyzer):
         res = X.max(axis=0, skipna=True)
         return res
 
-    
     @classmethod
     def get_properties(cls) -> Dict:
         """

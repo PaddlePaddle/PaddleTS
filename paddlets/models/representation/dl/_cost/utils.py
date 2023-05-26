@@ -11,9 +11,7 @@ COVS = ["observed_cov_numeric", "known_cov_numeric"]
 PAST_TARGET = "past_target"
 
 
-def create_cost_inputs(
-    X: Dict[str, paddle.Tensor]
-) -> paddle.Tensor:
+def create_cost_inputs(X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
     """`TSDataset` stores time series in the (batch_size, seq_len, target_dim) format.
     Convert it into the shape of (batch_size, seq_len, target_dim + cov_dim)
     as the input of the model.
@@ -24,16 +22,12 @@ def create_cost_inputs(
     Returns:
          paddle.Tensor: The inputs of the model.
     """
-    feats = [
-        X[col] for col in [PAST_TARGET] + COVS if col in X
-    ]
+    feats = [X[col] for col in [PAST_TARGET] + COVS if col in X]
     feats = paddle.concat(feats, axis=-1)
     return feats
 
 
-def create_contrastive_inputs(
-    tensor: paddle.Tensor,
-) -> paddle.Tensor:
+def create_contrastive_inputs(tensor: paddle.Tensor, ) -> paddle.Tensor:
     """CoST uses data augmentations as interventions on the error and learn invariant representations 
     of trend and season via constrastive learning. Since it is impossible to generate all possible variations of errors, 
     CoST selects three typical augmentations: scale, shift and jitter, which can simulate a large and diverse set of errors, 
@@ -54,9 +48,7 @@ def create_contrastive_inputs(
     return tensor
 
 
-def centerize_effective_series(
-    tensor: paddle.Tensor
-) -> paddle.Tensor:
+def centerize_effective_series(tensor: paddle.Tensor) -> paddle.Tensor:
     """In order to ensure that the sampling falls in the effective area as much as possible,    
     the series needs to be centerized. i.e. [nan, nan, nan, 1, 1, nan] -> [nan, nan, 1, 1, nan, nan].
     
@@ -88,6 +80,7 @@ def custom_collate_fn(samples: list):
     Returns:
         List[Dict[str, np.ndarray]]: The reorganized sample list.
     """
+
     def _padding_series_with_equal_length(arr, target_len, axis):
         """padding.
         """
@@ -96,7 +89,8 @@ def custom_collate_fn(samples: list):
             return arr
         npad = [(0, 0)] * arr.ndim
         npad[axis] = (0, pad_size)
-        return np.pad(arr, pad_width=npad, mode="constant", constant_values=np.nan)
+        return np.pad(
+            arr, pad_width=npad, mode="constant", constant_values=np.nan)
 
     from collections import defaultdict
     COLS = [col for col in [PAST_TARGET] + COVS if col in samples[0]]
@@ -115,8 +109,7 @@ def custom_collate_fn(samples: list):
             target_length = arrs[0].shape[0]
             for index in range(len(arrs)):
                 arrs[index] = _padding_series_with_equal_length(
-                    arrs[index], target_length, axis=0
-                )
+                    arrs[index], target_length, axis=0)
         else:
             arrs = [cache]
         chains.append(arrs)

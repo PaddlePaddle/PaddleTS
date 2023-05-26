@@ -5,10 +5,7 @@ import numpy as np
 import paddle
 
 
-def generate_true_mask(
-    batch_size: int, 
-    seq_len: int
-) -> paddle.Tensor:
+def generate_true_mask(batch_size: int, seq_len: int) -> paddle.Tensor:
     """Generate masks that are all `true`
 
     Args:
@@ -22,10 +19,7 @@ def generate_true_mask(
     return paddle.to_tensor(mask, dtype="bool")
 
 
-def generate_false_mask(
-    batch_size: int, 
-    seq_len: int
-) -> paddle.Tensor:
+def generate_false_mask(batch_size: int, seq_len: int) -> paddle.Tensor:
     """Generate masks that are all `false`
 
     Args:
@@ -39,10 +33,7 @@ def generate_false_mask(
     return paddle.to_tensor(mask, dtype="bool")
 
 
-def generate_last_mask(
-    batch_size: int, 
-    seq_len: int
-) -> paddle.Tensor:
+def generate_last_mask(batch_size: int, seq_len: int) -> paddle.Tensor:
     """Gernerate all `true` masks except the last time step.
 
     Args:
@@ -57,11 +48,8 @@ def generate_last_mask(
     return mask
 
 
-def generate_binomial_mask(
-    batch_size: int,
-    seq_len: int,
-    p: float = 0.5
-) -> paddle.Tensor:
+def generate_binomial_mask(batch_size: int, seq_len: int,
+                           p: float=0.5) -> paddle.Tensor:
     """Mask generation by Bernoulli distribution.
 
     Args:
@@ -76,12 +64,10 @@ def generate_binomial_mask(
     return paddle.to_tensor(mask, dtype="bool")
 
 
-def generate_continuous_mask(
-    batch_size: int,
-    seq_len: int,
-    mask_num: int = 5,
-    mask_ratio: float = 0.1
-) -> paddle.Tensor:
+def generate_continuous_mask(batch_size: int,
+                             seq_len: int,
+                             mask_num: int=5,
+                             mask_ratio: float=0.1) -> paddle.Tensor:
     """Generate continuous mask.
 
     Args:
@@ -99,15 +85,12 @@ def generate_continuous_mask(
     for row in range(batch_size):
         for _ in range(mask_num):
             start = np.random.randint(seq_len - mask_len + 1)
-            mask[row, start: start + mask_len] = False
+            mask[row, start:start + mask_len] = False
     return mask
 
 
-def paddle_mask_fill(
-    tensor: paddle.Tensor,
-    mask: paddle.Tensor,
-    value: float
-) -> paddle.Tensor:
+def paddle_mask_fill(tensor: paddle.Tensor, mask: paddle.Tensor,
+                     value: float) -> paddle.Tensor:
     """Fills elements of tensor with value where mask is True.
 
     Args:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from typing import List, Dict, Any, Callable, Optional 
+from typing import List, Dict, Any, Callable, Optional
 
 from paddle.optimizer import Optimizer
 import paddle.nn.functional as F
@@ -43,21 +43,21 @@ class _LSTNetModule(paddle.nn.Layer):
         _output_activation(str|None): The last activation to be used for output.
             Accepts either None (default no activation), sigmoid or tanh.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        skip_size: int,
-        channels: int,
-        kernel_size: int,
-        rnn_cell_type: str,
-        rnn_num_cells: int,
-        skip_rnn_cell_type: str,
-        skip_rnn_num_cells: int,
-        dropout_rate: float,
-        output_activation: Optional[str] = None,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            skip_size: int,
+            channels: int,
+            kernel_size: int,
+            rnn_cell_type: str,
+            rnn_num_cells: int,
+            skip_rnn_cell_type: str,
+            skip_rnn_num_cells: int,
+            dropout_rate: float,
+            output_activation: Optional[str]=None, ):
         super(_LSTNetModule, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._channels = channels
@@ -65,47 +65,43 @@ class _LSTNetModule(paddle.nn.Layer):
         self._skip_rnn_num_cells = skip_rnn_num_cells
         self._skip_size = skip_size
         self._output_activation = output_activation
+        raise_if_not(channels > 0, "`channels` must be a positive integer")
         raise_if_not(
-            channels > 0, 
-            "`channels` must be a positive integer"
-        )
+            rnn_cell_type in ("GRU", "LSTM"),
+            "`rnn_cell_type` must be either 'GRU' or 'LSTM'")
         raise_if_not(
-            rnn_cell_type in ("GRU", "LSTM"), 
-            "`rnn_cell_type` must be either 'GRU' or 'LSTM'"
-        )
-        raise_if_not(
-            skip_rnn_cell_type in ("GRU", "LSTM"), 
-            "`skip_rnn_cell_type` must be either 'GRU' or 'LSTM'"
-        )
+            skip_rnn_cell_type in ("GRU", "LSTM"),
+            "`skip_rnn_cell_type` must be either 'GRU' or 'LSTM'")
         conv_out = in_chunk_len - kernel_size
         self._conv_skip = conv_out // skip_size
         raise_if_not(
-            self._conv_skip > 0, 
+            self._conv_skip > 0,
             "conv1d output size must be greater than or equal to `skip_size`\n" \
             "Choose a smaller `kernel_size` or bigger `in_chunk_len`"
         )
         if output_activation is not None:
             raise_if_not(
-                output_activation in ("sigmoid", "tanh"), 
-                "`output_activation` must be either 'sigmoid' or 'tanh'"
-            )
+                output_activation in ("sigmoid", "tanh"),
+                "`output_activation` must be either 'sigmoid' or 'tanh'")
 
-        self._cnn = paddle.nn.Conv1D(target_dim, channels, kernel_size, data_format="NLC")
+        self._cnn = paddle.nn.Conv1D(
+            target_dim, channels, kernel_size, data_format="NLC")
         self._dropout = paddle.nn.Dropout(dropout_rate)
 
         rnn = {"LSTM": paddle.nn.LSTM, "GRU": paddle.nn.GRU}[rnn_cell_type]
         self._rnn = rnn(channels, rnn_num_cells)
 
-        skip_rnn = {"LSTM": paddle.nn.LSTM, "GRU": paddle.nn.GRU}[skip_rnn_cell_type]
+        skip_rnn = {
+            "LSTM": paddle.nn.LSTM,
+            "GRU": paddle.nn.GRU
+        }[skip_rnn_cell_type]
         self._skip_rnn = skip_rnn(channels, skip_rnn_num_cells)
 
-        self._fc = paddle.nn.Linear(rnn_num_cells + skip_size * skip_rnn_num_cells, target_dim)
+        self._fc = paddle.nn.Linear(
+            rnn_num_cells + skip_size * skip_rnn_num_cells, target_dim)
         self._ar_fc = paddle.nn.Linear(in_chunk_len, out_chunk_len)
 
-    def forward(
-        self,
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -115,47 +111,44 @@ class _LSTNetModule(paddle.nn.Layer):
             paddle.Tensor: Output of model.
         """
         # CNN
-        cnn_out = self._cnn(X[PAST_TARGET]) # [B, T, C]
-        cnn_out = F.relu(cnn_out) 
+        cnn_out = self._cnn(X[PAST_TARGET])  # [B, T, C]
+        cnn_out = F.relu(cnn_out)
         cnn_out = self._dropout(cnn_out)
 
         # RNN
-        _, rnn_out = self._rnn(cnn_out)                     
-        rnn_out = (
-            rnn_out[0] if isinstance(rnn_out, tuple) else rnn_out
-        )
-        rnn_out = self._dropout(rnn_out)          # [1, B, C] 
-        rnn_out = paddle.squeeze(rnn_out, axis=0) # [B, C]
+        _, rnn_out = self._rnn(cnn_out)
+        rnn_out = (rnn_out[0] if isinstance(rnn_out, tuple) else rnn_out)
+        rnn_out = self._dropout(rnn_out)  # [1, B, C] 
+        rnn_out = paddle.squeeze(rnn_out, axis=0)  # [B, C]
 
         # Skip-RNN
-        skip_out = cnn_out[:, -self._conv_skip * self._skip_size:, :] # [B, T, C]
-        skip_out = paddle.reshape(                                    # [B, conv_out // skip, skip, C]
-            skip_out, 
-            shape=[-1, self._conv_skip, self._skip_size, self._channels]
-        )                                                                
-        skip_out = paddle.transpose(skip_out, perm=[0, 2, 1, 3])                         # [B, skip, conv_out // skip, C]
-        skip_out = paddle.reshape(skip_out, shape=[-1, self._conv_skip, self._channels]) # [B, conv_out // skip, C]
-        _, skip_out = self._skip_rnn(skip_out)                                           # [1, B, C]
-        skip_out = (
-            skip_out[0] if isinstance(skip_out, tuple) else skip_out
-        )
-        skip_out = paddle.reshape(skip_out, shape=[-1, self._skip_size * self._skip_rnn_num_cells])
+        skip_out = cnn_out[:, -self._conv_skip *
+                           self._skip_size:, :]  # [B, T, C]
+        skip_out = paddle.reshape(  # [B, conv_out // skip, skip, C]
+            skip_out,
+            shape=[-1, self._conv_skip, self._skip_size, self._channels])
+        skip_out = paddle.transpose(
+            skip_out, perm=[0, 2, 1, 3])  # [B, skip, conv_out // skip, C]
+        skip_out = paddle.reshape(
+            skip_out, shape=[-1, self._conv_skip, self._channels
+                             ])  # [B, conv_out // skip, C]
+        _, skip_out = self._skip_rnn(skip_out)  # [1, B, C]
+        skip_out = (skip_out[0] if isinstance(skip_out, tuple) else skip_out)
+        skip_out = paddle.reshape(
+            skip_out, shape=[-1, self._skip_size * self._skip_rnn_num_cells])
         skip_out = self._dropout(skip_out)
-        res = self._fc(
-            paddle.concat([rnn_out, skip_out], axis=1)
-        )
+        res = self._fc(paddle.concat([rnn_out, skip_out], axis=1))
         res = paddle.unsqueeze(res, axis=1)
 
         # Highway
         ar_in = X[PAST_TARGET][:, -self._in_chunk_len:, :]
         ar_in = paddle.transpose(ar_in, perm=[0, 2, 1])
-        ar_out = self._ar_fc(ar_in)                       # [B, C, T]
-        ar_out = paddle.transpose(ar_out, perm=[0, 2, 1]) # [B, T, C]
+        ar_out = self._ar_fc(ar_in)  # [B, C, T]
+        ar_out = paddle.transpose(ar_out, perm=[0, 2, 1])  # [B, T, C]
         out = ar_out + res
         if self._output_activation:
-            out = (
-                F.sigmoid(out) if self._output_activation == "sigmoid" else F.tanh(out)
-            )
+            out = (F.sigmoid(out)
+                   if self._output_activation == "sigmoid" else F.tanh(out))
         return out
 
 
@@ -224,33 +217,31 @@ class LSTNetRegressor(PaddleBaseModelImpl):
         _output_activation(str|None): The last activation to be used for output.
             Accepts either None (default no activation), sigmoid or tanh.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        skip_size: int = 1,
-        channels: int = 1,
-        kernel_size: int = 3,
-        rnn_cell_type: str = "GRU",
-        rnn_num_cells: int = 10,
-        skip_rnn_cell_type: str = "GRU",
-        skip_rnn_num_cells: int = 10,
-        dropout_rate: float = 0.2,
-        output_activation: Optional[str] = None
-    ):
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=100,
+                 verbose: int=1,
+                 patience: int=10,
+                 seed: Optional[int]=None,
+                 skip_size: int=1,
+                 channels: int=1,
+                 kernel_size: int=3,
+                 rnn_cell_type: str="GRU",
+                 rnn_num_cells: int=10,
+                 skip_rnn_cell_type: str="GRU",
+                 skip_rnn_num_cells: int=10,
+                 dropout_rate: float=0.2,
+                 output_activation: Optional[str]=None):
         self._skip_size = skip_size
         self._channels = channels
         self._kernel_size = kernel_size
@@ -274,13 +265,9 @@ class LSTNetRegressor(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows:
 
@@ -310,12 +297,11 @@ class LSTNetRegressor(PaddleBaseModelImpl):
                 f"but received {column}: {dtype}."
             )
         super(LSTNetRegressor, self)._check_tsdataset(tsdataset)
-        
+
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -326,11 +312,9 @@ class LSTNetRegressor(PaddleBaseModelImpl):
             Dict[str, Any]: model parameters.
         """
         target_dim = train_tsdataset[0].get_target().data.shape[1]
-        fit_params = {
-            "target_dim": target_dim
-        }
+        fit_params = {"target_dim": target_dim}
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -349,5 +333,4 @@ class LSTNetRegressor(PaddleBaseModelImpl):
             skip_rnn_cell_type=self._skip_rnn_cell_type,
             skip_rnn_num_cells=self._skip_rnn_num_cells,
             dropout_rate=self._dropout_rate,
-            output_activation=self._output_activation
-        )
+            output_activation=self._output_activation)

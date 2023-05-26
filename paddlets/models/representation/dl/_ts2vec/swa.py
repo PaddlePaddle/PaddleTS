@@ -18,19 +18,22 @@ class AveragedModel(paddle.nn.Layer):
         _network(paddle.nn.Layer): The network to use with SWA.
         _avg_fn(Callable[..., paddle.Tensor]): The averaging function used to update parameters.
     """
+
     def __init__(
-        self, 
-        network: paddle.nn.Layer,
-        avg_fn: Optional[Callable[..., paddle.Tensor]] = None,
-    ):
+            self,
+            network: paddle.nn.Layer,
+            avg_fn: Optional[Callable[..., paddle.Tensor]]=None, ):
         super(AveragedModel, self).__init__()
         self._network = deepcopy(network)
         self.register_buffer("_num_averaged", paddle.to_tensor(0))
 
         if avg_fn is None:
-            def default_avg_fn(averaged_model_params, model_params, num_averaged):
+
+            def default_avg_fn(averaged_model_params, model_params,
+                               num_averaged):
                 return averaged_model_params + \
                     (model_params - averaged_model_params) / (num_averaged + 1)
+
         self._avg_fn = default_avg_fn
 
     def forward(self, *args, **kwargs) -> paddle.Tensor:
@@ -54,6 +57,6 @@ class AveragedModel(paddle.nn.Layer):
                 p_swa.detach().set_value(p_model.detach())
             else:
                 p_swa.detach().set_value(
-                    self._avg_fn(p_swa.detach(), p_model.detach(), self._num_averaged)
-                )
+                    self._avg_fn(p_swa.detach(),
+                                 p_model.detach(), self._num_averaged))
         self._num_averaged += 1

@@ -36,39 +36,34 @@ class _TemporalBlock(paddle.nn.Layer):
         _dropout(paddle.nn.Layer): Probability of setting units to zero.
         _padding(int): The size of zeros to be padded.
     """
+
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        kernel_size: int,
-        dilation: int,
-        dropout_rate: float,
-    ):
+            self,
+            in_channels: int,
+            out_channels: int,
+            kernel_size: int,
+            dilation: int,
+            dropout_rate: float, ):
         super(_TemporalBlock, self).__init__()
         self._conv1 = paddle.nn.Conv1D(
-            in_channels=in_channels, 
+            in_channels=in_channels,
             out_channels=out_channels,
             kernel_size=kernel_size,
-            dilation=dilation
-        )
+            dilation=dilation)
         self._conv2 = paddle.nn.Conv1D(
-            in_channels=out_channels, 
+            in_channels=out_channels,
             out_channels=out_channels,
             kernel_size=kernel_size,
-            dilation=dilation
-        )
+            dilation=dilation)
         self._downsample = paddle.nn.Conv1D(
-            in_channels, out_channels, 1
-        ) if in_channels != out_channels else None
+            in_channels, out_channels,
+            1) if in_channels != out_channels else None
         self._conv1 = paddle.nn.utils.weight_norm(self._conv1)
         self._conv2 = paddle.nn.utils.weight_norm(self._conv2)
         self._dropout = paddle.nn.Dropout(dropout_rate)
         self._padding = dilation * (kernel_size - 1)
-        
-    def forward(
-        self,
-        X: paddle.Tensor
-    ) -> paddle.Tensor:
+
+    def forward(self, X: paddle.Tensor) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -79,10 +74,8 @@ class _TemporalBlock(paddle.nn.Layer):
         """
         # In order to deal with the dimension mismatch during residual addition, 
         # use upsampling or downsampling to ensure that the input channel and output channel dimensions match.
-        residual = (
-            self._downsample(X) if self._downsample else X
-        )
-        
+        residual = (self._downsample(X) if self._downsample else X)
+
         # TCN is based on two principles:
         # 1> The convolution network produces an output of the same length as the input (by padding the input).
         # 2> No future information leakage.
@@ -112,15 +105,15 @@ class _TCNModule(paddle.nn.Layer):
     Attrubutes:
         _temporal_layers(paddle.nn.LayerList): Dynamic graph LayerList.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        hidden_config: List[int],
-        kernel_size: int,
-        dropout_rate: float,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            hidden_config: List[int],
+            kernel_size: int,
+            dropout_rate: float, ):
         super(_TCNModule, self).__init__()
         self._out_chunk_len = out_chunk_len
         raise_if_not(
@@ -131,45 +124,40 @@ class _TCNModule(paddle.nn.Layer):
         raise_if_not(
             out_chunk_len <= in_chunk_len,
             f"The `out_chunk_len` must be <= `in_chunk_len`, "
-            f"got out_chunk_len:{out_chunk_len} > in_chunk_len:{in_chunk_len}."
-        )
+            f"got out_chunk_len:{out_chunk_len} > in_chunk_len:{in_chunk_len}.")
 
         if hidden_config is None:
             # If hidden_config is not passed, compute number of layers needed for full history coverage.
             num_layers = np.ceil(
-                np.log2((in_chunk_len - 1) / (kernel_size - 1) / 2 + 1)
-            )
+                np.log2((in_chunk_len - 1) / (kernel_size - 1) / 2 + 1))
             hidden_config = [target_dim] * (int(num_layers) - 1)
 
         else:
             # If hidden_config is passed, compute the receptive field.
             num_layers = len(hidden_config) + 1
-            receptive_filed = 1 + 2 * (kernel_size - 1) * (2 ** num_layers - 1)
+            receptive_filed = 1 + 2 * (kernel_size - 1) * (2**num_layers - 1)
             if receptive_filed > in_chunk_len:
-                logger.warning("The receptive field of TCN exceeds the in_chunk_len.")
+                logger.warning(
+                    "The receptive field of TCN exceeds the in_chunk_len.")
 
         raise_if_not(
             np.any(np.array(hidden_config) > 0),
-            f"hidden_config must be > 0, got {hidden_config}."
-        )
-        
-        channels, temporal_layers = [target_dim] + hidden_config + [target_dim], []
+            f"hidden_config must be > 0, got {hidden_config}.")
+
+        channels, temporal_layers = [target_dim
+                                     ] + hidden_config + [target_dim], []
         for k, (in_channel, out_channel) in \
             enumerate(zip(channels[:-1], channels[1:])):
             temporal_layer = _TemporalBlock(
-                in_channels=in_channel, 
-                out_channels=out_channel, 
+                in_channels=in_channel,
+                out_channels=out_channel,
                 kernel_size=kernel_size,
-                dilation=(2 ** k),
-                dropout_rate=dropout_rate,
-            )
+                dilation=(2**k),
+                dropout_rate=dropout_rate, )
             temporal_layers.append(temporal_layer)
         self._temporal_layers = paddle.nn.Sequential(*temporal_layers)
 
-    def forward(
-        self,
-        X: Dict[str, paddle.Tensor]
-    ) -> paddle.Tensor:
+    def forward(self, X: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """Forward.
 
         Args:
@@ -237,27 +225,26 @@ class TCNRegressor(PaddleBaseModelImpl):
         _kernel_size(int): The filter size.
         _dropout_rate(float): Probability of setting units to zero.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-3),
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 32,
-        max_epochs: int = 100,
-        verbose: int = 1,
-        patience: int = 10,
-        seed: Optional[int] = None,
 
-        hidden_config: List[int] = None,
-        kernel_size: int = 3,
-        dropout_rate: float = 0.2,
-    ):
+    def __init__(
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,
+            max_epochs: int=100,
+            verbose: int=1,
+            patience: int=10,
+            seed: Optional[int]=None,
+            hidden_config: List[int]=None,
+            kernel_size: int=3,
+            dropout_rate: float=0.2, ):
         self._hidden_config = hidden_config
         self._kernel_size = kernel_size
         self._dropout_rate = dropout_rate
@@ -275,13 +262,9 @@ class TCNRegressor(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
-    
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-    ):
+            seed=seed, )
+
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows:
 
@@ -311,12 +294,11 @@ class TCNRegressor(PaddleBaseModelImpl):
                 f"but received {column}: {dtype}."
             )
         super(TCNRegressor, self)._check_tsdataset(tsdataset)
-        
+
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """Infer parameters by TSdataset automatically.
 
         Args:
@@ -327,11 +309,9 @@ class TCNRegressor(PaddleBaseModelImpl):
             Dict[str, Any]: model parameters
         """
         target_dim = train_tsdataset[0].get_target().data.shape[1]
-        fit_params = {
-            "target_dim": target_dim
-        }
+        fit_params = {"target_dim": target_dim}
         return fit_params
-        
+
     def _init_network(self) -> paddle.nn.Layer:
         """Setup the network.
 
@@ -344,5 +324,4 @@ class TCNRegressor(PaddleBaseModelImpl):
             target_dim=self._fit_params["target_dim"],
             hidden_config=self._hidden_config,
             kernel_size=self._kernel_size,
-            dropout_rate=self._dropout_rate,
-        )
+            dropout_rate=self._dropout_rate, )

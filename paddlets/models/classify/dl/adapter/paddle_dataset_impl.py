@@ -21,11 +21,7 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         labels:(np.ndarray) : The data class labels
     """
 
-    def __init__(
-            self,
-            rawdatasets: List[TSDataset],
-            labels: np.ndarray
-    ):
+    def __init__(self, rawdatasets: List[TSDataset], labels: np.ndarray):
         super(ClassifyPaddleDatasetImpl, self).__init__()
 
         self._rawdatasets = rawdatasets
@@ -33,10 +29,16 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         self.classes_ = []  # unique labels
         self.n_classes_ = 0  # number of unique labels
 
-        raise_if(self._rawdatasets is None or len(self._rawdatasets) == 0, "TSDataset must be specified.")
-        raise_if(0 < len(self._labels) != len(self._rawdatasets), "TSDatasets length must be equal to labels length.")
-        raise_if(self._rawdatasets[0].get_target() is None, "dataset target Timeseries must not be None.")
-        raise_if(len(self._rawdatasets[0].get_target().time_index) < 1, "TSDataset target Timeseries length must >= 1.")
+        raise_if(
+            self._rawdatasets is None or len(self._rawdatasets) == 0,
+            "TSDataset must be specified.")
+        raise_if(0 < len(self._labels) != len(self._rawdatasets),
+                 "TSDatasets length must be equal to labels length.")
+        raise_if(self._rawdatasets[0].get_target() is None,
+                 "dataset target Timeseries must not be None.")
+        raise_if(
+            len(self._rawdatasets[0].get_target().time_index) < 1,
+            "TSDataset target Timeseries length must >= 1.")
 
         self._samples = self._build_samples()
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-
 """
 This implementation is based on the article `N-HiTS: Neural Hierarchical Interpolation for Time Series Forecasting <https://arxiv.org/abs/2201.12886>`_ .
 """
@@ -21,7 +20,6 @@ from paddlets.logger import raise_if, raise_if_not, Logger
 
 logger = Logger(__name__)
 
-
 ACTIVATIONS = [
     "ReLU",
     "PReLU",
@@ -33,6 +31,7 @@ ACTIVATIONS = [
     "Sigmoid",
     "GELU",
 ]
+
 
 class _Block(nn.Layer):
     """
@@ -55,48 +54,50 @@ class _Block(nn.Layer):
         activation: The activation function of encoder/decoder intermediate layer.
         MaxPool1d: Whether to use MaxPool1d pooling, False uses AvgPool1d.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        in_chunk_len_flat: int,
-        target_dim: int,
-        known_cov_dim: int,
-        observed_cov_dim: int,
-        num_layers: int,
-        layer_width: int,
-        pooling_kernel_size: int,
-        n_freq_downsample: int,
-        batch_norm: bool,
-        dropout: float,
-        activation: str,
-        MaxPool1d: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            in_chunk_len_flat: int,
+            target_dim: int,
+            known_cov_dim: int,
+            observed_cov_dim: int,
+            num_layers: int,
+            layer_width: int,
+            pooling_kernel_size: int,
+            n_freq_downsample: int,
+            batch_norm: bool,
+            dropout: float,
+            activation: str,
+            MaxPool1d: bool, ):
         super().__init__()
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._target_dim = target_dim
-        
-        raise_if_not(
-            activation in ACTIVATIONS, f"'{activation}' is not in {ACTIVATIONS}"
-        )
-        
+
+        raise_if_not(activation in ACTIVATIONS,
+                     f"'{activation}' is not in {ACTIVATIONS}")
+
         self._activation = getattr(nn, activation)()
-        n_theta_backcast = max(in_chunk_len // n_freq_downsample * target_dim, 1) # multi-past_target input for number of base points
-        n_theta_forecast = max(out_chunk_len // n_freq_downsample * target_dim, 1) # multi-future_target output for number of base points
-        
+        n_theta_backcast = max(
+            in_chunk_len // n_freq_downsample * target_dim,
+            1)  # multi-past_target input for number of base points
+        n_theta_forecast = max(
+            out_chunk_len // n_freq_downsample * target_dim,
+            1)  # multi-future_target output for number of base points
+
         # pooling layer
         pool1d = nn.MaxPool1D if MaxPool1d else nn.AvgPool1D
-        
+
         self.pooling_layer = pool1d(
             kernel_size=pooling_kernel_size,
             stride=pooling_kernel_size,
-            ceil_mode=True,
-        )
+            ceil_mode=True, )
         # layer widths
         in_len = int(np.ceil(in_chunk_len / pooling_kernel_size)) * (target_dim + known_cov_dim + observed_cov_dim) +\
         int(np.ceil(out_chunk_len / pooling_kernel_size)) * known_cov_dim
-        
+
         layer_widths = [in_len] + [layer_width] * num_layers
         # FC layers
         layers = []
@@ -104,9 +105,7 @@ class _Block(nn.Layer):
             layers.append(
                 nn.Linear(
                     in_features=layer_widths[i],
-                    out_features=layer_widths[i + 1],
-                )
-            )
+                    out_features=layer_widths[i + 1], ))
             layers.append(self._activation)
 
             if batch_norm:
@@ -117,18 +116,15 @@ class _Block(nn.Layer):
         # Fully connected layer producing forecast/backcast expansion coeffcients (waveform generator parameters).
         # The coefficients are emitted for each parameter of the likelihood for the forecast.
         self.backcast_linear_layer = nn.Linear(
-            in_features=layer_width, out_features=n_theta_backcast
-        )
+            in_features=layer_width, out_features=n_theta_backcast)
         self.forecast_linear_layer = nn.Linear(
-            in_features=layer_width, out_features=n_theta_forecast
-        )
+            in_features=layer_width, out_features=n_theta_forecast)
 
-    def forward(
-            self, 
-            backcast: paddle.Tensor,
-            known_cov: paddle.Tensor,
-            observed_cov: paddle.Tensor
-            ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+    def forward(self,
+                backcast: paddle.Tensor,
+                known_cov: paddle.Tensor,
+                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
+                                                      paddle.Tensor]:
         """
         forward block.
         
@@ -148,10 +144,12 @@ class _Block(nn.Layer):
         future_feature = None
         if known_cov is not None:
             past_feature.append(known_cov[:, :self._in_chunk_len, :])
-            future_feature = known_cov[:, self._in_chunk_len:, :].transpose(perm=[0, 2, 1])
+            future_feature = known_cov[:, self._in_chunk_len:, :].transpose(
+                perm=[0, 2, 1])
         if observed_cov is not None:
             past_feature.append(observed_cov)
-        past_feature = paddle.concat(x=past_feature, axis=2).transpose(perm=[0, 2, 1]) # (N,C,L)
+        past_feature = paddle.concat(
+            x=past_feature, axis=2).transpose(perm=[0, 2, 1])  # (N,C,L)
         # pooling layer
         x = self.pooling_layer(past_feature).reshape([batch_size, -1])
         if future_feature is not None:
@@ -162,22 +160,30 @@ class _Block(nn.Layer):
         x = self.layers(x)
 
         # forked linear layers producing waveform generator parameters
-        theta_backcast = self.backcast_linear_layer(x) # in_chunk_len * target_dim
-        theta_forecast = self.forecast_linear_layer(x) # out_chunk_len * target_dim
+        theta_backcast = self.backcast_linear_layer(
+            x)  # in_chunk_len * target_dim
+        theta_forecast = self.forecast_linear_layer(
+            x)  # out_chunk_len * target_dim
 
         # set the expansion coefs in last dimension for the forecasts
-        theta_forecast = theta_forecast.reshape((batch_size, self._target_dim, -1))
+        theta_forecast = theta_forecast.reshape(
+            (batch_size, self._target_dim, -1))
 
         # set the expansion coefs in last dimension for the backcasts
-        theta_backcast = theta_backcast.reshape((batch_size, self._target_dim, -1))
+        theta_backcast = theta_backcast.reshape(
+            (batch_size, self._target_dim, -1))
 
         # interpolate both backcast and forecast from the theta_backcast and theta_forecast
         x_hat = F.interpolate(
-            theta_backcast, size=[self._in_chunk_len], mode="linear", data_format='NCW'
-        )
+            theta_backcast,
+            size=[self._in_chunk_len],
+            mode="linear",
+            data_format='NCW')
         y_hat = F.interpolate(
-            theta_forecast, size=[self._out_chunk_len], mode="linear", data_format='NCW'
-        )
+            theta_forecast,
+            size=[self._out_chunk_len],
+            mode="linear",
+            data_format='NCW')
         x_hat = paddle.transpose(x_hat, perm=[0, 2, 1])
         y_hat = paddle.transpose(y_hat, perm=[0, 2, 1])
         return x_hat, y_hat
@@ -204,24 +210,24 @@ class _Stack(nn.Layer):
         activation: The activation function of encoder/decoder intermediate layer.
         MaxPool1d: Whether to use MaxPool1d pooling, False uses AvgPool1d.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        in_chunk_len_flat: int,
-        num_blocks: int,
-        num_layers: int,
-        layer_width: int,
-        target_dim: int,
-        known_cov_dim: int,
-        observed_cov_dim: int,
-        pooling_kernel_sizes: Tuple[int],
-        n_freq_downsample: Tuple[int],
-        batch_norm: bool,
-        dropout: float,
-        activation: str,
-        MaxPool1d: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            in_chunk_len_flat: int,
+            num_blocks: int,
+            num_layers: int,
+            layer_width: int,
+            target_dim: int,
+            known_cov_dim: int,
+            observed_cov_dim: int,
+            pooling_kernel_sizes: Tuple[int],
+            n_freq_downsample: Tuple[int],
+            batch_norm: bool,
+            dropout: float,
+            activation: str,
+            MaxPool1d: bool, ):
         super().__init__()
         self.in_chunk_len = in_chunk_len
         self.out_chunk_len = out_chunk_len
@@ -241,22 +247,19 @@ class _Stack(nn.Layer):
                 pooling_kernel_sizes[i],
                 n_freq_downsample[i],
                 batch_norm=(
-                    batch_norm and i == 0
-                ),  # batch norm only on first block of first stack
+                    batch_norm and
+                    i == 0),  # batch norm only on first block of first stack
                 dropout=dropout,
                 activation=activation,
-                MaxPool1d=MaxPool1d,
-            )
-            for i in range(num_blocks)
+                MaxPool1d=MaxPool1d, ) for i in range(num_blocks)
         ]
         self._blocks = nn.LayerList(self._blocks_list)
-        
-    def forward(
-            self,
-            backcast: paddle.Tensor,
-            known_cov: paddle.Tensor,
-            observed_cov: paddle.Tensor
-            ) -> Tuple[paddle.Tensor, paddle.Tensor]:
+
+    def forward(self,
+                backcast: paddle.Tensor,
+                known_cov: paddle.Tensor,
+                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
+                                                      paddle.Tensor]:
         """
         forward stack.
 
@@ -272,8 +275,7 @@ class _Stack(nn.Layer):
         #init stack_forecast as paddle.zeros
         stack_forecast = paddle.zeros(
             shape=(backcast.shape[0], self.out_chunk_len, self._target_dim),
-            dtype=backcast.dtype,
-        )
+            dtype=backcast.dtype, )
         for block in self._blocks_list:
             # pass input through block
             x_hat, y_hat = block(backcast, known_cov, observed_cov)
@@ -290,24 +292,24 @@ class _NHiTSModule(nn.Layer):
     """
     Implementation of NHiTS, cover multi-targets, known_covariates, observed_covariates.
     """
+
     def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        target_dim: int,
-        known_cov_dim: int,
-        observed_cov_dim: int,
-        num_stacks: int,
-        num_blocks: int,
-        num_layers: int,
-        layer_widths: List[int],
-        pooling_kernel_sizes: Optional[Tuple[Tuple[int]]],
-        n_freq_downsample: Optional[Tuple[Tuple[int]]],
-        batch_norm: bool,
-        dropout: float,
-        activation: str,
-        MaxPool1d: bool,
-    ):
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            target_dim: int,
+            known_cov_dim: int,
+            observed_cov_dim: int,
+            num_stacks: int,
+            num_blocks: int,
+            num_layers: int,
+            layer_widths: List[int],
+            pooling_kernel_sizes: Optional[Tuple[Tuple[int]]],
+            n_freq_downsample: Optional[Tuple[Tuple[int]]],
+            batch_norm: bool,
+            dropout: float,
+            activation: str,
+            MaxPool1d: bool, ):
         """
         Args:
             in_chunk_len(int): The length of the input sequence fed to the model.
@@ -334,13 +336,8 @@ class _NHiTSModule(nn.Layer):
         input_dim = target_dim + known_cov_dim + observed_cov_dim
         self._in_chunk_len_multi = in_chunk_len * input_dim + out_chunk_len * known_cov_dim
         self._pooling_kernel_sizes, self._n_freq_downsample = self._check_pooling_downsampling(
-            pooling_kernel_sizes,
-            n_freq_downsample,
-            in_chunk_len,
-            out_chunk_len,
-            num_blocks,
-            num_stacks
-        )
+            pooling_kernel_sizes, n_freq_downsample, in_chunk_len,
+            out_chunk_len, num_blocks, num_stacks)
         self._stacks_list = [
             _Stack(
                 in_chunk_len,
@@ -354,26 +351,26 @@ class _NHiTSModule(nn.Layer):
                 observed_cov_dim,
                 self._pooling_kernel_sizes[i],
                 self._n_freq_downsample[i],
-                batch_norm=(batch_norm and i == 0), # batch norm only on the first block of the first stack
+                batch_norm=(
+                    batch_norm and i == 0
+                ),  # batch norm only on the first block of the first stack
                 dropout=dropout,
                 activation=activation,
-                MaxPool1d=MaxPool1d,
-            )
-            for i in range(num_stacks)
+                MaxPool1d=MaxPool1d, ) for i in range(num_stacks)
         ]
 
         self._stacks = nn.LayerList(self._stacks_list)
-        self._stacks_list[-1]._blocks[-1].backcast_linear_layer.stop_gradient = True
+        self._stacks_list[-1]._blocks[
+            -1].backcast_linear_layer.stop_gradient = True
 
     def _check_pooling_downsampling(
-        self,
-        pooling_kernel_sizes: Optional[Tuple[Tuple[int]]],
-        n_freq_downsample: Optional[Tuple[Tuple[int]]],
-        in_len: int,
-        out_len: int,
-        num_blocks: int,
-        num_stacks: int
-    ):
+            self,
+            pooling_kernel_sizes: Optional[Tuple[Tuple[int]]],
+            n_freq_downsample: Optional[Tuple[Tuple[int]]],
+            in_len: int,
+            out_len: int,
+            num_blocks: int,
+            num_stacks: int):
         """
         check validation of pooling kernel sizes and n_freq_downsample if user set,
         or compute the best values automatically.
@@ -390,11 +387,11 @@ class _NHiTSModule(nn.Layer):
             pooling_kernel_sizes: valid pooling_kernel_sizes.
             n_freq_downsample: valid n_freq_downsample.
         """
+
         def _check_sizes(tup, name):
             raise_if_not(
                 len(tup) == num_stacks,
-                f"the length of {name} must match the number of stacks.",
-            )
+                f"the length of {name} must match the number of stacks.", )
             raise_if_not(
                 all([len(i) == num_blocks for i in tup]),
                 f"the length of each tuple in {name} must be `num_blocks={num_blocks}`",
@@ -405,9 +402,8 @@ class _NHiTSModule(nn.Layer):
             # go from in_len/2 to 1 in num_stacks steps:
             max_v = max(in_len // 2, 1)
             pooling_kernel_sizes = tuple(
-                (max(int(v), 1),) * num_blocks
-                for v in max_v // np.geomspace(1, max_v, num_stacks)
-            )
+                (max(int(v), 1), ) * num_blocks
+                for v in max_v // np.geomspace(1, max_v, num_stacks))
         else:
             # check provided pooling format
             _check_sizes(pooling_kernel_sizes, "`pooling_kernel_sizes`")
@@ -416,9 +412,8 @@ class _NHiTSModule(nn.Layer):
             # go from out_len/2 to 1 in num_stacks steps:
             max_v = max(out_len // 2, 1)
             n_freq_downsample = tuple(
-                (max(int(v), 1),) * num_blocks
-                for v in max_v // np.geomspace(1, max_v, num_stacks)
-            )
+                (max(int(v), 1), ) * num_blocks
+                for v in max_v // np.geomspace(1, max_v, num_stacks))
         else:
             # check provided downsample format
             _check_sizes(n_freq_downsample, "`n_freq_downsample`")
@@ -427,14 +422,10 @@ class _NHiTSModule(nn.Layer):
             raise_if_not(
                 n_freq_downsample[-1][-1] == 1,
                 "the downsampling coefficient of the last block of the last stack must be 1 "
-                + "(i.e., `n_freq_downsample[-1][-1]`).",
-            )
+                + "(i.e., `n_freq_downsample[-1][-1]`).", )
         return pooling_kernel_sizes, n_freq_downsample
 
-    def forward(
-            self,
-            data: Dict[str, paddle.Tensor]
-            ) -> paddle.Tensor:
+    def forward(self, data: Dict[str, paddle.Tensor]) -> paddle.Tensor:
         """
         forward NHiTS network.
 
@@ -445,14 +436,17 @@ class _NHiTSModule(nn.Layer):
             forecast(padle.Tensor): Tensor containing the output of the NHiTS model.
         """
         backcast = data["past_target"]
-        known_cov = data["known_cov_numeric"] if self._known_cov_dim > 0 else None
-        observed_cov = data["observed_cov_numeric"] if self._observed_cov_dim > 0 else None
+        known_cov = data[
+            "known_cov_numeric"] if self._known_cov_dim > 0 else None
+        observed_cov = data[
+            "observed_cov_numeric"] if self._observed_cov_dim > 0 else None
         # init forecast tensor
         forecast = paddle.zeros(
-            shape = (backcast.shape[0], self._target_length, self._target_dim))
+            shape=(backcast.shape[0], self._target_length, self._target_dim))
         for stack_index, stack in enumerate(self._stacks_list):
             # compute stack output
-            stack_residual, stack_forecast = stack(backcast, known_cov, observed_cov)
+            stack_residual, stack_forecast = stack(backcast, known_cov,
+                                                   observed_cov)
             # accumulate stack_forecast to final output
             forecast = forecast + stack_forecast
             # set current stack residual as input for next stack
@@ -491,33 +485,32 @@ class NHiTSModel(PaddleBaseModelImpl):
         patience(int, Optional): number of epochs with no improvement after which learning rate wil be reduced.
         seed(int, Optional): global random seed.
     """
-    def __init__(
-        self,
-        in_chunk_len: int,
-        out_chunk_len: int,
-        num_stacks: int = 3,
-        num_blocks: int = 3,
-        num_layers: int = 2,
-        layer_widths: Union[int, List[int]] = 512,
-        pooling_kernel_sizes: Optional[Tuple[Tuple[int]]] = None,
-        n_freq_downsample: Optional[Tuple[Tuple[int]]] = None,
-        batch_norm: bool = False,
-        dropout: float = 0.1,
-        activation: str = "ReLU",
-        MaxPool1d: bool = True,
-        skip_chunk_len: int = 0,
-        sampling_stride: int = 1,
-        loss_fn: Callable[..., paddle.Tensor] = F.mse_loss,
-        optimizer_fn: Callable[..., Optimizer] = paddle.optimizer.Adam,
-        optimizer_params: Dict[str, Any] = dict(learning_rate=1e-4), 
-        eval_metrics: List[str] = [], 
-        callbacks: List[Callback] = [], 
-        batch_size: int = 256,
-        max_epochs: int = 10,
-        verbose: int = 1,
-        patience: int = 4,
-        seed: int = 0
-    ):
+
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 num_stacks: int=3,
+                 num_blocks: int=3,
+                 num_layers: int=2,
+                 layer_widths: Union[int, List[int]]=512,
+                 pooling_kernel_sizes: Optional[Tuple[Tuple[int]]]=None,
+                 n_freq_downsample: Optional[Tuple[Tuple[int]]]=None,
+                 batch_norm: bool=False,
+                 dropout: float=0.1,
+                 activation: str="ReLU",
+                 MaxPool1d: bool=True,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=256,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 seed: int=0):
         self._num_stacks = num_stacks
         self._num_blocks = num_blocks
         self._num_layers = num_layers
@@ -547,23 +540,20 @@ class NHiTSModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-        )
+            seed=seed, )
 
     def _check_params(self):
         """
         check validation of parameters
         """
         raise_if(
-            isinstance(self._layer_widths, list) and len(self._layer_widths) != self._num_stacks,
+            isinstance(self._layer_widths, list) and
+            len(self._layer_widths) != self._num_stacks,
             "Stack number should be equal to the length of the List: layer_widths."
         )
         super(NHiTSModel, self)._check_params()
 
-    def _check_tsdataset(
-        self,
-        tsdataset: TSDataset
-        ):
+    def _check_tsdataset(self, tsdataset: TSDataset):
         """-
         Rewrite _check_tsdataset to fit the specific model.
         For NHiTS, all data variables are expected to be float32.
@@ -577,10 +567,9 @@ class NHiTSModel(PaddleBaseModelImpl):
         super(NHiTSModel, self)._check_tsdataset(tsdataset)
 
     def _update_fit_params(
-        self,
-        train_tsdataset: List[TSDataset],
-        valid_tsdataset: Optional[List[TSDataset]] = None
-    ) -> Dict[str, Any]:
+            self,
+            train_tsdataset: List[TSDataset],
+            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
         """
         Infer parameters by TSDataset automatically.
 
@@ -592,14 +581,16 @@ class NHiTSModel(PaddleBaseModelImpl):
         """
         train_ts0 = train_tsdataset[0]
         fit_params = {
-                "target_dim": train_ts0.get_target().data.shape[1],
-                "known_cov_dim": 0,
-                "observed_cov_dim": 0
-                }
+            "target_dim": train_ts0.get_target().data.shape[1],
+            "known_cov_dim": 0,
+            "observed_cov_dim": 0
+        }
         if train_ts0.get_known_cov() is not None:
-            fit_params["known_cov_dim"] = train_ts0.get_known_cov().data.shape[1]
+            fit_params["known_cov_dim"] = train_ts0.get_known_cov().data.shape[
+                1]
         if train_ts0.get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_ts0.get_observed_cov().data.shape[1]
+            fit_params["observed_cov_dim"] = train_ts0.get_observed_cov(
+            ).data.shape[1]
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:
@@ -609,7 +600,7 @@ class NHiTSModel(PaddleBaseModelImpl):
         Returns:
             paddle.nn.Layer
         """
-        
+
         return _NHiTSModule(
             self._in_chunk_len,
             self._out_chunk_len,
@@ -625,5 +616,4 @@ class NHiTSModel(PaddleBaseModelImpl):
             self._batch_norm,
             self._dropout,
             self._activation,
-            self._MaxPool1d,
-        )
+            self._MaxPool1d, )

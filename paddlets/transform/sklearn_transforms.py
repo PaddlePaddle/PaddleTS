@@ -14,6 +14,7 @@ from sklearn import preprocessing
 from paddlets.transform.sklearn_transforms_base import SklearnTransformWrapper
 from paddlets.logger import Logger, raise_if_not
 
+
 class OneHot(SklearnTransformWrapper):
     """
     Transform categorical columns with OneHot encoder.
@@ -28,14 +29,13 @@ class OneHot(SklearnTransformWrapper):
     Returns:
         None
     """
-    def __init__(
-        self, 
-        cols: Union[str, List[str]], 
-        dtype: object = np.float64, 
-        handle_unknown: str = "error", 
-        categories: Union[str, List[str]] = 'auto', 
-        drop: bool = False
-    ):
+
+    def __init__(self,
+                 cols: Union[str, List[str]],
+                 dtype: object=np.float64,
+                 handle_unknown: str="error",
+                 categories: Union[str, List[str]]='auto',
+                 drop: bool=False):
         super().__init__(
             preprocessing.__getattribute__('OneHotEncoder'),
             in_col_names=cols,
@@ -43,8 +43,8 @@ class OneHot(SklearnTransformWrapper):
             drop_origin_columns=drop,
             dtype=dtype,
             handle_unknown=handle_unknown,
-            categories=categories,
-        )
+            categories=categories, )
+
 
 class Ordinal(SklearnTransformWrapper):
     """
@@ -61,15 +61,14 @@ class Ordinal(SklearnTransformWrapper):
     Returns:
         None
     """
-    def __init__(
-        self, 
-        cols: Union[str, List[str]], 
-        dtype: np.dtype = np.dtype("float64"), 
-        categories: Union[str, List[str]] = 'auto', 
-        unknown_value: Union[int, None] = None,
-        handle_unknown: str = 'error',
-        drop: bool = False
-    ):
+
+    def __init__(self,
+                 cols: Union[str, List[str]],
+                 dtype: np.dtype=np.dtype("float64"),
+                 categories: Union[str, List[str]]='auto',
+                 unknown_value: Union[int, None]=None,
+                 handle_unknown: str='error',
+                 drop: bool=False):
         super().__init__(
             preprocessing.__getattribute__('OrdinalEncoder'),
             in_col_names=cols,
@@ -78,8 +77,7 @@ class Ordinal(SklearnTransformWrapper):
             dtype=dtype,
             handle_unknown=handle_unknown,
             categories=categories,
-            unknown_value=unknown_value,
-        )
+            unknown_value=unknown_value, )
 
     def _check_multi_tsdataset_static_cov(self, datasets: List["TSDataset"]):
         """
@@ -88,7 +86,8 @@ class Ordinal(SklearnTransformWrapper):
         Args:
             datasets(List[TSDataset]): datasets from which to fit or transform the transformer.
         """
-        columns_set = set(tuple(sorted(dataset.static_cov.keys())) for dataset in datasets)
+        columns_set = set(
+            tuple(sorted(dataset.static_cov.keys())) for dataset in datasets)
         raise_if_not(
             len(columns_set) == 1,
             f"Invalid tsdatasets. The given tsdataset statoc column schema ({[ts.static_cov for ts in datasets]}) must be same."
@@ -108,24 +107,30 @@ class Ordinal(SklearnTransformWrapper):
             dataset(Union[TSDataset, List[TSDataset]]): dataset from which to fit the transformer.
         """
 
-        if isinstance(dataset, list) and all(ds.static_cov is not None for ds in dataset):
-            static_col = [col for col in self._cols if col in dataset[0].static_cov]
+        if isinstance(dataset, list) and all(ds.static_cov is not None
+                                             for ds in dataset):
+            static_col = [
+                col for col in self._cols if col in dataset[0].static_cov
+            ]
             if static_col:
                 self._check_multi_tsdataset_static_cov(dataset)
                 self._static_col = static_col
-                self._cols = [col for col in self._cols if col not in self._static_col]
-                self._static_ud_transformer = copy.deepcopy(self._ud_transformer)                
-                static_np = np.array([[ds.static_cov[col] for col in static_col] for ds in dataset])
+                self._cols = [
+                    col for col in self._cols if col not in self._static_col
+                ]
+                self._static_ud_transformer = copy.deepcopy(
+                    self._ud_transformer)
+                static_np = np.array(
+                    [[ds.static_cov[col] for col in static_col]
+                     for ds in dataset])
                 self._static_ud_transformer.fit(static_np)
-        
+
         return super().fit(dataset)
 
-
     def transform(
-        self,
-        dataset: Union["TSDataset", List["TSDataset"]],
-        inplace: bool = False
-    ) -> Union["TSDataset", List["TSDataset"]]:
+            self,
+            dataset: Union["TSDataset", List["TSDataset"]],
+            inplace: bool=False) -> Union["TSDataset", List["TSDataset"]]:
         """
         Apply the fitted transformer on the dataset
 
@@ -144,13 +149,15 @@ class Ordinal(SklearnTransformWrapper):
         if hasattr(self, "_static_ud_transformer") \
            and isinstance(dataset, list) \
            and all(ds.static_cov is not None for ds in dataset):
-            self._check_multi_tsdataset_static_cov(dataset)  
-            static_np = np.array([[ds.static_cov[col] for col in self._static_col] for ds in dataset])
+            self._check_multi_tsdataset_static_cov(dataset)
+            static_np = np.array(
+                [[ds.static_cov[col] for col in self._static_col]
+                 for ds in dataset])
             static_res = self._static_ud_transformer.transform(static_np)
             for col_id, col in enumerate(self._static_col):
                 for ds_id, ds in enumerate(dataset):
                     ds.static_cov[col] = static_res[ds_id][col_id]
-        
+
         return dataset
 
 
@@ -172,21 +179,20 @@ class MinMaxScaler(SklearnTransformWrapper):
 
     Returns:
         None
-    """ 
-    def __init__(
-        self, 
-        cols: Union[str, List[str]]=None, 
-        f_range: tuple=(0, 1), 
-        clip: bool=False
-    ):
+    """
+
+    def __init__(self,
+                 cols: Union[str, List[str]]=None,
+                 f_range: tuple=(0, 1),
+                 clip: bool=False):
         super().__init__(
             preprocessing.__getattribute__('MinMaxScaler'),
             in_col_names=cols,
             drop_origin_columns=True,
             per_col_transform=True,
             feature_range=f_range,
-            clip=clip
-        )
+            clip=clip)
+
 
 class StandardScaler(SklearnTransformWrapper):
     """
@@ -205,17 +211,15 @@ class StandardScaler(SklearnTransformWrapper):
     Returns:
         None
     """
-    def __init__(
-        self, 
-        cols: Union[str, List[str]]=None, 
-        with_mean: bool=True, 
-        with_std: bool=True
-    ):
+
+    def __init__(self,
+                 cols: Union[str, List[str]]=None,
+                 with_mean: bool=True,
+                 with_std: bool=True):
         super().__init__(
             preprocessing.__getattribute__('StandardScaler'),
             in_col_names=cols,
             drop_origin_columns=True,
             per_col_transform=True,
             with_mean=with_mean,
-            with_std=with_std
-        )
+            with_std=with_std)

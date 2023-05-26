@@ -44,9 +44,11 @@ def my_kl_loss(p: paddle.Tensor, q: paddle.Tensor):
     """
     res = p * (paddle.log(p + 0.0001) - paddle.log(q + 0.0001))
     return paddle.mean(paddle.sum(res, axis=-1), axis=1)
-    
-    
-def adjust_learning_rate(optimizer: Callable[..., Optimizer], epoch:int, lr_:float):
+
+
+def adjust_learning_rate(optimizer: Callable[..., Optimizer],
+                         epoch: int,
+                         lr_: float):
     """
     Dynamic Learning Rate Adjustment.
     
@@ -55,18 +57,20 @@ def adjust_learning_rate(optimizer: Callable[..., Optimizer], epoch:int, lr_:flo
         epoch(int): Max epochs during training.
         lr_(float): Learning rate.    
     """
-    lr_adjust = {epoch: lr_ * (0.5 ** ((epoch - 1) // 1))}
+    lr_adjust = {epoch: lr_ * (0.5**((epoch - 1) // 1))}
     if epoch in lr_adjust.keys():
         lr = lr_adjust[epoch]
         optimizer.set_lr(lr)
-        logger.info('epoch: {}, Updating learning rate to {}'.format(epoch, optimizer.get_lr()))
+        logger.info('epoch: {}, Updating learning rate to {}'.format(
+            epoch, optimizer.get_lr()))
 
 
-def series_prior_loss(output_list: List[paddle.Tensor], 
-                      input: paddle.Tensor, 
-                      criterion: Callable[..., paddle.Tensor]=paddle.nn.MSELoss(), 
-                      win_size: int=100, 
-                      k: int=3):
+def series_prior_loss(
+        output_list: List[paddle.Tensor],
+        input: paddle.Tensor,
+        criterion: Callable[..., paddle.Tensor]=paddle.nn.MSELoss(),
+        win_size: int=100,
+        k: int=3):
     """
     Calculate Association discrepancy in train.
     
@@ -82,18 +86,19 @@ def series_prior_loss(output_list: List[paddle.Tensor],
         loss2(paddle.Tensor): Prior_loss and rec_loss.
         for_loss_one(paddle.Tensor): Rec_loss and Association discrepancy.
     """
-    output, series, prior, _  = output_list
+    output, series, prior, _ = output_list
     series_loss = 0.0
     prior_loss = 0.0
     for u in range(len(prior)):
-        series_kl = prior[u] / paddle.tile(paddle.unsqueeze(paddle.sum(prior[u], axis=-1), axis=-1), 
-                                                                   repeat_times=[1, 1, 1, win_size])
-        series_loss += (paddle.mean(my_kl_loss(series[u], series_kl.detach())) 
-                      + paddle.mean(my_kl_loss(series_kl.detach(), series[u]))
-                       )
-        prior_loss += (paddle.mean(my_kl_loss(series_kl, series[u].detach()))
-                      + paddle.mean(my_kl_loss(series[u].detach(), series_kl))
-                      )
+        series_kl = prior[u] / paddle.tile(
+            paddle.unsqueeze(
+                paddle.sum(prior[u], axis=-1), axis=-1),
+            repeat_times=[1, 1, 1, win_size])
+        series_loss += (
+            paddle.mean(my_kl_loss(series[u], series_kl.detach())) +
+            paddle.mean(my_kl_loss(series_kl.detach(), series[u])))
+        prior_loss += (paddle.mean(my_kl_loss(series_kl, series[u].detach())) +
+                       paddle.mean(my_kl_loss(series[u].detach(), series_kl)))
     series_loss = series_loss / len(prior)
     prior_loss = prior_loss / len(prior)
     rec_loss = criterion(output, input)
@@ -120,14 +125,20 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
     series_loss = 0.0
     prior_loss = 0.0
     for u in range(len(prior)):
-        series_kl = prior[u] / paddle.tile(paddle.unsqueeze(paddle.sum(prior[u], axis=-1), axis=-1), 
-                                                             repeat_times=[1, 1, 1, win_size])
+        series_kl = prior[u] / paddle.tile(
+            paddle.unsqueeze(
+                paddle.sum(prior[u], axis=-1), axis=-1),
+            repeat_times=[1, 1, 1, win_size])
         if u == 0:
-            series_loss = my_kl_loss(series[u], series_kl.detach()) * temperature
-            prior_loss = my_kl_loss(series_kl, series[u].detach()) * temperature
+            series_loss = my_kl_loss(series[u],
+                                     series_kl.detach()) * temperature
+            prior_loss = my_kl_loss(series_kl,
+                                    series[u].detach()) * temperature
         else:
-            series_loss += my_kl_loss(series[u], series_kl.detach()) * temperature
-            prior_loss += my_kl_loss(series_kl, series[u].detach()) * temperature
+            series_loss += my_kl_loss(series[u],
+                                      series_kl.detach()) * temperature
+            prior_loss += my_kl_loss(series_kl,
+                                     series[u].detach()) * temperature
     # Metric
     metric = paddle.nn.functional.softmax((-series_loss - prior_loss), axis=-1)
     cri = metric * loss
@@ -135,15 +146,15 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
     return cri
 
 
-def anomaly_get_threshold(model: Callable[..., paddle.Tensor], 
-                         train_dataloader: paddle.io.DataLoader, 
-                         thre_dataloader: paddle.io.DataLoader, 
-                         temperature: float= 50,  
-                         anormly_ratio: float=4,
-                         criterion: Callable[..., paddle.Tensor] = paddle.nn.MSELoss(), 
-                         my_kl_loss: Callable[..., paddle.Tensor] = my_kl_loss,
-                         win_size: int=100, 
-                         ):
+def anomaly_get_threshold(
+        model: Callable[..., paddle.Tensor],
+        train_dataloader: paddle.io.DataLoader,
+        thre_dataloader: paddle.io.DataLoader,
+        temperature: float=50,
+        anormly_ratio: float=4,
+        criterion: Callable[..., paddle.Tensor]=paddle.nn.MSELoss(),
+        my_kl_loss: Callable[..., paddle.Tensor]=my_kl_loss,
+        win_size: int=100, ):
     """
     Threshold is calculated based on Association-based Anomaly Criterion.
     
@@ -164,9 +175,10 @@ def anomaly_get_threshold(model: Callable[..., paddle.Tensor],
     model.eval()
     # (1) stastic on the train set
     attens_energy = []
-    for i , (input_data) in  enumerate(train_dataloader):
+    for i, (input_data) in enumerate(train_dataloader):
         output, series, prior, _ = model(input_data)
-        if "observed_cov_numeric" in input_data.keys():    #  Not support categorical temporarily 
+        if "observed_cov_numeric" in input_data.keys(
+        ):  #  Not support categorical temporarily 
             input_data = input_data['observed_cov_numeric']
         else:
             raise_log(ValueError(f"observed_cov_numeric doesn't exist!"))
@@ -174,15 +186,22 @@ def anomaly_get_threshold(model: Callable[..., paddle.Tensor],
         series_loss = 0.0
         prior_loss = 0.0
         for u in range(len(prior)):
-            series_kl = prior[u] / paddle.tile(paddle.unsqueeze(paddle.sum(prior[u], axis=-1), axis=-1), 
-                                                                       repeat_times=[1, 1, 1, win_size])
-            if u == 0:            
-                series_loss = my_kl_loss(series[u], series_kl.detach()) * temperature
-                prior_loss = my_kl_loss(series_kl, series[u].detach()) * temperature
+            series_kl = prior[u] / paddle.tile(
+                paddle.unsqueeze(
+                    paddle.sum(prior[u], axis=-1), axis=-1),
+                repeat_times=[1, 1, 1, win_size])
+            if u == 0:
+                series_loss = my_kl_loss(series[u],
+                                         series_kl.detach()) * temperature
+                prior_loss = my_kl_loss(series_kl,
+                                        series[u].detach()) * temperature
             else:
-                series_loss += my_kl_loss(series[u], series_kl.detach()) * temperature
-                prior_loss += my_kl_loss(series_kl, series[u].detach()) * temperature
-        metric = paddle.nn.functional.softmax((-series_loss - prior_loss), axis=-1)    # AnomalyScore
+                series_loss += my_kl_loss(series[u],
+                                          series_kl.detach()) * temperature
+                prior_loss += my_kl_loss(series_kl,
+                                         series[u].detach()) * temperature
+        metric = paddle.nn.functional.softmax(
+            (-series_loss - prior_loss), axis=-1)  # AnomalyScore
         cri = metric * loss
         cri = cri.detach().cpu().numpy()
         attens_energy.append(cri)
@@ -192,7 +211,8 @@ def anomaly_get_threshold(model: Callable[..., paddle.Tensor],
     attens_energy = []
     for i, (input_data) in enumerate(thre_dataloader):
         output, series, prior, _ = model(input_data)
-        if "observed_cov_numeric" in input_data.keys():    #  Not support categorical temporarily 
+        if "observed_cov_numeric" in input_data.keys(
+        ):  #  Not support categorical temporarily 
             input_data = input_data['observed_cov_numeric']
         else:
             raise_log(ValueError(f"observed_cov_numeric doesn't exist!"))
@@ -200,20 +220,27 @@ def anomaly_get_threshold(model: Callable[..., paddle.Tensor],
         series_loss = 0.0
         prior_loss = 0.0
         for u in range(len(prior)):
-            series_kl = prior[u] / paddle.tile(paddle.unsqueeze(paddle.sum(prior[u], axis=-1), axis=-1), 
-                                                                   repeat_times=[1, 1, 1, win_size])
+            series_kl = prior[u] / paddle.tile(
+                paddle.unsqueeze(
+                    paddle.sum(prior[u], axis=-1), axis=-1),
+                repeat_times=[1, 1, 1, win_size])
             if u == 0:
-                series_loss = my_kl_loss(series[u], series_kl.detach()) * temperature
-                prior_loss = my_kl_loss(series_kl, series[u].detach()) * temperature
+                series_loss = my_kl_loss(series[u],
+                                         series_kl.detach()) * temperature
+                prior_loss = my_kl_loss(series_kl,
+                                        series[u].detach()) * temperature
             else:
-                series_loss += my_kl_loss(series[u], series_kl.detach()) * temperature
-                prior_loss += my_kl_loss(series_kl, series[u].detach()) * temperature
+                series_loss += my_kl_loss(series[u],
+                                          series_kl.detach()) * temperature
+                prior_loss += my_kl_loss(series_kl,
+                                         series[u].detach()) * temperature
         # Metric
-        metric = paddle.nn.functional.softmax((-series_loss - prior_loss), axis=-1)  # AnomalyScore
+        metric = paddle.nn.functional.softmax(
+            (-series_loss - prior_loss), axis=-1)  # AnomalyScore
         cri = metric * loss
         cri = cri.detach().cpu().numpy()
         attens_energy.append(cri)
-        
+
     attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
     test_energy = np.array(attens_energy)
     # comb energy
@@ -256,7 +283,7 @@ def result_adjust(pred: np.ndarray, real: np.ndarray):
     return np.array(pred)
 
 
-def smooth_l1_loss_vae(output_tensor_list: List[paddle.Tensor], 
+def smooth_l1_loss_vae(output_tensor_list: List[paddle.Tensor],
                        kld_beta: float=0.2):
     """ 
     smooth l1 loss.
@@ -270,14 +297,13 @@ def smooth_l1_loss_vae(output_tensor_list: List[paddle.Tensor],
     """
     [recon, mu, logvar, obs] = output_tensor_list
     recon_loss = F.smooth_l1_loss(recon, obs, reduction='sum')
-    kld = -0.5 * paddle.sum(1 + logvar - mu ** 2 - logvar.exp())
+    kld = -0.5 * paddle.sum(1 + logvar - mu**2 - logvar.exp())
     loss = recon_loss + kld_beta * kld
     return loss
 
 
-def to_tsdataset(
-    scenario: str = "anomaly_label"
-    ) -> Callable[..., Callable[..., TSDataset]]:
+def to_tsdataset(scenario: str="anomaly_label") -> Callable[..., Callable[
+        ..., TSDataset]]:
     """A decorator, used for converting ndarray to tsdataset in anomaly dl models. 
 
     Args:
@@ -285,13 +311,13 @@ def to_tsdataset(
     Returns:
         Callable[..., Callable[..., TSDataset]]: Wrapped core function.
     """
+
     def decorate(func) -> Callable[..., TSDataset]:
         @functools.wraps(func)
         def wrapper(
-            obj: BaseModel,
-            test_data: TSDataset,
-            train_data: TSDataset,
-        ) -> TSDataset:
+                obj: BaseModel,
+                test_data: TSDataset,
+                train_data: TSDataset, ) -> TSDataset:
             """Core processing logic.
 
             Args:
@@ -306,7 +332,7 @@ def to_tsdataset(
                 scenario in ("anomaly_label", "anomaly_score"),
                 f"{scenario} not supported, ['anomaly_label', 'anomaly_score'] is optional."
             )
-            
+
             results = func(obj, test_data, train_data)
             # Generate target cols
             target_cols = test_data.get_target()
@@ -328,13 +354,16 @@ def to_tsdataset(
                 f"There is something wrong, anomaly predict size is 0, you'd better check the tsdataset or the predict logic."
             )
             target_index = target_index[:results_size]
-            anomaly_target = pd.DataFrame(results, index=target_index, columns=target_cols)
+            anomaly_target = pd.DataFrame(
+                results, index=target_index, columns=target_cols)
             return TSDataset.load_from_dataframe(anomaly_target, freq=freq)
+
         return wrapper
+
     return decorate
 
-    
-def epsilon_th(anomaly_score: np.ndarray, reg_level: int = 1):
+
+def epsilon_th(anomaly_score: np.ndarray, reg_level: int=1):
     """
     Threshold method proposed by Hundman et. al. (https://arxiv.org/abs/1802.04431)
     Code from TelemAnom (https://github.com/khundman/telemanom)
@@ -357,17 +386,13 @@ def epsilon_th(anomaly_score: np.ndarray, reg_level: int = 1):
         epsilon = mean_a_s + sd_a_s * z
         pruned_a_s = a_s[a_s < epsilon]
 
-        i_anom = np.argwhere(a_s >= epsilon).reshape(-1,)
+        i_anom = np.argwhere(a_s >= epsilon).reshape(-1, )
         buffer = np.arange(1, 50)
         i_anom = np.sort(
-            np.concatenate(
-                (
-                    i_anom,
-                    np.array([i + buffer for i in i_anom]).flatten(),
-                    np.array([i - buffer for i in i_anom]).flatten(),
-                )
-            )
-        )
+            np.concatenate((
+                i_anom,
+                np.array([i + buffer for i in i_anom]).flatten(),
+                np.array([i - buffer for i in i_anom]).flatten(), )))
         i_anom = i_anom[(i_anom < len(a_s)) & (i_anom >= 0)]
         i_anom = np.sort(np.unique(i_anom))
 
@@ -380,7 +405,7 @@ def epsilon_th(anomaly_score: np.ndarray, reg_level: int = 1):
             elif reg_level == 1:
                 denom = len(i_anom)
             elif reg_level == 2:
-                denom = len(i_anom) ** 2
+                denom = len(i_anom)**2
             score = (mean_perc_decrease + sd_perc_decrease) / denom
             if score >= max_score and len(i_anom) < (len(a_s) * 0.5):
                 max_score = score
@@ -388,5 +413,5 @@ def epsilon_th(anomaly_score: np.ndarray, reg_level: int = 1):
 
     if best_epsilon is None:
         best_epsilon = np.max(a_s)
-            
+
     return best_epsilon
