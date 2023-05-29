@@ -44,14 +44,14 @@ Time series forecasting is one of the most important tasks in time series. At pr
 * Data introduction: Contains hourly electricity consumption data of 321 customers spanning 4 years, used to predict electricity demand in various regions.
 * Dataset name: ECL.
 
-6. M4
-^^^^^^
-* Data source: https://www.kaggle.com/datasets/yogesh94/m4-forecasting-competition-dataset
-* Data introduction: 100,000 pieces of univariate data including demography, finance, industry, macroeconomics, microeconomics, etc.
-* Dataset name: M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4-Hourly-train, M4-Hourly-test.
-
 7. WTH
 ^^^^^^
 * Data source: https://www.ncei.noaa.gov/data/local-climatological-data/
 * Data introduction: hourly weather data with 12 variables spanning 4 years, used to predict the weather in various regions.
 * Dataset names: WTH, UNI_WTH.
+
+8. M4
+^^^^^^
+* Data source: https://www.kaggle.com/datasets/yogesh94/m4-forecasting-competition-dataset
+* Data introduction: 100,000 pieces of univariate data including demography, finance, industry, macroeconomics, microeconomics, etc.
+* Dataset name: M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4-Hourly-train, M4-Hourly-test.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 15:31+0800\n"
+"POT-Creation-Date: 2023-05-29 13:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -54,7 +54,7 @@ msgstr "1. ETT-small"
 #: ../../source/modules/datasets/supported_datasets.rst:13
 #: d8a8004662744ee5b9e79bbd79a6694a
 msgid "Data source: https://github.com/zhouhaoyi/ETDataset"
-msgstr "数据来源：https://www.bgc-jena.mpg.de/wetter"
+msgstr "数据来源：https://github.com/zhouhaoyi/ETDataset"
 
 #: ../../source/modules/datasets/supported_datasets.rst:14
 #: 7cf8cbab7b6b459ab4ac9a823a0d34f7
@@ -183,11 +183,34 @@ msgid "Dataset name: ECL."
 msgstr "数据集名称：ECL"
 
 #: ../../source/modules/datasets/supported_datasets.rst:48
-#: 400d01add51041be83fdb0559a7cae12
-msgid "6. M4"
-msgstr "6. M4"
+#: f3b5ce64474c4aa7bb12f3e255eb0ba9
+msgid "7. WTH"
+msgstr "7. WTH"
 
 #: ../../source/modules/datasets/supported_datasets.rst:49
+#: e486d3edde064f899bf6fcd9bc04a6a3
+msgid "Data source: https://www.ncei.noaa.gov/data/local-climatological-data/"
+msgstr "数据来源：https://www.ncei.noaa.gov/data/local-climatological-data/"
+
+#: ../../source/modules/datasets/supported_datasets.rst:50
+#: 51e3e3de2b0a4cfbb5b38f21eee7445e
+msgid ""
+"Data introduction: hourly weather data with 12 variables spanning 4 "
+"years, used to predict the weather in various regions."
+msgstr "数据简介：包含12个变量跨度4年的每小时天气数据，用于预测各地区的天气。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:51
+#: 35083db2492d4babb7158b3f92908455
+msgid "Dataset names: WTH, UNI_WTH."
+msgstr "数据集名称：WTH、UNI_WTH。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:54
+#: 400d01add51041be83fdb0559a7cae12
+#, fuzzy
+msgid "8. M4"
+msgstr "8. M4"
+
+#: ../../source/modules/datasets/supported_datasets.rst:55
 #: 9bfb3960657e4b8cb7e5ac8a198a586b
 msgid ""
 "Data source: https://www.kaggle.com/datasets/yogesh94/m4-forecasting-"
@@ -196,40 +219,21 @@ msgstr ""
 "数据来源：https://www.kaggle.com/datasets/yogesh94/m4-forecasting-competition-"
 "dataset"
 
-#: ../../source/modules/datasets/supported_datasets.rst:50
+#: ../../source/modules/datasets/supported_datasets.rst:56
 #: 05cd09baa66f48b9bbc7f10f40871a5f
 msgid ""
 "Data introduction: 100,000 pieces of univariate data including "
 "demography, finance, industry, macroeconomics, microeconomics, etc."
 msgstr "数据集简介：包含人后、经济、工业、宏观经济、微观经济等的100000条单变量数据。"
 
-#: ../../source/modules/datasets/supported_datasets.rst:51
+#: ../../source/modules/datasets/supported_datasets.rst:57
 #: 7fc1fac4fd014684804dfdbd4223ee1d
 msgid ""
 "Dataset name: M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4"
 "-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-"
 "test, M4-Hourly-train, M4-Hourly-test."
-msgstr "数据集名称：M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4-Hourly-train, M4-Hourly-test。"
-
-#: ../../source/modules/datasets/supported_datasets.rst:54
-#: f3b5ce64474c4aa7bb12f3e255eb0ba9
-msgid "7. WTH"
-msgstr "7. WTH"
-
-#: ../../source/modules/datasets/supported_datasets.rst:55
-#: e486d3edde064f899bf6fcd9bc04a6a3
-msgid "Data source: https://www.ncei.noaa.gov/data/local-climatological-data/"
-msgstr "数据来源：https://www.ncei.noaa.gov/data/local-climatological-data/"
-
-#: ../../source/modules/datasets/supported_datasets.rst:56
-#: 51e3e3de2b0a4cfbb5b38f21eee7445e
-msgid ""
-"Data introduction: hourly weather data with 12 variables spanning 4 "
-"years, used to predict the weather in various regions."
-msgstr "数据简介：包含12个变量跨度4年的每小时天气数据，用于预测各地区的天气。"
-
-#: ../../source/modules/datasets/supported_datasets.rst:57
-#: 35083db2492d4babb7158b3f92908455
-msgid "Dataset names: WTH, UNI_WTH."
-msgstr "数据集名称：WTH、UNI_WTH。"
+msgstr ""
+"数据集名称：M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test,"
+" M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4"
+"-Hourly-train, M4-Hourly-test。"
 
