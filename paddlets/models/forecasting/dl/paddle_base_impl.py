@@ -91,6 +91,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             max_epochs: int=10,
             verbose: int=1,
             patience: int=4,
+            drop_last: bool=True,
             seed: Optional[int]=None, ):
         super(PaddleBaseModelImpl, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -107,6 +108,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._verbose = verbose
         self._patience = patience
         self._stop_training = False
+        self._drop_last = drop_last
 
         self._fit_params = None
         self._network = None
@@ -194,9 +196,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         train_dataset = None
         if isinstance(train_tsdataset, TSDataset):
             train_tsdataset = [train_tsdataset]
+        # 接入多个数据集，先用一个dataadapter进行统一为一个数据集
+        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
         for dataset in train_tsdataset:
             self._check_tsdataset(dataset)
-            dataset = data_adapter.to_sample_dataset(
+            dataset = data_adapter.to_sample_dataset( # sample the data
                 dataset,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
@@ -206,10 +210,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 train_dataset = dataset
             else:
                 train_dataset.samples = train_dataset.samples + dataset.samples
-        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
+        #todo: dataloader的设置这里可以增强，shuffle，drop_last
         train_dataloader = data_adapter.to_paddle_dataloader(train_dataset,
                                                              self._batch_size)
-        valid_dataloaders = []
+        valid_dataloaders = []   
         if valid_tsdataset is not None:
             valid_dataset = None
             if isinstance(valid_tsdataset, TSDataset):
