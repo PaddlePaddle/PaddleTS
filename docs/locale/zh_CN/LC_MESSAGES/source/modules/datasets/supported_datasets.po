@@ -26,7 +26,6 @@ msgstr "支持的数据集"
 
 #: ../../source/modules/datasets/supported_datasets.rst:4
 #: 5b508439c8e9478cadb1d93204dbd1d7
-#, fuzzy
 msgid ""
 "PaddleTS currently supports dozens of datasets including the four major "
 "tasks of time series prediction, time series anomaly detection, time "
@@ -409,7 +408,6 @@ msgstr "数据集名称：NAB_TEMP"
 
 #: ../../source/modules/datasets/supported_datasets.rst:103
 #: 625a50c3bdfc42229b62707d288d634e
-#, fuzzy
 msgid "Time Series Classification"
 msgstr "时序分类"
 
