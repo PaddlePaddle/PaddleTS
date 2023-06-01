@@ -81,11 +81,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             in_chunk_len: int,
             out_chunk_len: int,
             skip_chunk_len: int=0,
+            label_len: int=0,
             sampling_stride: int=1,
             loss_fn: Callable[..., paddle.Tensor]=None,
             optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
             optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
-            eval_metrics: Union[List[str], List[Metric]]=[],
+            eval_metrics: Union[List[str], List[Metric]]=["mae", "mse"],
             callbacks: List[Callback]=[],
             batch_size: int=128,
             max_epochs: int=10,
@@ -97,6 +98,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
             skip_chunk_len=skip_chunk_len)
+        self._label_len=label_len
         self._sampling_stride = sampling_stride
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
@@ -109,6 +111,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._patience = patience
         self._stop_training = False
         self._drop_last = drop_last
+        self.need_date_in_network = False
 
         self._fit_params = None
         self._network = None
@@ -147,7 +150,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                  f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
         if not self._eval_metrics:
-            self._eval_metrics = ["mae"]
+            self._eval_metrics = ["mae", "mse"]
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
@@ -205,14 +208,17 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
                 skip_chunk_len=self._skip_chunk_len,
+                label_len=self._label_len,
+                add_transformed_datastamp=self._add_transformed_datastamp,
                 sampling_stride=self._sampling_stride)
             if train_dataset is None:
                 train_dataset = dataset
             else:
                 train_dataset.samples = train_dataset.samples + dataset.samples
-        #todo: dataloader的设置这里可以增强，shuffle，drop_last
         train_dataloader = data_adapter.to_paddle_dataloader(train_dataset,
-                                                             self._batch_size)
+                                                             self._batch_size,
+                                                             shuffle=True,
+                                                             drop_last=self._drop_last)
         valid_dataloaders = []   
         if valid_tsdataset is not None:
             valid_dataset = None
@@ -225,13 +231,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                     in_chunk_len=self._in_chunk_len,
                     out_chunk_len=self._out_chunk_len,
                     skip_chunk_len=self._skip_chunk_len,
+                    add_transformed_datastamp=self._add_transformed_datastamp,
                     sampling_stride=self._sampling_stride)
                 if valid_dataset is None:
                     valid_dataset = dataset
                 else:
                     valid_dataset.samples = valid_dataset.samples + dataset.samples
-            valid_dataloader = data_adapter.to_paddle_dataloader(
-                valid_dataset, self._batch_size)
+            valid_dataloader = data_adapter.to_paddle_dataloader(valid_dataset, self._batch_size, shuffle=False, drop_last=self._drop_last) # shuffle=True
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
 
@@ -256,9 +262,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
             sampling_stride=self._sampling_stride,
+            add_transformed_datastamp=self._add_transformed_datastamp,
             time_window=(boundary, boundary))
+        # shuffle_flag = False drop_last = True batch_size = 1（Other than AD\CLass）
         dataloader = data_adapter.to_paddle_dataloader(dataset,
-                                                       self._batch_size)
+                                                       self._batch_size) 
         return dataloader
 
     def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
@@ -367,7 +375,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             # Predict for each eval set.
             for eval_name, valid_dataloader in zip(valid_names,
                                                    valid_dataloaders):
-                self._predict_epoch(eval_name, valid_dataloader)
+                self._predict_epoch(eval_name, valid_dataloader) # valid
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
@@ -404,8 +412,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.eval()
         results = []
         for batch_nb, data in enumerate(dataloader):
-            X, _ = self._prepare_X_y(data)
-            output = self._network(X)
+            X, _, date_stamp = self._prepare_X_y(data)
+            output = self._network(X, date_stamp)
             predictions = output.numpy()
             results.append(predictions)
         results = np.vstack(results)
@@ -420,14 +428,18 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.train()
         for batch_idx, data in enumerate(train_loader):
             self._callback_container.on_batch_begin(batch_idx)
-            X, y = self._prepare_X_y(data)
-            batch_logs = self._train_batch(X, y)
+            X, y, datestamp = self._prepare_X_y(data)
+
+            batch_logs = self._train_batch(X, y, datestamp)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
+
+            if batch_idx % 50 ==0:
+                logger.info('{}/{}: loss: {}, lr: {}'.format(batch_idx, len(train_loader), batch_logs['loss'], self._optimizer.get_lr()))
         epoch_logs = {"lr": self._optimizer.get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor],
-                     y: paddle.Tensor) -> Dict[str, Any]:
+                     y: paddle.Tensor, datestamp: paddle.Tensor) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -437,7 +449,15 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         Returns:
             Dict[str, Any]: Dict of logs.
         """
-        output = self._network(X)
+        if self.need_date_in_network:
+            output = self._network(X, datestamp) # align network
+            y = y[:, -self._out_chunk_len:, :]
+            # import numpy as np
+            # np.random.seed(2023)
+            # y = paddle.to_tensor(np.random.randn(32, 96, 7)*2).cast('float32')
+        else:
+            output = self._network(X)
+        
         loss = self._compute_loss(output, y)
         loss.backward()
         self._optimizer.step()
@@ -455,8 +475,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.eval()
         list_y_true, list_y_score = [], []
         for batch_idx, data in enumerate(loader):
-            X, y = self._prepare_X_y(data)
-            scores = self._predict_batch(X)
+            X, y ,date_stamp = self._prepare_X_y(data)
+            scores = self._predict_batch(X, date_stamp)
             list_y_true.append(y)
             list_y_score.append(scores)
         y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
@@ -464,16 +484,20 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
 
-    def _predict_batch(self, X: paddle.Tensor) -> np.ndarray:
+    def _predict_batch(self, X: paddle.Tensor, date_stamp: paddle.Tensor) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
             X(paddle.Tensor): Feature tensor.
+            data_stamp(paddle.Tensor): date Feature tensor.
 
         Returns:
             np.ndarray: Prediction results.
         """
-        scores = self._network(X)
+        if self.need_date_in_network:
+            scores = self._network(X, date_stamp)
+        else:
+            scores = self._network(X)
         return scores.numpy()
 
     def _prepare_X_y(self, X: Dict[str, paddle.Tensor]) -> Tuple[Dict[
@@ -490,10 +514,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             X(Dict[str, paddle.Tensor]): Dict of feature tensor. 
             y(paddle.Tensor): Target tensor.
         """
+        datastamp, y = None, None
         if "future_target" in X:
             y = X.pop("future_target")
-            return X, y
-        return X, None
+            if 'past_transformed_datastamp' in X:
+                datastamp = X.pop('past_transformed_datastamp')
+        return X, y, datastamp
 
     def _compute_loss(self, y_score: paddle.Tensor,
                       y_true: paddle.Tensor) -> paddle.Tensor:

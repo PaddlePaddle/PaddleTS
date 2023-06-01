@@ -11,8 +11,8 @@ import copy
 
 from sklearn import preprocessing
 
-from paddlets.transform.sklearn_transforms_base import SklearnTransformWrapper
 from paddlets.logger import Logger, raise_if_not
+from paddlets.transform.sklearn_transforms_base import SklearnTransformWrapper
 
 
 class OneHot(SklearnTransformWrapper):

@@ -1920,11 +1920,11 @@ class TSDataset(object):
         params = {}
         for attr in attrs:
             if res[attr] is not None:
-                params[attr] = TimeSeries.load_from_json(res[attr], **
-                                                         json_load_kwargs)
+                params[attr] = TimeSeries.load_from_json(res[attr],
+                                                         **json_load_kwargs)
         if res['static_cov'] is not None:
-            params['static_cov'] = json.loads(res['static_cov'], **
-                                              json_load_kwargs)
+            params['static_cov'] = json.loads(res['static_cov'],
+                                              **json_load_kwargs)
         return TSDataset(**params)
 
     @property

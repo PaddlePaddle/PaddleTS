@@ -4,7 +4,6 @@
 import abc
 import copy
 from typing import Callable, List, Optional, Union
-from paddlets.utils.utils import get_tsdataset_max_len, split_dataset
 
 import numpy as np
 import pandas as pd
@@ -12,6 +11,7 @@ import pandas as pd
 from paddlets import TSDataset, TimeSeries
 from paddlets.logger import raise_if_not, raise_if, raise_log
 from paddlets.logger.logger import log_decorator
+from paddlets.utils.utils import get_tsdataset_max_len, split_dataset
 
 TSDATASET_COL_TYPES = ['target', 'observed_cov', 'known_cov']
 

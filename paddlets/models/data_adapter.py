@@ -9,6 +9,7 @@ from typing import List, Dict, Union, Callable, Optional, Tuple
 
 from paddlets.datasets import TSDataset, TimeSeries
 from paddlets.logger.logger import Logger, raise_if, raise_if_not
+from paddlets.models.time_feature_gen import time_features
 
 logger = Logger(__name__)
 
@@ -31,6 +32,7 @@ class SampleDataset(paddle.io.Dataset):
         skip_chunk_len(int): Optional, the number of time steps between in_chunk and out_chunk for a single sample.
             The skip chunk is neither used as a feature (i.e. X) nor a label (i.e. Y) for a single sample. By
             default, it will NOT skip any time steps.
+        label_len(int): Optional, extra label length, default is 0.
         sampling_stride(int): Time steps to stride over the i-th sample and (i+1)-th sample. More precisely,
             let `t` be the time index of target time series, `t[i]` be the start time of the i-th sample,
             `t[i+1]` be the start time of the (i+1)-th sample, then `sampling_stride` represents the result of
@@ -238,6 +240,8 @@ class SampleDataset(paddle.io.Dataset):
             in_chunk_len: int=1,
             out_chunk_len: int=0,
             skip_chunk_len: int=0,
+            label_len: int=0,
+            add_transformed_datastamp: bool=False,
             sampling_stride: int=1,
             fill_last_value: Optional[Union[np.floating, np.integer]]=None,
             time_window: Optional[Tuple[int, int]]=None):
@@ -270,6 +274,8 @@ class SampleDataset(paddle.io.Dataset):
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
         self._skip_chunk_len = skip_chunk_len
+        self._label_len = label_len
+        self.add_transformed_datastamp = add_transformed_datastamp
         self._sampling_stride = sampling_stride
         self._fill_last_value = fill_last_value
         self._std_timeseries_name, self._std_timeindex = self._compute_std_timeindex(
@@ -703,6 +709,14 @@ class SampleDataset(paddle.io.Dataset):
             target_ndarray = self._build_ndarray_from_timeseries_by_dtype(
                 timeseries=target_ts, dtype=self._numeric_dtype)
 
+            if self.add_transformed_datastamp:
+                df_stamp = target_ts._data.index.to_series(
+                    index=[i for i in range(len(target_ts._data.index))])
+                df_stamp['date'] = pd.to_datetime(df_stamp)
+                data_stamp = time_features(
+                    pd.to_datetime(df_stamp['date'].values), freq='h')
+                data_stamp = data_stamp.transpose(1, 0)  # 转换时间格式
+
         # known cov (possibly be None)
         known_cov_ts = self._rawdataset.known_cov
         known_cov_timeindex_offset = 0
@@ -764,9 +778,9 @@ class SampleDataset(paddle.io.Dataset):
                         # ONLY fit api needs future_target, predict api does not need it.
                         sample[
                             "future_target"] = self._build_future_target_for_single_sample(
-                                curr_sample_tail=curr_sample_tail,
-                                timeindex_offset=target_timeindex_offset,
-                                target_ndarray=target_ndarray)
+                                curr_sample_tail=curr_sample_tail,  # 191
+                                timeindex_offset=target_timeindex_offset,  # 0
+                                target_ndarray=target_ndarray)  # 目标array
 
                     # past target
                     sample[
@@ -774,6 +788,14 @@ class SampleDataset(paddle.io.Dataset):
                             curr_sample_tail=curr_sample_tail,
                             timeindex_offset=target_timeindex_offset,
                             target_ndarray=target_ndarray)
+
+                    # transformed 
+                    if self.add_transformed_datastamp:
+                        sample[
+                            'past_transformed_datastamp'] = self._build_transformed_datastamp_for_single_sample(
+                                curr_sample_tail=curr_sample_tail,
+                                timeindex_offset=target_timeindex_offset,
+                                target_ndarray=data_stamp)
 
             # known_cov
             if known_cov_ts is not None:
@@ -1271,10 +1293,31 @@ class SampleDataset(paddle.io.Dataset):
             np.ndarray: built future_target chunk (Y) for the current single sample.
         """
         end = timeindex_offset + curr_sample_tail + 1
-        start = (end - 1) - self._out_chunk_len + 1
+        start = (end - 1) - self._out_chunk_len - self._label_len + 1
         return target_ndarray[start:end]
 
     def _build_past_target_for_single_sample(
+            self,
+            curr_sample_tail: int,
+            timeindex_offset: int,
+            target_ndarray: np.ndarray) -> np.ndarray:
+        """
+        Internal method, builds a past_target chunk for a single sample.
+
+        Args:
+            curr_sample_tail(int): the tail idx of future_target chunk of the same sample, note that curr_sample_tail
+                is based on self._std_timeindex.
+            timeindex_offset(int): the offset between current timeseries(target) index and std_timeindex.
+            target_ndarray(np.ndarray): an np.ndarray matrix.
+
+        Returns:
+            np.ndarray: built past_target chunk for the current single sample.
+        """
+        end = timeindex_offset + curr_sample_tail - self._out_chunk_len - self._skip_chunk_len + 1
+        start = (end - 1) - self._in_chunk_len + 1
+        return target_ndarray[start:end]
+
+    def _build_transformed_datastamp_for_single_sample(
             self,
             curr_sample_tail: int,
             timeindex_offset: int,
@@ -1461,6 +1504,8 @@ class DataAdapter(object):
             in_chunk_len: int=1,
             out_chunk_len: int=0,
             skip_chunk_len: int=0,
+            label_len: int=0,
+            add_transformed_datastamp: bool=False,
             sampling_stride: int=1,
             fill_last_value: Optional[Union[np.floating, np.integer]]=None,
             time_window: Optional[Tuple[int, int]]=None) -> SampleDataset:
@@ -1523,6 +1568,8 @@ class DataAdapter(object):
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
             skip_chunk_len=skip_chunk_len,
+            label_len=label_len,
+            add_transformed_datastamp=add_transformed_datastamp,
             sampling_stride=sampling_stride,
             time_window=time_window,
             fill_last_value=fill_last_value)

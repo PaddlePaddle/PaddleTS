@@ -55,8 +55,8 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params
-                                                      )])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor,
+                                                      mlp2_params)])
         assert model2 is not None
 
     def test_fit(self):
@@ -95,8 +95,8 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=96,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params
-                                                      )])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor,
+                                                      mlp2_params)])
 
         model1.fit(tsdataset)
 
@@ -136,8 +136,8 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params
-                                                      )])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor,
+                                                      mlp2_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -176,8 +176,8 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params
-                                                      )])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor,
+                                                      mlp2_params)])
 
         model1.fit(tsdataset)
         predcitions = model1.predict(tsdataset)
@@ -219,8 +219,8 @@ class TestEnsembleBase(TestCase):
             in_chunk_len=16,
             out_chunk_len=16,
             skip_chunk_len=4 * 4,
-            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor, mlp2_params
-                                                      )])
+            estimators=[(MLPRegressor, mlp1_params), (MLPRegressor,
+                                                      mlp2_params)])
 
         model1.fit(tsdataset)
         model1.save(path="/tmp/ensemble_test3/")

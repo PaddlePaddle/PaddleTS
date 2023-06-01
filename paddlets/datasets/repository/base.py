@@ -126,7 +126,6 @@ DATASETS = {
     SpokenArabicDigitsTestDataset.name: SpokenArabicDigitsTestDataset,
     UWaveGestureLibraryTrainDataset.name: UWaveGestureLibraryTrainDataset,
     UWaveGestureLibraryTestDataset.name: UWaveGestureLibraryTestDataset,
-
 }
 
 

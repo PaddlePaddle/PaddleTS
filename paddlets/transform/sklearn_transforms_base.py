@@ -8,10 +8,10 @@ import pandas as pd
 import numpy as np
 import scipy
 
+from paddlets.logger.logger import log_decorator
 from paddlets.transform.base import UdBaseTransform
 from paddlets.datasets.tsdataset import TimeSeries, TSDataset
 from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
-from paddlets.logger.logger import log_decorator
 
 logger = Logger(__name__)
 
