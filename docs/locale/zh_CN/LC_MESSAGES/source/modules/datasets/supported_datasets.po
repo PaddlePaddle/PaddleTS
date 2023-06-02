@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 15:31+0800\n"
+"POT-Creation-Date: 2023-05-26 17:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -20,25 +20,25 @@ msgstr ""
 "Generated-By: Babel 2.12.1\n"
 
 #: ../../source/modules/datasets/supported_datasets.rst:2
-#: 5b08165cdb8a4cfa9cacbd219ee30dd2
+#: a09bfe7ac1d543e19d6a6b6cc4f0db30
 msgid "Supported Datasets"
 msgstr "支持的数据集"
 
 #: ../../source/modules/datasets/supported_datasets.rst:4
-#: 512536aa09bb420fb277ce9c744b6ecb
+#: 5b508439c8e9478cadb1d93204dbd1d7
 msgid ""
 "PaddleTS currently supports dozens of datasets including the four major "
-"tasks of timing prediction, timing anomaly detection, timing completion, "
-"and timing classification."
+"tasks of time series prediction, time series anomaly detection, time "
+"series imputation, and time series classification."
 msgstr "PaddleTS目前支持包含时序预测、时序异常检测、时序补全、时序分类四大任务在内的数十种数据集。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:7
-#: 6af0f3863a0f4a21a37a238c92a551b9
+#: 7cf2c6fb26774aef8d43cdce6fc7d66e
 msgid "Time Series Prediction"
 msgstr "时序预测"
 
 #: ../../source/modules/datasets/supported_datasets.rst:9
-#: 7c613bb310ca4d419dacd27ed0411635
+#: 900fe8edd1b841d79b0946a1f169e122
 msgid ""
 "Time series forecasting is one of the most important tasks in time "
 "series. At present, we integrate data from multiple scenarios such as "
@@ -47,17 +47,17 @@ msgid ""
 msgstr "时序预测是时间序列中最重要的任务之一，目前我们针对时序预测集成了电力、天气、疾病、汇率等多个场景下的数据。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:12
-#: bcbba1f602d94f57b3fc0981778d7779
+#: 4c22dfda691242e6a5ce45db0d9dcd52
 msgid "1. ETT-small"
 msgstr "1. ETT-small"
 
 #: ../../source/modules/datasets/supported_datasets.rst:13
-#: d8a8004662744ee5b9e79bbd79a6694a
+#: 099284786a154a88be1ecd96ecefc342
 msgid "Data source: https://github.com/zhouhaoyi/ETDataset"
 msgstr "数据来源：https://www.bgc-jena.mpg.de/wetter"
 
 #: ../../source/modules/datasets/supported_datasets.rst:14
-#: 7cf8cbab7b6b459ab4ac9a823a0d34f7
+#: a9367a47749b4b75998f5304519980e8
 msgid ""
 "Data brief introduction: Power transformer data containing 7 variables, "
 "used to forecast electricity demand in various regions. Divided into "
@@ -65,44 +65,44 @@ msgid ""
 msgstr "数据简介：包含22个变量的每十分钟采样天气数据，用于预测天气。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:15
-#: d4142666a10246e0a6e47d365d91dbba
+#: 46fa0a2545cd44f1a16f77b2612c3766
 msgid "Dataset names: ETTh1, ETTh2, ETTm1, ETTm2."
 msgstr "数据集名称：ETTh1、ETTh2、ETTm1、ETTm2。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:18
-#: 75a04d4c2b0e42c1b23c16ce1ce6f72d
+#: a486a54484074e459ac4567f873b9a4d
 msgid "2. Weather"
 msgstr "2. Weather"
 
 #: ../../source/modules/datasets/supported_datasets.rst:19
-#: 7e060c2ecf3d47f4bdb6f175285ab06a
+#: b6f96e05b4a045b58fb4f2481d91372e
 msgid "Data source: https://www.bgc-jena.mpg.de/wetter"
 msgstr "数据来源：https://www.bgc-jena.mpg.de/wetter"
 
 #: ../../source/modules/datasets/supported_datasets.rst:20
-#: 2f0f532a561345a9b7f31392cae081b7
+#: 21201edcce474792b83ecc2e2002232a
 msgid ""
 "Data introduction: contains 22 variables sampled weather data every ten "
 "minutes, used to predict the weather."
 msgstr "数据简介：包含22个变量的每十分钟采样天气数据，用于预测天气。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:21
-#: ec08f8533fcd43c6bc6ccb26c3f3c994
+#: 5529661aec9143fa8ca8f90313bca3ca
 msgid "Dataset name: Weather."
 msgstr "数据集名称：Weather。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:24
-#: 697071c8248e4c6392939bf04aaba8d8
+#: 80c0f458c666438cbc0df32a948d1084
 msgid "3. ILI"
 msgstr "3. ILI"
 
 #: ../../source/modules/datasets/supported_datasets.rst:25
-#: 5e63ca724c4348ff9cbca2e1f5968899
+#: a831d7cd1a9f48d38f58dbf1a39f1006
 msgid "Data source: https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html"
 msgstr "数据来源：https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html"
 
 #: ../../source/modules/datasets/supported_datasets.rst:26
-#: 8d56ffc9b4174b86899bcf2b50ff9f2c
+#: 3fc8f7d3cbf14ec8a88eb9b1f887db18
 msgid ""
 "Data brief introduction: Contains daily sampling of 22 variables, "
 "influenza disease data spanning 19 years, used to predict the proportion "
@@ -110,66 +110,66 @@ msgid ""
 msgstr "数据简介：包含22个变量的每天采样，跨度19年的流感疾病数据，用于预测流感病人比例。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:27
-#: 35c42685ebce4d4892242b9a7e66579f
+#: 54ea7183ed584dceb80410083bcce553
 msgid "Dataset name: ILI."
 msgstr "数据集名称：ILI。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:30
-#: 0181270e1b7f402b8311aed1a671fff7
+#: 46c7be5c7867417da8b50c4dab6d889d
 msgid "4. Traffic"
 msgstr "4. Traffic"
 
 #: ../../source/modules/datasets/supported_datasets.rst:31
-#: 8f2e0442fbd74cf09179ad96d13ca9c1
+#: 259d86daee584e40a72a23c1a46243b2
 msgid "Data source: https://pems.dot.ca.gov"
 msgstr "数据来源：https://pems.dot.ca.gov"
 
 #: ../../source/modules/datasets/supported_datasets.rst:32
-#: 45f33daaaa4b48f2a47cb0d58f4a41c5
+#: 6dedb9ac065840d8b133797374f8abee
 msgid ""
 "Data brief introduction: Contains 862 sensors, hourly road occupancy "
 "ratio."
 msgstr "数据简介：包含862个传感器下，每小时的道路占用比例。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:33
-#: d290cbcfde3f42a182f05c1c1c9e91e4
+#: d9276e07692c40908b694f546b03ab09
 msgid "Dataset name: Traffic."
 msgstr "数据集名称：Traffic。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:36
-#: 49d71bfda6184b25a3124cd070b64f44
+#: 9e7771b97f4d460389eea61e4f6e25cc
 msgid "5. Exchange"
 msgstr "5. Exchange"
 
 #: ../../source/modules/datasets/supported_datasets.rst:37
-#: f40f84aa1b1247dc966d84845a13fe97
+#: d994ac3ab3c64ead9d6b6fa2fb8c94ee
 msgid "Data source: https://github.com/laiguokun/multivariate-time-series-data"
 msgstr "数据来源：https://github.com/laiguokun/multivariate-time-series-data"
 
 #: ../../source/modules/datasets/supported_datasets.rst:38
-#: c652f6b58fc74217b3395a8d0edc2c1e
+#: d7e7d31f9d924deeb94f81dff836a711
 msgid "Data profile: Contains daily sampled exchange rate data spanning 36 years."
 msgstr "数据简介：包含跨度36年的每天采样的汇率数据。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:39
-#: a8408582aa33430facd97d49623c96b8
+#: 88f73bd89dd24fc9b6f2bd5623c57b8f
 msgid "Dataset name: Exchange."
 msgstr "数据集名称：Exchange。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:42
-#: 37d673c320a344e48a72bfa5455a732d
+#: 80654614cdf042e0bff8fefcf43ef867
 msgid "6. ECL"
 msgstr "6. ECL"
 
 #: ../../source/modules/datasets/supported_datasets.rst:43
-#: 1dddbd4bea22420cb73fc45b8b9a87dd
+#: 5b67aa681f4f43b9b4a4da1fadfbd9eb
 msgid ""
 "Data source: "
 "https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014"
 msgstr "数据来源：https://archive.ics.uci.edu/ml/datasets/ElectricityLoadDiagrams20112014"
 
 #: ../../source/modules/datasets/supported_datasets.rst:44
-#: 083e5830b302477cb07db65d9a093a86
+#: 7567f47ea56c495c980758335ad78b9c
 msgid ""
 "Data introduction: Contains hourly electricity consumption data of 321 "
 "customers spanning 4 years, used to predict electricity demand in various"
@@ -177,18 +177,18 @@ msgid ""
 msgstr "数据简介：包含321个客户跨度4年的每小时用电数据，用于预测各地区的电力需求。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:45
-#: f6f79041cf5f46e8a804adabfbcfb69e
+#: 4fe627c749cf4bbba13c06afbccbcafe
 #, fuzzy
 msgid "Dataset name: ECL."
 msgstr "数据集名称：ECL"
 
 #: ../../source/modules/datasets/supported_datasets.rst:48
-#: 400d01add51041be83fdb0559a7cae12
+#: 2e07234d9563425fa405453c1c4950c3
 msgid "6. M4"
 msgstr "6. M4"
 
 #: ../../source/modules/datasets/supported_datasets.rst:49
-#: 9bfb3960657e4b8cb7e5ac8a198a586b
+#: ea2fb49b593e4a58aef068314785df5c
 msgid ""
 "Data source: https://www.kaggle.com/datasets/yogesh94/m4-forecasting-"
 "competition-dataset"
@@ -197,39 +197,277 @@ msgstr ""
 "dataset"
 
 #: ../../source/modules/datasets/supported_datasets.rst:50
-#: 05cd09baa66f48b9bbc7f10f40871a5f
+#: 9327f5a8efe24ba79faa74ce8ae1f954
 msgid ""
 "Data introduction: 100,000 pieces of univariate data including "
 "demography, finance, industry, macroeconomics, microeconomics, etc."
 msgstr "数据集简介：包含人后、经济、工业、宏观经济、微观经济等的100000条单变量数据。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:51
-#: 7fc1fac4fd014684804dfdbd4223ee1d
+#: 7ffafb08d4b74e3a9ea7be724eea9863
 msgid ""
 "Dataset name: M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4"
 "-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-"
 "test, M4-Hourly-train, M4-Hourly-test."
-msgstr "数据集名称：M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test, M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4-Hourly-train, M4-Hourly-test。"
+msgstr ""
+"数据集名称：M4-Yearly-train, M4-Yearly-test, M4-Monthly-train, M4-Monthly-test,"
+" M4-Weekly-train, M4-Weekly-test, M4-Daily-train, M4-Daily-test, M4"
+"-Hourly-train, M4-Hourly-test。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:54
-#: f3b5ce64474c4aa7bb12f3e255eb0ba9
+#: 5de98621b60d49d5a6dfa11427980d36
 msgid "7. WTH"
 msgstr "7. WTH"
 
 #: ../../source/modules/datasets/supported_datasets.rst:55
-#: e486d3edde064f899bf6fcd9bc04a6a3
+#: 589c47b6821c4db6a206524cd8fe915b
 msgid "Data source: https://www.ncei.noaa.gov/data/local-climatological-data/"
 msgstr "数据来源：https://www.ncei.noaa.gov/data/local-climatological-data/"
 
 #: ../../source/modules/datasets/supported_datasets.rst:56
-#: 51e3e3de2b0a4cfbb5b38f21eee7445e
+#: fac0d17e0c6448c9bb2e4581d42693bd
 msgid ""
 "Data introduction: hourly weather data with 12 variables spanning 4 "
 "years, used to predict the weather in various regions."
 msgstr "数据简介：包含12个变量跨度4年的每小时天气数据，用于预测各地区的天气。"
 
 #: ../../source/modules/datasets/supported_datasets.rst:57
-#: 35083db2492d4babb7158b3f92908455
+#: e91cc3059d1b4f01bd9ae2cfa92bf5f7
 msgid "Dataset names: WTH, UNI_WTH."
 msgstr "数据集名称：WTH、UNI_WTH。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:61
+#: a5d469b46050494c989f87336de1c932
+#, fuzzy
+msgid "Time Series Anomaly Detection"
+msgstr "时序预测"
+
+#: ../../source/modules/datasets/supported_datasets.rst:63
+#: 6849f04153d64729b9d41592095267d4
+msgid ""
+"Detecting anomalies from monitoring data is vital to industrial "
+"maintenance.  We provide widely-used anomaly detection benchmarks: SMD, "
+"MSL, SMAP, SWaT, PSM, covering service monitoring, space & earth "
+"exploration, and water treatment applications."
+msgstr "从监测数据中检测异常对工业维护至关重要。我们提供广泛使用的异常检测基准：SMD，MSL、SMAP、SWaT、PSM, 涵盖了服务器监控、太空和地球勘探和水处理应用。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:66
+#: c533858633504fb2983d44115e09e367
+msgid "1. SMD"
+msgstr "1. SMD"
+
+#: ../../source/modules/datasets/supported_datasets.rst:67
+#: 63ce103aed464c8c919fc1759b11d0eb
+#, fuzzy
+msgid ""
+"Data source: "
+"https://github.com/NetManAIOps/OmniAnomaly/tree/master/ServerMachineDataset"
+msgstr "数据来源：https://github.com/NetManAIOps/OmniAnomaly/tree/master/ServerMachineDataset"
+
+#: ../../source/modules/datasets/supported_datasets.rst:68
+#: cf3686aad3fc4331b0af0ce3bd4d333a
+msgid ""
+"Data brief introduction: SMD (Server Machine Dataset is a 5-week-long "
+"dataset that is collected from a large Internet company with 38 "
+"dimensions."
+msgstr "数据简介：SMD（服务器机器数据集）是从一家大型互联网公司收集的为期5周的38维数据集。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:69
+#: 9f40d1a1e6134a4885c2dc2d1c25c110
+#, fuzzy
+msgid "Dataset names: smd_train, smd_test."
+msgstr "数据集名称：smd_train、smd_test。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:72
+#: e9a74e71d0f54bbb8ea1e7eae2dafce7
+msgid "2. SMAP"
+msgstr "2. SMAP"
+
+#: ../../source/modules/datasets/supported_datasets.rst:73
+#: 7fac0e026b6c4809a629a4c2c4798ece
+msgid ""
+"Data source: "
+"https://raw.githubusercontent.com/khundman/telemanom/master/labeled_anomalies.csv"
+msgstr "数据来源: https://raw.githubusercontent.com/khundman/telemanom/master/labeled_anomalies.csv"
+
+#: ../../source/modules/datasets/supported_datasets.rst:74
+#: ee904866f4c646c799a8218138d00e33
+msgid ""
+"Data brief introduction: SMAP is from NASA with 25 dimensions, which "
+"contain the telemetry anomaly data derived from the Incident Surprise "
+"Anomaly (ISA) reports of spacecraft monitoring systems."
+msgstr "数据简介: SMAP来自美国国家航空航天局，具有25个维度，其中包含来自航天器监测系统的意外事件异常（ISA）报告的遥测异常数据。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:75
+#: 15a6242b53784abe95102c4484190ea6
+#, fuzzy
+msgid "Dataset names: smap_train, smap_test."
+msgstr "数据集名称：smap_train, smap_test"
+
+#: ../../source/modules/datasets/supported_datasets.rst:78
+#: 09cd94067e7444e2a98c318c22c43d51
+#, fuzzy
+msgid "3. MSL"
+msgstr "3. MSL"
+
+#: ../../source/modules/datasets/supported_datasets.rst:79
+#: 4ae93d281ac943ee9cbeeb64c27d79f0
+msgid "Data source: https://s3-us-west-2.amazonaws.com/telemanom/data.zip"
+msgstr "数据来源: https://s3-us-west-2.amazonaws.com/telemanom/data.zip"
+
+#: ../../source/modules/datasets/supported_datasets.rst:80
+#: 570f0145e8ea40baa7604ce640970a5c
+msgid ""
+"Data brief introduction: MSL (Mars Science Laboratory) is from NASA with "
+"55 dimensions, which contain the telemetry anomaly data derived from the "
+"Incident Surprise Anomaly (ISA) reports of spacecraft monitoring systems."
+msgstr "数据简介：MSL（火星科学实验室）来自美国国家航空航天局，具有55个维度，其中包含来自航天器监测系统的意外事件异常（ISA）报告的遥测异常数据."
+
+#: ../../source/modules/datasets/supported_datasets.rst:81
+#: 180eae9179f741b8bae9472a2af890e2
+#, fuzzy
+msgid "Dataset names: msl_train, msl_test."
+msgstr "数据集名称：msl_train, msl_test。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:84
+#: c2c8b96199bb47289c18f10ea6c77eb5
+#, fuzzy
+msgid "4. SWAT"
+msgstr "4. SWAT"
+
+#: ../../source/modules/datasets/supported_datasets.rst:85
+#: 2eb2cd8fd43446e584430b0e5830dedb
+msgid "Data source: https://itrust.sutd.edu.sg/itrust-labs_datasets/dataset_info"
+msgstr "数据来源：https://itrust.sutd.edu.sg/itrust-labs_datasets/dataset_info"
+
+#: ../../source/modules/datasets/supported_datasets.rst:86
+#: c3b585f069de41b1913397a5351df283
+msgid ""
+"Data brief introduction: ) SWaT(Secure Water Treatment) is obtained from "
+"51 sensors of the critical infrastructure system under continuous "
+"operations."
+msgstr "数据简介：SWaT（安全水处理）是从连续运行的关键基础设施系统的51个传感器中获得的。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:87
+#: c45ca46486e54f338df1ec7e4ccbc2a9
+#, fuzzy
+msgid "Dataset names: swat_train, swat_test."
+msgstr "数据集名称：swat_train, swat_test。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:90
+#: 5e5cd36ddfba47c0b030463b27be37c4
+msgid "5. PSM"
+msgstr "5. PSM"
+
+#: ../../source/modules/datasets/supported_datasets.rst:91
+#: 33f36393e62344a4b61d1ec1b54bc0ed
+#, python-format
+msgid ""
+"Data source: "
+"https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftrain.csv"
+msgstr "数据来源：https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftrain.csv"
+
+#: ../../source/modules/datasets/supported_datasets.rst:92
+#: 65bc2ceef34d4a2d889b0c287f2af807
+msgid ""
+"Data brief introduction: PSM (Pooled Server Metrics) is collected "
+"internally from multiple application server nodes at eBay with 26 "
+"dimensions."
+msgstr "数据简介：PSM是从eBay的多个应用程序服务器节点内部收集的，共有26个维度。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:93
+#: a3f470e39f8e4237a784e81e13321717
+#, fuzzy
+msgid "Dataset names: psm_train, psm_test."
+msgstr "数据集名称：psm_train, psm_test。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:96
+#: 296daf26840a4a58bf88587eca653f7c
+msgid "6. NAB_TEMP"
+msgstr "6. NAB_TEMP"
+
+#: ../../source/modules/datasets/supported_datasets.rst:97
+#: 173d9a7f322c41048e6ad6b003ba4999
+#, fuzzy
+msgid "Data source: https://github.com/numenta/NAB"
+msgstr "数据来源：https://github.com/numenta/NAB"
+
+#: ../../source/modules/datasets/supported_datasets.rst:98
+#: 64acc02385f846369c7c6d7f1d3bc39b
+msgid ""
+"Data brief introduction: The Numenta Anomaly Benchmark (NAB) provides "
+"streaming data to research anomaly detection algorithms. NAB_TEMP is the "
+"temperature dataset."
+msgstr "数据简介：Numenta异常基准（NAB）为研究异常检测算法提供流数据。NAB_TEMP是温度数据集。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:99
+#: 8bbb66b577fd47acbddfc0bdab62ebf1
+#, fuzzy
+msgid "Dataset names: NAB_TEMP"
+msgstr "数据集名称：NAB_TEMP"
+
+#: ../../source/modules/datasets/supported_datasets.rst:103
+#: 625a50c3bdfc42229b62707d288d634e
+msgid "Time Series Classification"
+msgstr "时序分类"
+
+#: ../../source/modules/datasets/supported_datasets.rst:107
+#: 35907545765c4185b972cc8783016b93
+msgid "1. UEA"
+msgstr "1. UEA"
+
+#: ../../source/modules/datasets/supported_datasets.rst:108
+#: c52a45cc1a864c89b8bbd8ecb156278b
+msgid "Data source: https://www.timeseriesclassification.com/index.php"
+msgstr "数据来源：https://www.timeseriesclassification.com/index.php"
+
+#: ../../source/modules/datasets/supported_datasets.rst:109
+#: 2e13e41d0bbc43da813d005907d34dc4
+msgid ""
+"Data brief introduction: UEA Time Series Classification dataset includes "
+"10 multivariate datasets, covering the gesture, action and audio "
+"recognition, medical diagnosis by heartbeat monitoring and other "
+"practical tasks."
+msgstr "数据简介：UEA时间序列分类数据集包括10个多变量数据集，涵盖手势、动作和音频识别、心跳监测医学诊断等实际任务。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:110
+#: d35ad2edf0c34ce1b66e723ae0dcb9ad
+msgid ""
+"Dataset names: EthanolConcentration_Train, EthanolConcentration_Test, "
+"FaceDetection_Train, FaceDetection_Test, Handwriting_Train, "
+"Handwriting_Test, Heartbeat_Train, Heartbeat_Test, JapaneseVowels_Train, "
+"JapaneseVowels_Test, PEMSSF_Train, PEMSSF_Test, SelfRegulationSCP1_Train,"
+" SelfRegulationSCP1_Test, SelfRegulationSCP2_Train, "
+"SelfRegulationSCP2_Test, SpokenArabicDigits_Train, "
+"SpokenArabicDigits_Test, UWaveGestureLibrary_Train, "
+"UWaveGestureLibrary_Test."
+msgstr "数据集名称：EthanolConcentration_Train, EthanolConcentration_Test, FaceDetection_Train, FaceDetection_Test, Handwriting_Train, Handwriting_Test, Heartbeat_Train, Heartbeat_Test, JapaneseVowels_Train, JapaneseVowels_Test, PEMSSF_Train, PEMSSF_Test, SelfRegulationSCP1_Train, SelfRegulationSCP1_Test, SelfRegulationSCP2_Train, SelfRegulationSCP2_Test, SpokenArabicDigits_Train, SpokenArabicDigits_Test, UWaveGestureLibrary_Train, UWaveGestureLibrary_Test。
+
+#: ../../source/modules/datasets/supported_datasets.rst:114
+#: 3924e36cadc14ed2b11170c49d0145b1
+msgid "2. BasicMotions"
+msgstr "2. BasicMotion"
+
+#: ../../source/modules/datasets/supported_datasets.rst:115
+#: 4417706880d0400eb0979278bda57d9e
+msgid ""
+"Data source: "
+"https://timeseriesclassification.com/description.php?Dataset=BasicMotions"
+msgstr "数据来源：https://timeseriesclassification.com/description.php?Dataset=BasicMotions"
+
+#: ../../source/modules/datasets/supported_datasets.rst:116
+#: 5d56e8780d144f199a7d0f6b20b9a27e
+msgid ""
+"Data brief introduction: The data was generated as part of a student "
+"project where four students performed four activities whilst wearing a "
+"smart watch. here are classes: walking, resting, running and badminton. "
+"Participants were required to record motion a total of five times, and "
+"the data is sampled once every tenth of a second, for a ten second "
+"period."
+msgstr "数据简介：四名学生戴着智能手表进行了四项活动：散步、休息、跑步和羽毛球。参与者被要求总共记录五次动作，数据每十分之一秒采样一次，持续10秒。"
+
+#: ../../source/modules/datasets/supported_datasets.rst:117
+#: fb5d1adcacb4405da5cc32dcc08d967d
+msgid "Dataset names: BasicMotions_Train, BasicMotions_Test."
+msgstr "数据集名称：BasicMotions_Train, BasicMotions_Test。"
 
