@@ -10,6 +10,7 @@ import abc
 from paddle.optimizer import Optimizer
 import numpy as np
 import paddle
+import paddle.nn.functional as F
 
 from paddlets.models.common.callbacks import (
     CallbackContainer,
@@ -82,7 +83,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             out_chunk_len: int,
             skip_chunk_len: int=0,
             sampling_stride: int=1,
-            loss_fn: Callable[..., paddle.Tensor]=None,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
             optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
             optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
             eval_metrics: Union[List[str], List[Metric]]=[],
@@ -354,12 +355,18 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
         # Call the `on_train_begin` method of each callback before the training starts.
         self._callback_container.on_train_begin({"start_time": time.time()})
+        learning_rate = self._optimizer_params['learning_rate']
         for epoch_idx in range(self._max_epochs):
-
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
             self._train_epoch(train_dataloader)
-
+            #import pdb;pdb.set_trace()
+            if True: #self._adjust_lr:
+                lr_adjust = {epoch_idx: learning_rate if epoch_idx < 3 else learning_rate * (0.9 ** ((epoch_idx - 3) // 1))}
+                if epoch_idx in lr_adjust.keys():
+                    lr = lr_adjust[epoch_idx]
+                    self._optimizer._learning_rate = lr
+                    print('lr is :', self._optimizer._learning_rate)
             # Predict for each eval set.
             for eval_name, valid_dataloader in zip(valid_names,
                                                    valid_dataloaders):

@@ -5,6 +5,7 @@ Public data sets for time series.
 """
 
 from collections import namedtuple
+from paddlets.utils import manager
 
 DatasetConfig = namedtuple('DatasetConfig',
                            ["name", "type", "path", "load_param"])
@@ -15,9 +16,10 @@ ETTh1Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh1.csv",
     load_param={
-        "target_cols": "OT",
+        #"target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
+        #"observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -28,9 +30,9 @@ ETTh2Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh2.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["OT", "HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
+        #"observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -41,9 +43,9 @@ ETTm1Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTm1.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
+        #"observed_cov_cols": 
         "freq": "15T",
         "dtype": "float32"
     })
@@ -54,9 +56,8 @@ ETTm2Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTm2.csv",
     load_param={
-        "target_cols": "OT",
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
+        "target_cols": ["OT", "HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "15T",
         "dtype": "float32"
     })
@@ -107,9 +108,9 @@ TrafficDataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/traffic.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["{}".format(x) for x in range(861)] + ["OT"],
         "time_col": "date",
-        "observed_cov_cols": ["{}".format(x) for x in range(861)],
+        #"observed_cov_cols": 
         "freq": "1h",
         "dtype": "float32"
     })
@@ -301,6 +302,16 @@ BasicMotionsTrainTDataset = DatasetConfig(
         "group_id": "7",
         "target_cols": ["0", "1", "2", "3", "4", "5"],
         "static_cov_cols": ["label"]
+    }
+)
+
+SMDTrainDataset = DatasetConfig(
+    name = "smd_train",
+    type = "anomaly",
+    path = "https://paddlets.bj.bcebos.com/SMD_train.csv",
+    load_param = {
+        "feature_cols": [str(i) for i in range(38)],
+        "freq": 1
     }
 )
 

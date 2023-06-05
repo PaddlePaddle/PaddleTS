@@ -10,6 +10,7 @@ import os
 import pandas as pd
 import numpy as np
 
+
 from paddlets.logger import raise_if_not
 from paddlets import TSDataset, TimeSeries
 from paddlets.datasets.repository._data_config import ETTh1Dataset
@@ -68,6 +69,7 @@ from paddlets.datasets.repository._data_config import M4DaiTrainDataset
 from paddlets.datasets.repository._data_config import M4DaiTestDataset
 from paddlets.datasets.repository._data_config import M4HourTrainDataset
 from paddlets.datasets.repository._data_config import M4HourTestDataset
+
 
 DATASETS = {
     UNIWTHDataset.name: UNIWTHDataset,
@@ -130,6 +132,7 @@ DATASETS = {
 }
 
 
+
 def dataset_list() -> List[str]:
     """
     获取paddlets内置时序数据集名称列表
@@ -140,7 +143,7 @@ def dataset_list() -> List[str]:
     return list(DATASETS.keys())
 
 
-def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List[
+def get_dataset(name: str, split=None, seq_len=0) -> Union["TSDataset", List["TSDataset"], Tuple[List[
         "TSDataset"], List[Any]]]:
     """
     基于名称获取内置数据集
@@ -165,4 +168,12 @@ def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List[
         y_label = np.array(y_label)
         return (data_list, y_label)
     else:
-        return TSDataset.load_from_dataframe(df, **dataset.load_param)
+        if not split:
+            return TSDataset.load_from_dataframe(df, **dataset.load_param)
+        else:
+            ts_list = []
+            for name, point in split.items():
+                if name == 'val' or name == 'test':
+                    point[0] = point[0] - seq_len
+                ts_list.append(TSDataset.load_from_dataframe(df[point[0]:point[1]], **dataset.load_param))
+            return ts_list

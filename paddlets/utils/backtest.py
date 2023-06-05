@@ -25,6 +25,7 @@ def backtest(data: TSDataset,
              stride: Optional[int]=None,
              metric: Optional[Metric]=None,
              return_predicts: bool=False,
+             column_wise: bool=False,
              reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
              verbose: bool=True) -> Union[float, Tuple[float, Union[
                  TSDataset, List[TSDataset]]]]:
@@ -126,7 +127,7 @@ def backtest(data: TSDataset,
     # If predict_window! = stride, the forecast will form a discontinuous time series, do not processed by default and returns List[TSdataset]
     return_tsdataset = True if predict_window == stride else False
 
-    length = target_length - start - model_skip_chunk_len
+    length = target_length - start - model_skip_chunk_len - predict_window + 1
     predict_rounds = math.ceil(length / stride)
     predicts = []
     scores = []
@@ -168,7 +169,6 @@ def backtest(data: TSDataset,
             all_target.data[index + model_skip_chunk_len:index + predict_window
                             + model_skip_chunk_len], output.freq))
         predict = output
-
         if metric is None:
             metric = MSE()
         score_dict = metric(real, predict)
@@ -203,7 +203,12 @@ def backtest(data: TSDataset,
                         tmp[k].append(v)
 
             tmp = {k: reduction(v) for k, v in tmp.items()}
-            scores = tmp
+            if column_wise:
+                scores = tmp
+            else:
+                scores = reduction([v for v in tmp.values()])
+
+
 
     if return_predicts:
         if return_tsdataset:
