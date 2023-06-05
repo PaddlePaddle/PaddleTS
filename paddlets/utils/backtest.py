@@ -130,7 +130,7 @@ def backtest(data: TSDataset,
     length = target_length - start - model_skip_chunk_len - predict_window + 1
     predict_rounds = math.ceil(length / stride)
     predicts = []
-    scores = []
+    scores = defaultdict(list)
     index = start
 
     TQDM_PREFIX = "Backtest Progress"
@@ -169,50 +169,60 @@ def backtest(data: TSDataset,
             all_target.data[index + model_skip_chunk_len:index + predict_window
                             + model_skip_chunk_len], output.freq))
         predict = output
-        if metric is None:
-            metric = MSE()
-        score_dict = metric(real, predict)
-        scores.append(score_dict)
-        index = index + stride
 
-    if reduction:
-        if metric._TYPE == "quantile" and isinstance(
-                list(scores[0].values())[0], dict):
-            target_cols = [x for x in scores[0].keys()]
-
-            tmp = {}
-            for cols in target_cols:
-                tmp[cols] = defaultdict(list)
-                for dct in [x[cols] for x in scores]:
-                    for k, v in dct.items():
-                        if isinstance(v, Iterable):
-                            tmp[cols][k].extend(v)
-                        else:
-                            tmp[cols][k].append(v)
-                tmp[cols] = {k: reduction(v) for k, v in tmp[cols].items()}
-
-            scores = tmp
+        if isinstance(metric, list):
+            for i in range(len(metric)):
+                score_dict = metric[i](real, predict)
+                scores[metric[i]._NAME].append(score_dict)
 
         else:
-            tmp = defaultdict(list)
-            for dct in [x for x in scores]:
-                for k, v in dct.items():
-                    if isinstance(v, Iterable):
-                        tmp[k].extend(v)
-                    else:
-                        tmp[k].append(v)
+            if metric is None:
+                metric = MSE() 
+            score_dict = metric(real, predict)
+            scores[metric[i]._NAME].append(score_dict)        
+        index = index + stride
 
-            tmp = {k: reduction(v) for k, v in tmp.items()}
-            if column_wise:
-                scores = tmp
+    score_final = dict()
+    for key, score in scores.items():
+        if reduction:
+            if key == "quantile" and isinstance(
+                    list(score[0].values())[0], dict):
+                target_cols = [x for x in score[0].keys()]
+
+                tmp = {}
+                for cols in target_cols:
+                    tmp[cols] = defaultdict(list)
+                    for dct in [x[cols] for x in score]:
+                        for k, v in dct.items():
+                            if isinstance(v, Iterable):
+                                tmp[cols][k].extend(v)
+                            else:
+                                tmp[cols][k].append(v)
+                    tmp[cols] = {k: reduction(v) for k, v in tmp[cols].items()}
+
+                score = tmp
+
             else:
-                scores = reduction([v for v in tmp.values()])
+                tmp = defaultdict(list)
+                for dct in [x for x in score]:
+                    for k, v in dct.items():
+                        if isinstance(v, Iterable):
+                            tmp[k].extend(v)
+                        else:
+                            tmp[k].append(v)
 
+                tmp = {k: reduction(v) for k, v in tmp.items()}
+                if column_wise:
+                    score = tmp
+                else:
+                    score = reduction([v for v in tmp.values()])
+            
+            score_final[key]= score
 
 
     if return_predicts:
         if return_tsdataset:
             predicts = TSDataset.concat(predicts)
-        return scores, predicts
+        return score_final, predicts
     else:
-        return scores
+        return score_final

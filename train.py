@@ -22,7 +22,7 @@ def parse_args():
         '--save_dir',
         help='The directory for saving the model snapshot.',
         type=str,
-        default='./output')
+        default='./output/')
     parser.add_argument(
         '--do_eval',
         help='Whether to do evaluation after training.',
@@ -87,7 +87,7 @@ def main(args):
         out_chunk_len=cfg.predict_len,
         batch_size=batch_size,
         max_epochs=epoch,
-        model_cfg=cfg.model['model_cfg']
+        **cfg.model['model_cfg']
         )
     
     scaler = StandardScaler()
@@ -96,30 +96,23 @@ def main(args):
     if do_eval:
         ts_val = scaler.transform(ts_val)
         ts_test = scaler.transform(ts_test)
-
-    model.fit(ts_train)
+        model.fit(ts_train, ts_val)
+    else:
+        model.fit(ts_train)
+    
     setting = dataset['name'] + '_' + str(seq_len) + '_' + str(predict_len) + '/'
+    print(setting)
     model.save(args.save_dir +setting)
-
+    
     if do_eval:
-        mse = MSE()
         metrics_mse_score = backtest(
             data=ts_test,
             model=model,
             predict_window=predict_len,
             stride=1,
-            metric=mse,
+            metric=[MSE(), MAE()],
         )
-        mae = MAE()
-        metrics_mae_score, predict_data = backtest(
-            data=ts_test,
-            model=model,
-            predict_window=predict_len,
-            stride=1,
-            metric=mae,
-            return_predicts=True,
-        )
-        print(f"mse: {metrics_mse_score}, mae: {metrics_mae_score}")
+        print(f"{metrics_mse_score}")
 
 if __name__ == '__main__':
     args = parse_args()
