@@ -5,4 +5,4 @@ metrics
 """
 from paddlets.metrics.metrics import (MetricContainer, Metric, LogLoss, MSE,
                                       MAE, QuantileLoss, ACC, Precision,
-                                      Recall, F1)
+                                      Recall, F1, SMAPE, MAPE, MASE)

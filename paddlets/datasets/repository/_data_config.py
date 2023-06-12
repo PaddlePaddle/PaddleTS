@@ -14,39 +14,27 @@ ETTh1Dataset = DatasetConfig(
     name="ETTh1",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh1.csv",
-    load_param={
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
-        "freq": "1h",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "1h",
+                "dtype": "float32"})
 
 # 2> ETT data with 1 hour frequency, https://github.com/zhouhaoyi/ETDataset
 ETTh2Dataset = DatasetConfig(
     name="ETTh2",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh2.csv",
-    load_param={
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
-        "freq": "1h",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "1h",
+                "dtype": "float32"})
 
 # 3> ETT data with 15 minutes frequency, https://github.com/zhouhaoyi/ETDataset
 ETTm1Dataset = DatasetConfig(
     name="ETTm1",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTm1.csv",
-    load_param={
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
-        "freq": "15T",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "15T",
+                "dtype": "float32"})
 
 # 4> ETT data with 15 minutes frequency, https://github.com/zhouhaoyi/ETDataset
 ETTm2Dataset = DatasetConfig(
@@ -62,13 +50,9 @@ ECLDataset = DatasetConfig(
     name="ECL",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ECL.csv",
-    load_param={
-        "target_cols": "MT_320",
-        "time_col": "date",
-        "observed_cov_cols": ["MT_{:0>3}".format(x) for x in range(320)],
-        "freq": "1h",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "1h",
+                "dtype": "float32"})
 
 # 6> Fixed weather data, https://www.ncei.noaa.gov/data/local-climatological-data/
 WTHDataset = DatasetConfig(
@@ -102,28 +86,18 @@ TrafficDataset = DatasetConfig(
     name="Traffic",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/traffic.csv",
-    load_param={
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ["{}".format(x) for x in range(861)],
-        "freq": "1h",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "1h",
+                "dtype": "float32"})
 
 # 8> ILIness data, https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html
 ILIDataset = DatasetConfig(
-    name = "ILI",
-    type = "forecasting",
-    path = "https://bj.bcebos.com/paddlets/national_illness.csv",
-    load_param = {
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ['% WEIGHTED ILI', '%UNWEIGHTED ILI', \
-                              'AGE 0-4', 'AGE 5-24', 'ILITOTAL', 'NUM. OF PROVIDERS'],
-        "freq": "7D",
-        "dtype": "float32"
-    }
-)
+    name="ILI",
+    type="forecasting",
+    path="https://bj.bcebos.com/paddlets/national_illness.csv",
+    load_param={"time_col": "date",
+                "freq": "7D",
+                "dtype": "float32"})
 
 # 9> Exchange-rate data, https://github.com/laiguokun/multivariate-time-series-data
 ExchangeDataset = DatasetConfig(
@@ -156,85 +130,85 @@ WeatherDataset = DatasetConfig(
 )
 
 # 11> M4 data, https://github.com/M4Competition/ M4-methods/tree/master/Dataset
-M4YearTrainDataset = DatasetConfig(
-    name="M4-Yearly-train",
+M4YearlyTrainDataset = DatasetConfig(
+    name="M4Yearlytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Yearly-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4YearTestDataset = DatasetConfig(
-    name="M4-Yearly-test",
+M4YearlyTestDataset = DatasetConfig(
+    name="M4Yearlytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Yearly-test-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4WeekTrainDataset = DatasetConfig(
-    name="M4-Weekly-train",
+M4WeeklyTrainDataset = DatasetConfig(
+    name="M4Weeklytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Weekly-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4WeekTestDataset = DatasetConfig(
-    name="M4-Weekly-test",
+M4WeeklyTestDataset = DatasetConfig(
+    name="M4Weeklytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Weekly-test-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4QuarterTrainDataset = DatasetConfig(
-    name="M4-Quarterly-train",
+M4QuarterlyTrainDataset = DatasetConfig(
+    name="M4Quarterlytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Quarterly-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4QuarterTestDataset = DatasetConfig(
-    name="M4-Quarterly-test",
+M4QuarterlyTestDataset = DatasetConfig(
+    name="M4Quarterlytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Quarterly-test-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4MonthTrainDataset = DatasetConfig(
-    name="M4-Monthly-train",
+M4MonthlyTrainDataset = DatasetConfig(
+    name="M4Monthlytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Monthly-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4MonthTestDataset = DatasetConfig(
-    name="M4-Monthly-test",
+M4MonthlyTestDataset = DatasetConfig(
+    name="M4Monthlytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Monthly-test-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4HourTrainDataset = DatasetConfig(
-    name="M4-Hourly-train",
+M4HourlyTrainDataset = DatasetConfig(
+    name="M4Hourlytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Hourly-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4HourTestDataset = DatasetConfig(
-    name="M4-Hourly-test",
+M4HourlyTestDataset = DatasetConfig(
+    name="M4Hourlytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Hourly-test-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4DaiTrainDataset = DatasetConfig(
-    name="M4-Daily-train",
+M4DailyTrainDataset = DatasetConfig(
+    name="M4Dailytrain",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Daily-train-t.csv",
     load_param={"freq": 1,
                 "dtype": "float32"})
 
-M4DaiTestDataset = DatasetConfig(
-    name="M4-Daily-test",
+M4DailyTestDataset = DatasetConfig(
+    name="M4Dailytest",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/m4/Daily-test-t.csv",
     load_param={"freq": 1,

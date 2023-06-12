@@ -1,3 +1,4 @@
+import math
 from typing import List, Dict, Any, Callable, Optional, NewType, Tuple, Union
 
 import numpy as np
@@ -6,15 +7,18 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle.optimizer import Optimizer
 
-from paddlets.datasets import TSDataset
+from paddlets.datasets import TSDataset, UnivariateDataset
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.forecasting.dl.revin import revin_norm
 from paddlets.models.forecasting.dl.embedding import DataEmbedding
 from paddlets.models.common.callbacks import Callback
+from paddlets.models.data_adapter import DataAdapter
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 from paddlets.models.forecasting.dl.layer_libs import Inception_Block_V1
+from paddlets.models.forecasting.dl import layer_init as init
 
 logger = Logger(__name__)
+
 
 def FFT_for_Period(x, k=2):
     xf = paddle.fft.rfft(x=x, axis=1)
@@ -27,39 +31,45 @@ def FFT_for_Period(x, k=2):
 
 
 class TimesBlock(nn.Layer):
-    def __init__(self, 
+    def __init__(
+            self,
             in_chunk_len: int,
             out_chunk_len: int,
             d_model: int,
             d_ff: int=32,
             top_k: int=5,
-            num_kernels:int=6,
-            ):
+            num_kernels: int=6, ):
         super(TimesBlock, self).__init__()
         self.seq_len = in_chunk_len
         self.pred_len = out_chunk_len
         self.k = top_k
-        self.conv = nn.Sequential(Inception_Block_V1(d_model,
-            d_ff, num_kernels=num_kernels), nn.GELU(
-            ), Inception_Block_V1(d_ff, d_model,
-            num_kernels=num_kernels))
+        self.conv = nn.Sequential(
+            Inception_Block_V1(
+                d_model, d_ff, num_kernels=num_kernels),
+            nn.GELU(),
+            Inception_Block_V1(
+                d_ff, d_model, num_kernels=num_kernels))
 
     def forward(self, x):
         B, T, N = x.shape
         period_list, period_weight = FFT_for_Period(x, self.k)
+
         res = []
         for i in range(self.k):
             period = period_list[i]
             if (self.seq_len + self.pred_len) % period != 0:
-                length = ((self.seq_len + self.pred_len) // period + 1
-                    ) * period
-                padding = paddle.zeros(shape=[x.shape[0], length - (self.
-                    seq_len + self.pred_len), x.shape[2]])
+                length = (
+                    (self.seq_len + self.pred_len) // period + 1) * period
+                padding = paddle.zeros(shape=[
+                    x.shape[0], length - (self.seq_len + self.pred_len),
+                    x.shape[2]
+                ])
                 out = paddle.concat(x=[x, padding], axis=1)
             else:
                 length = self.seq_len + self.pred_len
                 out = x
-            out = out.reshape([B, length // period, period, N]).transpose(perm=[0, 3, 1, 2])
+            out = out.reshape([B, length // period, period, N]).transpose(
+                perm=[0, 3, 1, 2])
             out = self.conv(out)
             out = out.transpose(perm=[0, 2, 3, 1]).reshape([B, -1, N])
             res.append(out[:, :self.seq_len + self.pred_len, :])
@@ -67,7 +77,7 @@ class TimesBlock(nn.Layer):
         period_weight = nn.functional.softmax(x=period_weight, axis=1)
         period_weight = period_weight.unsqueeze(axis=1).unsqueeze(axis=1).tile(
             repeat_times=[1, T, N, 1])
-        
+
         res = paddle.sum(x=res * period_weight, axis=-1)
         res = res + x
         return res
@@ -78,7 +88,8 @@ class _TimesNet(nn.Layer):
     Paper link: https://openreview.net/pdf?id=ju_Uqw384Oq
     """
 
-    def __init__(self,             
+    def __init__(
+            self,
             in_chunk_len: int,
             out_chunk_len: int,
             task_name: str='long_term_forecast',
@@ -93,45 +104,69 @@ class _TimesNet(nn.Layer):
             top_k: int=5,
             num_kernels: int=6,
             num_class: int=2,
-            pretrained: str='paddle.pdparams'):
+            pretrained: str='paddle_Monthly_TimesNet_m4.pdparams'):
         super(_TimesNet, self).__init__()
         self.task_name = task_name
         self.seq_len = in_chunk_len
         self.pred_len = out_chunk_len
         self.model = nn.LayerList(sublayers=[
-            TimesBlock(in_chunk_len=in_chunk_len,
-                out_chunk_len=out_chunk_len, d_model=d_model,
-                d_ff=d_ff, top_k=top_k, num_kernels=num_kernels) 
-                for _ in range(e_layers)])
-        self.enc_embedding = DataEmbedding(enc_in, d_model,
-            embed, freq, dropout)
+            TimesBlock(
+                in_chunk_len=in_chunk_len,
+                out_chunk_len=out_chunk_len,
+                d_model=d_model,
+                d_ff=d_ff,
+                top_k=top_k,
+                num_kernels=num_kernels) for _ in range(e_layers)
+        ])
+        self.enc_embedding = DataEmbedding(enc_in, d_model, embed, freq,
+                                           dropout)
         self.layer = e_layers
-        self.layer_norm = nn.LayerNorm(normalized_shape=d_model, epsilon=1e-05, weight_attr=None, bias_attr=None)
+        self.layer_norm = nn.LayerNorm(
+            normalized_shape=d_model,
+            epsilon=1e-05,
+            weight_attr=None,
+            bias_attr=None)
         self.pretrained = pretrained
-        if (self.task_name == 'long_term_forecast' or self.task_name ==
-            'short_term_forecast'):
-            self.predict_linear = nn.Linear(in_features=self.seq_len,
+        if (self.task_name == 'long_term_forecast' or
+                self.task_name == 'short_term_forecast'):
+            self.predict_linear = nn.Linear(
+                in_features=self.seq_len,
                 out_features=self.pred_len + self.seq_len)
-            self.projection = nn.Linear(in_features=d_model,
-                out_features=c_out, bias_attr=True)
-        if (self.task_name == 'imputation' or self.task_name ==
-            'anomaly_detection'):
-            self.projection = nn.Linear(in_features=d_model,
-                out_features=c_out, bias_attr=True)
+            self.projection = nn.Linear(
+                in_features=d_model, out_features=c_out, bias_attr=True)
+        if (self.task_name == 'imputation' or
+                self.task_name == 'anomaly_detection'):
+            self.projection = nn.Linear(
+                in_features=d_model, out_features=c_out, bias_attr=True)
         if self.task_name == 'classification':
             self.act = nn.functional.gelu
             self.dropout = nn.Dropout(p=dropout)
-            self.projection = nn.Linear(in_features=d_model *
-                in_chunk_len, out_features=num_class)
-        
+            self.projection = nn.Linear(
+                in_features=d_model * in_chunk_len, out_features=num_class)
+
         # self._load_from_checkpoint()
-    
+        # self._initialize_weights()
+        # paddle.save(self.state_dict(), 'init_paddle.pdparams')
+
+    def _initialize_weights(self, ):
+        for layer in self.sublayers():
+            if isinstance(layer, nn.LayerNorm):
+                init.constant_init(layer.weight, value=1.0)
+                init.constant_init(layer.bias, value=0.0)
+            elif isinstance(layer, nn.Linear):
+                init.th_linear_fill(layer)
+            elif isinstance(layer, nn.Embedding):
+                init.normal_init(layer.weight, mean=0.0, std=1.0)
+
     def _load_from_checkpoint(self):
         model = paddle.load(self.pretrained)
         self.set_dict(model)
         logger.info('Successfully load model from {}'.format(self.pretrained))
 
-    def forecast(self, x_enc, x_mark_enc):
+    def forecast(
+            self,
+            x_enc,
+            x_mark_enc=None, ):
         # import numpy as np
         # np.random.seed(2022)
         # x = np.random.randn(32, 96, 7)
@@ -142,12 +177,13 @@ class _TimesNet(nn.Layer):
 
         means = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - means
-        stdev = paddle.sqrt(x=paddle.var(x=x_enc, axis=1, keepdim=True,
-            unbiased=False) + 1e-05)
+        stdev = paddle.sqrt(x=paddle.var(
+            x=x_enc, axis=1, keepdim=True, unbiased=False) + 1e-05)
         x_enc /= stdev
 
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
-        enc_out = self.predict_linear(enc_out.transpose(perm=[0, 2, 1])).transpose(perm=[0, 2, 1])
+        enc_out = self.predict_linear(enc_out.transpose(
+            perm=[0, 2, 1])).transpose(perm=[0, 2, 1])
         for i in range(self.layer):
             enc_out = self.layer_norm(self.model[i](enc_out))
         dec_out = self.projection(enc_out)
@@ -155,7 +191,7 @@ class _TimesNet(nn.Layer):
             repeat_times=[1, self.pred_len + self.seq_len, 1])
         dec_out = dec_out + means[:, (0), :].unsqueeze(axis=1).tile(
             repeat_times=[1, self.pred_len + self.seq_len, 1])
-        
+
         return dec_out
 
     def imputation(self, x_enc, x_mark_enc, mask):
@@ -163,8 +199,8 @@ class _TimesNet(nn.Layer):
         means = means.unsqueeze(axis=1).detach()
         x_enc = x_enc - means
         x_enc = paddle.where(mask == 0, x_enc, 0)
-        stdev = paddle.sqrt(x=paddle.sum(x=x_enc * x_enc, axis=1) / paddle.
-            sum(x=mask == 1, axis=1) + 1e-05)
+        stdev = paddle.sqrt(x=paddle.sum(x=x_enc * x_enc, axis=1) / paddle.sum(
+            x=mask == 1, axis=1) + 1e-05)
         stdev = stdev.unsqueeze(axis=1).detach()
         x_enc /= stdev
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
@@ -180,8 +216,8 @@ class _TimesNet(nn.Layer):
     def anomaly_detection(self, x_enc):
         means = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - means
-        stdev = paddle.sqrt(x=paddle.var(x=x_enc, axis=1, keepdim=True,
-            unbiased=False) + 1e-05)
+        stdev = paddle.sqrt(x=paddle.var(
+            x=x_enc, axis=1, keepdim=True, unbiased=False) + 1e-05)
         x_enc /= stdev
         enc_out = self.enc_embedding(x_enc, None)
         for i in range(self.layer):
@@ -204,12 +240,14 @@ class _TimesNet(nn.Layer):
         output = self.projection(output)
         return output
 
-    def forward(self, x_enc, x_mark_enc, mask=None):
-        x_enc = x_enc['past_target'].cast('float32')
-        x_mark_enc = x_mark_enc.cast('float32')
-        
-        if (self.task_name == 'long_term_forecast' or self.task_name ==
-            'short_term_forecast'):
+    def forward(self, x_enc, x_mark_enc=None, mask=None):
+        if isinstance(x_enc, dict):
+            x_enc = x_enc['past_target'].cast('float32')
+        if x_mark_enc is not None:
+            x_mark_enc = x_mark_enc.cast('float32')
+
+        if (self.task_name == 'long_term_forecast' or
+                self.task_name == 'short_term_forecast'):
             dec_out = self.forecast(x_enc, x_mark_enc)
             return dec_out[:, -self.pred_len:, :]
         if self.task_name == 'imputation':
@@ -228,7 +266,7 @@ class _TimesNet(nn.Layer):
 # directly pass in the datateet additional check params
 class TimesNetModel(PaddleBaseModelImpl):
     """
-    Implementation of NBeats model.
+    Implementation of TimesNet model.
 
     Args:
         in_chunk_len(int): The size of the loopback window, i.e., the number of time steps feed to the model.
@@ -259,44 +297,50 @@ class TimesNetModel(PaddleBaseModelImpl):
         seed(int, Optional): global random seed.
     """
 
-    def __init__(self,
-                 in_chunk_len: int, # 96
-                 out_chunk_len: int, # 96 192 336 720
-                 label_len: int=0,
-                 task_name: str='long_term_forecast',
-                 e_layers: int=2,
-                 enc_in: int=7,
-                 d_model: int=32,
-                 embed: str='timeF',  # [timeF, fixed, learned]
-                 freq: str='h',
-                 dropout: float=0.1, # todo
-                 c_out: int=7,
-                 d_ff: int=32,
-                 top_k: int=5,
-                 num_kernels: int=6,
-                 num_class: int=2,
-                 use_revin: bool=False,
-                 revin_params: Dict[str, Any]=dict(
-                     eps=1e-5, affine=True),
-                 skip_chunk_len: int=0,
-                 sampling_stride: int=1, # 采样间隔，每个样本之间的差距
-                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss, # 
-                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam, #
-                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4), #
-                 eval_metrics: List[str]=[],
-                 callbacks: List[Callback]=[],
-                 batch_size: int=32, # 
-                 max_epochs: int=10,
-                 verbose: int=1,
-                 patience: int=10,
-                 drop_last: bool=True,
-                 seed: int=0):
+    def __init__(
+            self,
+            in_chunk_len: int,  # 96
+            out_chunk_len: int,  # 96 192 336 720
+            label_len: int=0,
+            task_name: str='long_term_forecast',
+            e_layers: int=2,
+            enc_in: int=7,
+            d_model: int=32,
+            embed: str='timeF',  # [timeF, fixed, learned]
+            freq: str='h',
+            dropout: float=0.0,
+            c_out: int=7,
+            d_ff: int=32,
+            top_k: int=5,
+            num_kernels: int=6,
+            num_class: int=2,
+            window_sampling_limit: int=None,
+            add_transformed_datastamp: bool=True,
+            need_date_in_network: bool=False,
+            use_revin: bool=False,
+            revin_params: Dict[str, Any]=dict(
+                eps=1e-5, affine=True),
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,  # 采样间隔，每个样本之间的差距
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,  # 
+            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,  #
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),  #
+            lrSched=paddle.optimizer.lr.LRScheduler,
+            eval_metrics: List[str]=[],
+            callbacks: List[Callback]=[],
+            batch_size: int=32,  # 
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=10,
+            drop_last: bool=True,
+            seed: int=0):
 
         super(TimesNetModel, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
             skip_chunk_len=skip_chunk_len,
             label_len=label_len,
+            task_name=task_name,
             sampling_stride=sampling_stride,
             loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
@@ -310,25 +354,113 @@ class TimesNetModel(PaddleBaseModelImpl):
             drop_last=drop_last,
             seed=seed, )
 
-        self._in_chunk_len=in_chunk_len
-        self._out_chunk_len=out_chunk_len
-        self._label_len=label_len
-        self._task_name=task_name
-        self._e_layers=e_layers
-        self._enc_in=enc_in
-        self._d_model=d_model
-        self._embed=embed
-        self._freq=freq
-        self._dropout=dropout
-        self._c_out=c_out
-        self._d_ff=d_ff
-        self._top_k=top_k
-        self._num_kernels=num_kernels
-        self._num_class=num_class
+        self._in_chunk_len = in_chunk_len
+        self._out_chunk_len = out_chunk_len
+        self._label_len = label_len
+        self._e_layers = e_layers
+        self._enc_in = enc_in
+        self._d_model = d_model
+        self._embed = embed
+        self._freq = freq
+        self._dropout = dropout
+        self._c_out = c_out
+        self._d_ff = d_ff
+        self._top_k = top_k
+        self._num_kernels = num_kernels
+        self._num_class = num_class
+        self._window_sampling_limit = window_sampling_limit
         self._use_revin = use_revin
         self._revin_params = revin_params
-        self.need_date_in_network = True
-        self._add_transformed_datastamp = True
+        self._need_date_in_network = need_date_in_network
+        self._add_transformed_datastamp = add_transformed_datastamp
+        self._lrSched = lrSched
+
+    def _init_fit_dataloaders(
+            self,
+            train_tsdataset: Union[TSDataset, List[TSDataset]],
+            valid_tsdataset: Optional[Union[TSDataset, List[TSDataset]]]=None
+    ) -> Tuple[paddle.io.DataLoader, List[paddle.io.DataLoader]]:
+        """Generate dataloaders for train and eval set.
+
+        Args: 
+            train_tsdataset(Union[TSDataset, List[TSDataset]]): Train set.
+            valid_tsdataset(Optional[Union[TSDataset, List[TSDataset]]]): Eval set.
+
+        Returns:
+            paddle.io.DataLoader: Training dataloader.
+            List[paddle.io.DataLoader]: List of validation dataloaders..
+        """
+        data_adapter = DataAdapter()
+        self.train_dataset = None
+        if isinstance(train_tsdataset, TSDataset):
+            train_tsdataset = [train_tsdataset]
+        # 接入多个数据集，先用一个dataadapter进行统一为一个数据集
+        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
+        if self._window_sampling_limit is not None:  # Only univariate dataset have this property
+            self.train_dataset = UnivariateDataset(
+                train_tsdataset, self._in_chunk_len, self._out_chunk_len,
+                self._label_len, self._window_sampling_limit)
+            if valid_tsdataset is not None:
+                self.valid_dataset = UnivariateDataset(
+                    valid_tsdataset, self._in_chunk_len, self._out_chunk_len,
+                    self._label_len, self._window_sampling_limit)
+
+        else:
+            for dataset in train_tsdataset:
+                self._check_tsdataset(dataset)
+                dataset = data_adapter.to_sample_dataset(  # sample the data
+                    dataset,
+                    in_chunk_len=self._in_chunk_len,
+                    out_chunk_len=self._out_chunk_len,
+                    skip_chunk_len=self._skip_chunk_len,
+                    label_len=self._label_len,
+                    add_transformed_datastamp=self._add_transformed_datastamp,
+                    sampling_stride=self._sampling_stride,
+                    window_sampling_limit=self._window_sampling_limit
+                )  # Only univariate dataset have this property
+                if self.train_dataset is None:
+                    self.train_dataset = dataset
+                else:
+                    self.train_dataset.samples = self.train_dataset.samples + dataset.samples
+
+            if valid_tsdataset is not None:
+                self.valid_dataset = None
+                if isinstance(valid_tsdataset, TSDataset):
+                    valid_tsdataset = [valid_tsdataset]
+                for dataset in valid_tsdataset:
+                    self._check_tsdataset(dataset)
+                    dataset = data_adapter.to_sample_dataset(
+                        dataset,
+                        in_chunk_len=self._in_chunk_len,
+                        out_chunk_len=self._out_chunk_len,
+                        skip_chunk_len=self._skip_chunk_len,
+                        add_transformed_datastamp=self.
+                        _add_transformed_datastamp,
+                        sampling_stride=self._sampling_stride,
+                        window_sampling_limit=self.
+                        _window_sampling_limit,  # Only univariate dataset have this property
+                    )
+                    if self.valid_dataset is None:
+                        self.valid_dataset = dataset
+                    else:
+                        self.valid_dataset.samples = self.valid_dataset.samples + dataset.samples
+
+        train_dataloader = data_adapter.to_paddle_dataloader(
+            self.train_dataset,
+            self._batch_size,
+            shuffle=True,
+            drop_last=self._drop_last)
+
+        if valid_tsdataset is not None:
+            valid_dataloaders = []
+            valid_dataloader = data_adapter.to_paddle_dataloader(
+                self.valid_dataset,
+                self._batch_size,
+                shuffle=False,
+                drop_last=self._drop_last)  # shuffle=True
+            valid_dataloaders.append(valid_dataloader)
+
+        return train_dataloader, valid_dataloaders
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
@@ -343,10 +475,18 @@ class TimesNetModel(PaddleBaseModelImpl):
             )
         super(TimesNetModel, self)._check_tsdataset(tsdataset)
 
-    def _update_fit_params(self, train_tsdataset: TSDataset, valid_tsdataset: Optional[TSDataset] = None) -> Dict[str, Any]:
-        return None
+    def _update_fit_params(
+            self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
+        fit_params = {
+            "target_dim": train_tsdataset[0].get_target().data.shape[1],
+            "known_cov_dim": 0,
+            "observed_cov_dim": 0
+        }
+        return fit_params
 
-    @revin_norm # aligned? not used seemly
+    @revin_norm  # aligned? not used seemly
     def _init_network(self) -> nn.Layer:
         """
         Init network.
@@ -354,7 +494,8 @@ class TimesNetModel(PaddleBaseModelImpl):
         Returns:
             nn.Layer
         """
-        return _TimesNet(
-            self._in_chunk_len, self._out_chunk_len, self._task_name, self._e_layers, self._enc_in,
-            self._d_model, self._embed, self._freq, self._dropout, self._c_out, self._d_ff, self._top_k,
-            self._num_kernels, self._num_class)
+        return _TimesNet(self._in_chunk_len, self._out_chunk_len,
+                         self._task_name, self._e_layers, self._enc_in,
+                         self._d_model, self._embed, self._freq, self._dropout,
+                         self._c_out, self._d_ff, self._top_k,
+                         self._num_kernels, self._num_class)

@@ -234,4 +234,4 @@ def th_linear_fill(layer):
     if getattr(layer, 'bias', None) is not None:
         fan_in = layer.weight.shape[0]
         bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
-        nn.initializer.Uniform(low=-bound, high=bound)(layer.bias)
+        nn.initializer.Constan(low=-bound, high=bound)(layer.bias)

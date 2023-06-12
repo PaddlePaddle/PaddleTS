@@ -611,6 +611,66 @@ class TimeSeries(object):
             self.astype(np.float32)
 
 
+class UnivariateDataset(object):
+    def __init__(self, tsdataset, seq_len, pred_len, label_len,
+                 window_sampling_limit) -> None:
+        self.ts_dataset = tsdataset[0].target.to_numpy()
+        self.timeseries = []
+        for v in self.ts_dataset.transpose(1, 0):
+            self.timeseries.append(v[~np.isnan(v)])
+        self.timeseries = np.array(
+            self.timeseries
+        )  #[v[~np.isnan(v)] for v in self.timeseries.transpose(1,0)]
+        self.pred_len = pred_len
+        self.seq_len = seq_len
+        self.label_len = label_len
+        self.window_sampling_limit = window_sampling_limit
+        self.M4ids = tsdataset[0].target.columns.values.tolist()
+
+    def __getitem__(self, index):
+        insample = np.zeros((self.seq_len, 1))
+        insample_mask = np.zeros((self.seq_len, 1))
+        outsample = np.zeros((self.pred_len + self.label_len, 1))
+        outsample_mask = np.zeros(
+            (self.pred_len + self.label_len, 1))  # m4 dataset
+
+        sampled_timeseries = self.timeseries[index]  # (48000, 469)
+        cut_point = np.random.randint(
+            low=max(1, len(sampled_timeseries) - self.window_sampling_limit),
+            high=len(sampled_timeseries),
+            size=1)[0]
+
+        insample_window = sampled_timeseries[max(0, cut_point - self.seq_len):
+                                             cut_point]
+        insample[-len(insample_window):, 0] = insample_window
+        insample_mask[-len(insample_window):, 0] = 1.0
+        outsample_window = sampled_timeseries[cut_point - self.label_len:min(
+            len(sampled_timeseries), cut_point + self.pred_len)]
+        outsample[:len(outsample_window), 0] = outsample_window
+        outsample_mask[:len(outsample_window), 0] = 1.0
+        return insample.astype('float32'), outsample.astype(
+            'float32'), insample_mask.astype('float32'), outsample_mask.astype(
+                'float32')  # outsample 和 insample的联系？数据和标签
+
+    def __len__(self):
+        return len(self.timeseries)
+
+    def last_insample_window(self):
+        """
+        The last window of insample size of all timeseries.
+        This function does not support batching and does not reshuffle timeseries.
+
+        :return: Last insample window of all timeseries. Shape "timeseries, insample size"
+        """
+        insample = np.zeros((len(self.timeseries), self.seq_len))
+        insample_mask = np.zeros((len(self.timeseries), self.seq_len))
+        for i, ts in enumerate(self.timeseries):
+            ts_last_window = ts[-self.seq_len:]
+            insample[i, -len(ts):] = ts_last_window
+            insample_mask[i, -len(ts):] = 1.0
+        return insample, insample_mask
+
+
 class TSDataset(object):
     """
     TSDataset is the fundamental data class in PaddleTS, which is designed as the first-class citizen 

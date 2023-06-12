@@ -275,7 +275,7 @@ class SampleDataset(paddle.io.Dataset):
         self._out_chunk_len = out_chunk_len
         self._skip_chunk_len = skip_chunk_len
         self._label_len = label_len
-        self.add_transformed_datastamp = add_transformed_datastamp
+        self._add_transformed_datastamp = add_transformed_datastamp
         self._sampling_stride = sampling_stride
         self._fill_last_value = fill_last_value
         self._std_timeseries_name, self._std_timeindex = self._compute_std_timeindex(
@@ -709,7 +709,7 @@ class SampleDataset(paddle.io.Dataset):
             target_ndarray = self._build_ndarray_from_timeseries_by_dtype(
                 timeseries=target_ts, dtype=self._numeric_dtype)
 
-            if self.add_transformed_datastamp:
+            if self._add_transformed_datastamp:
                 df_stamp = target_ts._data.index.to_series(
                     index=[i for i in range(len(target_ts._data.index))])
                 df_stamp['date'] = pd.to_datetime(df_stamp)

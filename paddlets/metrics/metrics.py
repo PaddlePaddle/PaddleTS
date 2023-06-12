@@ -15,6 +15,16 @@ from paddlets.logger import Logger, raise_if_not, raise_if, raise_log
 logger = Logger(__name__)
 
 
+def divide_no_nan(a, b):
+    """
+    a/b where the resulted NaN or Inf are replaced by 0.
+    """
+    result = a / b
+    result[result != result] = .0
+    result[result == np.inf] = .0
+    return result
+
+
 class MSE(Metric):
     """Mean Squared Error.
 
@@ -45,6 +55,89 @@ class MSE(Metric):
             float: Mean squared error regression loss. A non-negative floating point value (the best value is 0.0).
         """
         return metrics.mean_squared_error(y_true, y_score)
+
+
+class SMAPE(Metric):
+    """
+    sMAPE loss as defined in https://robjhyndman.com/hyndsight/smape/ (Makridakis 1993)
+
+    :param forecast: Forecast values. Shape: batch, time
+    :param target: Target values. Shape: batch, time
+    :param mask: 0/1 mask. Shape: batch, time
+    :return: Loss value
+    """
+    _NAME = "smape"
+    _TYPE = "point"
+    _MAXIMIZE = False
+
+    def __init__(self, mode: str="normal"):
+        super(SMAPE, self).__init__(mode)
+
+    def metric_fn(self,
+                  forecast: paddle.Tensor,
+                  target: paddle.Tensor,
+                  mask: paddle.Tensor) -> float:
+        return 200 * paddle.mean(
+            divide_no_nan(
+                paddle.abs(forecast - target),
+                paddle.abs(forecast) + paddle.abs(target)) * mask)
+
+
+class MASE(Metric):
+    """
+    MASE loss as defined in "Scaled Errors" https://robjhyndman.com/papers/mase.pdf
+
+    :param insample: Insample values. Shape: batch, time_i
+    :param freq: Frequency value
+    :param forecast: Forecast values. Shape: batch, time_o
+    :param target: Target values. Shape: batch, time_o
+    :param mask: 0/1 mask. Shape: batch, time_o
+    :return: Loss value
+    """
+    _NAME = "mase"
+    _TYPE = "point"
+    _MAXIMIZE = False
+
+    def __init__(self, mode: str="normal"):
+        super(MASE, self).__init__(mode)
+
+    def metric_fn(self,
+                  insample: paddle.Tensor,
+                  freq: int,
+                  forecast: paddle.Tensor,
+                  target: paddle.Tensor,
+                  mask: paddle.Tensor) -> float:
+        masep = paddle.mean(
+            paddle.abs(insample[:, freq:] - insample[:, :-freq]), axis=1)
+        masked_masep_inv = divide_no_nan(mask, masep[:, None])
+
+        return paddle.mean(paddle.abs(target - forecast) * masked_masep_inv)
+
+
+class MAPE(Metric):
+    """
+    MAPE loss as defined in: https://en.wikipedia.org/wiki/Mean_absolute_percentage_error
+
+    :param forecast: Forecast values. Shape: batch, time
+    :param target: Target values. Shape: batch, time
+    :param mask: 0/1 mask. Shape: batch, time
+    :return: Loss value
+    """
+    _NAME = "mape"
+    _TYPE = "point"
+    _MAXIMIZE = False
+
+    def __init__(self, mode: str="normal"):
+        super(MASE, self).__init__(mode)
+
+    def metric_fn(self,
+                  insample: paddle.Tensor,
+                  freq: int,
+                  forecast: paddle.Tensor,
+                  target: paddle.Tensor,
+                  mask: paddle.Tensor) -> float:
+        weights = divide_no_nan(mask, target)
+        return paddle.mean(paddle.abs((forecast - target) * weights))
 
 
 class MAE(Metric):

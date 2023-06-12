@@ -56,18 +56,18 @@ from paddlets.datasets.repository._data_config import TrafficDataset
 from paddlets.datasets.repository._data_config import ILIDataset
 from paddlets.datasets.repository._data_config import ExchangeDataset
 from paddlets.datasets.repository._data_config import WeatherDataset
-from paddlets.datasets.repository._data_config import M4YearTrainDataset
-from paddlets.datasets.repository._data_config import M4YearTestDataset
-from paddlets.datasets.repository._data_config import M4WeekTrainDataset
-from paddlets.datasets.repository._data_config import M4WeekTestDataset
-from paddlets.datasets.repository._data_config import M4QuarterTrainDataset
-from paddlets.datasets.repository._data_config import M4QuarterTestDataset
-from paddlets.datasets.repository._data_config import M4MonthTrainDataset
-from paddlets.datasets.repository._data_config import M4MonthTestDataset
-from paddlets.datasets.repository._data_config import M4DaiTrainDataset
-from paddlets.datasets.repository._data_config import M4DaiTestDataset
-from paddlets.datasets.repository._data_config import M4HourTrainDataset
-from paddlets.datasets.repository._data_config import M4HourTestDataset
+from paddlets.datasets.repository._data_config import M4YearlyTrainDataset
+from paddlets.datasets.repository._data_config import M4YearlyTestDataset
+from paddlets.datasets.repository._data_config import M4WeeklyTrainDataset
+from paddlets.datasets.repository._data_config import M4WeeklyTestDataset
+from paddlets.datasets.repository._data_config import M4QuarterlyTrainDataset
+from paddlets.datasets.repository._data_config import M4QuarterlyTestDataset
+from paddlets.datasets.repository._data_config import M4MonthlyTrainDataset
+from paddlets.datasets.repository._data_config import M4MonthlyTestDataset
+from paddlets.datasets.repository._data_config import M4DailyTrainDataset
+from paddlets.datasets.repository._data_config import M4DailyTestDataset
+from paddlets.datasets.repository._data_config import M4HourlyTrainDataset
+from paddlets.datasets.repository._data_config import M4HourlyTestDataset
 
 DATASETS = {
     UNIWTHDataset.name: UNIWTHDataset,
@@ -81,18 +81,18 @@ DATASETS = {
     ILIDataset.name: ILIDataset,
     ExchangeDataset.name: ExchangeDataset,
     WeatherDataset.name: WeatherDataset,
-    M4YearTrainDataset.name: M4YearTrainDataset,
-    M4YearTestDataset.name: M4YearTestDataset,
-    M4WeekTrainDataset.name: M4WeekTrainDataset,
-    M4WeekTestDataset.name: M4WeekTestDataset,
-    M4QuarterTrainDataset.name: M4QuarterTrainDataset,
-    M4QuarterTestDataset.name: M4QuarterTestDataset,
-    M4MonthTrainDataset.name: M4MonthTrainDataset,
-    M4MonthTestDataset.name: M4MonthTestDataset,
-    M4HourTrainDataset.name: M4HourTrainDataset,
-    M4HourTestDataset.name: M4HourTestDataset,
-    M4DaiTrainDataset.name: M4DaiTrainDataset,
-    M4DaiTestDataset.name: M4DaiTestDataset,
+    M4YearlyTrainDataset.name: M4YearlyTrainDataset,
+    M4YearlyTestDataset.name: M4YearlyTestDataset,
+    M4WeeklyTrainDataset.name: M4WeeklyTrainDataset,
+    M4WeeklyTestDataset.name: M4WeeklyTestDataset,
+    M4QuarterlyTrainDataset.name: M4QuarterlyTrainDataset,
+    M4QuarterlyTestDataset.name: M4QuarterlyTestDataset,
+    M4MonthlyTrainDataset.name: M4MonthlyTrainDataset,
+    M4MonthlyTestDataset.name: M4MonthlyTestDataset,
+    M4HourlyTrainDataset.name: M4HourlyTrainDataset,
+    M4HourlyTestDataset.name: M4HourlyTestDataset,
+    M4DailyTrainDataset.name: M4DailyTrainDataset,
+    M4DailyTestDataset.name: M4DailyTestDataset,
     NABTEMPDataset.name: NABTEMPDataset,
     PSMTRAINDataset.name: PSMTRAINDataset,
     PSMTESTDataset.name: PSMTESTDataset,
@@ -139,8 +139,8 @@ def dataset_list() -> List[str]:
     return list(DATASETS.keys())
 
 
-def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List[
-        "TSDataset"], List[Any]]]:
+def get_dataset(name: str, split=None) -> Union["TSDataset", List[
+        "TSDataset"], Tuple[List["TSDataset"], List[Any]]]:
     """
     基于名称获取内置数据集
     
@@ -164,4 +164,12 @@ def get_dataset(name: str) -> Union["TSDataset", List["TSDataset"], Tuple[List[
         y_label = np.array(y_label)
         return (data_list, y_label)
     else:
-        return TSDataset.load_from_dataframe(df, **dataset.load_param)
+        if not split:
+            return TSDataset.load_from_dataframe(df, **dataset.load_param)
+        else:
+            ts_list = []
+            for _, point in split.items():
+                ts_list.append(
+                    TSDataset.load_from_dataframe(df[point[0]:point[1]], **
+                                                  dataset.load_param))
+            return ts_list

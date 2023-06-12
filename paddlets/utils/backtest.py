@@ -9,13 +9,46 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-from paddlets.metrics import Metric, MSE
+from paddlets.metrics import Metric, MSE, MAE
 from paddlets.models.base import Trainable
 from paddlets.datasets import TSDataset, TimeSeries
 from paddlets.logger import Logger, raise_if
 from paddlets.utils.utils import check_model_fitted
 
 logger = Logger(__name__)
+
+
+def score_redution(metric, reduction, scores):
+    if metric._TYPE == "quantile" and isinstance(
+            list(scores[0].values())[0], dict):
+        target_cols = [x for x in scores[0].keys()]
+
+        tmp = {}
+        for cols in target_cols:
+            tmp[cols] = defaultdict(list)
+            for dct in [x[cols] for x in scores]:
+                for k, v in dct.items():
+                    if isinstance(v, Iterable):
+                        tmp[cols][k].extend(v)
+                    else:
+                        tmp[cols][k].append(v)
+            tmp[cols] = {k: reduction(v) for k, v in tmp[cols].items()}
+
+        scores = tmp
+
+    else:
+        tmp = defaultdict(list)
+        for dct in [x for x in scores]:
+            for k, v in dct.items():
+                if isinstance(v, Iterable):
+                    tmp[k].extend(v)
+                else:
+                    tmp[k].append(v)
+
+        tmp = {k: reduction(v) for k, v in tmp.items()}
+        scores = tmp
+
+    return scores
 
 
 def backtest(data: TSDataset,
@@ -126,10 +159,15 @@ def backtest(data: TSDataset,
     # If predict_window! = stride, the forecast will form a discontinuous time series, do not processed by default and returns List[TSdataset]
     return_tsdataset = True if predict_window == stride else False
 
-    length = target_length - start - model_skip_chunk_len
+    # length = target_length - start - model_skip_chunk_len
+    length = target_length - start - model_skip_chunk_len - predict_window + 1
+    # length used to be 11424, the modified version is 11329
+    print('length used to be {}, the modified version is {}'.format(
+        target_length - start - model_skip_chunk_len, length))
     predict_rounds = math.ceil(length / stride)
     predicts = []
     scores = []
+    scores_mae = []
     index = start
 
     TQDM_PREFIX = "Backtest Progress"
@@ -173,41 +211,18 @@ def backtest(data: TSDataset,
             metric = MSE()
         score_dict = metric(real, predict)
         scores.append(score_dict)
+        metric2 = MAE()
+        scores_mae.append(metric2(real, predict))
+
         index = index + stride
 
     if reduction:
-        if metric._TYPE == "quantile" and isinstance(
-                list(scores[0].values())[0], dict):
-            target_cols = [x for x in scores[0].keys()]
-
-            tmp = {}
-            for cols in target_cols:
-                tmp[cols] = defaultdict(list)
-                for dct in [x[cols] for x in scores]:
-                    for k, v in dct.items():
-                        if isinstance(v, Iterable):
-                            tmp[cols][k].extend(v)
-                        else:
-                            tmp[cols][k].append(v)
-                tmp[cols] = {k: reduction(v) for k, v in tmp[cols].items()}
-
-            scores = tmp
-
-        else:
-            tmp = defaultdict(list)
-            for dct in [x for x in scores]:
-                for k, v in dct.items():
-                    if isinstance(v, Iterable):
-                        tmp[k].extend(v)
-                    else:
-                        tmp[k].append(v)
-
-            tmp = {k: reduction(v) for k, v in tmp.items()}
-            scores = tmp
+        scores_metric = score_redution(metric, reduction, scores)
+        scores_mae = score_redution(metric2, reduction, scores_mae)
 
     if return_predicts:
         if return_tsdataset:
             predicts = TSDataset.concat(predicts)
-        return scores, predicts
+        return [scores_metric, scores_mae], predicts
     else:
-        return scores
+        return [scores_metric, scores_mae]

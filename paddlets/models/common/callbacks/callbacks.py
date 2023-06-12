@@ -343,8 +343,11 @@ class History(Callback):
 
         msg = f"epoch {epoch:0>3}"
         for metric_name, metric_value in self._epoch_metrics.items():
-            if metric_name != "lr":
-                msg += f"| {metric_name:<3}: {metric_value:.6f}"
+            try:
+                if metric_name != "lr":
+                    msg += f"| {metric_name:<3}: {metric_value:.6f}"
+            except TypeError:
+                print('metric_name, metric_value', metric_name, metric_value)
         total_time = int(time.time() - self._start_time)
         msg += f"| {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
         logger.info(msg)
