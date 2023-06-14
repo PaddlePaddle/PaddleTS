@@ -304,6 +304,17 @@ BasicMotionsTrainTDataset = DatasetConfig(
     }
 )
 
+# 11> SDM_train data
+SMDTrainDataset = DatasetConfig(
+    name = "smd_train",
+    type = "anomaly",
+    path = "https://paddlets.bj.bcebos.com/SMD_train.csv",
+    load_param = {
+        "feature_cols": [str(i) for i in range(38)],
+        "freq": 1
+    }
+)
+
 # 11> SDM_test data
 SMDTestDataset = DatasetConfig(
     name = "smd_test",
