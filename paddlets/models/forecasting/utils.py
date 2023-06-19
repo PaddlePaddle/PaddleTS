@@ -53,14 +53,6 @@ class M4Meta:
         'Daily': 10,
         'Hourly': 10
     }  # from interpretable.gin
-    # time_series_length = {
-    #     'Monthly': 469, # 48000
-    #     'Yearly': 31,   # 23000  
-    #     'Quarterly': 25,   # 24000  
-    #     'Weekly': 2179,   # 359
-    #     'Daily': 1006,   # 4227
-    #     'Hourly': 700,   # 414
-    # }
 
 
 def group_values(values, groups, group_name):
@@ -209,3 +201,27 @@ class M4Summary:
         scores_summary['Average'] = average
 
         return scores_summary
+
+
+def adjustment(gt, pred):
+    anomaly_state = False
+    for i in range(len(gt)):
+        if gt[i] == 1 and pred[i] == 1 and not anomaly_state:
+            anomaly_state = True
+            for j in range(i, 0, -1):
+                if gt[j] == 0:
+                    break
+                else:
+                    if pred[j] == 0:
+                        pred[j] = 1
+            for j in range(i, len(gt)):
+                if gt[j] == 0:
+                    break
+                else:
+                    if pred[j] == 0:
+                        pred[j] = 1
+        elif gt[i] == 0:
+            anomaly_state = False
+        if anomaly_state:
+            pred[i] = 1
+    return gt, pred

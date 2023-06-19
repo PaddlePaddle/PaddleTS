@@ -128,11 +128,9 @@ class MAPE(Metric):
     _MAXIMIZE = False
 
     def __init__(self, mode: str="normal"):
-        super(MASE, self).__init__(mode)
+        super(MAPE, self).__init__(mode)
 
     def metric_fn(self,
-                  insample: paddle.Tensor,
-                  freq: int,
                   forecast: paddle.Tensor,
                   target: paddle.Tensor,
                   mask: paddle.Tensor) -> float:

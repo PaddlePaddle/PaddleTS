@@ -762,7 +762,6 @@ class SampleDataset(paddle.io.Dataset):
                 static_cov_dict=static_cov_numeric)
             pre_computed_static_cov_categorical_for_single_sample = self._build_static_cov_for_single_sample(
                 static_cov_dict=static_cov_categorical)
-
         samples = []
         curr_sample_tail = self._time_window[0]
         # Because _time_window is left-closed-right-closed, thus using "<=" operator rather than "<".
@@ -790,7 +789,7 @@ class SampleDataset(paddle.io.Dataset):
                             target_ndarray=target_ndarray)
 
                     # transformed 
-                    if self.add_transformed_datastamp:
+                    if self._add_transformed_datastamp:
                         sample[
                             'past_transformed_datastamp'] = self._build_transformed_datastamp_for_single_sample(
                                 curr_sample_tail=curr_sample_tail,
@@ -864,7 +863,7 @@ class SampleDataset(paddle.io.Dataset):
                 target or observed_cov.
         """
         if self._rawdataset.target is not None:
-            return "target", self._rawdataset.target.time_index
+            return "target", self._rawdataset.target.time_index  #basically the date column
         return "observed_cov", self._rawdataset.observed_cov.time_index
 
     def _validate_std_timeindex(
@@ -912,8 +911,8 @@ class SampleDataset(paddle.io.Dataset):
         """
         default_min_window = self._in_chunk_len + self._skip_chunk_len + self._out_chunk_len - 1
         # Note, this std time index is filled if fill_last_value is not None.
-        default_max_window = len(self._std_timeindex) - 1
-        return default_min_window, default_max_window
+        default_max_window = len(self._std_timeindex) - 1  # last value
+        return default_min_window, default_max_window  # curr_sample_tail
 
     def _validate_time_window(self) -> None:
         """
@@ -1292,7 +1291,7 @@ class SampleDataset(paddle.io.Dataset):
         Returns:
             np.ndarray: built future_target chunk (Y) for the current single sample.
         """
-        end = timeindex_offset + curr_sample_tail + 1
+        end = timeindex_offset + curr_sample_tail + 1  # in_chunk_len+_out_chunk_len+_skip+skip_len
         start = (end - 1) - self._out_chunk_len - self._label_len + 1
         return target_ndarray[start:end]
 
@@ -1313,9 +1312,9 @@ class SampleDataset(paddle.io.Dataset):
         Returns:
             np.ndarray: built past_target chunk for the current single sample.
         """
-        end = timeindex_offset + curr_sample_tail - self._out_chunk_len - self._skip_chunk_len + 1
+        end = timeindex_offset + curr_sample_tail - self._out_chunk_len - self._skip_chunk_len + 1  #  in_chunk_len
         start = (end - 1) - self._in_chunk_len + 1
-        return target_ndarray[start:end]
+        return target_ndarray[start:end]  # input chunk 
 
     def _build_transformed_datastamp_for_single_sample(
             self,

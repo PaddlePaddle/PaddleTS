@@ -51,16 +51,17 @@ def score_redution(metric, reduction, scores):
     return scores
 
 
-def backtest(data: TSDataset,
-             model: Trainable,
-             start: Union[pd.Timestamp, int, str, float]=None,
-             predict_window: Optional[int]=None,
-             stride: Optional[int]=None,
-             metric: Optional[Metric]=None,
-             return_predicts: bool=False,
-             reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
-             verbose: bool=True) -> Union[float, Tuple[float, Union[
-                 TSDataset, List[TSDataset]]]]:
+def backtest(
+        data: TSDataset,
+        model: Trainable,
+        start: Union[pd.Timestamp, int, str, float]=None,
+        predict_window: Optional[int]=None,
+        stride: Optional[int]=None,
+        metric: Optional[Metric]=None,  # only support one metric
+        return_predicts: bool=False,
+        reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
+        verbose: bool=True) -> Union[float, Tuple[float, Union[TSDataset, List[
+            TSDataset]]]]:
     """
     Backtest
     A repeated forecasting and validating process. It first use data with the length of predict_window, 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+from curses import beep
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 from collections import OrderedDict
 from copy import deepcopy
@@ -95,7 +96,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             drop_last: bool=True,
             lrSched=None,
             seed: Optional[int]=None,
-            task_name: str=None, ):
+            task_name: str=None,
+            mask_rate: float=None, ):
         super(PaddleBaseModelImpl, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -115,6 +117,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._drop_last = drop_last
         self._lrSched = lrSched
         self._need_date_in_network = False
+        self._mask_rate = mask_rate
 
         self._fit_params = None
         self._network = None
@@ -377,7 +380,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._callback_container.on_train_begin({"start_time": time.time()})
         for epoch_idx in range(self._max_epochs):
             self.epochs = epoch_idx
-
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
             self._train_epoch(train_dataloader)
@@ -444,6 +446,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.train()
         for batch_idx, data in enumerate(train_loader):
             self._callback_container.on_batch_begin(batch_idx)
+            # if self._task_name == 'imputation' and batch_idx == 50:
+            #     break
+
             if self._task_name == 'short_term_forecast':
                 X, y, batch_x_mark, batch_y_mark = data
                 batch_logs = self._train_batch(X, y, batch_y_mark=batch_y_mark)
@@ -479,15 +484,36 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         Returns:
             Dict[str, Any]: Dict of logs.
         """
-        if self._need_date_in_network:
-            output = self._network(X, datestamp)  # align network
-            y = y[:, -self._out_chunk_len:, :]
-            # import numpy as np
-            # np.random.seed(2023)
-            # y = paddle.to_tensor(np.random.randn(32, 96, 7)*2).cast('float32')
-        else:
+        if self._task_name == 'imputation':  # imputation needs to compute mask
+            batch_x = X['past_target']
+            B, T, N = batch_x.shape
+            mask = paddle.rand(shape=(B, T, N))
+            mask[mask <= self._mask_rate] = 0  # masked
+            mask[mask > self._mask_rate] = 1  # remained
+            inp = paddle.where(
+                mask == 0,
+                paddle.zeros(
+                    shape=batch_x.shape, dtype='float32'),
+                batch_x)
+            output = self._network(inp, datestamp, mask)
+            loss = self._compute_loss(output[mask == 0], batch_x[mask == 0],
+                                      batch_y_mark)
+            y = batch_x
+        elif self._task_name == 'anomaly_detection':
             output = self._network(X)
-        loss = self._compute_loss(output, y, batch_y_mark)
+            y = X['observed_cov_numeric']
+            loss = self._compute_loss(output, y, batch_y_mark)
+        else:  # long term forecast
+            if self._need_date_in_network:
+                output = self._network(X,
+                                       datestamp)  # align network # x, x_mark
+                y = y[:, -self._out_chunk_len:, :]
+            else:
+                output = self._network(X)
+
+            loss = self._compute_loss(
+                output, y, batch_y_mark)  # output is None task_name is None
+
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
@@ -540,7 +566,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         for batch_idx, data in enumerate(loader):
             X, y, date_stamp = self._prepare_X_y(data)
             scores = self._predict_batch(X, date_stamp)
-            list_y_true.append(y)
+            if self._task_name == 'anomaly_detection':
+                list_y_true.append(X['observed_cov_numeric'])
+            elif self._task_name == 'imputation':
+                list_y_true.append(X['past_target'])
+            else:
+                list_y_true.append(y)
             list_y_score.append(scores)
         y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
         metrics_logs = self._metric_container_dict[name](y_true, scores)
@@ -558,10 +589,26 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         Returns:
             np.ndarray: Prediction results.
         """
-        if self._need_date_in_network:
-            scores = self._network(X, date_stamp)
+
+        if self._task_name == 'imputation':  # imputation needs to compute mask
+            # import pdb; pdb.set_trace()
+            batch_x = X['past_target']
+            B, T, N = batch_x.shape
+            mask = paddle.rand(shape=(B, T, N))
+            mask[mask <= self._mask_rate] = 0  # masked
+            mask[mask > self._mask_rate] = 1  # remained
+            inp = paddle.where(
+                mask == 0,
+                paddle.zeros(
+                    shape=batch_x.shape, dtype='float32'),
+                batch_x)
+
+            scores = self._network(inp, date_stamp, mask)
         else:
-            scores = self._network(X)
+            if self._need_date_in_network:
+                scores = self._network(X, date_stamp)
+            else:
+                scores = self._network(X)
         return scores.numpy()
 
     def _prepare_X_y(self, X: Dict[str, paddle.Tensor]) -> Tuple[Dict[
@@ -580,9 +627,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         """
         datastamp, y = None, None
         if "future_target" in X:
-            y = X.pop("future_target")
+            y = X.pop("future_target")  # as label
         if 'past_transformed_datastamp' in X:
-            datastamp = X.pop('past_transformed_datastamp')
+            datastamp = X.pop('past_transformed_datastamp')  # data of X
         return X, y, datastamp
 
     def _compute_loss(self,

@@ -5,6 +5,7 @@ Public data sets for time series.
 """
 
 from collections import namedtuple
+import numpy as np
 
 DatasetConfig = namedtuple('DatasetConfig',
                            ["name", "type", "path", "load_param"])
@@ -104,30 +105,18 @@ ExchangeDataset = DatasetConfig(
     name="Exchange",
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/exchange_rate.csv",
-    load_param={
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ['0', '1', '2', '3', '4', '5', '6'],
-        "freq": "1D",
-        "dtype": "float32"
-    })
+    load_param={"time_col": "date",
+                "freq": "1D",
+                "dtype": "float32"})
 
 # 10> Weather data, https://www.bgc-jena.mpg.de/wetter/
 WeatherDataset = DatasetConfig(
-    name = "Weather",
-    type = "forecasting",
-    path = "https://bj.bcebos.com/paddlets/weather.csv",
-    load_param = {
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ['p (mbar)','T (degC)', 'Tpot (K)', 'Tdew (degC)','rh (%)',\
-                            'VPmax (mbar)', 'VPact (mbar)','VPdef (mbar)','sh (g/kg)','H2OC (mmol/mol)', \
-                            'rho (g/m**3)','wv (m/s)','max. wv (m/s)','wd (deg)','rain (mm)','raining (s)', \
-                            'SWDR (W/m)', 'PAR (_ol/m/s)', 'max. PAR (_ol/m/s)','Tlog (degC)'],
-        "freq": "10T",
-        "dtype": "float32"
-    }
-)
+    name="Weather",
+    type="forecasting",
+    path="https://bj.bcebos.com/paddlets/weather.csv",
+    load_param={"time_col": "date",
+                "freq": "10T",
+                "dtype": "float32"})
 
 # 11> M4 data, https://github.com/M4Competition/ M4-methods/tree/master/Dataset
 M4YearlyTrainDataset = DatasetConfig(
@@ -228,30 +217,32 @@ NABTEMPDataset = DatasetConfig(
 
 # 7> psm train data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftrain.csv
 PSMTRAINDataset = DatasetConfig(
-    name="psm_train",
+    name="PSMtrain",
     type="anomaly",
     path="https://bj.bcebos.com/paddlets/psm_train.csv",
     load_param={
         "time_col": "timestamp",
         "feature_cols": ["feature_" + str(i) for i in range(25)],
-        "freq": 1
+        "freq": 1,
+        "dtype": "float32"
     })
 
 # 8> psm test data, https://cloud.tsinghua.edu.cn/d/9605612594f0423f891e/files/?p=%2FPSM%2Ftest.csv
 PSMTESTDataset = DatasetConfig(
-    name="psm_test",
+    name="PSMtest",
     type="anomaly",
     path="https://bj.bcebos.com/paddlets/psm_test.csv",
     load_param={
         "label_col": "label",
         "time_col": "timestamp",
         "feature_cols": ["feature_" + str(i) for i in range(25)],
-        "freq": 1
+        "freq": 1,
+        "dtype": "float32"
     })
 
 # 9> BasicMotions_Test.csv
 BasicMotionsTestDataset = DatasetConfig(
-    name="BasicMotions_Test",
+    name="BasicMotionstest",
     type="classification",
     path="https://bj.bcebos.com/paddlets/BasicMotions_Test.csv",
     load_param={
@@ -263,7 +254,7 @@ BasicMotionsTestDataset = DatasetConfig(
 
 # 10> BasicMotions_Train.csv
 BasicMotionsTrainTDataset = DatasetConfig(
-    name="BasicMotions_Train",
+    name="BasicMotionstrain",
     type="classification",
     path="https://bj.bcebos.com/paddlets/BasicMotions_Train.csv",
     load_param={
@@ -275,63 +266,75 @@ BasicMotionsTrainTDataset = DatasetConfig(
 
 # 11> SDM_test data
 SMDTrainDataset = DatasetConfig(
-    name="smd_train",
+    name="SMDtrain",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/SMD_train.csv",
-    load_param={"feature_cols": [str(i) for i in range(38)],
-                "freq": 1})
+    load_param={
+        "feature_cols": [str(i) for i in range(38)],
+        "freq": 1,
+        "dtype": np.float32
+    })
 
 SMDTestDataset = DatasetConfig(
-    name="smd_test",
+    name="SMDtest",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/SMD_test.csv",
     load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(38)],
-        "freq": 1
+        "freq": 1,
+        'dtype': np.float32
     })
 
 # 12> SMAP_train 
 SMAPTrainDataset = DatasetConfig(
-    name="smap_train",
+    name="SMAPtrain",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/SMAP_train.csv",
-    load_param={"feature_cols": [str(i) for i in range(25)],
-                "freq": 1})
+    load_param={
+        "feature_cols": [str(i) for i in range(25)],
+        "freq": 1,
+        'dtype': np.float32
+    })
 
 # 12> SMAP_test
 SMAPTestDataset = DatasetConfig(
-    name="smap_test",
+    name="SMAPtest",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/SMAP_test.csv",
     load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(25)],
-        "freq": 1
+        "freq": 1,
+        'dtype': np.float32
     })
 
 # 13> MSL_train
 MSLTrainDataset = DatasetConfig(
-    name="msl_train",
+    name="MSLtrain",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/MSL_train.csv",
-    load_param={"feature_cols": [str(i) for i in range(55)],
-                "freq": 1})
+    load_param={
+        "feature_cols": [str(i) for i in range(55)],
+        "freq": 1,
+        'dtype': np.float32
+    })
 
 # 13> MSL_test
 MSLTestDataset = DatasetConfig(
-    name="msl_test",
+    name="MSLtest",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/MSL_test.csv",
     load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(55)],
-        "freq": 1
+        "freq": 1,
+        'dtype': np.float32
     })
 
 # 14> SwaT train
 SWATTrainDataset = DatasetConfig(
-    name="swat_train",
+    name="SWATtrain",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/swat_train.csv",
     load_param={
@@ -345,12 +348,13 @@ SWATTrainDataset = DatasetConfig(
             'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
             'P601', 'P602', 'P603'
         ],
-        "freq": 1
+        "freq": 1,
+        'dtype': np.float32
     })
 
 # 14> SwaT test
 SWATTestDataset = DatasetConfig(
-    name="swat_test",
+    name="SWATtest",
     type="anomaly",
     path="https://paddlets.bj.bcebos.com/swat_test.csv",
     load_param={
@@ -365,12 +369,13 @@ SWATTestDataset = DatasetConfig(
             'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
             'P601', 'P602', 'P603'
         ],
-        "freq": 1
+        "freq": 1,
+        'dtype': np.float32
     })
 
 # 15> BasicMotions_Train.csv
 EthanolConcentrationTrainTDataset = DatasetConfig(
-    name="EthanolConcentration_Train",
+    name="EthanolConcentrationtrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TRAIN.csv",
     load_param={
@@ -381,7 +386,7 @@ EthanolConcentrationTrainTDataset = DatasetConfig(
     })
 
 EthanolConcentrationTestTDataset = DatasetConfig(
-    name="EthanolConcentration_Test",
+    name="EthanolConcentrationtest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TEST.csv",
     load_param={
@@ -392,7 +397,7 @@ EthanolConcentrationTestTDataset = DatasetConfig(
     })
 
 FaceDetectionTrainDataset = DatasetConfig(
-    name="FaceDetection_Train",
+    name="FaceDetectiontrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/FaceDetection_TRAIN.csv",
     load_param={
@@ -403,7 +408,7 @@ FaceDetectionTrainDataset = DatasetConfig(
     })
 
 FaceDetectionTestDataset = DatasetConfig(
-    name="FaceDetection_Train",
+    name="FaceDetectiontrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/FaceDetection_TEST.csv",
     load_param={
@@ -414,7 +419,7 @@ FaceDetectionTestDataset = DatasetConfig(
     })
 
 HandwritingTrainDataset = DatasetConfig(
-    name="Handwriting_Train",
+    name="Handwritingtrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/Handwriting_TRAIN.csv",
     load_param={
@@ -425,7 +430,7 @@ HandwritingTrainDataset = DatasetConfig(
     })
 
 HandwritingTestDataset = DatasetConfig(
-    name="Handwriting_Test",
+    name="Handwritingtest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/Handwriting_TEST.csv",
     load_param={
@@ -436,7 +441,7 @@ HandwritingTestDataset = DatasetConfig(
     })
 
 HeartbeatTrainDataset = DatasetConfig(
-    name="Heartbeat_Train",
+    name="Heartbeattrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/Heartbeat_TRAIN.csv",
     load_param={
@@ -447,7 +452,7 @@ HeartbeatTrainDataset = DatasetConfig(
     })
 
 HeartbeatTestDataset = DatasetConfig(
-    name="Heartbeat_Test",
+    name="Heartbeattest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/Heartbeat_TEST.csv",
     load_param={
@@ -458,7 +463,7 @@ HeartbeatTestDataset = DatasetConfig(
     })
 
 JapaneseVowelsTrainDataset = DatasetConfig(
-    name="JapaneseVowels_Train",
+    name="JapaneseVowelstrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TRAIN.csv",
     load_param={
@@ -469,7 +474,7 @@ JapaneseVowelsTrainDataset = DatasetConfig(
     })
 
 JapaneseVowelsTestDataset = DatasetConfig(
-    name="JapaneseVowels_Test",
+    name="JapaneseVowelstest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TEST.csv",
     load_param={
@@ -480,7 +485,7 @@ JapaneseVowelsTestDataset = DatasetConfig(
     })
 
 PEMSSFTrainDataset = DatasetConfig(
-    name="PEMSSF_Train",
+    name="PEMSSFtrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/PEMS-SF_TRAIN.csv",
     load_param={
@@ -491,7 +496,7 @@ PEMSSFTrainDataset = DatasetConfig(
     })
 
 PEMSSFTestDataset = DatasetConfig(
-    name="PEMSSF_Test",
+    name="PEMSSFtest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/PEMS-SF_TEST.csv",
     load_param={
@@ -502,7 +507,7 @@ PEMSSFTestDataset = DatasetConfig(
     })
 
 SelfRegulationSCP1TrainDataset = DatasetConfig(
-    name="SelfRegulationSCP1_Train",
+    name="SelfRegulationSCP1train",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TRAIN.csv",
     load_param={
@@ -513,7 +518,7 @@ SelfRegulationSCP1TrainDataset = DatasetConfig(
     })
 
 SelfRegulationSCP1TestDataset = DatasetConfig(
-    name="SelfRegulationSCP1_Test",
+    name="SelfRegulationSCP1test",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TEST.csv",
     load_param={
@@ -524,7 +529,7 @@ SelfRegulationSCP1TestDataset = DatasetConfig(
     })
 
 SelfRegulationSCP2TrainDataset = DatasetConfig(
-    name="SelfRegulationSCP2_Train",
+    name="SelfRegulationSCP2train",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TRAIN.csv",
     load_param={
@@ -535,7 +540,7 @@ SelfRegulationSCP2TrainDataset = DatasetConfig(
     })
 
 SelfRegulationSCP2TestDataset = DatasetConfig(
-    name="SelfRegulationSCP2_Test",
+    name="SelfRegulationSCP2test",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TEST.csv",
     load_param={
@@ -546,7 +551,7 @@ SelfRegulationSCP2TestDataset = DatasetConfig(
     })
 
 SpokenArabicDigitsTrainDataset = DatasetConfig(
-    name="SpokenArabicDigits_Train",
+    name="SpokenArabicDigitstrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TRAIN.csv",
     load_param={
@@ -557,7 +562,7 @@ SpokenArabicDigitsTrainDataset = DatasetConfig(
     })
 
 SpokenArabicDigitsTestDataset = DatasetConfig(
-    name="SpokenArabicDigits_Test",
+    name="SpokenArabicDigitstest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TEST.csv",
     load_param={
@@ -568,7 +573,7 @@ SpokenArabicDigitsTestDataset = DatasetConfig(
     })
 
 UWaveGestureLibraryTrainDataset = DatasetConfig(
-    name="UWaveGestureLibrary_Train",
+    name="UWaveGestureLibrarytrain",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TRAIN.csv",
     load_param={
@@ -579,7 +584,7 @@ UWaveGestureLibraryTrainDataset = DatasetConfig(
     })
 
 UWaveGestureLibraryTestDataset = DatasetConfig(
-    name="UWaveGestureLibrary_Test",
+    name="UWaveGestureLibrarytest",
     type="classification",
     path="https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TEST.csv",
     load_param={

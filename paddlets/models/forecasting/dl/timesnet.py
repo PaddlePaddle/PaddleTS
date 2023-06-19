@@ -21,13 +21,14 @@ logger = Logger(__name__)
 
 
 def FFT_for_Period(x, k=2):
-    xf = paddle.fft.rfft(x=x, axis=1)
-    frequency_list = xf.abs().mean(axis=0).mean(axis=-1)
+    xf = paddle.fft.rfft(x=x, axis=1)  # 时间序列频率项
+    frequency_list = xf.abs().mean(axis=0).mean(axis=-1)  # 频率值的平均
     frequency_list[0] = 0
-    _, top_list = paddle.topk(x=frequency_list, k=k)
+    _, top_list = paddle.topk(x=frequency_list, k=k)  # 幅度最大的前k个
     top_list = top_list.detach().cast('int32')
-    period = x.shape[1] // top_list.cpu().numpy()
-    return period, xf.abs().mean(axis=-1).index_select(index=top_list, axis=1)
+    period = x.shape[1] // top_list.cpu().numpy()  # 长度/频率=周期
+    return period, xf.abs().mean(axis=-1).index_select(
+        index=top_list, axis=1)  # 幅值最大的几个频率项
 
 
 class TimesBlock(nn.Layer):
@@ -175,6 +176,7 @@ class _TimesNet(nn.Layer):
         # x_mark_enc = paddle.to_tensor(y).cast('float32')
         # print('x_enc.shape, x_mark_enc.shape', x_enc.shape, x_mark_enc.shape)
 
+        # Normalization
         means = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - means
         stdev = paddle.sqrt(x=paddle.var(
@@ -198,7 +200,10 @@ class _TimesNet(nn.Layer):
         means = paddle.sum(x=x_enc, axis=1) / paddle.sum(x=mask == 1, axis=1)
         means = means.unsqueeze(axis=1).detach()
         x_enc = x_enc - means
-        x_enc = paddle.where(mask == 0, x_enc, 0)
+        x_enc = paddle.where(
+            mask == 0, paddle.zeros(
+                shape=x_enc.shape, dtype='float32'), x_enc)
+
         stdev = paddle.sqrt(x=paddle.sum(x=x_enc * x_enc, axis=1) / paddle.sum(
             x=mask == 1, axis=1) + 1e-05)
         stdev = stdev.unsqueeze(axis=1).detach()
@@ -242,7 +247,10 @@ class _TimesNet(nn.Layer):
 
     def forward(self, x_enc, x_mark_enc=None, mask=None):
         if isinstance(x_enc, dict):
-            x_enc = x_enc['past_target'].cast('float32')
+            if 'observed_cov_numeric' in x_enc.keys():
+                x_enc = x_enc['observed_cov_numeric'].cast('float32')
+            elif 'past_target' in x_enc.keys():
+                x_enc = x_enc['past_target'].cast('float32')
         if x_mark_enc is not None:
             x_mark_enc = x_mark_enc.cast('float32')
 
@@ -308,7 +316,7 @@ class TimesNetModel(PaddleBaseModelImpl):
             d_model: int=32,
             embed: str='timeF',  # [timeF, fixed, learned]
             freq: str='h',
-            dropout: float=0.0,
+            dropout: float=0.1,
             c_out: int=7,
             d_ff: int=32,
             top_k: int=5,
@@ -333,7 +341,8 @@ class TimesNetModel(PaddleBaseModelImpl):
             verbose: int=1,
             patience: int=10,
             drop_last: bool=True,
-            seed: int=0):
+            seed: int=0,
+            mask_rate: float=None):
 
         super(TimesNetModel, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -352,7 +361,8 @@ class TimesNetModel(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             drop_last=drop_last,
-            seed=seed, )
+            seed=seed,
+            mask_rate=mask_rate)
 
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
@@ -416,7 +426,6 @@ class TimesNetModel(PaddleBaseModelImpl):
                     label_len=self._label_len,
                     add_transformed_datastamp=self._add_transformed_datastamp,
                     sampling_stride=self._sampling_stride,
-                    window_sampling_limit=self._window_sampling_limit
                 )  # Only univariate dataset have this property
                 if self.train_dataset is None:
                     self.train_dataset = dataset
@@ -436,10 +445,7 @@ class TimesNetModel(PaddleBaseModelImpl):
                         skip_chunk_len=self._skip_chunk_len,
                         add_transformed_datastamp=self.
                         _add_transformed_datastamp,
-                        sampling_stride=self._sampling_stride,
-                        window_sampling_limit=self.
-                        _window_sampling_limit,  # Only univariate dataset have this property
-                    )
+                        sampling_stride=self._sampling_stride)
                     if self.valid_dataset is None:
                         self.valid_dataset = dataset
                     else:
@@ -465,12 +471,15 @@ class TimesNetModel(PaddleBaseModelImpl):
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
         Rewrite _check_tsdataset to fit the specific model.
-        For NBeats, all data variables are expected to be float32.
+        For TimesNet, all data variables are expected to be float32.
         """
         for column, dtype in tsdataset.dtypes.items():
+            if self._task_name == 'anomaly_detection':
+                if column == 'label':
+                    continue
             raise_if_not(
                 np.issubdtype(dtype, np.floating),
-                f"nbeats variables' dtype only supports [float16, float32, float64], " \
+                f"TimesNet variables' dtype only supports [float16, float32, float64], " \
                 f"but received {column}: {dtype}."
             )
         super(TimesNetModel, self)._check_tsdataset(tsdataset)
@@ -479,11 +488,20 @@ class TimesNetModel(PaddleBaseModelImpl):
             self,
             train_tsdataset: TSDataset,
             valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
-        fit_params = {
-            "target_dim": train_tsdataset[0].get_target().data.shape[1],
-            "known_cov_dim": 0,
-            "observed_cov_dim": 0
-        }
+
+        if self._task_name == 'anomaly_detection':
+            fit_params = {
+                "target_dim": 0,
+                "known_cov_dim": 0,
+                "observed_cov_dim":
+                train_tsdataset[0].get_observed_cov().data.shape[1]
+            }
+        else:
+            fit_params = {
+                "target_dim": train_tsdataset[0].get_target().data.shape[1],
+                "known_cov_dim": 0,
+                "observed_cov_dim": 0
+            }
         return fit_params
 
     @revin_norm  # aligned? not used seemly
