@@ -350,11 +350,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             train_tsdataset = [train_tsdataset]
         if isinstance(valid_tsdataset, TSDataset):
             valid_tsdataset = [valid_tsdataset]
-        self._check_multi_tsdataset(train_tsdataset)
+        if self._task_name != 'classification':
+            self._check_multi_tsdataset(train_tsdataset)
         self._fit_params = self._update_fit_params(train_tsdataset,
                                                    valid_tsdataset)
 
-        if isinstance(valid_tsdataset, list):
+        if isinstance(valid_tsdataset,
+                      list) and self._task_name != 'classification':
             self._check_multi_tsdataset(valid_tsdataset)
         train_dataloader, valid_dataloaders = self._init_fit_dataloaders(
             train_tsdataset, valid_tsdataset)
@@ -450,8 +452,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             #     break
 
             if self._task_name == 'short_term_forecast':
-                X, y, batch_x_mark, batch_y_mark = data
+                X, y, _, batch_y_mark = data
                 batch_logs = self._train_batch(X, y, batch_y_mark=batch_y_mark)
+            elif self._task_name == 'classification':
+                X, y, padding_mask = data
+                batch_logs = self._train_batch(X, y, padding_mask=padding_mask)
             else:
                 X, y, datestamp = self._prepare_X_y(data)
                 batch_logs = self._train_batch(X, y, datestamp)
@@ -474,7 +479,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                      X: Dict[str, paddle.Tensor],
                      y: paddle.Tensor,
                      datestamp: paddle.Tensor=None,
-                     batch_y_mark=None) -> Dict[str, Any]:
+                     batch_y_mark=None,
+                     padding_mask=None) -> Dict[str, Any]:
         """Trains one batch of data.
 
         Args:
@@ -503,6 +509,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             output = self._network(X)
             y = X['observed_cov_numeric']
             loss = self._compute_loss(output, y, batch_y_mark)
+        elif self._task_name == 'classification':
+            output = self._network(X, padding_mask)
+            loss = self._compute_loss(output, y.cast('int64').squeeze(-1))
         else:  # long term forecast
             if self._need_date_in_network:
                 output = self._network(X,
@@ -564,22 +573,31 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.eval()
         list_y_true, list_y_score = [], []
         for batch_idx, data in enumerate(loader):
-            X, y, date_stamp = self._prepare_X_y(data)
-            scores = self._predict_batch(X, date_stamp)
+            if self._task_name == 'classification':
+                X, y, padding_mask = data
+                scores = self._predict_batch(
+                    X, None, padding_mask=padding_mask)
+            else:
+                X, y, date_stamp = self._prepare_X_y(data)
+                scores = self._predict_batch(X, date_stamp)
+
             if self._task_name == 'anomaly_detection':
                 list_y_true.append(X['observed_cov_numeric'])
             elif self._task_name == 'imputation':
                 list_y_true.append(X['past_target'])
             else:
                 list_y_true.append(y)
-            list_y_score.append(scores)
-        y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
+                list_y_score.append(scores)
+        y_true, scores = np.concatenate(list_y_true), np.concatenate(
+            list_y_score)
         metrics_logs = self._metric_container_dict[name](y_true, scores)
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
 
-    def _predict_batch(self, X: paddle.Tensor,
-                       date_stamp: paddle.Tensor) -> np.ndarray:
+    def _predict_batch(self,
+                       X: paddle.Tensor,
+                       date_stamp: paddle.Tensor,
+                       padding_mask) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
@@ -602,8 +620,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 paddle.zeros(
                     shape=batch_x.shape, dtype='float32'),
                 batch_x)
-
             scores = self._network(inp, date_stamp, mask)
+        elif self._task_name == 'classification':
+            scores = self._network(X, padding_mask)
+            scores = paddle.nn.functional.softmax(scores)
+            scores = paddle.argmax(scores, axis=1)
         else:
             if self._need_date_in_network:
                 scores = self._network(X, date_stamp)

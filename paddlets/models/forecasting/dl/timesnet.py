@@ -7,7 +7,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle.optimizer import Optimizer
 
-from paddlets.datasets import TSDataset, UnivariateDataset
+from paddlets.datasets import TSDataset, UnivariateDataset, UEADataset, collate_func
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.forecasting.dl.revin import revin_norm
 from paddlets.models.forecasting.dl.embedding import DataEmbedding
@@ -53,6 +53,8 @@ class TimesBlock(nn.Layer):
 
     def forward(self, x):
         B, T, N = x.shape
+        import pdb
+        pdb.set_trace()
         period_list, period_weight = FFT_for_Period(x, self.k)
 
         res = []
@@ -69,6 +71,7 @@ class TimesBlock(nn.Layer):
             else:
                 length = self.seq_len + self.pred_len
                 out = x
+
             out = out.reshape([B, length // period, period, N]).transpose(
                 perm=[0, 3, 1, 2])
             out = self.conv(out)
@@ -342,7 +345,8 @@ class TimesNetModel(PaddleBaseModelImpl):
             patience: int=10,
             drop_last: bool=True,
             seed: int=0,
-            mask_rate: float=None):
+            mask_rate: float=None,
+            renorm: bool=None):
 
         super(TimesNetModel, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -384,6 +388,7 @@ class TimesNetModel(PaddleBaseModelImpl):
         self._need_date_in_network = need_date_in_network
         self._add_transformed_datastamp = add_transformed_datastamp
         self._lrSched = lrSched
+        self._renorm = renorm
 
     def _init_fit_dataloaders(
             self,
@@ -402,6 +407,7 @@ class TimesNetModel(PaddleBaseModelImpl):
         """
         data_adapter = DataAdapter()
         self.train_dataset = None
+        collate_fn = None
         if isinstance(train_tsdataset, TSDataset):
             train_tsdataset = [train_tsdataset]
         # 接入多个数据集，先用一个dataadapter进行统一为一个数据集
@@ -414,7 +420,17 @@ class TimesNetModel(PaddleBaseModelImpl):
                 self.valid_dataset = UnivariateDataset(
                     valid_tsdataset, self._in_chunk_len, self._out_chunk_len,
                     self._label_len, self._window_sampling_limit)
-
+        elif self._task_name == 'classification':
+            self.train_dataset = UEADataset(
+                train_tsdataset, renorm=self._renorm)
+            self.valid_dataset = UEADataset(
+                valid_tsdataset, renorm=self._renorm)
+            collate_fn = lambda x: collate_func(x, max_len=self._in_chunk_len)
+            self._num_class = len(self.train_dataset.class_names)
+            self._in_chunk_len = max(self.train_dataset.max_seq_len,
+                                     self.valid_dataset.max_seq_len)
+            self._enc_in = self.train_dataset.feature_df[
+                0]._target._data.shape[1]
         else:
             for dataset in train_tsdataset:
                 self._check_tsdataset(dataset)
@@ -455,7 +471,8 @@ class TimesNetModel(PaddleBaseModelImpl):
             self.train_dataset,
             self._batch_size,
             shuffle=True,
-            drop_last=self._drop_last)
+            drop_last=self._drop_last,
+            collate_fn=collate_fn)
 
         if valid_tsdataset is not None:
             valid_dataloaders = []
@@ -463,7 +480,8 @@ class TimesNetModel(PaddleBaseModelImpl):
                 self.valid_dataset,
                 self._batch_size,
                 shuffle=False,
-                drop_last=self._drop_last)  # shuffle=True
+                drop_last=self._drop_last,
+                collate_fn=collate_fn)
             valid_dataloaders.append(valid_dataloader)
 
         return train_dataloader, valid_dataloaders
@@ -495,6 +513,12 @@ class TimesNetModel(PaddleBaseModelImpl):
                 "known_cov_dim": 0,
                 "observed_cov_dim":
                 train_tsdataset[0].get_observed_cov().data.shape[1]
+            }
+        elif self._task_name == 'classification':
+            fit_params = {
+                "target_dim": self._num_class,
+                "known_cov_dim": 0,
+                "observed_cov_dim": 0
             }
         else:
             fit_params = {

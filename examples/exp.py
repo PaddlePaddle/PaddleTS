@@ -1,4 +1,5 @@
 from itertools import count
+import nntplib
 import os
 import shutil
 import pandas
@@ -10,8 +11,9 @@ from sklearn.metrics import precision_recall_fscore_support
 
 import paddle
 import paddle.nn.functional as F
+import paddle.nn as nn
 
-from paddlets.datasets import UnivariateDataset
+from paddlets.datasets import UnivariateDataset, UEADataset, collate_func
 from paddlets.datasets.repository import get_dataset
 from paddlets.models.model_loader import load
 from paddlets.models.data_adapter import DataAdapter
@@ -200,8 +202,8 @@ def anomaly_test(args, model, dataset_name, seq_len, batch_size,
     return
 
 
-def imputation_test(ts_test_dataset, args, seq_len, batch_size, dataset_name,
-                    exp):
+def imputation_test(args, ts_test_dataset, seq_len, batch_size, dataset_name,
+                    exp, model):
     data_adapter = DataAdapter()
 
     test_dataset = data_adapter.to_sample_dataset(
@@ -270,6 +272,56 @@ def imputation_test(ts_test_dataset, args, seq_len, batch_size, dataset_name,
     return
 
 
+def classification_test(dataset_name, ts_test_dataset, renorm,
+                        train_tsdataset):
+    _, test_loader = model._init_fit_dataloaders(train_tsdataset,
+                                                 ts_test_dataset)
+
+    preds = []
+    trues = []
+    folder_path = './test_results/' + dataset_name + '/'
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    model._network.eval()
+    with paddle.no_grad():
+        for i, (batch_x, label, padding_mask) in enumerate(test_loader[0]):
+            batch_x = batch_x.cast('float32')
+            padding_mask = padding_mask.cast('float32')
+
+            outputs = model._network(batch_x, padding_mask)
+
+            preds.append(outputs.detach())
+            trues.append(label)
+
+    preds = paddle.concat(preds, 0)
+    trues = paddle.concat(trues, 0)
+    print('test shape:', preds.shape, trues.shape)
+
+    probs = paddle.nn.functional.softmax(
+        preds
+    )  # (total_samples, num_classes) est. prob. for each class and sample
+    predictions = paddle.argmax(
+        probs, axis=1).cpu(
+        ).numpy()  # (total_samples,) int class index for each sample
+    trues = trues.flatten().cpu().numpy()
+    accuracy = ACC().metric_fn(predictions, trues)
+
+    # result save
+    folder_path = './results/' + dataset_name + '/'
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    print('accuracy:{}'.format(accuracy))
+    f = open("result_classification.txt", 'a')
+    f.write(dataset_name + "  \n")
+    f.write('accuracy:{}'.format(accuracy))
+    f.write('\n')
+    f.write('\n')
+    f.close()
+    return
+
+
 # 固定随机随机种子，保证训练结果可复现
 seed = 2022
 paddle.seed(seed)
@@ -304,8 +356,8 @@ parser.add_argument(
         'ECL', 'Traffic', 'M4Hourly', 'M4Weekly', 'M4Monthly', 'M4Daily',
         'M4Yearly', 'M4Quarterly', 'SMD', 'MSL', 'SMAP', 'SWAT', 'PSM',
         'EthanolConcentration', 'FaceDetection', 'Handwriting', 'Heartbeat',
-        'JapaneseVowels', 'PEMS-SF', 'SelfRegulationSCP1',
-        'SelfRegulationSCP2', 'SpokenArabicDigits', 'UWaveGestureLibrary'
+        'JapaneseVowels', 'PEMSSF', 'SelfRegulationSCP1', 'SelfRegulationSCP2',
+        'SpokenArabicDigits', 'UWaveGestureLibrary'
     ],
     help='The name of hourly dataset')
 args = parser.parse_args()
@@ -324,10 +376,12 @@ drop_last = True
 learning_rate = 0.0001
 add_transformed_datastamp = True
 need_date_in_network = True
-loss_fn = F.mse_loss
+loss_fn = F.mse_loss  #  MSE().metric_fn#
 training = args.training
 eval_metrics = ["mae", "mse"]
 window_sampling_limit = None
+renorm = None
+num_kernels = 6
 
 # short time forecast
 if 'M4' in dataset_name:
@@ -349,8 +403,8 @@ if 'M4' in dataset_name:
     history_size = M4Meta.history_size[args.dataset_name[2:]]
     window_sampling_limit = int(history_size * args.pred_len)
     eval_metrics = ['smape']
-    # task_name='short_term_forecast'
 
+# anomaly detection drop_last = False, test batch_size = args.batch_size
 elif 'SMD' in dataset_name:
     enc_in = c_out = 38
     d_model = d_ff = 64
@@ -374,6 +428,7 @@ elif 'SMD' in dataset_name:
     ts_val_dataset = ts_train_dataset.split(int(0.8 * data_len))[1]
     # print(np.abs(ts_test_dataset._observed_cov._data.to_numpy()).mean()) # 0.6506949867979888
     # print(np.abs(ts_train_dataset._observed_cov._data.to_numpy()).mean()) #  0.6069401903755253
+
 elif 'SMAP' in dataset_name:
     enc_in = c_out = 25
     d_model = d_ff = 128
@@ -383,6 +438,7 @@ elif 'SMAP' in dataset_name:
     max_epochs = 3
     drop_last = False
     args.pred_len = 0
+    # task_name = 'anomaly_detection'
     need_date_in_network = False
     add_transformed_datastamp = False
     e_layers = 3
@@ -658,12 +714,185 @@ elif 'ETTm' in dataset_name:
     ts_val_dataset = scaler.transform(ts_val_dataset)
     ts_test_dataset = scaler.transform(ts_test_dataset)
 
+# classification
+elif 'EthanolConcentration' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    max_epochs = 30
+    top_k = 3
+    d_ff = d_model = 32
+    batch_size = 16
+    e_layers = 3
+    renorm = True
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif "FaceDetection" in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 3
+    batch_size = 16
+    d_model = 64
+    d_ff = 256
+    top_k = 3
+    max_epochs = 30
+    num_kernels = 4
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'Handwriting' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 32
+    d_ff = 64
+    top_k = 3
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'Heartbeat' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 64
+    d_ff = 64
+    top_k = 1
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'JapaneseVowels' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 64
+    d_ff = 64
+    top_k = 3
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'PEMSSF' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 32
+    d_ff = 32
+    top_k = 3
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'SelfRegulationSCP1' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 3
+    batch_size = 16
+    d_model = 32
+    d_ff = 32
+    top_k = 3
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'SelfRegulationSCP2' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 3
+    batch_size = 16
+    d_model = 64
+    d_ff = 64
+    top_k = 3
+    max_epochs = 10
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'SpokenArabicDigits' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 32
+    d_ff = 32
+    top_k = 2
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+elif 'UWaveGestureLibrary' in dataset_name:
+    drop_last = False
+    learning_rate = 0.001
+    e_layers = 2
+    batch_size = 16
+    d_model = 32
+    d_ff = 64
+    top_k = 3
+    max_epochs = 30
+    renorm = False
+    loss_fn = nn.CrossEntropyLoss()
+    eval_metrics = ['acc', ]
+
+    ts_train_dataset = get_dataset(dataset_name + 'train')  # csv
+    ts_test_dataset = get_dataset(dataset_name + 'test')
+    ts_val_dataset = ts_test_dataset
+
+
 model = TimesNetModel(task_name=args.task_name, in_chunk_len=seq_len, out_chunk_len=args.pred_len, label_len=label_len, \
                     add_transformed_datastamp=add_transformed_datastamp, window_sampling_limit=window_sampling_limit, \
                     enc_in=enc_in, c_out=c_out, batch_size=batch_size,  d_model=d_model, d_ff=d_ff, loss_fn=loss_fn, \
                     lrSched=Type1Decay(learning_rate=learning_rate, last_epoch=0), optimizer_params=dict(learning_rate=learning_rate), \
                     need_date_in_network=need_date_in_network, drop_last=drop_last, eval_metrics=eval_metrics,
-                    max_epochs=max_epochs, e_layers=e_layers, top_k=top_k, mask_rate=args.mask_rate)
+                    max_epochs=max_epochs, e_layers=e_layers, top_k=top_k, mask_rate=args.mask_rate, renorm=renorm,
+                    num_kernels=num_kernels)
 
 exp = f'timesnet_{args.dataset_name}_{args.pred_len}_nopretrain'
 save_path = 'output/' + exp
@@ -691,7 +920,10 @@ if training:
                      anomaly_ratio)
     elif args.task_name == "imputation":
         imputation_test(ts_test_dataset, args, seq_len, batch_size,
-                        dataset_name, exp)
+                        dataset_name, exp, model)
+    elif args.task_name == 'classification':
+        classification_test(dataset_name, ts_test_dataset, renorm,
+                            ts_train_dataset)
 else:
     # Load model and plot
     model = load(save_path)
@@ -700,7 +932,11 @@ else:
                         dataset_name, seq_len)
     elif args.task_name == "long_term_forecast":
         score, preds_data = backtest(
-            data=ts_test_dataset, model=model, return_predicts=True, stride=1)
+            data=ts_test_dataset,
+            model=model,
+            return_predicts=True,
+            stride=1,
+            predict_window=1)
         print(
             f'{dataset_name}_{exp}: mse is { sum(score[0].values())/enc_in}; mae is {sum(score[1].values())/enc_in}'
         )
@@ -709,4 +945,7 @@ else:
                      anomaly_ratio)
     elif args.task_name == "imputation":
         imputation_test(ts_test_dataset, args, seq_len, batch_size,
-                        dataset_name, exp)
+                        dataset_name, exp, model)
+    elif args.task_name == 'classification':
+        classification_test(dataset_name, ts_test_dataset, renorm,
+                            ts_train_dataset)

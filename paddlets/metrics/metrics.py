@@ -300,6 +300,7 @@ class ACC(Metric):
         _NAME(str): Metric name.
     """
     _NAME = "acc"
+    _MAXIMIZE = True
 
     def __init__(self, mode: str="anomaly"):
         super(ACC, self).__init__(mode)
