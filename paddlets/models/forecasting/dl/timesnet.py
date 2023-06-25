@@ -53,8 +53,6 @@ class TimesBlock(nn.Layer):
 
     def forward(self, x):
         B, T, N = x.shape
-        import pdb
-        pdb.set_trace()
         period_list, period_weight = FFT_for_Period(x, self.k)
 
         res = []

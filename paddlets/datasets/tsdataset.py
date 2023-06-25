@@ -2284,14 +2284,13 @@ class UEADataset(paddle.io.Dataset):
 
     def __init__(self, dataset, limit_size=None, renorm=None):
         self.renorm = renorm
-        self.all_df, self.labels_df = self.load_all(dataset)
+        self.feature_df, self.labels_df = self.load_all(dataset)
 
         if limit_size is not None:
             raise NotImplementedError(
                 f'limit_size is {limit_size}, and this is not implemented')
 
-        self.feature_names = self.all_df[0]._target._data.columns
-        self.feature_df = self.all_df
+        self.feature_names = self.feature_df[0]._target._data.columns
 
         self.concate_array = np.concatenate(
             [dfi._target.to_numpy() for dfi in self.feature_df], axis=0)
@@ -2306,15 +2305,16 @@ class UEADataset(paddle.io.Dataset):
         # df, labels = load_from_tsfile_to_dataframe(filepath,
         #     return_separate_X_and_y=True, replace_missing_vals_with='NaN')
         df, labels = dataset
-        # check if it is the same
 
         labels = pd.Series(labels, dtype='category')
         self.class_names = labels.cat.categories
         labels_df = pd.DataFrame(labels.cat.codes, dtype=np.int32)
+
+        # subsample the time series if horizon_diff is not the same
         # lengths = df.applymap(lambda x: len(x)).values
         # horiz_diffs = np.abs(lengths - np.expand_dims(lengths[:, (0)], -1))
         # if np.sum(horiz_diffs) > 0:
-        #     df = df.applymap(subsample)
+        #     df = df.applymap(subsample) 
         # lengths = df.applymap(lambda x: len(x)).values
         # vert_diffs = np.abs(lengths - np.expand_dims(lengths[(0), :], 0))
         # if np.sum(vert_diffs) > 0:
@@ -2331,6 +2331,7 @@ class UEADataset(paddle.io.Dataset):
 
     def instance_norm(self, case):
         if self.renorm:
+            paddle.disable_static()
             mean = case.mean(axis=0, keepdim=True)
             case = case - mean
             stdev = paddle.sqrt(x=paddle.var(
@@ -2343,7 +2344,7 @@ class UEADataset(paddle.io.Dataset):
     def __getitem__(self, ind):
         return self.instance_norm(
             paddle.to_tensor(data=self.feature_df[ind].to_numpy().astype(
-                'int32'))), paddle.to_tensor(
+                'float32'))), paddle.to_tensor(
                     data=self.labels_df.to_numpy()[ind]).cast('int32')
 
     def __len__(self):
