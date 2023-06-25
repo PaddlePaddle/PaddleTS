@@ -52,7 +52,7 @@ class M4Meta:
         'Weekly': 10,
         'Daily': 10,
         'Hourly': 10
-    }  # from interpretable.gin
+    }
 
 
 def group_values(values, groups, group_name):

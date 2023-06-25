@@ -3,3 +3,5 @@
 """
 paddlets models common
 """
+from .embedding import *
+from .layer_init import *

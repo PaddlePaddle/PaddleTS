@@ -549,7 +549,7 @@ class NBEATSModel(PaddleBaseModelImpl):
             patience=patience,
             seed=seed, )
 
-    def _check_params(self): # additional check params
+    def _check_params(self):
         """
         Check validation of parameters.
         """

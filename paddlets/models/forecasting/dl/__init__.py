@@ -4,6 +4,4 @@
 paddlets paddle dl model
 """
 
-from .embedding import *
-from .layer_init import *
 from .timesnet import TimesNetModel

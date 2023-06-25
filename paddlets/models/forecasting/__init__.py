@@ -17,4 +17,4 @@ from paddlets.models.forecasting.dl.tft import TFTModel
 from paddlets.models.forecasting.dl.scinet import SCINetModel
 from paddlets.models.forecasting.dl.nlinear import NLinearModel
 from paddlets.models.forecasting.dl.timesnet import TimesNetModel
-from .utils import *
+from .M4_utils import *

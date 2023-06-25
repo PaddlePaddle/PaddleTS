@@ -1,7 +1,7 @@
 import paddle
 import paddle.nn as nn
 
-from paddlets.models.forecasting.dl import layer_init as init
+from paddlets.models.common import layer_init as init
 
 
 class Inception_Block_V1(paddle.nn.Layer):

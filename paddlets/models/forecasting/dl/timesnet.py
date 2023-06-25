@@ -1,7 +1,6 @@
-import math
-from typing import List, Dict, Any, Callable, Optional, NewType, Tuple, Union
-
 import numpy as np
+from typing import List, Dict, Any, Callable, Optional, Tuple, Union
+
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
@@ -10,12 +9,12 @@ from paddle.optimizer import Optimizer
 from paddlets.datasets import TSDataset, UnivariateDataset, UEADataset, collate_func
 from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
 from paddlets.models.forecasting.dl.revin import revin_norm
-from paddlets.models.forecasting.dl.embedding import DataEmbedding
+from paddlets.models.common import layer_init as init
 from paddlets.models.common.callbacks import Callback
+from paddlets.models.common.embedding import DataEmbedding
 from paddlets.models.data_adapter import DataAdapter
-from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 from paddlets.models.forecasting.dl.layer_libs import Inception_Block_V1
-from paddlets.models.forecasting.dl import layer_init as init
+from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
 logger = Logger(__name__)
 
@@ -148,7 +147,6 @@ class _TimesNet(nn.Layer):
 
         # self._load_from_checkpoint()
         # self._initialize_weights()
-        # paddle.save(self.state_dict(), 'init_paddle.pdparams')
 
     def _initialize_weights(self, ):
         for layer in self.sublayers():
@@ -169,14 +167,6 @@ class _TimesNet(nn.Layer):
             self,
             x_enc,
             x_mark_enc=None, ):
-        # import numpy as np
-        # np.random.seed(2022)
-        # x = np.random.randn(32, 96, 7)
-        # y = np.random.randn(32, 96, 4)
-        # x_enc['past_target'] = paddle.to_tensor(x).cast('float32')
-        # x_mark_enc = paddle.to_tensor(y).cast('float32')
-        # print('x_enc.shape, x_mark_enc.shape', x_enc.shape, x_mark_enc.shape)
-
         # Normalization
         means = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - means
@@ -364,7 +354,8 @@ class TimesNetModel(PaddleBaseModelImpl):
             patience=patience,
             drop_last=drop_last,
             seed=seed,
-            mask_rate=mask_rate)
+            mask_rate=mask_rate,
+            need_date_in_network=need_date_in_network)
 
         self._in_chunk_len = in_chunk_len
         self._out_chunk_len = out_chunk_len
@@ -383,7 +374,6 @@ class TimesNetModel(PaddleBaseModelImpl):
         self._window_sampling_limit = window_sampling_limit
         self._use_revin = use_revin
         self._revin_params = revin_params
-        self._need_date_in_network = need_date_in_network
         self._add_transformed_datastamp = add_transformed_datastamp
         self._lrSched = lrSched
         self._renorm = renorm
@@ -408,8 +398,6 @@ class TimesNetModel(PaddleBaseModelImpl):
         collate_fn = None
         if isinstance(train_tsdataset, TSDataset):
             train_tsdataset = [train_tsdataset]
-        # 接入多个数据集，先用一个dataadapter进行统一为一个数据集
-        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
         if self._window_sampling_limit is not None:  # Only univariate dataset have this property
             self.train_dataset = UnivariateDataset(
                 train_tsdataset, self._in_chunk_len, self._out_chunk_len,

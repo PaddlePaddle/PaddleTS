@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from curses import beep
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 from collections import OrderedDict
 from copy import deepcopy
@@ -77,27 +76,27 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
 
-    def __init__(
-            self,
-            in_chunk_len: int,
-            out_chunk_len: int,
-            skip_chunk_len: int=0,
-            label_len: int=0,
-            sampling_stride: int=1,
-            loss_fn: Callable[..., paddle.Tensor]=None,
-            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
-            eval_metrics: Union[List[str], List[Metric]]=["mae", "mse"],
-            callbacks: List[Callback]=[],
-            batch_size: int=128,
-            max_epochs: int=10,
-            verbose: int=1,
-            patience: int=4,
-            drop_last: bool=True,
-            lrSched=None,
-            seed: Optional[int]=None,
-            task_name: str=None,
-            mask_rate: float=None, ):
+    def __init__(self,
+                 in_chunk_len: int,
+                 out_chunk_len: int,
+                 skip_chunk_len: int=0,
+                 label_len: int=0,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=None,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: Union[List[str], List[Metric]]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=128,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 drop_last: bool=True,
+                 lrSched=None,
+                 seed: Optional[int]=None,
+                 task_name: str=None,
+                 mask_rate: float=None,
+                 need_date_in_network: bool=False):
         super(PaddleBaseModelImpl, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -116,7 +115,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._stop_training = False
         self._drop_last = drop_last
         self._lrSched = lrSched
-        self._need_date_in_network = False
+        self._need_date_in_network = need_date_in_network
         self._mask_rate = mask_rate
 
         self._fit_params = None
@@ -157,7 +156,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                  f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
         if not self._eval_metrics:
-            self._eval_metrics = ["mae", "mse"]
+            self._eval_metrics = ["mae"]
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
@@ -207,10 +206,9 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         if isinstance(train_tsdataset, TSDataset):
             train_tsdataset = [train_tsdataset]
         # 接入多个数据集，先用一个dataadapter进行统一为一个数据集
-        #The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
         for dataset in train_tsdataset:
             self._check_tsdataset(dataset)
-            dataset = data_adapter.to_sample_dataset(  # sample the data
+            dataset = data_adapter.to_sample_dataset(
                 dataset,
                 in_chunk_len=self._in_chunk_len,
                 out_chunk_len=self._out_chunk_len,
@@ -222,6 +220,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 train_dataset = dataset
             else:
                 train_dataset.samples = train_dataset.samples + dataset.samples
+        # The design here is to return one dataloader instead of multiple dataloaders, which can ensure the accuracy of shuffle logic
         train_dataloader = data_adapter.to_paddle_dataloader(
             train_dataset,
             self._batch_size,
@@ -249,7 +248,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 valid_dataset,
                 self._batch_size,
                 shuffle=False,
-                drop_last=self._drop_last)  # shuffle=True
+                drop_last=self._drop_last)
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
 
@@ -276,7 +275,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             sampling_stride=self._sampling_stride,
             add_transformed_datastamp=self._add_transformed_datastamp,
             time_window=(boundary, boundary))
-        # shuffle_flag = False drop_last = True batch_size = 1（Other than AD\CLass）
         dataloader = data_adapter.to_paddle_dataloader(dataset,
                                                        self._batch_size)
         return dataloader
@@ -385,7 +383,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
             self._train_epoch(train_dataloader)
-            # print('step the learning rate to {}/{}'.format(self._lrSched.get_lr(), self._optimizer.get_lr()))
             if self._lrSched is not None:
                 self._lrSched.step(self.epochs + 1)
                 self._optimizer.set_lr(self._lrSched.get_lr())
@@ -448,8 +445,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.train()
         for batch_idx, data in enumerate(train_loader):
             self._callback_container.on_batch_begin(batch_idx)
-            # if self._task_name == 'imputation' and batch_idx == 50:
-            #     break
 
             if self._task_name == 'short_term_forecast':
                 X, y, _, batch_y_mark = data
@@ -514,14 +509,14 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             loss = self._compute_loss(output, y.cast('int64').squeeze(-1))
         else:  # long term forecast
             if self._need_date_in_network:
-                output = self._network(X,
-                                       datestamp)  # align network # x, x_mark
+                output = self._network(X, datestamp)
                 y = y[:, -self._out_chunk_len:, :]
             else:
                 output = self._network(X)
 
             loss = self._compute_loss(
-                output, y, batch_y_mark)  # output is None task_name is None
+                output, y,
+                batch_y_mark)  # when output is None, task_name is none
 
         loss.backward()
         self._optimizer.step()
@@ -609,7 +604,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         """
 
         if self._task_name == 'imputation':  # imputation needs to compute mask
-            # import pdb; pdb.set_trace()
             batch_x = X['past_target']
             B, T, N = batch_x.shape
             mask = paddle.rand(shape=(B, T, N))
@@ -650,7 +644,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         if "future_target" in X:
             y = X.pop("future_target")  # as label
         if 'past_transformed_datastamp' in X:
-            datastamp = X.pop('past_transformed_datastamp')  # data of X
+            datastamp = X.pop('past_transformed_datastamp')
         return X, y, datastamp
 
     def _compute_loss(self,

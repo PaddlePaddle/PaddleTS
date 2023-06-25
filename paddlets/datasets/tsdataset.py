@@ -2242,8 +2242,6 @@ def collate_func(data, max_len=None):
         paddle.to_tensor(
             data=lengths, dtype='int32'), max_len=max_len).astype('int32')
 
-    # print('X.shape, targets.shape, padding_mask.shape', X.shape, targets.shape, padding_masks.shape)
-    # print('X, targets, padding_mask', X[0], targets[0], padding_masks[0])
     return X, targets, padding_masks
 
 

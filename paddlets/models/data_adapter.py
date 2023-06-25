@@ -777,9 +777,9 @@ class SampleDataset(paddle.io.Dataset):
                         # ONLY fit api needs future_target, predict api does not need it.
                         sample[
                             "future_target"] = self._build_future_target_for_single_sample(
-                                curr_sample_tail=curr_sample_tail,  # 191
-                                timeindex_offset=target_timeindex_offset,  # 0
-                                target_ndarray=target_ndarray)  # 目标array
+                                curr_sample_tail=curr_sample_tail,
+                                timeindex_offset=target_timeindex_offset,
+                                target_ndarray=target_ndarray)
 
                     # past target
                     sample[
@@ -863,7 +863,7 @@ class SampleDataset(paddle.io.Dataset):
                 target or observed_cov.
         """
         if self._rawdataset.target is not None:
-            return "target", self._rawdataset.target.time_index  #basically the date column
+            return "target", self._rawdataset.target.time_index  # the date column
         return "observed_cov", self._rawdataset.observed_cov.time_index
 
     def _validate_std_timeindex(
@@ -912,7 +912,7 @@ class SampleDataset(paddle.io.Dataset):
         default_min_window = self._in_chunk_len + self._skip_chunk_len + self._out_chunk_len - 1
         # Note, this std time index is filled if fill_last_value is not None.
         default_max_window = len(self._std_timeindex) - 1  # last value
-        return default_min_window, default_max_window  # curr_sample_tail
+        return default_min_window, default_max_window
 
     def _validate_time_window(self) -> None:
         """
@@ -1291,7 +1291,7 @@ class SampleDataset(paddle.io.Dataset):
         Returns:
             np.ndarray: built future_target chunk (Y) for the current single sample.
         """
-        end = timeindex_offset + curr_sample_tail + 1  # in_chunk_len+_out_chunk_len+_skip+skip_len
+        end = timeindex_offset + curr_sample_tail + 1
         start = (end - 1) - self._out_chunk_len - self._label_len + 1
         return target_ndarray[start:end]
 
@@ -1312,7 +1312,7 @@ class SampleDataset(paddle.io.Dataset):
         Returns:
             np.ndarray: built past_target chunk for the current single sample.
         """
-        end = timeindex_offset + curr_sample_tail - self._out_chunk_len - self._skip_chunk_len + 1  #  in_chunk_len
+        end = timeindex_offset + curr_sample_tail - self._out_chunk_len - self._skip_chunk_len + 1
         start = (end - 1) - self._in_chunk_len + 1
         return target_ndarray[start:end]  # input chunk 
 

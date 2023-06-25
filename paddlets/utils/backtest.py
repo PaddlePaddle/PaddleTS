@@ -162,7 +162,6 @@ def backtest(
 
     # length = target_length - start - model_skip_chunk_len
     length = target_length - start - model_skip_chunk_len - predict_window + 1
-    # length used to be 11424, the modified version is 11329
     print('length used to be {}, the modified version is {}'.format(
         target_length - start - model_skip_chunk_len, length))
     predict_rounds = math.ceil(length / stride)
