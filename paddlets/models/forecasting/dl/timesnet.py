@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
+from paddlets.utils import manager
 from paddle.optimizer import Optimizer
 
 from paddlets.datasets import TSDataset, UnivariateDataset, UEADataset, collate_func
@@ -263,6 +264,7 @@ class _TimesNet(nn.Layer):
 
 # implemete the model including the training process
 # directly pass in the datateet additional check params
+@manager.MODELS.add_component
 class TimesNetModel(PaddleBaseModelImpl):
     """
     Implementation of TimesNet model.

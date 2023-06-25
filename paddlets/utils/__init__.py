@@ -9,3 +9,5 @@ from paddlets.utils.backtest import backtest
 from paddlets.utils.validation import cross_validate, fit_and_score
 from paddlets.utils.utils import plot_anoms
 from paddlets.utils.learning_rate import *
+from paddlets.utils.predict_test import *
+from paddlets.utils.manager import *

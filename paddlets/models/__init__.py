@@ -5,3 +5,4 @@ paddlets models
 """
 from paddlets.models.base import BaseModel
 from paddlets.models.model_loader import load
+from paddlets.models.forecasting import TimesNetModel

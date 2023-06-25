@@ -582,7 +582,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 list_y_true.append(X['past_target'])
             else:
                 list_y_true.append(y)
-                list_y_score.append(scores)
+            list_y_score.append(scores)
         y_true, scores = np.concatenate(list_y_true), np.concatenate(
             list_y_score)
         metrics_logs = self._metric_container_dict[name](y_true, scores)
@@ -592,7 +592,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
     def _predict_batch(self,
                        X: paddle.Tensor,
                        date_stamp: paddle.Tensor,
-                       padding_mask) -> np.ndarray:
+                       padding_mask=None) -> np.ndarray:
         """Predict one batch of data.
 
         Args: 
