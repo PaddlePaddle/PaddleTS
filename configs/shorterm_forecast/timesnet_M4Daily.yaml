@@ -26,7 +26,7 @@ model:
     e_layers: 2 #
     num_kernels: 6 #
     d_model: 16 #
-    d_ff: 32 #
+    d_ff: 16 #
     add_transformed_datastamp: False # 
     need_date_in_network: False # 
     top_k: 5 # 
@@ -34,7 +34,7 @@ model:
     renorm: Null # 
     drop_last: False #
 
-Loss: smape # or smape or CE
+loss: smape # or smape or CE
 
 test:
   stride: 1 # 

@@ -34,7 +34,7 @@ model:
     renorm: Null 
     drop_last: False 
 
-Loss: smape # or smape or CE
+loss: smape # mse or smape or CE
 
 test:
   stride: 1 

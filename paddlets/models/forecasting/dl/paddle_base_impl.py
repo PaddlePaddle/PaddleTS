@@ -665,6 +665,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         """
         if batch_y_mark is not None:
             batch_y_mark = batch_y_mark[:, -self._out_chunk_len:, :]
+            y_true = y_true[:, -self._out_chunk_len:, :]
             return self._loss_fn(y_score, y_true, batch_y_mark)
         else:
             return self._loss_fn(y_score, y_true)
