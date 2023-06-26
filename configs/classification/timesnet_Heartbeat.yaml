@@ -1,0 +1,42 @@
+batch_size: 16 #
+seq_len: 96 #
+predict_len: 0 #
+label_len: 0 #
+do_eval: True #
+epoch: 30 # max_epochs
+training: True # 
+eval_metrics: ["acc", ] # 
+anomaly_ratio: Null
+
+lr_scheduler: # 
+  name: Type1Decay
+  lr_cfg:
+    learning_rate: 0.001
+    last_epoch: 0
+
+dataset: 
+  name: Heartbeat
+
+model: 
+  name: TimesNetModel
+  model_cfg:
+    task_name: classification
+    enc_in: 7 #
+    c_out: 7 #
+    e_layers: 2 #
+    num_kernels: 6 #
+    d_model: 64 #
+    d_ff: 64 #
+    add_transformed_datastamp: True # 
+    need_date_in_network: True # 
+    top_k: 1 # 
+    window_sampling_limit: Null # 
+    renorm: False # 
+    drop_last: False #
+
+Loss: CE # or smape or CE
+
+test:
+  stride: 1 # 
+
+output: 'output/'

@@ -1,0 +1,46 @@
+batch_size: 16 #
+seq_len: 96 #
+predict_len: 0 #
+label_len: 0 #
+do_eval: True #
+epoch: 10 # max_epochs
+training: True # 
+eval_metrics: ["mae", "mse"] # 
+anomaly_ratio: Null
+
+lr_scheduler: # 
+  name: Type1Decay
+  lr_cfg:
+    learning_rate: 0.001
+    last_epoch: 0
+
+dataset: 
+  name: ETTm2
+  split:
+    train: [0, 34560]  # 12 * 30 * 24 * 4
+    val: [34560, 46080]  # [12 * 30 * 24 * 4 - seq_len, 12 * 30 * 24 * 4 + 4 * 30 * 24 * 4]
+    test: [46080, 57600] # [12 * 30 * 24 * 4 + 4 * 30 * 24 * 4 - seq_len, 12 * 30 * 24 * 4 + 8 * 30 * 24 * 4]
+
+model: 
+  name: TimesNetModel
+  model_cfg:
+    task_name: imputation
+    enc_in: 7 #
+    c_out: 7 #
+    e_layers: 2 #
+    num_kernels: 6 #
+    d_model: 64 #
+    d_ff: 64 #
+    add_transformed_datastamp: True # 
+    need_date_in_network: True # 
+    top_k: 3 # 
+    window_sampling_limit: Null # 
+    renorm: Null # 
+    drop_last: True #
+
+Loss: mse # or smape or CE
+
+test:
+  stride: 1 # 
+
+output: 'output/'
