@@ -115,7 +115,7 @@ pip install paddlets
 
 ## コントリビュート
 
-私たちはあらゆる種類の貢献に感謝します。バグがありましたら、[Filing an issue](https://github.com/PaddlePaddle/PaddleTS/issues) までお知らせください。
+私たちはあらゆる種類の貢献に感謝します。バグがありましたら、[issue を提出](https://github.com/PaddlePaddle/PaddleTS/issues) してお知らせください。
 
 もしバグフィックスにご協力いただけるのであれば、それ以上の議論は必要ありません。
 
@@ -124,4 +124,4 @@ pip install paddlets
 
 
 ## ライセンス
-[LICENSE](LICENSE)ファイルにあるように、PaddleTS は Apache スタイルのライセンスを持っています。
+[LICENSE](LICENSE) ファイルにあるように、PaddleTS は Apache スタイルのライセンスを持っています。
