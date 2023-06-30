@@ -1,4 +1,4 @@
-[简体中文](./README_cn.md) |  **English**
+[简体中文](./README_cn.md) | **English** | [日本語](./README_ja.md)
 
 <p align="center">
   <img src="docs/static/images/logo/paddlets-readme-logo.png" align="middle" width=500>
