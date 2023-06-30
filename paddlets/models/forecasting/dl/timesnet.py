@@ -355,13 +355,12 @@ class TimesNetModel(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             drop_last=drop_last,
+            lrSched=lrSched,
             seed=seed,
             mask_rate=mask_rate,
-            need_date_in_network=need_date_in_network)
+            need_date_in_network=need_date_in_network,
+            add_transformed_datastamp=add_transformed_datastamp)
 
-        self._in_chunk_len = in_chunk_len
-        self._out_chunk_len = out_chunk_len
-        self._label_len = label_len
         self._e_layers = e_layers
         self._enc_in = enc_in
         self._d_model = d_model
@@ -376,8 +375,6 @@ class TimesNetModel(PaddleBaseModelImpl):
         self._window_sampling_limit = window_sampling_limit
         self._use_revin = use_revin
         self._revin_params = revin_params
-        self._add_transformed_datastamp = add_transformed_datastamp
-        self._lrSched = lrSched
         self._renorm = renorm
 
     def _init_fit_dataloaders(

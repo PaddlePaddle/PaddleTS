@@ -96,7 +96,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                  seed: Optional[int]=None,
                  task_name: str=None,
                  mask_rate: float=None,
-                 need_date_in_network: bool=False):
+                 need_date_in_network: bool=False,
+                 add_transformed_datastamp: bool=False):
         super(PaddleBaseModelImpl, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -127,6 +128,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._history = None
         self._callback_container = None
         self._task_name = task_name
+        self._add_transformed_datastamp = add_transformed_datastamp
 
         # Parameter check.
         self._check_params()
