@@ -1,1 +1,1 @@
-echo This is a Test!
+echo This is a new Test!
