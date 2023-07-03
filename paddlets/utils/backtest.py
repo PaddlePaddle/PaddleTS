@@ -127,7 +127,7 @@ def backtest(data: TSDataset,
     # If predict_window! = stride, the forecast will form a discontinuous time series, do not processed by default and returns List[TSdataset]
     return_tsdataset = True if predict_window == stride else False
 
-    length = target_length - start - model_skip_chunk_len - predict_window + 1
+    length = target_length - start - model_skip_chunk_len 
     predict_rounds = math.ceil(length / stride)
     predicts = []
     scores = defaultdict(list)
