@@ -1165,7 +1165,7 @@ class TestTSDataset(TestCase):
             out_chunk_len=5,
             skip_chunk_len=4 * 4,
             eval_metrics=["mse", "mae"],
-            batch_size=512,
+            batch_size=128,
             num_samples=101,
             regression_mode="sampling",
             output_mode="quantiles",

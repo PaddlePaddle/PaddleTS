@@ -431,10 +431,14 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._network.eval()
         results = []
         for batch_nb, data in enumerate(dataloader):
-            X, _, date_stamp = self._prepare_X_y(data)
+            data = self._prepare_X_y(data)
+            if len(data) == 2:
+                X, _ = data
+                datestamp = None
+            else:
+                X, _, datestamp = data
             if self._need_date_in_network:
-                output = self._network(X, date_stamp)
-                y = y[:, -self._out_chunk_len:, :]
+                output = self._network(X, datestamp)
             else:
                 output = self._network(X)
             predictions = output.numpy()
@@ -584,8 +588,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 scores = self._predict_batch(
                     X, None, padding_mask=padding_mask)
             else:
-                X, y, date_stamp = self._prepare_X_y(data)
-                scores = self._predict_batch(X, date_stamp)
+                data = self._prepare_X_y(data)
+                if len(data) == 2:
+                    X, y = data
+                    datestamp = None
+                else:
+                    X, y, datestamp = data
+                scores = self._predict_batch(X, datestamp)
 
             if self._task_name == 'anomaly_detection':
                 list_y_true.append(X['observed_cov_numeric'])
@@ -602,7 +611,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
     def _predict_batch(self,
                        X: paddle.Tensor,
-                       date_stamp: paddle.Tensor,
+                       datestamp: paddle.Tensor,
                        padding_mask=None) -> np.ndarray:
         """Predict one batch of data.
 
@@ -625,14 +634,14 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 paddle.zeros(
                     shape=batch_x.shape, dtype='float32'),
                 batch_x)
-            scores = self._network(inp, date_stamp, mask)
+            scores = self._network(inp, datestamp, mask)
         elif self._task_name == 'classification':
             scores = self._network(X, padding_mask)
             scores = paddle.nn.functional.softmax(scores)
             scores = paddle.argmax(scores, axis=1)
         else:
             if self._need_date_in_network:
-                scores = self._network(X, date_stamp)
+                scores = self._network(X, datestamp)
             else:
                 scores = self._network(X)
         return scores.numpy()

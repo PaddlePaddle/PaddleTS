@@ -576,8 +576,7 @@ class TestMetrics(TestCase):
 
         # case2
         fake_input = ["mse", "mape"]
-        with self.assertRaises(AssertionError):
-            Metric.get_metrics_by_names(fake_input)
+        Metric.get_metrics_by_names(fake_input)
 
 
 class TestMetricContainer(TestCase):

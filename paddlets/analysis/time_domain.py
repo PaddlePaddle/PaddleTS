@@ -102,7 +102,7 @@ class Seasonality(Analyzer):
                     col]):
                 ret = sm.tsa.seasonal_decompose(
                     X[col].dropna().values,
-                    freq=period_dict[col],
+                    period=period_dict[col],
                     model=self.mode,
                     extrapolate_trend="freq")
                 season_dict[col] = ret.seasonal[:period_dict[col]]
