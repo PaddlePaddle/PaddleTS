@@ -179,7 +179,7 @@ def backtest(data: TSDataset,
             if metric is None:
                 metric = MSE() 
             score_dict = metric(real, predict)
-            scores[metric[i]._NAME].append(score_dict)        
+            scores[metric._NAME].append(score_dict)        
         index = index + stride
 
     score_final = dict()
