@@ -432,7 +432,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         results = []
         for batch_nb, data in enumerate(dataloader):
             X, _, date_stamp = self._prepare_X_y(data)
-            output = self._network(X, date_stamp)
+            if self._need_date_in_network:
+                output = self._network(X, date_stamp)
+                y = y[:, -self._out_chunk_len:, :]
+            else:
+                output = self._network(X)
             predictions = output.numpy()
             results.append(predictions)
         results = np.vstack(results)
@@ -455,7 +459,12 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                 X, y, padding_mask = data
                 batch_logs = self._train_batch(X, y, padding_mask=padding_mask)
             else:
-                X, y, datestamp = self._prepare_X_y(data)
+                data = self._prepare_X_y(data)
+                if len(data) == 2:
+                    X, y = data
+                    datestamp = None
+                else:
+                    X, y, datestamp = data
                 batch_logs = self._train_batch(X, y, datestamp)
 
             self._callback_container.on_batch_end(batch_idx, batch_logs)
