@@ -169,6 +169,7 @@ def backtest(
     scores = []
     scores_mae = []
     index = start
+    no_mae = False
 
     TQDM_PREFIX = "Backtest Progress"
     for _ in tqdm(
@@ -212,13 +213,18 @@ def backtest(
         score_dict = metric(real, predict)
         scores.append(score_dict)
         metric2 = MAE()
-        scores_mae.append(metric2(real, predict))
+        try:
+            scores_mae.append(metric2(real, predict))
+        except ValueError:
+            scores_mae.append(0.0)
+            no_mae = True
 
         index = index + stride
 
     if reduction:
         scores_metric = score_redution(metric, reduction, scores)
-        scores_mae = score_redution(metric2, reduction, scores_mae)
+        if not no_mae:
+            scores_mae = score_redution(metric2, reduction, scores_mae)
 
     if return_predicts:
         if return_tsdataset:

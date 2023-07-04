@@ -1,6 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import sys
+import math
 
 sys.path.append(".")
 from typing import List
@@ -79,17 +80,20 @@ class TestBacktest(TestCase):
         lstnet = LSTNetRegressor(
             in_chunk_len=1 * 96 + 20 * 4, out_chunk_len=96, max_epochs=1)
         lstnet.fit(self.tsdataset1, self.tsdataset1)
+        predict_window = 50
+        stride = 50
         score, predicts = backtest(
             self.tsdataset1,
             lstnet,
             start=pd.Timestamp('2022-01-07T12'),
-            predict_window=50,
-            stride=50,
+            predict_window=predict_window,
+            stride=stride,
             return_predicts=True)
 
         start = 624
         data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+        assert len(predicts.get_target()) == math.ceil(
+            (data_len - start - predict_window + 1) / stride) * predict_window
 
         # case3 add window,stride, window != stride
         lstnet = LSTNetRegressor(
@@ -121,7 +125,8 @@ class TestBacktest(TestCase):
 
         start = 200
         data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+        assert len(predicts.get_target()) == math.ceil(
+            (data_len - start - predict_window + 1) / stride) * predict_window
 
         # case5 add return score
         lstnet = LSTNetRegressor(
@@ -291,7 +296,7 @@ class TestBacktest(TestCase):
             out_chunk_len=5,
             skip_chunk_len=4 * 4,
             eval_metrics=["mse", "mae"],
-            batch_size=512,
+            batch_size=128,
             num_samples=101,
             regression_mode="sampling",
             output_mode="quantiles",
@@ -299,14 +304,14 @@ class TestBacktest(TestCase):
 
         reg.fit(dataset, dataset)
         score = backtest(dataset, reg, metric=MSE("prob"), verbose=False)
-        assert isinstance(score, dict)
+        assert isinstance(score[0], dict)
 
         score = backtest(
             dataset,
             reg,
             metric=QuantileLoss(q_points=[0.1, 0.9]),
             verbose=False)
-        assert isinstance(score["a1"], dict)
+        assert isinstance(score[0]["a1"], dict)
 
 
 if __name__ == "__main__":

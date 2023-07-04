@@ -641,7 +641,8 @@ class SCINetModel(PaddleBaseModelImpl):
 
     def _compute_loss(self,
                       y_score: Tuple[paddle.Tensor, Optional[paddle.Tensor]],
-                      y_true: paddle.Tensor) -> paddle.Tensor:
+                      y_true: paddle.Tensor,
+                      batch_y_mark=None) -> paddle.Tensor:
         """
         Internal method, compute loss for current batch.
 
@@ -687,7 +688,7 @@ class SCINetModel(PaddleBaseModelImpl):
         self._network.eval()
         results = []
         for batch_nb, data in enumerate(dataloader):
-            x, _ = self._prepare_X_y(data)
+            x, _, _ = self._prepare_X_y(data)
             # output.shape = (out_chunk_len, in_dim)
             output, _ = self._network(x)
             predictions = output.numpy()
@@ -716,7 +717,7 @@ class SCINetModel(PaddleBaseModelImpl):
         mid_pred_list = []
         for batch_idx, data in enumerate(loader):
             # y_true_batch.shape = (batch_size, out_chunk_len, target_dim)
-            X, y_true_batch = self._prepare_X_y(data)
+            X, y_true_batch, _ = self._prepare_X_y(data)
             # y_pred_batch.shape = (batch_size, out_chunk_len, in_dim)
             # mid_pred_batch.shape = (batch_size, out_chunk_len, in_dim)
             y_pred_batch, mid_pred_batch = self._predict_batch(X)

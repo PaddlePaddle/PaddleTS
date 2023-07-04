@@ -269,7 +269,7 @@ class TFTModel(PaddleBaseModelImpl):
         results = {}
         dataloader = self._init_predict_dataloader(tsdataset)
         for batch_nb, data in enumerate(dataloader):
-            X, _ = self._prepare_X_y(data)
+            X, _, _ = self._prepare_X_y(data)
             output = self._network(X)
             for key in output:
                 weights = output[key].numpy() if output[
