@@ -211,7 +211,6 @@ def backtest(data: TSDataset,
                 score = tmp
             score_final[key]= score
 
-
     if return_predicts:
         if return_tsdataset:
             predicts = TSDataset.concat(predicts)

@@ -101,7 +101,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
         self.start_epoch = 1
-        if  optimizer_params.get('start_epoch', None):
+        if optimizer_params is not None and optimizer_params.get('start_epoch', None):
             self.start_epoch = int(optimizer_params.pop('start_epoch'))
 
         self._optimizer_params = deepcopy(optimizer_params)
