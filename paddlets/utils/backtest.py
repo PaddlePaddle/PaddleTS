@@ -184,7 +184,7 @@ def backtest(data: TSDataset,
     score_final = dict()
     for key, score in scores.items():
         if reduction:
-            if key == "quantile" and isinstance(
+            if key == "quantile_loss" and isinstance(
                     list(score[0].values())[0], dict):
                 target_cols = [x for x in score[0].keys()]
                 tmp = {}
