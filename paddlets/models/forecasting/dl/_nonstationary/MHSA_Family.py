@@ -30,7 +30,7 @@ class DSAttention(paddle.nn.Layer):
         scores = paddle.einsum('blhe,bshe->bhls', queries, keys) * tau + delta
         if self.mask_flag:
             if attn_mask is None:
-                attn_mask = TriangularCausalMask(B, L, device=queries.place)
+                attn_mask = TriangularCausalMask(B, L)
 
             scores = masked_fill(scores, attn_mask.mask, -np.inf)
         A = self.dropout(F.softmax(scale * scores, axis=-1))
@@ -92,7 +92,7 @@ class DSProbAttention(paddle.nn.Layer):
     def _update_context(self, context_in, V, scores, index, L_Q, attn_mask):
         B, H, L_V, D = V.shape
         if self.mask_flag:
-            attn_mask = ProbMask(B, H, L_Q, index, scores, device=V.place)
+            attn_mask = ProbMask(B, H, L_Q, index, scores)
             scores.masked_fill_(attn_mask.mask, -np.inf)
         attn = paddle.softmax(scores, dim=-1)
         context_in[(paddle.arange(start=B)[:, (None), (None)]), (paddle.
