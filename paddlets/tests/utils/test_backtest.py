@@ -89,7 +89,7 @@ class TestBacktest(TestCase):
 
         start = 624
         data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+        assert len(predicts.get_target()) == data_len - start 
 
         # case3 add window,stride, window != stride
         lstnet = LSTNetRegressor(

@@ -1,0 +1,42 @@
+batch_size: 128
+seq_len: 96
+predict_len: 192
+do_eval: True
+epoch: 100
+
+
+dataset: 
+  name: ETTh2
+  split:
+    train: [0, 8640]  # 12 * 30 * 24
+    val: [8640, 11520]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [11520, 14400] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: PatchTSTModel
+  model_cfg:
+    c_in: 7
+    n_layers: 3
+    n_heads: 4
+    d_model: 16
+    d_ff: 128
+    dropout: 0.3
+    fc_dropout: 0.3
+    head_dropout: 0.0
+    patch_len: 16
+    stride: 8
+    patience: 100
+    optimizer_params:
+      start_epoch: 3
+      learning_rate: 0.0001
+      gamma: 0.9
+
+test:
+  stride: 1
+
+
+
+
+
+

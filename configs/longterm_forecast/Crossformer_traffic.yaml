@@ -1,0 +1,40 @@
+batch_size: 32
+seq_len: 96
+predict_len: 24
+do_eval: True
+epoch: 20
+
+
+dataset: 
+  name: Traffic
+  split:
+    train: [0, 12280]  # 12 * 30 * 24
+    val: [12280, 14036]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [14036, 17544] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: Crossformer
+  model_cfg:
+    c_in: 862
+    win_size: 2
+    factor: 10
+    dropout: 0.2
+    seg_len: 12
+    d_model: 64 
+    d_ff: 128
+    n_heads: 2
+    e_layers: 3
+    optimizer_params:
+      learning_rate: 0.001
+      gamma: 0.7
+    patience: 3
+    #pretrain: Crossformer_init_etth1.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

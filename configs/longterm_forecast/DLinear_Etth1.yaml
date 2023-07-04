@@ -1,0 +1,32 @@
+batch_size: 32
+seq_len: 96
+predict_len: 96
+do_eval: True
+epoch: 10
+
+
+dataset: 
+  name: ETTh1
+  split:
+    train: [0, 8640]  # 12 * 30 * 24
+    val: [8640, 11520]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [11520, 14400] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: DLinearModel
+  model_cfg:
+    c_in: 7
+    individual: False
+    optimizer_params:
+      learning_rate: 0.005
+      gamma: 0.5
+    patience: 3
+
+test:
+  stride: 1
+
+  
+
+
+

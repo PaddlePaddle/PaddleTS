@@ -1,0 +1,33 @@
+batch_size: 8
+seq_len: 96
+predict_len: 720
+do_eval: True
+epoch: 10
+
+
+dataset: 
+  name: Exchange
+  split:
+    train: [0, 5311]  # 12 * 30 * 24
+    val: [5311, 6071]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [6071, 7588] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: DLinearModel
+  model_cfg:
+    c_in: 8
+    individual: False
+    optimizer_params:
+      learning_rate: 0.0005
+      gamma: 0.5
+    patience: 3
+    #pretrain: NLinear_init.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+
