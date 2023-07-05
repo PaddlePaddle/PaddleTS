@@ -382,7 +382,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             if self._scheduler:
                 if epoch_idx >= self.start_epoch:
                     self._scheduler.step()
-                print('epoch and lr is :', epoch_idx, ' ', self._scheduler.get_lr())
+                logger.info('lr: {}'.format(self._scheduler.get_lr()))
             if self._stop_training:
                 break
 
