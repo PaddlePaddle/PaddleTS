@@ -15,4 +15,10 @@ from paddlets.models.forecasting.dl.informer import InformerModel
 from paddlets.models.forecasting.dl.deepar import DeepARModel
 from paddlets.models.forecasting.dl.tft import TFTModel
 from paddlets.models.forecasting.dl.scinet import SCINetModel
-from paddlets.models.forecasting.dl.nlinear import NLinearModel
+from paddlets.models.forecasting.dl.NLinear import NLinearModel
+from paddlets.models.forecasting.dl.DLinear import DLinearModel
+from paddlets.models.forecasting.dl.PatchTST import PatchTSTModel
+from paddlets.models.forecasting.dl.RLinear import RLinearModel
+from paddlets.models.forecasting.dl.Nonstationary import Nonstationary_Transformer
+from paddlets.models.forecasting.dl.Crossformer import Crossformer
+from paddlets.models.forecasting.dl.TiDE import TiDE

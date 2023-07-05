@@ -239,7 +239,7 @@ class TestMLPRegressor(TestCase):
             skip_chunk_len=4 * 4,
             patience=1)
         _, metrics_names, _ = mlp._init_metrics(["val"])
-        self.assertEqual(metrics_names[-1], "val_mae")
+        self.assertEqual(metrics_names[-1], "val_mse")
 
     def test_init_callbacks(self):
         """unittest function

@@ -1,0 +1,33 @@
+batch_size: 16
+seq_len: 96
+predict_len: 96
+do_eval: True
+epoch: 10
+
+
+dataset: 
+  name: Traffic
+  split:
+    train: [0, 12280]  # 12 * 30 * 24
+    val: [12280, 14036]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [14036, 17544] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: DLinearModel
+  model_cfg:
+    c_in: 862
+    individual: False
+    optimizer_params:
+      learning_rate: 0.05
+      gamma: 0.5
+    patience: 3
+    #pretrain: NLinear_init.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

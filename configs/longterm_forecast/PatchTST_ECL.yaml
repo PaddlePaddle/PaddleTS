@@ -1,0 +1,40 @@
+batch_size: 32
+seq_len: 96
+predict_len: 720
+do_eval: True
+epoch: 100
+
+
+dataset: 
+  name: ECL
+  split:
+    train: [0, 18412]  # 12 * 30 * 24
+    val: [18412, 21044]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [21044, 26304] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: PatchTSTModel
+  model_cfg:
+    c_in: 321
+    n_layers: 3
+    n_heads: 16
+    d_model: 128
+    d_ff: 256
+    dropout: 0.2
+    fc_dropout: 0.2
+    head_dropout: 0.0
+    patch_len: 16
+    stride: 8
+    patience: 10
+    optimizer_params:
+      learning_rate: 0.0001
+      gamma: 0.9
+
+test:
+  stride: 1
+
+  
+
+
+

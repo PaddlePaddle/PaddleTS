@@ -70,7 +70,7 @@ class TimeSeries(object):
         self._data = data
         self._freq = freq
         if isinstance(self.freq, str):
-            self._data = self._data.asfreq(self._freq)
+            self._data = self._data.asfreq(self._freq, method='bfill')
             self._freq = self._data.index.freqstr  # ValueError: cannot reindex from a duplicate axis
 
     @classmethod
@@ -363,6 +363,9 @@ class TimeSeries(object):
         shift = 0 if isinstance(split_point, (int, np.int64)) else 1
         return (TimeSeries(self.data.iloc[:point + shift, :], self.freq),
                 TimeSeries(self.data.iloc[point + shift:, ], self.freq))
+
+    def resample(self, freq)-> "TimeSeries":
+        return TimeSeries(self.data.resample(freq).first(), freq)
 
     def copy(self) -> "TimeSeries":
         """
@@ -1306,6 +1309,24 @@ class TSDataset(object):
         self._static_cov = static_cov
         self._check_data()
 
+    def resample(self, freq :str):
+        if self.target is not None:
+            target = self.target.resample(freq)
+
+        else:
+            raise_if(
+                self.observed_cov is not None and self.known_cov is not None,
+                "Failed to split, the TSDataset's target can not be None when both observed_cov and known_cov are not None."
+            )
+            target = None
+
+        observed_cov = self._observed_cov.resample(freq) \
+            if self._observed_cov else None
+        known_cov = self._known_cov.resample(freq)  \
+            if self._known_cov else None
+        
+        return TSDataset(target, observed_cov, known_cov,
+                          self._static_cov)
     def split(self,
               split_point: Union[pd.Timestamp, str, float, int],
               after=True) -> Tuple["TSDataset", "TSDataset"]:

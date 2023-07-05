@@ -1,12 +1,13 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import sys
-
+import os
 sys.path.append(".")
 from typing import List
 from unittest import TestCase
 import unittest
 import random
+import math
 
 import pandas as pd
 import numpy as np
@@ -88,8 +89,11 @@ class TestBacktest(TestCase):
             return_predicts=True)
 
         start = 624
+        predict_window = 50
+        stride = 50
         data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+        assert len(predicts.get_target()) == math.ceil(
+            (data_len - start - predict_window + 1) / stride) * predict_window
 
         # case3 add window,stride, window != stride
         lstnet = LSTNetRegressor(
@@ -120,8 +124,11 @@ class TestBacktest(TestCase):
             return_predicts=True)
 
         start = 200
+        predict_window = 50
+        stride = 50
         data_len = len(self.tsdataset1.get_target())
-        assert len(predicts.get_target()) == data_len - start
+        assert len(predicts.get_target()) == math.ceil(
+        (data_len - start - predict_window + 1) / stride) * predict_window
 
         # case5 add return score
         lstnet = LSTNetRegressor(
@@ -300,13 +307,12 @@ class TestBacktest(TestCase):
         reg.fit(dataset, dataset)
         score = backtest(dataset, reg, metric=MSE("prob"), verbose=False)
         assert isinstance(score, dict)
-
         score = backtest(
             dataset,
             reg,
             metric=QuantileLoss(q_points=[0.1, 0.9]),
             verbose=False)
-        assert isinstance(score["a1"], dict)
+        assert isinstance(score["quantile_loss"]["a1"], dict)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,35 @@
+batch_size: 32
+seq_len: 720
+predict_len: 96
+do_eval: True
+epoch: 50
+
+
+dataset: 
+  name: Traffic
+  split:
+    train: [0, 12280]  # 12 * 30 * 24
+    val: [12280, 14036]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [14036, 17544] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+  use_holiday: True
+
+model: 
+  name: TiDE
+  model_cfg:
+    c_in: 862
+    layer_norm: False
+    num_encoder_layers: 1
+    use_revin: True
+    drop_prob: 0.3
+    hidden_size: 256
+    decoder_output_dim: 16
+    temporal_decoder_hidden: 64
+    optimizer_params:
+      learning_rate: 0.000066
+      gamma: 0.5
+    patience: 10
+    #pretrain: non-station_torch.pdparams
+
+test:
+  stride: 1
+  

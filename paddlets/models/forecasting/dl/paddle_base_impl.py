@@ -10,6 +10,7 @@ import abc
 from paddle.optimizer import Optimizer
 import numpy as np
 import paddle
+import paddle.nn.functional as F
 
 from paddlets.models.common.callbacks import (
     CallbackContainer,
@@ -82,7 +83,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             out_chunk_len: int,
             skip_chunk_len: int=0,
             sampling_stride: int=1,
-            loss_fn: Callable[..., paddle.Tensor]=None,
+            loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
             optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
             optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
             eval_metrics: Union[List[str], List[Metric]]=[],
@@ -99,6 +100,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._sampling_stride = sampling_stride
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
+        self.start_epoch = 1
+        if optimizer_params is not None and optimizer_params.get('start_epoch', None):
+            self.start_epoch = int(optimizer_params.pop('start_epoch'))
+
         self._optimizer_params = deepcopy(optimizer_params)
         self._eval_metrics = deepcopy(eval_metrics)
         self._callbacks = deepcopy(callbacks)
@@ -116,7 +121,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._metric_container_dict = None
         self._history = None
         self._callback_container = None
-
+        self._scheduler = None
         # Parameter check.
         self._check_params()
         if seed is not None:
@@ -145,7 +150,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                  f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
         if not self._eval_metrics:
-            self._eval_metrics = ["mae"]
+            self._eval_metrics = ["mse"]
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
@@ -172,7 +177,14 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         Returns:
             Optimizer.
         """
-        return self._optimizer_fn(
+        if self._optimizer_params.get('gamma', False):
+            import paddle.optimizer as opt
+            self._scheduler = opt.lr.ExponentialDecay(**self._optimizer_params)
+            return self._optimizer_fn(
+            learning_rate=self._scheduler, parameters=self._network.parameters())
+
+        else:
+            return self._optimizer_fn(
             **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
@@ -354,12 +366,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
         # Call the `on_train_begin` method of each callback before the training starts.
         self._callback_container.on_train_begin({"start_time": time.time()})
+        #learning_rate = self._optimizer_params['learning_rate']
         for epoch_idx in range(self._max_epochs):
-
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
             self._train_epoch(train_dataloader)
-
             # Predict for each eval set.
             for eval_name, valid_dataloader in zip(valid_names,
                                                    valid_dataloaders):
@@ -368,6 +379,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
                 epoch_idx, logs=self._history._epoch_metrics)
+            if self._scheduler:
+                if epoch_idx >= self.start_epoch:
+                    self._scheduler.step()
+                print('epoch and lr is :', epoch_idx, ' ', self._scheduler.get_lr())
             if self._stop_training:
                 break
 
