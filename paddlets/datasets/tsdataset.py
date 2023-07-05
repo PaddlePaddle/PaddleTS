@@ -1310,7 +1310,6 @@ class TSDataset(object):
         self._check_data()
 
     def resample(self, freq :str):
-        #self._freq = freq
         if self.target is not None:
             target = self.target.resample(freq)
 

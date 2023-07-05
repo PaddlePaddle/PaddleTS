@@ -121,7 +121,6 @@ class CrossformerModule(paddle.nn.Layer):
                     param_init.th_linear_fill(layer)
 
 
-
 @manager.MODELS.add_component
 class Crossformer(PaddleBaseModelImpl):
     """
@@ -196,7 +195,6 @@ class Crossformer(PaddleBaseModelImpl):
         self._use_revin = use_revin
         self._revin_params = revin_params
         self.pretrain = pretrain
-
 
         super(Crossformer, self).__init__(
             in_chunk_len=in_chunk_len,

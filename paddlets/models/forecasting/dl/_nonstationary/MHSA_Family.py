@@ -2,11 +2,13 @@ import paddle
 import paddle.nn.functional as F
 import numpy as np
 from math import sqrt
-from paddlets.utils.masking import TriangularCausalMask, ProbMask
+from paddlets.models.forecasting.dl._nonstationary.masking import TriangularCausalMask, ProbMask
+
 
 def masked_fill(x, mask, value):
     y = paddle.full(x.shape, value, x.dtype)
     return paddle.where(mask, y, x)
+
 
 class DSAttention(paddle.nn.Layer):
     """De-stationary Attention"""

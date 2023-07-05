@@ -141,10 +141,6 @@ class _DLinearModule(paddle.nn.Layer):
             for layer in self.sublayers():
                 if isinstance(layer, nn.Linear):
                     param_init.th_linear_fill(layer)
-                    #param_init.kaiming_normal_init(layer.weight)
-                    #if layer.bias is not None:
-                        #zeros_(layer.bias)
-                        #param_init.uniform_init(layer.bias,  low=-0.102, high=0.102)
 
 
 @manager.MODELS.add_component
