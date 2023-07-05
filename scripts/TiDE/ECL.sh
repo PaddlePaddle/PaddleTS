@@ -8,9 +8,9 @@ fi
 seq_len=96
 model_name=TiDE
 data_name=ECL
-config=./configs/longterm_forecast/longterm_forecast/TiDE_ECL.yaml
+config=./configs/longterm_forecast/TiDE_ECL.yaml
 
-for pred_len in 96 192 336 720
+for pred_len in 336
 do
     echo "training..."
     python3 -u train.py \

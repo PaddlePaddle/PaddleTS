@@ -8,7 +8,7 @@ fi
 seq_len=720
 model_name=TiDE
 data_name=ETTH1
-config=./configs/longterm_forecast/longterm_forecast/TiDE_Etth1.yaml
+config=./configs/longterm_forecast/TiDE_Etth1.yaml
 
 for pred_len in 96 192
 do

@@ -52,7 +52,6 @@ class _NLinearModule(paddle.nn.Layer):
         seq_last = x[:, -1:, :].detach()
         x = x - seq_last
         if self.individual:
-            
             output = paddle.zeros(shape=[x.shape[0], self.pred_len, x.shape
                 [2]], dtype=x.dtype)
             for i in range(self.channels):

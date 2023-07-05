@@ -16,7 +16,7 @@ dataset:
 model: 
   name: DLinearModel
   model_cfg:
-    c_in: 1
+    c_in: 321
     individual: False
     optimizer_params:
       learning_rate: 0.001

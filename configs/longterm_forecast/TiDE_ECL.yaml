@@ -16,7 +16,7 @@ dataset:
 model: 
   name: TiDE
   model_cfg:
-    c_in: 1
+    c_in: 321
     num_encoder_layers: 2
     use_revin: False
     drop_prob: 0.5

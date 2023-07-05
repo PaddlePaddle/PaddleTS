@@ -166,10 +166,6 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                 elif isinstance(layer, (nn.BatchNorm, nn.SyncBatchNorm)):
                     param_init.constant_init(layer.weight, value=1.0)
                     param_init.constant_init(layer.bias, value=0.0)
-                # elif isinstance(layer, nn.Linear):
-                #     param_init.normal_init(layer.weight, std=0.01)
-                #     if layer.bias is not None:
-                #         zeros_(layer.bias)
                 elif isinstance(layer, nn.LayerNorm):
                     zeros_(layer.bias)
                     ones_(layer.weight)

@@ -16,7 +16,7 @@ dataset:
 model: 
   name: Nonstationary_Transformer
   model_cfg:
-    c_in: 1
+    c_in: 321
     factor: 3
     p_hidden_dims: [256, 256]
     optimizer_params:

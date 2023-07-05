@@ -149,7 +149,6 @@ def positional_encoding(pe, learn_pe, q_len, d_model):
         raise ValueError(
             f"{pe} is not a valid pe (positional encoder. Available types: 'gauss'=='normal',         'zeros', 'zero', uniform', 'lin1d', 'exp1d', 'lin2d', 'exp2d', 'sincos', None.)"
             )
-    #import pdb;pdb.set_trace()
     W_pos = paddle.create_parameter(shape=W_pos.shape,default_initializer=paddle.nn.initializer.Assign(W_pos), dtype=str(W_pos.numpy().dtype))
     W_pos.stop_gradient = learn_pe
     return W_pos

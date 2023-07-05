@@ -302,7 +302,6 @@ class PatchTSTModel(PaddleBaseModelImpl):
             c_in = self.c_in,
             seq_len=self._in_chunk_len, 
             pred_len=self._out_chunk_len,
-            #c_in = self.c_in,
             n_layers = self.n_layers,
             n_heads = self.n_heads,
             d_model = self.d_model,

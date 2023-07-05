@@ -79,7 +79,6 @@ class PatchTST_backbone(paddle.nn.Layer):
             z = self.padding_patch_layer(z)
 
         z = unfold(z, dimension=-1, size=self.patch_len, step=self.stride)
-        #z = z.transpose(perm=[0, 1, 3, 2])
         z = self.backbone(z)
         z = self.head(z)
         if self.revin:

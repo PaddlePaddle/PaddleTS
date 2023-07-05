@@ -16,7 +16,7 @@ dataset:
 model: 
   name: NLinearModel
   model_cfg:
-    c_in: 1
+    c_in: 321
     individual: True
     optimizer_params:
       learning_rate: 0.005
