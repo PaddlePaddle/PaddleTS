@@ -1,6 +1,5 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-
 import pandas as pd
 from paddlets.pipeline.pipeline import Pipeline
 from paddlets.transform.fill import Fill
@@ -25,7 +24,6 @@ class TestEnsembleBase(TestCase):
     def test_init(self):
         # case1
         mlp_params = {'eval_metrics': ["mse", "mae"]}
-
         model1 = StackingEnsembleForecaster(
             in_chunk_len=7 * 96 + 20 * 4,
             out_chunk_len=96,
@@ -323,3 +321,7 @@ class TestEnsembleBase(TestCase):
         shutil.rmtree("/tmp/ensemble_test2/")
         predictions = model1.predict(tsdataset)
         assert (len(predictions.target) == 16)
+
+
+if __name__ == "__main__":
+    unittest.main()

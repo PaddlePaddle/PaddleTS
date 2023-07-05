@@ -1263,3 +1263,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
             static_cov={"static0": 1.0,
                         "static1": 2.0})
+
+
+if __name__ == "__main__":
+    unittest.main()
