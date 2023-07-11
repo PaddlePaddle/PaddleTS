@@ -1,10 +1,10 @@
 batch_size: 16 #
 seq_len: 96 #
-predict_len: 96 #
+predict_len: 0 #
 label_len: 0 #
 do_eval: True #
 epoch: 30 # max_epochs
-training: True # 
+training: True # c
 eval_metrics:  ['acc', ] # 
 anomaly_ratio: Null
 

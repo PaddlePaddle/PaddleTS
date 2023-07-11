@@ -23,9 +23,9 @@ model:
     task_name: classification
     enc_in: 7 #
     c_out: 7 #
-    e_layers: 2 #
+    e_layers: 3 #
     num_kernels: 6 #
-    d_model: 43 #
+    d_model: 32 #
     d_ff: 32 #
     add_transformed_datastamp: True # 
     need_date_in_network: True # 
