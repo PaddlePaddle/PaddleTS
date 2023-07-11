@@ -146,7 +146,6 @@ def main(args):
         else:
             from paddlets.models.model_loader import load
             model = load(args.checkpoints)
-        # model.load(args.checkpoints)
 
         logger.info('start backtest...')
         if do_eval:
