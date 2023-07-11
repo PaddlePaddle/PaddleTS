@@ -1,6 +1,10 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+import os
+import sys
+parent_path = os.path.abspath(os.path.join(__file__, *(['..'] * 6)))
+sys.path.insert(0, parent_path)
 from unittest import TestCase, mock
 import unittest
 import random
@@ -229,7 +233,7 @@ class TestCNNClassifier(TestCase):
         # case2 (用户未传入的metric, 取默认metric)
         cnn = CNNClassifier(patience=1)
         _, metrics_names, _ = cnn._init_metrics(["val"])
-        self.assertEqual(metrics_names[-1], "val_mse")
+        self.assertEqual(metrics_names[-1], "val_acc")
 
     def test_init_callbacks(self):
         """unittest function

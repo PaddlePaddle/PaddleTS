@@ -236,9 +236,14 @@ class PaddleBaseClassifier(BaseClassifier):
         """
         self._check_tsdatasets(train_tsdatasets, train_labels)
         data_adapter = ClassifyDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdatasets,
-            train_labels, self._fit_params['input_lens'])
+        if self._fit_params is not None:
+            train_dataset = data_adapter.to_paddle_dataset(
+                train_tsdatasets,
+                train_labels, self._fit_params['input_lens'])
+        else:
+            train_dataset = data_adapter.to_paddle_dataset(
+                train_tsdatasets,
+                train_labels)    
         self._n_classes = train_dataset.n_classes_
         self._classes_ = train_dataset.classes_
         train_dataloader = data_adapter.to_paddle_dataloader(
@@ -248,9 +253,14 @@ class PaddleBaseClassifier(BaseClassifier):
             valid_dataloader = None
         else:
             self._check_tsdatasets(valid_tsdatasets, valid_labels)
-            valid_dataset = data_adapter.to_paddle_dataset(
-                valid_tsdatasets,
-                valid_labels, self._fit_params['input_lens'])
+            if self._fit_params is not None:
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets,
+                    valid_labels, self._fit_params['input_lens'])
+            else:
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets,
+                    valid_labels)   
             valid_dataloader = data_adapter.to_paddle_dataloader(
                 valid_dataset, self._batch_size, shuffle=False)
 

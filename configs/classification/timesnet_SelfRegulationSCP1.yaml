@@ -7,12 +7,6 @@ epoch: 30 # max_epochs
 training: True # 
 eval_metrics: ["acc", ] # 
 
-lr_scheduler: # 
-  name: Type1Decay
-  lr_cfg:
-    learning_rate: 0.001
-    last_epoch: 0
-
 dataset: 
   name: SelfRegulationSCP1
 
