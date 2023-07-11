@@ -213,7 +213,7 @@ class _TiDETModule(paddle.nn.Layer):
 
 
 
-@manager.MODELS.add_component
+@manager.LFMODELS.add_component
 class TiDE(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.

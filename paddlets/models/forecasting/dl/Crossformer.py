@@ -121,7 +121,7 @@ class CrossformerModule(paddle.nn.Layer):
                     param_init.th_linear_fill(layer)
 
 
-@manager.MODELS.add_component
+@manager.LFMODELS.add_component
 class Crossformer(PaddleBaseModelImpl):
     """
     Implementation of NBeats model.

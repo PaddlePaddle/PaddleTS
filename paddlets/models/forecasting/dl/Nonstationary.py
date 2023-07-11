@@ -177,7 +177,7 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
 
 
 
-@manager.MODELS.add_component
+@manager.LFMODELS.add_component
 class Nonstationary_Transformer(PaddleBaseModelImpl):
     """
     Implementation of NBeats model.
