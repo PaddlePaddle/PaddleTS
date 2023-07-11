@@ -152,7 +152,7 @@ class _MockNotPaddleModel(object):
         modelname = os.path.basename(abs_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }

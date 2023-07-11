@@ -15,7 +15,7 @@ def read_requirements(path):
 
 
 base_reqs = read_requirements("requirements/core.txt")
-paddle_reqs = read_requirements("requirements/paddle.txt")
+paddle_reqs = read_requirements("requirements/paddle-gpu.txt")
 autots_reqs = read_requirements("requirements/autots.txt")
 
 all_reqs = base_reqs + paddle_reqs + autots_reqs

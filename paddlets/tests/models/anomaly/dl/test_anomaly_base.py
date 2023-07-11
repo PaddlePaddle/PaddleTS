@@ -124,7 +124,7 @@ class _MockNotAnomalyBaseModel(object):
         modelname = os.path.basename(abs_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -245,7 +245,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -294,7 +294,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -487,7 +487,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
         modelname = self.default_modelname
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -530,7 +530,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -588,7 +588,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -906,7 +906,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -990,7 +990,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
