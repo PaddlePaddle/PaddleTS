@@ -1,10 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import os
-import sys
-parent_path = os.path.abspath(os.path.join(__file__, *(['..'] * 6)))
-sys.path.insert(0, parent_path)
 from unittest import TestCase, mock
 import unittest
 import random
