@@ -14,11 +14,7 @@ def read_requirements(path):
     return list(Path(path).read_text().splitlines())
 
 
-base_reqs = read_requirements("requirements/core.txt")
-paddle_reqs = read_requirements("requirements/paddle.txt")
-autots_reqs = read_requirements("requirements/autots.txt")
-
-all_reqs = base_reqs + paddle_reqs + autots_reqs
+all_reqs = read_requirements("requirements.txt")
 
 setup(
     name='paddlets',
@@ -33,10 +29,8 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     python_requires='>=3.7',
-    install_requires=base_reqs,
+    install_requires=all_reqs,
     extras_require={
-        "paddle": paddle_reqs,
-        "autots": autots_reqs,
         "all": all_reqs
     },
     classifiers=[

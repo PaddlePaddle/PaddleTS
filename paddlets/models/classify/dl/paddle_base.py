@@ -597,10 +597,10 @@ class PaddleBaseClassifier(BaseClassifier):
         raise_if_not(
             os.path.exists(abs_root_path),
             "failed to save model, path not exists: %s" % abs_root_path)
-        raise_if(
-            os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" %
-            abs_model_path)
+        # raise_if(
+        #     os.path.isdir(abs_model_path),
+        #     "failed to save model, path must be a file, not directory: %s" %
+        #     abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
             "Failed to save model, target file already exists: %s" %
@@ -623,7 +623,7 @@ class PaddleBaseClassifier(BaseClassifier):
         modelname = os.path.basename(abs_model_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             "network_model": modelname,
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
@@ -757,7 +757,7 @@ class PaddleBaseClassifier(BaseClassifier):
             "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
-        network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
+        network_statedict_filename = "%s/%s" % ('best_model', "model.pdparams")
         network_statedict_abs_path = os.path.join(
             os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)

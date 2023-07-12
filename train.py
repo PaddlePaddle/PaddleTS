@@ -35,7 +35,8 @@ def parse_args():
     parser.add_argument(
         '--do_eval',
         help='Whether to do evaluation after training.',
-        action='store_true')
+        action='store_true')    
+    parser.add_argument('--checkpoints', help='model checkpoints for eval.', type=str, default=None)
     parser.add_argument(
         '--time_feat',
         help='Whether to do evaluation after training.',
@@ -92,9 +93,7 @@ def main(args):
         epoch = cfg.epoch
         split = dataset.get('split', None)
         do_eval = cfg.dic.get('do_eval', True)
-        setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(predict_len) + '_' + str(iter) + '/'
         logger.info(cfg.__dict__)
-        logger.info('========='+setting+'===========')
         
         ts_val, ts_test = None, None    
         if split:
@@ -135,9 +134,19 @@ def main(args):
                 ts_val = time_feature_generator.fit_transform(ts_val)
                 ts_test = time_feature_generator.fit_transform(ts_test)
         
-        logger.info('start training...')
-        model.fit(ts_train, ts_val)
-        
+        setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(predict_len) + '_' + str(iter) + '/'
+        if args.checkpoints is None:
+            logger.info('start training...')
+            model.fit(ts_train, ts_val)
+            logger.info('save best model...')
+            save_dir = os.path.join(args.save_dir, setting)
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            model.save(save_dir + '/checkpoints/')
+        else:
+            from paddlets.models.model_loader import load
+            model = load(args.checkpoints)
+
         logger.info('start backtest...')
         if do_eval:
             metrics_score = backtest(
