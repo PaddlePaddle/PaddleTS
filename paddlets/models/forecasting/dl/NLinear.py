@@ -95,7 +95,7 @@ class _NLinearModule(paddle.nn.Layer):
                         #param_init.uniform_init(layer.bias,  low=-0.102, high=0.102)
 
    
-@manager.MODELS.add_component
+@manager.LFMODELS.add_component
 class NLinearModel(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.

@@ -8,7 +8,7 @@ import paddle
 from paddlets.utils.config import Config
 from paddlets.datasets.repository import get_dataset
 from paddlets.transform.sklearn_transforms import StandardScaler
-from paddlets.utils.manager import MODELS
+from paddlets.utils.manager import TasktoModel
 from paddlets.metrics import MSE, MAE
 from paddlets.utils import backtest
 from paddlets.logger import Logger
@@ -22,6 +22,13 @@ def parse_args():
     # Common params
     parser.add_argument("--config", help="The path of config file.", type=str)
     parser.add_argument(
+        '--task',
+        required=True,
+        help='Set the task for training model.',
+        default='longforecast',
+        choices=['longforecast', 'shortforecast', 'classification', 'imputation', 'anomaly'],
+        type=str)
+    parser.add_argument(
         '--device',
         help='Set the device place for training model.',
         default='gpu',
@@ -33,7 +40,7 @@ def parse_args():
         type=str,
         default='./output/')
     parser.add_argument(
-        '--do_eval',
+        '--no_eval',
         help='Whether to do evaluation after training.',
         action='store_true')    
     parser.add_argument('--checkpoints', help='model checkpoints for eval.', type=str, default=None)
@@ -75,91 +82,100 @@ def main(args):
 
     assert args.config is not None, \
         'No configuration file specified, please set --config'
+
+    cfg = Config(
+        args.config,
+        learning_rate=args.learning_rate,
+        epoch=args.epoch,
+        seq_len=args.seq_len,
+        predict_len=args.predict_len,
+        batch_size=args.batch_size,
+        opts=args.opts)
+
+    dataset = cfg.dataset
+    seq_len=cfg.seq_len
+    split = dataset.get('split', None)
+    logger.info(cfg.__dict__)
     
-    for iter in range(args.iters):
-        cfg = Config(
-            args.config,
-            learning_rate=args.learning_rate,
-            epoch=args.epoch,
-            seq_len=args.seq_len,
-            predict_len=args.predict_len,
-            batch_size=args.batch_size,
-            opts=args.opts)
-
-        batch_size = cfg.batch_size
-        dataset = cfg.dataset
-        predict_len = cfg.predict_len
-        seq_len=cfg.seq_len
-        epoch = cfg.epoch
-        split = dataset.get('split', None)
-        do_eval = cfg.dic.get('do_eval', True)
-        logger.info(cfg.__dict__)
-        
-        ts_val, ts_test = None, None    
-        if split:
-            ts_train, ts_val, ts_test = get_dataset(dataset['name'], split, seq_len)
-        else:
-            assert do_eval == False, 'if not split test data, please set do_eval False'
-            ts_train = get_dataset(dataset['name'], split, seq_len)
-
-        model = MODELS.components_dict[cfg.model['name']](
-            in_chunk_len=seq_len,
-            out_chunk_len=cfg.predict_len,
-            batch_size=batch_size,
-            max_epochs=epoch,
-            **cfg.model['model_cfg']
-        )
-
+    ts_val, ts_test = None, None    
+    if split:
+        ts_train, ts_val, ts_test = get_dataset(dataset['name'], split, seq_len)
+    else:
+        ts_train, ts_y = get_dataset(dataset['name']+'_Train', split, seq_len)
+        ts_test, ts_test_y = get_dataset(dataset['name']+'_Test', split, seq_len)
+    
+    model = TasktoModel[args.task].components_dict[cfg.model['name']](
+        in_chunk_len=seq_len,
+        out_chunk_len=cfg.predict_len,
+        batch_size=cfg.batch_size,
+        max_epochs=cfg.epoch,
+        **cfg.model['model_cfg']
+    )
+    
+    if cfg.dataset.get('scale', True):
         scaler = StandardScaler()
         scaler.fit(ts_train)
         ts_train = scaler.transform(ts_train)
         ts_val = scaler.transform(ts_val)
         ts_test = scaler.transform(ts_test)
+        logger.info('data scale done!')
         
-        if args.time_feat: 
-            logger.info('generate times feature')
-            from paddlets.transform import TimeFeatureGenerator
-            if dataset.get('use_holiday', False):
-                ts_all = get_dataset(dataset['name'])
-                time_feature_generator = TimeFeatureGenerator(feature_cols=['minuteofhour','hourofday','dayofmonth','dayofweek','dayofyear', 'monthofyear', 
-                                                                        'weekofyear', 'holidays'])           
-                ts_all = time_feature_generator.fit_transform(ts_all)
-                ts_train._known_cov = ts_all._known_cov[split['train'][0]:split['train'][1]]
-                ts_val._known_cov = ts_all._known_cov[split['val'][0] - seq_len:split['val'][1]]
-                ts_test._known_cov = ts_all._known_cov[split['test'][0] - seq_len:split['test'][1]]   
-                    
-            else:
-                time_feature_generator = TimeFeatureGenerator(feature_cols=['hourofday','dayofmonth','dayofweek','dayofyear'])
-                ts_train = time_feature_generator.fit_transform(ts_train)
-                ts_val = time_feature_generator.fit_transform(ts_val)
-                ts_test = time_feature_generator.fit_transform(ts_test)
-        
-        setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(predict_len) + '_' + str(iter) + '/'
-        if args.checkpoints is None:
-            logger.info('start training...')
-            model.fit(ts_train, ts_val)
-            logger.info('save best model...')
-            save_dir = os.path.join(args.save_dir, setting)
-            if not os.path.exists(save_dir):
-                os.makedirs(save_dir)
-            model.save(save_dir + '/checkpoints/')
+    if args.time_feat: 
+        logger.info('generate times feature')
+        from paddlets.transform import TimeFeatureGenerator
+        if dataset.get('use_holiday', False):
+            ts_all = get_dataset(dataset['name'])
+            time_feature_generator = TimeFeatureGenerator(feature_cols=['minuteofhour','hourofday','dayofmonth','dayofweek','dayofyear', 'monthofyear', 
+                                                                    'weekofyear', 'holidays'])           
+            ts_all = time_feature_generator.fit_transform(ts_all)
+            ts_train._known_cov = ts_all._known_cov[split['train'][0]:split['train'][1]]
+            ts_val._known_cov = ts_all._known_cov[split['val'][0] - seq_len:split['val'][1]]
+            ts_test._known_cov = ts_all._known_cov[split['test'][0] - seq_len:split['test'][1]]   
+                
         else:
-            from paddlets.models.model_loader import load
-            model = load(args.checkpoints)
-
-        logger.info('start backtest...')
-        if do_eval:
-            metrics_score = backtest(
-                data=ts_test,
-                model=model,
-                predict_window=predict_len,
-                stride=1,
-                metric=[MSE(), MAE()],
-            )
-            logger.info(setting + f"{metrics_score}")
-            for metric in metrics_score.keys():
-                logger.info(f"{metric}: {np.mean([v for v in metrics_score[metric].values()])}")
-
+            time_feature_generator = TimeFeatureGenerator(feature_cols=['hourofday','dayofmonth','dayofweek','dayofyear'])
+            ts_train = time_feature_generator.fit_transform(ts_train)
+            ts_val = time_feature_generator.fit_transform(ts_val)
+            ts_test = time_feature_generator.fit_transform(ts_test)
+    
+    for iter in range(args.iters):
+        logger.info('start training...')
+        setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(cfg.predict_len) + '_' + str(iter) + '/'
+        if args.task == 'longforecast':
+            if args.checkpoints is None:
+                logger.info('start training...')
+                model.fit(ts_train, ts_val)
+                logger.info('save best model...')
+                save_dir = os.path.join(args.save_dir, setting)
+                if not os.path.exists(save_dir):
+                    os.makedirs(save_dir)
+                model.save(save_dir + '/checkpoints/')
+            else:
+                from paddlets.models.model_loader import load
+                model = load(args.checkpoints)
+                
+            if not args.no_eval:
+                logger.info('start backtest...')
+                metrics_score = backtest(
+                    data=ts_test,
+                    model=model,
+                    predict_window=cfg.predict_len,
+                    stride=1,
+                    metric=[MSE(), MAE()],
+                )
+                setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(cfg.predict_len) + '_' + str(iter) + '/'
+                logger.info(setting + f"{metrics_score}")
+                for metric in metrics_score.keys():
+                    logger.info(f"{metric}: {np.mean([v for v in metrics_score[metric].values()])}")
+        
+        elif args.task == 'classification':
+            model.fit(ts_train, ts_y, ts_test, ts_test_y)
+            if not args.no_eval:
+                from sklearn.metrics import accuracy_score, f1_score
+                preds = model.predict_proba(ts_test)
+                score = accuracy_score(ts_test_y, np.argmax(preds,axis=1))
+                f1 = f1_score(ts_test_y, np.argmax(preds,axis=1), average="macro")
+                logger.info(f"acc: {score}, f1: {f1}")
 
 
 if __name__ == '__main__':
