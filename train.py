@@ -40,11 +40,7 @@ def parse_args():
         type=str,
         default='./output/')
     parser.add_argument(
-        '--do_train',
-        help='Whether to train the model.',
-        action='store_false')
-    parser.add_argument(
-        '--do_eval',
+        '--no_eval',
         help='Whether to do evaluation after training.',
         action='store_false')
     parser.add_argument(
@@ -146,7 +142,7 @@ def main(args):
         logger.info('start training...')
         if args.task == 'longforecast':
             model.fit(ts_train, ts_val)
-            if args.do_eval:
+            if not args.no_eval:
                 logger.info('start backtest...')
                 metrics_score = backtest(
                     data=ts_test,
@@ -162,7 +158,7 @@ def main(args):
         
         elif args.task == 'classification':
             model.fit(ts_train, ts_y, ts_test, ts_test_y)
-            if args.do_eval:
+            if not args.no_eval:
                 from sklearn.metrics import accuracy_score, f1_score
                 preds = model.predict_proba(ts_test)
                 score = accuracy_score(ts_test_y, np.argmax(preds,axis=1))
