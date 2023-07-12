@@ -154,7 +154,7 @@ class _PatchTSTModule(paddle.nn.Layer):
                         param_init.th_linear_fill(layer)
 
 
-@manager.MODELS.add_component
+@manager.LFMODELS.add_component
 class PatchTSTModel(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.

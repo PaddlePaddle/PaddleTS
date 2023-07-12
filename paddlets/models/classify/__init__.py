@@ -5,4 +5,5 @@ classify.
 """
 
 from paddlets.models.classify.dl.cnn import CNNClassifier
+from paddlets.models.classify.dl.timesnet import TimesNetModel
 from paddlets.models.classify.dl.inception_time import InceptionTimeClassifier

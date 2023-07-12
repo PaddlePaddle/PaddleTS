@@ -8,3 +8,4 @@ from paddlets.utils.utils import check_model_fitted, check_train_valid_continuit
 from paddlets.utils.backtest import backtest
 from paddlets.utils.validation import cross_validate, fit_and_score
 from paddlets.utils.utils import plot_anoms
+from paddlets.utils.manager import *

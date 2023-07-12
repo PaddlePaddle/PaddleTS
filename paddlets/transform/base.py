@@ -529,6 +529,8 @@ class UdBaseTransform(BaseTransform):
         Returns:
             TSDataset
         """
+        if dataset is None:
+            return dataset
         new_ts = dataset if inplace else dataset.copy()
         if self._per_col_transform:
             for col in self._cols:
