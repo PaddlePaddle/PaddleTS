@@ -191,7 +191,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             internal_filename_map = {
                 "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
                 "network_statedict":
-                "%s/%s" % ('best', "model.pdparams"),
+                "%s/%s" % ('best_model', "model.pdparams"),
                 # currently ignore optimizer.
                 # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
             }
@@ -202,7 +202,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             files = set(os.listdir(path))
             self.assertEqual(
                 files,
-                {self.default_modelname, *internal_filename_map.values()})
+                {self.default_modelname, internal_filename_map["model_meta"], 'best_model'})
 
             # mode type
             with open(
@@ -241,7 +241,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -251,7 +251,7 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, *internal_filename_map.values()})
+            files, {self.default_modelname,  internal_filename_map["model_meta"], 'best_model'})
 
         # mode type RNNBlockRegressor
         with open(
@@ -317,8 +317,8 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, model_1_internal_filename_map["model_meta"], 'best_model',
+            model_2_name, model_2_internal_filename_map["model_meta"]
         })
 
         shutil.rmtree(path)
@@ -478,7 +478,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -491,7 +491,13 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, *internal_filename_map.values()})
+            files, {self.default_modelname, 
+                    internal_filename_map["network_model"],
+                    internal_filename_map["network_model_params"],
+                    internal_filename_map["network_model_params_info"],
+                    internal_filename_map['model_meta'],
+                    'best_model',
+                    })
 
         # mode type AutoEncoder
         with open(
@@ -543,7 +549,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -556,8 +562,14 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, *internal_filename_map.values()})
-
+            files, {self.default_modelname, 
+                    internal_filename_map["network_model"],
+                    internal_filename_map["network_model_params"],
+                    internal_filename_map["network_model_params_info"],
+                    internal_filename_map['model_meta'],
+                    'best_model',
+                    })
+        
         # mode type AutoEncoder
         with open(
                 os.path.join(path, internal_filename_map["model_meta"]),
@@ -859,7 +871,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -970,7 +982,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
             "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -1263,3 +1275,6 @@ class TestPaddleBaseModel(unittest.TestCase):
             observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
             static_cov={"static0": 1.0,
                         "static1": 2.0})
+
+if __name__ == "__main__":
+    unittest.main()
