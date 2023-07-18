@@ -51,8 +51,8 @@ class _PositionalEncoding(paddle.nn.Layer):
                 0, max_len, dtype="float32"), axis=1)
         div_term = paddle.exp(
             paddle.arange(
-                0, d_model, 2, dtype="float32") *
-            (-1. * np.log2(1e4) / d_model))
+                0, d_model, 2,
+                dtype="float32") * (-1. * np.log2(1e4) / d_model))
         pe[:, 0::2] = paddle.sin(position * div_term)
         pe[:, 1::2] = paddle.cos(position * div_term)
         self.register_buffer("_pe", pe)

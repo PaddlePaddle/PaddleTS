@@ -22,3 +22,4 @@ from paddlets.models.forecasting.dl.RLinear import RLinearModel
 from paddlets.models.forecasting.dl.Nonstationary import Nonstationary_Transformer
 from paddlets.models.forecasting.dl.Crossformer import Crossformer
 from paddlets.models.forecasting.dl.TiDE import TiDE
+from paddlets.models.forecasting.dl.TimesNet import TimesNetModel

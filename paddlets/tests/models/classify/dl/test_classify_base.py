@@ -54,8 +54,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -107,8 +106,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }

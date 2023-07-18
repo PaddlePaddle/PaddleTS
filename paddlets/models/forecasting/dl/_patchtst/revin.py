@@ -3,9 +3,11 @@ from paddle import nn
 
 
 class RevIN(paddle.nn.Layer):
-
-    def __init__(self, num_features: int, eps=1e-05, affine=True,
-        subtract_last=False):
+    def __init__(self,
+                 num_features: int,
+                 eps=1e-05,
+                 affine=True,
+                 subtract_last=False):
         """
         :param num_features: the number of features or channels
         :param eps: a value added for numerical stability
@@ -46,10 +48,11 @@ class RevIN(paddle.nn.Layer):
         if self.subtract_last:
             self.last = x[:, (-1), :].unsqueeze(axis=1)
         else:
-            self.mean = paddle.mean(x=x, axis=dim2reduce, keepdim=True).detach(
-                )
-        self.stdev = paddle.sqrt(x=paddle.var(x=x, axis=dim2reduce, keepdim
-            =True, unbiased=False) + self.eps).detach()
+            self.mean = paddle.mean(
+                x=x, axis=dim2reduce, keepdim=True).detach()
+        self.stdev = paddle.sqrt(
+            x=paddle.var(x=x, axis=dim2reduce, keepdim=True,
+                         unbiased=False) + self.eps).detach()
 
     def _normalize(self, x):
         if self.subtract_last:

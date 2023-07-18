@@ -4,7 +4,7 @@
 Setup script.
 """
 
-from setuptools import find_packages, setup
+from setuptools import find_packages, find_namespace_packages, setup
 from pathlib import Path
 import paddlets
 
@@ -21,7 +21,8 @@ setup(
     version=paddlets.__version__,
     maintainer='paddlets Team',
     maintainer_email='paddlets@baidu.com',
-    packages=find_packages(),
+    packages=find_packages(include=['paddlets', 'paddlets.*']) +
+    find_namespace_packages(include=['paddlets', 'paddlets.*']),
     url='https://github.com/PaddlePaddle/PaddleTS',
     license='LICENSE',
     description='PaddleTS (Paddle Time Series Tool), \
@@ -30,9 +31,7 @@ setup(
     long_description_content_type="text/markdown",
     python_requires='>=3.7',
     install_requires=all_reqs,
-    extras_require={
-        "all": all_reqs
-    },
+    extras_require={"all": all_reqs},
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',

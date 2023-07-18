@@ -190,8 +190,7 @@ class TestPaddleBaseModel(unittest.TestCase):
 
             internal_filename_map = {
                 "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-                "network_statedict":
-                "%s/%s" % ('best', "model.pdparams"),
+                "network_statedict": "%s/%s" % ('best', "model.pdparams"),
                 # currently ignore optimizer.
                 # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
             }
@@ -240,8 +239,7 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -477,8 +475,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -542,8 +539,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -858,8 +854,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -969,8 +964,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }

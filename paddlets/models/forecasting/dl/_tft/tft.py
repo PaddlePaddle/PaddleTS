@@ -406,9 +406,9 @@ class TemporalFusionTransformer(nn.Layer):
         if c_seq_hidden is not None:
             past_lstm_output, hidden = self._past_lstm(selected_historical, (
                 paddle.tile(
-                    c_seq_hidden.unsqueeze(0), [self._lstm_layers, 1, 1]),
-                paddle.tile(
-                    c_seq_cell.unsqueeze(0), [self._lstm_layers, 1, 1])))
+                    c_seq_hidden.unsqueeze(0),
+                    [self._lstm_layers, 1, 1]), paddle.tile(
+                        c_seq_cell.unsqueeze(0), [self._lstm_layers, 1, 1])))
         else:
             past_lstm_output, hidden = self._past_lstm(selected_historical)
 

@@ -31,8 +31,8 @@ class PositionalEmbedding(paddle.nn.Layer):
                 0, max_len, dtype="float32"), axis=1)
         div_term = paddle.exp(
             paddle.arange(
-                0, d_model, 2, dtype="float32") *
-            (-1. * np.log2(1e4) / d_model))
+                0, d_model, 2,
+                dtype="float32") * (-1. * np.log2(1e4) / d_model))
         position_embedding[:, 0::2] = paddle.sin(position * div_term)
         position_embedding[:, 1::2] = paddle.cos(position * div_term)
         self.register_buffer("_position_embedding", position_embedding)

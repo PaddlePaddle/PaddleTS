@@ -29,8 +29,8 @@ def load(path: str):
     abs_model_path = os.path.join(abs_root_path,
                                   os.path.basename(abs_model_path))
     modelname = os.path.basename(abs_model_path)
-    abs_modelmeta_path = os.path.join(abs_root_path, "%s_%s" %
-                                      (modelname, "model_meta"))
+    abs_modelmeta_path = os.path.join(abs_root_path,
+                                      "%s_%s" % (modelname, "model_meta"))
 
     try:
         with open(abs_modelmeta_path, "r") as f:

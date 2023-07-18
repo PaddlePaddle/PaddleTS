@@ -63,7 +63,8 @@ ECLDataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ECL.csv",
     load_param={
-        "target_cols": ["MT_{:0>3}".format(x) for x in range(320)] + ["MT_320"] ,
+        "target_cols":
+        ["MT_{:0>3}".format(x) for x in range(320)] + ["MT_320"],
         "time_col": "date",
         "freq": "1h",
         "dtype": "float32"
@@ -292,350 +293,320 @@ BasicMotionsTrainTDataset = DatasetConfig(
         "group_id": "7",
         "target_cols": ["0", "1", "2", "3", "4", "5"],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SMDTrainDataset = DatasetConfig(
-    name = "smd_train",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/SMD_train.csv",
-    load_param = {
-        "feature_cols": [str(i) for i in range(38)],
-        "freq": 1
-    }
-)
+    name="smd_train",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/SMD_train.csv",
+    load_param={"feature_cols": [str(i) for i in range(38)],
+                "freq": 1})
 
 # 11> SDM_test data
 SMDTestDataset = DatasetConfig(
-    name = "smd_test",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/SMD_test.csv",
-    load_param = {
+    name="smd_test",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/SMD_test.csv",
+    load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(38)],
         "freq": 1
-    }
-)
+    })
 
 # 12> SMAP_train 
 SMAPTrainDataset = DatasetConfig(
-    name = "smap_train",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/SMAP_train.csv",
-    load_param = {
-        "feature_cols": [str(i) for i in range(25)],
-        "freq": 1
-    }
-)
+    name="smap_train",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/SMAP_train.csv",
+    load_param={"feature_cols": [str(i) for i in range(25)],
+                "freq": 1})
 
 # 12> SMAP_test
 SMAPTestDataset = DatasetConfig(
-    name = "smap_test",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/SMAP_test.csv",
-    load_param = {
+    name="smap_test",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/SMAP_test.csv",
+    load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(25)],
         "freq": 1
-    }
-)
+    })
 
 # 13> MSL_train
 MSLTrainDataset = DatasetConfig(
-    name = "msl_train",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/MSL_train.csv",
-    load_param = {
-        "feature_cols": [str(i) for i in range(55)],
-        "freq": 1
-    }
-)
+    name="msl_train",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/MSL_train.csv",
+    load_param={"feature_cols": [str(i) for i in range(55)],
+                "freq": 1})
 
 # 13> MSL_test
 MSLTestDataset = DatasetConfig(
-    name = "msl_test",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/MSL_test.csv",
-    load_param = {
+    name="msl_test",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/MSL_test.csv",
+    load_param={
         "label_col": "label",
         "feature_cols": [str(i) for i in range(55)],
         "freq": 1
-    }
-)
+    })
 
 # 14> SwaT train
 SWATTrainDataset = DatasetConfig(
-    name = "swat_train",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/swat_train.csv",
-    load_param = {
-        "feature_cols": ['FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202',
-            'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204', 'P205',
-            'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302', ' MV303',
-            'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401', 'LIT401', 'P401',
-            'P402', 'P403', 'P404', 'UV401', 'AIT501', 'AIT502', 'AIT503', 'AIT504',
-            'FIT501', 'FIT502', 'FIT503', 'FIT504', 'P501', 'P502', 'PIT501',
-            'PIT502', 'PIT503', 'FIT601', 'P601', 'P602', 'P603'],
+    name="swat_train",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/swat_train.csv",
+    load_param={
+        "feature_cols": [
+            'FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202',
+            'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204',
+            'P205', 'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302',
+            ' MV303', 'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401',
+            'LIT401', 'P401', 'P402', 'P403', 'P404', 'UV401', 'AIT501',
+            'AIT502', 'AIT503', 'AIT504', 'FIT501', 'FIT502', 'FIT503',
+            'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
+            'P601', 'P602', 'P603'
+        ],
         "freq": 1
-    }
-)
+    })
 
 # 14> SwaT test
 SWATTestDataset = DatasetConfig(
-    name = "swat_test",
-    type = "anomaly",
-    path = "https://paddlets.bj.bcebos.com/swat_test.csv",
-    load_param = {
+    name="swat_test",
+    type="anomaly",
+    path="https://paddlets.bj.bcebos.com/swat_test.csv",
+    load_param={
         "label_col": "Normal/Attack",
-        "feature_cols": ['FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202',
-            'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204', 'P205',
-            'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302', ' MV303',
-            'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401', 'LIT401', 'P401',
-            'P402', 'P403', 'P404', 'UV401', 'AIT501', 'AIT502', 'AIT503', 'AIT504',
-            'FIT501', 'FIT502', 'FIT503', 'FIT504', 'P501', 'P502', 'PIT501',
-            'PIT502', 'PIT503', 'FIT601', 'P601', 'P602', 'P603'],
+        "feature_cols": [
+            'FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202',
+            'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204',
+            'P205', 'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302',
+            ' MV303', 'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401',
+            'LIT401', 'P401', 'P402', 'P403', 'P404', 'UV401', 'AIT501',
+            'AIT502', 'AIT503', 'AIT504', 'FIT501', 'FIT502', 'FIT503',
+            'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
+            'P601', 'P602', 'P603'
+        ],
         "freq": 1
-    }
-)
-
+    })
 
 # 15> BasicMotions_Train.csv
 EthanolConcentrationTrainTDataset = DatasetConfig(
-    name = "EthanolConcentration_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TRAIN.csv",
-    load_param = {
+    name="EthanolConcentration_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
-        "target_cols": ['dim_0', 'dim_1', 'dim_2'], 
+        "group_id": "group_id",
+        "target_cols": ['dim_0', 'dim_1', 'dim_2'],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 EthanolConcentrationTestTDataset = DatasetConfig(
-    name = "EthanolConcentration_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TEST.csv",
-    load_param = {
+    name="EthanolConcentration_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/EthanolConcentration_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
-        "target_cols": ['dim_0', 'dim_1', 'dim_2'], 
+        "group_id": "group_id",
+        "target_cols": ['dim_0', 'dim_1', 'dim_2'],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 FaceDetectionTrainDataset = DatasetConfig(
-    name = "FaceDetection_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/FaceDetection_TRAIN.csv",
-    load_param = {
+    name="FaceDetection_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/FaceDetection_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(144)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 FaceDetectionTestDataset = DatasetConfig(
-    name = "FaceDetection_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/FaceDetection_TEST.csv",
-    load_param = {
+    name="FaceDetection_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/FaceDetection_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(144)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 HandwritingTrainDataset = DatasetConfig(
-    name = "Handwriting_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/Handwriting_TRAIN.csv",
-    load_param = {
+    name="Handwriting_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/Handwriting_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
-        "target_cols": ['dim_0', 'dim_1', 'dim_2'], 
+        "group_id": "group_id",
+        "target_cols": ['dim_0', 'dim_1', 'dim_2'],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 HandwritingTestDataset = DatasetConfig(
-    name = "Handwriting_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/Handwriting_TEST.csv",
-    load_param = {
+    name="Handwriting_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/Handwriting_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
-        "target_cols":['dim_0', 'dim_1', 'dim_2'], 
+        "group_id": "group_id",
+        "target_cols": ['dim_0', 'dim_1', 'dim_2'],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 HeartbeatTrainDataset = DatasetConfig(
-    name = "Heartbeat_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/Heartbeat_TRAIN.csv",
-    load_param = {
+    name="Heartbeat_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/Heartbeat_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(61)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 HeartbeatTestDataset = DatasetConfig(
-    name = "Heartbeat_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/Heartbeat_TEST.csv",
-    load_param = {
+    name="Heartbeat_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/Heartbeat_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(61)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 JapaneseVowelsTrainDataset = DatasetConfig(
-    name = "JapaneseVowels_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TRAIN.csv",
-    load_param = {
+    name="JapaneseVowels_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(12)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 JapaneseVowelsTestDataset = DatasetConfig(
-    name = "JapaneseVowels_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TEST.csv",
-    load_param = {
+    name="JapaneseVowels_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/JapaneseVowels_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(12)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 PEMSSFTrainDataset = DatasetConfig(
-    name = "PEMSSF_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/PEMS-SF_TRAIN.csv",
-    load_param = {
+    name="PEMSSF_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/PEMS-SF_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(12)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 PEMSSFTestDataset = DatasetConfig(
-    name = "PEMSSF_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/PEMS-SF_TEST.csv",
-    load_param = {
+    name="PEMSSF_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/PEMS-SF_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(12)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SelfRegulationSCP1TrainDataset = DatasetConfig(
-    name = "SelfRegulationSCP1_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TRAIN.csv",
-    load_param = {
+    name="SelfRegulationSCP1_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(6)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SelfRegulationSCP1TestDataset = DatasetConfig(
-    name = "SelfRegulationSCP1_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TEST.csv",
-    load_param = {
+    name="SelfRegulationSCP1_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP1_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(6)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SelfRegulationSCP2TrainDataset = DatasetConfig(
-    name = "SelfRegulationSCP2_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TRAIN.csv",
-    load_param = {
+    name="SelfRegulationSCP2_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(7)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SelfRegulationSCP2TestDataset = DatasetConfig(
-    name = "SelfRegulationSCP2_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TEST.csv",
-    load_param = {
+    name="SelfRegulationSCP2_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SelfRegulationSCP2_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(7)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SpokenArabicDigitsTrainDataset = DatasetConfig(
-    name = "SpokenArabicDigits_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TRAIN.csv",
-    load_param = {
+    name="SpokenArabicDigits_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(7)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 SpokenArabicDigitsTestDataset = DatasetConfig(
-    name = "SpokenArabicDigits_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TEST.csv",
-    load_param = {
+    name="SpokenArabicDigits_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/SpokenArabicDigits_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(7)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 UWaveGestureLibraryTrainDataset = DatasetConfig(
-    name = "UWaveGestureLibrary_Train",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TRAIN.csv",
-    load_param = {
+    name="UWaveGestureLibrary_Train",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TRAIN.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(3)],
         "static_cov_cols": ["label"]
-    }
-)
+    })
 
 UWaveGestureLibraryTestDataset = DatasetConfig(
-    name = "UWaveGestureLibrary_Test",
-    type = "classification",
-    path = "https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TEST.csv",
-    load_param = {
+    name="UWaveGestureLibrary_Test",
+    type="classification",
+    path="https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TEST.csv",
+    load_param={
         "time_col": "time",
-        "group_id": "group_id", 
+        "group_id": "group_id",
         "target_cols": ["dim_" + str(i) for i in range(3)],
         "static_cov_cols": ["label"]
-    }
-)
+    })

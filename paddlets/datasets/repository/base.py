@@ -126,9 +126,7 @@ DATASETS = {
     SpokenArabicDigitsTestDataset.name: SpokenArabicDigitsTestDataset,
     UWaveGestureLibraryTrainDataset.name: UWaveGestureLibraryTrainDataset,
     UWaveGestureLibraryTestDataset.name: UWaveGestureLibraryTestDataset,
-
 }
-
 
 
 def dataset_list() -> List[str]:
@@ -141,8 +139,9 @@ def dataset_list() -> List[str]:
     return list(DATASETS.keys())
 
 
-def get_dataset(name: str, split: Optional[List[int]]=None, seq_len: int=0) -> Union["TSDataset", List["TSDataset"], Tuple[List[
-        "TSDataset"], List[Any]]]:
+def get_dataset(name: str, split: Optional[List[int]]=None,
+                seq_len: int=0) -> Union["TSDataset", List["TSDataset"], Tuple[
+                    List["TSDataset"], List[Any]]]:
     """
     基于名称获取内置数据集
     
@@ -173,5 +172,7 @@ def get_dataset(name: str, split: Optional[List[int]]=None, seq_len: int=0) -> U
             for name, point in split.items():
                 if name == 'val' or name == 'test':
                     point[0] = point[0] - seq_len
-                ts_list.append(TSDataset.load_from_dataframe(df[point[0]:point[1]], **dataset.load_param))
+                ts_list.append(
+                    TSDataset.load_from_dataframe(df[point[0]:point[1]], **
+                                                  dataset.load_param))
             return ts_list

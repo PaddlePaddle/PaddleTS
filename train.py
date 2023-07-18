@@ -35,15 +35,23 @@ def parse_args():
     parser.add_argument(
         '--do_eval',
         help='Whether to do evaluation after training.',
-        action='store_true')    
-    parser.add_argument('--checkpoints', help='model checkpoints for eval.', type=str, default=None)
+        action='store_true')
+    parser.add_argument(
+        '--checkpoints',
+        help='model checkpoints for eval.',
+        type=str,
+        default=None)
     parser.add_argument(
         '--time_feat',
         help='Whether to do evaluation after training.',
         action='store_true')
     # Runntime params
-    parser.add_argument('--seq_len', help='input length in training.', type=int)
-    parser.add_argument('--predict_len', help='output length in training.', type=int)
+    parser.add_argument(
+        '--csv_path', help='input test csv format file in predict.', type=str)
+    parser.add_argument(
+        '--seq_len', help='input length in training.', type=int)
+    parser.add_argument(
+        '--predict_len', help='output length in training.', type=int)
     parser.add_argument('--epoch', help='Iterations in training.', type=int)
     parser.add_argument(
         '--batch_size', help='Mini batch size of one gpu or cpu. ', type=int)
@@ -56,14 +64,12 @@ def parse_args():
         default=42,
         type=int)
     parser.add_argument(
-        '--iters',
-        help='Set the iters in training.',
-        default=1,
-        type=int)
+        '--iters', help='Set the iters in training.', default=1, type=int)
     parser.add_argument(
         '--opts', help='Update the key-value pairs of all options.', nargs='+')
 
     return parser.parse_args()
+
 
 def main(args):
 
@@ -75,7 +81,7 @@ def main(args):
 
     assert args.config is not None, \
         'No configuration file specified, please set --config'
-    
+
     for iter in range(args.iters):
         cfg = Config(
             args.config,
@@ -89,52 +95,72 @@ def main(args):
         batch_size = cfg.batch_size
         dataset = cfg.dataset
         predict_len = cfg.predict_len
-        seq_len=cfg.seq_len
+        seq_len = cfg.seq_len
         epoch = cfg.epoch
         split = dataset.get('split', None)
         do_eval = cfg.dic.get('do_eval', True)
         logger.info(cfg.__dict__)
-        
-        ts_val, ts_test = None, None    
-        if split:
-            ts_train, ts_val, ts_test = get_dataset(dataset['name'], split, seq_len)
+
+        ts_val, ts_test = None, None
+        if dataset['name'] == 'Dataset':
+            import pandas as pd
+            from paddlets import TSDataset
+            df = pd.read_csv(dataset['train_path'])
+            ts_train = TSDataset.load_from_dataframe(df,
+                                                     **cfg.dic['info_params'])
+            if dataset.get('val_path', False):
+                df = pd.read_csv(dataset['val_path'])
+                ts_val = TSDataset.load_from_dataframe(
+                    df, **cfg.dic['info_params'])
         else:
-            assert do_eval == False, 'if not split test data, please set do_eval False'
-            ts_train = get_dataset(dataset['name'], split, seq_len)
+            if split:
+                ts_train, ts_val, ts_test = get_dataset(dataset['name'], split,
+                                                        seq_len)
+            else:
+                assert do_eval == False, 'if not split test data, please set do_eval False'
+                ts_train = get_dataset(dataset['name'], split, seq_len)
 
         model = MODELS.components_dict[cfg.model['name']](
             in_chunk_len=seq_len,
             out_chunk_len=cfg.predict_len,
             batch_size=batch_size,
             max_epochs=epoch,
-            **cfg.model['model_cfg']
-        )
+            **cfg.model['model_cfg'])
 
         scaler = StandardScaler()
         scaler.fit(ts_train)
         ts_train = scaler.transform(ts_train)
         ts_val = scaler.transform(ts_val)
-        ts_test = scaler.transform(ts_test)
-        
-        if args.time_feat: 
+        if ts_test is not None:
+            ts_test = scaler.transform(ts_test)
+
+        if args.time_feat:
             logger.info('generate times feature')
             from paddlets.transform import TimeFeatureGenerator
             if dataset.get('use_holiday', False):
                 ts_all = get_dataset(dataset['name'])
-                time_feature_generator = TimeFeatureGenerator(feature_cols=['minuteofhour','hourofday','dayofmonth','dayofweek','dayofyear', 'monthofyear', 
-                                                                        'weekofyear', 'holidays'])           
+                time_feature_generator = TimeFeatureGenerator(feature_cols=[
+                    'minuteofhour', 'hourofday', 'dayofmonth', 'dayofweek',
+                    'dayofyear', 'monthofyear', 'weekofyear', 'holidays'
+                ])
                 ts_all = time_feature_generator.fit_transform(ts_all)
-                ts_train._known_cov = ts_all._known_cov[split['train'][0]:split['train'][1]]
-                ts_val._known_cov = ts_all._known_cov[split['val'][0] - seq_len:split['val'][1]]
-                ts_test._known_cov = ts_all._known_cov[split['test'][0] - seq_len:split['test'][1]]   
-                    
+                ts_train._known_cov = ts_all._known_cov[split['train'][0]:
+                                                        split['train'][1]]
+                ts_val._known_cov = ts_all._known_cov[split['val'][0] -
+                                                      seq_len:split['val'][1]]
+                ts_test._known_cov = ts_all._known_cov[split['test'][
+                    0] - seq_len:split['test'][1]]
+
             else:
-                time_feature_generator = TimeFeatureGenerator(feature_cols=['hourofday','dayofmonth','dayofweek','dayofyear'])
+                time_feature_generator = TimeFeatureGenerator(feature_cols=[
+                    'hourofday', 'dayofmonth', 'dayofweek', 'dayofyear'
+                ])
                 ts_train = time_feature_generator.fit_transform(ts_train)
                 ts_val = time_feature_generator.fit_transform(ts_val)
                 ts_test = time_feature_generator.fit_transform(ts_test)
-        
-        setting = cfg.model['name']+'_' + dataset['name'] + '_' + str(seq_len) + '_' + str(predict_len) + '_' + str(iter) + '/'
+
+        setting = cfg.model['name'] + '_' + dataset['name'] + '_' + str(
+            seq_len) + '_' + str(predict_len) + '_' + str(iter) + '/'
         if args.checkpoints is None:
             logger.info('start training...')
             model.fit(ts_train, ts_val)
@@ -142,24 +168,31 @@ def main(args):
             save_dir = os.path.join(args.save_dir, setting)
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
+            else:
+                import shutil
+                shutil.rmtree(save_dir)
+                os.makedirs(save_dir)
             model.save(save_dir + '/checkpoints/')
+
         else:
             from paddlets.models.model_loader import load
-            model = load(args.checkpoints)
+            model = load(args.checkpoints + '/checkpoints')
+            metric = model.eval(ts_val)
+            logger.info(metric)
 
         logger.info('start backtest...')
-        if do_eval:
+        if do_eval and ts_test is not None:
             metrics_score = backtest(
                 data=ts_test,
                 model=model,
                 predict_window=predict_len,
                 stride=1,
-                metric=[MSE(), MAE()],
-            )
+                metric=[MSE(), MAE()], )
             logger.info(setting + f"{metrics_score}")
             for metric in metrics_score.keys():
-                logger.info(f"{metric}: {np.mean([v for v in metrics_score[metric].values()])}")
-
+                logger.info(
+                    f"{metric}: {np.mean([v for v in metrics_score[metric].values()])}"
+                )
 
 
 if __name__ == '__main__':

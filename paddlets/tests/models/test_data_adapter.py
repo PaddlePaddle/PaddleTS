@@ -68,8 +68,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -85,8 +85,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -104,8 +104,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
         self.assertEqual(test_param["time_window"],
                          test_sample_ds._time_window)
@@ -130,8 +130,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -147,8 +147,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -166,8 +166,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
         self.assertEqual(test_param["time_window"],
                          test_sample_ds._time_window)
@@ -192,8 +192,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -209,8 +209,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -228,8 +228,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
         self.assertEqual(test_param["time_window"],
                          test_sample_ds._time_window)
@@ -457,8 +457,8 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                    **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -474,8 +474,8 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                    **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -491,8 +491,8 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                    **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -527,8 +527,8 @@ class TestDataAdapter(unittest.TestCase):
                 cov_dtypes_bits=self._only_numeric_dtype_bits)
 
             # Build sample.
-            sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                        fill_param)
+            sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                        **fill_param)
 
             self._compare_tsdataset_and_sample_dataset(
                 tsdataset=tsdataset,
