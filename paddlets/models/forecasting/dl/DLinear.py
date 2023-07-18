@@ -28,14 +28,14 @@ class moving_avg(paddle.nn.Layer):
     def __init__(self, kernel_size, stride):
         super(moving_avg, self).__init__()
         self.kernel_size = kernel_size
-        self.avg = paddle.nn.AvgPool1D(kernel_size=kernel_size, stride=
-            stride, padding=0)
+        self.avg = paddle.nn.AvgPool1D(
+            kernel_size=kernel_size, stride=stride, padding=0)
 
     def forward(self, x):
-        front = x[:, 0:1, :].tile(repeat_times=[1, (self.kernel_size - 1) //
-            2, 1])
-        end = x[:, -1:, :].tile(repeat_times=[1, (self.kernel_size - 1) // 
-            2, 1])
+        front = x[:, 0:1, :].tile(
+            repeat_times=[1, (self.kernel_size - 1) // 2, 1])
+        end = x[:, -1:, :].tile(
+            repeat_times=[1, (self.kernel_size - 1) // 2, 1])
         x = paddle.concat(x=[front, x, end], axis=1)
         x = self.avg(x.transpose(perm=[0, 2, 1]))
         x = x.transpose(perm=[0, 2, 1])
@@ -66,7 +66,12 @@ class _DLinearModule(paddle.nn.Layer):
     (https://arxiv.org/pdf/2205.13504.pdf)
     """
 
-    def __init__(self, c_in=7, seq_len=96, pred_len=96, individual=False, pretrain=None):
+    def __init__(self,
+                 c_in=7,
+                 seq_len=96,
+                 pred_len=96,
+                 individual=False,
+                 pretrain=None):
         super(_DLinearModule, self).__init__()
         self.seq_len = seq_len
         self.pred_len = pred_len
@@ -78,43 +83,50 @@ class _DLinearModule(paddle.nn.Layer):
             self.Linear_Seasonal = paddle.nn.LayerList()
             self.Linear_Trend = paddle.nn.LayerList()
             for i in range(self.channels):
-                self.Linear_Seasonal.append(paddle.nn.Linear(in_features=
-                    self.seq_len, out_features=self.pred_len))
-                self.Linear_Trend.append(paddle.nn.Linear(in_features=self.
-                    seq_len, out_features=self.pred_len))
+                self.Linear_Seasonal.append(
+                    paddle.nn.Linear(
+                        in_features=self.seq_len, out_features=self.pred_len))
+                self.Linear_Trend.append(
+                    paddle.nn.Linear(
+                        in_features=self.seq_len, out_features=self.pred_len))
         else:
-            self.Linear_Seasonal = paddle.nn.Linear(in_features=self.
-                seq_len, out_features=self.pred_len)
-            self.Linear_Trend = paddle.nn.Linear(in_features=self.seq_len,
-                out_features=self.pred_len)
+            self.Linear_Seasonal = paddle.nn.Linear(
+                in_features=self.seq_len, out_features=self.pred_len)
+            self.Linear_Trend = paddle.nn.Linear(
+                in_features=self.seq_len, out_features=self.pred_len)
         self.pretrain = pretrain
         self.init_weight()
 
     def forward(self, x):
         x = x['past_target']
         seasonal_init, trend_init = self.decompsition(x)
-        seasonal_init, trend_init = seasonal_init.transpose(perm=[0, 2, 1]
-            ), trend_init.transpose(perm=[0, 2, 1])
+        seasonal_init, trend_init = seasonal_init.transpose(
+            perm=[0, 2, 1]), trend_init.transpose(perm=[0, 2, 1])
         if self.individual:
-            
-            seasonal_output = paddle.zeros(shape=[seasonal_init.shape[0],
-                seasonal_init.shape[1], self.pred_len], dtype=seasonal_init
-                .dtype)
-            
-            trend_output = paddle.zeros(shape=[trend_init.shape[0],
-                trend_init.shape[1], self.pred_len], dtype=trend_init.dtype
-                )
+
+            seasonal_output = paddle.zeros(
+                shape=[
+                    seasonal_init.shape[0], seasonal_init.shape[1],
+                    self.pred_len
+                ],
+                dtype=seasonal_init.dtype)
+
+            trend_output = paddle.zeros(
+                shape=[
+                    trend_init.shape[0], trend_init.shape[1], self.pred_len
+                ],
+                dtype=trend_init.dtype)
             for i in range(self.channels):
                 seasonal_output[:, (i), :] = self.Linear_Seasonal[i](
                     seasonal_init[:, (i), :])
-                trend_output[:, (i), :] = self.Linear_Trend[i](trend_init[:,
-                    (i), :])
+                trend_output[:, (i), :] = self.Linear_Trend[i](trend_init[:, (
+                    i), :])
         else:
             seasonal_output = self.Linear_Seasonal(seasonal_init)
             trend_output = self.Linear_Trend(trend_init)
         x = seasonal_output + trend_output
         return x.transpose(perm=[0, 2, 1])
-    
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -128,8 +140,8 @@ class _DLinearModule(paddle.nn.Layer):
                                                             .shape):
                     logger.warning(
                         "[SKIP] Shape of pretrained params {} doesn't match.(Pretrained: {}, Actual: {})"
-                        .format(k, para_state_dict[k].shape, model_state_dict[k]
-                                .shape))
+                        .format(k, para_state_dict[k].shape, model_state_dict[
+                            k].shape))
                 else:
                     model_state_dict[k] = para_state_dict[k]
                     num_params_loaded += 1
@@ -220,7 +232,6 @@ class DLinearModel(PaddleBaseModelImpl):
             patience=patience,
             seed=seed, )
 
-
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
         Rewrite _check_tsdataset to fit the specific model.
@@ -269,9 +280,8 @@ class DLinearModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _DLinearModule(
-            c_in = self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            individual=self.individual, 
-            pretrain = self.pretrain
-            )
+            individual=self.individual,
+            pretrain=self.pretrain)

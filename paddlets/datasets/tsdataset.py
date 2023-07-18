@@ -364,7 +364,7 @@ class TimeSeries(object):
         return (TimeSeries(self.data.iloc[:point + shift, :], self.freq),
                 TimeSeries(self.data.iloc[point + shift:, ], self.freq))
 
-    def resample(self, freq)-> "TimeSeries":
+    def resample(self, freq) -> "TimeSeries":
         return TimeSeries(self.data.resample(freq).first(), freq)
 
     def copy(self) -> "TimeSeries":
@@ -842,8 +842,8 @@ class TSDataset(object):
             fillna_method: str="pre",
             fillna_window_size: int=10,
             drop_tail_nan: bool=False,
-            dtype: Optional[Union[type, Dict[str, type]]]=None) -> Union[
-                "TSDataset", List["TSDataset"]]:
+            dtype: Optional[Union[type, Dict[str, type]]]=None,
+            **kwargs) -> Union["TSDataset", List["TSDataset"]]:
         """
         Construct a TSDataset object from a DataFrame
 
@@ -1309,7 +1309,7 @@ class TSDataset(object):
         self._static_cov = static_cov
         self._check_data()
 
-    def resample(self, freq :str):
+    def resample(self, freq: str):
         if self.target is not None:
             target = self.target.resample(freq)
 
@@ -1324,9 +1324,9 @@ class TSDataset(object):
             if self._observed_cov else None
         known_cov = self._known_cov.resample(freq)  \
             if self._known_cov else None
-        
-        return TSDataset(target, observed_cov, known_cov,
-                          self._static_cov)
+
+        return TSDataset(target, observed_cov, known_cov, self._static_cov)
+
     def split(self,
               split_point: Union[pd.Timestamp, str, float, int],
               after=True) -> Tuple["TSDataset", "TSDataset"]:
@@ -1941,11 +1941,11 @@ class TSDataset(object):
         params = {}
         for attr in attrs:
             if res[attr] is not None:
-                params[attr] = TimeSeries.load_from_json(res[attr], **
-                                                         json_load_kwargs)
+                params[attr] = TimeSeries.load_from_json(res[attr],
+                                                         **json_load_kwargs)
         if res['static_cov'] is not None:
-            params['static_cov'] = json.loads(res['static_cov'], **
-                                              json_load_kwargs)
+            params['static_cov'] = json.loads(res['static_cov'],
+                                              **json_load_kwargs)
         return TSDataset(**params)
 
     @property

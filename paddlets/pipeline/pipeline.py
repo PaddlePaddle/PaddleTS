@@ -450,8 +450,8 @@ class Pipeline(Trainable):
             _, new_chunk = tsdataset_copy.split(target_length -
                                                 self._model._out_chunk_len)
             if tsdataset_copy.known_cov:
-                new_chunk, _ = split_dataset(new_chunk, 2 *
-                                             self._model._out_chunk_len)
+                new_chunk, _ = split_dataset(new_chunk,
+                                             2 * self._model._out_chunk_len)
 
             # transform one chunk
             chunk_transformed, chunk_transformed_caches = self.transform(

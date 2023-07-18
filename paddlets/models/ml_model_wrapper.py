@@ -432,8 +432,8 @@ def default_sklearn_ml_dataloader_to_fit_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
-                                           ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0],
+                                           ndarray.shape[1] * ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -527,8 +527,8 @@ def default_sklearn_ml_dataloader_to_predict_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
-                                           ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0],
+                                           ndarray.shape[1] * ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32
@@ -856,8 +856,8 @@ def default_pyod_ml_dataloader_to_fit_ndarray(
     for k in actual_ordered_x_key_list:
         ndarray = data[k]
         # 3-dim -> 2-dim
-        reshaped_ndarray = ndarray.reshape(ndarray.shape[0], ndarray.shape[1] *
-                                           ndarray.shape[2])
+        reshaped_ndarray = ndarray.reshape(ndarray.shape[0],
+                                           ndarray.shape[1] * ndarray.shape[2])
         reshaped_x_ndarray_list.append(reshaped_ndarray)
     # Note: if a_ndarray.dtype = np.int64, b_ndarray.dtype = np.float32, then
     # np.hstack(tup=(a_ndarray, b_ndarray)).dtype will ALWAYS BE np.float32

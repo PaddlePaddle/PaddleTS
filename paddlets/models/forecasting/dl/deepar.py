@@ -250,8 +250,8 @@ class _DeepAR(nn.Layer):
         quantiles_output = paddle.stack(quantiles_output).reshape(
             [num_steps, -1, self._num_samples, self._target_dim])
         quantiles_output = quantiles_output.transpose(
-            [1, 0, 3, 2
-             ])  # to shape: [batch_size, num_steps, target_dim, num_samples]
+            [1, 0, 3,
+             2])  # to shape: [batch_size, num_steps, target_dim, num_samples]
         quantiles_output = paddle.quantile(
             quantiles_output,
             list(np.linspace(

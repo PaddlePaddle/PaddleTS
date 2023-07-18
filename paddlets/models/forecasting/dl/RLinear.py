@@ -29,13 +29,21 @@ class _RLinearModule(paddle.nn.Layer):
     (https://arxiv.org/pdf/2305.10721.pdf)
     """
 
-    def __init__(self, c_in=7, seq_len=96, pred_len=96, dropout=0.0, revin=1, individual=False, pretrain=None):
+    def __init__(self,
+                 c_in=7,
+                 seq_len=96,
+                 pred_len=96,
+                 dropout=0.0,
+                 revin=1,
+                 individual=False,
+                 pretrain=None):
         super(_RLinearModule, self).__init__()
-        self.Linear = paddle.nn.LayerList(sublayers=[paddle.nn.Linear(
-            in_features=seq_len, out_features=pred_len) for
-            _ in range(c_in)]
-            ) if individual else paddle.nn.Linear(in_features=
-            seq_len, out_features=pred_len)
+        self.Linear = paddle.nn.LayerList(sublayers=[
+            paddle.nn.Linear(
+                in_features=seq_len, out_features=pred_len)
+            for _ in range(c_in)
+        ]) if individual else paddle.nn.Linear(
+            in_features=seq_len, out_features=pred_len)
         self.dropout = paddle.nn.Dropout(p=dropout)
         self.rev = RevIN(c_in) if revin else None
         self.individual = individual
@@ -46,7 +54,7 @@ class _RLinearModule(paddle.nn.Layer):
         x = x['past_target']
         x = self.rev(x, 'norm') if self.rev else x
         x = self.dropout(x)
-         
+
         if self.individual:
             pred = paddle.zeros_like(x)
             for idx, proj in enumerate(self.Linear):
@@ -63,7 +71,7 @@ class _RLinearModule(paddle.nn.Layer):
             pred = x.transpose(perm=perm_1)
         pred = self.rev(pred, 'denorm') if self.rev else pred
         return pred
-    
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -77,8 +85,8 @@ class _RLinearModule(paddle.nn.Layer):
                                                             .shape):
                     logger.warning(
                         "[SKIP] Shape of pretrained params {} doesn't match.(Pretrained: {}, Actual: {})"
-                        .format(k, para_state_dict[k].shape, model_state_dict[k]
-                                .shape))
+                        .format(k, para_state_dict[k].shape, model_state_dict[
+                            k].shape))
                 else:
                     model_state_dict[k] = para_state_dict[k]
                     num_params_loaded += 1
@@ -102,7 +110,7 @@ class _RLinearModule(paddle.nn.Layer):
                     # if layer.bias is not None:
                     #     param_init.uniform_init(layer.bias,  low=-0.102, high=0.102)
 
-    
+
 @manager.MODELS.add_component
 class RLinearModel(PaddleBaseModelImpl):
     """
@@ -141,7 +149,7 @@ class RLinearModel(PaddleBaseModelImpl):
                  in_chunk_len: int,
                  out_chunk_len: int,
                  c_in: int=3,
-                 dropout: float=0.0, 
+                 dropout: float=0.0,
                  individual: bool=False,
                  skip_chunk_len: int=0,
                  sampling_stride: int=1,
@@ -181,7 +189,6 @@ class RLinearModel(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             seed=seed, )
-
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
@@ -231,10 +238,9 @@ class RLinearModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _RLinearModule(
-            c_in = self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            dropout=self.dropout, 
-            individual=self.individual, 
-            pretrain = self.pretrain
-            )
+            dropout=self.dropout,
+            individual=self.individual,
+            pretrain=self.pretrain)

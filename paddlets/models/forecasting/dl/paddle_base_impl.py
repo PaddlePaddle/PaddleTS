@@ -101,7 +101,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
         self.start_epoch = 1
-        if optimizer_params is not None and optimizer_params.get('start_epoch', None):
+        if optimizer_params is not None and optimizer_params.get('start_epoch',
+                                                                 None):
             self.start_epoch = int(optimizer_params.pop('start_epoch'))
 
         self._optimizer_params = deepcopy(optimizer_params)
@@ -150,7 +151,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                  f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
         if not self._eval_metrics:
-            self._eval_metrics = ["mse"]
+            self._eval_metrics = ["mse", "mae"]
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """Ensure the robustness of input data (consistent feature order), at the same time,
@@ -181,11 +182,13 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             import paddle.optimizer as opt
             self._scheduler = opt.lr.ExponentialDecay(**self._optimizer_params)
             return self._optimizer_fn(
-            learning_rate=self._scheduler, parameters=self._network.parameters())
+                learning_rate=self._scheduler,
+                parameters=self._network.parameters())
 
         else:
             return self._optimizer_fn(
-            **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -243,9 +246,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             valid_dataloaders.append(valid_dataloader)
         return train_dataloader, valid_dataloaders
 
-    def _init_predict_dataloader(
-            self,
-            tsdataset: TSDataset, ) -> paddle.io.DataLoader:
+    def _init_predict_dataloader(self, tsdataset: TSDataset,
+                                 boundary=None) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
         Args: 
@@ -255,8 +257,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             paddle.io.DataLoader: dataloader. 
         """
         self._check_tsdataset(tsdataset)
-        boundary = (len(tsdataset.get_target().data) - 1 + self._skip_chunk_len
-                    + self._out_chunk_len)
         data_adapter = DataAdapter()
         dataset = data_adapter.to_sample_dataset(
             tsdataset,
@@ -264,7 +264,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
             sampling_stride=self._sampling_stride,
-            time_window=(boundary, boundary))
+            time_window=boundary)
         dataloader = data_adapter.to_paddle_dataloader(dataset,
                                                        self._batch_size)
         return dataloader
@@ -382,7 +382,6 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             if self._scheduler:
                 if epoch_idx >= self.start_epoch:
                     self._scheduler.step()
-                print('epoch and lr is :', epoch_idx, ' ', self._scheduler.get_lr())
             if self._stop_training:
                 break
 
@@ -400,8 +399,31 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         Returns:
             TSDataset.
         """
-        dataloader = self._init_predict_dataloader(tsdataset)
+        boundary = (len(tsdataset.get_target().data) - 1 + self._skip_chunk_len
+                    + self._out_chunk_len)
+        dataloader = self._init_predict_dataloader(tsdataset,
+                                                   (boundary, boundary))
         return self._predict(dataloader)
+
+    def eval(self, tsdataset: TSDataset) -> TSDataset:
+        dataloader = self._init_predict_dataloader(tsdataset)
+        self._network.eval()
+        list_y_score = []
+        list_y_true = []
+        for batch_nb, data in enumerate(dataloader):
+            X, y = self._prepare_X_y(data)
+            output = self._network(X)
+            predictions = output.numpy()
+            list_y_score.append(predictions)
+            list_y_true.append(y)
+        y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
+        from paddlets.metrics import MSE, MAE
+        mse = MSE()
+        mae = MAE()
+        return {
+            'mse': mse.metric_fn(y_true, scores),
+            'mae': mae.metric_fn(y_true, scores)
+        }
 
     def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.

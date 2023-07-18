@@ -111,8 +111,8 @@ def revin_norm(func):
             logger.warning(
                 "Using reversible instance normalization (revin) to remove and restore the statistical information of a time-series instance"
             )
-            model = RevinWrapper(model, obj._fit_params['target_dim'], **
-                                 obj._revin_params)
+            model = RevinWrapper(model, obj._fit_params['target_dim'],
+                                 **obj._revin_params)
         return model
 
     return wrapper

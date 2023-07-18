@@ -1,5 +1,7 @@
-import paddle
 import math
+
+import paddle
+import paddle.nn as nn
 from paddlets.utils import param_init
 
 
@@ -26,16 +28,13 @@ class TokenEmbedding(paddle.nn.Layer):
     def __init__(self, c_in, d_model):
         super(TokenEmbedding, self).__init__()
         padding = 1 if paddle.__version__ >= '1.5.0' else 2
-        self.tokenConv = paddle.nn.Conv1D(
+        self.tokenConv = nn.Conv1D(
             in_channels=c_in,
             out_channels=d_model,
             kernel_size=3,
             padding=padding,
             padding_mode='circular',
             bias_attr=False)
-        self.init_weight()
-
-    def init_weight(self):
         for m in self.sublayers():
             if isinstance(m, paddle.nn.Conv1D):
                 param_init.kaiming_normal_init(
@@ -43,10 +42,10 @@ class TokenEmbedding(paddle.nn.Layer):
 
     def forward(self, x):
         x = self.tokenConv(x.transpose(perm=[0, 2, 1]))
-        perm_0 = list(range(x.ndim))
-        perm_0[1] = 2
-        perm_0[2] = 1
-        x = x.transpose(perm=perm_0)
+        perm_16 = list(range(x.ndim))
+        perm_16[1] = 2
+        perm_16[2] = 1
+        x = x.transpose(perm=perm_16)
         return x
 
 
@@ -54,7 +53,7 @@ class FixedEmbedding(paddle.nn.Layer):
     def __init__(self, c_in, d_model):
         super(FixedEmbedding, self).__init__()
         w = paddle.zeros(shape=[c_in, d_model]).astype(dtype='float32')
-        w.require_grad = False
+        w.stop_gradient = True
         position = paddle.arange(
             start=0, end=c_in).astype(dtype='float32').unsqueeze(axis=1)
         div_term = (paddle.arange(
@@ -62,8 +61,9 @@ class FixedEmbedding(paddle.nn.Layer):
                     -(math.log(10000.0) / d_model)).exp()
         w[:, 0::2] = paddle.sin(x=position * div_term)
         w[:, 1::2] = paddle.cos(x=position * div_term)
-        self.emb = paddle.nn.Embedding(c_in, d_model)
-        self.emb.weight = paddle.nn.Parameter(w, requires_grad=False)
+        self.emb = nn.Embedding(c_in, d_model)
+        self.emb.weight = self.register_buffer(
+            'emd.weight', w, persistable=True)
 
     def forward(self, x):
         return self.emb(x).detach()
@@ -77,7 +77,8 @@ class TemporalEmbedding(paddle.nn.Layer):
         weekday_size = 7
         day_size = 32
         month_size = 13
-        Embed = FixedEmbedding if embed_type == 'fixed' else paddle.nn.Embedding
+        Embed = FixedEmbedding if embed_type == 'fixed' else nn.Embedding
+        print('Embedding type is {}'.format(embed_type))
         if freq == 't':
             self.minute_embed = Embed(minute_size, d_model)
         self.hour_embed = Embed(hour_size, d_model)
@@ -134,8 +135,11 @@ class DataEmbedding(paddle.nn.Layer):
         self.dropout = paddle.nn.Dropout(p=dropout)
 
     def forward(self, x, x_mark):
-        x = self.value_embedding(x) + self.temporal_embedding(
-            x_mark) + self.position_embedding(x)
+        if x_mark is None:
+            x = self.value_embedding(x) + self.position_embedding(x)
+        else:
+            x = self.value_embedding(x) + self.temporal_embedding(
+                x_mark) + self.position_embedding(x)
         return self.dropout(x)
 
 
@@ -156,5 +160,8 @@ class DataEmbedding_wo_pos(paddle.nn.Layer):
         self.dropout = paddle.nn.Dropout(p=dropout)
 
     def forward(self, x, x_mark):
-        x = self.value_embedding(x) + self.temporal_embedding(x_mark)
+        if x_mark is None:
+            x = self.value_embedding(x)
+        else:
+            x = self.value_embedding(x) + self.temporal_embedding(x_mark)
         return self.dropout(x)

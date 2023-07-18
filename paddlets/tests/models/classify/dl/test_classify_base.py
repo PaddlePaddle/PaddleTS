@@ -1,5 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
+
 import pickle
 import numpy as np
 import paddle
@@ -53,8 +54,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -64,7 +64,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, internal_filename_map['model_meta'], 'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type CNNClassifier
         with open(
@@ -106,8 +106,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -117,7 +116,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, internal_filename_map['model_meta'], 'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type CNNClassifier
         with open(
@@ -182,8 +181,8 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, model_1_internal_filename_map['model_meta'],
-            model_2_name, model_2_internal_filename_map['model_meta'], 'best_model',
+            model_1_name, *model_1_internal_filename_map.values(),
+            model_2_name, *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -345,7 +344,7 @@ class TestClassifyBaseModel(unittest.TestCase):
             "network_model_params": "%s.pdiparams" % (model_1_name),
             "network_model_params_info": "%s.pdiparams.info" % (model_1_name),
             "model_meta": "%s_%s" % (model_1_name, "model_meta"),
-            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
         }
@@ -356,13 +355,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {model_1_name, 
-                    model_1_internal_filename_map["network_model"],
-                    model_1_internal_filename_map["network_model_params"],
-                    model_1_internal_filename_map["network_model_params_info"],
-                    model_1_internal_filename_map["model_meta"],
-                    'best_model',
-                    })
+            files, {model_1_name, *model_1_internal_filename_map.values()})
 
         with open(
                 os.path.join(path,
@@ -419,13 +412,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {model_1_name, 
-                    model_1_internal_filename_map["network_model"],
-                    model_1_internal_filename_map["network_model_params"],
-                    model_1_internal_filename_map["network_model_params_info"],
-                    model_1_internal_filename_map["model_meta"],
-                    'best_model',
-                    })
+            files, {model_1_name, *model_1_internal_filename_map.values()})
 
         with open(
                 os.path.join(path,

@@ -376,14 +376,14 @@ class InterpretableMultiHeadAttention(nn.Layer):
 
         # transpose to get the following shapes
         q_proj = q_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_future_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_future_steps x num_heads x state_size)
         k_proj = k_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_total_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_total_steps x num_heads x state_size)
         v_proj = v_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_total_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_total_steps x num_heads x state_size)
 
         # calculate attention using function we will define next
         attn_outputs_all_heads, attn_scores_all_heads = self.attention(

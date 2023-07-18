@@ -43,10 +43,9 @@ class Config(object):
             learning_rate: Optional[float]=None,
             batch_size: Optional[int]=None,
             epoch: Optional[int]=None,
-            seq_len:  Optional[int]=None,
+            seq_len: Optional[int]=None,
             predict_len: Optional[int]=None,
-            opts: Optional[list]=None,
-            ):
+            opts: Optional[list]=None, ):
         assert os.path.exists(path), \
             'Config path ({}) does not exist'.format(path)
         assert path.endswith('yml') or path.endswith('yaml'), \
@@ -77,7 +76,7 @@ class Config(object):
     @property
     def seq_len(self) -> int:
         return self.dic.get('seq_len')
-    
+
     @property
     def epoch(self) -> int:
         return self.dic.get('epoch')
@@ -89,7 +88,6 @@ class Config(object):
     @property
     def loss_cfg(self) -> Dict:
         return self.dic.get('mode', {}).copy()
-
 
     @classmethod
     def update_config_dict(cls, dic: dict, *args, **kwargs) -> dict:
@@ -135,21 +133,22 @@ def merge_config_dicts(dic, base_dic):
     return base_dic
 
 
-def update_config_dict(dic: dict,
-                       learning_rate: Optional[float]=None,
-                       batch_size: Optional[int]=None,
-                       epoch: Optional[int]=None,
-                       seq_len: Optional[int]=None,
-                       predict_len: Optional[int]=None,
-                       opts: Optional[int]=None,
-                       ):
+def update_config_dict(
+        dic: dict,
+        learning_rate: Optional[float]=None,
+        batch_size: Optional[int]=None,
+        epoch: Optional[int]=None,
+        seq_len: Optional[int]=None,
+        predict_len: Optional[int]=None,
+        opts: Optional[int]=None, ):
     """Update config"""
     # TODO: If the items to update are marked as anchors in the yaml file,
     # we should synchronize the references.
     dic = dic.copy()
 
     if learning_rate:
-        dic['model']['model_cfg']['optimizer_params']['learning_rate'] = learning_rate
+        dic['model']['model_cfg']['optimizer_params'][
+            'learning_rate'] = learning_rate
     if batch_size:
         dic['batch_size'] = batch_size
     if epoch:

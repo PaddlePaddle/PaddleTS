@@ -141,7 +141,8 @@ def fit_and_score(
             score_dict, predicts = backtest(data, estimator, start,
                                             predict_window, stride, metric,
                                             True, reduction, verbose)
-            score = _get_score_from_score_dict(metric, score_dict[metric._NAME])
+            score = _get_score_from_score_dict(metric,
+                                               score_dict[metric._NAME])
         else:
             # valid_data is a list
 
@@ -154,7 +155,8 @@ def fit_and_score(
                 score_dict, tmp_prediction = backtest(
                     e, estimator, None, predict_window, stride, metric, True,
                     reduction, verbose)
-                tmp_score = _get_score_from_score_dict(metric, score_dict[metric._NAME])
+                tmp_score = _get_score_from_score_dict(
+                    metric, score_dict[metric._NAME])
                 score = tmp_score if score is None else score + tmp_score
                 if predicts is None:
                     predicts = [tmp_prediction]

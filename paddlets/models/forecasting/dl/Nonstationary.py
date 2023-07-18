@@ -28,20 +28,39 @@ class Projector(paddle.nn.Layer):
     MLP to learn the De-stationary factors
     """
 
-    def __init__(self, enc_in, seq_len, hidden_dims, hidden_layers,
-        output_dim, kernel_size=3):
+    def __init__(self,
+                 enc_in,
+                 seq_len,
+                 hidden_dims,
+                 hidden_layers,
+                 output_dim,
+                 kernel_size=3):
         super(Projector, self).__init__()
         padding = 1 if paddle.__version__ >= '1.5.0' else 2
-        self.series_conv = paddle.nn.Conv1D(in_channels=seq_len,
-            out_channels=1, kernel_size=kernel_size, padding=padding,
-            padding_mode='circular', bias_attr=False)
-        layers = [paddle.nn.Linear(in_features=2 * enc_in, out_features=
-            hidden_dims[0]), paddle.nn.ReLU()]
+        self.series_conv = paddle.nn.Conv1D(
+            in_channels=seq_len,
+            out_channels=1,
+            kernel_size=kernel_size,
+            padding=padding,
+            padding_mode='circular',
+            bias_attr=False)
+        layers = [
+            paddle.nn.Linear(
+                in_features=2 * enc_in, out_features=hidden_dims[0]),
+            paddle.nn.ReLU()
+        ]
         for i in range(hidden_layers - 1):
-            layers += [paddle.nn.Linear(in_features=hidden_dims[i],
-                out_features=hidden_dims[i + 1]), paddle.nn.ReLU()]
-        layers += [paddle.nn.Linear(in_features=hidden_dims[-1],
-            out_features=output_dim, bias_attr=False)]
+            layers += [
+                paddle.nn.Linear(
+                    in_features=hidden_dims[i],
+                    out_features=hidden_dims[i + 1]), paddle.nn.ReLU()
+            ]
+        layers += [
+            paddle.nn.Linear(
+                in_features=hidden_dims[-1],
+                out_features=output_dim,
+                bias_attr=False)
+        ]
         self.backbone = paddle.nn.Sequential(*layers)
 
     def forward(self, x, stats):
@@ -62,9 +81,25 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
     (https://openreview.net/pdf?id=ucNDIDRNjjv)
     """
 
-    def __init__(self, c_in=7, seq_len=96, pred_len=720, label_len=48, e_layers=2, d_layers=1, n_heads=8,
-                 d_model=512, d_ff=2048, dropout=0.05, embed='timeF', freq='h', factor=1, p_hidden_dims=[256, 256], activation='gelu',
-                 p_hidden_layers=2, output_attention=False, pretrain=None):
+    def __init__(self,
+                 c_in=7,
+                 seq_len=96,
+                 pred_len=720,
+                 label_len=48,
+                 e_layers=2,
+                 d_layers=1,
+                 n_heads=8,
+                 d_model=512,
+                 d_ff=2048,
+                 dropout=0.05,
+                 embed='timeF',
+                 freq='h',
+                 factor=1,
+                 p_hidden_dims=[256, 256],
+                 activation='gelu',
+                 p_hidden_layers=2,
+                 output_attention=False,
+                 pretrain=None):
         super(Nonstationary_Transformer_Module, self).__init__()
         self.pred_len = pred_len
         self.c_in = c_in
@@ -72,68 +107,120 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
         self.seq_len = seq_len
         self.label_len = label_len
         self.output_attention = output_attention
-        self.enc_embedding = DataEmbedding(c_in, d_model,
-            embed, freq, dropout)
-        self.dec_embedding = DataEmbedding(dec_in, d_model,
-            embed, freq, dropout)
-        self.encoder = Encoder([EncoderLayer(AttentionLayer(DSAttention(
-            False, factor, attention_dropout=dropout,
-            output_attention=output_attention), d_model,
-            n_heads), d_model, d_ff, dropout=
-            dropout, activation=activation) for l in range(
-            e_layers)], norm_layer=paddle.nn.LayerNorm(
-            normalized_shape=d_model, epsilon=1e-05, weight_attr=
-            None, bias_attr=None))
-        self.decoder = Decoder([DecoderLayer(AttentionLayer(DSAttention(
-            True, factor, attention_dropout=dropout,
-            output_attention=False), d_model, n_heads),
-            AttentionLayer(DSAttention(False, factor,
-            attention_dropout=dropout, output_attention=False),
-            d_model, n_heads), d_model, 
-            d_ff, dropout=dropout, activation=activation) for
-            l in range(d_layers)], norm_layer=paddle.nn.LayerNorm(
-            normalized_shape=d_model, epsilon=1e-05, weight_attr=
-            None, bias_attr=None), projection=paddle.nn.Linear(in_features=
-            d_model, out_features=c_out, bias_attr=True))
-        self.tau_learner = Projector(enc_in=c_in, seq_len=seq_len, hidden_dims=p_hidden_dims, hidden_layers=
-            p_hidden_layers, output_dim=1)
-        self.delta_learner = Projector(enc_in=c_in, seq_len=
-            seq_len, hidden_dims=p_hidden_dims,
-            hidden_layers=p_hidden_layers, output_dim=seq_len)
+        self.enc_embedding = DataEmbedding(c_in, d_model, embed, freq, dropout)
+        self.dec_embedding = DataEmbedding(dec_in, d_model, embed, freq,
+                                           dropout)
+        self.encoder = Encoder(
+            [
+                EncoderLayer(
+                    AttentionLayer(
+                        DSAttention(
+                            False,
+                            factor,
+                            attention_dropout=dropout,
+                            output_attention=output_attention),
+                        d_model,
+                        n_heads),
+                    d_model,
+                    d_ff,
+                    dropout=dropout,
+                    activation=activation) for l in range(e_layers)
+            ],
+            norm_layer=paddle.nn.LayerNorm(
+                normalized_shape=d_model,
+                epsilon=1e-05,
+                weight_attr=None,
+                bias_attr=None))
+        self.decoder = Decoder(
+            [
+                DecoderLayer(
+                    AttentionLayer(
+                        DSAttention(
+                            True,
+                            factor,
+                            attention_dropout=dropout,
+                            output_attention=False),
+                        d_model,
+                        n_heads),
+                    AttentionLayer(
+                        DSAttention(
+                            False,
+                            factor,
+                            attention_dropout=dropout,
+                            output_attention=False),
+                        d_model,
+                        n_heads),
+                    d_model,
+                    d_ff,
+                    dropout=dropout,
+                    activation=activation) for l in range(d_layers)
+            ],
+            norm_layer=paddle.nn.LayerNorm(
+                normalized_shape=d_model,
+                epsilon=1e-05,
+                weight_attr=None,
+                bias_attr=None),
+            projection=paddle.nn.Linear(
+                in_features=d_model, out_features=c_out, bias_attr=True))
+        self.tau_learner = Projector(
+            enc_in=c_in,
+            seq_len=seq_len,
+            hidden_dims=p_hidden_dims,
+            hidden_layers=p_hidden_layers,
+            output_dim=1)
+        self.delta_learner = Projector(
+            enc_in=c_in,
+            seq_len=seq_len,
+            hidden_dims=p_hidden_dims,
+            hidden_layers=p_hidden_layers,
+            output_dim=seq_len)
         self.pretrain = pretrain
         self.init_weight()
 
-
-    def forward(self, x, enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
+    def forward(self,
+                x,
+                enc_self_mask=None,
+                dec_self_mask=None,
+                dec_enc_mask=None):
         x_enc = x["past_target"]
         times_mark = x.get("known_cov_numeric", None)
-        x_mark_enc = times_mark[:,:self.seq_len,:]
-        dec_inp = paddle.zeros(shape=[x_enc.shape[0], self.pred_len, self.c_in])
+        x_mark_enc = times_mark[:, :self.seq_len, :]
+        dec_inp = paddle.zeros(
+            shape=[x_enc.shape[0], self.pred_len, self.c_in])
         x_dec = paddle.concat([x_enc[:, -self.label_len:, :], dec_inp], axis=1)
-        x_mark_dec = times_mark[:, -(self.pred_len + self.label_len) :,:]
+        x_mark_dec = times_mark[:, -(self.pred_len + self.label_len):, :]
         # init forecast tensor
         x_raw = x_enc.clone().detach()
         mean_enc = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - mean_enc
-        std_enc = paddle.sqrt(x=paddle.var(x=x_enc, axis=1, keepdim=True,
-            unbiased=False) + 1e-05).detach()
+        std_enc = paddle.sqrt(x=paddle.var(
+            x=x_enc, axis=1, keepdim=True, unbiased=False) + 1e-05).detach()
         x_enc = x_enc / std_enc
-        x_dec_new = paddle.concat(x=[x_enc[:, -self.label_len:, :], paddle.
-            zeros_like(x=x_dec[:, -self.pred_len:, :])], axis=1).clone()
+        x_dec_new = paddle.concat(
+            x=[
+                x_enc[:, -self.label_len:, :],
+                paddle.zeros_like(x=x_dec[:, -self.pred_len:, :])
+            ],
+            axis=1).clone()
         tau = self.tau_learner(x_raw, std_enc).exp()
         delta = self.delta_learner(x_raw, mean_enc)
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
-        enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask, tau
-            =tau, delta=delta)
+        enc_out, attns = self.encoder(
+            enc_out, attn_mask=enc_self_mask, tau=tau, delta=delta)
         dec_out = self.dec_embedding(x_dec_new, x_mark_dec)
-        dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask,
-            cross_mask=dec_enc_mask, tau=tau, delta=delta)
+        dec_out = self.decoder(
+            dec_out,
+            enc_out,
+            x_mask=dec_self_mask,
+            cross_mask=dec_enc_mask,
+            tau=tau,
+            delta=delta)
         dec_out = dec_out * std_enc + mean_enc
         if self.output_attention:
             return dec_out[:, -self.pred_len:, :], attns
         else:
             return dec_out[:, -self.pred_len:, :]
-    
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -147,8 +234,8 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                                                             .shape):
                     logger.warning(
                         "[SKIP] Shape of pretrained params {} doesn't match.(Pretrained: {}, Actual: {})"
-                        .format(k, para_state_dict[k].shape, model_state_dict[k]
-                                .shape))
+                        .format(k, para_state_dict[k].shape, model_state_dict[
+                            k].shape))
                 else:
                     model_state_dict[k] = para_state_dict[k]
                     num_params_loaded += 1
@@ -171,10 +258,6 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                     ones_(layer.weight)
                 elif isinstance(layer, nn.Linear):
                     param_init.th_linear_fill(layer)
-
-
-
-
 
 
 @manager.MODELS.add_component
@@ -219,7 +302,7 @@ class Nonstationary_Transformer(PaddleBaseModelImpl):
                  label_len: int=48,
                  p_hidden_dims: List[int]=[],
                  p_hidden_layers: int=2,
-                 pretrain = None,
+                 pretrain=None,
                  skip_chunk_len: int=0,
                  sampling_stride: int=1,
                  loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
@@ -244,7 +327,6 @@ class Nonstationary_Transformer(PaddleBaseModelImpl):
         self._revin_params = revin_params
         self.pretrain = pretrain
 
-
         super(Nonstationary_Transformer, self).__init__(
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
@@ -260,7 +342,6 @@ class Nonstationary_Transformer(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             seed=seed, )
-
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
@@ -311,11 +392,11 @@ class Nonstationary_Transformer(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return Nonstationary_Transformer_Module(
-            c_in=self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
             factor=self.factor,
-            label_len = self.label_len,
-            p_hidden_dims = self.p_hidden_dims,
-            p_hidden_layers = self.p_hidden_layers,
+            label_len=self.label_len,
+            p_hidden_dims=self.p_hidden_dims,
+            p_hidden_layers=self.p_hidden_layers,
             pretrain=self.pretrain)

@@ -483,8 +483,8 @@ class ReprBaseModel(abc.ABC):
         """
         abs_path = os.path.abspath(path)
         raise_if_not(
-            os.path.exists(abs_path), "model file does not exist: %s" %
-            abs_path)
+            os.path.exists(abs_path),
+            "model file does not exist: %s" % abs_path)
         raise_if(
             os.path.isdir(abs_path),
             "path must be a file path, not a directory: %s" % abs_path)

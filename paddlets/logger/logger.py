@@ -56,6 +56,7 @@ class Logger(object):
         # Do basic configuration(level and format) for the logging system
         logging.basicConfig(level=LOG_LEVEL, format=FORMAT)
         self.logger = logging.getLogger(name)
+        self.logger.setLevel(LOG_LEVEL)
 
     def __getattr__(self, name):
         """

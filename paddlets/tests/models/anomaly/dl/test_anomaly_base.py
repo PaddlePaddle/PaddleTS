@@ -69,8 +69,8 @@ class _MockNotAnomalyBaseModel(object):
     def __init__(self, in_chunk_len: int=1, hidden_config: List[int]=None):
         self._in_chunk_len = in_chunk_len
         self._fit_params = {"observed_dim": 1}
-        self._hidden_config = [8, 16
-                               ] if hidden_config is None else hidden_config
+        self._hidden_config = [8,
+                               16] if hidden_config is None else hidden_config
         self._network = None
         self._optimizer = None
         self._callback_container = None
@@ -244,8 +244,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -255,7 +254,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, internal_filename_map['model_meta'], 'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type AutoEncoder
         with open(
@@ -293,8 +292,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -304,7 +302,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname, internal_filename_map['model_meta'], 'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type AutoEncoder
         with open(
@@ -351,7 +349,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
         model_1_name = "a"
         model_1_internal_filename_map = {
             "model_meta": "%s_%s" % (model_1_name, "model_meta"),
-            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s_%s" % (model_1_name, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (model_1_name, "optimizer_statedict"),
         }
@@ -361,15 +359,16 @@ class TestAnomalyBaseModel(unittest.TestCase):
         model_2_name = "b"
         model_2_internal_filename_map = {
             "model_meta": "%s_%s" % (model_2_name, "model_meta"),
-            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s_%s" % (model_2_name, "network_statedict"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (model_2_name, "optimizer_statedict"),
         }
         model.save(os.path.join(path, model_2_name))
+
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, model_1_internal_filename_map['model_meta'], 'best_model',
-            model_2_name, model_2_internal_filename_map['model_meta']
+            model_1_name, *model_1_internal_filename_map.values(),
+            model_2_name, *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -528,8 +527,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -542,12 +540,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname,  
-                    internal_filename_map["network_model"], 
-                    internal_filename_map["network_model_params"], 
-                    internal_filename_map["network_model_params_info"], 
-                    internal_filename_map["model_meta"], 
-                    'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type AutoEncoder
         with open(
@@ -591,8 +584,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -605,12 +597,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(
-            files, {self.default_modelname,  
-                    internal_filename_map["network_model"], 
-                    internal_filename_map["network_model_params"], 
-                    internal_filename_map["network_model_params_info"], 
-                    internal_filename_map["model_meta"], 
-                    'best_model'})
+            files, {self.default_modelname, *internal_filename_map.values()})
 
         # mode type AutoEncoder
         with open(
@@ -914,8 +901,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -998,8 +984,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s/%s" % ('best_model', "model.pdparams"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
