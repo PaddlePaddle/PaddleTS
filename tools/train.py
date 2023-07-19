@@ -201,6 +201,7 @@ def main(args):
     model.fit(ts_train, ts_val)
 
     logger.info('save best model...')
+
     if cfg.model['name'] == 'PPTimes':
         model.save(args.save_dir + '/')
     else:
