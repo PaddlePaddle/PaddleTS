@@ -74,6 +74,10 @@ class Config(object):
         return self.dic.get('predict_len')
 
     @property
+    def sampling_stride(self) -> int:
+        return self.dic.get('sampling_stride', 1)
+
+    @property
     def seq_len(self) -> int:
         return self.dic.get('seq_len')
 

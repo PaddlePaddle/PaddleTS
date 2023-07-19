@@ -99,14 +99,21 @@ def main(args):
                 batch_size=cfg.batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
-            one_model = MODELS.components_dict[model_name]
-            params = model_cfg.model['model_cfg']
+            params = dict()
             params['in_chunk_len'] = cfg.seq_len
             params['out_chunk_len'] = cfg.predict_len
-            params['batch_size'] = cfg.batch_size
-            params['max_epochs'] = cfg.epoch
 
-            estimators.append((one_model, params))
+            if model_name == 'XGBoost':
+                from paddlets.models.ml_model_wrapper import SklearnModelWrapper
+                from xgboost import XGBRegressor
+                params['model_init_params'] = model_cfg.model['model_cfg']
+                params['sampling_stride'] = model_cfg.sampling_stride
+                params['model_class'] = XGBRegressor
+                estimators.append((SklearnModelWrapper, params))
+            else:
+                one_model = MODELS.components_dict[model_name]
+                params = model_cfg.model['model_cfg']
+                estimators.append((one_model, params))
 
         model = WeightingEnsembleForecaster(
             in_chunk_len=cfg.seq_len,
@@ -115,8 +122,19 @@ def main(args):
             estimators=estimators,
             mode='mean')
         model = model.load(weight_path + '/')
+    elif cfg.model['name'] == 'XGBoost':
+        from paddlets.models.ml_model_wrapper import make_ml_model
+        from xgboost import XGBRegressor
+        model = make_ml_model(
+            in_chunk_len=cfg.seq_len,
+            out_chunk_len=cfg.predict_len,
+            sampling_stride=1,
+            model_class=XGBRegressor,
+            use_skl_gridsearch=False,
+            model_init_params=cfg.model['model_cfg'])
+        model = model.load(weight_path + '/checkpoints')
     else:
-        model = load(weight_path + 'checkpoints')
+        model = load(weight_path + '/checkpoints')
 
     if dataset.get('scale', False):
         logger.info('start scaling...')
@@ -124,7 +142,7 @@ def main(args):
             raise FileNotFoundError('there is not `scaler`: {}.'.format(
                 os.path.join(weight_path, 'scaler.pkl')))
         import joblib
-        scaler = joblib.load(weight_path + 'scaler.pkl')
+        scaler = joblib.load(os.path.join(weight_path, 'scaler.pkl'))
         ts_test = scaler.transform(ts_test)
 
     if cfg.dataset.get('time_feat', 'False'):

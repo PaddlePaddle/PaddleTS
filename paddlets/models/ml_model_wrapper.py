@@ -93,6 +93,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             out_chunk_len: int,
             skip_chunk_len: int=0,
             sampling_stride: int=1,
+            is_mulitioutput: bool=False,
+            use_skl_gridsearch: bool=False,
             model_init_params: Dict[str, Any]=None,
             fit_params: Dict[str, Any]=None,
             predict_params: Dict[str, Any]=None,
@@ -101,10 +103,10 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         raise_if(in_chunk_len < 0, f"in_chunk_len ({in_chunk_len}) must >= 0.")
         raise_if(skip_chunk_len < 0,
                  f"skip_chunk_len ({skip_chunk_len}) must >= 0.")
-        raise_if(out_chunk_len != 1,
-                 f"""out_chunk_len ({out_chunk_len}) must == 1. 
-            Please refer to {BaseModel}.recursive_predict for multistep time series forecasting."""
-                 )
+        # raise_if(out_chunk_len != 1,
+        #          f"""out_chunk_len ({out_chunk_len}) must == 1. 
+        #     Please refer to {BaseModel}.recursive_predict for multistep time series forecasting."""
+        #          )
         raise_if(sampling_stride < 1,
                  f"sampling_stride ({sampling_stride}) must >= 1.")
 
@@ -122,7 +124,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             isinstance(self._model_class, type),
             "isinstance(model_class, type) must be True.")
 
-        self._model = self._init_model()
+        self.use_skl_gridsearch = use_skl_gridsearch
+        self._model = self._init_model(is_mulitioutput)
         self._data_adapter = self._init_data_adapter()
 
         self._udf_ml_dataloader_to_fit_ndarray = default_sklearn_ml_dataloader_to_fit_ndarray
@@ -166,6 +169,9 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         if hasattr(self._model,
                    "fit") and callable(getattr(self._model, "fit")):
             self._model.fit(train_x, train_y, **self._fit_params)
+            if self.use_skl_gridsearch:
+                logger.info(self._model.best_params_)
+                self._model = self._model.best_estimator_.fit(train_x, train_y)
             return
         raise_log(
             ValueError(
@@ -217,7 +223,72 @@ class SklearnModelWrapper(MLModelBaseWrapper):
                 f"original model {self._model_class} must have callable predict method."
             ))
 
-    def _init_model(self) -> sklearn.base.BaseEstimator:
+    def _init_predict_dataloader(self, tsdataset: TSDataset):
+        self._validate_predict_data(tsdataset)
+
+        test_ml_dataset = self._tsdataset_to_ml_dataset(
+            tsdataset, sampling_stride=1)
+        test_ml_dataloader = self._data_adapter.to_ml_dataloader(
+            test_ml_dataset, batch_size=len(test_ml_dataset))
+
+        test_x, test_y = None, None
+        try:
+            test_x, test_y = self._udf_ml_dataloader_to_fit_ndarray(
+                ml_dataloader=test_ml_dataloader,
+                model_init_params=self._model_init_params,
+                in_chunk_len=self._in_chunk_len,
+                out_chunk_len=self._out_chunk_len,
+                skip_chunk_len=self._skip_chunk_len)
+        except Exception as e:
+            raise_log(
+                ValueError(
+                    f"""failed to convert train_data to sklearn model predictable numpy array. 
+                    Please check udf_ml_dataloader_to_predict_ndarray function. Error: {str(e)}"""
+                ))
+        return (test_x, test_y)
+
+    def _eval(self, data):
+        test_x, test_y = data
+        if hasattr(self._model,
+                   "predict") and callable(getattr(self._model, "predict")):
+            score = self._model.predict(test_x, **self._predict_params)
+
+            return test_y.reshape(
+                [test_y.shape[0], self._out_chunk_len, -1]), score.reshape(
+                    [score.shape[0], self._out_chunk_len, -1]),
+        raise_log(
+            ValueError(
+                f"original model {self._model_class} must have callable predict method."
+            ))
+
+    def eval(self, tsdataset: TSDataset):
+        """
+        Make prediction.
+
+        Args:
+            tsdataset(TSDataset): TSDataset to predict.
+
+        Returns:
+            TSDataset: TSDataset with predictions.
+        """
+        test_x, test_y = self._init_predict_dataloader(tsdataset)
+        if hasattr(self._model,
+                   "predict") and callable(getattr(self._model, "predict")):
+            score = self._model.predict(test_x, **self._predict_params)
+            from paddlets.metrics import MSE, MAE
+            mse = MSE()
+            mae = MAE()
+            return {
+                'mse': mse.metric_fn(test_y, score),
+                'mae': mae.metric_fn(test_y, score)
+            }
+        else:
+            raise_log(
+                ValueError(
+                    f"original model {self._model_class} must have callable predict method."
+                ))
+
+    def _init_model(self, is_mulitioutput) -> sklearn.base.BaseEstimator:
         """
         Internal method, init sklearn model.
 
@@ -235,7 +306,16 @@ class SklearnModelWrapper(MLModelBaseWrapper):
 
         model = None
         try:
-            model = self._model_class(**self._model_init_params)
+            if self.use_skl_gridsearch:
+                from sklearn.model_selection import GridSearchCV
+                model = self._model_class()
+                model = GridSearchCV(
+                    estimator=model,
+                    param_grid=self._model_init_params,
+                    cv=3,
+                    n_jobs=4)
+            else:
+                model = self._model_class(**self._model_init_params)
         except Exception as e:
             # all other possible errors are captured here:
             # (1) TypeError: __init__() got an unexpected keyword argument "xxx"
@@ -253,15 +333,9 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         # False
         # >>> hasattr(model.__class__, "predict")
         # True
-        not_implemented_method_set = set()
-        for method in {"fit", "predict"}:
-            if (hasattr(model, method) and callable(getattr(model, method))
-                ) is not True:
-                not_implemented_method_set.add(method)
-        raise_if(
-            len(not_implemented_method_set) > 0,
-            f"The initialized {self._model_class} object must implement {not_implemented_method_set} methods."
-        )
+        if is_mulitioutput:
+            from sklearn.multioutput import MultiOutputRegressor
+            model = MultiOutputRegressor(model, n_jobs=8)
         return model
 
     def _init_data_adapter(self) -> DataAdapter:
@@ -276,6 +350,7 @@ class SklearnModelWrapper(MLModelBaseWrapper):
     def _tsdataset_to_ml_dataset(
             self,
             tsdataset: TSDataset,
+            sampling_stride: Optional[int]=None,
             time_window: Optional[Tuple[int, int]]=None) -> SampleDataset:
         """
         Internal method, convert TSDataset to MLDataset.
@@ -288,7 +363,8 @@ class SklearnModelWrapper(MLModelBaseWrapper):
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
-            sampling_stride=self._sampling_stride,
+            sampling_stride=sampling_stride
+            if sampling_stride is not None else self._sampling_stride,
             time_window=time_window)
 
     def _ml_dataset_to_ml_dataloader(
@@ -315,11 +391,6 @@ class SklearnModelWrapper(MLModelBaseWrapper):
 
         check_tsdataset(train_data)
         target_ts = train_data.get_target()
-        # multi target is NOT supported.
-        raise_if(
-            len(target_ts.columns) != 1,
-            f"training dataset target timeseries columns number ({len(target_ts.columns)}) must be 1."
-        )
 
         # target dtype must be numeric (np.float32), not categorical (np.int64).
         target_dtype = target_ts.data.iloc[:, 0].dtype
@@ -342,11 +413,6 @@ class SklearnModelWrapper(MLModelBaseWrapper):
 
         check_tsdataset(tsdataset)
         target_ts = tsdataset.get_target()
-        # multi target is NOT supported.
-        raise_if(
-            len(target_ts.columns) != 1,
-            f"columns number of target timeseries to be predicted ({len(target_ts.columns)}) must be 1."
-        )
 
         # target dtype must be numeric (np.float32), not categorical (np.int64).
         target_dtype = target_ts.data.iloc[:, 0].dtype
@@ -447,7 +513,8 @@ def default_sklearn_ml_dataloader_to_fit_ndarray(
     # Thus, np.squeeze() call can successfully remove these single-dimensional entries (shape[1] and shape[2]) and
     # only make shape[0] (i.e., batch_size dim) reserved.
     # As a result, after the below call, y.shape == (batch_size, ), which fits sklearn requirement.
-    y = np.squeeze(data["future_target"])
+    target = data["future_target"]
+    y = target.reshape(target.shape[0], target.shape[1] * target.shape[2])
     return x, y
 
 
@@ -894,6 +961,8 @@ def make_ml_model(model_class: Type,
                   out_chunk_len: int=1,
                   skip_chunk_len: int=0,
                   sampling_stride: int=1,
+                  is_mulitioutput: bool=False,
+                  use_skl_gridsearch: bool=False,
                   model_init_params: Dict[str, Any]=None,
                   fit_params: Dict[str, Any]=None,
                   predict_params: Dict[str, Any]=None,
@@ -936,13 +1005,15 @@ def make_ml_model(model_class: Type,
 
     module = model_class.__module__.split(".")[0]
 
-    if module == sklearn.__name__:
+    if sklearn.__name__ in model_class.__module__:
         return SklearnModelWrapper(
             model_class=model_class,
             in_chunk_len=in_chunk_len,
             out_chunk_len=out_chunk_len,
             skip_chunk_len=skip_chunk_len,
             sampling_stride=sampling_stride,
+            is_mulitioutput=is_mulitioutput,
+            use_skl_gridsearch=use_skl_gridsearch,
             model_init_params=model_init_params,
             fit_params=fit_params,
             predict_params=predict_params,

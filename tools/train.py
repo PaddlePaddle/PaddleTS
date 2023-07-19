@@ -136,14 +136,23 @@ def main(args):
                 batch_size=batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
-            one_model = MODELS.components_dict[model_name]
-            params = model_cfg.model['model_cfg']
+            params = dict()
             params['in_chunk_len'] = seq_len
             params['out_chunk_len'] = predict_len
-            params['batch_size'] = batch_size
-            params['max_epochs'] = epoch
 
-            estimators.append((one_model, params))
+            if model_name == 'XGBoost':
+                from paddlets.models.ml_model_wrapper import SklearnModelWrapper
+                from xgboost import XGBRegressor
+                params['model_init_params'] = model_cfg.model['model_cfg']
+                params['sampling_stride'] = model_cfg.sampling_stride
+                params['model_class'] = XGBRegressor
+                estimators.append((SklearnModelWrapper, params))
+            else:
+                one_model = MODELS.components_dict[model_name]
+                params = model_cfg.model['model_cfg']
+                params['batch_size'] = batch_size
+                params['max_epochs'] = epoch
+                estimators.append((one_model, params))
 
         model = WeightingEnsembleForecaster(
             in_chunk_len=seq_len,
@@ -151,6 +160,17 @@ def main(args):
             skip_chunk_len=0,
             estimators=estimators,
             mode='mean')
+
+    elif cfg.model['name'] == 'XGBoost':
+        from paddlets.models.ml_model_wrapper import make_ml_model
+        from xgboost import XGBRegressor
+        model = make_ml_model(
+            in_chunk_len=seq_len,
+            out_chunk_len=predict_len,
+            sampling_stride=cfg.sampling_stride,
+            model_class=XGBRegressor,
+            use_skl_gridsearch=False,
+            model_init_params=cfg.model['model_cfg'])
 
     else:
         model = MODELS.components_dict[cfg.model['name']](
