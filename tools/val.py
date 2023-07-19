@@ -160,6 +160,7 @@ def main(args):
     else:
         model = load(weight_path + '/checkpoints')
 
+
     if dataset.get('scale', False):
         logger.info('start scaling...')
         if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
