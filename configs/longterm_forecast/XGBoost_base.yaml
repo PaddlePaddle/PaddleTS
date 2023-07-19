@@ -1,0 +1,33 @@
+batch_size: 16
+seq_len: 96
+predict_len: 96
+do_eval: True
+epoch: 4
+
+
+dataset: 
+  name: Dataset
+  dataset_root: /ssd2/sunting13/ts/paddlex/new/paddle-uapi/tests/test_models/data/ts_optic_examples/
+  train_path: /ssd2/sunting13/ts/paddlex/new/paddle-uapi/tests/test_models/data/ts_optic_examples/train.csv
+  val_path: /ssd2/sunting13/ts/paddlex/new/paddle-uapi/tests/test_models/data/ts_optic_examples/val.csv
+  time_feat: True
+  use_holiday: False
+  scale: True
+
+info_params:
+  time_col: date
+
+
+model: 
+  name: PPTimes
+  model_cfg:
+    DLinearModel: configs/longterm_forecast/DLinear_base.yaml
+    Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
+
+test:
+  stride: 1
+
+  
+
+
+

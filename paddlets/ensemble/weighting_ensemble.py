@@ -66,7 +66,8 @@ class WeightingEnsembleBase(EnsembleBase):
         predictions = self._predict_estimators(tsdataset)
 
         target_names = predictions[0].target.data.columns.values.tolist()
-        target_df = pd.DataFrame(columns=target_names)
+        target_df = pd.DataFrame(
+            columns=target_names, index=predictions[0].target.data.index)
 
         for name in target_names:
             meta = np.concatenate(
@@ -79,7 +80,37 @@ class WeightingEnsembleBase(EnsembleBase):
             y = self._weighting(meta)
             target_df[name] = y
 
-        return target_df.to_numpy()
+        return target_df
+
+    def eval(self, tsdataset: TSDataset) -> TSDataset:
+        """
+        predict 
+
+        Args:
+            tsdataset(TSDataset): Dataset to predict.
+
+        """
+        gt, predictions = self._eval_estimators(tsdataset)
+        bs, predict_len, dim = predictions[0].shape
+        target_df = np.zeros(predictions[0].shape)
+        for i in range(len(range(dim))):
+            meta = np.concatenate(
+                [
+                    np.array(prediction[:, :, i]).reshape(-1, 1)
+                    for prediction in predictions
+                ],
+                axis=1)
+
+            y = self._weighting(meta)
+            target_df[:, :, i] = y.reshape(bs, predict_len)
+
+        from paddlets.metrics import MSE, MAE
+        mse = MSE()
+        mae = MAE()
+        return {
+            'mse': mse.metric_fn(gt[0], target_df),
+            'mae': mae.metric_fn(gt[0], target_df)
+        }
 
     def _weighting(self, meta) -> TSDataset:
         """

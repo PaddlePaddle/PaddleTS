@@ -265,8 +265,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             skip_chunk_len=self._skip_chunk_len,
             sampling_stride=self._sampling_stride,
             time_window=boundary)
-        dataloader = data_adapter.to_paddle_dataloader(dataset,
-                                                       self._batch_size)
+        dataloader = data_adapter.to_paddle_dataloader(
+            dataset, batch_size=self._batch_size, shuffle=False)
         return dataloader
 
     def _init_metrics(self, eval_names: List[str]) -> Tuple[List[Metric], List[
@@ -405,8 +405,18 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
                                                    (boundary, boundary))
         return self._predict(dataloader)
 
-    def eval(self, tsdataset: TSDataset) -> TSDataset:
+    def eval(self, tsdataset: TSDataset) -> dict:
         dataloader = self._init_predict_dataloader(tsdataset)
+        y_true, scores = self._eval(dataloader)
+        from paddlets.metrics import MSE, MAE
+        mse = MSE()
+        mae = MAE()
+        return {
+            'mse': mse.metric_fn(y_true, scores),
+            'mae': mae.metric_fn(y_true, scores)
+        }
+
+    def _eval(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         self._network.eval()
         list_y_score = []
         list_y_true = []
@@ -417,13 +427,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             list_y_score.append(predictions)
             list_y_true.append(y)
         y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
-        from paddlets.metrics import MSE, MAE
-        mse = MSE()
-        mae = MAE()
-        return {
-            'mse': mse.metric_fn(y_true, scores),
-            'mae': mae.metric_fn(y_true, scores)
-        }
+        return y_true, scores
 
     def _predict(self, dataloader: paddle.io.DataLoader) -> np.ndarray:
         """Predict function core logic.

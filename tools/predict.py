@@ -88,7 +88,36 @@ def main(args):
     if 'best_model' in weight_path:
         weight_path = weight_path.split('best_model')[0]
 
-    model = load(weight_path + 'checkpoints')
+    if cfg.model['name'] == 'PPTimes':
+        from paddlets.ensemble import WeightingEnsembleForecaster
+        estimators = []
+        for model_name, model_cfg in cfg.model['model_cfg'].items():
+            model_cfg = Config(
+                model_cfg,
+                seq_len=cfg.seq_len,
+                predict_len=cfg.predict_len,
+                batch_size=cfg.batch_size,
+                opts=args.opts)
+            logger.info(model_cfg.model)
+            one_model = MODELS.components_dict[model_name]
+            params = model_cfg.model['model_cfg']
+            params['in_chunk_len'] = cfg.seq_len
+            params['out_chunk_len'] = cfg.predict_len
+            params['batch_size'] = cfg.batch_size
+            params['max_epochs'] = cfg.epoch
+
+            estimators.append((one_model, params))
+
+        model = WeightingEnsembleForecaster(
+            in_chunk_len=cfg.seq_len,
+            out_chunk_len=cfg.predict_len,
+            skip_chunk_len=0,
+            estimators=estimators,
+            mode='mean')
+        model = model.load(weight_path + '/')
+    else:
+        model = load(weight_path + 'checkpoints')
+
     if dataset.get('scale', False):
         logger.info('start scaling...')
         if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
