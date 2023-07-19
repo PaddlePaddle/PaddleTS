@@ -21,10 +21,13 @@ info_params:
 model: 
   name: PPTimes
   model_cfg:
-    DLinearModel: configs/longterm_forecast/DLinear_base.yaml
-    Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
-    XGBoost: configs/longterm_forecast/XGBoost_base.yaml
-    
+    Ensemble:
+      DLinearModel: configs/longterm_forecast/DLinear_base.yaml
+      Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
+      XGBoost: configs/longterm_forecast/XGBoost_base.yaml
+    optimizer_params:
+      learning_rate: 0.01
+
 test:
   stride: 1
 

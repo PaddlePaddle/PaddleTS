@@ -305,6 +305,9 @@ class SklearnModelWrapper(MLModelBaseWrapper):
         )
 
         model = None
+        learning_rate = self._model_init_params.pop('optimizer_params')[
+            'learning_rate']
+        self._model_init_params['learning_rate'] = learning_rate
         try:
             if self.use_skl_gridsearch:
                 from sklearn.model_selection import GridSearchCV

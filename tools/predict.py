@@ -91,7 +91,8 @@ def main(args):
     if cfg.model['name'] == 'PPTimes':
         from paddlets.ensemble import WeightingEnsembleForecaster
         estimators = []
-        for model_name, model_cfg in cfg.model['model_cfg'].items():
+        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
+        ):
             model_cfg = Config(
                 model_cfg,
                 seq_len=cfg.seq_len,

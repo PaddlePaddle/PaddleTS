@@ -24,7 +24,8 @@ model:
   model_cfg:
     max_depth: 4
     n_estimators: 100
-    learning_rate: 0.1
+    optimizer_params:
+      learning_rate: 0.1
     colsample_bytree: 0.3
     min_child_weight: 1
     gamma: 0
