@@ -137,6 +137,7 @@ def main(args):
                 batch_size=batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
+
             params = dict()
             params['in_chunk_len'] = seq_len
             params['out_chunk_len'] = predict_len

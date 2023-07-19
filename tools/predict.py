@@ -100,6 +100,7 @@ def main(args):
                 batch_size=cfg.batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
+
             params = dict()
             params['in_chunk_len'] = cfg.seq_len
             params['out_chunk_len'] = cfg.predict_len
@@ -123,6 +124,7 @@ def main(args):
             estimators=estimators,
             mode='mean')
         model = model.load(weight_path + '/')
+
     elif cfg.model['name'] == 'XGBoost':
         from paddlets.models.ml_model_wrapper import make_ml_model
         from xgboost import XGBRegressor
