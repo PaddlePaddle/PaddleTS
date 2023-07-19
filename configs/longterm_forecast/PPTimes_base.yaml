@@ -2,7 +2,8 @@ batch_size: 16
 seq_len: 96
 predict_len: 96
 do_eval: True
-epoch: 4
+epoch: 8
+
 
 
 dataset: 
@@ -23,6 +24,7 @@ model:
   model_cfg:
     DLinearModel: configs/longterm_forecast/DLinear_base.yaml
     Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
+    XGBoost: configs/longterm_forecast/XGBoost_base.yaml
 
 test:
   stride: 1

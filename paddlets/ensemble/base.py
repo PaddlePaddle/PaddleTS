@@ -9,6 +9,9 @@ from typing import List, Optional, Tuple
 from paddlets.datasets.tsdataset import TSDataset
 from paddlets.logger import raise_log
 from paddlets.models.model_loader import load as paddlets_model_load
+from paddlets.logger import Logger
+
+logger = Logger(__name__)
 
 
 class EnsembleBase(metaclass=abc.ABCMeta):
@@ -95,6 +98,7 @@ class EnsembleBase(metaclass=abc.ABCMeta):
             valid_tsdataset(TSDataset, optional): Valid dataset.
         """
         for estimator in self._estimators:
+            logger.info("train one estimator...")
             estimator.fit(train_tsdataset, valid_tsdataset)
 
     @abc.abstractmethod
