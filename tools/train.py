@@ -125,12 +125,40 @@ def main(args):
         else:
             ts_train = get_dataset(dataset['name'], split, seq_len)
 
-    model = MODELS.components_dict[cfg.model['name']](
-        in_chunk_len=seq_len,
-        out_chunk_len=predict_len,
-        batch_size=batch_size,
-        max_epochs=epoch,
-        **cfg.model['model_cfg'])
+    if cfg.model['name'] == 'PPTimes':
+        from paddlets.ensemble import WeightingEnsembleForecaster
+        estimators = []
+        for model_name, model_cfg in cfg.model['model_cfg'].items():
+            model_cfg = Config(
+                model_cfg,
+                seq_len=seq_len,
+                predict_len=predict_len,
+                batch_size=batch_size,
+                opts=args.opts)
+            logger.info(model_cfg.model)
+            one_model = MODELS.components_dict[model_name]
+            params = model_cfg.model['model_cfg']
+            params['in_chunk_len'] = seq_len
+            params['out_chunk_len'] = predict_len
+            params['batch_size'] = batch_size
+            params['max_epochs'] = epoch
+
+            estimators.append((one_model, params))
+
+        model = WeightingEnsembleForecaster(
+            in_chunk_len=seq_len,
+            out_chunk_len=predict_len,
+            skip_chunk_len=0,
+            estimators=estimators,
+            mode='mean')
+
+    else:
+        model = MODELS.components_dict[cfg.model['name']](
+            in_chunk_len=seq_len,
+            out_chunk_len=predict_len,
+            batch_size=batch_size,
+            max_epochs=epoch,
+            **cfg.model['model_cfg'])
 
     if dataset.get('scale', False):
         logger.info('start scaling...')
@@ -173,7 +201,11 @@ def main(args):
     model.fit(ts_train, ts_val)
 
     logger.info('save best model...')
-    model.save(args.save_dir + '/checkpoints/')
+
+    if cfg.model['name'] == 'PPTimes':
+        model.save(args.save_dir + '/')
+    else:
+        model.save(args.save_dir + '/checkpoints/')
 
     logger.info('done.')
 

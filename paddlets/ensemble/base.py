@@ -121,6 +121,23 @@ class EnsembleBase(metaclass=abc.ABCMeta):
             predictions.append(estimator.predict(tsdataset))
         return predictions
 
+    def _eval_estimators(self, tsdataset: TSDataset) -> List[TSDataset]:
+        """
+        Predict estimators
+
+        Args:
+            tsdataset(TSDataset): Dataset to predict.
+
+        """
+        gt = []
+        predictions = []
+        for estimator in self._estimators:
+            dataloader = estimator._init_predict_dataloader(tsdataset)
+            y_true, prediction = estimator._eval(dataloader)
+            gt.append(y_true)
+            predictions.append(prediction)
+        return gt, predictions
+
     def save(self,
              path: str,
              ensemble_file_name: str="paddlets-ensemble-partial.pkl") -> None:
