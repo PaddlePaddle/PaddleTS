@@ -121,6 +121,7 @@ def main(args):
                 batch_size=batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
+
             params = dict()
             params['in_chunk_len'] = seq_len
             params['out_chunk_len'] = predict_len
@@ -146,6 +147,7 @@ def main(args):
             estimators=estimators,
             mode='mean')
         model = model.load(weight_path + '/')
+
     elif cfg.model['name'] == 'XGBoost':
         from paddlets.models.ml_model_wrapper import make_ml_model
         from xgboost import XGBRegressor
@@ -159,7 +161,6 @@ def main(args):
         model = model.load(weight_path + '/checkpoints')
     else:
         model = load(weight_path + '/checkpoints')
-
 
     if dataset.get('scale', False):
         logger.info('start scaling...')

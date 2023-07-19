@@ -136,6 +136,7 @@ def main(args):
                 batch_size=batch_size,
                 opts=args.opts)
             logger.info(model_cfg.model)
+
             params = dict()
             params['in_chunk_len'] = seq_len
             params['out_chunk_len'] = predict_len
@@ -171,7 +172,7 @@ def main(args):
             model_class=XGBRegressor,
             use_skl_gridsearch=False,
             model_init_params=cfg.model['model_cfg'])
-
+        
     else:
         model = MODELS.components_dict[cfg.model['name']](
             in_chunk_len=seq_len,

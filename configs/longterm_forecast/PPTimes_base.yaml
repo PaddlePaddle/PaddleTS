@@ -5,6 +5,7 @@ do_eval: True
 epoch: 8
 
 
+
 dataset: 
   name: Dataset
   dataset_root: /data/
@@ -24,7 +25,7 @@ model:
     DLinearModel: configs/longterm_forecast/DLinear_base.yaml
     Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
     XGBoost: configs/longterm_forecast/XGBoost_base.yaml
-    
+
 test:
   stride: 1
 
