@@ -97,7 +97,7 @@ def main(args):
         os.makedirs(args.save_dir)
 
     ts_val = None
-    if dataset['name'] == 'Dataset':
+    if dataset['name'] == 'TSDataset':
         import pandas as pd
         from paddlets import TSDataset
         dataset_root = dataset.get('dataset_root', None)
@@ -180,7 +180,7 @@ def main(args):
             model_class=XGBRegressor,
             use_skl_gridsearch=False,
             model_init_params=cfg.model['model_cfg'])
-        
+
     else:
         model = MODELS.components_dict[cfg.model['name']](
             in_chunk_len=seq_len,
@@ -208,7 +208,7 @@ def main(args):
                 'minuteofhour', 'hourofday', 'dayofmonth', 'dayofweek',
                 'dayofyear', 'monthofyear', 'weekofyear', 'holidays'
             ])
-            if dataset['name'] != 'Dataset':
+            if dataset['name'] != 'TSDataset':
                 ts_all = get_dataset(dataset['name'])
                 ts_all = time_feature_generator.fit_transform(ts_all)
                 ts_train._known_cov = ts_all._known_cov[split['train'][0]:

@@ -162,7 +162,7 @@ def main(args):
                     'dayofyear', 'monthofyear', 'weekofyear', 'holidays'
                 ],
                 extend_points=model._out_chunk_len + 1)
-            if dataset['name'] != 'Dataset':
+            if dataset['name'] != 'TSDataset':
                 ts_all = get_dataset(dataset['name'])
                 ts_all = time_feature_generator.fit_transform(ts_all)
                 ts_test._known_cov = ts_all._known_cov[split['val'][0]:split[

@@ -6,7 +6,7 @@ do_eval: True
 epoch: 10
 
 dataset: 
-  name: Dataset
+  name: TSDataset
   dataset_root: /data/
   train_path: /data/train.csv
   val_path: /data/val.csv
