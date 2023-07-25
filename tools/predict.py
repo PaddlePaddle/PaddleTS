@@ -80,6 +80,10 @@ def main(args):
         info_params = cfg.dic['info_params']
         if info_params.get('time_col', None) is None:
             raise ValueError("`time_col` is necessary, but it is None.")
+        if info_params.get('target_cols', None):
+            target_cols = info_params['target_cols'] if info_params[
+                'target_cols'] != [''] else None
+            info_params['target_cols'] = target_cols
 
     df = pd.read_csv(args.csv_path)
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
@@ -109,7 +113,7 @@ def main(args):
                 from paddlets.models.ml_model_wrapper import SklearnModelWrapper
                 from xgboost import XGBRegressor
                 params['model_init_params'] = model_cfg.model['model_cfg']
-                params['sampling_stride'] = model_cfg.sampling_stride
+                params['sampling_stride'] = 1
                 params['model_class'] = XGBRegressor
                 estimators.append((SklearnModelWrapper, params))
             else:

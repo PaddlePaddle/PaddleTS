@@ -1,6 +1,7 @@
 batch_size: 16
 seq_len: 96
 predict_len: 336
+sampling_stride: 1
 do_eval: True
 epoch: 10
 

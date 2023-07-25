@@ -2,6 +2,7 @@ batch_size: 32
 seq_len: 96
 predict_len: 720
 do_eval: True
+sampling_stride: 1
 epoch: 5
 
 dataset: 

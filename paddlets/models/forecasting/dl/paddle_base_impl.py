@@ -263,7 +263,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
             in_chunk_len=self._in_chunk_len,
             out_chunk_len=self._out_chunk_len,
             skip_chunk_len=self._skip_chunk_len,
-            sampling_stride=self._sampling_stride,
+            sampling_stride=1,
             time_window=boundary)
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, batch_size=self._batch_size, shuffle=False)
