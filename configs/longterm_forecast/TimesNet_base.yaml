@@ -7,7 +7,7 @@ epoch: 10 # max_epochs
 
 
 dataset: 
-  name: Dataset
+  name: TSDataset
   dataset_root: /data/
   train_path: /data/train.csv
   val_path: /data/val.csv

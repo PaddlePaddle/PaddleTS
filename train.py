@@ -102,7 +102,7 @@ def main(args):
         logger.info(cfg.__dict__)
 
         ts_val, ts_test = None, None
-        if dataset['name'] == 'Dataset':
+        if dataset['name'] == 'TSDataset':
             import pandas as pd
             from paddlets import TSDataset
             df = pd.read_csv(dataset['train_path'])
