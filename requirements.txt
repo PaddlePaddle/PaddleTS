@@ -16,6 +16,7 @@ einops
 jinja2
 IPython
 more-itertools
+ruamel.yaml
 
 # autots
 ray[tune]>=1.13.0
