@@ -86,6 +86,7 @@ def main(args):
     epoch = cfg.epoch
     split = dataset.get('split', None)
     do_eval = cfg.dic.get('do_eval', True)
+    sampling_stride = cfg.dic.get('sampling_stride', 1)
     logger.info(cfg.__dict__)
 
     if not os.path.exists(args.save_dir):
@@ -112,6 +113,10 @@ def main(args):
             info_params = cfg.dic['info_params']
             if info_params.get('time_col', None) is None:
                 raise ValueError("`time_col` is necessary, but it is None.")
+            if info_params.get('target_cols', None):
+                target_cols = info_params['target_cols'] if info_params[
+                    'target_cols'] != [''] else None
+                info_params['target_cols'] = target_cols
 
         ts_train = TSDataset.load_from_dataframe(df, **info_params)
         if dataset.get('val_path', False):
@@ -146,7 +151,7 @@ def main(args):
                 from paddlets.models.ml_model_wrapper import SklearnModelWrapper
                 from xgboost import XGBRegressor
                 params['model_init_params'] = model_cfg.model['model_cfg']
-                params['sampling_stride'] = model_cfg.sampling_stride
+                params['sampling_stride'] = sampling_stride
                 params['model_class'] = XGBRegressor
                 estimators.append((SklearnModelWrapper, params))
             else:
@@ -166,10 +171,12 @@ def main(args):
     elif cfg.model['name'] == 'XGBoost':
         from paddlets.models.ml_model_wrapper import make_ml_model
         from xgboost import XGBRegressor
+        #sample_len = len(ts_train._target.data) - seq_len - predict_len
+        # max sample = 1000
         model = make_ml_model(
             in_chunk_len=seq_len,
             out_chunk_len=predict_len,
-            sampling_stride=cfg.sampling_stride,
+            sampling_stride=sampling_stride,
             model_class=XGBRegressor,
             use_skl_gridsearch=False,
             model_init_params=cfg.model['model_cfg'])
@@ -179,6 +186,7 @@ def main(args):
             in_chunk_len=seq_len,
             out_chunk_len=predict_len,
             batch_size=batch_size,
+            sampling_stride=sampling_stride,
             max_epochs=epoch,
             **cfg.model['model_cfg'])
 
