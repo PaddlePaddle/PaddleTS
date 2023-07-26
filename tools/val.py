@@ -105,53 +105,20 @@ def main(args):
                 df = pd.read_csv(dataset['val_path'])
                 ts_val = TSDataset.load_from_dataframe(df, **info_params)
     else:
+        info_params = cfg.dic.get('info_params', None)
         if split:
-            _, ts_val, _ = get_dataset(dataset['name'], split, seq_len)
+            _, ts_val, _ = get_dataset(dataset['name'], split, seq_len,
+                                       info_params)
         else:
-            ts_val = get_dataset(dataset['name'], split, seq_len)
+            ts_val = get_dataset(dataset['name'], split, seq_len, info_params)
 
     weight_path = args.checkpoints
     if 'best_model' in weight_path:
         weight_path = weight_path.split('best_model')[0]
 
     if cfg.model['name'] == 'PPTimes':
-        from paddlets.ensemble import WeightingEnsembleForecaster
-        estimators = []
-        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
-        ):
-            model_cfg = Config(
-                model_cfg,
-                seq_len=seq_len,
-                predict_len=predict_len,
-                batch_size=batch_size,
-                opts=args.opts)
-            logger.info(model_cfg.model)
-
-            params = dict()
-            params['in_chunk_len'] = seq_len
-            params['out_chunk_len'] = predict_len
-
-            if model_name == 'XGBoost':
-                from paddlets.models.ml_model_wrapper import SklearnModelWrapper
-                from xgboost import XGBRegressor
-                params['model_init_params'] = model_cfg.model['model_cfg']
-                params['sampling_stride'] = 1
-                params['model_class'] = XGBRegressor
-                estimators.append((SklearnModelWrapper, params))
-            else:
-                one_model = MODELS.components_dict[model_name]
-                params = model_cfg.model['model_cfg']
-                params['batch_size'] = batch_size
-                params['max_epochs'] = epoch
-                estimators.append((one_model, params))
-
-        model = WeightingEnsembleForecaster(
-            in_chunk_len=seq_len,
-            out_chunk_len=predict_len,
-            skip_chunk_len=0,
-            estimators=estimators,
-            mode='mean')
-        model = model.load(weight_path + '/')
+        from paddlets.ensemble.base import EnsembleBase
+        model = EnsembleBase.load(weight_path + '/')
 
     elif cfg.model['name'] == 'XGBoost':
         from paddlets.models.ml_model_wrapper import make_ml_model
