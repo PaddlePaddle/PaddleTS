@@ -117,6 +117,7 @@ def main(args):
         weight_path = weight_path.split('best_model')[0]
 
     if cfg.model['name'] == 'PPTimes':
+
         from paddlets.ensemble.base import EnsembleBase
         model = EnsembleBase.load(weight_path + '/')
 

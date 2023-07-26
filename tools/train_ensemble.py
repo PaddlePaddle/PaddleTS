@@ -1,6 +1,4 @@
 import os
-import sys
-sys.path.insert(0, '/ssd2/sunting13/ts/fork/finalts/PaddleTS')
 
 import numpy as np
 import random
@@ -241,6 +239,7 @@ def main(args):
     logger.info('start training...')
     model.fit(ts_train, ts_val)
 
+
     if cfg.model['name'] == 'PPTimes' and ts_val is not None:
         model.search_best(ts_val)
 
@@ -250,6 +249,7 @@ def main(args):
         model.save(args.save_dir + '/')
     else:
         model.save(args.save_dir + '/checkpoints/')
+
 
     from paddlets.ensemble.base import EnsembleBase
     model = EnsembleBase.load(args.save_dir + '/')
