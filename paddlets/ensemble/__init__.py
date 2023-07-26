@@ -4,5 +4,6 @@
 ensemble
 """
 from paddlets.ensemble.base import EnsembleBase
+from paddlets.ensemble.search_ga import GASearch
 from paddlets.ensemble.stacking_ensemble import StackingEnsembleForecaster
 from paddlets.ensemble.weighting_ensemble import WeightingEnsembleForecaster, WeightingEnsembleAnomaly

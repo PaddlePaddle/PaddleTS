@@ -25,10 +25,16 @@ model:
   model_cfg:
     Ensemble:
       DLinearModel: configs/longterm_forecast/DLinear_base.yaml
+      RLinearModel: configs/longterm_forecast/RLinear_base.yaml
+      NLinearModel: configs/longterm_forecast/NLinear_base.yaml
+      PatchTSTModel: configs/longterm_forecast/PatchTST_base.yaml
+      TiDE: configs/longterm_forecast/TiDE_base.yaml
+      TimesNetModel: configs/longterm_forecast/TimesNet_base.yaml
       Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
       XGBoost: configs/longterm_forecast/XGBoost_base.yaml
     optimizer_params:
-      learning_rate: 0.01
+      learning_rate: 0.001
+
 
 test:
   stride: 1

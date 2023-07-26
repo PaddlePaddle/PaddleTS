@@ -93,41 +93,9 @@ def main(args):
         weight_path = weight_path.split('best_model')[0]
 
     if cfg.model['name'] == 'PPTimes':
-        from paddlets.ensemble import WeightingEnsembleForecaster
-        estimators = []
-        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
-        ):
-            model_cfg = Config(
-                model_cfg,
-                seq_len=cfg.seq_len,
-                predict_len=cfg.predict_len,
-                batch_size=cfg.batch_size,
-                opts=args.opts)
-            logger.info(model_cfg.model)
-
-            params = dict()
-            params['in_chunk_len'] = cfg.seq_len
-            params['out_chunk_len'] = cfg.predict_len
-
-            if model_name == 'XGBoost':
-                from paddlets.models.ml_model_wrapper import SklearnModelWrapper
-                from xgboost import XGBRegressor
-                params['model_init_params'] = model_cfg.model['model_cfg']
-                params['sampling_stride'] = 1
-                params['model_class'] = XGBRegressor
-                estimators.append((SklearnModelWrapper, params))
-            else:
-                one_model = MODELS.components_dict[model_name]
-                params = model_cfg.model['model_cfg']
-                estimators.append((one_model, params))
-
-        model = WeightingEnsembleForecaster(
-            in_chunk_len=cfg.seq_len,
-            out_chunk_len=cfg.predict_len,
-            skip_chunk_len=0,
-            estimators=estimators,
-            mode='mean')
-        model = model.load(weight_path + '/')
+      
+        from paddlets.ensemble.base import EnsembleBase
+        model = EnsembleBase.load(weight_path + '/')
 
     elif cfg.model['name'] == 'XGBoost':
         from paddlets.models.ml_model_wrapper import make_ml_model

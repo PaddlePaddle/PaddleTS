@@ -97,6 +97,7 @@ def main(args):
         os.makedirs(args.save_dir)
 
     ts_val = None
+    ts_test = None
     if dataset['name'] == 'TSDataset':
         import pandas as pd
         from paddlets import TSDataset
@@ -123,12 +124,18 @@ def main(args):
             if os.path.exists(dataset['val_path']):
                 df = pd.read_csv(dataset['val_path'])
                 ts_val = TSDataset.load_from_dataframe(df, **info_params)
+        if dataset.get('test_path', False):
+            if os.path.exists(dataset['test_path']):
+                df = pd.read_csv(dataset['test_path'])
+                ts_test = TSDataset.load_from_dataframe(df, **info_params)
     else:
+        info_params = cfg.dic.get('info_params', None)
         if split:
             ts_train, ts_val, ts_test = get_dataset(dataset['name'], split,
-                                                    seq_len)
+                                                    seq_len, info_params)
         else:
-            ts_train = get_dataset(dataset['name'], split, seq_len)
+            ts_train = get_dataset(dataset['name'], split, seq_len,
+                                   info_params)
 
     if cfg.model['name'] == 'PPTimes':
         from paddlets.ensemble import WeightingEnsembleForecaster
@@ -197,6 +204,8 @@ def main(args):
         ts_train = scaler.transform(ts_train)
         if ts_val is not None:
             ts_val = scaler.transform(ts_val)
+        if ts_test is not None:
+            ts_test = scaler.transform(ts_test)
         import joblib
         joblib.dump(scaler, os.path.join(args.save_dir, 'scaler.pkl'))
 
@@ -213,25 +222,37 @@ def main(args):
                 ts_all = time_feature_generator.fit_transform(ts_all)
                 ts_train._known_cov = ts_all._known_cov[split['train'][0]:
                                                         split['train'][1]]
-                ts_val._known_cov = ts_all._known_cov[split['val'][0] -
-                                                      seq_len:split['val'][1]]
+                if ts_val is not None:
+                    ts_val._known_cov = ts_all._known_cov[split['val'][
+                        0] - seq_len:split['val'][1]]
+                if ts_test is not None:
+                    ts_test._known_cov = ts_all._known_cov[split['test'][
+                        0] - seq_len:split['test'][1]]
             else:
                 ts_train = time_feature_generator.fit_transform(ts_train)
                 if ts_val is not None:
                     ts_val = time_feature_generator.fit_transform(ts_val)
+                if ts_test is not None:
+                    ts_test = time_feature_generator.fit_transform(ts_test)
 
         else:
             time_feature_generator = TimeFeatureGenerator(feature_cols=[
                 'hourofday', 'dayofmonth', 'dayofweek', 'dayofyear'
             ])
             ts_train = time_feature_generator.fit_transform(ts_train)
-            ts_val = time_feature_generator.fit_transform(ts_val)
+            if ts_val is not None:
+                ts_val = time_feature_generator.fit_transform(ts_val)
+            if ts_test is not None:
+                ts_test = time_feature_generator.fit_transform(ts_test)
 
     logger.info('start training...')
     model.fit(ts_train, ts_val)
 
-    logger.info('save best model...')
+    logger.info('search best model...')
+    if cfg.model['name'] == 'PPTimes' and ts_val is not None:
+        model.search_best(ts_val)
 
+    logger.info('save best model...')
     if cfg.model['name'] == 'PPTimes':
         model.save(args.save_dir + '/')
     else:

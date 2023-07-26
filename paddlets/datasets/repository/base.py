@@ -177,5 +177,5 @@ def get_dataset(name: str,
                     point[0] = point[0] - seq_len
                 ts_list.append(
                     TSDataset.load_from_dataframe(df[point[0]:point[1]], **
-                                                  dataset.load_param))
+                                                  load_param))
             return ts_list

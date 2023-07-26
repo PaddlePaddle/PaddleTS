@@ -239,12 +239,20 @@ def main(args):
     logger.info('start training...')
     model.fit(ts_train, ts_val)
 
+
+    if cfg.model['name'] == 'PPTimes' and ts_val is not None:
+        model.search_best(ts_val)
+
     logger.info('save best model...')
 
     if cfg.model['name'] == 'PPTimes':
         model.save(args.save_dir + '/')
     else:
         model.save(args.save_dir + '/checkpoints/')
+
+
+    from paddlets.ensemble.base import EnsembleBase
+    model = EnsembleBase.load(args.save_dir + '/')
 
     logger.info('choose model on val.')
     metric = model.eval(ts_val)

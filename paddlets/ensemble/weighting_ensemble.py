@@ -15,6 +15,7 @@ from paddlets.pipeline import Pipeline
 from paddlets.models.utils import to_tsdataset
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.ml_model_wrapper import PyodModelWrapper
+from paddlets.ensemble.search_ga import GASearch
 
 logger = Logger(__name__)
 FORECASTER_SUPPORT_MODES = ["mean", "min", "max", "median"]
@@ -40,6 +41,7 @@ class WeightingEnsembleBase(EnsembleBase):
 
         raise_if_not(isinstance(mode, str), "Mode should in type of string")
         self._mode = mode
+        self._model_idx = None
         super().__init__(estimators, verbose)
 
     def fit(self,
@@ -81,6 +83,18 @@ class WeightingEnsembleBase(EnsembleBase):
             target_df[name] = y
 
         return target_df
+
+    def search_best(self, tsdataset: TSDataset):
+        gt, predictions = self._eval_estimators(tsdataset)
+        ga = GASearch(gt[0], predictions)
+        best_idx = ga.run()
+        _estimators = []
+        for i, estimator in enumerate(self._estimators):
+            if best_idx[i]:
+                _estimators.append(estimator)
+        self._model_idx = best_idx
+        self._estimators = _estimators if len(
+            _estimators) > 0 else self._estimators
 
     def eval(self, tsdataset: TSDataset) -> TSDataset:
         """
@@ -243,7 +257,7 @@ class WeightingEnsembleForecaster(WeightingEnsembleBase, BaseModel):
             path(str): Output directory path.
             ensemble_file_name(str): Name of ensemble object. This file contains meta information of ensemble model.
         """
-        return super().save(path, ensemble_file_name)
+        return super().save(path)
 
     @staticmethod
     def load(
