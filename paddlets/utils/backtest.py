@@ -3,7 +3,8 @@
 
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 import math
-from collections import defaultdict, Iterable
+from collections import defaultdict
+from collections.abc import Iterable
 
 import pandas as pd
 import numpy as np

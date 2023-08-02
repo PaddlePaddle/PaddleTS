@@ -21,7 +21,7 @@ info_params:
 
 
 model: 
-  name: PPTimes
+  name: PP-TS
   model_cfg:
     Ensemble:
       DLinearModel: configs/longterm_forecast/DLinear_base.yaml
@@ -34,7 +34,6 @@ model:
       XGBoost: configs/longterm_forecast/XGBoost_base.yaml
     optimizer_params:
       learning_rate: 0.001
-
 
 test:
   stride: 1

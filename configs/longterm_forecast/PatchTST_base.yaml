@@ -16,7 +16,6 @@ dataset:
 
 info_params:
   time_col: date
-  target_cols: ['OT', 'HUFL']
 
 
 model: 

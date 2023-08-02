@@ -26,7 +26,7 @@ info_params:
 
 
 model: 
-  name: PPTimes
+  name: PP-TS
   model_cfg:
     Ensemble:
       DLinearModel: configs/longterm_forecast/DLinear_base.yaml

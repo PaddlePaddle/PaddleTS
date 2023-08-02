@@ -137,7 +137,7 @@ def main(args):
             ts_train = get_dataset(dataset['name'], split, seq_len,
                                    info_params)
 
-    if cfg.model['name'] == 'PPTimes':
+    if cfg.model['name'] == 'PP-TS':
         from paddlets.ensemble import WeightingEnsembleForecaster
         estimators = []
         for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
@@ -249,11 +249,11 @@ def main(args):
     model.fit(ts_train, ts_val)
 
     logger.info('search best model...')
-    if cfg.model['name'] == 'PPTimes' and ts_val is not None:
+    if cfg.model['name'] == 'PP-TS' and ts_val is not None:
         model.search_best(ts_val)
 
     logger.info('save best model...')
-    if cfg.model['name'] == 'PPTimes':
+    if cfg.model['name'] == 'PP-TS':
         model.save(args.save_dir + '/')
     else:
         model.save(args.save_dir + '/checkpoints/')
