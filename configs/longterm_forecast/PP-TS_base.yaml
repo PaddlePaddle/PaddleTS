@@ -1,0 +1,44 @@
+batch_size: 16
+seq_len: 96
+predict_len: 96
+sampling_stride: 1
+do_eval: True
+epoch: 8
+
+
+
+dataset: 
+  name: TSDataset
+  dataset_root: /data/
+  train_path: /data/train.csv
+  val_path: /data/val.csv
+  time_feat: True
+  use_holiday: False
+  scale: True
+
+info_params:
+  time_col: date
+
+
+model: 
+  name: PP-TS
+  model_cfg:
+    Ensemble:
+      DLinearModel: configs/longterm_forecast/DLinear_base.yaml
+      RLinearModel: configs/longterm_forecast/RLinear_base.yaml
+      NLinearModel: configs/longterm_forecast/NLinear_base.yaml
+      PatchTSTModel: configs/longterm_forecast/PatchTST_base.yaml
+      TiDE: configs/longterm_forecast/TiDE_base.yaml
+      TimesNetModel: configs/longterm_forecast/TimesNet_base.yaml
+      Nonstationary_Transformer: configs/longterm_forecast/Nonstationary_base.yaml
+      XGBoost: configs/longterm_forecast/XGBoost_base.yaml
+    optimizer_params:
+      learning_rate: 0.001
+
+test:
+  stride: 1
+
+  
+
+
+
