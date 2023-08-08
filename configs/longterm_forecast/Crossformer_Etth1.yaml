@@ -1,0 +1,40 @@
+batch_size: 32
+seq_len: 720
+predict_len: 24
+do_eval: True
+epoch: 20
+
+
+dataset: 
+  name: ETTh1
+  split:
+    train: [0, 8640]  # 12 * 30 * 24
+    val: [8640, 11520]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [11520, 14400] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: Crossformer
+  model_cfg:
+    c_in: 7
+    win_size: 2
+    factor: 10
+    dropout: 0.2
+    seg_len: 24
+    d_model: 256 
+    d_ff: 512
+    n_heads: 4
+    e_layers: 3
+    optimizer_params:
+      learning_rate: 0.00001
+      gamma: 0.7
+    patience: 3
+    #pretrain: Crossformer_init_etth1.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

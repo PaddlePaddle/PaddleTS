@@ -1,0 +1,39 @@
+batch_size: 32
+seq_len: 336
+predict_len: 168
+do_eval: True
+epoch: 20
+
+
+dataset: 
+  name: ECL
+  split:
+    train: [0, 10800]  # 12 * 30 * 24
+    val: [10800, 12960]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [12960, 15840] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: Crossformer
+  model_cfg:
+    c_in: 321
+    win_size: 2
+    factor: 10
+    dropout: 0.2
+    seg_len: 12
+    d_model: 64
+    d_ff: 128
+    n_heads: 2
+    e_layers: 3
+    optimizer_params:
+      learning_rate: 0.0005
+    patience: 3
+    #pretrain: Crossformer_init_etth1.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

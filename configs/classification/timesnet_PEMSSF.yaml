@@ -1,0 +1,31 @@
+batch_size: 16 #
+seq_len: 96 #
+predict_len: 0 #
+label_len: 0 #
+do_eval: True #
+epoch: 30 # max_epochs
+training: True # 
+eval_metrics: ["acc", ] # 
+
+dataset: 
+  name: PEMSSF
+
+model: 
+  name: TimesNetModel
+  model_cfg:
+    e_layers: 3 #
+    num_kernels: 6 #
+    d_model: 32 #
+    d_ff: 32 #
+    top_k: 3 # 
+    window_sampling_limit: Null # 
+    optimizer_params:
+      learning_rate: 0.001
+      gamma: 0.9
+
+loss: CE # or smape or CE
+
+test:
+  stride: 1 # 
+
+output: 'output/'

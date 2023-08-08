@@ -1,0 +1,33 @@
+batch_size: 16
+seq_len: 96
+predict_len: 336
+do_eval: True
+epoch: 10
+
+
+dataset: 
+  name: ECL
+  split:
+    train: [0, 18412]  # 12 * 30 * 24
+    val: [18412, 21044]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [21044, 26304] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: NLinearModel
+  model_cfg:
+    c_in: 321
+    individual: True
+    optimizer_params:
+      learning_rate: 0.005
+      gamma: 0.5
+    patience: 3
+    #pretrain: NLinear_init.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

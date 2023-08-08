@@ -1,0 +1,38 @@
+batch_size: 32
+seq_len: 720
+predict_len: 96
+do_eval: True
+epoch: 50
+
+
+dataset: 
+  name: ETTh2
+  split:
+    train: [0, 8640]  # 12 * 30 * 24
+    val: [8640, 11520]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [11520, 14400] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+  use_holiday: True
+
+model: 
+  name: TiDE
+  model_cfg:
+    c_in: 7
+    num_encoder_layers: 2
+    use_revin: True
+    drop_prob: 0.2
+    hidden_size: 512
+    decoder_output_dim: 32
+    temporal_decoder_hidden: 16
+    optimizer_params:
+      learning_rate: 0.00024
+      gamma: 0.5
+    patience: 10
+    #pretrain: non-station_torch.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

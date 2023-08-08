@@ -1,0 +1,33 @@
+batch_size: 128
+seq_len: 96
+predict_len: 720
+do_eval: True
+epoch: 15
+
+
+dataset: 
+  name: Weather
+  split:
+    train: [0, 36887]  # 0.7
+    val: [36887, 42157]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [42157, 52696] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+
+model: 
+  name: RLinearModel
+  model_cfg:
+    c_in: 21
+    dropout: 0.1
+    optimizer_params:
+      learning_rate: 0.005
+      gamma: 0.5
+    patience: 10
+
+test:
+  stride: 1
+
+  
+
+
+

@@ -1,0 +1,38 @@
+batch_size: 32
+seq_len: 720
+predict_len: 96
+do_eval: True
+epoch: 50
+
+
+dataset: 
+  name: ECL
+  split:
+    train: [0, 18412]  # 12 * 30 * 24
+    val: [18412, 21044]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [21044, 26304] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+  use_holiday: False
+
+model: 
+  name: TiDE
+  model_cfg:
+    c_in: 321
+    num_encoder_layers: 2
+    use_revin: False
+    drop_prob: 0.5
+    hidden_size: 1024
+    decoder_output_dim: 8
+    temporal_decoder_hidden: 64
+    optimizer_params:
+      learning_rate: 0.00099
+      gamma: 0.5
+    patience: 10
+    #pretrain: non-station_torch.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

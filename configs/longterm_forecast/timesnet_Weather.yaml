@@ -1,0 +1,32 @@
+batch_size: 32 #
+seq_len: 96 #
+predict_len: 96 #
+do_eval: True #
+epoch: 10 # max_epochs
+
+
+dataset: 
+  name: Weather
+  split:
+    train: [0, 36892]  # 12 * 30 * 24
+    val: [36892, 42164]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [42164, 52704] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: TimesNetModel
+  model_cfg:
+    c_in: 21 #
+    c_out: 21 #
+    e_layers: 2 #
+    num_kernels: 6 #
+    d_model: 32 #
+    d_ff: 32 #
+    top_k: 5 # 
+    renorm: Null # 
+    optimizer_params:
+      learning_rate: 0.0001
+      gamma: 0.5
+
+test:
+  stride: 1 # 

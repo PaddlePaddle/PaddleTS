@@ -15,9 +15,8 @@ ETTh1Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh1.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -28,9 +27,8 @@ ETTh2Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTh2.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -41,9 +39,8 @@ ETTm1Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTm1.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "15T",
         "dtype": "float32"
     })
@@ -54,9 +51,8 @@ ETTm2Dataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ETTm2.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL", "OT"],
         "time_col": "date",
-        "observed_cov_cols": ["HUFL", "HULL", "MUFL", "MULL", "LUFL", "LULL"],
         "freq": "15T",
         "dtype": "float32"
     })
@@ -67,9 +63,8 @@ ECLDataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/ECL.csv",
     load_param={
-        "target_cols": "MT_320",
+        "target_cols": ["MT_{:0>3}".format(x) for x in range(320)] + ["MT_320"] ,
         "time_col": "date",
-        "observed_cov_cols": ["MT_{:0>3}".format(x) for x in range(320)],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -107,9 +102,8 @@ TrafficDataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/traffic.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ["{}".format(x) for x in range(861)] + ["OT"],
         "time_col": "date",
-        "observed_cov_cols": ["{}".format(x) for x in range(861)],
         "freq": "1h",
         "dtype": "float32"
     })
@@ -120,11 +114,10 @@ ILIDataset = DatasetConfig(
     type = "forecasting",
     path = "https://bj.bcebos.com/paddlets/national_illness.csv",
     load_param = {
-        "target_cols": "OT",
+        "target_cols": ['% WEIGHTED ILI', '%UNWEIGHTED ILI', \
+                        'AGE 0-4', 'AGE 5-24', 'ILITOTAL', 'NUM. OF PROVIDERS', "OT"],
         "time_col": "date",
-        "observed_cov_cols": ['% WEIGHTED ILI', '%UNWEIGHTED ILI', \
-                              'AGE 0-4', 'AGE 5-24', 'ILITOTAL', 'NUM. OF PROVIDERS'],
-        "freq": "7D",
+        "freq": "W-TUE",
         "dtype": "float32"
     }
 )
@@ -135,9 +128,8 @@ ExchangeDataset = DatasetConfig(
     type="forecasting",
     path="https://bj.bcebos.com/paddlets/exchange_rate.csv",
     load_param={
-        "target_cols": "OT",
+        "target_cols": ['0', '1', '2', '3', '4', '5', '6', 'OT'],
         "time_col": "date",
-        "observed_cov_cols": ['0', '1', '2', '3', '4', '5', '6'],
         "freq": "1D",
         "dtype": "float32"
     })
@@ -148,12 +140,11 @@ WeatherDataset = DatasetConfig(
     type = "forecasting",
     path = "https://bj.bcebos.com/paddlets/weather.csv",
     load_param = {
-        "target_cols": "OT",
-        "time_col": "date",
-        "observed_cov_cols": ['p (mbar)','T (degC)', 'Tpot (K)', 'Tdew (degC)','rh (%)',\
+        "target_cols": ['p (mbar)','T (degC)', 'Tpot (K)', 'Tdew (degC)','rh (%)',\
                             'VPmax (mbar)', 'VPact (mbar)','VPdef (mbar)','sh (g/kg)','H2OC (mmol/mol)', \
                             'rho (g/m**3)','wv (m/s)','max. wv (m/s)','wd (deg)','rain (mm)','raining (s)', \
-                            'SWDR (W/m)', 'PAR (_ol/m/s)', 'max. PAR (_ol/m/s)','Tlog (degC)'],
+                            'SWDR (W/m)', 'PAR (_ol/m/s)', 'max. PAR (_ol/m/s)','Tlog (degC)', "OT"],
+        "time_col": "date",
         "freq": "10T",
         "dtype": "float32"
     }
@@ -301,6 +292,16 @@ BasicMotionsTrainTDataset = DatasetConfig(
         "group_id": "7",
         "target_cols": ["0", "1", "2", "3", "4", "5"],
         "static_cov_cols": ["label"]
+    }
+)
+
+SMDTrainDataset = DatasetConfig(
+    name = "smd_train",
+    type = "anomaly",
+    path = "https://paddlets.bj.bcebos.com/SMD_train.csv",
+    load_param = {
+        "feature_cols": [str(i) for i in range(38)],
+        "freq": 1
     }
 )
 

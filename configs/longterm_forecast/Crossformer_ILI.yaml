@@ -1,0 +1,40 @@
+batch_size: 32
+seq_len: 48
+predict_len: 24
+do_eval: True
+epoch: 20
+
+
+dataset: 
+  name: ILI
+  split:
+    train: [0, 676]  # 12 * 30 * 24
+    val: [676, 773]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [773, 966] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: Crossformer
+  model_cfg:
+    c_in: 7
+    win_size: 2
+    factor: 10
+    dropout: 0.6
+    seg_len: 6
+    d_model: 256 
+    d_ff: 512
+    n_heads: 4
+    e_layers: 2
+    optimizer_params:
+      learning_rate: 0.0005
+      gamma: 0.7
+    patience: 3
+    #pretrain: Crossformer_init_etth1.pdparams
+
+test:
+  stride: 1
+
+  
+
+
+

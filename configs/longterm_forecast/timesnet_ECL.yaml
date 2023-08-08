@@ -1,0 +1,32 @@
+batch_size: 32 #
+seq_len: 96 #
+predict_len: 96 #
+do_eval: True #
+epoch: 10 # max_epochs
+
+
+dataset: 
+  name: ECL
+  split:
+    train: [0, 18412]  # 12 * 30 * 24
+    val: [18412, 21044]  # [12 * 30 * 24 - seq_len, 12 * 30 * 24 + 4 * 30 * 24]
+    test: [21044, 26304] # [12 * 30 * 24 + 4 * 30 * 24 - seq_len, 12 * 30 * 24 + 8 * 30 * 24]
+
+
+model: 
+  name: TimesNetModel
+  model_cfg:
+    c_in: 321 #
+    c_out: 321 #
+    e_layers: 2 #
+    num_kernels: 6 #
+    d_model: 256 #
+    d_ff: 512 #
+    top_k: 5 # 
+    renorm: Null # 
+    optimizer_params:
+      learning_rate: 0.0001
+      gamma: 0.5
+
+test:
+  stride: 1 # 
