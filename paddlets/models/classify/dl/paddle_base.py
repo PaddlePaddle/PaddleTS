@@ -11,6 +11,7 @@ import pickle
 import json
 
 from paddle.optimizer import Optimizer
+import paddle.nn.functional as F
 from paddle.nn import CrossEntropyLoss
 from sklearn.utils import check_random_state
 import numpy as np
@@ -59,7 +60,7 @@ class PaddleBaseClassifier(BaseClassifier):
         _verbose(int): Verbosity mode.
         _patience(int): Number of epochs to wait for improvement before terminating.
         _seed(int|None): Global random seed.
-        _classes_（ndarray）: ndarray of class labels, possibly strings
+        _classes_(ndarray): ndarray of class labels, possibly strings
         _n_class(int) : number of unique labels
         _stop_training(bool) Training status.
         _fit_params(Dict[str, Any]): Infer parameters by TSdataset automatically.
@@ -74,7 +75,7 @@ class PaddleBaseClassifier(BaseClassifier):
 
     def __init__(
             self,
-            loss_fn: Callable[..., paddle.Tensor]=None,
+            loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
             optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
             optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
             eval_metrics: List[str]=[],
@@ -87,6 +88,7 @@ class PaddleBaseClassifier(BaseClassifier):
         super(PaddleBaseClassifier, self).__init__()
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
+        self._scheduler = None
         self._optimizer_params = deepcopy(optimizer_params)
         self._eval_metrics = deepcopy(eval_metrics)
         self._callbacks = deepcopy(callbacks)
@@ -107,6 +109,10 @@ class PaddleBaseClassifier(BaseClassifier):
         self._callback_container = None
         self._classes_ = []
         self._n_class = 0
+        self.start_epoch = 1
+        if optimizer_params is not None and optimizer_params.get('start_epoch',
+                                                                 None):
+            self.start_epoch = int(optimizer_params.pop('start_epoch'))
 
         # Parameter check.
         self._check_params()
@@ -136,7 +142,7 @@ class PaddleBaseClassifier(BaseClassifier):
                  f"patience must be >= 0, got {self._patience}.")
         # If user does not specify an evaluation standard, a metric is provided by default.
         if not self._eval_metrics:
-            self._eval_metrics = ["mse"]
+            self._eval_metrics = ["acc"]
 
     def _check_tsdatasets(self,
                           tsdatasets: List[TSDataset],
@@ -198,8 +204,17 @@ class PaddleBaseClassifier(BaseClassifier):
         Returns:
             Optimizer.
         """
-        return self._optimizer_fn(
-            **self._optimizer_params, parameters=self._network.parameters())
+        if self._optimizer_params.get('gamma', False):
+            import paddle.optimizer as opt
+            self._scheduler = opt.lr.ExponentialDecay(**self._optimizer_params)
+            return self._optimizer_fn(
+                learning_rate=self._scheduler,
+                parameters=self._network.parameters())
+
+        else:
+            return self._optimizer_fn(
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -224,9 +239,12 @@ class PaddleBaseClassifier(BaseClassifier):
         """
         self._check_tsdatasets(train_tsdatasets, train_labels)
         data_adapter = ClassifyDataAdapter()
-        train_dataset = data_adapter.to_paddle_dataset(
-            train_tsdatasets,
-            train_labels, )
+        if self._fit_params is not None:
+            train_dataset = data_adapter.to_paddle_dataset(
+                train_tsdatasets, train_labels, self._fit_params['input_lens'])
+        else:
+            train_dataset = data_adapter.to_paddle_dataset(train_tsdatasets,
+                                                           train_labels)
         self._n_classes = train_dataset.n_classes_
         self._classes_ = train_dataset.classes_
         train_dataloader = data_adapter.to_paddle_dataloader(
@@ -236,11 +254,15 @@ class PaddleBaseClassifier(BaseClassifier):
             valid_dataloader = None
         else:
             self._check_tsdatasets(valid_tsdatasets, valid_labels)
-            valid_dataset = data_adapter.to_paddle_dataset(
-                valid_tsdatasets,
-                valid_labels, )
+            if self._fit_params is not None:
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets, valid_labels,
+                    self._fit_params['input_lens'])
+            else:
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets, valid_labels)
             valid_dataloader = data_adapter.to_paddle_dataloader(
-                valid_dataset, self._batch_size, shuffle=shuffle)
+                valid_dataset, self._batch_size, shuffle=False)
 
         return train_dataloader, valid_dataloader
 
@@ -256,11 +278,12 @@ class PaddleBaseClassifier(BaseClassifier):
         Returns:
             paddle.io.DataLoader: dataloader. 
         """
+        if not isinstance(tsdatasets, list):
+            tsdatasets = [tsdatasets]
         self._check_tsdatasets(tsdatasets, labels)
         data_adapter = ClassifyDataAdapter()
         dataset = data_adapter.to_paddle_dataset(
-            tsdatasets,
-            labels, )
+            tsdatasets, labels, self._fit_params['input_lens'])
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -371,6 +394,10 @@ class PaddleBaseClassifier(BaseClassifier):
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
                 epoch_idx, logs=self._history._epoch_metrics)
+            if self._scheduler:
+                if epoch_idx >= self.start_epoch:
+                    self._scheduler.step()
+                logger.info('lr: {}'.format(self._scheduler.get_lr()))
             if self._stop_training:
                 break
 
@@ -427,13 +454,10 @@ class PaddleBaseClassifier(BaseClassifier):
             predictions = output.numpy()
             results.append(predictions)
         results = np.vstack(results)
-
-        # check if binary classification
-        if results.shape[1] == 1:
-            # first column is probability of class 0 and second is of class 1
-            probs = np.hstack([1 - results, results])
-        results = results / results.sum(axis=1, keepdims=1)
-
+        results -= np.max(results, axis=1, keepdims=True)
+        results = np.exp(results) / np.sum(np.exp(results),
+                                           axis=1,
+                                           keepdims=True)
         return results
 
     def _train_epoch(self, train_loader: paddle.io.DataLoader):
@@ -485,7 +509,10 @@ class PaddleBaseClassifier(BaseClassifier):
             list_y_true.append(y)
             list_y_score.append(scores)
         y_true, scores = np.vstack(list_y_true), np.vstack(list_y_score)
-        metrics_logs = self._metric_container_dict[name](y_true, scores)
+        metrics_logs = self._metric_container_dict[name](np.argmax(
+            y_true, axis=-1),
+                                                         np.argmax(
+                                                             scores, axis=-1))
         self._history._epoch_metrics.update(metrics_logs)
         self._network.train()
 
@@ -597,10 +624,10 @@ class PaddleBaseClassifier(BaseClassifier):
         raise_if_not(
             os.path.exists(abs_root_path),
             "failed to save model, path not exists: %s" % abs_root_path)
-        # raise_if(
-        #     os.path.isdir(abs_model_path),
-        #     "failed to save model, path must be a file, not directory: %s" %
-        #     abs_model_path)
+        raise_if(
+            os.path.isdir(abs_model_path),
+            "failed to save model, path must be a file, not directory: %s" %
+            abs_model_path)
         raise_if(
             os.path.exists(abs_model_path),
             "Failed to save model, target file already exists: %s" %

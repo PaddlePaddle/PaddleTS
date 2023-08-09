@@ -107,8 +107,8 @@ def main(args):
     else:
         info_params = cfg.dic.get('info_params', None)
         if split:
-            _, ts_val, _ = get_dataset(dataset['name'], split, seq_len,
-                                       info_params)
+            _, ts_val, ts_test = get_dataset(dataset['name'], split, seq_len,
+                                             info_params)
         else:
             ts_val = get_dataset(dataset['name'], split, seq_len, info_params)
 
@@ -167,8 +167,20 @@ def main(args):
             ts_val = time_feature_generator.fit_transform(ts_val)
 
     logger.info('start evalution...')
-    metric = model.eval(ts_val)
-    logger.info(metric)
+    if cfg.task == 'longforecast':
+        metric = model.eval(ts_val)
+        logger.info(metric)
+    elif cfg.task == 'classification':
+        y_label = []
+        for dataset in ts_val:
+            y_label.append(dataset.static_cov[info_params['static_cov_cols']])
+            dataset.static_cov = None
+        ts_val_y = np.array(y_label)
+        from sklearn.metrics import accuracy_score, f1_score
+        preds = model.predict_proba(ts_val)
+        score = accuracy_score(ts_val_y, np.argmax(preds, axis=1))
+        f1 = f1_score(ts_val_y, np.argmax(preds, axis=1), average="macro")
+        logger.info(f"acc: {score}, f1: {f1}")
 
 
 if __name__ == '__main__':

@@ -21,13 +21,17 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         labels:(np.ndarray) : The data class labels
     """
 
-    def __init__(self, rawdatasets: List[TSDataset], labels: np.ndarray):
+    def __init__(self,
+                 rawdatasets: List[TSDataset],
+                 labels: np.ndarray,
+                 max_len: int=0):
         super(ClassifyPaddleDatasetImpl, self).__init__()
 
         self._rawdatasets = rawdatasets
         self._labels = [] if labels is None else labels
         self.classes_ = []  # unique labels
         self.n_classes_ = 0  # number of unique labels
+        self.max_length = max_len
 
         raise_if(
             self._rawdatasets is None or len(self._rawdatasets) == 0,
@@ -69,9 +73,22 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         for i in range(len(self._rawdatasets)):
             sample = dict()
             target_ts = self._rawdatasets[i].get_target()
+            target_len, target_dim = target_ts.data.shape
             target_ndarray = target_ts.to_numpy(copy=False)
             sample["features"] = target_ndarray
             sample["label"] = [] if len(self._labels) == 0 else labels[i]
+            if self.max_length > 0:
+                ones = np.ones(self.max_length, dtype=np.int32)
+                if self.max_length != target_len:
+                    target_ndarray_final = np.zeros(
+                        [self.max_length, target_dim], dtype=np.int32)
+                    end = min(target_len, self.max_length)
+                    target_ndarray_final[:end, :] = target_ndarray
+                    sample["features"] = target_ndarray_final
+                    ones[end:] = 0
+                    sample["pad_mask"] = ones
+                else:
+                    sample["pad_mask"] = ones
             samples.append(sample)
 
         return samples

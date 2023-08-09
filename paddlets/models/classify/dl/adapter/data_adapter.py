@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 import numpy as np
-
+import paddle
 from paddlets.models.classify.dl.adapter.paddle_dataset_impl import ClassifyPaddleDatasetImpl
 from paddlets.datasets import TSDataset
 from paddlets.logger import Logger
@@ -22,7 +22,8 @@ class ClassifyDataAdapter(object):
 
     def to_paddle_dataset(self,
                           rawdatasets: List[TSDataset],
-                          labels: np.ndarray) -> ClassifyPaddleDatasetImpl:
+                          labels: np.ndarray,
+                          max_len: int=0) -> ClassifyPaddleDatasetImpl:
         """
         Converts :class:`TSDataset` to :class:`paddle.io.Dataset`.
 
@@ -34,7 +35,7 @@ class ClassifyDataAdapter(object):
             PaddleDatasetImpl: A built PaddleDatasetImpl.
         """
         return ClassifyPaddleDatasetImpl(
-            rawdatasets=rawdatasets, labels=labels)
+            rawdatasets=rawdatasets, labels=labels, max_len=max_len)
 
     def to_paddle_dataloader(self,
                              paddle_dataset: ClassifyPaddleDatasetImpl,
