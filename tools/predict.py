@@ -84,6 +84,8 @@ def main(args):
             target_cols = info_params['target_cols'] if info_params[
                 'target_cols'] != [''] else None
             info_params['target_cols'] = target_cols
+        if info_params.get('static_cov_cols', None):
+            info_params['static_cov_cols'] = None
 
     df = pd.read_csv(args.csv_path)
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
@@ -146,17 +148,23 @@ def main(args):
                 extend_points=model._out_chunk_len + 1)
             ts_test = time_feature_generator.fit_transform(ts_test)
 
-    logger.info('start to predit...')
-    result = model.predict(ts_test)
+    if cfg.task == 'longforecast':
+        logger.info('start to predit...')
+        result = model.predict(ts_test)
 
-    if dataset.get('scale', 'False'):
-        result = scaler.inverse_transform(result)
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
+        if dataset.get('scale', 'False'):
+            result = scaler.inverse_transform(result)
+        if not os.path.exists(args.save_dir):
+            os.makedirs(args.save_dir)
 
-    result.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
-    logger.info('save result to {}'.format(
-        os.path.join(args.save_dir, 'result.csv')))
+        result.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
+        logger.info('save result to {}'.format(
+            os.path.join(args.save_dir, 'result.csv')))
+
+    elif cfg.task == 'classification':
+        preds = model.predict_proba(ts_test)
+        classid = np.argmax(preds, axis=1)[0]
+        logger.info(f"class: {classid}, scores: {preds[0][classid]}")
 
 
 if __name__ == '__main__':

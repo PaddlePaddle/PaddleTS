@@ -245,20 +245,43 @@ def main(args):
             if ts_test is not None:
                 ts_test = time_feature_generator.fit_transform(ts_test)
 
-    logger.info('start training...')
-    model.fit(ts_train, ts_val)
+    if cfg.task == 'longforecast':
 
-    logger.info('search best model...')
-    if cfg.model['name'] == 'PP-TS' and ts_val is not None:
-        model.search_best(ts_val)
+        logger.info('start training...')
+        model.fit(ts_train, ts_val)
 
-    logger.info('save best model...')
-    if cfg.model['name'] == 'PP-TS':
-        model.save(args.save_dir + '/')
-    else:
+        logger.info('search best model...')
+        if cfg.model['name'] == 'PP-TS' and ts_val is not None:
+            model.search_best(ts_val)
+
+        logger.info('save best model...')
+        if cfg.model['name'] == 'PP-TS':
+            model.save(args.save_dir + '/')
+        else:
+            model.save(args.save_dir + '/checkpoints/')
+
+        logger.info('done.')
+
+    elif cfg.task == 'classification':
+        logger.info('start training...')
+
+        y_label = []
+        for dataset in ts_train:
+            y_label.append(dataset.static_cov[info_params['static_cov_cols']])
+            dataset.static_cov = None
+        ts_y = np.array(y_label)
+
+        ts_val_y = None
+        if ts_val is not None:
+            y_label = []
+            for dataset in ts_val:
+                y_label.append(dataset.static_cov[info_params[
+                    'static_cov_cols']])
+                dataset.static_cov = None
+            ts_val_y = np.array(y_label)
+
+        model.fit(ts_train, ts_y, ts_val, ts_val_y)
         model.save(args.save_dir + '/checkpoints/')
-
-    logger.info('done.')
 
 
 if __name__ == '__main__':

@@ -77,6 +77,10 @@ def load(path: str):
         # lazy import
         from paddlets.models.representation.dl.repr_base import ReprBaseModel
         return ReprBaseModel.load(abs_model_path)
+    if "PaddleBaseClassifier" in model_meta_map[
+            modelmeta_key_ancestor_classname_set]:
+        from paddlets.models.classify.dl.paddle_base import PaddleBaseClassifier
+        return PaddleBaseClassifier.load(abs_model_path)
     raise_log(
         ValueError("The given model class is not supported: %s.%s" % (
             model_meta_map[modelmeta_key_modulename],
