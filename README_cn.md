@@ -50,12 +50,14 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 ## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 技术交流
 
-飞桨AI套件([PaddleX](http://10.136.157.23:8080/paddle/paddleX))提供了飞桨模型训压推一站式全流程高效率开发平台，其使命是助力AI技术快速落地，愿景是使人人成为AI Developer！
-   - PaddleX 目前覆盖图像分类、目标检测、图像分割、3D、OCR和时序预测等领域方向，已内置了36种基础单模型，例如RT-DETR、PP-YOLOE、PP-HGNet、PP-LCNet、PP-LiteSeg等；集成了12种实用的产业方案，例如PP-OCRv4、PP-ChatOCR、PP-ShiTu、PP-TS、车载路面垃圾检测、野生动物违禁制品识别等。
-   - PaddleX 提供了“工具箱”和“开发者”两种AI开发模式。工具箱模式可以无代码调优关键超参，开发者模式可以低代码进行单模型训压推和多模型串联推理，同时支持云端和本地端。
-   - PaddleX 还支持联创开发，利润分成！目前 PaddleX 正在快速迭代，欢迎广大的个人开发者和企业开发者参与进来，共创繁荣的 AI 技术生态！
+飞桨AI套件（([PaddleX](http://10.136.157.23:8080/paddle/paddleX))）是飞桨精选模型的一站式开发平台，通过4个按键即可完成常见AI任务的数据、训练、评估和推理全流程开发。
+   - PaddleX覆盖了目标检测、OCR、时序预测、自然语言处理等10个通用任务的模型选型，提供了36个基础模型，例如PP-ChatOCR、PP-OCRv4、RT-DETR、PP-TS、TimesNet、PatchTST等，以及15个产业方案，例如车牌识别、液晶屏识别、PCB瑕疵检测、安全帽检测、电压时序预测和温度时序预测等。
+   - PaddleX提供了“工具箱”和“开发者”两种AI开发模式。工具箱模式可以实现无代码进行数据处理和模型评估，方便地调整模型训练和部署中的关键超参。开发者模式则支持低代码进行单模型训练推理和多模型串联推理。PaddleX 同时支持云端和本地端使用。
+   - 此外，PaddleX还支持联创开发，收益共享！目前，PaddleX正在快速迭代，欢迎广大的个人开发者和企业开发者积极参与，共同推动人工智能技术的发展和应用！
 
-微信扫描下面二维码添加运营同学，并回复paddlex，运营同学会邀请您加入官方交流群，获得更高效的问题答疑。
+PaddleX官网地址：https://www.paddlepaddle.org.cn/paddle/paddleX
+
+微信扫描下面二维码添加运营同学，并回复【paddlex】，运营同学会邀请您加入官方交流群，获得更高效的问题答疑。
 
 <div align="center">
 <img src="https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dygraph/doc/joinus_paddlex.jpg"  width = "150" height = "150",caption='' />
