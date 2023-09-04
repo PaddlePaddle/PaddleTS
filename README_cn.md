@@ -30,7 +30,9 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 支持在GPU设备上运行基于PaddlePaddle的时序模型
 * 时序模型集成学习能力
 
-最新更新：
+## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 最新动态
+
+* [2023-09-01] :fire::fire:  飞桨AI套件 [PaddleX](http://10.136.157.23:8080/paddle/paddleX) 发布全新2.0版本， 围绕飞桨模型提供了一站式、全流程、高效率的开发平台，希望助力AI技术快速落地、使人人成为AI Developer！欢迎大家使用和共建。
 * 新增时序分类能力
 * 全新发布6个深度时序模型。
   USAD(UnSupervised Anomaly Detection)与MTAD_GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network)异常检测模型，
@@ -46,7 +48,7 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 更多时序模型
 * 场景化Pipeline，支持端到端真实场景解决方案
 
-## <img src="./docs/images/chat.png" width="20"/> 技术交流
+## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 技术交流
 
 飞桨AI套件([PaddleX](http://10.136.157.23:8080/paddle/paddleX))提供了飞桨模型训压推一站式全流程高效率开发平台，其使命是助力AI技术快速落地，愿景是使人人成为AI Developer！
    - PaddleX 目前覆盖图像分类、目标检测、图像分割、3D、OCR和时序预测等领域方向，已内置了36种基础单模型，例如RT-DETR、PP-YOLOE、PP-HGNet、PP-LCNet、PP-LiteSeg等；集成了12种实用的产业方案，例如PP-OCRv4、PP-ChatOCR、PP-ShiTu、PP-TS、车载路面垃圾检测、野生动物违禁制品识别等。
