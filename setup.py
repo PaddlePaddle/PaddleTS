@@ -11,7 +11,7 @@ import paddlets
 
 def read_requirements(path):
     """read requirements"""
-    return list(Path(path).read_text().splitlines())
+    return list(Path(path).read_text(encoding='utf-8').splitlines())
 
 
 all_reqs = read_requirements("requirements.txt")
@@ -27,7 +27,8 @@ setup(
     license='LICENSE',
     description='PaddleTS (Paddle Time Series Tool), \
            PaddlePaddle-based Time Series Modeling in Python',
-    long_description=open('README.md').read(),
+    long_description=open(
+        'README.md', encoding='utf-8').read(),
     long_description_content_type="text/markdown",
     python_requires='>=3.7',
     install_requires=all_reqs,
