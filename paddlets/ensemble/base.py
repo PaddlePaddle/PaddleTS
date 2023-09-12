@@ -4,6 +4,7 @@
 import abc
 import os
 import pickle
+from tqdm import tqdm
 from typing import List, Optional, Tuple
 
 from paddlets.datasets.tsdataset import TSDataset
@@ -97,8 +98,9 @@ class EnsembleBase(metaclass=abc.ABCMeta):
             train_tsdataset(TSDataset): Train dataset.
             valid_tsdataset(TSDataset, optional): Valid dataset.
         """
-        for estimator in self._estimators:
-            logger.info("train one estimator...")
+        for estimator in tqdm(self._estimators):
+            logger.info("train estimator: {}".format(
+                estimator.__module__.split(".")[-1]))
             estimator.fit(train_tsdataset, valid_tsdataset)
 
     @abc.abstractmethod

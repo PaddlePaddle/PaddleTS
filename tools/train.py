@@ -95,9 +95,17 @@ def main(args):
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
     else:
-        import shutil
-        shutil.rmtree(args.save_dir)
-        os.makedirs(args.save_dir)
+        if not os.path.isdir(args.save_dir):
+            os.remove(args.save_dir)
+            os.makedirs(args.save_dir, exist_ok=True)
+        else:
+            for f in os.listdir(args.save_dir):
+                if f.startswith('checkpoint') or f.startswith(
+                        'paddlets-ensemble') or f == 'scaler.pkl':
+                    os.remove(os.path.join(args.save_dir, f))
+                if f == 'best_model':
+                    import shutil
+                    shutil.rmtree(os.path.join(args.save_dir, f))
 
     ts_val = None
     ts_test = None
