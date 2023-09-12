@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.insert(0, '/ssd2/sunting13/ts/fork/finalts/PaddleTS')
+import paddlets
 import numpy as np
 import random
 import argparse
@@ -93,12 +96,17 @@ def main(args):
             raise ValueError("`info_params` is necessary, but it is None.")
         else:
             info_params = cfg.dic['info_params']
-            if info_params.get('time_col', None) is None:
+            if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
                 raise ValueError("`time_col` is necessary, but it is None.")
             if info_params.get('target_cols', None):
                 target_cols = info_params['target_cols'] if info_params[
                     'target_cols'] != [''] else None
                 info_params['target_cols'] = target_cols
+
+        if cfg.task == 'anomaly':
+            info_params["dtype"] = np.float32
+            if info_params.get('label_col', None) is None:
+                raise ValueError("`label_col` is necessary to eval for anomaly task, but it is None.")
 
         if dataset.get('val_path', False):
             if os.path.exists(dataset['val_path']):
@@ -167,7 +175,7 @@ def main(args):
             ts_val = time_feature_generator.fit_transform(ts_val)
 
     logger.info('start evalution...')
-    if cfg.task == 'longforecast':
+    if cfg.task == 'longforecast' or cfg.task == 'anomaly':
         metric = model.eval(ts_val)
         logger.info(metric)
     elif cfg.task == 'classification':

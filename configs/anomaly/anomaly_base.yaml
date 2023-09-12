@@ -1,0 +1,51 @@
+batch_size: 128
+seq_len: 100
+predict_len: 0
+label_len: 0
+do_eval: True
+epoch: 1
+training: True 
+anomaly_ratio: 1
+task: anomaly
+
+
+dataset: 
+  name: TSDataset
+  dataset_root: ./data/
+  train_path: ./data/swat_train.csv
+  val_path: ./data/swat_test.csv
+  scale: True
+  time_feat: False
+
+info_params:
+  freq: 1
+  label_col: "Normal/Attack"
+  feature_cols: ['FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202', 
+            'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204',
+            'P205', 'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302',
+            ' MV303', 'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401',
+            'LIT401', 'P401', 'P402', 'P403', 'P404', 'UV401', 'AIT501',
+            'AIT502', 'AIT503', 'AIT504', 'FIT501', 'FIT502', 'FIT503',
+            'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
+            'P601', 'P602', 'P603']
+
+model: 
+  name: TimesNet_AD
+  model_cfg:
+    c_in: 55
+    e_layers: 1
+    num_kernels: 6
+    d_model: 8
+    d_ff: 16
+    top_k: 3 
+    q: 1.0
+    optimizer_params:
+      learning_rate: 0.001
+      gamma: 0.5
+
+loss: mse
+
+test:
+  stride: 1 
+
+output: 'output/'

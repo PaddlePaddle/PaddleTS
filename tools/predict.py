@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.insert(0, '/ssd2/sunting13/ts/fork/finalts/PaddleTS')
+import paddlets
 import numpy as np
 import random
 import argparse
@@ -29,7 +32,7 @@ def parse_args():
         '--device',
         help='Set the device place for training model.',
         default='gpu',
-        choices=['cpu', 'gpu'],
+        choices=['cpu', 'gpu', 'xpu'],
         type=str)
     parser.add_argument(
         '--save_dir',
@@ -78,7 +81,7 @@ def main(args):
         raise ValueError("`info_params` is necessary, but it is None.")
     else:
         info_params = cfg.dic['info_params']
-        if info_params.get('time_col', None) is None:
+        if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
             raise ValueError("`time_col` is necessary, but it is None.")
         if info_params.get('target_cols', None):
             target_cols = info_params['target_cols'] if info_params[
@@ -87,6 +90,7 @@ def main(args):
         if info_params.get('static_cov_cols', None):
             info_params['static_cov_cols'] = None
 
+    info_params.pop("label_col", None)
     df = pd.read_csv(args.csv_path)
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
 
@@ -166,6 +170,17 @@ def main(args):
         classid = np.argmax(preds, axis=1)[0]
         logger.info(f"class: {classid}, scores: {preds[0][classid]}")
 
+    elif cfg.task =='anomaly':
+        logger.info('start to predit...')
+        label = model.predict(ts_test)
+        logger.info(f"label: {label}")
+
+        if not os.path.exists(args.save_dir):
+            os.makedirs(args.save_dir)
+
+        label.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
+        logger.info('save result to {}'.format(
+            os.path.join(args.save_dir, 'result.csv')))
 
 if __name__ == '__main__':
     args = parse_args()

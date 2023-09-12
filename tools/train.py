@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.insert(0, '/ssd2/sunting13/ts/fork/finalts/PaddleTS')
+import paddlets
 import numpy as np
 import random
 import argparse
@@ -25,7 +28,7 @@ def parse_args():
         '--device',
         help='Set the device place for training model.',
         default='gpu',
-        choices=['cpu', 'gpu'],
+        choices=['cpu', 'gpu', 'xpu'],
         type=str)
     parser.add_argument(
         '--save_dir',
@@ -112,14 +115,20 @@ def main(args):
             raise ValueError("`info_params` is necessary, but it is None.")
         else:
             info_params = cfg.dic['info_params']
-            if info_params.get('time_col', None) is None:
+            if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
                 raise ValueError("`time_col` is necessary, but it is None.")
             if info_params.get('target_cols', None):
                 target_cols = info_params['target_cols'] if info_params[
                     'target_cols'] != [''] else None
                 info_params['target_cols'] = target_cols
 
-        ts_train = TSDataset.load_from_dataframe(df, **info_params)
+        if cfg.task == 'anomaly':
+            info_params_train = info_params.copy()
+            info_params_train.pop("label_col", None)
+            ts_train = TSDataset.load_from_dataframe(df, **info_params_train)
+        else:
+            ts_train = TSDataset.load_from_dataframe(df, **info_params)
+
         if dataset.get('val_path', False):
             if os.path.exists(dataset['val_path']):
                 df = pd.read_csv(dataset['val_path'])
@@ -283,6 +292,9 @@ def main(args):
         model.fit(ts_train, ts_y, ts_val, ts_val_y)
         model.save(args.save_dir + '/checkpoints/')
 
+    elif cfg.task == 'anomaly':
+        model.fit(ts_train, ts_val)
+        model.save(args.save_dir + '/checkpoints/')
 
 if __name__ == '__main__':
     args = parse_args()
