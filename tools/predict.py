@@ -81,9 +81,8 @@ def main(args):
         if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
             raise ValueError("`time_col` is necessary, but it is None.")
         if info_params.get('target_cols', None):
-            target_cols = info_params['target_cols'] if info_params[
-                'target_cols'] != [''] else None
-            info_params['target_cols'] = target_cols
+            if isinstance(info_params['target_cols'], str):
+                info_params['target_cols'] = info_params['target_cols'].split(',')  
         if info_params.get('static_cov_cols', None):
             info_params['static_cov_cols'] = None
 
