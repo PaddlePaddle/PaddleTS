@@ -43,10 +43,7 @@ def parse_args():
         default=None)
     # Other params
     parser.add_argument(
-        '--seed',
-        help='Set the random seed in training.',
-        default=42,
-        type=int)
+        '--seed', help='Set the random seed in training.', default=42, type=int)
     parser.add_argument(
         '--opts', help='Update the key-value pairs of all options.', nargs='+')
 
@@ -78,16 +75,36 @@ def main(args):
         raise ValueError("`info_params` is necessary, but it is None.")
     else:
         info_params = cfg.dic['info_params']
-        if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
+        if cfg.task == 'longforecast' and info_params.get('time_col',
+                                                          None) is None:
             raise ValueError("`time_col` is necessary, but it is None.")
         if info_params.get('target_cols', None):
             if isinstance(info_params['target_cols'], str):
-                info_params['target_cols'] = info_params['target_cols'].split(',')  
+                info_params['target_cols'] = info_params['target_cols'].split(',')
         if info_params.get('static_cov_cols', None):
             info_params['static_cov_cols'] = None
 
-    info_params.pop("label_col", None)
     df = pd.read_csv(args.csv_path)
+    if cfg.task == 'anomaly':
+        info_params.pop("label_col", None)
+        if info_params.get('feature_cols', None):
+            if isinstance(info_params['feature_cols'], str):
+                info_params['feature_cols'] = info_params['feature_cols'].split(',')
+        else:
+            cols = df.columns.values.tolist()
+            if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                cols.remove(info_params['time_col'])
+            info_params['feature_cols'] = cols
+    elif cfg.task == 'classification':
+        if info_params.get('target_cols', None) is None:
+            cols = df.columns.values.tolist()
+            if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                cols.remove(info_params['time_col'])
+            if info_params.get('group_id', None) and info_params['group_id'] in cols:
+                cols.remove(info_params['group_id'])
+            if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
+                cols.remove(info_params['static_cov_cols'])
+            info_params['target_cols'] = cols
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
 
     weight_path = args.checkpoints
@@ -148,14 +165,14 @@ def main(args):
                 extend_points=model._out_chunk_len + 1)
             ts_test = time_feature_generator.fit_transform(ts_test)
 
+    if not os.path.exists(args.save_dir):
+        os.makedirs(args.save_dir)
     if cfg.task == 'longforecast':
         logger.info('start to predit...')
         result = model.predict(ts_test)
-
+        import pdb;pdb.set_trace()
         if dataset.get('scale', 'False'):
             result = scaler.inverse_transform(result)
-        if not os.path.exists(args.save_dir):
-            os.makedirs(args.save_dir)
 
         result.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
         logger.info('save result to {}'.format(
@@ -165,14 +182,16 @@ def main(args):
         preds = model.predict_proba(ts_test)
         classid = np.argmax(preds, axis=1)[0]
         logger.info(f"class: {classid}, scores: {preds[0][classid]}")
-
-    elif cfg.task =='anomaly':
+        result = {'classid': [classid],'score': [preds[0][classid]]}
+        result = pd.DataFrame.from_dict(result)
+        result.to_csv(os.path.join(args.save_dir, 'result.csv'), index=False)
+        logger.info('save result to {}'.format(
+            os.path.join(args.save_dir, 'result.csv')))
+        
+    elif cfg.task == 'anomaly':
         logger.info('start to predit...')
         label = model.predict(ts_test)
         logger.info(f"label: {label}")
-
-        if not os.path.exists(args.save_dir):
-            os.makedirs(args.save_dir)
 
         label.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
         logger.info('save result to {}'.format(

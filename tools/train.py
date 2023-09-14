@@ -38,8 +38,7 @@ def parse_args():
         type=str,
         default=None)
     # Runntime params
-    parser.add_argument(
-        '--seq_len', help='input length in training.', type=int)
+    parser.add_argument('--seq_len', help='input length in training.', type=int)
     parser.add_argument(
         '--predict_len', help='output length in training.', type=int)
     parser.add_argument('--epoch', help='Iterations in training.', type=int)
@@ -49,10 +48,7 @@ def parse_args():
 
     # Other params
     parser.add_argument(
-        '--seed',
-        help='Set the random seed in training.',
-        default=42,
-        type=int)
+        '--seed', help='Set the random seed in training.', default=42, type=int)
     parser.add_argument(
         '--opts', help='Update the key-value pairs of all options.', nargs='+')
 
@@ -120,15 +116,41 @@ def main(args):
             raise ValueError("`info_params` is necessary, but it is None.")
         else:
             info_params = cfg.dic['info_params']
-            if cfg.task == 'longforecast' and info_params.get('time_col', None) is None:
+            if cfg.task == 'longforecast' and info_params.get('time_col',
+                                                              None) is None:
                 raise ValueError("`time_col` is necessary, but it is None.")
             if info_params.get('target_cols', None):
-                info_params['target_cols'] = info_params['target_cols'].split(',')
+                # target_cols = info_params['target_cols'] if info_params[
+                #     'target_cols'] != [''] else None
+                if isinstance(info_params['target_cols'], str):
+                    info_params['target_cols'] = info_params['target_cols'].split(',')
 
         if cfg.task == 'anomaly':
+            if info_params.get('feature_cols', None):
+                if isinstance(info_params['feature_cols'], str):
+                    info_params['feature_cols'] = info_params['feature_cols'].split(',')
+            else:
+                cols = df.columns.values.tolist()
+                if info_params.get('label_col', None) and info_params['label_col'] in cols:
+                    cols.remove(info_params['label_col'])
+                if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                    cols.remove(info_params['time_col'])
+                info_params['feature_cols'] = cols
+            
             info_params_train = info_params.copy()
             info_params_train.pop("label_col", None)
             ts_train = TSDataset.load_from_dataframe(df, **info_params_train)
+        elif cfg.task == 'classification':
+            if info_params.get('target_cols', None) is None:
+                cols = df.columns.values.tolist()
+                if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                    cols.remove(info_params['time_col'])
+                if info_params.get('group_id', None) and info_params['group_id'] in cols:
+                    cols.remove(info_params['group_id'])
+                if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
+                    cols.remove(info_params['static_cov_cols'])
+                info_params['target_cols'] = cols
+            ts_train = TSDataset.load_from_dataframe(df, **info_params)
         else:
             ts_train = TSDataset.load_from_dataframe(df, **info_params)
 
@@ -146,14 +168,12 @@ def main(args):
             ts_train, ts_val, ts_test = get_dataset(dataset['name'], split,
                                                     seq_len, info_params)
         else:
-            ts_train = get_dataset(dataset['name'], split, seq_len,
-                                   info_params)
+            ts_train = get_dataset(dataset['name'], split, seq_len, info_params)
 
     if cfg.model['name'] == 'PP-TS':
         from paddlets.ensemble import WeightingEnsembleForecaster
         estimators = []
-        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
-        ):
+        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items():
             model_cfg = Config(
                 model_cfg,
                 seq_len=seq_len,
@@ -232,8 +252,8 @@ def main(args):
             if dataset['name'] != 'TSDataset':
                 ts_all = get_dataset(dataset['name'])
                 ts_all = time_feature_generator.fit_transform(ts_all)
-                ts_train._known_cov = ts_all._known_cov[split['train'][0]:
-                                                        split['train'][1]]
+                ts_train._known_cov = ts_all._known_cov[split['train'][0]:split[
+                    'train'][1]]
                 if ts_val is not None:
                     ts_val._known_cov = ts_all._known_cov[split['val'][
                         0] - seq_len:split['val'][1]]
@@ -298,6 +318,7 @@ def main(args):
     elif cfg.task == 'anomaly':
         model.fit(ts_train, ts_val)
         model.save(args.save_dir + '/checkpoints/')
+
 
 if __name__ == '__main__':
     args = parse_args()

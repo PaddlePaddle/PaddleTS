@@ -441,7 +441,6 @@ class TimesNet_AD(AnomalyBaseModel):
             attens_energy.append(loss)
             test_labels.append(data['past_target'])
         
-        import pdb;pdb.set_trace()
         attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
         test_energy = np.array(attens_energy)
         pred = (test_energy > self._threshold).astype(int)
@@ -470,7 +469,7 @@ class TimesNet_AD(AnomalyBaseModel):
         from sklearn.metrics import precision_recall_fscore_support
         precision, recall, f_score, support = precision_recall_fscore_support(
         gt, pred, average='binary')
-        return {'f1: ': f_score,
-                'precision: ': precision,
-                'recall: ': recall
+        return {'f1': f_score,
+                'precision': precision,
+                'recall': recall
                 }

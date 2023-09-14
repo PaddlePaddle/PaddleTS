@@ -509,9 +509,9 @@ class AnomalyBaseModel(abc.ABC):
         from sklearn.metrics import precision_recall_fscore_support
         precision, recall, f_score, support = precision_recall_fscore_support(
         gt, pred, average='binary')
-        return {'f1: ': f_score,
-                'precision: ': precision,
-                'recall: ': recall
+        return {'f1': f_score,
+                'precision': precision,
+                'recall': recall
                 }
     
     def _get_anomaly_score(self,
