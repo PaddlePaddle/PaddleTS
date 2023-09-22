@@ -8,8 +8,9 @@ from paddle.optimizer import Optimizer
 import paddle.nn.initializer as paddle_init
 
 from paddlets.datasets import TSDataset
-from paddlets.models.forecasting.dl.paddle_base_impl import PaddleBaseModelImpl
-from paddlets.models.forecasting.dl.revin import revin_norm
+from paddlets.models.utils import to_tsdataset
+from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
+from paddlets.models.anomaly.dl import utils as U
 from paddlets.models.common.callbacks import Callback
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 from paddlets.utils import manager, param_init
@@ -74,7 +75,7 @@ class _DLinearModule(paddle.nn.Layer):
                  pretrain=None):
         super(_DLinearModule, self).__init__()
         self.seq_len = seq_len
-        self.pred_len = pred_len
+        self.pred_len = seq_len
         kernel_size = 25
         self.decompsition = series_decomp(kernel_size)
         self.individual = individual
@@ -97,8 +98,8 @@ class _DLinearModule(paddle.nn.Layer):
         self.pretrain = pretrain
         self.init_weight()
 
-    def forward(self, x):
-        x = x['past_target']
+    def forward(self, X):
+        x = X["observed_cov_numeric"].cast('float32')
         seasonal_init, trend_init = self.decompsition(x)
         seasonal_init, trend_init = seasonal_init.transpose(
             perm=[0, 2, 1]), trend_init.transpose(perm=[0, 2, 1])
@@ -125,7 +126,7 @@ class _DLinearModule(paddle.nn.Layer):
             seasonal_output = self.Linear_Seasonal(seasonal_init)
             trend_output = self.Linear_Trend(trend_init)
         x = seasonal_output + trend_output
-        return x.transpose(perm=[0, 2, 1])
+        return x.transpose(perm=[0, 2, 1]), X["observed_cov_numeric"].cast('float32')
 
     def init_weight(self):
         if self.pretrain:
@@ -156,7 +157,7 @@ class _DLinearModule(paddle.nn.Layer):
 
 
 @manager.MODELS.add_component
-class DLinearModel(PaddleBaseModelImpl):
+class DLinear_AD(AnomalyBaseModel):
     """
     Implementation of PatchTST model.
 
@@ -191,38 +192,45 @@ class DLinearModel(PaddleBaseModelImpl):
 
     def __init__(self,
                  in_chunk_len: int,
-                 out_chunk_len: int,
+                 out_chunk_len: int=0,
                  c_in: int=3,
                  individual: bool=False,
                  skip_chunk_len: int=0,
                  sampling_stride: int=1,
-                 loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
-                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
-                 use_revin: bool=False,
-                 revin_params: Dict[str, Any]=dict(
-                     eps=1e-5, affine=True),
-                 eval_metrics: List[str]=[],
-                 callbacks: List[Callback]=[],
-                 batch_size: int=32,
-                 max_epochs: int=10,
-                 verbose: int=1,
-                 patience: int=10,
-                 seed: int=0,
-                 pretrain=None):
+                loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
+                optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                anomaly_ratio: float=1,
+                threshold: Optional[float]=None,
+                threshold_coeff: float=1.0,
+                threshold_fn: Callable[..., float]=U.get_threshold,
+                anomaly_score_fn: Callable[..., List[float]]=None,
+                pred_adjust: bool=True,
+                pred_adjust_fn: Callable[..., np.ndarray]=U.result_adjust,
+                optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                eval_metrics: List[str]=[],
+                callbacks: List[Callback]=[],
+                batch_size: int=32,
+                max_epochs: int=100,
+                verbose: int=1,
+                patience: int=10,
+                seed: Optional[int]=None,
+                **kwargs):
         self.c_in = c_in
         self.individual = individual
-        self._use_revin = use_revin
-        self._revin_params = revin_params
-        self.pretrain = pretrain
+        self._anomaly_ratio = anomaly_ratio
+        self._criterion = paddle.nn.functional.mse_loss
 
-        super(DLinearModel, self).__init__(
+        super(DLinear_AD, self).__init__(
             in_chunk_len=in_chunk_len,
-            out_chunk_len=out_chunk_len,
-            skip_chunk_len=skip_chunk_len,
             sampling_stride=sampling_stride,
             loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
+            threshold=threshold,
+            threshold_coeff=threshold_coeff,
+            threshold_fn=threshold_fn,
+            anomaly_score_fn=anomaly_score_fn,
+            pred_adjust=pred_adjust,
+            pred_adjust_fn=pred_adjust_fn,
             optimizer_params=optimizer_params,
             eval_metrics=eval_metrics,
             callbacks=callbacks,
@@ -232,37 +240,21 @@ class DLinearModel(PaddleBaseModelImpl):
             patience=patience,
             seed=seed, )
 
-    def _check_tsdataset(self, tsdataset: TSDataset):
-        """ 
-        Rewrite _check_tsdataset to fit the specific model.
-        For NBeats, all data variables are expected to be float32.
-        """
-        for column, dtype in tsdataset.dtypes.items():
-            raise_if_not(
-                np.issubdtype(dtype, np.floating),
-                f"nbeats variables' dtype only supports [float16, float32, float64], " \
-                f"but received {column}: {dtype}."
-            )
-        super(DLinearModel, self)._check_tsdataset(tsdataset)
-
     def _update_fit_params(
             self,
-            train_tsdataset: List[TSDataset],
-            valid_tsdataset: Optional[List[TSDataset]]=None) -> Dict[str, Any]:
-        """
-        Infer parameters by TSDataset automatically.
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
+        """Infer parameters by TSdataset automatically.
 
         Args:
-            train_tsdataseet(List[TSDataset]): list of train dataset
-            valid_tsdataset(List[TSDataset], optional): list of validation dataset
-        
+            train_tsdataset(TSDataset): Train dataset.
+            valid_tsdataset(TSDataset|None): Validation dataset.
+
         Returns:
-            Dict[str, Any]: model parameters
+            Dict[str, Any]: model parameters.
         """
         fit_params = {
-            "target_dim": train_tsdataset[0].get_target().data.shape[1],
-            "known_cov_dim": 0,
-            "observed_cov_dim": 0
+            "observed_dim": train_tsdataset.get_observed_cov().data.shape[1]
         }
         return fit_params
 
@@ -274,8 +266,98 @@ class DLinearModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _DLinearModule(
-            c_in=self._fit_params['target_dim'],
+            c_in=self._fit_params["observed_dim"],
             seq_len=self._in_chunk_len,
-            pred_len=self._out_chunk_len,
-            individual=self.individual,
-            pretrain=self.pretrain)
+            pred_len=self._in_chunk_len,
+            individual=self.individual)
+
+    def fit(self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None):
+        """Train a neural network stored in self._network, 
+            Using train_dataloader for training data and valid_dataloader for validation.
+
+        Args: 
+            train_tsdataset(TSDataset): Train set. 
+            valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
+        """
+        self._check_tsdataset(train_tsdataset)
+        if valid_tsdataset is not None:
+            self._check_tsdataset(valid_tsdataset)
+        self._fit_params = self._update_fit_params(train_tsdataset,
+                                                   valid_tsdataset)
+        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(
+            train_tsdataset, valid_tsdataset)
+        self._fit(train_dataloader, valid_dataloaders)
+
+        # Get threshold
+        if self._threshold is None:
+            dataloader, valid_dataloaders = self._init_fit_dataloaders(
+                train_tsdataset, valid_tsdataset, shuffle=False)
+            self._threshold = self._get_threshold(
+                dataloader, valid_dataloaders)
+
+    @to_tsdataset(scenario="anomaly_label")
+    def predict(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
+        """Get anomaly label on a batch. the result are output as tsdataset.
+
+        Args:
+            tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
+
+        Returns:
+            TSDataset.
+        """
+        boundary = (len(tsdataset._observed_cov.data) - 1 )
+        dataloader = self._init_predict_dataloader(tsdataset, (boundary, boundary))
+        anomaly_score = self._get_anomaly_score(dataloader, **predict_kwargs)
+        anomaly_score = np.concatenate(anomaly_score, axis=0).reshape(-1)
+        anomaly_label = (anomaly_score >= self._threshold) + 0
+        # adjust pred 
+        
+        return anomaly_label
+            
+    def _get_threshold(self, 
+            train_dataloader: TSDataset,
+            val_dataloader: Optional[TSDataset]=None) :
+        """Get the threshold value to judge anomaly.
+        
+        Args:
+            anomaly_score(np.ndarray): 
+            
+        Returns:
+            float: Thresold value.
+        """
+        raise_if(
+            train_dataloader is None,
+            f" Please pass in train_tsdataset to calculate the threshold.")
+        logger.info(f"calculate threshold...")
+        self._threshold = self._threshold_fn(
+            self._network,
+            train_dataloader,
+            val_dataloader,
+            anomaly_ratio=self._anomaly_ratio,
+            criterion=self._criterion)
+        logger.info(f"threshold is {self._threshold}")
+        return self._threshold
+    
+    def _get_loss(self, y_pred: paddle.Tensor,
+                  y_true: paddle.Tensor) -> np.ndarray:
+        """Get the loss for anomaly label and anomaly score.
+
+        Note:
+            This function could be overrided by the subclass if necessary.
+
+        Args:
+            y_pred(paddle.Tensor): Estimated feature values.
+            y_true(paddle.Tensor): Ground truth (correct) feature values.
+
+        Returns:
+            np.ndarray.
+
+        """
+        anomaly_criterion = paddle.nn.functional.mse_loss
+        loss = paddle.mean(
+            x=anomaly_criterion(
+                y_true, y_pred, reduction='none'), axis=-1)
+        return loss.numpy()

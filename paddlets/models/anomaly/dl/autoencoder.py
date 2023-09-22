@@ -11,10 +11,14 @@ import paddle
 
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.anomaly.dl._ed.ed import MLP, CNN
+from paddlets.models.utils import to_tsdataset
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.anomaly.dl import utils as U
 from paddlets.datasets import TSDataset
-from paddlets.logger import raise_if, raise_if_not
+from paddlets.utils import manager
+from paddlets.logger import raise_if, raise_if_not, Logger
+
+logger = Logger(__name__)
 
 
 class _AEBlock(paddle.nn.Layer):
@@ -130,7 +134,7 @@ class _AEBlock(paddle.nn.Layer):
             recon, perm=[0, 2, 1]), paddle.transpose(
                 x, perm=[0, 2, 1])
 
-
+@manager.MODELS.add_component
 class AutoEncoder(AnomalyBaseModel):
     """Auto encoder network for anomaly detection.
 
@@ -201,8 +205,9 @@ class AutoEncoder(AnomalyBaseModel):
             sampling_stride: int=1,
             loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
             optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-            threshold_fn: Callable[..., float]=U.percentile,
+            threshold_fn: Callable[..., float]=U.get_threshold,
             q: float=100,
+            anomaly_ratio: float=1,
             threshold: Optional[float]=None,
             threshold_coeff: float=1.0,
             anomaly_score_fn: Callable[..., List[float]]=None,
@@ -225,7 +230,8 @@ class AutoEncoder(AnomalyBaseModel):
             kernel_size: int=3,
             dropout_rate: float=0.2,
             embedding_size: int=16,
-            pooling: bool=False, ):
+            pooling: bool=False, 
+            **kwargs):
         self._hidden_config = (hidden_config if hidden_config else [32, 16])
         self._use_bn = use_bn
         self._kernel_size = kernel_size
@@ -236,6 +242,8 @@ class AutoEncoder(AnomalyBaseModel):
         self._embedding_size = embedding_size
         self._pooling = pooling
         self._q = q
+        self._anomaly_ratio = anomaly_ratio
+        self._criterion = paddle.nn.functional.mse_loss
 
         super(AutoEncoder, self).__init__(
             in_chunk_len=in_chunk_len,
@@ -300,7 +308,35 @@ class AutoEncoder(AnomalyBaseModel):
                         self._dropout_rate, self._use_bn, self._embedding_size,
                         self._pooling)
 
-    def _get_threshold(self, anomaly_score: np.ndarray) -> float:
+    def fit(self,
+            train_tsdataset: TSDataset,
+            valid_tsdataset: Optional[TSDataset]=None):
+        """Train a neural network stored in self._network, 
+            Using train_dataloader for training data and valid_dataloader for validation.
+
+        Args: 
+            train_tsdataset(TSDataset): Train set. 
+            valid_tsdataset(TSDataset|None): Eval set, used for early stopping.
+        """
+        self._check_tsdataset(train_tsdataset)
+        if valid_tsdataset is not None:
+            self._check_tsdataset(valid_tsdataset)
+        self._fit_params = self._update_fit_params(train_tsdataset,
+                                                   valid_tsdataset)
+        train_dataloader, valid_dataloaders = self._init_fit_dataloaders(
+            train_tsdataset, valid_tsdataset)
+        self._fit(train_dataloader, valid_dataloaders)
+
+        # Get threshold
+        if self._threshold is None:
+            dataloader, valid_dataloaders = self._init_fit_dataloaders(
+                train_tsdataset, valid_tsdataset, shuffle=False)
+            self._threshold = self._get_threshold(
+                dataloader, valid_dataloaders)
+
+    def _get_threshold(self, 
+            train_dataloader: TSDataset,
+            val_dataloader: Optional[TSDataset]=None) :
         """Get the threshold value to judge anomaly.
         
         Args:
@@ -309,4 +345,56 @@ class AutoEncoder(AnomalyBaseModel):
         Returns:
             float: Thresold value.
         """
-        return self._threshold_fn(anomaly_score, self._q)
+        raise_if(
+            train_dataloader is None,
+            f" Please pass in train_tsdataset to calculate the threshold.")
+        logger.info(f"calculate threshold...")
+        self._threshold = self._threshold_fn(
+            self._network,
+            train_dataloader,
+            val_dataloader,
+            anomaly_ratio=self._anomaly_ratio,
+            criterion=self._criterion)
+        logger.info(f"threshold is {self._threshold}")
+        return self._threshold
+
+    @to_tsdataset(scenario="anomaly_label")
+    def predict(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
+        """Get anomaly label on a batch. the result are output as tsdataset.
+
+        Args:
+            tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
+
+        Returns:
+            TSDataset.
+        """
+        boundary = (len(tsdataset._observed_cov.data) - 1 )
+        dataloader = self._init_predict_dataloader(tsdataset, (boundary, boundary))
+        anomaly_score = self._get_anomaly_score(dataloader, **predict_kwargs)
+        anomaly_score = np.concatenate(anomaly_score, axis=0).reshape(-1)
+        anomaly_label = (anomaly_score >= self._threshold) + 0
+        # adjust pred 
+        
+        return anomaly_label
+
+    def _get_loss(self, y_pred: paddle.Tensor,
+                  y_true: paddle.Tensor) -> np.ndarray:
+        """Get the loss for anomaly label and anomaly score.
+
+        Note:
+            This function could be overrided by the subclass if necessary.
+
+        Args:
+            y_pred(paddle.Tensor): Estimated feature values.
+            y_true(paddle.Tensor): Ground truth (correct) feature values.
+
+        Returns:
+            np.ndarray.
+
+        """
+        anomaly_criterion = paddle.nn.functional.mse_loss
+        loss = paddle.mean(
+            x=anomaly_criterion(
+                y_true, y_pred, reduction='none'), axis=-1)
+        return loss.numpy()
