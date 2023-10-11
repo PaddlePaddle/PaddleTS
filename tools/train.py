@@ -157,6 +157,8 @@ def main(args):
         if dataset.get('val_path', False):
             if os.path.exists(dataset['val_path']):
                 df = pd.read_csv(dataset['val_path'])
+                if cfg.task == 'anomaly':
+                    info_params["dtype"] = np.float32
                 ts_val = TSDataset.load_from_dataframe(df, **info_params)
         if dataset.get('test_path', False):
             if os.path.exists(dataset['test_path']):

@@ -197,7 +197,7 @@ class TimesNet_AD(AnomalyBaseModel):
     def __init__(
             self,
             in_chunk_len: int,  # 96
-            out_chunk_len: int,  # 96 192 336 720
+            out_chunk_len: int=0,  # 96 192 336 720
             e_layers: int=2,
             c_in: int=7,
             d_model: int=32,
@@ -417,59 +417,3 @@ class TimesNet_AD(AnomalyBaseModel):
             x=anomaly_criterion(
                 y_true, y_pred, reduction='none'), axis=-1)
         return loss.numpy()
-    
-
-    def _eval(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
-        """Get anomaly label on a batch. the result are output as tsdataset.
-
-        Args:
-            tsdataset(TSDataset): Data to be predicted.
-            **predict_kwargs: Additional arguments for `_predict`.
-
-        Returns:
-            TSDataset.
-        """
-        dataloader = self._init_predict_dataloader(tsdataset)
-        self._network.eval()
-        loss_list = []
-        attens_energy = []
-        test_labels = []
-
-        for _, data in enumerate(dataloader):
-            y_pred, y_true = self._network(data)
-            loss = self._get_loss(y_pred, y_true)
-            attens_energy.append(loss)
-            test_labels.append(data['past_target'])
-        
-        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
-        test_energy = np.array(attens_energy)
-        pred = (test_energy > self._threshold).astype(int)
-        # adjust pred 
-        test_labels = np.concatenate(test_labels, axis=0).reshape(-1)
-        test_labels = np.array(test_labels)
-        gt = test_labels.astype(int)
-
-        anomaly_label = self._pred_adjust_fn(pred, gt)
-
-        return gt, anomaly_label
-    
-    def eval(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
-        """Get anomaly label on a batch. the result are output as tsdataset.
-
-        Args:
-            tsdataset(TSDataset): Data to be predicted.
-            **predict_kwargs: Additional arguments for `_predict`.
-
-        Returns:
-            TSDataset.
-        """
-        
-        gt, pred = self._eval(tsdataset, **predict_kwargs)
-
-        from sklearn.metrics import precision_recall_fscore_support
-        precision, recall, f_score, support = precision_recall_fscore_support(
-        gt, pred, average='binary')
-        return {'f1': f_score,
-                'precision': precision,
-                'recall': recall
-                }

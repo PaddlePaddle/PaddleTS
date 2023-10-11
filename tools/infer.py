@@ -1,4 +1,5 @@
 import os
+import paddlets
 import numpy as np
 import random
 import argparse
@@ -85,26 +86,6 @@ def main(args):
             info_params['static_cov_cols'] = None
 
     df = pd.read_csv(args.csv_path)
-    if cfg.task == 'anomaly':
-        info_params.pop("label_col", None)
-        if info_params.get('feature_cols', None):
-            if isinstance(info_params['feature_cols'], str):
-                info_params['feature_cols'] = info_params['feature_cols'].split(',')
-        else:
-            cols = df.columns.values.tolist()
-            if info_params.get('time_col', None) and info_params['time_col'] in cols:
-                cols.remove(info_params['time_col'])
-            info_params['feature_cols'] = cols
-    elif cfg.task == 'classification':
-        if info_params.get('target_cols', None) is None:
-            cols = df.columns.values.tolist()
-            if info_params.get('time_col', None) and info_params['time_col'] in cols:
-                cols.remove(info_params['time_col'])
-            if info_params.get('group_id', None) and info_params['group_id'] in cols:
-                cols.remove(info_params['group_id'])
-            if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
-                cols.remove(info_params['static_cov_cols'])
-            info_params['target_cols'] = cols
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
 
     weight_path = args.checkpoints
@@ -114,18 +95,6 @@ def main(args):
     if cfg.model['name'] == 'PP-TS':
         from paddlets.ensemble.base import EnsembleBase
         model = EnsembleBase.load(weight_path + '/')
-
-    elif cfg.model['name'] == 'XGBoost':
-        from paddlets.models.ml_model_wrapper import make_ml_model
-        from xgboost import XGBRegressor
-        model = make_ml_model(
-            in_chunk_len=cfg.seq_len,
-            out_chunk_len=cfg.predict_len,
-            sampling_stride=1,
-            model_class=XGBRegressor,
-            use_skl_gridsearch=False,
-            model_init_params=cfg.model['model_cfg'])
-        model = model.load(weight_path + '/checkpoints')
     else:
         model = load(weight_path + '/checkpoints')
 
@@ -169,32 +138,49 @@ def main(args):
         os.makedirs(args.save_dir)
     if cfg.task == 'longforecast':
         logger.info('start to predit...')
-        result = model.predict(ts_test)
+        import paddle.inference as paddle_infer
+        
+        config = paddle_infer.Config(os.path.join(weight_path, "checkpoints.pdmodel"), os.path.join(weight_path,"checkpoints.pdiparams"))
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        print(f"input_name: f{input_names}")
+        import json
+        with open(os.path.join(weight_path,"./checkpoints_model_meta")) as f:
+            json_data = json.load(f)
+            print(json_data)
+
+        from paddlets.utils.utils import build_ts_infer_input
+        input_data = build_ts_infer_input(ts_test, os.path.join(weight_path, "./checkpoints_model_meta"))
+        for key, value in json_data['input_data'].items():
+            input_handle1 = predictor.get_input_handle(key)
+            #set batch_size=1
+            value[0] = 1
+            input_handle1.reshape(value)
+            input_handle1.copy_from_cpu(input_data[key])
+        
+        predictor.run()
+        output_names = predictor.get_output_names()
+        output_handle = predictor.get_output_handle(output_names[0])
+        output_data = output_handle.copy_to_cpu()
+        
+        past_target_index = ts_test.get_target().data.index
+        freq = past_target_index.freqstr
+        future_target_index = pd.date_range(
+            past_target_index[-1] + past_target_index.freq,
+            periods=output_data.shape[1],
+            freq=freq)
+        future_target = pd.DataFrame(
+            np.reshape(
+                output_data[0], newshape=[output_data.shape[1], -1]),
+            index=future_target_index,
+            columns=ts_test.get_target().data.columns)
+        output = TSDataset.load_from_dataframe(future_target, freq=freq)
+
         if dataset.get('scale', 'False'):
-            result = scaler.inverse_transform(result)
+            result = scaler.inverse_transform(output)
 
         result.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
-        logger.info('save result to {}'.format(
-            os.path.join(args.save_dir, 'result.csv')))
 
-    elif cfg.task == 'classification':
-        preds = model.predict_proba(ts_test)
-        classid = np.argmax(preds, axis=1)[0]
-        logger.info(f"class: {classid}, scores: {preds[0][classid]}")
-        result = {'classid': [classid],'score': [preds[0][classid]]}
-        result = pd.DataFrame.from_dict(result)
-        result.to_csv(os.path.join(args.save_dir, 'result.csv'), index=False)
-        logger.info('save result to {}'.format(
-            os.path.join(args.save_dir, 'result.csv')))
-        
-    elif cfg.task == 'anomaly':
-        logger.info('start to predit...')
-        label = model.predict(ts_test)
-        logger.info(f"label: {label}")
-
-        label.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
-        logger.info('save result to {}'.format(
-            os.path.join(args.save_dir, 'result.csv')))
 
 if __name__ == '__main__':
     args = parse_args()

@@ -411,6 +411,7 @@ def plot_anoms(predict_data: TSDataset=None,
         pass
     else:
         plot_anoms_point(ax, predict_data)
+    return ax
 
 
 def build_ts_infer_input(tsdataset: TSDataset,
