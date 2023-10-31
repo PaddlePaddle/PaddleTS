@@ -70,10 +70,7 @@ In the future, more advanced features will be coming, including:
 
 Scan the QR code below on WeChat to add operation students, and reply [paddlex], operation students will invite you to join the official communication group for more efficient questions and answers.
 
-<div align="center">
-<img src="https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dygraph/doc/joinus_paddlex.jpg"  width = "150" height = "150",caption='' />
-<p>[PaddleX] technology exchange group QR code</p>
-</div>
+Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
 
 ## More About PaddleTS
 
@@ -121,10 +118,7 @@ To get more detailed information, please refer to [Installation](https://paddlet
 
 ## Community
 
-Feel free to scan below WeChat QR code to join PaddleTS community for technical discussion with PaddleTS maintainers and community members:
-<p align="center">
-    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
-</p>
+Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
 
 ## Contributions
 
