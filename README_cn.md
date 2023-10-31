@@ -62,12 +62,7 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 PaddleX官网地址：https://www.paddlepaddle.org.cn/paddle/paddleX
 
-微信扫描下面二维码添加运营同学，并回复【paddlex】，运营同学会邀请您加入官方交流群，获得更高效的问题答疑。
-
-<div align="center">
-<img src="https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/dygraph/doc/joinus_paddlex.jpg"  width = "150" height = "150",caption='' />
-<p>飞桨AI套件【PaddleX】技术交流群二维码</p>
-</div>
+欢迎大家进入：AI Studio【PaddleX社区频道】进一步交流。地址直达：https://aistudio.baidu.com/community/channel/610
 
 ## 关于 PaddleTS
 
@@ -114,11 +109,8 @@ pip install paddlets
 
 ## 社区
 
-欢迎通过扫描下面的微信二维码加入PaddleTS开源社区，与PaddleTS维护者及社区成员随时进行技术讨论：
+欢迎大家进入：AI Studio【PaddleX社区频道】进一步交流。地址直达：https://aistudio.baidu.com/community/channel/610
 
-<p align="center">
-    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
-</p>
 
 ## 代码发布与贡献
 
