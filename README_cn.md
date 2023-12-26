@@ -50,19 +50,17 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 ## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 技术交流
 
-飞桨AI套件（PaddleX）—— 精选产业实用模型的一站式开发平台。包含如下特点：
+飞桨低代码开发工具（PaddleX）—— 面向国内外主流AI硬件的飞桨精选模型一站式开发工具。包含如下核心优势：
 
-* 【丰富的算法库】PaddleX提供36个精选模型，覆盖了10大AI任务场景，并附带模型推理benchmark数据。开发者可以根据业务需求轻松选择合适的模型，并进行开发和部署。
-* 【简便的开发方式】PaddleX支持无代码和低代码开发，只需四个简单步骤，即可完成全流程AI开发，包括数据处理、模型训练、验证和部署。
-* 【高效的模型部署】PaddleX平台提供强大的部署能力，支持快速实现产业级部署，实现跨平台、跨硬件的部署。
-* 【多样的硬件支持】PaddleX不仅能够在AI Studio云端使用，还支持在Windows本地环境使用，并正在积极扩展支持Linux版本、昆仑芯版本、昇腾版本和寒武纪版本。
-* 【共赢的合作机会】：除了提供便捷的AI应用开发工具，PaddleX还为企业提供商业收益机会，共同探索更多商业空间，实现共同成长和共赢。
+* 【产业高精度模型库】：覆盖10个主流AI任务 40+精选模型，丰富齐全。
+* 【特色模型产线】：提供融合大小模型的特色模型产线，精度更高，效果更好。
+* 【低代码开发模式】：图形化界面支持统一开发范式，便捷高效。
+* 【私有化部署多硬件支持】：适配国内外主流AI硬件，支持本地纯离线使用，满足企业安全保密需要。
 
-作为一款高效的开发神器，PaddleX值得每一位开发者拥有。
+PaddleX官网地址：https://aistudio.baidu.com/intro/paddlex
 
-PaddleX官网地址：https://www.paddlepaddle.org.cn/paddle/paddleX
+PaddleX官方交流频道：https://aistudio.baidu.com/community/channel/610
 
-欢迎大家进入：AI Studio【PaddleX社区频道】进一步交流。地址直达：https://aistudio.baidu.com/community/channel/610
 
 ## 关于 PaddleTS
 
