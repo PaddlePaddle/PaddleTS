@@ -60,7 +60,7 @@ msgid ""
 " input of static covariates. Please refer to the introduction of the "
 "model section for details."
 msgstr ""
-"上述中的 `static_cov_cols` 是否传递并指定为 `group_id` 是可选的，如果设置了改选项，` group_id` 将作为静态协变量加入模型的训练。"
+"上述中的 `static_cov_cols` 是否传递并指定为 `group_id` 是可选的，如果设置了该选项，` group_id` 将作为静态协变量加入模型的训练。"
 "需要注意的是，PaddleTS当前不是所有的模型都支持静态协变量的输入，详情请参考模型部分介绍。"
 
 #: ../../source/get_started/multiple_time_series.rst:47
