@@ -3,8 +3,12 @@
 
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 import math
-from collections import defaultdict, Iterable
-
+try:
+  from collections import defaultdict, Iterable
+except ImportError:
+  from collections.abc import Iterable
+  from collections import defaultdict
+  
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
