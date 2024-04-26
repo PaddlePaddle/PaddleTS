@@ -25,7 +25,7 @@ def parse_args():
         '--device',
         help='Set the device place for training model.',
         default='gpu',
-        choices=['cpu', 'gpu', 'xpu'],
+        choices=['cpu', 'gpu', 'xpu', 'npu'],
         type=str)
     parser.add_argument(
         '--save_dir',
