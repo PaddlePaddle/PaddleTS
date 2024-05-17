@@ -72,8 +72,8 @@ def check_tsdataset(tsdataset: TSDataset):
             raise_log(TypeError(msg))
 
         # Check whether the data contains NaN.
-        if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[
-                column]).any():
+        if np.isnan(tsdataset[column]).any() or np.isinf(tsdataset[column]).any(
+        ):
             msg = f"np.inf or np.NaN, which may lead to unexpected results from the model"
             msg = f"Input `{column}` contains {msg}."
             logger.warning(msg)
@@ -155,8 +155,9 @@ def to_tsdataset(scenario: str="forecasting") -> Callable[..., Callable[
                     freq=freq)
             target_cols = tsdataset.get_target().data.columns
             # for probability forecasting and quantile output
-            if hasattr(obj, "_output_mode"
-                       ) and obj._output_mode == QUANTILE_OUTPUT_MODE:
+            if hasattr(
+                    obj,
+                    "_output_mode") and obj._output_mode == QUANTILE_OUTPUT_MODE:
                 target_cols = [
                     x + "@" + "quantile" + str(y)
                     for x in target_cols for y in obj._q_points

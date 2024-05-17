@@ -52,9 +52,7 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe
-        df = pd.DataFrame({
-            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
-        })
+        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
         res = Seasonality().analyze(df)
         self.assertEqual(np.shape(res), (2, ))
         self.assertEqual(res[0], {'target': 100, })
@@ -127,9 +125,7 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe
-        df = pd.DataFrame({
-            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
-        })
+        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
         res = Acf().analyze(df)
         self.assertEqual(len(res['target']), 2)
 
@@ -205,9 +201,7 @@ class TestFrequencyDomain(TestCase):
         self.assertTrue(flag)
 
         #case4, input data is dataframe and columns number = 1
-        df = pd.DataFrame({
-            'target': np.sin(np.pi * 2 / 100 * np.arange(1000))
-        })
+        df = pd.DataFrame({'target': np.sin(np.pi * 2 / 100 * np.arange(1000))})
         flag = False
         try:
             res = Correlation().analyze(df)

@@ -89,8 +89,10 @@ def custom_collate_fn(samples: list):
             return arr
         npad = [(0, 0)] * arr.ndim
         npad[axis] = (0, pad_size)
-        return np.pad(
-            arr, pad_width=npad, mode="constant", constant_values=np.nan)
+        return np.pad(arr,
+                      pad_width=npad,
+                      mode="constant",
+                      constant_values=np.nan)
 
     from collections import defaultdict
     COLS = [col for col in [PAST_TARGET] + COVS if col in samples[0]]

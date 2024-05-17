@@ -4,11 +4,15 @@
 import abc
 import os
 import pickle
+from tqdm import tqdm
 from typing import List, Optional, Tuple
 
 from paddlets.datasets.tsdataset import TSDataset
 from paddlets.logger import raise_log
 from paddlets.models.model_loader import load as paddlets_model_load
+from paddlets.logger import Logger
+
+logger = Logger(__name__)
 
 
 class EnsembleBase(metaclass=abc.ABCMeta):
@@ -94,7 +98,9 @@ class EnsembleBase(metaclass=abc.ABCMeta):
             train_tsdataset(TSDataset): Train dataset.
             valid_tsdataset(TSDataset, optional): Valid dataset.
         """
-        for estimator in self._estimators:
+        for estimator in tqdm(self._estimators):
+            logger.info("train estimator: {}".format(
+                estimator.__module__.split(".")[-1]))
             estimator.fit(train_tsdataset, valid_tsdataset)
 
     @abc.abstractmethod
@@ -120,6 +126,23 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         for estimator in self._estimators:
             predictions.append(estimator.predict(tsdataset))
         return predictions
+
+    def _eval_estimators(self, tsdataset: TSDataset) -> List[TSDataset]:
+        """
+        Predict estimators
+
+        Args:
+            tsdataset(TSDataset): Dataset to predict.
+
+        """
+        gt = []
+        predictions = []
+        for estimator in self._estimators:
+            dataloader = estimator._init_predict_dataloader(tsdataset)
+            y_true, prediction = estimator._eval(dataloader)
+            gt.append(y_true)
+            predictions.append(prediction)
+        return gt, predictions
 
     def save(self,
              path: str,
@@ -160,8 +183,7 @@ class EnsembleBase(metaclass=abc.ABCMeta):
         self._estimators = model_tmp
 
     @staticmethod
-    def load(path: str,
-             ensemble_file_name: str="paddlets-ensemble-partial.pkl"
+    def load(path: str, ensemble_file_name: str="paddlets-ensemble-partial.pkl"
              ) -> "EnsembleBase":
         """
         Load the ensemble model from a directory.

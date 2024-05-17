@@ -108,10 +108,9 @@ class _DeepAR(nn.Layer):
         else:
             return target_roll
 
-    def _decode_direct(self,
-                       input_tensor: paddle.Tensor,
-                       hidden_state: paddle.Tensor) -> Tuple[paddle.Tensor,
-                                                             paddle.Tensor]:
+    def _decode_direct(
+            self, input_tensor: paddle.Tensor,
+            hidden_state: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         Decode directly in training phase.
         
@@ -131,10 +130,9 @@ class _DeepAR(nn.Layer):
             [output.shape[0], output.shape[1], self._target_dim, -1])
         return output, hidden_state
 
-    def _decode_regressive_by_mean(self,
-                                   input_tensor: paddle.Tensor,
-                                   hidden_state: paddle.Tensor) -> Tuple[
-                                       paddle.Tensor, paddle.Tensor]:
+    def _decode_regressive_by_mean(
+            self, input_tensor: paddle.Tensor,
+            hidden_state: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         Updated implementation of DeepAR.
         Decode regressively in prediction phase, use mean of current step's output as next step's input.
@@ -189,10 +187,9 @@ class _DeepAR(nn.Layer):
         prediction_output = paddle.stack(prediction_output, 1)
         return quantiles_output, prediction_output
 
-    def _decode_regressive_by_sampling(self,
-                                       input_tensor: paddle.Tensor,
-                                       hidden_state: paddle.Tensor) -> Tuple[
-                                           paddle.Tensor, paddle.Tensor]:
+    def _decode_regressive_by_sampling(
+            self, input_tensor: paddle.Tensor,
+            hidden_state: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         The original implementation of DeepAR model.
         Decode regressively in prediction phase, construct num_samples sample path, and use sampling of current step's output as next step's input.
@@ -250,8 +247,8 @@ class _DeepAR(nn.Layer):
         quantiles_output = paddle.stack(quantiles_output).reshape(
             [num_steps, -1, self._num_samples, self._target_dim])
         quantiles_output = quantiles_output.transpose(
-            [1, 0, 3, 2
-             ])  # to shape: [batch_size, num_steps, target_dim, num_samples]
+            [1, 0, 3,
+             2])  # to shape: [batch_size, num_steps, target_dim, num_samples]
         quantiles_output = paddle.quantile(
             quantiles_output,
             list(np.linspace(
@@ -275,8 +272,7 @@ class _DeepAR(nn.Layer):
         if "known_cov_numeric" not in data:
             past_known_cov = None
         else:
-            past_known_cov = data["known_cov_numeric"][:, :past_target.shape[
-                1]]
+            past_known_cov = data["known_cov_numeric"][:, :past_target.shape[1]]
 
         #1> build input tensor
         input_tensor = self._build_input(
@@ -356,8 +352,7 @@ class _DeepAR(nn.Layer):
         #decode
         if not self.training:
             x["future_target"] = paddle.rand([
-                x["past_target"].shape[0], self._out_chunk_len,
-                self._target_dim
+                x["past_target"].shape[0], self._out_chunk_len, self._target_dim
             ])
         output = self._decoder(x, hidden_state)
         return output

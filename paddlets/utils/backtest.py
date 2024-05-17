@@ -3,12 +3,9 @@
 
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 import math
-try:
-  from collections import defaultdict, Iterable
-except ImportError:
-  from collections.abc import Iterable
-  from collections import defaultdict
-  
+from collections import defaultdict
+from collections.abc import Iterable
+
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -137,8 +134,7 @@ def backtest(data: TSDataset,
     index = start
 
     TQDM_PREFIX = "Backtest Progress"
-    for _ in tqdm(
-            range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
+    for _ in tqdm(range(predict_rounds), desc=TQDM_PREFIX, disable=not verbose):
         data._target, rest = all_target.split(index)
         data._observed_cov, _ = all_observe.split(index) if all_observe else (
             None, None)
@@ -147,8 +143,7 @@ def backtest(data: TSDataset,
         if rest_len < model_out_chunk_len + model_skip_chunk_len:
             if data.known_cov is not None:
                 target_end_time = data._target.end_time
-                known_index = data.known_cov.get_index_at_point(
-                    target_end_time)
+                known_index = data.known_cov.get_index_at_point(target_end_time)
                 if len(
                         data.known_cov
                 ) - known_index - 1 < model_out_chunk_len + model_skip_chunk_len:
@@ -180,9 +175,9 @@ def backtest(data: TSDataset,
 
         else:
             if metric is None:
-                metric = MSE() 
+                metric = MSE()
             score_dict = metric(real, predict)
-            scores[metric._NAME].append(score_dict)        
+            scores[metric._NAME].append(score_dict)
         index = index + stride
 
     score_final = dict()
@@ -213,7 +208,7 @@ def backtest(data: TSDataset,
 
                 tmp = {k: reduction(v) for k, v in tmp.items()}
                 score = tmp
-            score_final[key]= score
+            score_final[key] = score
 
     if return_predicts:
         if return_tsdataset:

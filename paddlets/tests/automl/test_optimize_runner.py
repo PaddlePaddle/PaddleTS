@@ -114,8 +114,8 @@ class TestOptimizeRunner(TestCase):
         sp = {
             "Fill": {
                 "cols": ['b', 'b1'],
-                "method": choice(
-                    ['max', 'min', 'mean', 'median', 'pre', 'next', 'zero']),
+                "method":
+                choice(['max', 'min', 'mean', 'median', 'pre', 'next', 'zero']),
                 "value": uniform(0.1, 0.9),
                 "window_size": qrandint(
                     20, 50, q=1)
@@ -129,12 +129,7 @@ class TestOptimizeRunner(TestCase):
             }
         }
         analysis = optimize_runner.optimize(
-            [Fill, MLPRegressor],
-            10,
-            4,
-            tsdataset,
-            search_space=sp,
-            n_trials=1)
+            [Fill, MLPRegressor], 10, 4, tsdataset, search_space=sp, n_trials=1)
         best_trial = analysis.best_trial
         dfs = analysis.trial_dataframes
 

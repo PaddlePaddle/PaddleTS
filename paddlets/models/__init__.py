@@ -6,4 +6,5 @@ paddlets models
 from paddlets.models.base import BaseModel
 from paddlets.models.forecasting import *
 from paddlets.models.classify import *
+from paddlets.models.anomaly import *
 from paddlets.models.model_loader import load

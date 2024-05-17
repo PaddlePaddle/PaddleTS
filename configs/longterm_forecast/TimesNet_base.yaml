@@ -2,22 +2,27 @@ batch_size: 32 #
 seq_len: 96 #
 predict_len: 96 #
 do_eval: True #
+sampling_stride: 1
 epoch: 10 # max_epochs
 
 
 dataset: 
-  name: ETTm2
-  split:
-    train: [0, 34560]  # 12 * 30 * 24 * 4
-    val: [34560, 46080]  # [12 * 30 * 24 * 4 - seq_len, 12 * 30 * 24 * 4 + 4 * 30 * 24 * 4]
-    test: [46080, 57600] # [12 * 30 * 24 * 4 + 4 * 30 * 24 * 4 - seq_len, 12 * 30 * 24 * 4 + 8 * 30 * 24 * 4]
+  name: TSDataset
+  dataset_root: /data/
+  train_path: /data/train.csv
+  val_path: /data/val.csv
+  time_feat: True
+  use_holiday: False
+  scale: True
 
-
+info_params:
+  time_col: date
+  
 model: 
   name: TimesNetModel
   model_cfg:
-    c_in: 7 #
-    c_out: 7 #
+    c_in: 321 #
+    c_out: 321 #
     e_layers: 2 #
     num_kernels: 6 #
     d_model: 32 #

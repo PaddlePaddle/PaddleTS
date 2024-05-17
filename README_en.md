@@ -1,4 +1,4 @@
-[简体中文](./README_cn.md) | **English** | [日本語](./README_ja.md)
+[简体中文](./README_cn.md) |  **English**
 
 <p align="center">
   <img src="docs/static/images/logo/paddlets-readme-logo.png" align="middle" width=500>
@@ -42,9 +42,8 @@ PaddleTS is an easy-to-use Python library for deep time series modeling,
 * Third-party (e.g. scikit-learn, [pyod](https://github.com/yzhao062/pyod)) ML models & data transformations integration
 * Time series model ensemble
 
-## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 最新动态
+Recently updated:
 
-* [2023-09-01] :fire::fire:  [PaddleX](http://10.136.157.23:8080/paddle/paddleX) releases version 2.0， provides a one-stop full-process high-efficiency development platform for flying paddle ecological model training, pressure, and push. Its mission is to help AI technology quickly land, and its vision is to make everyone an AI Developer!
 * PaddleTS now supports time series classification
 * PaddleTS releases 6 new time series models.
   USAD(UnSupervised Anomaly Detection) and MTAD-GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network) for anomaly detection,
@@ -62,15 +61,6 @@ In the future, more advanced features will be coming, including:
 * Scenario-specific pipelines which aim to provide an end-to-end solution for solving real-world business problems
 * And more
 
-## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> Technical exchange and cooperation
-[PaddleX](http://10.136.157.23:8080/paddle/paddleX) provides a one-stop development platform for selected models of PaddlePaddle, which can complete the full process development of data, training, evaluation and reasoning of common AI tasks through four buttons.
-   - PaddleX currently covers areas such as image classification, object detection, image segmentation, 3D, OCR, and time series prediction, and has built-in 36 basic single models, such as RP-DETR, PP-YOLOE, PP-HGNet, PP-LCNet, PP- LiteSeg, PP-TS, TimesNet, PatchTST, etc.; integrated 12 practical industrial solutions, such as PP-OCRv4, PP-ChatOCR, PP-ShiTu, PP-TS, vehicle-mounted road waste detection, identification of prohibited wildlife products, etc.
-   - PaddleX provides two AI development modes: "Toolbox" and "Developer". The toolbox mode can tune key hyperparameters without code, and the developer mode can perform single-model training, push and multi-model serial inference with low code, and supports both cloud and local terminals.
-   - PaddleX also supports joint innovation and development, profit sharing! At present, PaddleX is rapidly iterating, and welcomes the participation of individual developers and enterprise developers to create a prosperous AI technology ecosystem!
-
-Scan the QR code below on WeChat to add operation students, and reply [paddlex], operation students will invite you to join the official communication group for more efficient questions and answers.
-
-Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
 
 ## More About PaddleTS
 
@@ -118,7 +108,10 @@ To get more detailed information, please refer to [Installation](https://paddlet
 
 ## Community
 
-Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
+Feel free to scan below WeChat QR code to join PaddleTS community for technical discussion with PaddleTS maintainers and community members:
+<p align="center">
+    <img src="docs/static/images/wechat_qrcode/wechat_qrcode.jpg" align="middle" height=300 width=300>
+</p>
 
 ## Contributions
 

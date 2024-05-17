@@ -65,8 +65,8 @@ class TestOptimizeRunner(TestCase):
         sp = {
             "Fill": {
                 "cols": ['WetBulbCelsius'],
-                "method": choice(
-                    ['max', 'min', 'mean', 'median', 'pre', 'next', 'zero']),
+                "method":
+                choice(['max', 'min', 'mean', 'median', 'pre', 'next', 'zero']),
                 "value": uniform(0.1, 0.9),
                 "window_size": qrandint(
                     20, 50, q=1)

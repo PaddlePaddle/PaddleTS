@@ -120,11 +120,11 @@ class _Block(nn.Layer):
         self.forecast_linear_layer = nn.Linear(
             in_features=layer_width, out_features=n_theta_forecast)
 
-    def forward(self,
-                backcast: paddle.Tensor,
-                known_cov: paddle.Tensor,
-                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
-                                                      paddle.Tensor]:
+    def forward(
+            self,
+            backcast: paddle.Tensor,
+            known_cov: paddle.Tensor,
+            observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         forward block.
         
@@ -255,11 +255,11 @@ class _Stack(nn.Layer):
         ]
         self._blocks = nn.LayerList(self._blocks_list)
 
-    def forward(self,
-                backcast: paddle.Tensor,
-                known_cov: paddle.Tensor,
-                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
-                                                      paddle.Tensor]:
+    def forward(
+            self,
+            backcast: paddle.Tensor,
+            known_cov: paddle.Tensor,
+            observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         forward stack.
 

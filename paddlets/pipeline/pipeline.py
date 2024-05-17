@@ -89,15 +89,12 @@ class Pipeline(Trainable):
             train_tsdataset_copy = train_tsdataset.copy()
         if valid_tsdataset:
             if isinstance(valid_tsdataset, list):
-                valid_tsdataset_copy = [
-                    data.copy() for data in valid_tsdataset
-                ]
+                valid_tsdataset_copy = [data.copy() for data in valid_tsdataset]
             else:
                 valid_tsdataset_copy = valid_tsdataset.copy()
         # Transform
         for transform in self._transform_list:
-            train_tsdataset_copy = transform.fit_transform(
-                train_tsdataset_copy)
+            train_tsdataset_copy = transform.fit_transform(train_tsdataset_copy)
             if valid_tsdataset:
                 valid_tsdataset_copy = transform.fit_transform(
                     valid_tsdataset_copy)
@@ -152,8 +149,7 @@ class Pipeline(Trainable):
         # Init transform copys with same length as tansform list, fill with None
         transform_caches = [None] * tansform_list_length
         # the first transformer's cache is the origin data
-        if cache_transform_steps and self._transform_list[
-                0].need_previous_data:
+        if cache_transform_steps and self._transform_list[0].need_previous_data:
             transform_caches[0] = tsdataset_transformed
 
         for i in range(tansform_list_length):
@@ -450,8 +446,8 @@ class Pipeline(Trainable):
             _, new_chunk = tsdataset_copy.split(target_length -
                                                 self._model._out_chunk_len)
             if tsdataset_copy.known_cov:
-                new_chunk, _ = split_dataset(new_chunk, 2 *
-                                             self._model._out_chunk_len)
+                new_chunk, _ = split_dataset(new_chunk,
+                                             2 * self._model._out_chunk_len)
 
             # transform one chunk
             chunk_transformed, chunk_transformed_caches = self.transform(
@@ -476,8 +472,7 @@ class Pipeline(Trainable):
         result = TSDataset.concat(results)
         # Resize result
         result.set_target(
-            TimeSeries(result.get_target().data[0:predict_length],
-                       result.freq))
+            TimeSeries(result.get_target().data[0:predict_length], result.freq))
         return result
 
     def save(self,

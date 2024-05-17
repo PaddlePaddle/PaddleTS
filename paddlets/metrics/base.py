@@ -205,9 +205,10 @@ class Metric(ABC):
             )
         index_name = merge_index.columns[0]
         if isinstance(target_true.time_index, pd.RangeIndex):
-            merge_index = pd.RangeIndex(merge_index[index_name].iloc[0],
-                                        merge_index[index_name].iloc[-1] +
-                                        target_true.freq, target_true.freq)
+            merge_index = pd.RangeIndex(
+                merge_index[index_name].iloc[0],
+                merge_index[index_name].iloc[-1] + target_true.freq,
+                target_true.freq)
         else:
             merge_index = pd.DatetimeIndex(
                 merge_index[index_name], freq=target_true.freq)
@@ -256,8 +257,7 @@ class Metric(ABC):
             ValueError.
         """
         if self._mode == "normal":
-            res_array = self._build_metrics_data(tsdataset_true,
-                                                 tsdataset_pred)
+            res_array = self._build_metrics_data(tsdataset_true, tsdataset_pred)
         elif self._mode == "prob":  # "prob"
             res_array = self._build_prob_metrics_data(
                 tsdataset_true, tsdataset_pred, self._TYPE)

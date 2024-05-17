@@ -1,0 +1,38 @@
+batch_size: 128
+seq_len: 100
+predict_len: 0
+label_len: 0
+do_eval: True
+epoch: 1
+training: True 
+anomaly_ratio: 1
+task: anomaly
+
+
+dataset: 
+  name: TSADDataset
+  dataset_root: ../data/
+  train_path: ../data/MSL_train.csv
+  val_path: ../data/MSL_test.csv
+  scale: True
+  time_feat: False
+
+info_params:
+  freq: 1
+  label_col: label
+  feature_cols: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54']
+
+
+model: 
+  name: AutoEncoder
+  model_cfg:
+    optimizer_params:
+      learning_rate: 0.001
+      gamma: 0.5
+
+loss: mse
+
+test:
+  stride: 1 
+
+output: 'output/'

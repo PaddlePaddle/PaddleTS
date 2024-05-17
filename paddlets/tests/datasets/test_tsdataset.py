@@ -52,8 +52,7 @@ class TestTimeSeries(TestCase):
         self.assertEqual(ts1.freq, 'D')
         self.assertEqual(ts1.data.shape, (200, 2))
         #case4
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'b', 'c'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'b', 'c'])
         ts1 = TimeSeries.load_from_dataframe(
             data=sample1, value_cols=['a', 'c'])
         self.assertEqual(ts1.freq, 1)
@@ -61,8 +60,7 @@ class TestTimeSeries(TestCase):
         #case5
         tmp = pd.Series(pd.date_range(
             '2022-01-01', periods=200, freq='1D')).astype(str)
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'c', 'd'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'c', 'd'])
         sample1['f'] = tmp
         ts1 = TimeSeries.load_from_dataframe(
             data=sample1, value_cols=['a', 'c'], time_col='f')
@@ -71,8 +69,7 @@ class TestTimeSeries(TestCase):
         #case6
         tmp = pd.Series(pd.date_range(
             '2022-01-01', periods=200, freq='1D')).astype(str)
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'c', 'd'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'c', 'd'])
         sample1['f'] = tmp
         ts1 = TimeSeries.load_from_dataframe(
             data=sample1, value_cols=['a'], time_col='f')
@@ -81,8 +78,7 @@ class TestTimeSeries(TestCase):
         #case7
         tmp = pd.Series(pd.date_range(
             '2022-01-01', periods=200, freq='1D')).astype(str)
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'c', 'd'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'c', 'd'])
         sample1['f'] = tmp
         ts1 = TimeSeries.load_from_dataframe(
             data=sample1, value_cols=['a'], time_col='f', freq='2D')
@@ -400,8 +396,7 @@ class TestTimeSeries(TestCase):
         self.assertEqual(ts1.data.shape, ts2.data.shape)
         self.assertTrue((ts1.time_index == ts2.time_index).all())
 
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'b', 'c'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'b', 'c'])
         ts1 = TimeSeries.load_from_dataframe(data=sample1)
         json_data = ts1.to_json()
         ts2 = TimeSeries.load_from_json(json_data)
@@ -490,8 +485,7 @@ class TestTSDataset(TestCase):
         #case3
         tmp = pd.Series(pd.date_range(
             '2022-01-01', periods=200, freq='1D')).astype(str)
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'c', 'd'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'c', 'd'])
         sample1['f'] = tmp
         sample1['s'] = pd.Series([1 for i in range(200)])
         tsdataset = TSDataset.load_from_dataframe(
@@ -650,8 +644,7 @@ class TestTSDataset(TestCase):
         #case1
         tmp = pd.Series(pd.date_range(
             '2022-01-01', periods=200, freq='1D')).astype(str)
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'c', 'd'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'c', 'd'])
         sample1['f'] = tmp
         sample1['s'] = pd.Series([1 for i in range(200)])
         sample1.to_csv("/tmp/sample1.csv")
@@ -793,13 +786,9 @@ class TestTSDataset(TestCase):
         self.assertEqual(test.get_known_cov().data.shape, (40, 2))
         self.assertEqual(test.get_static_cov(), {'f': 1, 'g': 2})
 
-        sample1 = pd.DataFrame(
-            np.random.randn(200, 3), columns=['a', 'b', 'c'])
+        sample1 = pd.DataFrame(np.random.randn(200, 3), columns=['a', 'b', 'c'])
         tsdataset = TSDataset.load_from_dataframe(
-            sample1,
-            target_cols='a',
-            observed_cov_cols='b',
-            known_cov_cols='c')
+            sample1, target_cols='a', observed_cov_cols='b', known_cov_cols='c')
         start_num = 120
         train, test = tsdataset.split(start_num)
         self.assertEqual(train.get_target().data.shape, (start_num, 1))
@@ -861,8 +850,7 @@ class TestTSDataset(TestCase):
         self.assertEqual(ts1.get_item_from_column('c1'), ts1.get_known_cov())
         self.assertEqual(ts1.get_item_from_column('g'), ts1.get_static_cov())
 
-        self.assertEqual(ts1['c'].shape,
-                         ts1.get_observed_cov().data['c'].shape)
+        self.assertEqual(ts1['c'].shape, ts1.get_observed_cov().data['c'].shape)
         self.assertEqual(
             list(ts1[['a', 'c', 'c1', 'g']].columns), ['a', 'c', 'c1', 'g'])
         self.assertEqual(

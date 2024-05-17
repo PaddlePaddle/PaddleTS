@@ -42,8 +42,7 @@ class TimesBlock(nn.Layer):
         for i in range(self.k):
             period = period_list[i]
             if (self.seq_len + self.pred_len) % period != 0:
-                length = (
-                    (self.seq_len + self.pred_len) // period + 1) * period
+                length = ((self.seq_len + self.pred_len) // period + 1) * period
                 padding = paddle.zeros(shape=[
                     x.shape[0], length - (self.seq_len + self.pred_len),
                     x.shape[2]

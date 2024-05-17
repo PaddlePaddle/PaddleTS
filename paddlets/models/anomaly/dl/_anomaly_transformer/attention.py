@@ -108,8 +108,7 @@ class AnomalyAttention(paddle.nn.Layer):
         sigma = paddle.nn.functional.sigmoid(sigma * 5) + 1e-5
         sigma = paddle.pow(paddle.to_tensor(3.), sigma)  # - 1
         sigma = paddle.tile(
-            sigma.unsqueeze(-1),
-            repeat_times=[1, 1, 1, window_size])  # B H L L
+            sigma.unsqueeze(-1), repeat_times=[1, 1, 1, window_size])  # B H L L
         prior = paddle.tile(
             self.distances.unsqueeze(0).unsqueeze(0),
             [sigma.shape[0], sigma.shape[1], 1, 1])

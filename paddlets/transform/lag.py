@@ -82,6 +82,5 @@ class LagFeatureGenerator(BaseTransform):
                     new_ts.set_column(feature_name + '%s_%d' %
                                       (self.suffix, index), v, 'observed_cov')
                 else:
-                    tcov.data[feature_name + '%s_%d' % (self.suffix, index
-                                                        )] = v
+                    tcov.data[feature_name + '%s_%d' % (self.suffix, index)] = v
         return new_ts

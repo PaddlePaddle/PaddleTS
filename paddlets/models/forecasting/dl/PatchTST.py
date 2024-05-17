@@ -29,84 +29,168 @@ class _PatchTSTModule(paddle.nn.Layer):
     Yuqi Nie, Nam H. Nguyen, et al. "A TIME SERIES IS WORTH 64 WORDS: LONG-TERM FORECASTING WITH TRANSFORMERS"
     (https://arxiv.org/pdf/2211.14730.pdf)
     """
-    def __init__(self, c_in=7, seq_len=336, pred_len=96, n_layers=3, n_heads=4,
-                 d_model=16, d_ff=128, dropout=0.3, fc_dropout=0.3,head_dropout=0.0,individual=0,
-                 patch_len=16, stride=8, padding_patch='end', revin=1, affine=0, subtract_last=0, decomposition=0,
-                 kernel_size=25, pretrain=None):
+
+    def __init__(self,
+                 c_in=7,
+                 seq_len=336,
+                 pred_len=96,
+                 n_layers=3,
+                 n_heads=4,
+                 d_model=16,
+                 d_ff=128,
+                 dropout=0.3,
+                 fc_dropout=0.3,
+                 head_dropout=0.0,
+                 individual=0,
+                 patch_len=16,
+                 stride=8,
+                 padding_patch='end',
+                 revin=1,
+                 affine=0,
+                 subtract_last=0,
+                 decomposition=0,
+                 kernel_size=25,
+                 pretrain=None):
         super().__init__()
         max_seq_len = 1024
         d_k = None
         d_v = None
         norm = 'BatchNorm'
         attn_dropout = 0.0
-        act ='gelu'
+        act = 'gelu'
         key_padding_mask = 'auto'
-        padding_var=None
-        attn_mask=None
-        res_attention=True
-        pre_norm=False
-        store_attn=False
-        pe='zeros'
-        learn_pe=True
-        pretrain_head=False
-        head_type='flatten'
-        verbose=False
-        context_window=seq_len
-        target_window=pred_len
+        padding_var = None
+        attn_mask = None
+        res_attention = True
+        pre_norm = False
+        store_attn = False
+        pe = 'zeros'
+        learn_pe = True
+        pretrain_head = False
+        head_type = 'flatten'
+        verbose = False
+        context_window = seq_len
+        target_window = pred_len
         self.pretrain = pretrain
 
         self.decomposition = decomposition
         if self.decomposition:
             self.decomp_module = series_decomp(kernel_size)
-            self.model_trend = PatchTST_backbone(c_in=c_in, context_window=
-                context_window, target_window=target_window, patch_len=
-                patch_len, stride=stride, max_seq_len=max_seq_len, n_layers
-                =n_layers, d_model=d_model, n_heads=n_heads, d_k=d_k, d_v=
-                d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
-                dropout=dropout, act=act, key_padding_mask=key_padding_mask,
-                padding_var=padding_var, attn_mask=attn_mask, res_attention
-                =res_attention, pre_norm=pre_norm, store_attn=store_attn,
-                pe=pe, learn_pe=learn_pe, fc_dropout=fc_dropout,
-                head_dropout=head_dropout, padding_patch=padding_patch,
-                pretrain_head=pretrain_head, head_type=head_type,
-                individual=individual, revin=revin, affine=affine,
-                subtract_last=subtract_last, verbose=verbose)
-            self.model_res = PatchTST_backbone(c_in=c_in, context_window=
-                context_window, target_window=target_window, patch_len=
-                patch_len, stride=stride, max_seq_len=max_seq_len, n_layers
-                =n_layers, d_model=d_model, n_heads=n_heads, d_k=d_k, d_v=
-                d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
-                dropout=dropout, act=act, key_padding_mask=key_padding_mask,
-                padding_var=padding_var, attn_mask=attn_mask, res_attention
-                =res_attention, pre_norm=pre_norm, store_attn=store_attn,
-                pe=pe, learn_pe=learn_pe, fc_dropout=fc_dropout,
-                head_dropout=head_dropout, padding_patch=padding_patch,
-                pretrain_head=pretrain_head, head_type=head_type,
-                individual=individual, revin=revin, affine=affine,
-                subtract_last=subtract_last, verbose=verbose)
+            self.model_trend = PatchTST_backbone(
+                c_in=c_in,
+                context_window=context_window,
+                target_window=target_window,
+                patch_len=patch_len,
+                stride=stride,
+                max_seq_len=max_seq_len,
+                n_layers=n_layers,
+                d_model=d_model,
+                n_heads=n_heads,
+                d_k=d_k,
+                d_v=d_v,
+                d_ff=d_ff,
+                norm=norm,
+                attn_dropout=attn_dropout,
+                dropout=dropout,
+                act=act,
+                key_padding_mask=key_padding_mask,
+                padding_var=padding_var,
+                attn_mask=attn_mask,
+                res_attention=res_attention,
+                pre_norm=pre_norm,
+                store_attn=store_attn,
+                pe=pe,
+                learn_pe=learn_pe,
+                fc_dropout=fc_dropout,
+                head_dropout=head_dropout,
+                padding_patch=padding_patch,
+                pretrain_head=pretrain_head,
+                head_type=head_type,
+                individual=individual,
+                revin=revin,
+                affine=affine,
+                subtract_last=subtract_last,
+                verbose=verbose)
+            self.model_res = PatchTST_backbone(
+                c_in=c_in,
+                context_window=context_window,
+                target_window=target_window,
+                patch_len=patch_len,
+                stride=stride,
+                max_seq_len=max_seq_len,
+                n_layers=n_layers,
+                d_model=d_model,
+                n_heads=n_heads,
+                d_k=d_k,
+                d_v=d_v,
+                d_ff=d_ff,
+                norm=norm,
+                attn_dropout=attn_dropout,
+                dropout=dropout,
+                act=act,
+                key_padding_mask=key_padding_mask,
+                padding_var=padding_var,
+                attn_mask=attn_mask,
+                res_attention=res_attention,
+                pre_norm=pre_norm,
+                store_attn=store_attn,
+                pe=pe,
+                learn_pe=learn_pe,
+                fc_dropout=fc_dropout,
+                head_dropout=head_dropout,
+                padding_patch=padding_patch,
+                pretrain_head=pretrain_head,
+                head_type=head_type,
+                individual=individual,
+                revin=revin,
+                affine=affine,
+                subtract_last=subtract_last,
+                verbose=verbose)
         else:
-            self.model = PatchTST_backbone(c_in=c_in, context_window=
-                context_window, target_window=target_window, patch_len=
-                patch_len, stride=stride, max_seq_len=max_seq_len, n_layers
-                =n_layers, d_model=d_model, n_heads=n_heads, d_k=d_k, d_v=
-                d_v, d_ff=d_ff, norm=norm, attn_dropout=attn_dropout,
-                dropout=dropout, act=act, key_padding_mask=key_padding_mask,
-                padding_var=padding_var, attn_mask=attn_mask, res_attention
-                =res_attention, pre_norm=pre_norm, store_attn=store_attn,
-                pe=pe, learn_pe=learn_pe, fc_dropout=fc_dropout,
-                head_dropout=head_dropout, padding_patch=padding_patch,
-                pretrain_head=pretrain_head, head_type=head_type,
-                individual=individual, revin=revin, affine=affine,
-                subtract_last=subtract_last, verbose=verbose)
-        
+            self.model = PatchTST_backbone(
+                c_in=c_in,
+                context_window=context_window,
+                target_window=target_window,
+                patch_len=patch_len,
+                stride=stride,
+                max_seq_len=max_seq_len,
+                n_layers=n_layers,
+                d_model=d_model,
+                n_heads=n_heads,
+                d_k=d_k,
+                d_v=d_v,
+                d_ff=d_ff,
+                norm=norm,
+                attn_dropout=attn_dropout,
+                dropout=dropout,
+                act=act,
+                key_padding_mask=key_padding_mask,
+                padding_var=padding_var,
+                attn_mask=attn_mask,
+                res_attention=res_attention,
+                pre_norm=pre_norm,
+                store_attn=store_attn,
+                pe=pe,
+                learn_pe=learn_pe,
+                fc_dropout=fc_dropout,
+                head_dropout=head_dropout,
+                padding_patch=padding_patch,
+                pretrain_head=pretrain_head,
+                head_type=head_type,
+                individual=individual,
+                revin=revin,
+                affine=affine,
+                subtract_last=subtract_last,
+                verbose=verbose)
+
         self.init_weight()
 
     def forward(self, x):
         x = x['past_target']
         if self.decomposition:
             res_init, trend_init = self.decomp_module(x)
-            res_init, trend_init = res_init.transpose(perm=[0, 2, 1]
-                ), trend_init.transpose(perm=[0, 2, 1])
+            res_init, trend_init = res_init.transpose(
+                perm=[0, 2, 1]), trend_init.transpose(perm=[0, 2, 1])
             res = self.model_res(res_init)
             trend = self.model_trend(trend_init)
             x = res + trend
@@ -116,7 +200,7 @@ class _PatchTSTModule(paddle.nn.Layer):
             x = self.model(x)
             x = x.transpose(perm=[0, 2, 1])
         return x
-    
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -154,7 +238,7 @@ class _PatchTSTModule(paddle.nn.Layer):
                         param_init.th_linear_fill(layer)
 
 
-@manager.LFMODELS.add_component
+@manager.MODELS.add_component
 class PatchTSTModel(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.
@@ -226,7 +310,7 @@ class PatchTSTModel(PaddleBaseModelImpl):
         self.d_ff = d_ff
         self.dropout = dropout
         self.fc_dropout = fc_dropout
-        self.head_dropout = head_dropout 
+        self.head_dropout = head_dropout
         self.patch_len = patch_len
         self.stride = stride
         self._expansion_coefficient_dim = expansion_coefficient_dim
@@ -250,7 +334,7 @@ class PatchTSTModel(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             seed=seed, )
-        
+
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
         Rewrite _check_tsdataset to fit the specific model.
@@ -299,17 +383,16 @@ class PatchTSTModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _PatchTSTModule(
-            c_in = self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            n_layers = self.n_layers,
-            n_heads = self.n_heads,
-            d_model = self.d_model,
-            d_ff = self.d_ff,
-            dropout = self.dropout,
-            fc_dropout = self.fc_dropout,
-            head_dropout = self.head_dropout,
+            n_layers=self.n_layers,
+            n_heads=self.n_heads,
+            d_model=self.d_model,
+            d_ff=self.d_ff,
+            dropout=self.dropout,
+            fc_dropout=self.fc_dropout,
+            head_dropout=self.head_dropout,
             patch_len=self.patch_len,
-            stride = self.stride,
-            pretrain = self.pretrain
-            )
+            stride=self.stride,
+            pretrain=self.pretrain)

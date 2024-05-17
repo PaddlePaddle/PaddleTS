@@ -119,8 +119,7 @@ class _Interactor(paddle.nn.Layer):
 
         x_scaled_even = paddle.multiply(
             x=x_even, y=paddle.exp(self._phi(x_odd)))
-        x_scaled_odd = paddle.multiply(
-            x=x_odd, y=paddle.exp(self._psi(x_even)))
+        x_scaled_odd = paddle.multiply(x=x_odd, y=paddle.exp(self._psi(x_even)))
 
         x_even_update = x_scaled_even + self._eta(x_scaled_odd)
         x_odd_update = x_scaled_odd - self._rho(x_scaled_even)
@@ -356,8 +355,7 @@ class _StackedSCINetModule(paddle.nn.Layer):
                 for i in range(div_num):
                     lens = min(i * self._div_len + self._overlap_len,
                                self._in_chunk_len) - i * self._div_len
-                    div_projection.append(
-                        paddle.nn.Linear(lens, self._div_len))
+                    div_projection.append(paddle.nn.Linear(lens, self._div_len))
                 self._div_projection.append(div_projection)
 
         if self._num_stack == 2:
@@ -741,8 +739,7 @@ class SCINetModel(PaddleBaseModelImpl):
 
         self._network.train()
 
-    def _predict_batch(self,
-                       X: paddle.Tensor) -> Tuple[np.ndarray, np.ndarray]:
+    def _predict_batch(self, X: paddle.Tensor) -> Tuple[np.ndarray, np.ndarray]:
         """
         Predict one batch of data.
 

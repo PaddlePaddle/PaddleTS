@@ -39,8 +39,8 @@ class _MockPaddleNetwork(paddle.nn.Layer):
         self.register_buffer("_num_averaged", paddle.to_tensor(0))
 
         def default_avg_fn(averaged_model_params, model_params, num_averaged):
-            return averaged_model_params + (
-                model_params - averaged_model_params) / (num_averaged + 1)
+            return averaged_model_params + (model_params - averaged_model_params
+                                            ) / (num_averaged + 1)
 
         self._avg_fn = default_avg_fn if avg_fn is None else avg_fn
 
@@ -122,7 +122,7 @@ class _MockNotPaddleModel(object):
         modelname = os.path.basename(abs_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -183,8 +183,7 @@ class TestReprBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -201,8 +200,7 @@ class TestReprBaseModel(unittest.TestCase):
                 os.path.join(path, internal_filename_map["model_meta"]),
                 "r") as f:
             model_meta = json.load(f)
-        self.assertTrue(
-            TS2Vec.__name__ in model_meta["ancestor_classname_set"])
+        self.assertTrue(TS2Vec.__name__ in model_meta["ancestor_classname_set"])
         self.assertTrue(
             ReprBaseModel.__name__ in model_meta["ancestor_classname_set"])
         self.assertEqual(TS2Vec.__module__, model_meta["modulename"])
@@ -264,8 +262,8 @@ class TestReprBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -391,7 +389,7 @@ class TestReprBaseModel(unittest.TestCase):
         modelname = self.default_modelname
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -525,11 +523,11 @@ class TestReprBaseModel(unittest.TestCase):
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_1.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy(
+                    ).astype(np.float64)))
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_2.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy(
+                    ).astype(np.float64)))
 
         # prediction results expected.
         loaded_model_1_encoded_ndarray = loaded_model_1.encode(tsdataset)

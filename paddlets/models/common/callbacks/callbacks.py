@@ -323,6 +323,8 @@ class History(Callback):
         """
         self._epoch_metrics = {"loss": 0.}  # nqa
         self._samples_seen = 0.
+        self._train_run_cost = 0.
+        self._train_reader_cost = 0.
 
     def on_epoch_end(self, epoch: int, logs: Optional[Dict[str, Any]]=None):
         """Called at the end of each epoch.
@@ -333,6 +335,11 @@ class History(Callback):
                 contains `loss` and `metrics`.
         """
         self._epoch_metrics["loss"] = self._epoch_loss
+        self._train_reader_cost = self._epoch_metrics["train_reader_cost"]
+        self._epoch_metrics["batch_cost"]  = (self._train_run_cost + self._train_reader_cost) / self._epoch_metrics["steps"]
+        self._epoch_metrics["reader_cost"]  = self._train_reader_cost / self._epoch_metrics["steps"]
+        self._epoch_metrics["samples"] = self._samples_seen / self._epoch_metrics["steps"]
+        self._epoch_metrics["ips"] = self._samples_seen / self._epoch_metrics["batch_cost"] 
         for metric_name, metric_value in self._epoch_metrics.items():
             if metric_name not in self._history:
                 self._history.update({metric_name: []})
@@ -340,13 +347,18 @@ class History(Callback):
 
         if self._verbose == 0 or epoch % self._verbose != 0:
             return
-
+        self._epoch_metrics.pop('train_reader_cost',None)
+        self._epoch_metrics.pop('steps',None)
         msg = f"epoch {epoch:0>3}"
         for metric_name, metric_value in self._epoch_metrics.items():
             if metric_name != "lr":
-                msg += f"| {metric_name:<3}: {metric_value:.6f}"
+                msg += f", {metric_name:<3}: {metric_value:.6f}"
+            if metric_name == "reader_cost" or metric_name == "batch_cost":
+                msg += f" sec"
+            if metric_name == "ips":
+                msg += f" sequences/sec"
         total_time = int(time.time() - self._start_time)
-        msg += f"| {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
+        msg += f" | {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
         logger.info(msg)
 
     def on_batch_end(self, batch: int, logs: Optional[Dict[str, Any]]=None):
@@ -362,3 +374,5 @@ class History(Callback):
             self._samples_seen * self._epoch_loss + batch_size * logs["loss"]
         ) / (self._samples_seen + batch_size)
         self._samples_seen += batch_size
+        self._train_run_cost += logs['train_run_cost']
+

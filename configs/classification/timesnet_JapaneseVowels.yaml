@@ -11,7 +11,7 @@ dataset:
   name: JapaneseVowels
 
 model: 
-  name: TimesNetModel
+  name: TimesNet_CLS
   model_cfg:
     e_layers: 2 #
     num_kernels: 6 #

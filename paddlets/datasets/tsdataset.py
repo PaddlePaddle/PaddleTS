@@ -74,14 +74,14 @@ class TimeSeries(object):
             self._freq = self._data.index.freqstr  # ValueError: cannot reindex from a duplicate axis
 
     @classmethod
-    def load_from_dataframe(cls,
-                            data: Union[pd.DataFrame, pd.Series],
-                            time_col: Optional[str]=None,
-                            value_cols: Optional[Union[List[str], str]]=None,
-                            freq: Optional[Union[str, int]]=None,
-                            drop_tail_nan: bool=False,
-                            dtype: Optional[Union[type, Dict[str, type]]]=None
-                            ) -> "TimeSeries":
+    def load_from_dataframe(
+            cls,
+            data: Union[pd.DataFrame, pd.Series],
+            time_col: Optional[str]=None,
+            value_cols: Optional[Union[List[str], str]]=None,
+            freq: Optional[Union[str, int]]=None,
+            drop_tail_nan: bool=False,
+            dtype: Optional[Union[type, Dict[str, type]]]=None) -> "TimeSeries":
         """
         Construct a TimeSeries object from the specified columns of a DataFrame
 
@@ -364,7 +364,7 @@ class TimeSeries(object):
         return (TimeSeries(self.data.iloc[:point + shift, :], self.freq),
                 TimeSeries(self.data.iloc[point + shift:, ], self.freq))
 
-    def resample(self, freq)-> "TimeSeries":
+    def resample(self, freq) -> "TimeSeries":
         return TimeSeries(self.data.resample(freq).first(), freq)
 
     def copy(self) -> "TimeSeries":
@@ -472,12 +472,11 @@ class TimeSeries(object):
             if drop_duplicates:
                 data = data.loc[:, ~data.columns.duplicated(keep=keep)]
             else:
-                raise_if(
-                    data.columns.duplicated().any(),
-                    "Failed to concatenate, duplicated column names found.\
+                raise_if(data.columns.duplicated().any(),
+                         "Failed to concatenate, duplicated column names found.\
                     You can set drop_duplicates = True to drop Duplicate columns.\
                     And you can set keep = 'first' or 'last' to choose which value to preserve."
-                )
+                         )
             return TimeSeries(data, tss[0].freq)
         else:
             raise_log(
@@ -556,8 +555,7 @@ class TimeSeries(object):
         return json.dumps(json_res, ensure_ascii=False)
 
     @classmethod
-    def load_from_json(cls, json_data: str,
-                       **json_load_kwargs) -> "TimeSeries":
+    def load_from_json(cls, json_data: str, **json_load_kwargs) -> "TimeSeries":
         """
         Construct a TimeSeries object from a str json_data
         
@@ -842,8 +840,8 @@ class TSDataset(object):
             fillna_method: str="pre",
             fillna_window_size: int=10,
             drop_tail_nan: bool=False,
-            dtype: Optional[Union[type, Dict[str, type]]]=None) -> Union[
-                "TSDataset", List["TSDataset"]]:
+            dtype: Optional[Union[type, Dict[str, type]]]=None,
+            **kwargs) -> Union["TSDataset", List["TSDataset"]]:
         """
         Construct a TSDataset object from a DataFrame
 
@@ -1309,7 +1307,7 @@ class TSDataset(object):
         self._static_cov = static_cov
         self._check_data()
 
-    def resample(self, freq :str):
+    def resample(self, freq: str):
         if self.target is not None:
             target = self.target.resample(freq)
 
@@ -1324,9 +1322,9 @@ class TSDataset(object):
             if self._observed_cov else None
         known_cov = self._known_cov.resample(freq)  \
             if self._known_cov else None
-        
-        return TSDataset(target, observed_cov, known_cov,
-                          self._static_cov)
+
+        return TSDataset(target, observed_cov, known_cov, self._static_cov)
+
     def split(self,
               split_point: Union[pd.Timestamp, str, float, int],
               after=True) -> Tuple["TSDataset", "TSDataset"]:
@@ -1871,8 +1869,7 @@ class TSDataset(object):
         
         """
         target = self._target.copy() if self._target else None
-        observed_cov = self._observed_cov.copy(
-        ) if self._observed_cov else None
+        observed_cov = self._observed_cov.copy() if self._observed_cov else None
         known_cov = self._known_cov.copy() if self._known_cov else None
         static_cov = deepcopy(self._static_cov) if self._static_cov else None
         return TSDataset(target, observed_cov, known_cov, static_cov)
@@ -1941,11 +1938,11 @@ class TSDataset(object):
         params = {}
         for attr in attrs:
             if res[attr] is not None:
-                params[attr] = TimeSeries.load_from_json(res[attr], **
-                                                         json_load_kwargs)
+                params[attr] = TimeSeries.load_from_json(res[attr],
+                                                         **json_load_kwargs)
         if res['static_cov'] is not None:
-            params['static_cov'] = json.loads(res['static_cov'], **
-                                              json_load_kwargs)
+            params['static_cov'] = json.loads(res['static_cov'],
+                                              **json_load_kwargs)
         return TSDataset(**params)
 
     @property
@@ -1997,9 +1994,7 @@ class TSDataset(object):
             ValueError
 
         """
-        targets = [
-            ts.get_target() for ts in tss if ts.get_target() is not None
-        ]
+        targets = [ts.get_target() for ts in tss if ts.get_target() is not None]
         target = TimeSeries.concat(
             targets, axis, drop_duplicates=drop_duplicates,
             keep=keep) if len(targets) != 0 else None

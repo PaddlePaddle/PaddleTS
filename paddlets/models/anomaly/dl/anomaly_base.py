@@ -81,26 +81,26 @@ class AnomalyBaseModel(abc.ABC):
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
 
-    def __init__(
-            self,
-            in_chunk_len: int,
-            sampling_stride: int=1,
-            loss_fn: Callable[..., paddle.Tensor]=None,
-            anomaly_score_fn: Callable[..., List[float]]=None,
-            threshold: Optional[float]=None,
-            threshold_fn: Callable[..., float]=None,
-            threshold_coeff: float=1.0,
-            pred_adjust: bool=False,
-            pred_adjust_fn: Callable[..., np.ndarray]=None,
-            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
-            eval_metrics: List[str]=[],
-            callbacks: List[Callback]=[],
-            batch_size: int=128,
-            max_epochs: int=10,
-            verbose: int=1,
-            patience: int=4,
-            seed: Optional[int]=None, ):
+    def __init__(self,
+                 in_chunk_len: int,
+                 sampling_stride: int=1,
+                 loss_fn: Callable[..., paddle.Tensor]=None,
+                 anomaly_score_fn: Callable[..., List[float]]=None,
+                 threshold: Optional[float]=None,
+                 threshold_fn: Callable[..., float]=None,
+                 threshold_coeff: float=1.0,
+                 pred_adjust: bool=False,
+                 pred_adjust_fn: Callable[..., np.ndarray]=None,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=128,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 seed: Optional[int]=None,
+                 **kargs):
         super(AnomalyBaseModel, self).__init__()
         self._in_chunk_len = in_chunk_len
         self._sampling_stride = sampling_stride
@@ -112,6 +112,10 @@ class AnomalyBaseModel(abc.ABC):
         self._pred_adjust = pred_adjust
         self._pred_adjust_fn = pred_adjust_fn
         self._optimizer_fn = optimizer_fn
+        self.start_epoch = 1
+        if optimizer_params is not None and optimizer_params.get('start_epoch',
+                                                                 None):
+            self.start_epoch = int(optimizer_params.pop('start_epoch'))
         self._optimizer_params = deepcopy(optimizer_params)
         self._eval_metrics = deepcopy(eval_metrics)
         self._callbacks = deepcopy(callbacks)
@@ -129,6 +133,7 @@ class AnomalyBaseModel(abc.ABC):
         self._metric_container_dict = None
         self._history = None
         self._callback_container = None
+        self._scheduler = None
 
         # Parameter check.
         self._check_params()
@@ -184,12 +189,12 @@ class AnomalyBaseModel(abc.ABC):
             tsdataset(TSDataset): Data to be checked.
         """
         target = tsdataset.get_target()
-        if target is not None:
-            target_dtype = target.dtypes
-            raise_if_not(
-                np.issubdtype(target_dtype[0], np.integer),
-                f"In anomaly detection scenario, the dtype of label must be integer, but recevid {target_dtype[0]}"
-            )
+        # if target is not None:
+        #     target_dtype = target.dtypes
+        #     raise_if_not(
+        #         np.issubdtype(target_dtype[0], np.integer),
+        #         f"In anomaly detection scenario, the dtype of label must be integer, but recevid {target_dtype[0]}"
+        #     )
         known = tsdataset.get_known_cov()
         if known is not None:
             known_cols = [str(i) for i in known.columns.tolist()]
@@ -235,8 +240,16 @@ class AnomalyBaseModel(abc.ABC):
         Returns:
             Optimizer.
         """
-        return self._optimizer_fn(
-            **self._optimizer_params, parameters=self._network.parameters())
+        if self._optimizer_params.get('gamma', False):
+            import paddle.optimizer as opt
+            self._scheduler = opt.lr.ExponentialDecay(**self._optimizer_params)
+            return self._optimizer_fn(
+                learning_rate=self._scheduler,
+                parameters=self._network.parameters())
+
+        else:
+            return self._optimizer_fn(
+                **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -277,6 +290,7 @@ class AnomalyBaseModel(abc.ABC):
     def _init_predict_dataloader(
             self,
             tsdataset: TSDataset,
+            boundary=None,
             sampling_stride: int=1, ) -> paddle.io.DataLoader:
         """Generate dataloaders for data to be predicted.
 
@@ -292,7 +306,8 @@ class AnomalyBaseModel(abc.ABC):
         dataset = data_adapter.to_sample_dataset(
             tsdataset,
             in_chunk_len=self._in_chunk_len,
-            sampling_stride=sampling_stride, )
+            sampling_stride=sampling_stride,
+            time_window=boundary)
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -411,12 +426,88 @@ class AnomalyBaseModel(abc.ABC):
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
                 epoch_idx, logs=self._history._epoch_metrics)
+            if self._scheduler:
+                if epoch_idx >= self.start_epoch:
+                    self._scheduler.step()
             if self._stop_training:
                 break
 
         # Call the `on_train_end` method of each callback at the end of the training.
         self._callback_container.on_train_end()
         self._network.eval()
+
+    def _get_loss_eval(self, y_pred: paddle.Tensor,
+                       y_true: paddle.Tensor) -> np.ndarray:
+        """Get the loss for anomaly label and anomaly score.
+
+        Note:
+            This function could be overrided by the subclass if necessary.
+
+        Args:
+            y_pred(paddle.Tensor): Estimated feature values.
+            y_true(paddle.Tensor): Ground truth (correct) feature values.
+
+        Returns:
+            np.ndarray.
+
+        """
+        anomaly_criterion = paddle.nn.functional.mse_loss
+        loss = paddle.mean(
+            x=anomaly_criterion(
+                y_true, y_pred, reduction='none'), axis=-1)
+        return loss.numpy()
+
+    def _eval(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
+        """Get anomaly label on a batch. the result are output as tsdataset.
+
+        Args:
+            tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
+
+        Returns:
+            TSDataset.
+        """
+        dataloader = self._init_predict_dataloader(tsdataset)
+        self._network.eval()
+        loss_list = []
+        attens_energy = []
+        test_labels = []
+
+        for _, data in enumerate(dataloader):
+            y_pred, y_true = self._network(data)
+            loss = self._get_loss_eval(y_pred, y_true)
+            attens_energy.append(loss)
+            test_labels.append(data['past_target'])
+
+        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
+        test_energy = np.array(attens_energy)
+        pred = (test_energy > self._threshold).astype(int)
+        # adjust pred 
+        test_labels = np.concatenate(test_labels, axis=0).reshape(-1)
+        test_labels = np.array(test_labels)
+        gt = test_labels.astype(int)
+
+        anomaly_label = self._pred_adjust_fn(pred, gt)
+
+        return gt, anomaly_label
+
+    def eval(self, tsdataset: TSDataset, **predict_kwargs) -> TSDataset:
+        """Get anomaly label on a batch. the result are output as tsdataset.
+
+        Args:
+            tsdataset(TSDataset): Data to be predicted.
+            **predict_kwargs: Additional arguments for `_predict`.
+
+        Returns:
+            TSDataset.
+        """
+
+        gt, pred = self._eval(tsdataset, **predict_kwargs)
+
+        from sklearn.metrics import precision_recall_fscore_support
+        precision, recall, f_score, support = precision_recall_fscore_support(
+            gt, pred, average='binary')
+        return {'f1': f_score, 'precision': precision, 'recall': recall}
 
     def _get_anomaly_score(self,
                            dataloader: paddle.io.DataLoader,
@@ -521,11 +612,15 @@ class AnomalyBaseModel(abc.ABC):
             train_loader(paddle.io.DataLoader): Training dataloader.
         """
         self._network.train()
+        train_reader_cost = 0.0
+        reader_start = time.time()
         for batch_idx, data in enumerate(train_loader):
+            train_reader_cost += time.time() - reader_start            
             self._callback_container.on_batch_begin(batch_idx)
             batch_logs = self._train_batch(data)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
-        epoch_logs = {"lr": self._optimizer.get_lr()}
+            reader_start = time.time()
+        epoch_logs = {"lr": self._optimizer.get_lr(), "steps": batch_idx, "train_reader_cost": train_reader_cost}
         self._history._epoch_metrics.update(epoch_logs)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
@@ -538,12 +633,14 @@ class AnomalyBaseModel(abc.ABC):
         Returns:
             Dict[str, Any]: Dict of logs.
         """
+        start_time = time.time()
         y_pred, y_true = self._network(X)
+        train_run_cost = time.time() - start_time
         loss = self._compute_loss(y_pred, y_true)
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {"batch_size": y_true.shape[0], "loss": loss.item()}
+        batch_logs = {"batch_size": y_true.shape[0], "loss": loss.item(), "train_run_cost": train_run_cost}
         return batch_logs
 
     def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
@@ -705,13 +802,23 @@ class AnomalyBaseModel(abc.ABC):
         # b.network_statedict = "b_network_statedict"
         # given above example, adding name prefix avoids conflicts between a.internal files and b.internal files.
         modelname = os.path.basename(abs_model_path)
-        internal_filename_map = {
-            "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
-            "network_model": modelname,
-            # currently ignore optimizer.
-            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
-        }
+        if 'paddlets-ensemble-model' in abs_model_path:
+            internal_filename_map = {
+                "model_meta": "%s_%s" % (modelname, "model_meta"),
+                "network_statedict":
+                "%s/%s/%s" % ('best_model', modelname, "model.pdparams"),
+                "network_model": modelname,
+                # currently ignore optimizer.
+                # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+            }
+        else:
+            internal_filename_map = {
+                "model_meta": "%s_%s" % (modelname, "model_meta"),
+                "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+                "network_model": modelname,
+                # currently ignore optimizer.
+                # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+            }
 
         # internal files must not conflict with existing files.
         conflict_files = {*internal_filename_map.values()} - set(
@@ -835,8 +942,8 @@ class AnomalyBaseModel(abc.ABC):
         """
         abs_path = os.path.abspath(path)
         raise_if_not(
-            os.path.exists(abs_path), "model file does not exist: %s" %
-            abs_path)
+            os.path.exists(abs_path),
+            "model file does not exist: %s" % abs_path)
         raise_if(
             os.path.isdir(abs_path),
             "path must be a file path, not a directory: %s" % abs_path)
@@ -856,7 +963,12 @@ class AnomalyBaseModel(abc.ABC):
             "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
-        network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
+        if 'paddlets-ensemble-model' in abs_path:
+            network_statedict_filename = "%s/%s/%s" % ('best_model', modelname,
+                                                       "model.pdparams")
+        else:
+            network_statedict_filename = "%s/%s" % ('best_model',
+                                                    "model.pdparams")
         network_statedict_abs_path = os.path.join(
             os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)

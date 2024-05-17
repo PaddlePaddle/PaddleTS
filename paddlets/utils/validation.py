@@ -72,19 +72,18 @@ def cross_validate(
         return res
 
 
-def fit_and_score(
-        train_data: Union[TSDataset, List[TSDataset]],
-        valid_data: Union[TSDataset, List[TSDataset]],
-        estimator: Trainable,
-        use_backtest: bool=True,
-        predict_window: int=None,
-        stride: int=None,
-        metric: Optional[Metric]=None,
-        return_score=True,
-        return_estimator=True,
-        return_predicts=True,
-        reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
-        verbose: bool=False) -> dict:
+def fit_and_score(train_data: Union[TSDataset, List[TSDataset]],
+                  valid_data: Union[TSDataset, List[TSDataset]],
+                  estimator: Trainable,
+                  use_backtest: bool=True,
+                  predict_window: int=None,
+                  stride: int=None,
+                  metric: Optional[Metric]=None,
+                  return_score=True,
+                  return_estimator=True,
+                  return_predicts=True,
+                  reduction: Union[Callable[[np.ndarray], float], None]=np.mean,
+                  verbose: bool=False) -> dict:
     """
     Fit and score
 
@@ -149,12 +148,12 @@ def fit_and_score(
                 if verbose:
                     logger.info(
                         "Train and valid are not continious, the initial in_"
-                        "chunk_len points of valid data will use as model input"
-                    )
+                        "chunk_len points of valid data will use as model input")
                 score_dict, tmp_prediction = backtest(
                     e, estimator, None, predict_window, stride, metric, True,
                     reduction, verbose)
-                tmp_score = _get_score_from_score_dict(metric, score_dict[metric._NAME])
+                tmp_score = _get_score_from_score_dict(metric,
+                                                       score_dict[metric._NAME])
                 score = tmp_score if score is None else score + tmp_score
                 if predicts is None:
                     predicts = [tmp_prediction]

@@ -108,11 +108,11 @@ class _MTADGATBlock(paddle.nn.Layer):
 
         self._conv = ConvLayer(self._num_dim, kernel_size)
         self._feature_gat = FeatOrTempAttention(
-            self._num_dim, in_chunk_len - 1, dropout, alpha,
-            feat_gat_embed_dim, use_gatv2, use_bias, 'feature')
+            self._num_dim, in_chunk_len - 1, dropout, alpha, feat_gat_embed_dim,
+            use_gatv2, use_bias, 'feature')
         self._temporal_gat = FeatOrTempAttention(
-            self._num_dim, in_chunk_len - 1, dropout, alpha,
-            time_gat_embed_dim, use_gatv2, use_bias, 'temporal')
+            self._num_dim, in_chunk_len - 1, dropout, alpha, time_gat_embed_dim,
+            use_gatv2, use_bias, 'temporal')
         self._gru = GRULayer(3 * self._num_dim, gru_hid_size, gru_n_layers,
                              dropout)
         self._forec_model = Forecasting(gru_hid_size, forecast_hid_size,
@@ -477,9 +477,8 @@ class MTADGAT(AnomalyBaseModel):
 
         anomaly_scores = np.zeros_like(true_list)
         for i in range(pred_list.shape[1]):
-            a_score = np.sqrt((pred_list[:, i] - true_list[:, i])**
-                              2) + np.sqrt((recon_list[:, i] - true_list[:, i])
-                                           **2)
+            a_score = np.sqrt((pred_list[:, i] - true_list[:, i])**2) + np.sqrt(
+                (recon_list[:, i] - true_list[:, i])**2)
             anomaly_scores[:, i] = a_score
         anomaly_scores = np.mean(anomaly_scores, 1)
 

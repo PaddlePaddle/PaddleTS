@@ -140,8 +140,7 @@ class TemporalFusionTransformer(nn.Layer):
             hidden_dim=self._state_size,
             output_dim=self._state_size,
             dropout=self._dropout)
-        self._static_encoder_selection = copy.deepcopy(
-            static_covariate_encoder)
+        self._static_encoder_selection = copy.deepcopy(static_covariate_encoder)
         self._static_encoder_enrichment = copy.deepcopy(
             static_covariate_encoder)
         self._static_encoder_sequential_cell_init = copy.deepcopy(
@@ -293,8 +292,7 @@ class TemporalFusionTransformer(nn.Layer):
         return temporal_signal.reshape([-1, temporal_signal.shape[-1]])
 
     def transform_inputs(
-            self,
-            batch: Dict[str, paddle.Tensor]) -> Tuple[paddle.Tensor, ...]:
+            self, batch: Dict[str, paddle.Tensor]) -> Tuple[paddle.Tensor, ...]:
         """
         This method processes the batch and transform each input channel (historical_ts, future_ts, static)
         separately to eventually return the learned embedding for each of the input channels
@@ -369,12 +367,11 @@ class TemporalFusionTransformer(nn.Layer):
         c_seq_cell = self._static_encoder_sequential_cell_init(selected_static)
         return c_enrichment, c_selection, c_seq_cell, c_seq_hidden
 
-    def apply_sequential_processing(
-            self,
-            selected_historical: paddle.Tensor,
-            selected_future: paddle.Tensor,
-            c_seq_hidden: paddle.Tensor,
-            c_seq_cell: paddle.Tensor) -> paddle.Tensor:
+    def apply_sequential_processing(self,
+                                    selected_historical: paddle.Tensor,
+                                    selected_future: paddle.Tensor,
+                                    c_seq_hidden: paddle.Tensor,
+                                    c_seq_cell: paddle.Tensor) -> paddle.Tensor:
         """
         This part of the model is designated to mimic a sequence-to-sequence layer which will be used for local processing.
         On that part the historical ("observed" and "known") information will be fed into a recurrent layer called "Encoder" and
@@ -406,9 +403,9 @@ class TemporalFusionTransformer(nn.Layer):
         if c_seq_hidden is not None:
             past_lstm_output, hidden = self._past_lstm(selected_historical, (
                 paddle.tile(
-                    c_seq_hidden.unsqueeze(0), [self._lstm_layers, 1, 1]),
-                paddle.tile(
-                    c_seq_cell.unsqueeze(0), [self._lstm_layers, 1, 1])))
+                    c_seq_hidden.unsqueeze(0),
+                    [self._lstm_layers, 1, 1]), paddle.tile(
+                        c_seq_cell.unsqueeze(0), [self._lstm_layers, 1, 1])))
         else:
             past_lstm_output, hidden = self._past_lstm(selected_historical)
 
@@ -557,8 +554,7 @@ class TemporalFusionTransformer(nn.Layer):
             # Dimensions:
             # selected_static: [num_samples x state_size]
             # static_weights: [num_samples x num_static_inputs x 1]
-            selected_static, static_weights = self._static_selection(
-                static_rep)
+            selected_static, static_weights = self._static_selection(static_rep)
             # each of the static encoders signals is of shape: [num_samples x state_size]
             c_enrichment, c_selection, c_seq_cell, c_seq_hidden = self.get_static_encoders(
                 selected_static)

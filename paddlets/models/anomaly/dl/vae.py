@@ -53,8 +53,8 @@ class stack(paddle.nn.Layer):
             rnn_num_layers: int=1,
             direction: str='forward',
             activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
-            last_layer_activation: Callable[...,
-                                            paddle.Tensor]=paddle.nn.ReLU6, ):
+            last_layer_activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
+    ):
         super(stack, self).__init__()
         if not is_encoder:
             hidden_config = [int(i) for i in reversed(hidden_config)]
@@ -130,8 +130,7 @@ class _VAEBlock(paddle.nn.Layer):
             rnn_num_layers: int=1,
             direction: str='forward',
             activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
-            last_layer_activation: Callable[...,
-                                            paddle.Tensor]=paddle.nn.ReLU6,
+            last_layer_activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
             stdev: float=0.1, ):
         super(_VAEBlock, self).__init__()
         raise_if_not(
@@ -320,8 +319,7 @@ class VAE(AnomalyBaseModel):
             rnn_num_layers: int=1,
             direction: str='forward',
             activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
-            last_layer_activation: Callable[...,
-                                            paddle.Tensor]=paddle.nn.ReLU6,
+            last_layer_activation: Callable[..., paddle.Tensor]=paddle.nn.ReLU6,
             stdev: float=0.1, ):
         self._hidden_config = hidden_config
         self._in_chunk_len = in_chunk_len
@@ -384,9 +382,9 @@ class VAE(AnomalyBaseModel):
         return _VAEBlock(
             self._in_chunk_len, self._hidden_config,
             self._fit_params["observed_dim"], self._base_en, self._base_de,
-            self._use_bn, self._use_drop, self._dropout_rate,
-            self._kernel_size, self._rnn_num_layers, self._direction,
-            self._activation, self._last_layer_activation, self._stdev)
+            self._use_bn, self._use_drop, self._dropout_rate, self._kernel_size,
+            self._rnn_num_layers, self._direction, self._activation,
+            self._last_layer_activation, self._stdev)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.

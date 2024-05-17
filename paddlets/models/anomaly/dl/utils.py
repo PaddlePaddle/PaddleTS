@@ -94,9 +94,8 @@ def series_prior_loss(
             paddle.unsqueeze(
                 paddle.sum(prior[u], axis=-1), axis=-1),
             repeat_times=[1, 1, 1, win_size])
-        series_loss += (
-            paddle.mean(my_kl_loss(series[u], series_kl.detach())) +
-            paddle.mean(my_kl_loss(series_kl.detach(), series[u])))
+        series_loss += (paddle.mean(my_kl_loss(series[u], series_kl.detach())) +
+                        paddle.mean(my_kl_loss(series_kl.detach(), series[u])))
         prior_loss += (paddle.mean(my_kl_loss(series_kl, series[u].detach())) +
                        paddle.mean(my_kl_loss(series[u].detach(), series_kl)))
     series_loss = series_loss / len(prior)
@@ -132,8 +131,7 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
         if u == 0:
             series_loss = my_kl_loss(series[u],
                                      series_kl.detach()) * temperature
-            prior_loss = my_kl_loss(series_kl,
-                                    series[u].detach()) * temperature
+            prior_loss = my_kl_loss(series_kl, series[u].detach()) * temperature
         else:
             series_loss += my_kl_loss(series[u],
                                       series_kl.detach()) * temperature
@@ -144,6 +142,58 @@ def series_prios_energy(output_list, loss, temperature=50, win_size=100):
     cri = metric * loss
     cri = cri.detach().cpu().numpy()
     return cri
+
+
+def get_threshold(
+        model: Callable[..., paddle.Tensor],
+        train_dataloader: paddle.io.DataLoader,
+        thre_dataloaders: paddle.io.DataLoader,
+        anomaly_ratio: float=1,
+        criterion: Callable[..., paddle.Tensor]=paddle.nn.MSELoss()):
+    """
+    Threshold is calculated based on Association-based Anomaly Criterion.
+    
+    Args:
+        model(Callable[..., paddle.Tensor]): Anomaly transformer model.
+        train_dataloader(paddle.io.DataLoader): Train set. 
+        thre_dataloader(List[paddle.io.DataLoader]|None): Test set.
+        anormly_ratio(int|float): The Proportion of Anomaly data in train set and test set.
+        criterion(Callable[..., paddle.Tensor]|None): Loss function for the reconstruction loss.
+
+    Return:
+        threshold(float|None): The threshold to judge anomaly.
+    
+    """
+    model.eval()
+    # (1) stastic on the train set
+    attens_energy = []
+    for i, (input_data) in enumerate(train_dataloader):
+        output, y = model(input_data)
+        score = paddle.mean(criterion(y, output, reduction='none'), axis=-1)
+        score = score.detach().cpu().numpy()
+        attens_energy.append(score)
+
+    attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
+    train_energy = np.array(attens_energy)
+    # (2) find the threshold
+    attens_energy = []
+    for thre_dataloader in thre_dataloaders:
+        for i, (input_data) in enumerate(thre_dataloader):
+            output, y = model(input_data)
+            score = paddle.mean(criterion(y, output, reduction='none'), axis=-1)
+            score = score.detach().cpu().numpy()
+            attens_energy.append(score)
+
+    if attens_energy != []:
+        attens_energy = np.concatenate(attens_energy, axis=0).reshape(-1)
+        test_energy = np.array(attens_energy)
+        # comb energy
+        combined_energy = np.concatenate([train_energy, test_energy], axis=0)
+        threshold = np.percentile(combined_energy, 100 - anomaly_ratio)
+    else:
+        threshold = np.percentile(train_energy, 100 - anomaly_ratio)
+
+    return threshold
 
 
 def anomaly_get_threshold(

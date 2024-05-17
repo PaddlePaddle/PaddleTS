@@ -25,8 +25,8 @@ class Summary(Analyzer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> Union[
-            pd.Series, pd.DataFrame]:
+    def analyze(self, X: Union[pd.Series, pd.DataFrame]) -> Union[pd.Series,
+                                                                  pd.DataFrame]:
         """
         Calculate Statistical indicators.
 

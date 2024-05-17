@@ -104,5 +104,4 @@ class SklearnTransformWrapper(UdBaseTransform):
         if hasattr(self._ud_transformer, 'inverse_transform'):
             return self._ud_transformer.inverse_transform(input)
         else:
-            raise_log(
-                NotImplementedError(f"inverse_transform not implemented"))
+            raise_log(NotImplementedError(f"inverse_transform not implemented"))

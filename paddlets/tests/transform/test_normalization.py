@@ -176,8 +176,7 @@ class test_MinMaxScaler(TestCase):
 
         self.assertTrue((inverse_ts.to_numpy().astype('int') ==
                          input_ts.to_numpy().astype('int')).all())
-        self.assertTrue((fit_transform_ts.to_numpy() == sk_fit_transform).all(
-        ))
+        self.assertTrue((fit_transform_ts.to_numpy() == sk_fit_transform).all())
         self.assertTrue((inverse_ts.to_numpy() == np_inverse_sk).all())
 
         params1 = {'with_mean': True, 'with_std': True}  #['X', 'X1', 'Y','Y1']
@@ -192,8 +191,7 @@ class test_MinMaxScaler(TestCase):
 
         self.assertTrue((inverse_ts.to_numpy().astype('int') ==
                          input_ts.to_numpy().astype('int')).all())
-        self.assertTrue((fit_transform_ts.to_numpy() == sk_fit_transform).all(
-        ))
+        self.assertTrue((fit_transform_ts.to_numpy() == sk_fit_transform).all())
         self.assertTrue((inverse_ts.to_numpy() == np_inverse_sk).all())
 
 

@@ -21,7 +21,10 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         labels:(np.ndarray) : The data class labels
     """
 
-    def __init__(self, rawdatasets: List[TSDataset], labels: np.ndarray, max_len: int=0):
+    def __init__(self,
+                 rawdatasets: List[TSDataset],
+                 labels: np.ndarray,
+                 max_len: int=0):
         super(ClassifyPaddleDatasetImpl, self).__init__()
 
         self._rawdatasets = rawdatasets
@@ -77,7 +80,8 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
             if self.max_length > 0:
                 ones = np.ones(self.max_length, dtype=np.int32)
                 if self.max_length != target_len:
-                    target_ndarray_final = np.zeros([self.max_length, target_dim], dtype=np.int32)
+                    target_ndarray_final = np.zeros(
+                        [self.max_length, target_dim], dtype=np.int32)
                     end = min(target_len, self.max_length)
                     target_ndarray_final[:end, :] = target_ndarray
                     sample["features"] = target_ndarray_final

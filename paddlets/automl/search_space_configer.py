@@ -190,8 +190,7 @@ class SearchSpaceConfiger:
         """
         for e, sp in search_space.items():
             if isinstance(sp, dict):
-                search_space[e] = self._dfs_search_space_to_str(search_space[
-                    e])
+                search_space[e] = self._dfs_search_space_to_str(search_space[e])
             else:
                 search_space[e] = self._param_search_space_to_str(sp)
         return search_space

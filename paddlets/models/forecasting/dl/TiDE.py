@@ -21,23 +21,29 @@ logger = Logger(__name__)
 
 
 class ResidualBlock(paddle.nn.Layer):
-
-    def __init__(self, in_features, hid_features, out_features,
-        dropout_prob=0.3, layer_norm=True):
+    def __init__(self,
+                 in_features,
+                 hid_features,
+                 out_features,
+                 dropout_prob=0.3,
+                 layer_norm=True):
         super(ResidualBlock, self).__init__()
-        self.fc1 = paddle.nn.Linear(in_features=in_features, out_features=
-            hid_features)
+        self.fc1 = paddle.nn.Linear(
+            in_features=in_features, out_features=hid_features)
         self.relu1 = paddle.nn.ReLU()
-        self.fc2 = paddle.nn.Linear(in_features=hid_features, out_features=
-            out_features)
+        self.fc2 = paddle.nn.Linear(
+            in_features=hid_features, out_features=out_features)
         self.dropout = paddle.nn.Dropout(p=dropout_prob)
-        self.norm = paddle.nn.LayerNorm(normalized_shape=out_features,
-            epsilon=1e-05, weight_attr=None, bias_attr=None)
+        self.norm = paddle.nn.LayerNorm(
+            normalized_shape=out_features,
+            epsilon=1e-05,
+            weight_attr=None,
+            bias_attr=None)
         self.layer_norm = layer_norm
         self.shortcut = paddle.nn.Identity()
         if in_features != out_features:
-            self.shortcut = paddle.nn.Linear(in_features=in_features,
-                out_features=out_features)
+            self.shortcut = paddle.nn.Linear(
+                in_features=in_features, out_features=out_features)
 
     def forward(self, x):
         residual = x
@@ -52,14 +58,19 @@ class ResidualBlock(paddle.nn.Layer):
 
 
 class TiDEEncoder(paddle.nn.Layer):
-
-    def __init__(self, in_features, hid_features, out_features, drop_prob,
-        num_blocks=1, layer_norm=True):
+    def __init__(self,
+                 in_features,
+                 hid_features,
+                 out_features,
+                 drop_prob,
+                 num_blocks=1,
+                 layer_norm=True):
         super(TiDEEncoder, self).__init__()
         self.blocks = paddle.nn.LayerList()
         for i in range(num_blocks):
-            self.blocks.append(ResidualBlock(in_features, hid_features,
-                out_features, drop_prob, layer_norm))
+            self.blocks.append(
+                ResidualBlock(in_features, hid_features, out_features,
+                              drop_prob, layer_norm))
             in_features = out_features
 
     def forward(self, x):
@@ -69,14 +80,19 @@ class TiDEEncoder(paddle.nn.Layer):
 
 
 class TiDEDenseDecoder(paddle.nn.Layer):
-
-    def __init__(self, in_features, hid_features, out_features, drop_prob,
-        num_blocks=1, layer_norm=True):
+    def __init__(self,
+                 in_features,
+                 hid_features,
+                 out_features,
+                 drop_prob,
+                 num_blocks=1,
+                 layer_norm=True):
         super(TiDEDenseDecoder, self).__init__()
         self.blocks = paddle.nn.LayerList()
         for i in range(num_blocks):
-            self.blocks.append(ResidualBlock(in_features, hid_features,
-                out_features, drop_prob, layer_norm))
+            self.blocks.append(
+                ResidualBlock(in_features, hid_features, out_features,
+                              drop_prob, layer_norm))
             in_features = out_features
 
     def forward(self, x):
@@ -86,12 +102,15 @@ class TiDEDenseDecoder(paddle.nn.Layer):
 
 
 class TiDETemporalDecoder(paddle.nn.Layer):
-
-    def __init__(self, in_features, hid_features, out_features, drop_prob,
-        layer_norm=True):
+    def __init__(self,
+                 in_features,
+                 hid_features,
+                 out_features,
+                 drop_prob,
+                 layer_norm=True):
         super(TiDETemporalDecoder, self).__init__()
-        self.residual = ResidualBlock(in_features, hid_features,
-            out_features, drop_prob, layer_norm)
+        self.residual = ResidualBlock(in_features, hid_features, out_features,
+                                      drop_prob, layer_norm)
 
     def forward(self, x):
         return self.residual(x)
@@ -106,75 +125,101 @@ class _TiDETModule(paddle.nn.Layer):
     (https://arxiv.org/pdf/2304.08424.pdf)
     """
 
-    def __init__(self, c_in=7, seq_len=96, pred_len=720, c_in_time_feat=4, time_feat_size=4,
-        time_hidden_size=64,hidden_size=256, num_encoder_layers=2, num_decoder_layers=2, decoder_output_dim=8, temporal_decoder_hidden=128,
-        drop_prob=0.3 ,layer_norm =True, revin=True, pretrain=None):  
+    def __init__(self,
+                 c_in=7,
+                 seq_len=96,
+                 pred_len=720,
+                 c_in_time_feat=4,
+                 time_feat_size=4,
+                 time_hidden_size=64,
+                 hidden_size=256,
+                 num_encoder_layers=2,
+                 num_decoder_layers=2,
+                 decoder_output_dim=8,
+                 temporal_decoder_hidden=128,
+                 drop_prob=0.3,
+                 layer_norm=True,
+                 revin=True,
+                 pretrain=None):
         super(_TiDETModule, self).__init__()
 
         self.c_in = c_in
         self.seq_len = seq_len
         self.dynCov_shape = [seq_len + pred_len, c_in_time_feat]
-        self.pred_len =pred_len
+        self.pred_len = pred_len
         self.time_feat_size = time_feat_size
         self.time_hidden_size = time_hidden_size
         self.hidden_size = hidden_size
         self.num_encoder_layers = num_encoder_layers
-        self.num_decoder_layers =  num_decoder_layers
-        self.decoder_output_dim =  decoder_output_dim
-        self.temporal_decoder_hidden =  temporal_decoder_hidden
+        self.num_decoder_layers = num_decoder_layers
+        self.decoder_output_dim = decoder_output_dim
+        self.temporal_decoder_hidden = temporal_decoder_hidden
         self.drop_prob = drop_prob
         self.layer_norm = layer_norm
-        self.revin =  revin
+        self.revin = revin
         self.pretrain = pretrain
         self.RevIN = RevIN(self.c_in)
-        self.concat_shape = self.seq_len  + self.dynCov_shape[0
-                    ] * self.time_feat_size 
-        self.featproj = ResidualBlock(self.dynCov_shape[1], self.
-            time_hidden_size, self.time_feat_size, self.drop_prob, self.layer_norm)
+        self.concat_shape = self.seq_len + self.dynCov_shape[
+            0] * self.time_feat_size
+        self.featproj = ResidualBlock(
+            self.dynCov_shape[1], self.time_hidden_size, self.time_feat_size,
+            self.drop_prob, self.layer_norm)
         self.encoder = TiDEEncoder(self.concat_shape, self.hidden_size,
-            self.hidden_size, self.drop_prob, self.num_encoder_layers, self
-            .layer_norm)
-        self.denseDecoder = TiDEDenseDecoder(self.hidden_size, self.
-            hidden_size, self.decoder_output_dim * self.pred_len, self.
-            drop_prob, self.num_decoder_layers, self.layer_norm)
-        self.temporalDecoder = TiDETemporalDecoder(self.time_feat_size + self.
-            decoder_output_dim, self.temporal_decoder_hidden, 
-            1, self.drop_prob, self.layer_norm)
-        self.linear = paddle.nn.Linear(in_features=self.seq_len,
-            out_features=self.pred_len)
-        
+                                   self.hidden_size, self.drop_prob,
+                                   self.num_encoder_layers, self.layer_norm)
+        self.denseDecoder = TiDEDenseDecoder(
+            self.hidden_size, self.hidden_size,
+            self.decoder_output_dim * self.pred_len, self.drop_prob,
+            self.num_decoder_layers, self.layer_norm)
+        self.temporalDecoder = TiDETemporalDecoder(
+            self.time_feat_size + self.decoder_output_dim,
+            self.temporal_decoder_hidden, 1, self.drop_prob, self.layer_norm)
+        self.linear = paddle.nn.Linear(
+            in_features=self.seq_len, out_features=self.pred_len)
+
         self.init_weight()
 
     def forward(self, x):
         batch_x = x["past_target"]
         batch_size = batch_x.shape[0]
         times_mark = x.get("known_cov_numeric", None)
-        proj_feature = self.featproj(times_mark) # time_encoder
-        proj_feature_x, proj_feature_y = proj_feature[:,:self.seq_len,:], proj_feature[:,self.seq_len:,:]
+        proj_feature = self.featproj(times_mark)  # time_encoder
+        proj_feature_x, proj_feature_y = proj_feature[:, :self.
+                                                      seq_len, :], proj_feature[:,
+                                                                                self.
+                                                                                seq_len:, :]
 
         if self.revin:
             batch_x = self.RevIN(batch_x, mode='norm')
 
-        proj_feature_past = paddle.repeat_interleave(proj_feature_x.reshape([batch_size, -1, 1]), self.c_in, 2) # [1, 2880]
-        proj_feature_furt = paddle.repeat_interleave(proj_feature_y.reshape([batch_size, -1, 1]), self.c_in, 2)  # [1, 384]
-        encoder_input = paddle.concat(x=(batch_x, proj_feature_past, proj_feature_furt), axis=1) # [1, 3984, 7]
+        proj_feature_past = paddle.repeat_interleave(
+            proj_feature_x.reshape([batch_size, -1, 1]), self.c_in,
+            2)  # [1, 2880]
+        proj_feature_furt = paddle.repeat_interleave(
+            proj_feature_y.reshape([batch_size, -1, 1]), self.c_in,
+            2)  # [1, 384]
+        encoder_input = paddle.concat(
+            x=(batch_x, proj_feature_past, proj_feature_furt),
+            axis=1)  # [1, 3984, 7]
         encoded = self.encoder(encoder_input.transpose([0, 2, 1]))
-        denseDecoded = self.denseDecoder(encoded) 
+        denseDecoded = self.denseDecoder(encoded)
 
-        denseDecoded = denseDecoded.reshape([batch_size, self.c_in, self.pred_len,
-            self.decoder_output_dim]) 
-        denseDecoded = paddle.concat(x=(denseDecoded, proj_feature_furt.transpose([0,2,1]).reshape([
-            batch_size, self.c_in, self.pred_len, self.time_feat_size])), axis=3)
-        temporalDecoded = self.temporalDecoder(denseDecoded).squeeze(-1)  
-        res_lookback = self.linear(batch_x.transpose([0, 2, 1])) 
+        denseDecoded = denseDecoded.reshape(
+            [batch_size, self.c_in, self.pred_len, self.decoder_output_dim])
+        denseDecoded = paddle.concat(
+            x=(denseDecoded, proj_feature_furt.transpose([0, 2, 1]).reshape(
+                [batch_size, self.c_in, self.pred_len, self.time_feat_size])),
+            axis=3)
+        temporalDecoded = self.temporalDecoder(denseDecoded).squeeze(-1)
+        res_lookback = self.linear(batch_x.transpose([0, 2, 1]))
         pred = temporalDecoded + res_lookback
 
         if self.revin:
-            pred = self.RevIN(pred.transpose([0,2,1]), mode='denorm')
+            pred = self.RevIN(pred.transpose([0, 2, 1]), mode='denorm')
             return pred
         else:
-            return pred.transpose([0,2,1])
-    
+            return pred.transpose([0, 2, 1])
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -212,8 +257,7 @@ class _TiDETModule(paddle.nn.Layer):
                         param_init.th_linear_fill(layer)
 
 
-
-@manager.LFMODELS.add_component
+@manager.MODELS.add_component
 class TiDE(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.
@@ -251,16 +295,16 @@ class TiDE(PaddleBaseModelImpl):
                  in_chunk_len: int,
                  out_chunk_len: int,
                  c_in: int=3,
-                 c_in_time_feat=4, 
+                 c_in_time_feat=4,
                  time_feat_size=4,
-                 time_hidden_size=64, 
-                 hidden_size=256, 
-                 num_encoder_layers=2, 
-                 num_decoder_layers=2, 
-                 decoder_output_dim=8, 
+                 time_hidden_size=64,
+                 hidden_size=256,
+                 num_encoder_layers=2,
+                 num_decoder_layers=2,
+                 decoder_output_dim=8,
                  temporal_decoder_hidden=128,
                  drop_prob=0.3,
-                 layer_norm =True, 
+                 layer_norm=True,
                  skip_chunk_len: int=0,
                  sampling_stride: int=1,
                  loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
@@ -286,7 +330,7 @@ class TiDE(PaddleBaseModelImpl):
         self.num_decoder_layers = num_decoder_layers
         self.decoder_output_dim = decoder_output_dim
         self.temporal_decoder_hidden = temporal_decoder_hidden
-        self.drop_prob = drop_prob 
+        self.drop_prob = drop_prob
         self.layer_norm = layer_norm
         self._use_revin = use_revin
         self._revin_params = revin_params
@@ -307,7 +351,6 @@ class TiDE(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             seed=seed, )
-
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
@@ -357,19 +400,18 @@ class TiDE(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _TiDETModule(
-            c_in = self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            c_in_time_feat= self._fit_params["known_cov_dim"], 
+            c_in_time_feat=self._fit_params["known_cov_dim"],
             time_feat_size=self.time_feat_size,
-            time_hidden_size=self.time_hidden_size, 
-            hidden_size=self.hidden_size, 
-            num_encoder_layers=self.num_encoder_layers, 
-            num_decoder_layers=self.num_decoder_layers, 
-            decoder_output_dim=self.decoder_output_dim, 
+            time_hidden_size=self.time_hidden_size,
+            hidden_size=self.hidden_size,
+            num_encoder_layers=self.num_encoder_layers,
+            num_decoder_layers=self.num_decoder_layers,
+            decoder_output_dim=self.decoder_output_dim,
             temporal_decoder_hidden=self.temporal_decoder_hidden,
             drop_prob=self.drop_prob,
-            layer_norm =self.layer_norm, 
+            layer_norm=self.layer_norm,
             revin=self._use_revin,
-            pretrain = self.pretrain
-            )
+            pretrain=self.pretrain)

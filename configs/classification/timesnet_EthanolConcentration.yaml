@@ -7,11 +7,13 @@ epoch: 30 # max_epochs
 training: True # 
 eval_metrics:  ['acc', ] 
 
+
 dataset: 
   name: EthanolConcentration
 
+
 model: 
-  name: TimesNetModel
+  name: TimesNet_CLS
   model_cfg:
     e_layers: 3 #
     num_kernels: 6 #

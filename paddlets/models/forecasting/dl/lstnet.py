@@ -130,8 +130,8 @@ class _LSTNetModule(paddle.nn.Layer):
         skip_out = paddle.transpose(
             skip_out, perm=[0, 2, 1, 3])  # [B, skip, conv_out // skip, C]
         skip_out = paddle.reshape(
-            skip_out, shape=[-1, self._conv_skip, self._channels
-                             ])  # [B, conv_out // skip, C]
+            skip_out, shape=[-1, self._conv_skip,
+                             self._channels])  # [B, conv_out // skip, C]
         _, skip_out = self._skip_rnn(skip_out)  # [1, B, C]
         skip_out = (skip_out[0] if isinstance(skip_out, tuple) else skip_out)
         skip_out = paddle.reshape(

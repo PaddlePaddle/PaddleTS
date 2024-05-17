@@ -161,9 +161,9 @@ class BaseTransform(object, metaclass=abc.ABCMeta):
                                    self.n_rows_pre_data_need)
         return res
 
-    def fit_transform(
-            self, dataset: Union[TSDataset, List[TSDataset]],
-            inplace: bool=False) -> Union[TSDataset, List[TSDataset]]:
+    def fit_transform(self,
+                      dataset: Union[TSDataset, List[TSDataset]],
+                      inplace: bool=False) -> Union[TSDataset, List[TSDataset]]:
         """
         Combine the above fit and transform into one method, firstly fitting the transformer from the dataset 
         and then applying the fitted transformer on the dataset.
@@ -529,8 +529,6 @@ class UdBaseTransform(BaseTransform):
         Returns:
             TSDataset
         """
-        if dataset is None:
-            return dataset
         new_ts = dataset if inplace else dataset.copy()
         if self._per_col_transform:
             for col in self._cols:

@@ -13,8 +13,12 @@ def masked_fill(x, mask, value):
 class DSAttention(paddle.nn.Layer):
     """De-stationary Attention"""
 
-    def __init__(self, mask_flag=True, factor=5, scale=None,
-        attention_dropout=0.1, output_attention=False):
+    def __init__(self,
+                 mask_flag=True,
+                 factor=5,
+                 scale=None,
+                 attention_dropout=0.1,
+                 output_attention=False):
         super(DSAttention, self).__init__()
         self.scale = scale
         self.mask_flag = mask_flag
@@ -46,8 +50,12 @@ class DSAttention(paddle.nn.Layer):
 class DSProbAttention(paddle.nn.Layer):
     """De-stationary ProbAttention for Informer"""
 
-    def __init__(self, mask_flag=True, factor=5, scale=None,
-        attention_dropout=0.1, output_attention=False):
+    def __init__(self,
+                 mask_flag=True,
+                 factor=5,
+                 scale=None,
+                 attention_dropout=0.1,
+                 output_attention=False):
         super(DSProbAttention, self).__init__()
         self.factor = factor
         self.scale = scale
@@ -60,19 +68,19 @@ class DSProbAttention(paddle.nn.Layer):
         _, _, L_Q, _ = Q.shape
         K_expand = K.unsqueeze(axis=-3).expand(shape=[B, H, L_Q, L_K, E])
         index_sample = paddle.randint(low=L_K, high=(L_Q, sample_k))
-        K_sample = K_expand[:, :, (paddle.arange(start=L_Q).unsqueeze(axis=
-            1)), (index_sample), :]
+        K_sample = K_expand[:, :, (paddle.arange(start=L_Q).unsqueeze(axis=1)),
+                            (index_sample), :]
         x = K_sample
         perm_0 = list(range(x.ndim))
         perm_0[-2] = -1
         perm_0[-1] = -2
-        Q_K_sample = paddle.matmul(x=Q.unsqueeze(axis=-2), y=x.transpose(
-            perm=perm_0)).squeeze()
-        M = Q_K_sample.max(axis=-1)[0] - paddle.divide(x=Q_K_sample.sum(
-            axis=-1), y=L_K)
+        Q_K_sample = paddle.matmul(
+            x=Q.unsqueeze(axis=-2), y=x.transpose(perm=perm_0)).squeeze()
+        M = Q_K_sample.max(axis=-1)[0] - paddle.divide(
+            x=Q_K_sample.sum(axis=-1), y=L_K)
         M_top = M.topk(k=n_top, sorted=False)[1]
-        Q_reduce = Q[(paddle.arange(start=B)[:, (None), (None)]), (paddle.
-            arange(start=H)[(None), :, (None)]), (M_top), :]
+        Q_reduce = Q[(paddle.arange(start=B)[:, (None), (None)]), (
+            paddle.arange(start=H)[(None), :, (None)]), (M_top), :]
         x = K
         perm_1 = list(range(x.ndim))
         perm_1[-2] = -1
@@ -84,8 +92,8 @@ class DSProbAttention(paddle.nn.Layer):
         B, H, L_V, D = V.shape
         if not self.mask_flag:
             V_sum = V.mean(axis=-2)
-            contex = V_sum.unsqueeze(axis=-2).expand(shape=[B, H, L_Q,
-                V_sum.shape[-1]]).clone()
+            contex = V_sum.unsqueeze(axis=-2).expand(
+                shape=[B, H, L_Q, V_sum.shape[-1]]).clone()
         else:
             assert L_Q == L_V
             contex = V.cumsum(axis=-2)
@@ -97,15 +105,15 @@ class DSProbAttention(paddle.nn.Layer):
             attn_mask = ProbMask(B, H, L_Q, index, scores)
             scores.masked_fill_(attn_mask.mask, -np.inf)
         attn = paddle.softmax(scores, dim=-1)
-        context_in[(paddle.arange(start=B)[:, (None), (None)]), (paddle.
-            arange(start=H)[(None), :, (None)]), (index), :] = paddle.matmul(x
-            =attn, y=V).astype(dtype=context_in.dtype)
+        context_in[(paddle.arange(start=B)[:, (None), (None)]), (paddle.arange(
+            start=H)[(None), :, (None)]), (index), :] = paddle.matmul(
+                x=attn, y=V).astype(dtype=context_in.dtype)
         if self.output_attention:
-            
-            attns = (paddle.ones(shape=[B, H, L_V, L_V]) / L_V).astype(dtype
-                =attn.dtype)
-            attns[(paddle.arange(start=B)[:, (None), (None)]), (paddle.
-                arange(start=H)[(None), :, (None)]), (index), :] = attn
+
+            attns = (paddle.ones(shape=[B, H, L_V, L_V]) / L_V).astype(
+                dtype=attn.dtype)
+            attns[(paddle.arange(start=B)[:, (None), (None)]), (paddle.arange(
+                start=H)[(None), :, (None)]), (index), :] = attn
             return context_in, attns
         else:
             return context_in, None
@@ -132,8 +140,8 @@ class DSProbAttention(paddle.nn.Layer):
         u = self.factor * np.ceil(np.log(L_Q)).astype('int').item()
         U_part = U_part if U_part < L_K else L_K
         u = u if u < L_Q else L_Q
-        scores_top, index = self._prob_QK(queries, keys, sample_k=U_part,
-            n_top=u)
+        scores_top, index = self._prob_QK(
+            queries, keys, sample_k=U_part, n_top=u)
         tau = 1.0 if tau is None else tau.unsqueeze(axis=1).unsqueeze(axis=1)
         delta = 0.0 if delta is None else delta.unsqueeze(axis=1).unsqueeze(
             axis=1)
@@ -142,27 +150,25 @@ class DSProbAttention(paddle.nn.Layer):
         if scale is not None:
             scores_top = scores_top * scale
         context = self._get_initial_context(values, L_Q)
-        context, attn = self._update_context(context, values, scores_top,
-            index, L_Q, attn_mask)
+        context, attn = self._update_context(context, values, scores_top, index,
+                                             L_Q, attn_mask)
         return context, attn
 
 
 class AttentionLayer(paddle.nn.Layer):
-
-    def __init__(self, attention, d_model, n_heads, d_keys=None, d_values=None
-        ):
+    def __init__(self, attention, d_model, n_heads, d_keys=None, d_values=None):
         super(AttentionLayer, self).__init__()
         d_keys = d_keys or d_model // n_heads
         d_values = d_values or d_model // n_heads
         self.inner_attention = attention
-        self.query_projection = paddle.nn.Linear(in_features=d_model,
-            out_features=d_keys * n_heads)
-        self.key_projection = paddle.nn.Linear(in_features=d_model,
-            out_features=d_keys * n_heads)
-        self.value_projection = paddle.nn.Linear(in_features=d_model,
-            out_features=d_values * n_heads)
-        self.out_projection = paddle.nn.Linear(in_features=d_values *
-            n_heads, out_features=d_model)
+        self.query_projection = paddle.nn.Linear(
+            in_features=d_model, out_features=d_keys * n_heads)
+        self.key_projection = paddle.nn.Linear(
+            in_features=d_model, out_features=d_keys * n_heads)
+        self.value_projection = paddle.nn.Linear(
+            in_features=d_model, out_features=d_values * n_heads)
+        self.out_projection = paddle.nn.Linear(
+            in_features=d_values * n_heads, out_features=d_model)
         self.n_heads = n_heads
 
     def forward(self, queries, keys, values, attn_mask, tau=None, delta=None):
@@ -172,7 +178,7 @@ class AttentionLayer(paddle.nn.Layer):
         queries = self.query_projection(queries).reshape([B, L, H, -1])
         keys = self.key_projection(keys).reshape([B, S, H, -1])
         values = self.value_projection(values).reshape([B, S, H, -1])
-        out, attn = self.inner_attention(queries, keys, values, attn_mask,
-            tau, delta)
+        out, attn = self.inner_attention(queries, keys, values, attn_mask, tau,
+                                         delta)
         out = out.reshape([B, L, -1])
         return self.out_projection(out), attn

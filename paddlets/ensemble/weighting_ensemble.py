@@ -15,6 +15,7 @@ from paddlets.pipeline import Pipeline
 from paddlets.models.utils import to_tsdataset
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
 from paddlets.models.ml_model_wrapper import PyodModelWrapper
+from paddlets.ensemble.search_ga import GASearch
 
 logger = Logger(__name__)
 FORECASTER_SUPPORT_MODES = ["mean", "min", "max", "median"]
@@ -40,6 +41,7 @@ class WeightingEnsembleBase(EnsembleBase):
 
         raise_if_not(isinstance(mode, str), "Mode should in type of string")
         self._mode = mode
+        self._model_idx = None
         super().__init__(estimators, verbose)
 
     def fit(self,
@@ -66,7 +68,8 @@ class WeightingEnsembleBase(EnsembleBase):
         predictions = self._predict_estimators(tsdataset)
 
         target_names = predictions[0].target.data.columns.values.tolist()
-        target_df = pd.DataFrame(columns=target_names)
+        target_df = pd.DataFrame(
+            columns=target_names, index=predictions[0].target.data.index)
 
         for name in target_names:
             meta = np.concatenate(
@@ -79,7 +82,49 @@ class WeightingEnsembleBase(EnsembleBase):
             y = self._weighting(meta)
             target_df[name] = y
 
-        return target_df.to_numpy()
+        return target_df
+
+    def search_best(self, tsdataset: TSDataset):
+        gt, predictions = self._eval_estimators(tsdataset)
+        ga = GASearch(gt[0], predictions)
+        best_idx = ga.run()
+        _estimators = []
+        for i, estimator in enumerate(self._estimators):
+            if best_idx[i]:
+                _estimators.append(estimator)
+        self._model_idx = best_idx
+        self._estimators = _estimators if len(
+            _estimators) > 0 else self._estimators
+
+    def eval(self, tsdataset: TSDataset) -> TSDataset:
+        """
+        predict 
+
+        Args:
+            tsdataset(TSDataset): Dataset to predict.
+
+        """
+        gt, predictions = self._eval_estimators(tsdataset)
+        bs, predict_len, dim = predictions[0].shape
+        target_df = np.zeros(predictions[0].shape)
+        for i in range(len(range(dim))):
+            meta = np.concatenate(
+                [
+                    np.array(prediction[:, :, i]).reshape(-1, 1)
+                    for prediction in predictions
+                ],
+                axis=1)
+
+            y = self._weighting(meta)
+            target_df[:, :, i] = y.reshape(bs, predict_len)
+
+        from paddlets.metrics import MSE, MAE
+        mse = MSE()
+        mae = MAE()
+        return {
+            'mse': mse.metric_fn(gt[0], target_df),
+            'mae': mae.metric_fn(gt[0], target_df)
+        }
 
     def _weighting(self, meta) -> TSDataset:
         """
@@ -212,7 +257,7 @@ class WeightingEnsembleForecaster(WeightingEnsembleBase, BaseModel):
             path(str): Output directory path.
             ensemble_file_name(str): Name of ensemble object. This file contains meta information of ensemble model.
         """
-        return super().save(path, ensemble_file_name)
+        return super().save(path)
 
     @staticmethod
     def load(
@@ -288,8 +333,8 @@ class WeightingEnsembleAnomaly(WeightingEnsembleBase):
         """
         super()._check_estimators(estimators)
         if all([
-                issubclass(e[0], PyodModelWrapper) or issubclass(
-                    e[0], AnomalyBaseModel or issubclass(e[0], Pipeline))
+                issubclass(e[0], PyodModelWrapper) or
+                issubclass(e[0], AnomalyBaseModel or issubclass(e[0], Pipeline))
                 for e in estimators
         ]):
             pass
@@ -313,9 +358,10 @@ class WeightingEnsembleAnomaly(WeightingEnsembleBase):
             if issubclass(e[0], PyodModelWrapper) or issubclass(
                     e[0], AnomalyBaseModel):
                 e[-1]["in_chunk_len"] = self._in_chunk_len
-            elif issubclass(e[0], Pipeline) and (issubclass(
-                    e[0]._steps[-1][0], PyodModelWrapper) or issubclass(
-                        e[0]._steps[-1][0], AnomalyBaseModel)):
+            elif issubclass(e[0], Pipeline) and (issubclass(e[0]._steps[-1][0],
+                                                            PyodModelWrapper) or
+                                                 issubclass(e[0]._steps[-1][0],
+                                                            AnomalyBaseModel)):
                 e[1]["steps"][-1][1]["in_chunk_len"] = self._in_chunk_len
         return super()._set_params(estimators)
 
@@ -339,8 +385,8 @@ class WeightingEnsembleAnomaly(WeightingEnsembleBase):
             if self._contamination == 0:
                 self._threshold = max_score_on_train
             else:
-                self._threshold = np.percentile(scores, 100 *
-                                                (1 - self._contamination))
+                self._threshold = np.percentile(scores,
+                                                100 * (1 - self._contamination))
 
     @to_tsdataset(scenario="anomaly_label")
     def predict(self, tsdataset: TSDataset) -> TSDataset:

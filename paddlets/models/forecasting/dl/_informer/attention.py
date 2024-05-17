@@ -112,8 +112,7 @@ class CrossAttention(paddle.nn.Layer):
 
         # scores : [batch_size, n_heads, in_chunk_len, in_chunk_len]
         scores = paddle.matmul(
-            q * np.sqrt(self._head_dim),
-            paddle.transpose(
+            q * np.sqrt(self._head_dim), paddle.transpose(
                 k, perm=[0, 1, 3, 2]))
 
         if attn_mask is not None:

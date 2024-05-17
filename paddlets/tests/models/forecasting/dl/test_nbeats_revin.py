@@ -13,8 +13,7 @@ import numpy as np
 from paddlets.datasets import TimeSeries, TSDataset
 from paddlets.models.common.callbacks import Callback
 from paddlets.models.forecasting.dl.nbeats import (
-    NBEATSModel, _TrendGenerator, _SeasonalityGenerator, _GType, _Block,
-    _Stack)
+    NBEATSModel, _TrendGenerator, _SeasonalityGenerator, _GType, _Block, _Stack)
 
 np.random.seed(2023)
 paddle.seed(0)

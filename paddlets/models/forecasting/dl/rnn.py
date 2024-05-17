@@ -331,8 +331,7 @@ class RNNBlockRegressor(PaddleBaseModelImpl):
         static_num_cols = []
         if static_dic:
             for col, val in static_dic.items():
-                if np.issubdtype(type(val), np.integer) or isinstance(val,
-                                                                      int):
+                if np.issubdtype(type(val), np.integer) or isinstance(val, int):
                     static_cat_size[col] = len(df_all[col].unique())
                 else:
                     static_num_cols.append(col)

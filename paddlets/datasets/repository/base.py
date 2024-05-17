@@ -126,9 +126,7 @@ DATASETS = {
     SpokenArabicDigitsTestDataset.name: SpokenArabicDigitsTestDataset,
     UWaveGestureLibraryTrainDataset.name: UWaveGestureLibraryTrainDataset,
     UWaveGestureLibraryTestDataset.name: UWaveGestureLibraryTestDataset,
-
 }
-
 
 
 def dataset_list() -> List[str]:
@@ -141,8 +139,11 @@ def dataset_list() -> List[str]:
     return list(DATASETS.keys())
 
 
-def get_dataset(name: str, split: Optional[List[int]]=None, seq_len: int=0) -> Union["TSDataset", List["TSDataset"], Tuple[List[
-        "TSDataset"], List[Any]]]:
+def get_dataset(name: str,
+                split: Optional[List[int]]=None,
+                seq_len: int=0,
+                info: Optional[Dict]=None) -> Union["TSDataset", List[
+                    "TSDataset"], Tuple[List["TSDataset"], List[Any]]]:
     """
     基于名称获取内置数据集
     
@@ -157,8 +158,9 @@ def get_dataset(name: str, split: Optional[List[int]]=None, seq_len: int=0) -> U
     dataset = DATASETS[name]
     path = dataset.path
     df = pd.read_csv(path)
+    load_param = info if info is not None else dataset.load_param
     if dataset.type == 'classification':
-        data_list = TSDataset.load_from_dataframe(df, **dataset.load_param)
+        data_list = TSDataset.load_from_dataframe(df, **load_param)
         y_label = []
         for dataset in data_list:
             y_label.append(dataset.static_cov['label'])
@@ -167,11 +169,13 @@ def get_dataset(name: str, split: Optional[List[int]]=None, seq_len: int=0) -> U
         return (data_list, y_label)
     else:
         if not split:
-            return TSDataset.load_from_dataframe(df, **dataset.load_param)
+            return TSDataset.load_from_dataframe(df, **load_param)
         else:
             ts_list = []
             for name, point in split.items():
                 if name == 'val' or name == 'test':
                     point[0] = point[0] - seq_len
-                ts_list.append(TSDataset.load_from_dataframe(df[point[0]:point[1]], **dataset.load_param))
+                ts_list.append(
+                    TSDataset.load_from_dataframe(df[point[0]:point[1]], **
+                                                  load_param))
             return ts_list

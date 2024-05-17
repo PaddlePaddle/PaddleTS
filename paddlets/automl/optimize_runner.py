@@ -248,8 +248,7 @@ class OptimizeRunner:
                                  "gpu": gpu_resource},
             local_dir=local_dir + "/ray_results", )
 
-    def _backtrack_traverse_search_space(self, sp, track,
-                                         track_choice_mapping):
+    def _backtrack_traverse_search_space(self, sp, track, track_choice_mapping):
         """
         _backtrack_traverse_search_space
         """

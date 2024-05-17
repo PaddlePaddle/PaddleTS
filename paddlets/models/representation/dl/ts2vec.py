@@ -262,8 +262,8 @@ class TS2Vec(ReprBaseModel):
         if feats.shape[1] > self._segment_size:
             offset = np.random.randint(feats.shape[1] - self._segment_size + 1)
             feats = feats[:, offset:offset + self._segment_size]
-        aug1, aug2, overlap_len = create_contrastive_inputs(
-            feats, self._temporal_unit)
+        aug1, aug2, overlap_len = create_contrastive_inputs(feats,
+                                                            self._temporal_unit)
         repr1 = self._network(aug1, mask="binomial")[:, -overlap_len:, :]
         repr2 = self._network(aug2, mask="binomial")[:, :overlap_len, :]
         loss = hierarchical_contrastive_loss(repr1, repr2)
@@ -321,8 +321,7 @@ class TS2Vec(ReprBaseModel):
         #   using the observations located in [t - sliding_len, t].
         if sliding_len is not None:
             seq_len, buffer, reprs = feats.shape[1], [], []
-            for timestamp_idx in tqdm.tqdm(
-                    range(seq_len), disable=not verbose):
+            for timestamp_idx in tqdm.tqdm(range(seq_len), disable=not verbose):
                 start = timestamp_idx - sliding_len
                 end = timestamp_idx + 1
                 padding_left = (-start if start < 0 else 0)

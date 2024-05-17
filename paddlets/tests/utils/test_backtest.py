@@ -128,7 +128,7 @@ class TestBacktest(TestCase):
         stride = 50
         data_len = len(self.tsdataset1.get_target())
         assert len(predicts.get_target()) == math.ceil(
-        (data_len - start - predict_window + 1) / stride) * predict_window
+            (data_len - start - predict_window + 1) / stride) * predict_window
 
         # case5 add return score
         lstnet = LSTNetRegressor(

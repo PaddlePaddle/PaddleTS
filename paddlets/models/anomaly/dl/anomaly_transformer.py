@@ -302,9 +302,8 @@ class AnomalyTransformer(AnomalyBaseModel):
         Returns:
             TSDataset.
         """
-        raise_if(
-            train_dataset is None,
-            f" Please pass in train_tsdataset to calculate the threshold.")
+        raise_if(train_dataset is None,
+                 f" Please pass in train_tsdataset to calculate the threshold.")
         train_dataloader = self._init_predict_dataloader(train_dataset)
         test_dataloader = self._init_predict_dataloader(test_dataset)
         thre_dataloader = self._init_predict_dataloader(
@@ -324,8 +323,8 @@ class AnomalyTransformer(AnomalyBaseModel):
             label = 0 if score < self._threshold else 1
             anomaly_label.append(label)
         if test_dataset.target is not None and self._pred_adjust:
-            anomaly_label = self._pred_adjust_fn(
-                anomaly_label, test_dataset.target.to_numpy())
+            anomaly_label = self._pred_adjust_fn(anomaly_label,
+                                                 test_dataset.target.to_numpy())
         return np.array(anomaly_label)
 
     def _predict(

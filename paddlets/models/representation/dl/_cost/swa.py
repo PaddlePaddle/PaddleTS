@@ -31,8 +31,8 @@ class AveragedModel(paddle.nn.Layer):
 
             def default_avg_fn(averaged_model_params, model_params,
                                num_averaged):
-                return averaged_model_params * 0.999 + model_params * (1 -
-                                                                       0.999)
+                return averaged_model_params * 0.999 + model_params * (1 - 0.999
+                                                                       )
 
         self._avg_fn = default_avg_fn
 

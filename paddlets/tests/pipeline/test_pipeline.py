@@ -173,8 +173,7 @@ class TestPipeline(TestCase):
         transform_params = {"cols": ['b1'], "k": 0.5}
         transform_params_1 = {"cols": ['c1'], "k": 0.7}
 
-        pipe = Pipeline([(KSigma, transform_params),
-                         (TimeFeatureGenerator, {}),
+        pipe = Pipeline([(KSigma, transform_params), (TimeFeatureGenerator, {}),
                          (KSigma, transform_params_1)])
         pipe.fit(tsdataset, tsdataset)
         res = pipe.transform(tsdataset)

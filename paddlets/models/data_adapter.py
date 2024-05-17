@@ -232,15 +232,14 @@ class SampleDataset(paddle.io.Dataset):
             # (i.e. tsdataset.target[-1] = 10), so current target timeseries cannot provide 11 to build this sample.
         """
 
-    def __init__(
-            self,
-            rawdataset: TSDataset,
-            in_chunk_len: int=1,
-            out_chunk_len: int=0,
-            skip_chunk_len: int=0,
-            sampling_stride: int=1,
-            fill_last_value: Optional[Union[np.floating, np.integer]]=None,
-            time_window: Optional[Tuple[int, int]]=None):
+    def __init__(self,
+                 rawdataset: TSDataset,
+                 in_chunk_len: int=1,
+                 out_chunk_len: int=0,
+                 skip_chunk_len: int=0,
+                 sampling_stride: int=1,
+                 fill_last_value: Optional[Union[np.floating, np.integer]]=None,
+                 time_window: Optional[Tuple[int, int]]=None):
         super(SampleDataset, self).__init__()
 
         raise_if(rawdataset is None, "rawdataset must not be None.")
@@ -845,8 +844,8 @@ class SampleDataset(paddle.io.Dataset):
             return "target", self._rawdataset.target.time_index
         return "observed_cov", self._rawdataset.observed_cov.time_index
 
-    def _validate_std_timeindex(
-            self, time_window: Optional[Tuple[int, int]]) -> None:
+    def _validate_std_timeindex(self,
+                                time_window: Optional[Tuple[int, int]]) -> None:
         """
         Internal method, ensuring the standard time index must be long enough to build at least one sample, raises
         if invalid.
@@ -1042,8 +1041,7 @@ class SampleDataset(paddle.io.Dataset):
                 f"TSDataset.{self._std_timeseries_name}.time_index" +
                 f"[min(time_window[1], len(TSDataset.{self._std_timeseries_name}.time_index) - 1)] "
                 + f"({sample_end_std_time}) <= " +
-                f"TSDataset.observed_cov.end_time ({observed_cov_ts.end_time})."
-            )
+                f"TSDataset.observed_cov.end_time ({observed_cov_ts.end_time}).")
 
     def _fill_tsdataset(self, tsdataset: TSDataset) -> TSDataset:
         # First, fill target

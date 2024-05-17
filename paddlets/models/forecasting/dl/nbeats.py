@@ -193,11 +193,11 @@ class _Block(nn.Layer):
         else:
             raise ValueError("g_type not supported")
 
-    def forward(self,
-                backcast: paddle.Tensor,
-                known_cov: paddle.Tensor,
-                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
-                                                      paddle.Tensor]:
+    def forward(
+            self,
+            backcast: paddle.Tensor,
+            known_cov: paddle.Tensor,
+            observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         Forward block.
 
@@ -302,11 +302,11 @@ class _Stack(nn.Layer):
             self._blocks_list = [interpretable_block] * num_blocks
         self._blocks = nn.LayerList(self._blocks_list)
 
-    def forward(self,
-                backcast: paddle.Tensor,
-                known_cov: paddle.Tensor,
-                observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor,
-                                                      paddle.Tensor]:
+    def forward(
+            self,
+            backcast: paddle.Tensor,
+            known_cov: paddle.Tensor,
+            observed_cov: paddle.Tensor) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         Forward stack.
 

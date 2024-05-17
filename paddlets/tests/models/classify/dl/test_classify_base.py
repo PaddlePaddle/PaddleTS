@@ -54,8 +54,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -107,8 +106,7 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -183,8 +181,8 @@ class TestClassifyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -301,7 +299,7 @@ class TestClassifyBaseModel(unittest.TestCase):
         modelname = self.default_modelname
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -360,8 +358,7 @@ class TestClassifyBaseModel(unittest.TestCase):
             files, {model_1_name, *model_1_internal_filename_map.values()})
 
         with open(
-                os.path.join(path,
-                             model_1_internal_filename_map["model_meta"]),
+                os.path.join(path, model_1_internal_filename_map["model_meta"]),
                 "r") as f:
             model_meta = json.load(f)
         # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
@@ -372,9 +369,7 @@ class TestClassifyBaseModel(unittest.TestCase):
         # paddlets.models.anomaly.dl.autoencoder
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         self.assertEqual("classification", model_meta['model_type'])
-        self.assertEqual({
-            "features": [None, 200, 5]
-        }, model_meta["input_data"])
+        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
 
         shutil.rmtree(path)
 
@@ -417,8 +412,7 @@ class TestClassifyBaseModel(unittest.TestCase):
             files, {model_1_name, *model_1_internal_filename_map.values()})
 
         with open(
-                os.path.join(path,
-                             model_1_internal_filename_map["model_meta"]),
+                os.path.join(path, model_1_internal_filename_map["model_meta"]),
                 "r") as f:
             model_meta = json.load(f)
         # AutoEncoder,AnomalyBaseModel,Trainable,ABC,object
@@ -429,9 +423,7 @@ class TestClassifyBaseModel(unittest.TestCase):
         # paddlets.models.anomaly.dl.autoencoder
         self.assertEqual(CNNClassifier.__module__, model_meta["modulename"])
         self.assertEqual("classification", model_meta['model_type'])
-        self.assertEqual({
-            "features": [None, 200, 5]
-        }, model_meta["input_data"])
+        self.assertEqual({"features": [None, 200, 5]}, model_meta["input_data"])
 
         shutil.rmtree(path)
 
@@ -601,11 +593,11 @@ class TestClassifyBaseModel(unittest.TestCase):
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_1.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy(
+                    ).astype(np.float64)))
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_2.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy(
+                    ).astype(np.float64)))
 
         # prediction results expected.
         loaded_model_1_preds = loaded_model_1.predict(paddlets_ds)
@@ -667,8 +659,7 @@ class TestClassifyBaseModel(unittest.TestCase):
         # use same mode instance to save the first model file.
         model_1_name = "a"
         abs_model_1_path = os.path.join(path, model_1_name)
-        model.save(
-            abs_model_1_path, network_model=True, dygraph_to_static=True)
+        model.save(abs_model_1_path, network_model=True, dygraph_to_static=True)
 
         with open(os.path.join(path, "a_model_meta"), "r") as f:
             model_meta = json.load(f)

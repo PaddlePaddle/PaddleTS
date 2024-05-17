@@ -1,13 +1,14 @@
 import paddle
 import math
 
-__all__ = ['Transpose', 'get_activation_fn', 'moving_avg', 'series_decomp',
+__all__ = [
+    'Transpose', 'get_activation_fn', 'moving_avg', 'series_decomp',
     'PositionalEncoding', 'SinCosPosEncoding', 'Coord2dPosEncoding',
-    'Coord1dPosEncoding', 'positional_encoding']
+    'Coord1dPosEncoding', 'positional_encoding'
+]
 
 
 class Transpose(paddle.nn.Layer):
-
     def __init__(self, *dims, contiguous=False):
         super().__init__()
         self.dims, self.contiguous = dims, contiguous
@@ -28,7 +29,7 @@ def get_activation_fn(activation):
         return paddle.nn.GELU()
     raise ValueError(
         f'{activation} is not available. You can use "relu", "gelu", or a callable'
-        )
+    )
 
 
 class moving_avg(paddle.nn.Layer):
@@ -39,14 +40,14 @@ class moving_avg(paddle.nn.Layer):
     def __init__(self, kernel_size, stride):
         super(moving_avg, self).__init__()
         self.kernel_size = kernel_size
-        self.avg = paddle.nn.AvgPool1d(kernel_size=kernel_size, stride=
-            stride, padding=0)
+        self.avg = paddle.nn.AvgPool1d(
+            kernel_size=kernel_size, stride=stride, padding=0)
 
     def forward(self, x):
-        front = x[:, 0:1, :].tile(repeat_times=[1, (self.kernel_size - 1) //
-            2, 1])
-        end = x[:, -1:, :].tile(repeat_times=[1, (self.kernel_size - 1) // 
-            2, 1])
+        front = x[:, 0:1, :].tile(
+            repeat_times=[1, (self.kernel_size - 1) // 2, 1])
+        end = x[:, -1:, :].tile(
+            repeat_times=[1, (self.kernel_size - 1) // 2, 1])
         x = paddle.concat(x=[front, x, end], axis=1)
         x = self.avg(x.transpose(perm=[0, 2, 1]))
         x = x.transpose(perm=[0, 2, 1])
@@ -71,8 +72,8 @@ class series_decomp(paddle.nn.Layer):
 def PositionalEncoding(q_len, d_model, normalize=True):
     pe = paddle.zeros(shape=[q_len, d_model])
     position = paddle.arange(start=0, end=q_len).unsqueeze(axis=1)
-    div_term = paddle.exp(x=paddle.arange(start=0, end=d_model, step=2) * -
-        (math.log(10000.0) / d_model))
+    div_term = paddle.exp(x=paddle.arange(
+        start=0, end=d_model, step=2) * -(math.log(10000.0) / d_model))
     pe[:, 0::2] = paddle.sin(x=position * div_term)
     pe[:, 1::2] = paddle.cos(x=position * div_term)
     if normalize:
@@ -84,14 +85,18 @@ def PositionalEncoding(q_len, d_model, normalize=True):
 SinCosPosEncoding = PositionalEncoding
 
 
-def Coord2dPosEncoding(q_len, d_model, exponential=False, normalize=True,
-    eps=0.001, verbose=False):
+def Coord2dPosEncoding(q_len,
+                       d_model,
+                       exponential=False,
+                       normalize=True,
+                       eps=0.001,
+                       verbose=False):
     x = 0.5 if exponential else 1
     i = 0
     for i in range(100):
-        cpe = 2 * paddle.linspace(start=0, stop=1, num=q_len).reshape(-1, 1
-            ) ** x * paddle.linspace(start=0, stop=1, num=d_model).reshape(
-            1, -1) ** x - 1
+        cpe = 2 * paddle.linspace(
+            start=0, stop=1, num=q_len).reshape(-1, 1)**x * paddle.linspace(
+                start=0, stop=1, num=d_model).reshape(1, -1)**x - 1
         #pv(f'{i:4.0f}  {x:5.3f}  {cpe.mean():+6.3f}', verbose)
         if abs(cpe.mean()) <= eps:
             break
@@ -107,8 +112,9 @@ def Coord2dPosEncoding(q_len, d_model, exponential=False, normalize=True,
 
 
 def Coord1dPosEncoding(q_len, exponential=False, normalize=True):
-    cpe = 2 * paddle.linspace(start=0, stop=1, num=q_len).reshape(-1, 1) ** (
-        0.5 if exponential else 1) - 1
+    cpe = 2 * paddle.linspace(
+        start=0, stop=1, num=q_len).reshape(-1, 1)**(0.5
+                                                     if exponential else 1) - 1
     if normalize:
         cpe = cpe - cpe.mean()
         cpe = cpe / (cpe.std() * 10)
@@ -138,18 +144,20 @@ def positional_encoding(pe, learn_pe, q_len, d_model):
     elif pe == 'exp1d':
         W_pos = Coord1dPosEncoding(q_len, exponential=True, normalize=True)
     elif pe == 'lin2d':
-        W_pos = Coord2dPosEncoding(q_len, d_model, exponential=False,
-            normalize=True)
+        W_pos = Coord2dPosEncoding(
+            q_len, d_model, exponential=False, normalize=True)
     elif pe == 'exp2d':
-        W_pos = Coord2dPosEncoding(q_len, d_model, exponential=True,
-            normalize=True)
+        W_pos = Coord2dPosEncoding(
+            q_len, d_model, exponential=True, normalize=True)
     elif pe == 'sincos':
         W_pos = PositionalEncoding(q_len, d_model, normalize=True)
     else:
         raise ValueError(
             f"{pe} is not a valid pe (positional encoder. Available types: 'gauss'=='normal',         'zeros', 'zero', uniform', 'lin1d', 'exp1d', 'lin2d', 'exp2d', 'sincos', None.)"
-            )
-    W_pos = paddle.create_parameter(shape=W_pos.shape,default_initializer=paddle.nn.initializer.Assign(W_pos), dtype=str(W_pos.numpy().dtype))
+        )
+    W_pos = paddle.create_parameter(
+        shape=W_pos.shape,
+        default_initializer=paddle.nn.initializer.Assign(W_pos),
+        dtype=str(W_pos.numpy().dtype))
     W_pos.stop_gradient = learn_pe
     return W_pos
-
