@@ -27,9 +27,7 @@ class TestFill(TestCase):
         print(sys.stderr, "test_fit()...")
         a = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
         a1 = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
-        b = [
-            1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
-        ]
+        b = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16]
         b1 = [
             1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
         ]
@@ -55,9 +53,7 @@ class TestFill(TestCase):
         #测试数据样例
         a = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
         a1 = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
-        b = [
-            1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
-        ]
+        b = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16]
         b1 = [
             1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
         ]
@@ -89,8 +85,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'pre'}
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -112,8 +107,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'next'}
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -135,27 +129,24 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'zero'}
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
         # test --  opt
         a = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            3.1415926
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 3.1415926
         ]
         a1 = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            3.1415926
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 3.1415926
         ]
         b = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926,
-            14, 15, 16
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926, 14,
+            15, 16
         ]
         b1 = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926,
-            14, 15, 16
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926, 14,
+            15, 16
         ]
         expect_output = pd.DataFrame(columns=["X", "Y", "X1", "Y1"])
         expect_output['X'] = a
@@ -197,8 +188,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'max'}
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -224,8 +214,7 @@ class TestFill(TestCase):
         }
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -251,8 +240,7 @@ class TestFill(TestCase):
         }
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -278,8 +266,7 @@ class TestFill(TestCase):
         }
         ob = eval("Fill")(**params)
         at = ob.transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -301,9 +288,7 @@ class TestFill(TestCase):
         #测试数据样例
         a = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
         a1 = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, np.nan]
-        b = [
-            1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
-        ]
+        b = [1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16]
         b1 = [
             1, np.nan, 3, 4, 5, 6, 7, 8, 9, 10, 11, np.nan, np.nan, 14, 15, 16
         ]
@@ -335,8 +320,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'pre'}
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -358,8 +342,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'next'}
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -381,27 +364,24 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'zero'}
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
         # test --  opt
         a = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            3.1415926
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 3.1415926
         ]
         a1 = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            3.1415926
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 3.1415926
         ]
         b = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926,
-            14, 15, 16
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926, 14,
+            15, 16
         ]
         b1 = [
-            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926,
-            14, 15, 16
+            1, 3.1415926, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3.1415926, 3.1415926, 14,
+            15, 16
         ]
         expect_output = pd.DataFrame(columns=["X", "Y", "X1", "Y1"])
         expect_output['X'] = a
@@ -443,8 +423,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'max'}
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -466,8 +445,7 @@ class TestFill(TestCase):
         params = {'cols': ['X', 'X1', 'Y', 'Y1'], 'method': 'min'}
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -493,8 +471,7 @@ class TestFill(TestCase):
         }
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 
@@ -520,8 +497,7 @@ class TestFill(TestCase):
         }
         ob = eval("Fill")(**params)
         at = ob.fit_transform(ts)
-        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov()
-                                                       .data))
+        self.assertTrue(eo.get_known_cov().data.equals(at.get_known_cov().data))
         self.assertTrue(eo.get_observed_cov().data.equals(at.get_observed_cov()
                                                           .data))
 

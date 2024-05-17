@@ -68,8 +68,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -85,8 +85,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -104,11 +104,10 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
-        self.assertEqual(test_param["time_window"],
-                         test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
@@ -130,8 +129,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -147,8 +146,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -166,11 +165,10 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
-        self.assertEqual(test_param["time_window"],
-                         test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
@@ -192,8 +190,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (train_window_min, train_window_max)
         }
-        train_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          train_param)
+        train_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **train_param)
         self.assertEqual(train_param["time_window"],
                          train_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
@@ -209,8 +207,8 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (valid_window_min, valid_window_max)
         }
-        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                          valid_param)
+        valid_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                          **valid_param)
 
         self.assertEqual(valid_param["time_window"],
                          valid_sample_ds._time_window)
@@ -228,11 +226,10 @@ class TestDataAdapter(unittest.TestCase):
             common_param,
             "time_window": (test_window_min, test_window_max)
         }
-        test_sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                         test_param)
+        test_sample_ds = self._adapter.to_sample_dataset(tsdataset,
+                                                         **test_param)
 
-        self.assertEqual(test_param["time_window"],
-                         test_sample_ds._time_window)
+        self.assertEqual(test_param["time_window"], test_sample_ds._time_window)
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
             sample_ds=test_sample_ds,
@@ -457,8 +454,7 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._both_numeric_and_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -474,8 +470,7 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._only_numeric_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -491,8 +486,7 @@ class TestDataAdapter(unittest.TestCase):
             cov_dtypes_bits=self._only_categorical_dtype_bits)
 
         # Build sample.
-        sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                    not_fill_param)
+        sample_ds = self._adapter.to_sample_dataset(tsdataset, **not_fill_param)
 
         self._compare_tsdataset_and_sample_dataset(
             tsdataset=tsdataset,
@@ -514,8 +508,7 @@ class TestDataAdapter(unittest.TestCase):
 
         for fill_value in [
                 t(99.9)
-                for t in
-            [float, np.float, np.float16, np.float32, np.float64]
+                for t in [float, np.float, np.float16, np.float32, np.float64]
         ]:
             fill_param = { ** param, "fill_last_value": fill_value}
             # (a) fill value is numeric, samples also only contain numeric too.
@@ -527,8 +520,7 @@ class TestDataAdapter(unittest.TestCase):
                 cov_dtypes_bits=self._only_numeric_dtype_bits)
 
             # Build sample.
-            sample_ds = self._adapter.to_sample_dataset(tsdataset, **
-                                                        fill_param)
+            sample_ds = self._adapter.to_sample_dataset(tsdataset, **fill_param)
 
             self._compare_tsdataset_and_sample_dataset(
                 tsdataset=tsdataset,
@@ -973,8 +965,7 @@ class TestDataAdapter(unittest.TestCase):
         bad_contain_data_map = {
             "float": [
                 t(1.1)
-                for t in
-                [float, np.float, np.float16, np.float32, np.float64]
+                for t in [float, np.float, np.float16, np.float32, np.float64]
             ],
             "int": [
                 t(1)
@@ -1760,9 +1751,7 @@ class TestDataAdapter(unittest.TestCase):
                         {pd.DatetimeIndex.__name__, pd.RangeIndex.__name__})
         if target_timeindex_type == pd.DatetimeIndex.__name__:
             target_index = pd.date_range(
-                start=target_start_timestamp,
-                periods=target_periods,
-                freq=freq)
+                start=target_start_timestamp, periods=target_periods, freq=freq)
         else:
             target_index = pd.RangeIndex(start=0, stop=target_periods, step=1)
         target_df = pd.DataFrame(
@@ -1821,8 +1810,7 @@ class TestDataAdapter(unittest.TestCase):
                 freq=freq)
         else:
             observed_index = pd.RangeIndex(start=0, stop=known_periods, step=1)
-        observed_raw_data = [(i * -1, i * -10)
-                             for i in range(observed_periods)]
+        observed_raw_data = [(i * -1, i * -10) for i in range(observed_periods)]
         observed_numeric_df = None
         if (cov_dtypes_bits & observed_contain_numeric_bit
             ) == observed_contain_numeric_bit:
@@ -1937,8 +1925,7 @@ class TestDataAdapter(unittest.TestCase):
                 else:
                     ndarray_tail = target_offset + curr_sample_tail + 1
                     ndarray_head = ndarray_tail - out_chunk_len
-                    ndarray = df.to_numpy(
-                        copy=False)[ndarray_head:ndarray_tail]
+                    ndarray = df.to_numpy(copy=False)[ndarray_head:ndarray_tail]
                     # data ok.
                     self.assertTrue(
                         np.alltrue(ndarray == curr_sample["future_target"]))
@@ -1963,12 +1950,10 @@ class TestDataAdapter(unittest.TestCase):
                         include=self._numeric_dtype).to_numpy(copy=False)
                     ndarray = np.vstack(tup=(
                         numeric_ndarray[ndarray_left_head:ndarray_left_tail],
-                        numeric_ndarray[ndarray_right_head:ndarray_right_tail]
-                    ))
+                        numeric_ndarray[ndarray_right_head:ndarray_right_tail]))
                     # data ok.
                     self.assertTrue(
-                        np.alltrue(ndarray == curr_sample[
-                            "known_cov_numeric"]))
+                        np.alltrue(ndarray == curr_sample["known_cov_numeric"]))
                     # dtype ok.
                     self.assertEqual(ndarray.dtype,
                                      curr_sample["known_cov_numeric"].dtype)
@@ -1992,9 +1977,8 @@ class TestDataAdapter(unittest.TestCase):
                         np.alltrue(ndarray == curr_sample[
                             "known_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(
-                        ndarray.dtype,
-                        curr_sample["known_cov_categorical"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     curr_sample["known_cov_categorical"].dtype)
             # known_cov is None.
             else:
                 self.assertTrue("known_cov_numeric" not in curr_sample.keys())
@@ -2059,12 +2043,11 @@ class TestDataAdapter(unittest.TestCase):
                     ]
                     # data ok.
                     self.assertTrue(
-                        np.alltrue(numeric == curr_sample["static_cov_numeric"]
-                                   [0]))
+                        np.alltrue(numeric == curr_sample["static_cov_numeric"][
+                            0]))
                     # dtype ok.
-                    self.assertEqual(
-                        numeric[0].dtype,
-                        curr_sample["static_cov_numeric"][0].dtype)
+                    self.assertEqual(numeric[0].dtype,
+                                     curr_sample["static_cov_numeric"][0].dtype)
                 # categorical
                 if "static_cov_categorical" in curr_sample.keys():
                     categorical = [
@@ -2107,8 +2090,7 @@ class TestDataAdapter(unittest.TestCase):
                 ]
                 # data ok.
                 self.assertTrue(
-                    np.alltrue(numeric == last_sample["static_cov_numeric"][
-                        0]))
+                    np.alltrue(numeric == last_sample["static_cov_numeric"][0]))
                 # dtype ok.
                 self.assertEqual(numeric[0].dtype,
                                  last_sample["static_cov_numeric"][0].dtype)
@@ -2123,9 +2105,8 @@ class TestDataAdapter(unittest.TestCase):
                     np.alltrue(categorical == last_sample[
                         "static_cov_categorical"][0]))
                 # dtype ok.
-                self.assertEqual(
-                    categorical[0].dtype,
-                    last_sample["static_cov_categorical"][0].dtype)
+                self.assertEqual(categorical[0].dtype,
+                                 last_sample["static_cov_categorical"][0].dtype)
         # static_cov is None
         else:
             self.assertTrue("static_cov_numeric" not in last_sample.keys())
@@ -2160,8 +2141,7 @@ class TestDataAdapter(unittest.TestCase):
                 else:
                     ndarray_tail = target_offset + last_sample_tail + 1
                     ndarray_head = ndarray_tail - out_chunk_len
-                    ndarray = df.to_numpy(
-                        copy=False)[ndarray_head:ndarray_tail]
+                    ndarray = df.to_numpy(copy=False)[ndarray_head:ndarray_tail]
                     # data ok.
                     self.assertTrue(
                         np.alltrue(ndarray == last_sample["future_target"]))
@@ -2186,12 +2166,10 @@ class TestDataAdapter(unittest.TestCase):
                         include=self._numeric_dtype).to_numpy(copy=False)
                     ndarray = np.vstack(tup=(
                         numeric_ndarray[ndarray_left_head:ndarray_left_tail],
-                        numeric_ndarray[ndarray_right_head:ndarray_right_tail]
-                    ))
+                        numeric_ndarray[ndarray_right_head:ndarray_right_tail]))
                     # data ok.
                     self.assertTrue(
-                        np.alltrue(ndarray == last_sample[
-                            "known_cov_numeric"]))
+                        np.alltrue(ndarray == last_sample["known_cov_numeric"]))
                     # dtype ok.
                     self.assertEqual(ndarray.dtype,
                                      last_sample["known_cov_numeric"].dtype)
@@ -2215,9 +2193,8 @@ class TestDataAdapter(unittest.TestCase):
                         np.alltrue(ndarray == last_sample[
                             "known_cov_categorical"]))
                     # dtype ok.
-                    self.assertEqual(
-                        ndarray.dtype,
-                        last_sample["known_cov_categorical"].dtype)
+                    self.assertEqual(ndarray.dtype,
+                                     last_sample["known_cov_categorical"].dtype)
             # known_cov is None.
             else:
                 self.assertTrue("known_cov_numeric" not in last_sample.keys())

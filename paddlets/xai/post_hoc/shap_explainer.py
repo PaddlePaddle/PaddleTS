@@ -129,8 +129,7 @@ class ShapExplainer(BaseExplainer):
         # Initializing explainer
         if shap_method == 'kernel':
             kwargs['keep_index'] = True
-            if use_paddleloader and not issubclass(
-                    type(self._model), Pipeline):
+            if use_paddleloader and not issubclass(type(self._model), Pipeline):
                 self.explainer = self._ShapMethod[shap_method](
                     model=self._wrapper_paddle_predict,
                     data=self.new_background_data,

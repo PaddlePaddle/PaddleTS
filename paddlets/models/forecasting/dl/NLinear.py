@@ -28,23 +28,29 @@ class _NLinearModule(paddle.nn.Layer):
     (https://arxiv.org/pdf/2205.13504.pdf)
     """
 
-    def __init__(self, c_in=7, seq_len=96, pred_len=96, individual=False, pretrain=None):
+    def __init__(self,
+                 c_in=7,
+                 seq_len=96,
+                 pred_len=96,
+                 individual=False,
+                 pretrain=None):
         super(_NLinearModule, self).__init__()
         self.seq_len = seq_len
         self.pred_len = pred_len
         self.channels = c_in
         self.individual = individual
         self.pretrain = pretrain
-        
+
         if self.individual:
             self.Linear = paddle.nn.LayerList()
             for i in range(self.channels):
-                self.Linear.append(paddle.nn.Linear(in_features=self.
-                    seq_len, out_features=self.pred_len))
+                self.Linear.append(
+                    paddle.nn.Linear(
+                        in_features=self.seq_len, out_features=self.pred_len))
         else:
-            self.Linear = paddle.nn.Linear(in_features=self.seq_len,
-                out_features=self.pred_len)
-        
+            self.Linear = paddle.nn.Linear(
+                in_features=self.seq_len, out_features=self.pred_len)
+
         self.init_weight()
 
     def forward(self, x):
@@ -52,17 +58,17 @@ class _NLinearModule(paddle.nn.Layer):
         seq_last = x[:, -1:, :].detach()
         x = x - seq_last
         if self.individual:
-            output = paddle.zeros(shape=[x.shape[0], self.pred_len, x.shape
-                [2]], dtype=x.dtype)
+            output = paddle.zeros(
+                shape=[x.shape[0], self.pred_len, x.shape[2]], dtype=x.dtype)
             for i in range(self.channels):
                 output[:, :, i] = self.Linear[i](x[:, :, i])
             x = output
         else:
-            x = self.Linear(x.transpose(perm=[0, 2, 1])).transpose(perm=[0,
-                2, 1])
+            x = self.Linear(x.transpose(perm=[0, 2, 1])).transpose(
+                perm=[0, 2, 1])
         x = x + seq_last
         return x
-    
+
     def init_weight(self):
         if self.pretrain:
             para_state_dict = paddle.load(self.pretrain)
@@ -91,11 +97,11 @@ class _NLinearModule(paddle.nn.Layer):
                     param_init.th_linear_fill(layer)
                     #param_init.kaiming_normal_init(layer.weight)
                     #if layer.bias is not None:
-                        #zeros_(layer.bias)
-                        #param_init.uniform_init(layer.bias,  low=-0.102, high=0.102)
+                #zeros_(layer.bias)
+                #param_init.uniform_init(layer.bias,  low=-0.102, high=0.102)
 
-   
-@manager.LFMODELS.add_component
+
+@manager.MODELS.add_component
 class NLinearModel(PaddleBaseModelImpl):
     """
     Implementation of PatchTST model.
@@ -172,7 +178,6 @@ class NLinearModel(PaddleBaseModelImpl):
             patience=patience,
             seed=seed, )
 
-
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
         Rewrite _check_tsdataset to fit the specific model.
@@ -205,12 +210,6 @@ class NLinearModel(PaddleBaseModelImpl):
             "known_cov_dim": 0,
             "observed_cov_dim": 0
         }
-        if train_tsdataset[0].get_known_cov() is not None:
-            fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov(
-            ).data.shape[1]
-        if train_tsdataset[0].get_observed_cov() is not None:
-            fit_params["observed_cov_dim"] = train_tsdataset[
-                0].get_observed_cov().data.shape[1]
         return fit_params
 
     def _init_network(self) -> paddle.nn.Layer:
@@ -221,9 +220,8 @@ class NLinearModel(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return _NLinearModule(
-            c_in = self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            individual=self.individual, 
-            pretrain = self.pretrain
-            )
+            individual=self.individual,
+            pretrain=self.pretrain)

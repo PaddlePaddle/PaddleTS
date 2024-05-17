@@ -64,11 +64,13 @@ class SplitterBase(metaclass=ABCMeta):
                 test_index.freq = indices.freqstr
             elif isinstance(indices, pd.RangeIndex):
                 train_index = pd.RangeIndex(
-                    indices[0] + train[0] * indices.step, indices[0] +
-                    train[-1] * indices.step + indices.step, indices.step)
-                test_index = pd.RangeIndex(indices[0] + test[0] * indices.step,
-                                           indices[0] + test[-1] * indices.step
-                                           + indices.step, indices.step)
+                    indices[0] + train[0] * indices.step,
+                    indices[0] + train[-1] * indices.step + indices.step,
+                    indices.step)
+                test_index = pd.RangeIndex(
+                    indices[0] + test[0] * indices.step,
+                    indices[0] + test[-1] * indices.step + indices.step,
+                    indices.step)
             if return_index:
                 yield (train_index, test_index)
             else:

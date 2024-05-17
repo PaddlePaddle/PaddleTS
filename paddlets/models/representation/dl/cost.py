@@ -406,11 +406,10 @@ class CoST(ReprBaseModel):
             end = timestamp_idx + 1
             padding_left = (-start if start < 0 else 0)
             padding_right = (end - seq_len if end > seq_len else 0)
-            padding_tensor = F.pad(
-                feats[:, max(start, 0):min(end, seq_len), :],
-                (padding_left, padding_right),
-                value=np.nan,
-                data_format="NLC")
+            padding_tensor = F.pad(feats[:, max(start, 0):min(end, seq_len), :],
+                                   (padding_left, padding_right),
+                                   value=np.nan,
+                                   data_format="NLC")
             # Accumulate a batch and encode together.
             buffer.append(padding_tensor)
             if len(buffer) < batch_size:

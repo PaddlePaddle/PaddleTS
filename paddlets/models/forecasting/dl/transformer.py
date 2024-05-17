@@ -51,8 +51,8 @@ class _PositionalEncoding(paddle.nn.Layer):
                 0, max_len, dtype="float32"), axis=1)
         div_term = paddle.exp(
             paddle.arange(
-                0, d_model, 2, dtype="float32") *
-            (-1. * np.log2(1e4) / d_model))
+                0, d_model, 2,
+                dtype="float32") * (-1. * np.log2(1e4) / d_model))
         pe[:, 0::2] = paddle.sin(position * div_term)
         pe[:, 1::2] = paddle.cos(position * div_term)
         self.register_buffer("_pe", pe)
@@ -154,8 +154,9 @@ class _TransformerModule(paddle.nn.Layer):
         # to get the final prediction result.
         self._decoder = paddle.nn.Linear(d_model, out_chunk_len * target_dim)
 
-    def _create_transformer_inputs(self, X: Dict[str, paddle.Tensor]) -> Tuple[
-            paddle.Tensor, paddle.Tensor]:
+    def _create_transformer_inputs(
+            self,
+            X: Dict[str, paddle.Tensor]) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """`TSDataset` stores time series in the (batch_size, in_chunk_len, target_dim) format.
             Take X[batch_size, -1:, target_dim] as input to decoder.
 
@@ -366,8 +367,8 @@ class TransformerModel(PaddleBaseModelImpl):
         observed_num_dim = 0
         input_dim = target_dim = train_tsdataset[0].get_target().data.shape[1]
         if train_tsdataset[0].get_observed_cov():
-            observed_num_dim = train_tsdataset[0].get_observed_cov(
-            ).data.shape[1]
+            observed_num_dim = train_tsdataset[0].get_observed_cov().data.shape[
+                1]
             input_dim += observed_num_dim
         if train_tsdataset[0].get_known_cov():
             known_num_dim = train_tsdataset[0].get_known_cov().data.shape[1]

@@ -420,8 +420,7 @@ class TFTExplainer(TFTModel):
 
         #fig, ax = plt.subplots(figsize=(10, 5))
         fig, ax = plt.subplots()
-        if len(prctiles
-               ) == 1:  # in case only a single percentile was configured
+        if len(prctiles) == 1:  # in case only a single percentile was configured
             relevant_prctile = prctiles[0]
             title = f"Multi-Step - Attention ({relevant_prctile}% Percentile)"
             scores_percentile = attn_stats[relevant_prctile]

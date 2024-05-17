@@ -93,8 +93,9 @@ class _InformerModule(paddle.nn.Layer):
         # Projection step.
         self._out_proj = paddle.nn.Linear(d_model, target_dim)
 
-    def _create_informer_inputs(self, X: Dict[str, paddle.Tensor]) -> Tuple[
-            paddle.Tensor, paddle.Tensor]:
+    def _create_informer_inputs(
+            self,
+            X: Dict[str, paddle.Tensor]) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """`TSDataset` stores time series in the (batch_size, in_chunk_len, target_dim) format.
             Take [X[batch_size, -out_chunk_len:, target_dim], paddle.zeros([batch_size, -out_chunk_len:, target_dim])] 
             as input to decoder.

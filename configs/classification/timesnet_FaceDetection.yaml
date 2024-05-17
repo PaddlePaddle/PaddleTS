@@ -12,7 +12,7 @@ dataset:
   scale: False
 
 model: 
-  name: TimesNetModel
+  name: TimesNet_CLS
   model_cfg:
     c_in: 7 #
     c_out: 7 #

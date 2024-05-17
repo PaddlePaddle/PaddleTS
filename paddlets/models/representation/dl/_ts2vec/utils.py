@@ -57,8 +57,9 @@ def create_contrastive_inputs(
     series1_left_boundary = np.random.randint(series2_left_boundary + 1)
     series2_right_boundary = np.random.randint(series1_right_boundary,
                                                seq_len + 1)
-    turbulence = np.random.randint(-series1_left_boundary, seq_len -
-                                   series2_right_boundary + 1, tensor.shape[0])
+    turbulence = np.random.randint(-series1_left_boundary,
+                                   seq_len - series2_right_boundary + 1,
+                                   tensor.shape[0])
     aug1 = _slice(tensor, turbulence + series1_left_boundary,
                   series1_right_boundary - series1_left_boundary)
     aug2 = _slice(tensor, turbulence + series2_left_boundary,
@@ -145,8 +146,10 @@ def custom_collate_fn(samples: list):
             return arr
         npad = [(0, 0)] * arr.ndim
         npad[axis] = (0, pad_size)
-        return np.pad(
-            arr, pad_width=npad, mode="constant", constant_values=np.nan)
+        return np.pad(arr,
+                      pad_width=npad,
+                      mode="constant",
+                      constant_values=np.nan)
 
     from collections import defaultdict
     COLS = [col for col in [PAST_TARGET] + COVS if col in samples[0]]

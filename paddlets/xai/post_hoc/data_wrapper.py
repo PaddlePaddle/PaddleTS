@@ -179,13 +179,11 @@ class PaddleDsFromDf(PaddleDataset):
                             ],
                             axis=0)[0:1, :]
                     else:
-                        sample[
-                            'static_cov_numeric'] = np_static_num_sum_future[
-                                0:1, :]
+                        sample['static_cov_numeric'] = np_static_num_sum_future[
+                            0:1, :]
 
                 if (len(np_static_cat_sum) > 0):
-                    sample['static_cov_categorical'] = np_static_cat_sum[0:
-                                                                         1, :]
+                    sample['static_cov_categorical'] = np_static_cat_sum[0:1, :]
                 if (len(np_static_cat_sum_future) > 0):
                     if 'static_cov_categorical' in sample:
                         sample['static_cov_categorical'] = np.concatenate(

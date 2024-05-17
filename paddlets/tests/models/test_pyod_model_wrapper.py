@@ -164,8 +164,7 @@ class TestPyodModelWrapper(unittest.TestCase):
         self._bad_to_predict_pyod_model_set = set()
 
         # Good cases for fit and predict and predict_score methods.
-        self._good_to_fit_and_predict_and_predict_score_pyod_model_list = list(
-        )
+        self._good_to_fit_and_predict_and_predict_score_pyod_model_list = list()
         for m in self._good_to_init_pyod_model_list:
             if (m["clazz"] not in self._bad_to_fit_pyod_model_set) and \
                     (m["clazz"] not in self._bad_to_predict_pyod_model_set):
@@ -553,8 +552,8 @@ class TestPyodModelWrapper(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)

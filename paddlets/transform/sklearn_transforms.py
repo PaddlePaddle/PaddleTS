@@ -127,10 +127,9 @@ class Ordinal(SklearnTransformWrapper):
 
         return super().fit(dataset)
 
-    def transform(
-            self,
-            dataset: Union["TSDataset", List["TSDataset"]],
-            inplace: bool=False) -> Union["TSDataset", List["TSDataset"]]:
+    def transform(self,
+                  dataset: Union["TSDataset", List["TSDataset"]],
+                  inplace: bool=False) -> Union["TSDataset", List["TSDataset"]]:
         """
         Apply the fitted transformer on the dataset
 

@@ -94,8 +94,7 @@ class GatedResidualNetwork(nn.Layer):
 
         # A linear layer for projecting the primary input (acts across time if necessary)
         self.fc1 = TimeDistributed(
-            nn.Linear(self.input_dim, self.hidden_dim),
-            batch_first=batch_first)
+            nn.Linear(self.input_dim, self.hidden_dim), batch_first=batch_first)
         # In case we expect context input, an additional linear layer will project the context
         if self.context_dim is not None:
             self.context_projection = TimeDistributed(
@@ -193,8 +192,7 @@ class GateAddNorm(nn.Layer):
         self.layernorm = TimeDistributed(
             nn.LayerNorm(input_dim), batch_first=True)
 
-    def forward(self, x: paddle.Tensor,
-                residual: Optional[paddle.Tensor]=None):
+    def forward(self, x: paddle.Tensor, residual: Optional[paddle.Tensor]=None):
         """
         Args:
             x(paddle.Tensor): The input tensor.

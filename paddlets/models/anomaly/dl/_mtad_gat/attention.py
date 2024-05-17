@@ -117,15 +117,14 @@ class FeatOrTempAttention(paddle.nn.Layer):
         # Right-side of the matrix
         blocks_alternating = paddle.tile(v, repeat_times=(1, K, 1))
         # [batch_size, feature_dim*feature_dim/in_chunk_len*in_chunk_len, 2*in_chunk_len/2*feature_dim]
-        combined = paddle.concat(
-            [blocks_repeating, blocks_alternating], axis=2)
+        combined = paddle.concat([blocks_repeating, blocks_alternating], axis=2)
 
         if self._use_gatv2:
-            return paddle.reshape(combined, (combined.shape[0], K, K, 2 *
-                                             self._in_chunk_len))
+            return paddle.reshape(combined, (combined.shape[0], K, K,
+                                             2 * self._in_chunk_len))
         else:
-            return paddle.reshape(combined, (combined.shape[0], K, K, 2 *
-                                             self._embed_dim))
+            return paddle.reshape(combined, (combined.shape[0], K, K,
+                                             2 * self._embed_dim))
 
     def forward(self, x) -> paddle.Tensor:
         """Feature extraction based on graph attention network

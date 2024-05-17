@@ -27,7 +27,7 @@ class PositionalEmbedding(paddle.nn.Layer):
 class TokenEmbedding(paddle.nn.Layer):
     def __init__(self, c_in, d_model):
         super(TokenEmbedding, self).__init__()
-        padding = 1 if paddle.__version__ >= '1.5.0' else 2
+        padding = 1
         self.tokenConv = nn.Conv1D(
             in_channels=c_in,
             out_channels=d_model,
@@ -37,7 +37,8 @@ class TokenEmbedding(paddle.nn.Layer):
             bias_attr=False)
         for m in self.sublayers():
             if isinstance(m, paddle.nn.Conv1D):
-                param_init.kaiming_normal_init(m.weight, nonlinearity='leaky_relu')
+                param_init.kaiming_normal_init(
+                    m.weight, nonlinearity='leaky_relu')
 
     def forward(self, x):
         x = self.tokenConv(x.transpose(perm=[0, 2, 1]))
@@ -118,11 +119,7 @@ class TimeFeatureEmbedding(paddle.nn.Layer):
 
 
 class DataEmbedding(paddle.nn.Layer):
-    def __init__(self,
-                 c_in,
-                 d_model,
-                 embed_type='fixed',
-                 freq='h',
+    def __init__(self, c_in, d_model, embed_type='fixed', freq='h',
                  dropout=0.1):
         super(DataEmbedding, self).__init__()
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)
@@ -143,11 +140,7 @@ class DataEmbedding(paddle.nn.Layer):
 
 
 class DataEmbedding_wo_pos(paddle.nn.Layer):
-    def __init__(self,
-                 c_in,
-                 d_model,
-                 embed_type='fixed',
-                 freq='h',
+    def __init__(self, c_in, d_model, embed_type='fixed', freq='h',
                  dropout=0.1):
         super(DataEmbedding_wo_pos, self).__init__()
         self.value_embedding = TokenEmbedding(c_in=c_in, d_model=d_model)

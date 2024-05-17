@@ -69,8 +69,8 @@ class _MockNotAnomalyBaseModel(object):
     def __init__(self, in_chunk_len: int=1, hidden_config: List[int]=None):
         self._in_chunk_len = in_chunk_len
         self._fit_params = {"observed_dim": 1}
-        self._hidden_config = [8, 16
-                               ] if hidden_config is None else hidden_config
+        self._hidden_config = [8,
+                               16] if hidden_config is None else hidden_config
         self._network = None
         self._optimizer = None
         self._callback_container = None
@@ -124,7 +124,7 @@ class _MockNotAnomalyBaseModel(object):
         modelname = os.path.basename(abs_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -244,8 +244,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -293,8 +292,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -369,8 +367,8 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -487,7 +485,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
         modelname = self.default_modelname
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -529,8 +527,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -587,8 +584,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -799,11 +795,11 @@ class TestAnomalyBaseModel(unittest.TestCase):
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_1.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy(
+                    ).astype(np.float64)))
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_2.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy(
+                    ).astype(np.float64)))
 
         # prediction results expected.
         loaded_model_1_predicted_paddlets_ds = loaded_model_1.predict(
@@ -892,8 +888,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             ((len(paddlets_ds.get_observed_cov()) - in_chunk_len + 1),
              len(paddlets_ds.get_target().data.columns)),
             predicted_paddlets_ds.get_target().data.shape)
-        _, input_data_ts = paddlets_ds.split(
-            len(paddlets_ds.observed_cov) - 10)
+        _, input_data_ts = paddlets_ds.split(len(paddlets_ds.observed_cov) - 10)
         input_data_ts_score = model.predict_score(input_data_ts)
 
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -905,8 +900,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -976,8 +970,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             ((len(paddlets_ds.get_observed_cov()) - in_chunk_len + 1),
              len(paddlets_ds.get_target().data.columns)),
             predicted_paddlets_ds.get_target().data.shape)
-        _, input_data_ts = paddlets_ds.split(
-            len(paddlets_ds.observed_cov) - 10)
+        _, input_data_ts = paddlets_ds.split(len(paddlets_ds.observed_cov) - 10)
         input_data_ts_score = model.predict_score(input_data_ts)
 
         path = os.path.join(os.getcwd(), str(random.randint(1, 10000000)))
@@ -989,8 +982,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -1096,8 +1088,7 @@ class TestAnomalyBaseModel(unittest.TestCase):
 
         return TSDataset(
             target=TimeSeries.load_from_dataframe(data=target_df),
-            observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df),
-        )
+            observed_cov=TimeSeries.load_from_dataframe(data=observed_cov_df), )
 
 
 if __name__ == "__main__":

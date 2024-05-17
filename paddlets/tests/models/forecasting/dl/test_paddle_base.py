@@ -128,7 +128,7 @@ class _MockNotPaddleModel(object):
         modelname = os.path.basename(abs_path)
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -190,8 +190,7 @@ class TestPaddleBaseModel(unittest.TestCase):
 
             internal_filename_map = {
                 "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-                "network_statedict":
-                "%s_%s" % (self.default_modelname, "network_statedict"),
+                "network_statedict": "%s/%s" % ('best', "model.pdparams"),
                 # currently ignore optimizer.
                 # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
             }
@@ -240,8 +239,7 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         internal_filename_map = {
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -264,8 +262,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         self.assertTrue(
             PaddleBaseModel.__name__ in model_meta["ancestor_classname_set"])
         # paddlets.models.dl.paddlepaddle.rnn
-        self.assertEqual(RNNBlockRegressor.__module__,
-                         model_meta["modulename"])
+        self.assertEqual(RNNBlockRegressor.__module__, model_meta["modulename"])
         shutil.rmtree(path)
 
         ############################################
@@ -317,8 +314,8 @@ class TestPaddleBaseModel(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -435,7 +432,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         modelname = self.default_modelname
         internal_filename_map = {
             "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -477,8 +474,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -504,8 +500,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         self.assertTrue(
             PaddleBaseModel.__name__ in model_meta["ancestor_classname_set"])
         # paddlets.models.dl.paddlepaddle.rnn
-        self.assertEqual(RNNBlockRegressor.__module__,
-                         model_meta["modulename"])
+        self.assertEqual(RNNBlockRegressor.__module__, model_meta["modulename"])
         self.assertEqual("forecasting", model_meta['model_type'])
         self.assertEqual({
             "in_chunk_len": 10,
@@ -542,8 +537,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -569,8 +563,7 @@ class TestPaddleBaseModel(unittest.TestCase):
         self.assertTrue(
             PaddleBaseModel.__name__ in model_meta["ancestor_classname_set"])
         # paddlets.models.dl.paddlepaddle.rnn
-        self.assertEqual(RNNBlockRegressor.__module__,
-                         model_meta["modulename"])
+        self.assertEqual(RNNBlockRegressor.__module__, model_meta["modulename"])
         self.assertEqual("forecasting", model_meta['model_type'])
         self.assertEqual({
             "in_chunk_len": 10,
@@ -757,17 +750,15 @@ class TestPaddleBaseModel(unittest.TestCase):
             if isinstance(raw, paddle.Tensor):
                 # convert tensor to numpy and call np.alltrue() to compare.
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_1.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_1.numpy(
+                    ).astype(np.float64)))
                 self.assertTrue(
-                    np.alltrue(raw.numpy().astype(np.float64) ==
-                               loaded_2.numpy().astype(np.float64)))
+                    np.alltrue(raw.numpy().astype(np.float64) == loaded_2.numpy(
+                    ).astype(np.float64)))
 
         # prediction results expected.
-        loaded_model_1_predicted_paddlets_ds = loaded_model_1.predict(
-            sample_ds)
-        loaded_model_2_predicted_paddlets_ds = loaded_model_2.predict(
-            sample_ds)
+        loaded_model_1_predicted_paddlets_ds = loaded_model_1.predict(sample_ds)
+        loaded_model_2_predicted_paddlets_ds = loaded_model_2.predict(sample_ds)
         self.assertTrue(
             np.alltrue(
                 predicted_paddlets_ds.target.to_numpy(False) ==
@@ -858,8 +849,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }
@@ -969,8 +959,7 @@ class TestPaddleBaseModel(unittest.TestCase):
             "network_model_params_info":
             "%s.pdiparams.info" % (self.default_modelname),
             "model_meta": "%s_%s" % (self.default_modelname, "model_meta"),
-            "network_statedict":
-            "%s_%s" % (self.default_modelname, "network_statedict"),
+            "network_statedict": "%s/%s" % ('best', "model.pdparams"),
             # currently ignore optimizer.
             # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
         }

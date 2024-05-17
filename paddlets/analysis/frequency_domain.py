@@ -42,8 +42,7 @@ class FFT(Analyzer):
         None
     """
 
-    def __init__(self, fs: float=0, norm: bool=True, half: bool=True,
-                 **kwargs):
+    def __init__(self, fs: float=0, norm: bool=True, half: bool=True, **kwargs):
         super(FFT, self).__init__(**kwargs)
         self._fs = fs
         self._norm = norm

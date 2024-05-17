@@ -126,15 +126,4 @@ class ComponentManager:
         return components
 
 
-LFMODELS = ComponentManager("longforecast")
-SFMODELS = ComponentManager("shortforecast")
-CLSMODELS = ComponentManager("classification")
-IMMODELS = ComponentManager("imputation")
-ANMODELS = ComponentManager("anomaly")
-
-TasktoModel = {'longforecast': LFMODELS,
-                 'shortforecast': SFMODELS,
-                 'classification': CLSMODELS,
-                 'imputation': IMMODELS,
-                 'anomaly': ANMODELS}
-
+MODELS = ComponentManager("models")

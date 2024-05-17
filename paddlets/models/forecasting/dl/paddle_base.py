@@ -117,10 +117,6 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             os.path.exists(abs_root_path),
             "failed to save model, path not exists: %s" % abs_root_path)
         raise_if(
-            os.path.isdir(abs_model_path),
-            "failed to save model, path must be a file, not directory: %s" %
-            abs_model_path)
-        raise_if(
             os.path.exists(abs_model_path),
             "Failed to save model, target file already exists: %s" %
             abs_model_path)
@@ -140,13 +136,23 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         # b.network_statedict = "b_network_statedict"
         # given above example, adding name prefix avoids conflicts between a.internal files and b.internal files.
         modelname = os.path.basename(abs_model_path)
-        internal_filename_map = {
-            "model_meta": "%s_%s" % (modelname, "model_meta"),
-            "network_statedict": "%s_%s" % (modelname, "network_statedict"),
-            "network_model": modelname,
-            # currently ignore optimizer.
-            # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
-        }
+        if 'paddlets-ensemble-model' in abs_model_path:
+            internal_filename_map = {
+                "model_meta": "%s_%s" % (modelname, "model_meta"),
+                "network_statedict":
+                "%s/%s/%s" % ('best_model', modelname, "model.pdparams"),
+                "network_model": modelname,
+                # currently ignore optimizer.
+                # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+            }
+        else:
+            internal_filename_map = {
+                "model_meta": "%s_%s" % (modelname, "model_meta"),
+                "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+                "network_model": modelname,
+                # currently ignore optimizer.
+                # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
+            }
 
         # internal files must not conflict with existing files.
         conflict_files = {*internal_filename_map.values()} - set(
@@ -217,8 +223,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             paddle.save(
                 obj=network_state_dict,
                 path=os.path.join(abs_root_path,
-                                  internal_filename_map["network_statedict"]),
-            )
+                                  internal_filename_map["network_statedict"]), )
         except Exception as e:
             raise_log(
                 ValueError("error occurred while saving %s: %s, err: %s" %
@@ -272,8 +277,8 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         """
         abs_path = os.path.abspath(path)
         raise_if_not(
-            os.path.exists(abs_path), "model file does not exist: %s" %
-            abs_path)
+            os.path.exists(abs_path),
+            "model file does not exist: %s" % abs_path)
         raise_if(
             os.path.isdir(abs_path),
             "path must be a file path, not a directory: %s" % abs_path)
@@ -293,7 +298,12 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             "model._network must not be None after calling _init_network()")
 
         modelname = os.path.basename(abs_path)
-        network_statedict_filename = "%s_%s" % (modelname, "network_statedict")
+        if 'paddlets-ensemble-model' in abs_path:
+            network_statedict_filename = "%s/%s/%s" % ('best_model', modelname,
+                                                       "model.pdparams")
+        else:
+            network_statedict_filename = "%s/%s" % ('best_model',
+                                                    "model.pdparams")
         network_statedict_abs_path = os.path.join(
             os.path.dirname(abs_path), network_statedict_filename)
         network_statedict = paddle.load(network_statedict_abs_path)

@@ -57,8 +57,7 @@ class _TimesNet(nn.Layer):
                 top_k=top_k,
                 num_kernels=num_kernels) for _ in range(e_layers)
         ])
-        self.enc_embedding = DataEmbedding(c_in, d_model, embed, freq,
-                                           dropout)
+        self.enc_embedding = DataEmbedding(c_in, d_model, embed, freq, dropout)
         self.layer = e_layers
         self.layer_norm = nn.LayerNorm(
             normalized_shape=d_model,
@@ -66,8 +65,7 @@ class _TimesNet(nn.Layer):
             weight_attr=None,
             bias_attr=None)
         self.predict_linear = nn.Linear(
-            in_features=self.seq_len,
-            out_features=self.pred_len + self.seq_len)
+            in_features=self.seq_len, out_features=self.pred_len + self.seq_len)
         self.projection = nn.Linear(
             in_features=d_model, out_features=c_out, bias_attr=True)
 
@@ -109,13 +107,13 @@ class _TimesNet(nn.Layer):
     def forecast(
             self,
             x_enc,
-            x_mark_enc=None,):
+            x_mark_enc=None, ):
         # Normalization
 
         means = x_enc.mean(axis=1, keepdim=True).detach()
         x_enc = x_enc - means
-        stdev = paddle.sqrt(x=paddle.var(
-            x=x_enc, axis=1, keepdim=True, unbiased=False) + 1e-05)
+        stdev = paddle.sqrt(
+            x=paddle.var(x=x_enc, axis=1, keepdim=True, unbiased=False) + 1e-05)
         x_enc /= stdev
         enc_out = self.enc_embedding(x_enc, x_mark_enc)
         enc_out = self.predict_linear(enc_out.transpose(
@@ -133,12 +131,12 @@ class _TimesNet(nn.Layer):
     def forward(self, x):
         x_enc = x["past_target"]
         times_mark = x.get("known_cov_numeric", None)
-        x_mark_enc = times_mark[:,:self.seq_len,:]
+        x_mark_enc = times_mark[:, :self.seq_len, :]
         dec_out = self.forecast(x_enc, x_mark_enc)
         return dec_out[:, -self.pred_len:, :]
 
 
-@manager.LFMODELS.add_component
+@manager.MODELS.add_component
 class TimesNetModel(PaddleBaseModelImpl):
     """
     Implementation of TimesNet model.
@@ -218,8 +216,7 @@ class TimesNetModel(PaddleBaseModelImpl):
             max_epochs=max_epochs,
             verbose=verbose,
             patience=patience,
-            seed=seed,
-            )
+            seed=seed, )
 
         self._e_layers = e_layers
         self._c_in = c_in
@@ -254,7 +251,6 @@ class TimesNetModel(PaddleBaseModelImpl):
             train_tsdataset: TSDataset,
             valid_tsdataset: Optional[TSDataset]=None) -> Dict[str, Any]:
 
-
         fit_params = {
             "target_dim": train_tsdataset[0].get_target().data.shape[1],
             "known_cov_dim": 0,
@@ -270,15 +266,16 @@ class TimesNetModel(PaddleBaseModelImpl):
         Returns:
             nn.Layer
         """
-        return _TimesNet(in_chunk_len=self._in_chunk_len, 
-                         out_chunk_len=self._out_chunk_len, 
-                         e_layers=self._e_layers, 
-                         c_in=self._c_in,
-                         d_model=self._d_model,
-                         embed =self._embed, 
-                         freq=self._freq, 
-                         dropout=self._dropout,
-                         c_out=self._c_out, 
-                         d_ff=self._d_ff, 
-                         top_k=self._top_k,
-                         num_kernels=self._num_kernels)
+        return _TimesNet(
+            in_chunk_len=self._in_chunk_len,
+            out_chunk_len=self._out_chunk_len,
+            e_layers=self._e_layers,
+            c_in=self._fit_params['target_dim'],
+            d_model=self._d_model,
+            embed=self._embed,
+            freq=self._freq,
+            dropout=self._dropout,
+            c_out=self._fit_params['target_dim'],
+            d_ff=self._d_ff,
+            top_k=self._top_k,
+            num_kernels=self._num_kernels)

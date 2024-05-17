@@ -239,8 +239,7 @@ class NumericInputTransformation(nn.Layer):
 
         self.numeric_projection_layers = nn.LayerList()
         for _ in range(self.num_inputs):
-            self.numeric_projection_layers.append(
-                nn.Linear(1, self.state_size))
+            self.numeric_projection_layers.append(nn.Linear(1, self.state_size))
 
     def forward(self, x: paddle.Tensor) -> List[paddle.Tensor]:
         """
@@ -255,8 +254,8 @@ class NumericInputTransformation(nn.Layer):
         """
         projections = []
         for i in range(self.num_inputs):
-            projections.append(self.numeric_projection_layers[i](
-                x[:, i].unsqueeze(1)))
+            projections.append(self.numeric_projection_layers[i](x[:, i]
+                                                                 .unsqueeze(1)))
 
         return projections
 
@@ -332,11 +331,9 @@ class InterpretableMultiHeadAttention(nn.Layer):
             embed_dim,
             self.all_heads_dim)  # multi-head projection for the queries
         self.w_k = nn.Linear(
-            embed_dim,
-            self.all_heads_dim)  # multi-head projection for the keys
+            embed_dim, self.all_heads_dim)  # multi-head projection for the keys
         self.w_v = nn.Linear(
-            embed_dim,
-            embed_dim)  # a single, shared, projection for the values
+            embed_dim, embed_dim)  # a single, shared, projection for the values
 
         # the last layer is used for final linear mapping (corresponds to W_H in the paper)
         self.out = nn.Linear(self.d_model, self.d_model)
@@ -376,14 +373,14 @@ class InterpretableMultiHeadAttention(nn.Layer):
 
         # transpose to get the following shapes
         q_proj = q_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_future_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_future_steps x num_heads x state_size)
         k_proj = k_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_total_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_total_steps x num_heads x state_size)
         v_proj = v_proj.transpose(
-            [0, 2, 1, 3
-             ])  # (num_samples x num_total_steps x num_heads x state_size)
+            [0, 2, 1,
+             3])  # (num_samples x num_total_steps x num_heads x state_size)
 
         # calculate attention using function we will define next
         attn_outputs_all_heads, attn_scores_all_heads = self.attention(

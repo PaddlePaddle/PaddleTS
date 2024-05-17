@@ -56,8 +56,9 @@ class TimeDistributed(nn.Layer):
                 #y = y.contiguous().view(x.size(0), -1, y.size(-1))  # (samples, time-steps, output_size)
                 y = y.reshape([paddle.shape(x)[0], -1, y.shape[-1]])
             else:
-                y = y.reshape([-1, x.shape[1], y.shape[-1]
-                               ])  # (time-steps, samples, output_size)
+                y = y.reshape(
+                    [-1, x.shape[1],
+                     y.shape[-1]])  # (time-steps, samples, output_size)
         return y
 
 

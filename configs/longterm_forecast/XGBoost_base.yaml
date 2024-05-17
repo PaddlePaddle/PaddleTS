@@ -1,0 +1,40 @@
+batch_size: 16
+seq_len: 96
+predict_len: 96
+sampling_stride: 1
+do_eval: True
+epoch: 4
+
+
+dataset: 
+  name: TSDataset
+  dataset_root: /data/
+  train_path: /data/train.csv
+  val_path: /data/val.csv
+  time_feat: False
+  use_holiday: False
+  scale: True
+
+info_params:
+  time_col: date
+
+
+model: 
+  name: XGBoost
+  model_cfg:
+    max_depth: 4
+    n_estimators: 100
+    optimizer_params:
+      learning_rate: 0.1
+    colsample_bytree: 0.3
+    min_child_weight: 1
+    gamma: 0
+    verbosity: 1
+
+test:
+  stride: 1
+
+  
+
+
+

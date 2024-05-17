@@ -1,0 +1,53 @@
+batch_size: 32
+seq_len: 100
+predict_len: 0
+label_len: 0
+do_eval: True
+epoch: 1
+training: True 
+anomaly_ratio: 1
+task: anomaly
+
+
+dataset: 
+  name: TSADDataset
+  dataset_root: ../data/
+  train_path: ../data/MSL_train.csv
+  val_path: ../data/MSL_test.csv
+  scale: True
+  time_feat: False
+
+info_params:
+  # freq: 1
+  # label_col: "Normal/Attack"
+  # feature_cols: ['FIT101', 'LIT101', ' MV101', 'P101', 'P102', ' AIT201', 'AIT202', 
+  #           'AIT203', 'FIT201', ' MV201', ' P201', ' P202', 'P203', ' P204',
+  #           'P205', 'P206', 'DPIT301', 'FIT301', 'LIT301', 'MV301', 'MV302',
+  #           ' MV303', 'MV304', 'P301', 'P302', 'AIT401', 'AIT402', 'FIT401',
+  #           'LIT401', 'P401', 'P402', 'P403', 'P404', 'UV401', 'AIT501',
+  #           'AIT502', 'AIT503', 'AIT504', 'FIT501', 'FIT502', 'FIT503',
+  #           'FIT504', 'P501', 'P502', 'PIT501', 'PIT502', 'PIT503', 'FIT601',
+  #           'P601', 'P602', 'P603']
+  freq: 1
+  label_col: label
+  feature_cols: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54']
+
+
+model: 
+  name: NonStationary_AD
+  model_cfg:
+    c_in: 5
+    factor: 3
+    p_hidden_dims: [32, 32]
+    d_model: 64
+    d_ff: 64
+    optimizer_params:
+      learning_rate: 0.001
+      gamma: 0.5
+
+loss: mse
+
+test:
+  stride: 1 
+
+output: 'output/'

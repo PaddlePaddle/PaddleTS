@@ -29,16 +29,16 @@ def load(path: str):
     abs_model_path = os.path.join(abs_root_path,
                                   os.path.basename(abs_model_path))
     modelname = os.path.basename(abs_model_path)
-    abs_modelmeta_path = os.path.join(abs_root_path, "%s_%s" %
-                                      (modelname, "model_meta"))
+    abs_modelmeta_path = os.path.join(abs_root_path,
+                                      "%s_%s" % (modelname, "model_meta"))
 
     try:
         with open(abs_modelmeta_path, "r") as f:
             model_meta_map = json.load(f)
     except Exception as e:
         raise_log(
-            ValueError("failed to open file: %s, err: %s" % (
-                abs_modelmeta_path, str(e))))
+            ValueError("failed to open file: %s, err: %s" % (abs_modelmeta_path,
+                                                             str(e))))
 
     modelmeta_key_ancestor_classname_set = "ancestor_classname_set"
     modelmeta_key_modulename = "modulename"
@@ -77,6 +77,10 @@ def load(path: str):
         # lazy import
         from paddlets.models.representation.dl.repr_base import ReprBaseModel
         return ReprBaseModel.load(abs_model_path)
+    if "PaddleBaseClassifier" in model_meta_map[
+            modelmeta_key_ancestor_classname_set]:
+        from paddlets.models.classify.dl.paddle_base import PaddleBaseClassifier
+        return PaddleBaseClassifier.load(abs_model_path)
     raise_log(
         ValueError("The given model class is not supported: %s.%s" % (
             model_meta_map[modelmeta_key_modulename],

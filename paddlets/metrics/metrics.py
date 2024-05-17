@@ -328,8 +328,7 @@ class MetricContainer(object):
         _names(List[str]): List of metric names associated with eval_name.
     """
 
-    def __init__(self, metrics: Union[List[str], List[Metric]],
-                 prefix: str=""):
+    def __init__(self, metrics: Union[List[str], List[Metric]], prefix: str=""):
         self._prefix = prefix
         self._metrics = (metrics
                          if (metrics and isinstance(metrics[-1], Metric)) else

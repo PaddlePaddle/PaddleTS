@@ -150,9 +150,7 @@ class TestShapExplainer(TestCase):
         # Known/observed = None, use_paddleloader=False
         df = self.data.to_dataframe()
         data = TSDataset.load_from_dataframe(
-            df,
-            target_cols=['MT_320'],
-            observed_cov_cols=[],
+            df, target_cols=['MT_320'], observed_cov_cols=[],
             known_cov_cols=[])
         # Sample
         data, _ = data.split('2014-06-30')
@@ -288,9 +286,7 @@ class TestShapExplainer(TestCase):
         # Known/observed = None, use_paddleloader=True
         df = self.data.to_dataframe()
         data = TSDataset.load_from_dataframe(
-            df,
-            target_cols=['MT_320'],
-            observed_cov_cols=[],
+            df, target_cols=['MT_320'], observed_cov_cols=[],
             known_cov_cols=[])
         # Sample
         data, _ = data.split('2014-06-30')
@@ -919,9 +915,7 @@ class TestShapExplainer(TestCase):
         # Known/observed = None, use_paddleloader=False
         df = self.data.to_dataframe()
         data = TSDataset.load_from_dataframe(
-            df,
-            target_cols=['MT_320'],
-            observed_cov_cols=[],
+            df, target_cols=['MT_320'], observed_cov_cols=[],
             known_cov_cols=[])
         # Sample
         data, _ = data.split('2014-06-30')

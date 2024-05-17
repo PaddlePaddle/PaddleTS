@@ -59,8 +59,7 @@ class _TimesNet(nn.Layer):
                 top_k=top_k,
                 num_kernels=num_kernels) for _ in range(e_layers)
         ])
-        self.enc_embedding = DataEmbedding(c_in, d_model, embed, freq,
-                                           dropout)
+        self.enc_embedding = DataEmbedding(c_in, d_model, embed, freq, dropout)
         self.layer = e_layers
         self.layer_norm = nn.LayerNorm(
             normalized_shape=d_model,
@@ -116,7 +115,7 @@ class _TimesNet(nn.Layer):
         output = output.reshape([output.shape[0], -1])
         output = self.projection(output)
         return output
-    
+
     def forward(self, x):
         x_enc = x["features"].cast('float32')
         times_mark = x.get("pad_mask", None)
@@ -124,8 +123,8 @@ class _TimesNet(nn.Layer):
         return dec_out
 
 
-@manager.CLSMODELS.add_component
-class TimesNetModel(PaddleBaseClassifier):
+@manager.MODELS.add_component
+class TimesNet_CLS(PaddleBaseClassifier):
     """
     Implementation of TimesNet model.
 
@@ -162,6 +161,7 @@ class TimesNetModel(PaddleBaseClassifier):
             self,
             in_chunk_len: int,  # 96
             out_chunk_len: int,  # 96 192 336 720
+            sampling_stride: int=1,
             e_layers: int=2,
             c_in: int=7,
             d_model: int=32,
@@ -189,7 +189,7 @@ class TimesNetModel(PaddleBaseClassifier):
             seed: int=0,
             renorm: bool=None):
 
-        super(TimesNetModel, self).__init__(
+        super(TimesNet_CLS, self).__init__(
             loss_fn=loss_fn,
             optimizer_fn=optimizer_fn,
             optimizer_params=optimizer_params,
@@ -217,7 +217,7 @@ class TimesNetModel(PaddleBaseClassifier):
         self._use_revin = use_revin
         self._revin_params = revin_params
         self._renorm = renorm
-    
+
     def _update_fit_params(self,
                            train_tsdatasets: List[TSDataset],
                            train_labels: np.ndarray,
@@ -238,15 +238,14 @@ class TimesNetModel(PaddleBaseClassifier):
             if tsdataset.get_target().data.shape[0] > max_len:
                 max_len = tsdataset.get_target().data.shape[0]
             #print(tsdataset.get_target().data.shape[1])
-        
+
         if valid_tsdatasets is not None:
             for tsdataset in valid_tsdatasets:
                 if tsdataset.get_target().data.shape[0] > max_len:
                     max_len = tsdataset.get_target().data.shape[0]
 
-        
         fit_params = {
-            "feature_dim":  train_tsdatasets[0].get_target().data.shape[1],
+            "feature_dim": train_tsdatasets[0].get_target().data.shape[1],
             "input_lens": max_len,
         }
 
@@ -260,16 +259,17 @@ class TimesNetModel(PaddleBaseClassifier):
         Returns:
             nn.Layer
         """
-        return _TimesNet(in_chunk_len=self._fit_params["input_lens"],
-                         out_chunk_len=self._out_chunk_len, 
-                         e_layers=self._e_layers, 
-                         c_in=self._fit_params["feature_dim"],
-                         d_model=self._d_model,
-                         embed =self._embed, 
-                         freq=self._freq, 
-                         dropout=self._dropout,
-                         c_out=self._c_out, 
-                         d_ff=self._d_ff, 
-                         top_k=self._top_k,
-                         num_class=self._n_classes,
-                         num_kernels=self._num_kernels)
+        return _TimesNet(
+            in_chunk_len=self._fit_params["input_lens"],
+            out_chunk_len=self._out_chunk_len,
+            e_layers=self._e_layers,
+            c_in=self._fit_params["feature_dim"],
+            d_model=self._d_model,
+            embed=self._embed,
+            freq=self._freq,
+            dropout=self._dropout,
+            c_out=self._c_out,
+            d_ff=self._d_ff,
+            top_k=self._top_k,
+            num_class=self._n_classes,
+            num_kernels=self._num_kernels)

@@ -4,41 +4,35 @@
 Setup script.
 """
 
-from setuptools import find_packages, setup
+from setuptools import find_packages, find_namespace_packages, setup
 from pathlib import Path
 import paddlets
 
 
 def read_requirements(path):
     """read requirements"""
-    return list(Path(path).read_text().splitlines())
+    return list(Path(path).read_text(encoding='utf-8').splitlines())
 
 
-base_reqs = read_requirements("requirements/core.txt")
-paddle_reqs = read_requirements("requirements/paddle.txt")
-autots_reqs = read_requirements("requirements/autots.txt")
-
-all_reqs = base_reqs + paddle_reqs + autots_reqs
+all_reqs = read_requirements("requirements.txt")
 
 setup(
     name='paddlets',
     version=paddlets.__version__,
     maintainer='paddlets Team',
     maintainer_email='paddlets@baidu.com',
-    packages=find_packages(),
+    packages=find_packages(include=['paddlets', 'paddlets.*']) +
+    find_namespace_packages(include=['paddlets', 'paddlets.*']),
     url='https://github.com/PaddlePaddle/PaddleTS',
     license='LICENSE',
     description='PaddleTS (Paddle Time Series Tool), \
            PaddlePaddle-based Time Series Modeling in Python',
-    long_description=open('README.md').read(),
+    long_description=open(
+        'README.md', encoding='utf-8').read(),
     long_description_content_type="text/markdown",
     python_requires='>=3.7',
-    install_requires=base_reqs,
-    extras_require={
-        "paddle": paddle_reqs,
-        "autots": autots_reqs,
-        "all": all_reqs
-    },
+    install_requires=all_reqs,
+    extras_require={"all": all_reqs},
     classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.7',

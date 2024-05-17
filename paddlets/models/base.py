@@ -233,16 +233,14 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
                     pd.RangeIndex(
                         start=tsdataset_copy.get_observed_cov().start_time,
                         stop=dataset_end_time + 1,
-                        step=tsdataset_copy.get_observed_cov()
-                        .time_index.step),
+                        step=tsdataset_copy.get_observed_cov().time_index.step),
                     fill_value=fill_value)
             else:
                 tsdataset_copy.get_observed_cov().reindex(
                     pd.date_range(
                         start=tsdataset_copy.get_observed_cov().start_time,
                         end=dataset_end_time,
-                        freq=tsdataset_copy.get_observed_cov()
-                        .time_index.freq),
+                        freq=tsdataset_copy.get_observed_cov().time_index.freq),
                     fill_value=fill_value)
         return self._recursive_predict(tsdataset_copy, predict_length)
 
@@ -272,6 +270,5 @@ class BaseModel(Trainable, metaclass=abc.ABCMeta):
         result = TSDataset.concat(results)
         # Resize result
         result.set_target(
-            TimeSeries(result.get_target().data[0:predict_length],
-                       result.freq))
+            TimeSeries(result.get_target().data[0:predict_length], result.freq))
         return result

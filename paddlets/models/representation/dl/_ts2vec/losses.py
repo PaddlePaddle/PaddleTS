@@ -28,8 +28,8 @@ def instance_contrastive_loss(repr1: paddle.Tensor,
         repr, repr,
         transpose_y=True)  # [seq_len, 2 * batch_size, 2 * batch_size]
     logits = paddle.tril(
-        sim, diagonal=-1)[:, :, :
-                          -1]  # [seq_len, 2 * batch_size, 2 * batch_size - 1]
+        sim,
+        diagonal=-1)[:, :, :-1]  # [seq_len, 2 * batch_size, 2 * batch_size - 1]
     logits += paddle.triu(sim, diagonal=1)[:, :, 1:]
     logits = -1. * F.log_softmax(logits, axis=-1)
 

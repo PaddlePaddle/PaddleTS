@@ -19,6 +19,7 @@ from paddlets.logger.logger import log_decorator
 logger = Logger(__name__)
 MAX_WINDOW = 183 + 17
 
+
 def _cal_year(x: np.datetime64, ):
     """
     Args:
@@ -84,6 +85,7 @@ def _cal_quarter(x: np.datetime64, ):
     """
     return x.quarter
 
+
 def _cal_hourofday(x: np.datetime64, ):
     """
     Args:
@@ -92,7 +94,8 @@ def _cal_hourofday(x: np.datetime64, ):
     Returns
         int: hour of day
     """
-    return x.hour / 23.0 - 0.5  
+    return x.hour / 23.0 - 0.5
+
 
 def _cal_dayofweek(x: np.datetime64, ):
     """
@@ -104,6 +107,7 @@ def _cal_dayofweek(x: np.datetime64, ):
     """
     return x.dayofweek / 6.0 - 0.5
 
+
 def _cal_dayofmonth(x: np.datetime64, ):
     """
     Args:
@@ -111,9 +115,10 @@ def _cal_dayofmonth(x: np.datetime64, ):
     
     Returns
         int: day of week
-    """   
+    """
     #return (x.day - 1) / 30.0 - 0.5
-    return x.day  / 30.0 - 0.5
+    return x.day / 30.0 - 0.5
+
 
 def _cal_dayofyear(x: np.datetime64, ):
     """
@@ -134,7 +139,7 @@ def _cal_weekofyear(x: np.datetime64, ):
     Returns
         int: week of year
     """
-    return x.weekofyear  / 51.0 - 0.5
+    return x.weekofyear / 51.0 - 0.5
 
 
 def _cal_holiday(x: np.datetime64, ):
@@ -158,25 +163,27 @@ def _cal_workday(x: np.datetime64, ):
     """
     return float(chinese_calendar.is_workday(x))
 
+
 def _cal_minuteofhour(x: np.datetime64, ):
 
     return x.minute / 59 - 0.5
 
+
 def _cal_monthofyear(x: np.datetime64, ):
-    return x.month  / 11.0 - 0.5
+    return x.month / 11.0 - 0.5
+
 
 def _distance_to_holiday(holiday):
     def _distance_to_day(index):
         holiday_date = holiday.dates(
             index - pd.Timedelta(days=MAX_WINDOW),
-            index + pd.Timedelta(days=MAX_WINDOW),
-        )
-        assert (
-            len(holiday_date) != 0  # pylint: disable=g-explicit-length-test
-        ), f"No closest holiday for the date index {index} found."
+            index + pd.Timedelta(days=MAX_WINDOW), )
+        assert (len(holiday_date) != 0  # pylint: disable=g-explicit-length-test
+                ), f"No closest holiday for the date index {index} found."
         # It sometimes returns two dates if it is exactly half a year after the
         # holiday. In this case, the smaller distance (182 days) is returned.
         return float((index - holiday_date[0]).days)
+
     return _distance_to_day
 
 
@@ -190,9 +197,9 @@ CAL_DATE_METHOD = {
     'quarter': _cal_quarter,
     'minuteofhour': _cal_minuteofhour,
     'monthofyear': _cal_monthofyear,
-    'hourofday':_cal_hourofday,
-    'dayofweek':_cal_dayofweek,
-    'dayofmonth':_cal_dayofmonth,
+    'hourofday': _cal_hourofday,
+    'dayofweek': _cal_dayofweek,
+    'dayofmonth': _cal_dayofmonth,
     'dayofyear': _cal_dayofyear,
     'weekofyear': _cal_weekofyear,
     'is_holiday': _cal_holiday,
@@ -200,15 +207,12 @@ CAL_DATE_METHOD = {
 }
 
 EasterSunday = hd.Holiday(
-    "Easter Sunday", month=1, day=1, offset=[Easter(), Day(0)]
-)
+    "Easter Sunday", month=1, day=1, offset=[Easter(), Day(0)])
 NewYearsDay = hd.Holiday("New Years Day", month=1, day=1)
 SuperBowl = hd.Holiday(
-    "Superbowl", month=2, day=1, offset=DateOffset(weekday=hd.SU(1))
-)
+    "Superbowl", month=2, day=1, offset=DateOffset(weekday=hd.SU(1)))
 MothersDay = hd.Holiday(
-    "Mothers Day", month=5, day=1, offset=DateOffset(weekday=hd.SU(2))
-)
+    "Mothers Day", month=5, day=1, offset=DateOffset(weekday=hd.SU(2)))
 IndependenceDay = hd.Holiday("Independence Day", month=7, day=4)
 ChristmasEve = hd.Holiday("Christmas", month=12, day=24)
 ChristmasDay = hd.Holiday("Christmas", month=12, day=25)
@@ -217,14 +221,12 @@ BlackFriday = hd.Holiday(
     "Black Friday",
     month=11,
     day=1,
-    offset=[pd.DateOffset(weekday=hd.TH(4)), Day(1)],
-)
+    offset=[pd.DateOffset(weekday=hd.TH(4)), Day(1)], )
 CyberMonday = hd.Holiday(
     "Cyber Monday",
     month=11,
     day=1,
-    offset=[pd.DateOffset(weekday=hd.TH(4)), Day(4)],
-)
+    offset=[pd.DateOffset(weekday=hd.TH(4)), Day(4)], )
 
 HOLIDAYS = [
     hd.EasterMonday,
@@ -266,8 +268,17 @@ class TimeFeatureGenerator(BaseTransform):
     def __init__(
             self,
             feature_cols: Optional[List[str]]=[
-                'year', 'month', 'day', 'weekday', 'hour', 'quarter',
-                'dayofyear', 'weekofyear', 'is_holiday', 'is_workday', 'holidays',
+                'year',
+                'month',
+                'day',
+                'weekday',
+                'hour',
+                'quarter',
+                'dayofyear',
+                'weekofyear',
+                'is_holiday',
+                'is_workday',
+                'holidays',
             ],
             extend_points: int=0, ):
         super(TimeFeatureGenerator, self).__init__()
@@ -341,9 +352,9 @@ class TimeFeatureGenerator(BaseTransform):
                     v = tf_kcov[time_col].apply(_distance_to_holiday(H))
                     v.index = tf_kcov[time_col]
                     #import pdb;pdb.set_trace()
-                    holidays_col.append(k+'_'+str(i))
-                    new_ts.set_column(k+'_'+str(i), v, 'known_cov')
+                    holidays_col.append(k + '_' + str(i))
+                    new_ts.set_column(k + '_' + str(i), v, 'known_cov')
                 scaler = StandardScaler(cols=holidays_col)
-                scaler.fit(new_ts) 
+                scaler.fit(new_ts)
                 new_ts = scaler.transform(new_ts)
         return new_ts

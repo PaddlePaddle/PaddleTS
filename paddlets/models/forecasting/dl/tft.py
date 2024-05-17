@@ -214,8 +214,7 @@ class TFTModel(PaddleBaseModelImpl):
         static_cat_cols = []
         if static_dic:
             for col, val in static_dic.items():
-                if np.issubdtype(type(val), np.integer) or isinstance(val,
-                                                                      int):
+                if np.issubdtype(type(val), np.integer) or isinstance(val, int):
                     static_cat_size.append(len(df_all[col].unique()))
                     static_cat_cols.append(col)
                 else:

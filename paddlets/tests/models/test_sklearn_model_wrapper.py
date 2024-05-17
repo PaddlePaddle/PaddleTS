@@ -87,9 +87,9 @@ from sklearn.isotonic import IsotonicRegression
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.mixture import GaussianMixture, BayesianGaussianMixture
 from sklearn.cluster import (
-    AffinityPropagation, AgglomerativeClustering, Birch, DBSCAN, OPTICS,
-    KMeans, FeatureAgglomeration, MeanShift, MiniBatchKMeans,
-    SpectralClustering, SpectralBiclustering, SpectralCoclustering)
+    AffinityPropagation, AgglomerativeClustering, Birch, DBSCAN, OPTICS, KMeans,
+    FeatureAgglomeration, MeanShift, MiniBatchKMeans, SpectralClustering,
+    SpectralBiclustering, SpectralCoclustering)
 
 from paddlets.models.forecasting.ml.ml_base import MLBaseModel
 from paddlets.models.ml_model_wrapper import SklearnModelWrapper, make_ml_model
@@ -1017,8 +1017,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1047,8 +1047,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1079,8 +1079,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1111,8 +1111,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1144,8 +1144,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1178,8 +1178,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] != dict() or model[
-                    "predict_params"] != dict():
+            if model["fit_params"] != dict() or model["predict_params"] != dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1213,8 +1213,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
         observed_periods = target_periods
 
         for model in self._good_to_fit_and_predict_sklearn_model_list:
-            if model["fit_params"] == dict() or model[
-                    "predict_params"] == dict():
+            if model["fit_params"] == dict() or model["predict_params"] == dict(
+            ):
                 continue
             paddlets_ds = self._build_mock_ts_dataset(
                 target_col_num=target_col_num,
@@ -1403,8 +1403,8 @@ class TestSklearnModelWrapper(unittest.TestCase):
 
         files = set(os.listdir(path))
         self.assertEqual(files, {
-            model_1_name, *model_1_internal_filename_map.values(),
-            model_2_name, *model_2_internal_filename_map.values()
+            model_1_name, *model_1_internal_filename_map.values(), model_2_name,
+            *model_2_internal_filename_map.values()
         })
 
         shutil.rmtree(path)
@@ -1621,8 +1621,7 @@ class TestSklearnModelWrapper(unittest.TestCase):
                  for i in range(target_periods)],
                 dtype=target_dtype),
             index=pd.date_range(
-                start=target_start_timestamp,
-                periods=target_periods,
+                start=target_start_timestamp, periods=target_periods,
                 freq=freq),
             columns=[f"target{n}" for n in range(target_col_num)], )
 

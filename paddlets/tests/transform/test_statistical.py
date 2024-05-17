@@ -111,8 +111,7 @@ class TestStatsTransform(TestCase):
         ob.fit(ts)
         new_ts = ob.transform(ts)
         observed = new_ts.get_observed_cov().data
-        self.assertEqual(observed['value_min'].tolist(),
-                         [0.72, 0.8, -1.2, 0.6])
+        self.assertEqual(observed['value_min'].tolist(), [0.72, 0.8, -1.2, 0.6])
 
         ob.fit([ts, ts])
         new_tss = ob.transform([ts, ts])

@@ -34,9 +34,20 @@ class CrossformerModule(paddle.nn.Layer):
     (https://openreview.net/forum?id=vSVLM2j9eie)
     """
 
-    def __init__(self, c_in, seq_len, pred_len, seg_len, win_size=4,
-        factor=10, d_model=512, d_ff=1024, n_heads=8, e_layers=3, dropout=
-        0.0, baseline=False, pretrain=None):
+    def __init__(self,
+                 c_in,
+                 seq_len,
+                 pred_len,
+                 seg_len,
+                 win_size=4,
+                 factor=10,
+                 d_model=512,
+                 d_ff=1024,
+                 n_heads=8,
+                 e_layers=3,
+                 dropout=0.0,
+                 baseline=False,
+                 pretrain=None):
         super(CrossformerModule, self).__init__()
         self.data_dim = c_in
         self.in_len = seq_len
@@ -50,24 +61,42 @@ class CrossformerModule(paddle.nn.Layer):
         self.enc_value_embedding = DSW_embedding(seg_len, d_model)
 
         x = paddle.randn(shape=[1, c_in, self.pad_in_len // seg_len, d_model])
-        self.enc_pos_embedding = paddle.create_parameter(shape=[1, c_in, self.pad_in_len // seg_len, d_model],
-                                    dtype=str(x.numpy().dtype),
-                                    default_initializer=paddle.nn.initializer.Assign(x))
-        
-        self.pre_norm = paddle.nn.LayerNorm(normalized_shape=d_model,
-            epsilon=1e-05, weight_attr=None, bias_attr=None)
-        self.encoder = Encoder(e_layers, win_size, d_model, n_heads, d_ff,
-            block_depth=1, dropout=dropout, in_seg_num=self.pad_in_len //
-            seg_len, factor=factor)
-        
+        self.enc_pos_embedding = paddle.create_parameter(
+            shape=[1, c_in, self.pad_in_len // seg_len, d_model],
+            dtype=str(x.numpy().dtype),
+            default_initializer=paddle.nn.initializer.Assign(x))
+
+        self.pre_norm = paddle.nn.LayerNorm(
+            normalized_shape=d_model,
+            epsilon=1e-05,
+            weight_attr=None,
+            bias_attr=None)
+        self.encoder = Encoder(
+            e_layers,
+            win_size,
+            d_model,
+            n_heads,
+            d_ff,
+            block_depth=1,
+            dropout=dropout,
+            in_seg_num=self.pad_in_len // seg_len,
+            factor=factor)
+
         x = paddle.randn(shape=[1, c_in, self.pad_out_len // seg_len, d_model])
-        self.dec_pos_embedding = paddle.create_parameter(shape=[1,c_in, self.pad_out_len // seg_len, d_model],
-                                    dtype=str(x.numpy().dtype),
-                                    default_initializer=paddle.nn.initializer.Assign(x))
-        
-        self.decoder = Decoder(seg_len, e_layers + 1, d_model, n_heads,
-            d_ff, dropout, out_seg_num=self.pad_out_len // seg_len, factor=
-            factor)
+        self.dec_pos_embedding = paddle.create_parameter(
+            shape=[1, c_in, self.pad_out_len // seg_len, d_model],
+            dtype=str(x.numpy().dtype),
+            default_initializer=paddle.nn.initializer.Assign(x))
+
+        self.decoder = Decoder(
+            seg_len,
+            e_layers + 1,
+            d_model,
+            n_heads,
+            d_ff,
+            dropout,
+            out_seg_num=self.pad_out_len // seg_len,
+            factor=factor)
         self.pretrain = pretrain
         self.init_weight()
 
@@ -79,14 +108,18 @@ class CrossformerModule(paddle.nn.Layer):
             base = 0
         batch_size = x_seq.shape[0]
         if self.in_len_add != 0:
-            x_seq = paddle.concat(x=(x_seq[:, :1, :].expand(shape=[-1, self
-                .in_len_add, -1]), x_seq), axis=1)
+            x_seq = paddle.concat(
+                x=(x_seq[:, :1, :].expand(shape=[-1, self.in_len_add, -1]),
+                   x_seq),
+                axis=1)
         x_seq = self.enc_value_embedding(x_seq)
         x_seq += self.enc_pos_embedding
         x_seq = self.pre_norm(x_seq)
         enc_out = self.encoder(x_seq)
-        dec_in = repeat(self.dec_pos_embedding,
-            'b ts_d l d -> (repeat b) ts_d l d', repeat=batch_size)
+        dec_in = repeat(
+            self.dec_pos_embedding,
+            'b ts_d l d -> (repeat b) ts_d l d',
+            repeat=batch_size)
         predict_y = self.decoder(dec_in, enc_out)
         return base + predict_y[:, :self.out_len, :]
 
@@ -121,7 +154,7 @@ class CrossformerModule(paddle.nn.Layer):
                     param_init.th_linear_fill(layer)
 
 
-@manager.LFMODELS.add_component
+@manager.MODELS.add_component
 class Crossformer(PaddleBaseModelImpl):
     """
     Implementation of NBeats model.
@@ -163,11 +196,11 @@ class Crossformer(PaddleBaseModelImpl):
                  seg_len: int=24,
                  win_size: int=4,
                  dropout: float=0.0,
-                 d_model: int=512, 
-                 d_ff: int=1024, 
-                 n_heads: int=8, 
+                 d_model: int=512,
+                 d_ff: int=1024,
+                 n_heads: int=8,
                  e_layers: int=3,
-                 pretrain = None,
+                 pretrain=None,
                  skip_chunk_len: int=0,
                  sampling_stride: int=1,
                  loss_fn: Callable[..., paddle.Tensor]=F.mse_loss,
@@ -190,7 +223,7 @@ class Crossformer(PaddleBaseModelImpl):
         self.d_model = d_model
         self.d_ff = d_ff
         self.n_head = n_heads
-        self.e_layers= e_layers
+        self.e_layers = e_layers
         self.dropout = dropout
         self._use_revin = use_revin
         self._revin_params = revin_params
@@ -211,7 +244,6 @@ class Crossformer(PaddleBaseModelImpl):
             verbose=verbose,
             patience=patience,
             seed=seed, )
-
 
     def _check_tsdataset(self, tsdataset: TSDataset):
         """ 
@@ -262,15 +294,15 @@ class Crossformer(PaddleBaseModelImpl):
             paddle.nn.Layer
         """
         return CrossformerModule(
-            c_in=self.c_in,
-            seq_len=self._in_chunk_len, 
+            c_in=self._fit_params['target_dim'],
+            seq_len=self._in_chunk_len,
             pred_len=self._out_chunk_len,
-            seg_len = self.seg_len,
+            seg_len=self.seg_len,
             factor=self.factor,
             win_size=self.win_size,
-            d_model=self.d_model, 
+            d_model=self.d_model,
             d_ff=self.d_ff,
-            n_heads=self.n_head, 
+            n_heads=self.n_head,
             e_layers=self.e_layers,
             dropout=self.dropout,
             pretrain=self.pretrain)
