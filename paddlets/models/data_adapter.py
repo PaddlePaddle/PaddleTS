@@ -1229,6 +1229,7 @@ class SampleDataset(paddle.io.Dataset):
                 # (3, 0)
         """
         full_df = timeseries.to_dataframe(copy=False)
+        full_df = full_df.astype(dtype)
         extracted_df = full_df.select_dtypes(include=dtype)
         return extracted_df.to_numpy(copy=False)
 
