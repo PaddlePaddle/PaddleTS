@@ -33,7 +33,7 @@ UWaveGestureLibrary：
 [训练](https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TRAIN.csv)
 [评测](https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TEST.csv)
 
-| ID | model |  acc |
+| ID | model |  精度（acc） |
 | 01 | TimesNet_cls | 87.5|
 
 
