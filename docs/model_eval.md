@@ -19,6 +19,7 @@
 数据 [PSM](https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ts_anomaly_examples.tar)
 
 | ID | model |  输入序列长度 | f1/recall/precision |
+|-----|-----|--------|--------|
 | 01 | TimesNet_ad | 100 | 96.56/94.80/98.37|
 | 02 | DLinear_ad | 100 | 96.41/93.96/0.9898|
 | 03 | PatchTST_ad | 100 | 94.57/90.70/98.78 |
@@ -34,6 +35,7 @@ UWaveGestureLibrary：
 [评测](https://paddlets.bj.bcebos.com/classification/UWaveGestureLibrary_TEST.csv)
 
 | ID | model |  精度（acc） |
+|-----|-----|--------|
 | 01 | TimesNet_cls | 87.5|
 
 
