@@ -88,7 +88,7 @@ Use the trained model for prediction and evaluation.
 
    from paddlets.metrics import F1,ACC,Precision,Recall
    
-   pred_label = model.predict(test_data_scaled)
+   pred_label = model.predict(test_tsdata_scaled)
    lable_name = pred_label.target.data.columns[0]
    f1 = F1()(test_tsdata, pred_label)
    precision = Precision()(test_tsdata, pred_label)
@@ -114,7 +114,7 @@ The model also provides `predict_score` interface returns the anomaly score of e
 
 .. code-block:: python
 
-   pred_score = model.predict_score(test_data_scaled)
+   pred_score = model.predict_score(test_tsdata_scaled)
    plot_anoms(origin_data=test_tsdata, predict_data=pred_score, feature_name="value")
    
 .. image:: ../../../static/images/modules_models_anomaly_figure3.png
@@ -137,5 +137,5 @@ After the model is saved, the model can be loaded for new data prediction.
    from paddlets.models.model_loader import load
 
    loaded_model = load('./model_path/ae')
-   pred_label = loaded_model.predict(test_data_scaled)
-   pred_score = loaded_model.predict_score(test_data_scaled)
+   pred_label = loaded_model.predict(test_tsdata_scaled)
+   pred_score = loaded_model.predict_score(test_tsdata_scaled)
