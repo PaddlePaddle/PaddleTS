@@ -52,25 +52,26 @@ class TFTModel(PaddleBaseModelImpl):
         seed(int, Optional): global random seed.
     """
 
-    def __init__(self,
-                 in_chunk_len: int,
-                 out_chunk_len: int,
-                 hidden_size: int=64,
-                 lstm_layers_num: int=1,
-                 attention_heads_num: int=1,
-                 output_quantiles: List[float]=[0.1, 0.5, 0.9],
-                 dropout: float=0.0,
-                 skip_chunk_len: int=0,
-                 sampling_stride: int=1,
-                 loss_fn: Callable[..., paddle.Tensor]=None,
-                 optimizer_fn: Callable[..., Optimizer]=None,
-                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
-                 callbacks: List[Callback]=[],
-                 batch_size: int=128,
-                 max_epochs: int=10,
-                 verbose: int=1,
-                 patience: int=4,
-                 seed: int=0):
+    def __init__(
+            self,
+            in_chunk_len: int,
+            out_chunk_len: int,
+            hidden_size: int=64,
+            lstm_layers_num: int=1,
+            attention_heads_num: int=1,
+            output_quantiles: List[float]=[0.1, 0.5, 0.9],
+            dropout: float=0.0,
+            skip_chunk_len: int=0,
+            sampling_stride: int=1,
+            loss_fn: Callable[..., paddle.Tensor]=None,
+            optimizer_fn: Callable[..., Optimizer]=None,
+            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-4),
+            callbacks: List[Callback]=[],
+            batch_size: int=128,
+            max_epochs: int=10,
+            verbose: int=1,
+            patience: int=4,
+            seed: int=0):
         self._hidden_size = hidden_size
         self._lstm_layers_num = lstm_layers_num
         self._attention_heads_num = attention_heads_num
