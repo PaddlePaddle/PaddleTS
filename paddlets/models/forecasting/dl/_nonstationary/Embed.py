@@ -25,7 +25,7 @@ class PositionalEmbedding(paddle.nn.Layer):
 class TokenEmbedding(paddle.nn.Layer):
     def __init__(self, c_in, d_model):
         super(TokenEmbedding, self).__init__()
-        padding = 1 if paddle.__version__ >= '1.5.0' else 2
+        padding = 1
         self.tokenConv = paddle.nn.Conv1D(
             in_channels=c_in,
             out_channels=d_model,
