@@ -36,7 +36,7 @@ class Projector(paddle.nn.Layer):
                  output_dim,
                  kernel_size=3):
         super(Projector, self).__init__()
-        padding = 1 if paddle.__version__ >= '1.5.0' else 2
+        padding = 1
         self.series_conv = paddle.nn.Conv1D(
             in_channels=seq_len,
             out_channels=1,
