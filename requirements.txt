@@ -17,7 +17,6 @@ jinja2
 IPython
 more-itertools
 ruamel.yaml
-xgboost
 
 # autots
 ray[tune]>=1.13.0
