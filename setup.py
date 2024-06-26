@@ -6,7 +6,6 @@ Setup script.
 
 from setuptools import find_packages, find_namespace_packages, setup
 from pathlib import Path
-import paddlets
 
 
 def read_requirements(path):
@@ -18,7 +17,7 @@ all_reqs = read_requirements("requirements.txt")
 
 setup(
     name='paddlets',
-    version=paddlets.__version__,
+    version='1.1.0',
     maintainer='paddlets Team',
     maintainer_email='paddlets@baidu.com',
     packages=find_packages(include=['paddlets', 'paddlets.*']) +
