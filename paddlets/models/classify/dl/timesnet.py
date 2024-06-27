@@ -111,7 +111,7 @@ class _TimesNet(nn.Layer):
             enc_out = self.layer_norm(self.model[i](enc_out))
         output = self.act(enc_out)
         output = self.dropout(output)
-        output = output * x_mark_enc.unsqueeze(axis=-1)
+        output = output * x_mark_enc.unsqueeze(axis=-1).astype(output.dtype)
         output = output.reshape([output.shape[0], -1])
         output = self.projection(output)
         return output
