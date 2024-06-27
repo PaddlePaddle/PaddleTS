@@ -84,7 +84,7 @@ def main(args):
     split = dataset.get('split', None)
     do_eval = cfg.dic.get('do_eval', True)
     sampling_stride = cfg.dic.get('sampling_stride', 1)
-    cfg_output_dir = cfg.dic.get('output_dir', 'output')
+    cfg_output_dir = args.save_dir
     logger.info(cfg.__dict__)
 
     if not os.path.exists(cfg_output_dir):
