@@ -31,6 +31,10 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 时序模型集成学习能力
 
 最新更新：
+- [2024-06-27] **💥 飞桨低代码开发工具 PaddleX 3.0 重磅更新！**
+  - 丰富的模型产线：精选 68 个优质飞桨模型，涵盖图像分类、目标检测、图像分割、OCR、文本图像版面分析、时序分析等任务场景；
+  - 低代码开发范式：支持单模型和模型产线全流程低代码开发，提供 Python API，支持用户自定义串联模型；
+  - 多硬件训推支持：支持英伟达 GPU、昆仑芯、昇腾和寒武纪等多种硬件进行模型训练与推理。PaddleTS支持的模型见 [模型列表]()
 * 新增时序分类能力
 * 全新发布6个深度时序模型。
   USAD(UnSupervised Anomaly Detection)与MTAD_GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network)异常检测模型，
