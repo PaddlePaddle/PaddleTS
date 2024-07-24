@@ -30,7 +30,9 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 支持在GPU设备上运行基于PaddlePaddle的时序模型
 * 时序模型集成学习能力
 
-最新更新：
+📣 **近期更新**
+* 📚 **《高精度时序分析星河零代码产线全新上线》**，汇聚时序分析3大场景任务，涵盖11个前沿的时序模型。高精度多模型融合时序特色产线，自适应不同场景自动搜索模型最优组合，真实产业场景应用时序预测精度提升约20%，时序异常检测精度提升5%。支持云端和本地端服务化部署与纯离线使用。直播时间：**8月1日（周四）19：00**。报名链接：https://www.wjx.top/vm/YLz6DY6.aspx?udsid=146765
+
 * 新增时序分类能力
 * 全新发布6个深度时序模型。
   USAD(UnSupervised Anomaly Detection)与MTAD_GAT(Multivariate Time-series Anomaly Detection via Graph Attention Network)异常检测模型，
