@@ -10,10 +10,11 @@ from typing import List, Dict, Any, Optional
 import datetime
 import time
 import copy
-
+import paddle
 import numpy as np
 
 from paddlets.logger import Logger
+import paddlets.utils.utils as utils
 
 logger = Logger(__name__)
 
@@ -336,10 +337,25 @@ class History(Callback):
         """
         self._epoch_metrics["loss"] = self._epoch_loss
         self._train_reader_cost = self._epoch_metrics["train_reader_cost"]
-        self._epoch_metrics["batch_cost"]  = (self._train_run_cost + self._train_reader_cost) / self._epoch_metrics["steps"]
-        self._epoch_metrics["reader_cost"]  = self._train_reader_cost / self._epoch_metrics["steps"]
-        self._epoch_metrics["samples"] = self._samples_seen / self._epoch_metrics["steps"]
-        self._epoch_metrics["ips"] = self._samples_seen / self._epoch_metrics["batch_cost"] 
+        self._epoch_metrics["batch_cost"] = (
+            self._train_run_cost + self._train_reader_cost
+        ) / self._epoch_metrics["steps"]
+        self._epoch_metrics[
+            "reader_cost"] = self._train_reader_cost / self._epoch_metrics[
+                "steps"]
+        self._epoch_metrics[
+            "samples"] = self._samples_seen / self._epoch_metrics["steps"]
+        self._epoch_metrics["ips"] = self._samples_seen / self._epoch_metrics[
+            "batch_cost"]
+        max_mem_reserved_str = ""
+        max_mem_allocated_str = ""
+        if paddle.device.is_compiled_with_cuda() and utils.print_mem_info:
+            if paddle.device.cuda.max_memory_reserved() / (1024**2) < 1:
+                max_mem_reserved_str = f", max_mem_reserved: {paddle.device.cuda.max_memory_reserved() // 1024} KB"
+                max_mem_allocated_str = f", max_mem_allocated: {paddle.device.cuda.max_memory_allocated() // 1024} KB"
+            else:
+                max_mem_reserved_str = f", max_mem_reserved: {paddle.device.cuda.max_memory_reserved() // (1024 ** 2)} MB"
+                max_mem_allocated_str = f", max_mem_allocated: {paddle.device.cuda.max_memory_allocated() // (1024 ** 2)} MB"
         for metric_name, metric_value in self._epoch_metrics.items():
             if metric_name not in self._history:
                 self._history.update({metric_name: []})
@@ -347,8 +363,8 @@ class History(Callback):
 
         if self._verbose == 0 or epoch % self._verbose != 0:
             return
-        self._epoch_metrics.pop('train_reader_cost',None)
-        self._epoch_metrics.pop('steps',None)
+        self._epoch_metrics.pop('train_reader_cost', None)
+        self._epoch_metrics.pop('steps', None)
         msg = f"epoch {epoch:0>3}"
         for metric_name, metric_value in self._epoch_metrics.items():
             if metric_name != "lr":
@@ -357,6 +373,7 @@ class History(Callback):
                 msg += f" sec"
             if metric_name == "ips":
                 msg += f" sequences/sec"
+        msg += f"{max_mem_reserved_str}{max_mem_allocated_str}"
         total_time = int(time.time() - self._start_time)
         msg += f" | {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
         logger.info(msg)
@@ -375,4 +392,3 @@ class History(Callback):
         ) / (self._samples_seen + batch_size)
         self._samples_seen += batch_size
         self._train_run_cost += logs['train_run_cost']
-
