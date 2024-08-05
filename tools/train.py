@@ -13,6 +13,7 @@ from paddlets.utils.manager import MODELS
 from paddlets.metrics import MSE, MAE
 from paddlets.utils import backtest
 from paddlets.logger import Logger
+from paddlets.utils.utils import set_print_mem_info
 
 logger = Logger(__name__)
 warnings.filterwarnings("ignore")
@@ -76,6 +77,8 @@ def main(args):
         batch_size=args.batch_size,
         opts=args.opts)
 
+    print_mem_info = cfg.dic.get('print_mem_info', True)
+    set_print_mem_info(print_mem_info)
     batch_size = cfg.batch_size
     dataset = cfg.dataset
     predict_len = cfg.predict_len
@@ -110,18 +113,24 @@ def main(args):
         dataset_root = dataset.get('dataset_root', None)
 
         # if not os.path.exists(dataset_root):
-            # raise FileNotFoundError('there is not `dataset_root`: {}.'.format(
-                # dataset_root))
+        # raise FileNotFoundError('there is not `dataset_root`: {}.'.format(
+        # dataset_root))
 
         if dataset['name'] == 'TSDataset':
             if cfg.task not in 'longforecast':
-                raise AssertionError('Error: When dataset is TSDataset, task should be set to forecast.')
+                raise AssertionError(
+                    'Error: When dataset is TSDataset, task should be set to forecast.'
+                )
         elif dataset['name'] == 'TSADDataset':
             if cfg.task != 'anomaly':
-                raise AssertionError('Error: When dataset is TSADataset, task should be set to anomaly.')
+                raise AssertionError(
+                    'Error: When dataset is TSADataset, task should be set to anomaly.'
+                )
         elif dataset['name'] == 'TSCLSDataset':
             if cfg.task != 'classification':
-                raise AssertionError('Error: When dataset is TSCLSataset, task should be set to classification.')
+                raise AssertionError(
+                    'Error: When dataset is TSCLSataset, task should be set to classification.'
+                )
 
         df = pd.read_csv(dataset['train_path'])
 
@@ -136,31 +145,39 @@ def main(args):
                 # target_cols = info_params['target_cols'] if info_params[
                 #     'target_cols'] != [''] else None
                 if isinstance(info_params['target_cols'], str):
-                    info_params['target_cols'] = info_params['target_cols'].split(',')
+                    info_params['target_cols'] = info_params[
+                        'target_cols'].split(',')
 
         if cfg.task == 'anomaly':
             if info_params.get('feature_cols', None):
                 if isinstance(info_params['feature_cols'], str):
-                    info_params['feature_cols'] = info_params['feature_cols'].split(',')
+                    info_params['feature_cols'] = info_params[
+                        'feature_cols'].split(',')
             else:
                 cols = df.columns.values.tolist()
-                if info_params.get('label_col', None) and info_params['label_col'] in cols:
+                if info_params.get('label_col',
+                                   None) and info_params['label_col'] in cols:
                     cols.remove(info_params['label_col'])
-                if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                if info_params.get('time_col',
+                                   None) and info_params['time_col'] in cols:
                     cols.remove(info_params['time_col'])
                 info_params['feature_cols'] = cols
-            
+
             info_params_train = info_params.copy()
             info_params_train.pop("label_col", None)
             ts_train = TSDataset.load_from_dataframe(df, **info_params_train)
         elif cfg.task == 'classification':
             if info_params.get('target_cols', None) is None:
                 cols = df.columns.values.tolist()
-                if info_params.get('time_col', None) and info_params['time_col'] in cols:
+                if info_params.get('time_col',
+                                   None) and info_params['time_col'] in cols:
                     cols.remove(info_params['time_col'])
-                if info_params.get('group_id', None) and info_params['group_id'] in cols:
+                if info_params.get('group_id',
+                                   None) and info_params['group_id'] in cols:
                     cols.remove(info_params['group_id'])
-                if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
+                if info_params.get(
+                        'static_cov_cols',
+                        None) and info_params['static_cov_cols'] in cols:
                     cols.remove(info_params['static_cov_cols'])
                 info_params['target_cols'] = cols
             ts_train = TSDataset.load_from_dataframe(df, **info_params)
@@ -185,7 +202,8 @@ def main(args):
         else:
             ts_train = get_dataset(dataset['name'], split, seq_len, info_params)
 
-    if cfg.model['name'] in ['TimesNetModel', 'Nonstationary_Transformer'] and args.device == 'xpu':
+    if cfg.model['name'] in ['TimesNetModel', 'Nonstationary_Transformer'
+                             ] and args.device == 'xpu':
         os.environ['XPU_BLACK_LIST'] = 'pad3d, pad3d_grad'
 
     if cfg.model['name'] == 'PP-TS':
@@ -344,7 +362,9 @@ def main(args):
             score = model.eval(ts_val)['f1']
         model.save(cfg_output_dir + '/checkpoints/')
     if ts_val is not None:
-        json.dump({'metric': float(score)}, open(cfg_output_dir + '/score.json', 'w'))
+        json.dump({
+            'metric': float(score)
+        }, open(cfg_output_dir + '/score.json', 'w'))
 
 
 if __name__ == '__main__':

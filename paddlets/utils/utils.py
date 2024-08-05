@@ -18,6 +18,13 @@ from paddlets.datasets.tsdataset import TSDataset
 from paddlets.models.data_adapter import DataAdapter
 
 logger = Logger(__name__)
+# Compatible with earlier versions
+print_mem_info = True
+
+
+def set_print_mem_info(flag: bool):
+    global print_mem_info
+    print_mem_info = flag
 
 
 def check_model_fitted(model: Trainable, msg: str=None):
