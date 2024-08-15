@@ -70,8 +70,6 @@ In the future, more advanced features will be coming, including:
 
 Scan the QR code below on WeChat to add operation students, and reply [paddlex], operation students will invite you to join the official communication group for more efficient questions and answers.
 
-Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
-
 ## More About PaddleTS
 
 Specifically, PaddleTS consists of the following modules:
@@ -115,10 +113,6 @@ To get more detailed information, please refer to [Installation](https://paddlet
 
 * [API Reference](https://paddlets.readthedocs.io/en/latest/source/api/paddlets.analysis.html)
 
-
-## Community
-
-Welcome to the AI Studio PaddleX Community Channel for further communication. Address Direct：https://aistudio.baidu.com/community/channel/610
 
 ## Contributions
 
