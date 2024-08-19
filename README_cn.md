@@ -62,9 +62,6 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 PaddleX官网地址：https://aistudio.baidu.com/intro/paddlex
 
-PaddleX官方交流频道：https://aistudio.baidu.com/community/channel/610
-
-
 ## 关于 PaddleTS
 
 具体来说，PaddleTS 时序库包含以下子模块：
@@ -107,10 +104,6 @@ pip install paddlets
 
 * [API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
 
-
-## 社区
-
-欢迎大家进入：AI Studio【PaddleX社区频道】进一步交流。地址直达：https://aistudio.baidu.com/community/channel/610
 
 
 ## 代码发布与贡献
