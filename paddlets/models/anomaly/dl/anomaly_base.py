@@ -249,7 +249,8 @@ class AnomalyBaseModel(abc.ABC):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -416,7 +417,7 @@ class AnomalyBaseModel(abc.ABC):
 
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
-            self._train_epoch(train_dataloader)
+            self._train_epoch(train_dataloader, epoch_idx, self._max_epochs)
 
             # Predict for each eval set.
             for eval_name, valid_dataloader in zip(valid_names,
@@ -605,7 +606,10 @@ class AnomalyBaseModel(abc.ABC):
             keepdim=False)
         return loss.numpy()
 
-    def _train_epoch(self, train_loader: paddle.io.DataLoader):
+    def _train_epoch(self,
+                     train_loader: paddle.io.DataLoader,
+                     epoch: int,
+                     max_epochs: int):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -615,13 +619,19 @@ class AnomalyBaseModel(abc.ABC):
         train_reader_cost = 0.0
         reader_start = time.time()
         for batch_idx, data in enumerate(train_loader):
-            train_reader_cost += time.time() - reader_start            
+            train_reader_cost += time.time() - reader_start
+            logs = {
+                "epoch": epoch,
+                "max_epochs": max_epochs,
+                "lr": self._optimizer.get_lr(),
+                "steps": batch_idx,
+                "train_reader_cost": train_reader_cost
+            }
             self._callback_container.on_batch_begin(batch_idx)
             batch_logs = self._train_batch(data)
+            batch_logs.update(logs)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
             reader_start = time.time()
-        epoch_logs = {"lr": self._optimizer.get_lr(), "steps": batch_idx, "train_reader_cost": train_reader_cost}
-        self._history._epoch_metrics.update(epoch_logs)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.
@@ -640,7 +650,11 @@ class AnomalyBaseModel(abc.ABC):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {"batch_size": y_true.shape[0], "loss": loss.item(), "train_run_cost": train_run_cost}
+        batch_logs = {
+            "batch_size": y_true.shape[0],
+            "loss": loss.item(),
+            "train_run_cost": train_run_cost
+        }
         return batch_logs
 
     def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
@@ -814,7 +828,8 @@ class AnomalyBaseModel(abc.ABC):
         else:
             internal_filename_map = {
                 "model_meta": "%s_%s" % (modelname, "model_meta"),
-                "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
+                "network_statedict":
+                "%s/%s" % ('best_model', "model.pdparams"),
                 "network_model": modelname,
                 # currently ignore optimizer.
                 # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),

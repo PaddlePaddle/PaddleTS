@@ -15,6 +15,7 @@ from paddle.optimizer import Optimizer
 import paddle.nn.functional as F
 import numpy as np
 import paddle
+import time
 
 from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.anomaly.dl.anomaly_base import AnomalyBaseModel
@@ -406,16 +407,30 @@ class USAD(AnomalyBaseModel):
                 keepdim=False)
         return loss.numpy()
 
-    def _train_epoch(self, train_loader: paddle.io.DataLoader):
+    def _train_epoch(self,
+                     train_loader: paddle.io.DataLoader,
+                     epoch: int,
+                     max_epochs: int):
         """Trains one epoch of the network in self._network.
 
         Args: 
             train_loader(paddle.io.DataLoader): Training dataloader.
         """
         self._network.train()
+        train_reader_cost = 0.0
+        reader_start = time.time()
         for batch_idx, data in enumerate(train_loader):
+            train_reader_cost += time.time() - reader_start
+            logs = {
+                "epoch": epoch,
+                "max_epochs": max_epochs,
+                "lr": self._optimizer.get_lr(),
+                "steps": batch_idx,
+                "train_reader_cost": train_reader_cost
+            }
             self._callback_container.on_batch_begin(batch_idx)
             batch_logs = self._train_batch(data, batch_idx)
+            batch_logs.update(logs)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
         epoch_logs = {"lr": self._optimizer[0].get_lr()}
         self._history._epoch_metrics.update(epoch_logs)
@@ -432,7 +447,9 @@ class USAD(AnomalyBaseModel):
             Dict[str, Any]: Dict of logs.
         """
         batch_idx = batch_idx + 1
+        start_time = time.time()
         y_true, w1, w2, w3 = self._network(X)
+        train_run_cost = time.time() - start_time
         loss1 = 1 / batch_idx * self._compute_loss(y_true, w1) + (
             1 - 1 / batch_idx) * self._compute_loss(y_true, w3)
         loss1.backward()
@@ -448,7 +465,8 @@ class USAD(AnomalyBaseModel):
 
         batch_logs = {
             "batch_size": y_true.shape[0],
-            "loss": loss1.item() + loss2.item()
+            "loss": loss1.item() + loss2.item(),
+            "train_run_cost": train_run_cost
         }
         return batch_logs
 
