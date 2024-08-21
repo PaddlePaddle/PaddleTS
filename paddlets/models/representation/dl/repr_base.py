@@ -227,7 +227,7 @@ class ReprBaseModel(abc.ABC):
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
 
-            self._train_epoch(train_dataloader)
+            self._train_epoch(train_dataloader, epoch_idx, self._max_epochs)
 
             # Call the `on_epoch_end` method of each callback at the end of the epoch.
             self._callback_container.on_epoch_end(
@@ -269,19 +269,32 @@ class ReprBaseModel(abc.ABC):
         """
         pass
 
-    def _train_epoch(self, train_loader: paddle.io.DataLoader):
+    def _train_epoch(self,
+                     train_loader: paddle.io.DataLoader,
+                     epoch: int,
+                     max_epochs: int):
         """Trains one epoch of the network in self._network.
 
         Args: 
             train_loader(paddle.io.DataLoader): Training dataloader.
         """
         self._network.train()
+        train_reader_cost = 0.0
+        reader_start = time.time()
         for batch_idx, X in enumerate(train_loader):
+            train_reader_cost += time.time() - reader_start
+            logs = {
+                "epoch": epoch,
+                "max_epochs": max_epochs,
+                "lr": self._optimizer.get_lr(),
+                "steps": batch_idx,
+                "train_reader_cost": train_reader_cost
+            }
             self._callback_container.on_batch_begin(batch_idx)
             batch_logs = self._train_batch(X)
+            batch_logs.update(logs)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
-        epoch_logs = {"lr": self._optimizer.get_lr()}
-        self._history._epoch_metrics.update(epoch_logs)
+            reader_start = time.time()
 
     def _train_batch(self, X: Dict[str, paddle.Tensor]) -> Dict[str, Any]:
         """Trains one batch of data.

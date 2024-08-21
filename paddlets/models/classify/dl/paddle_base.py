@@ -144,7 +144,8 @@ class PaddleBaseClassifier(BaseClassifier):
         if not self._eval_metrics:
             self._eval_metrics = ["acc"]
 
-    def _check_tsdatasets(self, tsdatasets: List[TSDataset],
+    def _check_tsdatasets(self,
+                          tsdatasets: List[TSDataset],
                           labels: np.ndarray):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
@@ -212,7 +213,8 @@ class PaddleBaseClassifier(BaseClassifier):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -257,8 +259,8 @@ class PaddleBaseClassifier(BaseClassifier):
                     valid_tsdatasets, valid_labels,
                     self._fit_params['input_lens'])
             else:
-                valid_dataset = data_adapter.to_paddle_dataset(valid_tsdatasets,
-                                                               valid_labels)
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets, valid_labels)
             valid_dataloader = data_adapter.to_paddle_dataloader(
                 valid_dataset, self._batch_size, shuffle=False)
 
@@ -280,8 +282,8 @@ class PaddleBaseClassifier(BaseClassifier):
             tsdatasets = [tsdatasets]
         self._check_tsdatasets(tsdatasets, labels)
         data_adapter = ClassifyDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(tsdatasets, labels,
-                                                 self._fit_params['input_lens'])
+        dataset = data_adapter.to_paddle_dataset(
+            tsdatasets, labels, self._fit_params['input_lens'])
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -384,7 +386,7 @@ class PaddleBaseClassifier(BaseClassifier):
 
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
-            self._train_epoch(train_dataloader)
+            self._train_epoch(train_dataloader, epoch_idx, self._max_epochs)
 
             if len(valid_names) > 0:
                 self._predict_epoch(valid_names[0], valid_dataloader)
@@ -418,7 +420,8 @@ class PaddleBaseClassifier(BaseClassifier):
         # np.save('probs',probs)
         rng = check_random_state(self._seed)
         return np.array([
-            self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
+            self._classes_[int(
+                rng.choice(np.flatnonzero(prob == prob.max())))]
             for prob in probs
         ])
 
@@ -457,7 +460,10 @@ class PaddleBaseClassifier(BaseClassifier):
                                            keepdims=True)
         return results
 
-    def _train_epoch(self, train_loader: paddle.io.DataLoader):
+    def _train_epoch(self,
+                     train_loader: paddle.io.DataLoader,
+                     epoch: int,
+                     max_epochs: int):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -468,13 +474,19 @@ class PaddleBaseClassifier(BaseClassifier):
         reader_start = time.time()
         for batch_idx, data in enumerate(train_loader):
             train_reader_cost += time.time() - reader_start
+            logs = {
+                "epoch": epoch,
+                "max_epochs": max_epochs,
+                "lr": self._optimizer.get_lr(),
+                "steps": batch_idx,
+                "train_reader_cost": train_reader_cost
+            }
             self._callback_container.on_batch_begin(batch_idx)
             X, y = self._prepare_X_y(data)
             batch_logs = self._train_batch(X, y)
+            batch_logs.update(logs)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
             reader_start = time.time()
-        epoch_logs = {"lr": self._optimizer.get_lr(), "steps": batch_idx, "train_reader_cost": train_reader_cost}
-        self._history._epoch_metrics.update(epoch_logs)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor],
                      y: paddle.Tensor) -> Dict[str, Any]:
@@ -494,7 +506,11 @@ class PaddleBaseClassifier(BaseClassifier):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {"batch_size": y.shape[0], "loss": loss.item(), "train_run_cost": train_run_cost}
+        batch_logs = {
+            "batch_size": y.shape[0],
+            "loss": loss.item(),
+            "train_run_cost": train_run_cost
+        }
         return batch_logs
 
     def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
@@ -714,7 +730,8 @@ class PaddleBaseClassifier(BaseClassifier):
             paddle.save(
                 obj=network_state_dict,
                 path=os.path.join(abs_root_path,
-                                  internal_filename_map["network_statedict"]), )
+                                  internal_filename_map["network_statedict"]),
+            )
         except Exception as e:
             raise_log(
                 ValueError("error occurred while saving %s: %s, err: %s" %

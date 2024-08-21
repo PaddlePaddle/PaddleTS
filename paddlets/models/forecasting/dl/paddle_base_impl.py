@@ -187,7 +187,8 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -369,7 +370,7 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         for epoch_idx in range(self._max_epochs):
             # Call the `on_epoch_begin` method of each callback before the epoch starts.
             self._callback_container.on_epoch_begin(epoch_idx)
-            self._train_epoch(train_dataloader)
+            self._train_epoch(train_dataloader, epoch_idx, self._max_epochs)
             # Predict for each eval set.
             for eval_name, valid_dataloader in zip(valid_names,
                                                    valid_dataloaders):
@@ -447,7 +448,10 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         results = np.vstack(results)
         return results
 
-    def _train_epoch(self, train_loader: paddle.io.DataLoader):
+    def _train_epoch(self,
+                     train_loader: paddle.io.DataLoader,
+                     epoch: int,
+                     max_epochs: int):
         """Trains one epoch of the network in self._network.
 
         Args: 
@@ -458,13 +462,19 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         reader_start = time.time()
         for batch_idx, data in enumerate(train_loader):
             train_reader_cost += time.time() - reader_start
+            logs = {
+                "epoch": epoch,
+                "max_epochs": max_epochs,
+                "lr": self._optimizer.get_lr(),
+                "steps": batch_idx,
+                "train_reader_cost": train_reader_cost
+            }
             self._callback_container.on_batch_begin(batch_idx)
             X, y = self._prepare_X_y(data)
             batch_logs = self._train_batch(X, y)
+            batch_logs.update(logs)
             self._callback_container.on_batch_end(batch_idx, batch_logs)
             reader_start = time.time()
-        epoch_logs = {"lr": self._optimizer.get_lr(),"steps": batch_idx, "train_reader_cost": train_reader_cost}
-        self._history._epoch_metrics.update(epoch_logs)
 
     def _train_batch(self, X: Dict[str, paddle.Tensor],
                      y: paddle.Tensor) -> Dict[str, Any]:
@@ -484,7 +494,11 @@ class PaddleBaseModelImpl(PaddleBaseModel, abc.ABC):
         loss.backward()
         self._optimizer.step()
         self._optimizer.clear_grad()
-        batch_logs = {"batch_size": y.shape[0], "loss": loss.item(), "train_run_cost": train_run_cost}
+        batch_logs = {
+            "batch_size": y.shape[0],
+            "loss": loss.item(),
+            "train_run_cost": train_run_cost
+        }
         return batch_logs
 
     def _predict_epoch(self, name: str, loader: paddle.io.DataLoader):
