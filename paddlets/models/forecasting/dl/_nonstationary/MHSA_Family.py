@@ -16,11 +16,14 @@ class DSAttention(paddle.nn.Layer):
     def __init__(self,
                  mask_flag=True,
                  factor=5,
+                 d_model=128,
+                 num_heads=8,
                  scale=None,
                  attention_dropout=0.1,
                  output_attention=False):
         super(DSAttention, self).__init__()
-        self.scale = scale
+        E = d_model // num_heads
+        self.scale = scale if  scale is not None else 1.0 / sqrt(E)
         self.mask_flag = mask_flag
         self.output_attention = output_attention
         self.dropout = paddle.nn.Dropout(p=attention_dropout)
@@ -29,7 +32,7 @@ class DSAttention(paddle.nn.Layer):
     def forward(self, queries, keys, values, attn_mask, tau=None, delta=None):
         B, L, H, E = queries.shape
         _, S, _, D = values.shape
-        scale = self.scale or 1.0 / sqrt(E)
+        scale = self.scale 
         tau = 1.0 if tau is None else tau.unsqueeze(axis=1).unsqueeze(axis=1)
         delta = 0.0 if delta is None else delta.unsqueeze(axis=1).unsqueeze(
             axis=1)

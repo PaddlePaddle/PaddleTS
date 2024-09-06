@@ -256,6 +256,12 @@ class TimesNetModel(PaddleBaseModelImpl):
             "known_cov_dim": 0,
             "observed_cov_dim": 0
         }
+        if train_tsdataset[0].get_known_cov() is not None:
+            fit_params["known_cov_dim"] = train_tsdataset[0].get_known_cov(
+            ).data.shape[1]
+        if train_tsdataset[0].get_observed_cov() is not None:
+            fit_params["observed_cov_dim"] = train_tsdataset[
+                0].get_observed_cov().data.shape[1]
         return fit_params
 
     @revin_norm  # aligned? not used seemly

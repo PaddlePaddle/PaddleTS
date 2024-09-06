@@ -628,7 +628,8 @@ class PaddleBaseClassifier(BaseClassifier):
              path: str,
              network_model: bool=False,
              dygraph_to_static=True,
-             batch_size: Optional[int]=None) -> None:
+             batch_size: Optional[int]=None,
+             data_info: Optional[dict]=None) -> None:
         """
         Saves a PaddleBaseClassifier instance to a disk file.
 
@@ -713,30 +714,40 @@ class PaddleBaseClassifier(BaseClassifier):
                         % (internal_filename_map["network_model"], str(e))))
 
         # 2 save model meta (e.g. classname)
-        try:
-            with open(
-                    os.path.join(abs_root_path,
-                                 internal_filename_map["model_meta"]),
-                    "w") as f:
-                json.dump(model_meta, f, ensure_ascii=False)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (
-                    internal_filename_map["model_meta"], str(e))))
+            try:
+                with open(os.path.join(abs_root_path, 'inference.yml'), "w") as f:
+                    if data_info is not None:
+                        model_meta.update(data_info)
+                    json.dump(model_meta, f, ensure_ascii=False)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        internal_filename_map["model_meta"], str(e))))
 
+        if not network_model:
+            try:
+                with open(
+                        os.path.join(abs_root_path,
+                                    internal_filename_map["model_meta"]),
+                        "w") as f:
+                    json.dump(model_meta, f, ensure_ascii=False)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        internal_filename_map["model_meta"], str(e))))
         # 3 save network state dict
-        network_state_dict = self._network.state_dict()
-        try:
-            paddle.save(
-                obj=network_state_dict,
-                path=os.path.join(abs_root_path,
-                                  internal_filename_map["network_statedict"]),
-            )
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s: %s, err: %s" %
-                           (internal_filename_map["network_statedict"],
-                            network_state_dict, str(e))))
+        if not network_model:
+            network_state_dict = self._network.state_dict()
+            try:
+                paddle.save(
+                    obj=network_state_dict,
+                    path=os.path.join(abs_root_path,
+                                    internal_filename_map["network_statedict"]), )
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s: %s, err: %s" %
+                            (internal_filename_map["network_statedict"],
+                                network_state_dict, str(e))))
 
         # 4 save model
         optimizer = self._optimizer
@@ -754,13 +765,14 @@ class PaddleBaseClassifier(BaseClassifier):
         # loss_fn could possibly contain paddle.Tensor when it is a bound method of a class, thus needs to set to
         # None to avoid pickle.dumps failure.
         self._loss_fn = None
-        try:
-            with open(abs_model_path, "wb") as f:
-                pickle.dump(self, f)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (
-                    abs_model_path, str(e))))
+        if not network_model:
+            try:
+                with open(abs_model_path, "wb") as f:
+                    pickle.dump(self, f)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        abs_model_path, str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
@@ -836,7 +848,8 @@ class PaddleBaseClassifier(BaseClassifier):
                 "features": [
                     None, self._fit_params["input_lens"],
                     self._fit_params["feature_dim"]
-                ]
+                ],
+                "pad_mask": [None, self._fit_params["input_lens"]]
             },
         }
 

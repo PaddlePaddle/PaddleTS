@@ -117,6 +117,8 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                         DSAttention(
                             False,
                             factor,
+                            d_model,
+                            n_heads,
                             attention_dropout=dropout,
                             output_attention=output_attention),
                         d_model,
@@ -138,6 +140,8 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                         DSAttention(
                             True,
                             factor,
+                            d_model,
+                            n_heads,
                             attention_dropout=dropout,
                             output_attention=False),
                         d_model,
@@ -146,6 +150,8 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                         DSAttention(
                             False,
                             factor,
+                            d_model,
+                            n_heads,
                             attention_dropout=dropout,
                             output_attention=False),
                         d_model,
@@ -183,6 +189,7 @@ class Nonstationary_Transformer_Module(paddle.nn.Layer):
                 dec_self_mask=None,
                 dec_enc_mask=None):
         x_enc = x["past_target"]
+
         times_mark = x.get("known_cov_numeric", None)
         x_mark_enc = times_mark[:, :self.seq_len, :]
         dec_inp = paddle.zeros(shape=[x_enc.shape[0], self.pred_len, self.c_in])
