@@ -9,7 +9,7 @@ def FFT_for_Period(x, k=2):
     frequency_list[0] = 0
     _, top_list = paddle.topk(x=frequency_list, k=k)  # 幅度最大的前k个
     top_list = top_list.detach().cast('int32')
-    period = x.shape[1] // top_list.cpu().numpy()  # 长度/频率=周期
+    period = paddle.shape(x)[1] // top_list  # 长度/频率=周期
     return period, xf.abs().mean(axis=-1).index_select(
         index=top_list, axis=1)  # 幅值最大的几个频率项
 
@@ -26,6 +26,7 @@ class TimesBlock(nn.Layer):
         super(TimesBlock, self).__init__()
         self.seq_len = in_chunk_len
         self.pred_len = out_chunk_len
+        self.seq_pred_len = paddle.to_tensor(self.seq_len + self.pred_len)
         self.k = top_k
         self.conv = nn.Sequential(
             Inception_Block_V1(
@@ -41,15 +42,15 @@ class TimesBlock(nn.Layer):
         res = []
         for i in range(self.k):
             period = period_list[i]
-            if (self.seq_len + self.pred_len) % period != 0:
-                length = ((self.seq_len + self.pred_len) // period + 1) * period
+            if self.seq_pred_len % period != 0:
+                length = (self.seq_pred_len // period + 1) * period
                 padding = paddle.zeros(shape=[
-                    x.shape[0], length - (self.seq_len + self.pred_len),
+                    x.shape[0], length - self.seq_pred_len,
                     x.shape[2]
                 ])
-                out = paddle.concat(x=[x, padding], axis=1)
+                out = paddle.concat(x=[x.cast('float32'), padding.cast('float32')], axis=1)
             else:
-                length = self.seq_len + self.pred_len
+                length = self.seq_pred_len
                 out = x
 
             out = out.reshape([B, length // period, period, N]).transpose(
