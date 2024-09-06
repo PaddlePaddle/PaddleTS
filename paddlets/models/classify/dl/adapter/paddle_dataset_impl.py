@@ -100,7 +100,10 @@ class ClassifyPaddleDatasetImpl(PaddleDataset):
         self.classes_ = self.label_encoder.classes_
         self.n_classes_ = len(self.classes_)
         y = y.reshape(len(y), 1)
-        self.onehot_encoder = OneHotEncoder(sparse=False, categories="auto")
+        try:
+            self.onehot_encoder = OneHotEncoder(sparse=False, categories="auto")
+        except:
+            self.onehot_encoder = OneHotEncoder(sparse_output=False, categories="auto")
         y = self.onehot_encoder.fit_transform(y).astype(np.float32)
         return y
 

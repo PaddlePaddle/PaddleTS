@@ -4,11 +4,12 @@ import numpy as np
 import random
 import argparse
 import warnings
+import joblib
 
 import paddle
 from paddlets.utils.config import Config
 from paddlets.datasets.repository import get_dataset
-from paddlets.transform.sklearn_transforms import StandardScaler
+from sklearn.preprocessing import StandardScaler
 from paddlets.utils.manager import MODELS
 from paddlets.metrics import MSE, MAE
 from paddlets.utils import backtest
@@ -133,22 +134,34 @@ def main(args):
                 )
 
         df = pd.read_csv(dataset['train_path'])
+        scaler = StandardScaler()
 
         if cfg.dic.get('info_params', None) is None:
             raise ValueError("`info_params` is necessary, but it is None.")
         else:
             info_params = cfg.dic['info_params']
-            if cfg.task == 'longforecast' and info_params.get('time_col',
-                                                              None) is None:
+
+        if cfg.task == 'longforecast':
+            if info_params.get('time_col', None) is None:
                 raise ValueError("`time_col` is necessary, but it is None.")
             if info_params.get('target_cols', None):
-                # target_cols = info_params['target_cols'] if info_params[
-                #     'target_cols'] != [''] else None
                 if isinstance(info_params['target_cols'], str):
                     info_params['target_cols'] = info_params[
                         'target_cols'].split(',')
+            else:
+                cols = df.columns.values.tolist()
+                if info_params.get('time_col',
+                                   None) and info_params['time_col'] in cols:
+                    cols.remove(info_params['time_col'])
+                info_params['target_cols'] = cols
+            
+            if dataset.get('scale', False):
+                scaler_cols = info_params['target_cols']
+                scaler.fit(df[scaler_cols])
+                df[scaler_cols] = scaler.transform(df[scaler_cols])
+            ts_train = TSDataset.load_from_dataframe(df, **info_params)
 
-        if cfg.task == 'anomaly':
+        elif cfg.task == 'anomaly':
             if info_params.get('feature_cols', None):
                 if isinstance(info_params['feature_cols'], str):
                     info_params['feature_cols'] = info_params[
@@ -165,6 +178,10 @@ def main(args):
 
             info_params_train = info_params.copy()
             info_params_train.pop("label_col", None)
+            if dataset.get('scale', False):
+                scaler_cols = info_params['feature_cols']
+                scaler.fit(df[scaler_cols])
+                df[scaler_cols] = scaler.transform(df[scaler_cols])
             ts_train = TSDataset.load_from_dataframe(df, **info_params_train)
         elif cfg.task == 'classification':
             if info_params.get('target_cols', None) is None:
@@ -180,19 +197,29 @@ def main(args):
                         None) and info_params['static_cov_cols'] in cols:
                     cols.remove(info_params['static_cov_cols'])
                 info_params['target_cols'] = cols
-            ts_train = TSDataset.load_from_dataframe(df, **info_params)
-        else:
+            else:
+                if isinstance(info_params['target_cols'], str):
+                    info_params['target_cols'] = info_params[
+                        'target_cols'].split(',')
+            
+            if dataset.get('scale', False):
+                scaler_cols = info_params['target_cols']
+                scaler.fit(df[scaler_cols])
+                df[scaler_cols] = scaler.transform(df[scaler_cols])
             ts_train = TSDataset.load_from_dataframe(df, **info_params)
 
         if dataset.get('val_path', False):
             if os.path.exists(dataset['val_path']):
                 df = pd.read_csv(dataset['val_path'])
+                if dataset.get('scale', False):
+                    df[scaler_cols] = scaler.transform(df[scaler_cols])
                 if cfg.task == 'anomaly':
                     info_params["dtype"] = np.float32
                 ts_val = TSDataset.load_from_dataframe(df, **info_params)
         if dataset.get('test_path', False):
             if os.path.exists(dataset['test_path']):
                 df = pd.read_csv(dataset['test_path'])
+                df[scaler_cols] = scaler.transform(df[scaler_cols])
                 ts_test = TSDataset.load_from_dataframe(df, **info_params)
     else:
         info_params = cfg.dic.get('info_params', None)
@@ -267,14 +294,6 @@ def main(args):
 
     if dataset.get('scale', False):
         logger.info('start scaling...')
-        scaler = StandardScaler()
-        scaler.fit(ts_train)
-        ts_train = scaler.transform(ts_train)
-        if ts_val is not None:
-            ts_val = scaler.transform(ts_val)
-        if ts_test is not None:
-            ts_test = scaler.transform(ts_test)
-        import joblib
         joblib.dump(scaler, os.path.join(cfg_output_dir, 'scaler.pkl'))
 
     if cfg.dataset.get('time_feat', 'False'):

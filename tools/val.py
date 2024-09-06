@@ -3,6 +3,7 @@ import numpy as np
 import random
 import argparse
 import warnings
+import joblib
 
 import paddle
 from paddlets.utils.config import Config
@@ -77,6 +78,16 @@ def main(args):
     logger.info(cfg.__dict__)
 
     ts_val, ts_test = None, None
+
+    if dataset.get('scale', False):
+        logger.info('start scaling...')
+        if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
+            raise FileNotFoundError('there is not `scaler`: {}.'.format(
+                os.path.join(weight_path, 'scaler.pkl')))
+        
+        scaler = joblib.load(os.path.join(weight_path, 'scaler.pkl'))
+        
+
     if dataset['name'] in ['TSDataset', 'TSADDataset', 'TSCLSDataset']:
         import pandas as pd
         from paddlets import TSDataset
@@ -100,18 +111,19 @@ def main(args):
             raise ValueError("`info_params` is necessary, but it is None.")
         else:
             info_params = cfg.dic['info_params']
-            if cfg.task == 'longforecast' and info_params.get('time_col',
-                                                              None) is None:
-                raise ValueError("`time_col` is necessary, but it is None.")
-            if info_params.get('target_cols', None):
-                if isinstance(info_params['target_cols'], str):
-                    info_params['target_cols'] = info_params['target_cols'].split(',')
 
 
         if dataset.get('val_path', False):
             if os.path.exists(dataset['val_path']):
                 df = pd.read_csv(dataset['val_path'])
-            if cfg.task == 'anomaly':
+            if cfg.task == 'longforecast':
+                if info_params.get('time_col', None) is None:
+                    raise ValueError("`time_col` is necessary, but it is None.")
+                if info_params.get('target_cols', None):
+                    if isinstance(info_params['target_cols'], str):
+                        info_params['target_cols'] = info_params['target_cols'].split(',')
+                ts_val = TSDataset.load_from_dataframe(df, **info_params)
+            elif cfg.task == 'anomaly':
                 info_params["dtype"] = np.float32
                 if info_params.get('label_col', None) is None:
                     raise ValueError(
@@ -138,9 +150,13 @@ def main(args):
                     if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
                         cols.remove(info_params['static_cov_cols'])
                     info_params['target_cols'] = cols
+                else:
+                    if isinstance(info_params['target_cols'], str):
+                        info_params['target_cols'] = info_params[
+                            'target_cols'].split(',')
                 ts_val = TSDataset.load_from_dataframe(df, **info_params)
-            else:
-                ts_val = TSDataset.load_from_dataframe(df, **info_params)
+
+                
     else:
         info_params = cfg.dic.get('info_params', None)
         if split:
@@ -171,14 +187,6 @@ def main(args):
     else:
         model = load(weight_path + '/checkpoints')
 
-    if dataset.get('scale', False):
-        logger.info('start scaling...')
-        if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
-            raise FileNotFoundError('there is not `scaler`: {}.'.format(
-                os.path.join(weight_path, 'scaler.pkl')))
-        import joblib
-        scaler = joblib.load(os.path.join(weight_path, 'scaler.pkl'))
-        ts_val = scaler.transform(ts_val)
 
     if cfg.dataset.get('time_feat', 'False'):
         logger.info('generate times feature')

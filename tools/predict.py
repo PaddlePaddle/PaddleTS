@@ -2,6 +2,7 @@ import os
 import numpy as np
 import random
 import argparse
+import joblib
 import warnings
 
 import paddle
@@ -75,17 +76,31 @@ def main(args):
         raise ValueError("`info_params` is necessary, but it is None.")
     else:
         info_params = cfg.dic['info_params']
-        if cfg.task == 'longforecast' and info_params.get('time_col',
-                                                          None) is None:
+
+    weight_path = args.checkpoints
+    if 'best_model' in weight_path:
+        weight_path = weight_path.split('best_model')[0]
+    if dataset.get('scale', False):
+        logger.info('start scaling...')
+        if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
+            raise FileNotFoundError('there is not `scaler`: {}.'.format(
+                os.path.join(weight_path, 'scaler.pkl')))
+        scaler = joblib.load(os.path.join(weight_path, 'scaler.pkl'))
+    
+    df = pd.read_csv(args.csv_path)
+
+    if cfg.task == 'longforecast':
+        if info_params.get('time_col', None) is None:
             raise ValueError("`time_col` is necessary, but it is None.")
         if info_params.get('target_cols', None):
             if isinstance(info_params['target_cols'], str):
                 info_params['target_cols'] = info_params['target_cols'].split(',')
         if info_params.get('static_cov_cols', None):
             info_params['static_cov_cols'] = None
-
-    df = pd.read_csv(args.csv_path)
-    if cfg.task == 'anomaly':
+        if dataset.get('scale', False):
+            scaler_cols = info_params['target_cols']
+            df[scaler_cols] = scaler.transform(df[scaler_cols])
+    elif cfg.task == 'anomaly':
         info_params.pop("label_col", None)
         if info_params.get('feature_cols', None):
             if isinstance(info_params['feature_cols'], str):
@@ -95,7 +110,11 @@ def main(args):
             if info_params.get('time_col', None) and info_params['time_col'] in cols:
                 cols.remove(info_params['time_col'])
             info_params['feature_cols'] = cols
+        if dataset.get('scale', False):
+            scaler_cols = info_params['feature_cols']
+            df[scaler_cols] = scaler.transform(df[scaler_cols])
     elif cfg.task == 'classification':
+        info_params.pop("static_cov_cols", None)
         if info_params.get('target_cols', None) is None:
             cols = df.columns.values.tolist()
             if info_params.get('time_col', None) and info_params['time_col'] in cols:
@@ -105,12 +124,15 @@ def main(args):
             if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
                 cols.remove(info_params['static_cov_cols'])
             info_params['target_cols'] = cols
+        else:
+            if isinstance(info_params['target_cols'], str):
+                info_params['target_cols'] = info_params[
+                    'target_cols'].split(',')
+        if dataset.get('scale', False):
+            scaler_cols = info_params['target_cols']
+            df[scaler_cols] = scaler.transform(df[scaler_cols])
+
     ts_test = TSDataset.load_from_dataframe(df, **info_params)
-
-    weight_path = args.checkpoints
-    if 'best_model' in weight_path:
-        weight_path = weight_path.split('best_model')[0]
-
     if cfg.model['name'] in ['TimesNetModel', 'Nonstationary_Transformer'] and args.device == 'xpu':
         os.environ['XPU_BLACK_LIST'] = 'pad3d, pad3d_grad'
 
@@ -132,14 +154,6 @@ def main(args):
     else:
         model = load(weight_path + '/checkpoints')
 
-    if dataset.get('scale', False):
-        logger.info('start scaling...')
-        if not os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
-            raise FileNotFoundError('there is not `scaler`: {}.'.format(
-                os.path.join(weight_path, 'scaler.pkl')))
-        import joblib
-        scaler = joblib.load(os.path.join(weight_path, 'scaler.pkl'))
-        ts_test = scaler.transform(ts_test)
 
     if cfg.dataset.get('time_feat', 'False'):
         logger.info('generate times feature')
@@ -165,18 +179,19 @@ def main(args):
                 feature_cols=[
                     'hourofday', 'dayofmonth', 'dayofweek', 'dayofyear'
                 ],
-                extend_points=model._out_chunk_len + 1)
+                extend_points=model._out_chunk_len) 
             ts_test = time_feature_generator.fit_transform(ts_test)
 
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
     if cfg.task == 'longforecast':
         logger.info('start to predit...')
-        result = model.predict(ts_test)
+        result = model.predict(ts_test).to_dataframe()
         if dataset.get('scale', 'False'):
-            result = scaler.inverse_transform(result)
+            scale_cols = result.columns.values.tolist()
+            result[scale_cols] = scaler.inverse_transform(result[scale_cols]) 
 
-        result.to_dataframe().to_csv(os.path.join(args.save_dir, 'result.csv'))
+        result.to_csv(os.path.join(args.save_dir, 'result.csv'))
         logger.info('save result to {}'.format(
             os.path.join(args.save_dir, 'result.csv')))
 

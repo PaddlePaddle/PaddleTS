@@ -90,7 +90,8 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
              path: str,
              network_model: bool=False,
              dygraph_to_static=True,
-             batch_size: Optional[int]=None) -> None:
+             batch_size: Optional[int]=None,
+             data_info: Optional[dict]=None) -> None:
         """
         Saves a PaddleBaseModel instance to a disk file.
 
@@ -155,12 +156,12 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             }
 
         # internal files must not conflict with existing files.
-        conflict_files = {*internal_filename_map.values()} - set(
-            os.listdir(abs_root_path))
-        raise_if(
-            len(conflict_files) < len(internal_filename_map),
-            "failed to save model internal files, these files must not exist: %s"
-            % conflict_files)
+        # conflict_files = {*internal_filename_map.values()} - set(
+        #     os.listdir(abs_root_path))
+        # raise_if(
+        #     len(conflict_files) < len(internal_filename_map),
+        #     "failed to save model internal files, these files must not exist: %s"
+        #     % conflict_files)
 
         # start to save
         # 1 save network model and params for paddle inference
@@ -190,17 +191,30 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
                         "error occurred while saving or dygraph_to_static network_model: %s, err: %s"
                         % (internal_filename_map["network_model"], str(e))))
 
+            try:
+                with open(
+                        os.path.join(abs_root_path,
+                                    'inference.yml'),
+                        "w") as f:
+                    if data_info is not None:
+                        model_meta.update(data_info)
+                    json.dump(model_meta, f, ensure_ascii=False)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        internal_filename_map["model_meta"], str(e))))
         # 2 save model meta (e.g. classname)
-        try:
-            with open(
-                    os.path.join(abs_root_path,
-                                 internal_filename_map["model_meta"]),
-                    "w") as f:
-                json.dump(model_meta, f, ensure_ascii=False)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (
-                    internal_filename_map["model_meta"], str(e))))
+        if not network_model:
+            try:
+                with open(
+                        os.path.join(abs_root_path,
+                                    internal_filename_map["model_meta"]),
+                        "w") as f:
+                    json.dump(model_meta, f, ensure_ascii=False)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        internal_filename_map["model_meta"], str(e))))
 
         # 3 save optimizer state dict (currently ignore optimizer logic.)
         # optimizer_state_dict = self._optimizer.state_dict()
@@ -218,17 +232,18 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         #     )
 
         # 4 save network state dict
-        network_state_dict = self._network.state_dict()
-        try:
-            paddle.save(
-                obj=network_state_dict,
-                path=os.path.join(abs_root_path,
-                                  internal_filename_map["network_statedict"]), )
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s: %s, err: %s" %
-                           (internal_filename_map["network_statedict"],
-                            network_state_dict, str(e))))
+        if not network_model:
+            network_state_dict = self._network.state_dict()
+            try:
+                paddle.save(
+                    obj=network_state_dict,
+                    path=os.path.join(abs_root_path,
+                                    internal_filename_map["network_statedict"]), )
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s: %s, err: %s" %
+                            (internal_filename_map["network_statedict"],
+                                network_state_dict, str(e))))
 
         # 5 save model
         optimizer = self._optimizer
@@ -246,13 +261,14 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
         # loss_fn could possibly contain paddle.Tensor when it is a bound method of a class, thus needs to set to
         # None to avoid pickle.dumps failure.
         self._loss_fn = None
-        try:
-            with open(abs_model_path, "wb") as f:
-                pickle.dump(self, f)
-        except Exception as e:
-            raise_log(
-                ValueError("error occurred while saving %s, err: %s" % (
-                    abs_model_path, str(e))))
+        if not network_model:
+            try:
+                with open(abs_model_path, "wb") as f:
+                    pickle.dump(self, f)
+            except Exception as e:
+                raise_log(
+                    ValueError("error occurred while saving %s, err: %s" % (
+                        abs_model_path, str(e))))
 
         # in order to allow a model instance to be saved multiple times, set attrs back.
         self._optimizer = optimizer
