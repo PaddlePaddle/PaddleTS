@@ -32,6 +32,9 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 ## <img src="https://user-images.githubusercontent.com/18344247/265358660-cf92ce4c-e6d8-4adb-8de6-cf9cafdb3f8a.png" width="20"/> 最新动态
 
+- [2024-06-27] **💥 飞桨低代码开发工具 [PaddleX 3.0](https://github.com/paddlepaddle/paddlex) 重磅更新！**
+  - 低代码开发范式：支持时序模型全流程低代码开发，提供 Python API，支持用户自定义串联模型；
+  - 多硬件训推支持：支持英伟达 GPU、昆仑芯、昇腾和寒武纪等多种硬件进行模型训练与推理。
 * [2023-09-01] :fire::fire:  飞桨AI套件 [PaddleX](http://10.136.157.23:8080/paddle/paddleX) 发布全新2.0版本， 围绕飞桨模型提供了一站式、全流程、高效率的开发平台，希望助力AI技术快速落地、使人人成为AI Developer！欢迎大家使用和共建。
 * 新增时序分类能力
 * 全新发布6个深度时序模型。
@@ -58,9 +61,6 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 * 【私有化部署多硬件支持】：适配国内外主流AI硬件，支持本地纯离线使用，满足企业安全保密需要。
 
 PaddleX官网地址：https://aistudio.baidu.com/intro/paddlex
-
-PaddleX官方交流频道：https://aistudio.baidu.com/community/channel/610
-
 
 ## 关于 PaddleTS
 
@@ -104,10 +104,6 @@ pip install paddlets
 
 * [API文档](https://paddlets.readthedocs.io/zh_CN/latest/source/api/paddlets.analysis.html)
 
-
-## 社区
-
-欢迎大家进入：AI Studio【PaddleX社区频道】进一步交流。地址直达：https://aistudio.baidu.com/community/channel/610
 
 
 ## 代码发布与贡献
