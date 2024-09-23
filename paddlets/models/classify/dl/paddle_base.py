@@ -9,6 +9,7 @@ import abc
 import os
 import pickle
 import json
+import yaml
 
 from paddle.optimizer import Optimizer
 import paddle.nn.functional as F
@@ -144,8 +145,7 @@ class PaddleBaseClassifier(BaseClassifier):
         if not self._eval_metrics:
             self._eval_metrics = ["acc"]
 
-    def _check_tsdatasets(self,
-                          tsdatasets: List[TSDataset],
+    def _check_tsdatasets(self, tsdatasets: List[TSDataset],
                           labels: np.ndarray):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
@@ -213,8 +213,7 @@ class PaddleBaseClassifier(BaseClassifier):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params,
-                parameters=self._network.parameters())
+                **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -259,8 +258,8 @@ class PaddleBaseClassifier(BaseClassifier):
                     valid_tsdatasets, valid_labels,
                     self._fit_params['input_lens'])
             else:
-                valid_dataset = data_adapter.to_paddle_dataset(
-                    valid_tsdatasets, valid_labels)
+                valid_dataset = data_adapter.to_paddle_dataset(valid_tsdatasets,
+                                                               valid_labels)
             valid_dataloader = data_adapter.to_paddle_dataloader(
                 valid_dataset, self._batch_size, shuffle=False)
 
@@ -282,8 +281,8 @@ class PaddleBaseClassifier(BaseClassifier):
             tsdatasets = [tsdatasets]
         self._check_tsdatasets(tsdatasets, labels)
         data_adapter = ClassifyDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(
-            tsdatasets, labels, self._fit_params['input_lens'])
+        dataset = data_adapter.to_paddle_dataset(tsdatasets, labels,
+                                                 self._fit_params['input_lens'])
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -420,8 +419,7 @@ class PaddleBaseClassifier(BaseClassifier):
         # np.save('probs',probs)
         rng = check_random_state(self._seed)
         return np.array([
-            self._classes_[int(
-                rng.choice(np.flatnonzero(prob == prob.max())))]
+            self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
             for prob in probs
         ])
 
@@ -628,6 +626,7 @@ class PaddleBaseClassifier(BaseClassifier):
              path: str,
              network_model: bool=False,
              dygraph_to_static=True,
+             model_name=None,
              batch_size: Optional[int]=None,
              data_info: Optional[dict]=None) -> None:
         """
@@ -715,10 +714,13 @@ class PaddleBaseClassifier(BaseClassifier):
 
         # 2 save model meta (e.g. classname)
             try:
-                with open(os.path.join(abs_root_path, 'inference.yml'), "w") as f:
+                with open(os.path.join(abs_root_path, 'inference.yml'),
+                          "w") as f:
                     if data_info is not None:
                         model_meta.update(data_info)
-                    json.dump(model_meta, f, ensure_ascii=False)
+                    if model_name is not None:
+                        model_meta['Global'] = {'model_name': model_name}
+                    yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s, err: %s" % (
@@ -728,7 +730,7 @@ class PaddleBaseClassifier(BaseClassifier):
             try:
                 with open(
                         os.path.join(abs_root_path,
-                                    internal_filename_map["model_meta"]),
+                                     internal_filename_map["model_meta"]),
                         "w") as f:
                     json.dump(model_meta, f, ensure_ascii=False)
             except Exception as e:
@@ -741,12 +743,13 @@ class PaddleBaseClassifier(BaseClassifier):
             try:
                 paddle.save(
                     obj=network_state_dict,
-                    path=os.path.join(abs_root_path,
-                                    internal_filename_map["network_statedict"]), )
+                    path=os.path.join(
+                        abs_root_path,
+                        internal_filename_map["network_statedict"]), )
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s: %s, err: %s" %
-                            (internal_filename_map["network_statedict"],
+                               (internal_filename_map["network_statedict"],
                                 network_state_dict, str(e))))
 
         # 4 save model

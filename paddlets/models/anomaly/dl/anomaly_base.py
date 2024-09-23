@@ -9,6 +9,7 @@ import abc
 import os
 import pickle
 import json
+import yaml
 
 from paddle.optimizer import Optimizer
 import numpy as np
@@ -249,8 +250,7 @@ class AnomalyBaseModel(abc.ABC):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params,
-                parameters=self._network.parameters())
+                **self._optimizer_params, parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -766,6 +766,7 @@ class AnomalyBaseModel(abc.ABC):
              path: str,
              network_model: bool=False,
              dygraph_to_static: bool=True,
+             model_name=None,
              batch_size: Optional[int]=None,
              data_info: Optional[dict]=None) -> None:
         """
@@ -829,8 +830,7 @@ class AnomalyBaseModel(abc.ABC):
         else:
             internal_filename_map = {
                 "model_meta": "%s_%s" % (modelname, "model_meta"),
-                "network_statedict":
-                "%s/%s" % ('best_model', "model.pdparams"),
+                "network_statedict": "%s/%s" % ('best_model', "model.pdparams"),
                 "network_model": modelname,
                 # currently ignore optimizer.
                 # "optimizer_statedict": "%s_%s" % (modelname, "optimizer_statedict"),
@@ -874,10 +874,13 @@ class AnomalyBaseModel(abc.ABC):
 
         # 2 save model meta (e.g. classname)
             try:
-                with open(os.path.join(abs_root_path, 'inference.yml'), "w") as f:
+                with open(os.path.join(abs_root_path, 'inference.yml'),
+                          "w") as f:
                     if data_info is not None:
                         model_meta.update(data_info)
-                    json.dump(model_meta, f, ensure_ascii=False)
+                    if model_name is not None:
+                        model_meta['Global'] = {'model_name': model_name}
+                    yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s, err: %s" % (
@@ -887,7 +890,7 @@ class AnomalyBaseModel(abc.ABC):
             try:
                 with open(
                         os.path.join(abs_root_path,
-                                    internal_filename_map["model_meta"]),
+                                     internal_filename_map["model_meta"]),
                         "w") as f:
                     json.dump(model_meta, f, ensure_ascii=False)
             except Exception as e:
@@ -915,12 +918,13 @@ class AnomalyBaseModel(abc.ABC):
             try:
                 paddle.save(
                     obj=network_state_dict,
-                    path=os.path.join(abs_root_path,
-                                    internal_filename_map["network_statedict"]))
+                    path=os.path.join(
+                        abs_root_path,
+                        internal_filename_map["network_statedict"]))
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s: %s, err: %s" %
-                            (internal_filename_map["network_statedict"],
+                               (internal_filename_map["network_statedict"],
                                 network_state_dict, str(e))))
 
         # 5 save model

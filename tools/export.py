@@ -42,21 +42,23 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(args):
+def export(args, model=None):
     paddle.set_device(args.device)
+    if model is None:
+        assert args.checkpoints is not None, \
+            'No checkpoints dictionary specified, please set --checkpoints'
+        weight_path = args.checkpoints
+        if 'best_model' in weight_path:
+            weight_path = weight_path.split('best_model')[0]
+        save_path = args.save_dir
+    else:
+        weight_path = args.save_dir
+        save_path = os.path.join(args.save_dir, 'inference')
 
-    assert args.checkpoints is not None, \
-        'No checkpoints dictionary specified, please set --checkpoints'
-
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
 
     cfg = Config(args.config)
-
-    weight_path = args.checkpoints
-    if 'best_model' in weight_path:
-        weight_path = weight_path.split('best_model')[0]
-
 
     if cfg.dic.get('info_params', None) is None:
         raise ValueError("`info_params` is necessary, but it is None.")
@@ -67,34 +69,41 @@ def main(args):
             raise ValueError("`time_col` is necessary, but it is None.")
         if info_params.get('target_cols', None):
             if isinstance(info_params['target_cols'], str):
-                info_params['target_cols'] = info_params['target_cols'].split(',')
+                info_params['target_cols'] = info_params['target_cols'].split(
+                    ',')
         if info_params.get('static_cov_cols', None):
             info_params['static_cov_cols'] = None
     elif cfg.task == 'anomaly':
         info_params.pop("label_col", None)
         if info_params.get('feature_cols', None):
             if isinstance(info_params['feature_cols'], str):
-                info_params['feature_cols'] = info_params['feature_cols'].split(',')
+                info_params['feature_cols'] = info_params[
+                    'feature_cols'].split(',')
         else:
             cols = df.columns.values.tolist()
-            if info_params.get('time_col', None) and info_params['time_col'] in cols:
+            if info_params.get('time_col',
+                               None) and info_params['time_col'] in cols:
                 cols.remove(info_params['time_col'])
             info_params['feature_cols'] = cols
     elif cfg.task == 'classification':
         info_params.pop("static_cov_cols", None)
         if info_params.get('target_cols', None) is None:
             cols = df.columns.values.tolist()
-            if info_params.get('time_col', None) and info_params['time_col'] in cols:
+            if info_params.get('time_col',
+                               None) and info_params['time_col'] in cols:
                 cols.remove(info_params['time_col'])
-            if info_params.get('group_id', None) and info_params['group_id'] in cols:
+            if info_params.get('group_id',
+                               None) and info_params['group_id'] in cols:
                 cols.remove(info_params['group_id'])
-            if info_params.get('static_cov_cols', None) and info_params['static_cov_cols'] in cols:
+            if info_params.get(
+                    'static_cov_cols',
+                    None) and info_params['static_cov_cols'] in cols:
                 cols.remove(info_params['static_cov_cols'])
             info_params['target_cols'] = cols
         else:
             if isinstance(info_params['target_cols'], str):
-                info_params['target_cols'] = info_params[
-                    'target_cols'].split(',')
+                info_params['target_cols'] = info_params['target_cols'].split(
+                    ',')
 
     data_info = {}
     data_info['time_feat'] = cfg.dataset['time_feat']
@@ -102,20 +111,33 @@ def main(args):
     data_info['info_params'] = info_params
 
     if os.path.exists(os.path.join(weight_path, 'scaler.pkl')):
-        shutil.copyfile(os.path.join(weight_path,'scaler.pkl'), os.path.join(args.save_dir,'scaler.pkl'))
+        shutil.copyfile(
+            os.path.join(weight_path, 'scaler.pkl'),
+            os.path.join(save_path, 'scaler.pkl'))
         data_info['scale'] = True
     else:
         data_info['scale'] = False
 
     if cfg.model['name'] == 'PP-TS':
         from paddlets.ensemble.base import EnsembleBase
-        model = EnsembleBase.load(weight_path + '/')
-        model.save(args.save_dir, network_model=True, dygraph_to_static=True)
+        if model is None:
+            model = EnsembleBase.load(weight_path + '/')
+        model.save(
+            save_path,
+            network_model=True,
+            dygraph_to_static=True,
+            model_name=cfg.dic.get('pdx_model_name', None))
     else:
-        model = load(weight_path + '/checkpoints')
-        model.save(args.save_dir + '/inference', network_model=True, dygraph_to_static=True, data_info=data_info)
+        if model is None:
+            model = load(weight_path + '/checkpoints')
+        model.save(
+            save_path + '/inference',
+            network_model=True,
+            dygraph_to_static=True,
+            data_info=data_info,
+            model_name=cfg.dic.get('pdx_model_name', None))
 
 
 if __name__ == '__main__':
     args = parse_args()
-    main(args)
+    export(args)
