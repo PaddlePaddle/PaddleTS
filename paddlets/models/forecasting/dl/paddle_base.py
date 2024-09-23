@@ -12,6 +12,7 @@ import paddle
 import abc
 from typing import Optional, List, Union
 import json
+import yaml
 
 
 class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
@@ -90,6 +91,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
              path: str,
              network_model: bool=False,
              dygraph_to_static=True,
+             model_name=None,
              batch_size: Optional[int]=None,
              data_info: Optional[dict]=None) -> None:
         """
@@ -192,13 +194,13 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
                         % (internal_filename_map["network_model"], str(e))))
 
             try:
-                with open(
-                        os.path.join(abs_root_path,
-                                    'inference.yml'),
-                        "w") as f:
+                with open(os.path.join(abs_root_path, 'inference.yml'),
+                          "w") as f:
                     if data_info is not None:
                         model_meta.update(data_info)
-                    json.dump(model_meta, f, ensure_ascii=False)
+                    if model_name is not None:
+                        model_meta['Global'] = {'model_name': model_name}
+                    yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s, err: %s" % (
@@ -208,7 +210,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             try:
                 with open(
                         os.path.join(abs_root_path,
-                                    internal_filename_map["model_meta"]),
+                                     internal_filename_map["model_meta"]),
                         "w") as f:
                     json.dump(model_meta, f, ensure_ascii=False)
             except Exception as e:
@@ -237,12 +239,13 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
             try:
                 paddle.save(
                     obj=network_state_dict,
-                    path=os.path.join(abs_root_path,
-                                    internal_filename_map["network_statedict"]), )
+                    path=os.path.join(
+                        abs_root_path,
+                        internal_filename_map["network_statedict"]), )
             except Exception as e:
                 raise_log(
                     ValueError("error occurred while saving %s: %s, err: %s" %
-                            (internal_filename_map["network_statedict"],
+                               (internal_filename_map["network_statedict"],
                                 network_state_dict, str(e))))
 
         # 5 save model

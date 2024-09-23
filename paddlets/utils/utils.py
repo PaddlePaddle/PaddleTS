@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+import os
 from numbers import Integral
 import uuid
 import hashlib
@@ -486,3 +487,45 @@ def build_ts_infer_input(tsdataset: TSDataset,
         )
         res[name] = sample[name].numpy()
     return res
+
+
+def convert_floats(obj):
+    if isinstance(obj, dict):
+        return {k: convert_floats(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_floats(elem) for elem in obj]
+    elif isinstance(obj, np.float32):
+        return float(obj)
+    else:
+        return obj
+
+
+def update_train_results(save_path, score, model_name="", done_flag=True):
+
+    train_results_path = os.path.join(save_path, "train_results.json")
+    save_model_tag = ["pdparams", "pdopt", "pdstates", "pdema"]
+    save_inference_tag = [
+        "inference_config", "pdmodel", "pdiparams", "pdiparams.info"
+    ]
+    train_results = {}
+    train_results["model_name"] = model_name
+    train_results["label_dict"] = ""
+    train_results["train_log"] = "train.log"
+    train_results["visualdl_log"] = ""
+    train_results["config"] = "config.yaml"
+    train_results["models"] = {}
+    train_results["models"]["best"] = {}
+    train_results["done_flag"] = done_flag
+    train_results["models"]["best"]["score"] = score
+    for tag in save_model_tag:
+        train_results["models"]["best"][
+            tag] = "" if tag != "pdparams" else os.path.join("best_model",
+                                                             "model.pdparams")
+    for tag in save_inference_tag:
+        train_results["models"]["best"][tag] = os.path.join(
+            "inference", f"inference.{tag}"
+            if tag != "inference_config" else "inference.yml")
+
+    train_results = convert_floats(train_results)
+    with open(train_results_path, "w") as fp:
+        json.dump(train_results, fp)
