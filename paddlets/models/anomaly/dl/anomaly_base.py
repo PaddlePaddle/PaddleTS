@@ -23,6 +23,7 @@ from paddlets.models.common.callbacks import (
 from paddlets.metrics import (MetricContainer, Metric)
 from paddlets.models.data_adapter import DataAdapter
 from paddlets.models.utils import check_tsdataset, to_tsdataset, build_network_input_spec
+from paddlets.utils.utils import convert_and_remove_types
 from paddlets.datasets import TSDataset
 from paddlets.logger import raise_if, raise_if_not, raise_log, Logger
 
@@ -880,6 +881,7 @@ class AnomalyBaseModel(abc.ABC):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(

@@ -3,6 +3,7 @@
 
 from paddlets.models.base import BaseModel
 from paddlets.models.utils import build_network_input_spec
+from paddlets.utils.utils import convert_and_remove_types
 from paddlets import TSDataset
 from paddlets.logger import raise_if, raise_if_not, raise_log
 
@@ -200,6 +201,7 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(

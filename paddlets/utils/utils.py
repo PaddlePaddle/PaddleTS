@@ -489,15 +489,25 @@ def build_ts_infer_input(tsdataset: TSDataset,
     return res
 
 
-def convert_floats(obj):
-    if isinstance(obj, dict):
-        return {k: convert_floats(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_floats(elem) for elem in obj]
-    elif isinstance(obj, np.float32):
-        return float(obj)
-    else:
-        return obj
+def convert_and_remove_types(data):
+    if isinstance(data, dict):
+        return {
+            k: convert_and_remove_types(v)
+            for k, v in data.items() if not isinstance(v, type)
+        }
+    elif isinstance(data, list):
+        return [convert_and_remove_types(v) for v in data]
+    elif isinstance(data, np.ndarray):
+        return data.tolist()
+    elif isinstance(data, (np.float32, np.float64)):
+        return float(data)
+    elif isinstance(data, (np.int32, np.int64)):
+        return int(data)
+    elif isinstance(data, np.bool_):
+        return bool(data)
+    elif isinstance(data, (np.str_, np.unicode_)):
+        return str(data)
+    return data
 
 
 def update_train_results(save_path, score, model_name="", done_flag=True):
@@ -526,6 +536,6 @@ def update_train_results(save_path, score, model_name="", done_flag=True):
             "inference", f"inference.{tag}"
             if tag != "inference_config" else "inference.yml")
 
-    train_results = convert_floats(train_results)
+    train_results = convert_and_remove_types(train_results)
     with open(train_results_path, "w") as fp:
         json.dump(train_results, fp)
