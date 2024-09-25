@@ -6,6 +6,7 @@ import yaml
 import argparse
 import warnings
 import joblib
+import copy
 
 import paddle
 from paddlets.utils.config import Config
@@ -14,6 +15,7 @@ from sklearn.preprocessing import StandardScaler
 from paddlets.utils.manager import MODELS
 from paddlets.metrics import MSE, MAE
 from paddlets.utils import backtest
+from paddlets.utils.utils import convert_and_remove_types
 from paddlets.logger import Logger
 from paddlets.utils.utils import set_print_mem_info, update_train_results
 from export import export
@@ -43,8 +45,7 @@ def parse_args():
         type=str,
         default=None)
     # Runntime params
-    parser.add_argument(
-        '--seq_len', help='input length in training.', type=int)
+    parser.add_argument('--seq_len', help='input length in training.', type=int)
     parser.add_argument(
         '--predict_len', help='output length in training.', type=int)
     parser.add_argument('--epoch', help='Iterations in training.', type=int)
@@ -54,10 +55,7 @@ def parse_args():
 
     # Other params
     parser.add_argument(
-        '--seed',
-        help='Set the random seed in training.',
-        default=42,
-        type=int)
+        '--seed', help='Set the random seed in training.', default=42, type=int)
     parser.add_argument(
         '--opts', help='Update the key-value pairs of all options.', nargs='+')
 
@@ -233,8 +231,7 @@ def main(args):
             ts_train, ts_val, ts_test = get_dataset(dataset['name'], split,
                                                     seq_len, info_params)
         else:
-            ts_train = get_dataset(dataset['name'], split, seq_len,
-                                   info_params)
+            ts_train = get_dataset(dataset['name'], split, seq_len, info_params)
 
     if cfg.model['name'] in ['TimesNetModel', 'Nonstationary_Transformer'
                              ] and args.device == 'xpu':
@@ -243,8 +240,7 @@ def main(args):
     if cfg.model['name'] == 'PP-TS':
         from paddlets.ensemble import WeightingEnsembleForecaster
         estimators = []
-        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items(
-        ):
+        for model_name, model_cfg in cfg.model['model_cfg']['Ensemble'].items():
             model_cfg = Config(
                 model_cfg,
                 seq_len=seq_len,
@@ -315,8 +311,8 @@ def main(args):
             if dataset['name'] != 'TSDataset':
                 ts_all = get_dataset(dataset['name'])
                 ts_all = time_feature_generator.fit_transform(ts_all)
-                ts_train._known_cov = ts_all._known_cov[split['train'][0]:
-                                                        split['train'][1]]
+                ts_train._known_cov = ts_all._known_cov[split['train'][0]:split[
+                    'train'][1]]
                 if ts_val is not None:
                     ts_val._known_cov = ts_all._known_cov[split['val'][
                         0] - seq_len:split['val'][1]]
@@ -394,7 +390,9 @@ def main(args):
         }, open(cfg_output_dir + '/score.json', 'w'))
     if cfg.dic.get("uniform_output_enabled", False):
         with open(os.path.join(args.save_dir, "config.yaml"), "w") as f:
-            yaml.dump(cfg.dic, f)
+            dict_to_dump = copy.deepcopy(cfg.dic)
+            dict_to_dump = convert_and_remove_types(dict_to_dump)
+            yaml.dump(dict_to_dump, f)
         export(args, model)
         update_train_results(
             args.save_dir,

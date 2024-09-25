@@ -15,6 +15,7 @@ from paddle.optimizer import Optimizer
 import paddle.nn.functional as F
 from paddle.nn import CrossEntropyLoss
 from sklearn.utils import check_random_state
+from paddlets.utils.utils import convert_and_remove_types
 import numpy as np
 import paddle
 
@@ -720,6 +721,7 @@ class PaddleBaseClassifier(BaseClassifier):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:
                 raise_log(
