@@ -109,7 +109,7 @@ PaddleX中时序分析相关的3条产线均支持本地**快速推理**，部�
 ## 3. 时序分析相关模型产线列表和教程
 
 - **时序预测产线**: [使用教程](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/pipeline_usage/tutorials/time_series_pipelines/time_series_forecasting.md)
-- **时序异常检测**: [使用教程](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/pipeline_usage/tutorials/time_series_pipelines/time_series_anomaly_detection.md)
+- **时序异常检测产线**: [使用教程](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/pipeline_usage/tutorials/time_series_pipelines/time_series_anomaly_detection.md)
 - **时序分类产线**: [使用教程](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/pipeline_usage/tutorials/time_series_pipelines/time_series_classification.md)
 
 <a name="4"></a>
