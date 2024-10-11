@@ -6,6 +6,7 @@ import random
 import argparse
 import warnings
 import joblib
+import tarfile
 
 import paddle
 from paddlets.utils.config import Config
@@ -13,6 +14,7 @@ from paddlets.models.model_loader import load
 from paddlets.datasets.repository import get_dataset
 from paddlets.utils.manager import MODELS
 from paddlets.logger import Logger
+from paddlets.utils.download import get_weights_path_from_url, uncompress_file_tar
 
 logger = Logger(__name__)
 warnings.filterwarnings("ignore")
@@ -48,6 +50,11 @@ def export(args, model=None):
         assert args.checkpoints is not None, \
             'No checkpoints dictionary specified, please set --checkpoints'
         weight_path = args.checkpoints
+        if weight_path.startswith(("http://", "https://")):
+            weight_path = get_weights_path_from_url(weight_path)
+        else:
+            if tarfile.is_tarfile(weight_path):
+                weight_path = uncompress_file_tar(weight_path)
         if 'best_model' in weight_path:
             weight_path = weight_path.split('best_model')[0]
         save_path = args.save_dir
@@ -77,8 +84,8 @@ def export(args, model=None):
         info_params.pop("label_col", None)
         if info_params.get('feature_cols', None):
             if isinstance(info_params['feature_cols'], str):
-                info_params['feature_cols'] = info_params[
-                    'feature_cols'].split(',')
+                info_params['feature_cols'] = info_params['feature_cols'].split(
+                    ',')
         else:
             cols = df.columns.values.tolist()
             if info_params.get('time_col',
@@ -95,9 +102,8 @@ def export(args, model=None):
             if info_params.get('group_id',
                                None) and info_params['group_id'] in cols:
                 cols.remove(info_params['group_id'])
-            if info_params.get(
-                    'static_cov_cols',
-                    None) and info_params['static_cov_cols'] in cols:
+            if info_params.get('static_cov_cols',
+                               None) and info_params['static_cov_cols'] in cols:
                 cols.remove(info_params['static_cov_cols'])
             info_params['target_cols'] = cols
         else:
