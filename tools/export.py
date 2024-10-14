@@ -65,7 +65,10 @@ def export(args, model=None):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    cfg = Config(args.config)
+    if os.path.exists(os.path.join(weight_path, 'config.yaml')):
+        cfg = Config(os.path.join(weight_path, 'config.yaml'))
+    else:
+        cfg = Config(args.config)
 
     if cfg.dic.get('info_params', None) is None:
         raise ValueError("`info_params` is necessary, but it is None.")
