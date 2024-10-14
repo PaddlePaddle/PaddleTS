@@ -7,7 +7,7 @@
 
 ### 🛠️ 安装
 
-> ❗安装PaddleX前请先确保您有基础的**Python运行环境**。
+> ❗安装PaddleX前请先确保您有基础的**Python运行环境**。（注：当前支持Python 3.8 ～ Python 3.10下运行，更多Python版本适配中）。
 * **安装PaddlePaddle**
 ```bash
 # cpu
