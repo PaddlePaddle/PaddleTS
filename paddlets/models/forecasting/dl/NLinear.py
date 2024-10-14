@@ -55,7 +55,7 @@ class _NLinearModule(paddle.nn.Layer):
 
     def forward(self, x):
         x = x['past_target']
-        seq_last = x[:, -1:, :].detach()
+        seq_last = paddle.assign(x[:, -1:, :]).detach()
         x = x - seq_last
         if self.individual:
             output = paddle.zeros(
