@@ -75,18 +75,18 @@ class PaddleBaseClassifier(BaseClassifier):
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
 
-    def __init__(
-            self,
-            loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
-            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
-            eval_metrics: List[str]=[],
-            callbacks: List[Callback]=[],
-            batch_size: int=32,
-            max_epochs: int=10,
-            verbose: int=1,
-            patience: int=4,
-            seed: Optional[int]=None, ):
+    def __init__(self,
+                 loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 seed: Optional[int]=None,
+                 config: Dict[str, Any]=None):
         super(PaddleBaseClassifier, self).__init__()
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
@@ -112,6 +112,7 @@ class PaddleBaseClassifier(BaseClassifier):
         self._classes_ = []
         self._n_class = 0
         self.start_epoch = 1
+        self._config = config
         if optimizer_params is not None and optimizer_params.get('start_epoch',
                                                                  None):
             self.start_epoch = int(optimizer_params.pop('start_epoch'))
@@ -146,7 +147,8 @@ class PaddleBaseClassifier(BaseClassifier):
         if not self._eval_metrics:
             self._eval_metrics = ["acc"]
 
-    def _check_tsdatasets(self, tsdatasets: List[TSDataset],
+    def _check_tsdatasets(self,
+                          tsdatasets: List[TSDataset],
                           labels: np.ndarray):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
@@ -214,7 +216,8 @@ class PaddleBaseClassifier(BaseClassifier):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -259,8 +262,8 @@ class PaddleBaseClassifier(BaseClassifier):
                     valid_tsdatasets, valid_labels,
                     self._fit_params['input_lens'])
             else:
-                valid_dataset = data_adapter.to_paddle_dataset(valid_tsdatasets,
-                                                               valid_labels)
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets, valid_labels)
             valid_dataloader = data_adapter.to_paddle_dataloader(
                 valid_dataset, self._batch_size, shuffle=False)
 
@@ -282,8 +285,8 @@ class PaddleBaseClassifier(BaseClassifier):
             tsdatasets = [tsdatasets]
         self._check_tsdatasets(tsdatasets, labels)
         data_adapter = ClassifyDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(tsdatasets, labels,
-                                                 self._fit_params['input_lens'])
+        dataset = data_adapter.to_paddle_dataset(
+            tsdatasets, labels, self._fit_params['input_lens'])
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -324,7 +327,8 @@ class PaddleBaseClassifier(BaseClassifier):
         early_stopping_metric = (self._metrics_names[-1]
                                  if len(self._metrics_names) > 0 else None)
         # Set callback functions, including history, early stopping, etc..
-        history, callbacks = History(self._verbose), []  # nqa
+        print(self._config)
+        history, callbacks = History(self._verbose, self._config), []  # nqa
         callbacks.append(history)
         if (early_stopping_metric is not None) and (self._patience > 0):
             early_stopping = EarlyStopping(
@@ -420,7 +424,8 @@ class PaddleBaseClassifier(BaseClassifier):
         # np.save('probs',probs)
         rng = check_random_state(self._seed)
         return np.array([
-            self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
+            self._classes_[int(
+                rng.choice(np.flatnonzero(prob == prob.max())))]
             for prob in probs
         ])
 

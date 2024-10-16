@@ -90,6 +90,14 @@ class Config(object):
         return self.dic.get('epoch')
 
     @property
+    def log_interval(self) -> int:
+        return self.dic.get('log_interval', 1)
+
+    @property
+    def print_mem_info(self) -> bool:
+        return self.dic.get('print_mem_info', False)
+
+    @property
     def model(self) -> Dict:
         return self.dic.get('model', {}).copy()
 
@@ -157,9 +165,8 @@ def update_config_dict(
     if learning_rate:
         dic['model']['model_cfg']['optimizer_params'][
             'learning_rate'] = learning_rate
-    dic['model']['model_cfg']['optimizer_params'][
-            'learning_rate']  = float(dic['model']['model_cfg']['optimizer_params'][
-            'learning_rate'])
+    dic['model']['model_cfg']['optimizer_params']['learning_rate'] = float(dic[
+        'model']['model_cfg']['optimizer_params']['learning_rate'])
     if batch_size:
         dic['batch_size'] = batch_size
     if epoch:

@@ -375,14 +375,11 @@ class History(Callback):
         max_mem_reserved_str = ""
         max_mem_allocated_str = ""
         if paddle.device.is_compiled_with_cuda() and utils.print_mem_info:
-            if paddle.device.cuda.max_memory_reserved() / (1024**2) < 1:
-                max_mem_reserved_str = f", max_mem_reserved: {paddle.device.cuda.max_memory_reserved() // 1024} KB"
-                max_mem_allocated_str = f", max_mem_allocated: {paddle.device.cuda.max_memory_allocated() // 1024} KB"
-            else:
-                max_mem_reserved_str = f", max_mem_reserved: {paddle.device.cuda.max_memory_reserved() // (1024 ** 2)} MB"
-                max_mem_allocated_str = f", max_mem_allocated: {paddle.device.cuda.max_memory_allocated() // (1024 ** 2)} MB"
+            max_mem_reserved_str = f", max_mem_reserved: {paddle.device.cuda.max_memory_reserved() // (1024 ** 2)} MB"
+            max_mem_allocated_str = f", max_mem_allocated: {paddle.device.cuda.max_memory_allocated() // (1024 ** 2)} MB"
 
         msg += f"{max_mem_reserved_str}{max_mem_allocated_str}"
         total_time = int(time.time() - self._start_time)
         msg += f" | {str(datetime.timedelta(seconds=total_time)) + 's':<6}"
-        logger.info(msg)
+        if batch % utils.log_interval == 0:
+            logger.info(msg)
