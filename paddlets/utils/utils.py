@@ -21,11 +21,17 @@ from paddlets.models.data_adapter import DataAdapter
 logger = Logger(__name__)
 # Compatible with earlier versions
 print_mem_info = True
+log_interval = 1
 
 
 def set_print_mem_info(flag: bool):
     global print_mem_info
     print_mem_info = flag
+
+
+def set_log_interval(interval: int):
+    global log_interval
+    log_interval = interval
 
 
 def check_model_fitted(model: Trainable, msg: str=None):
@@ -182,7 +188,8 @@ def check_train_valid_continuity(train_data: TSDataset,
                                pd.to_timedelta(train_index.freq))
     elif isinstance(train_index, pd.RangeIndex):
         if isinstance(valid_index, pd.RangeIndex):
-            continuious = (valid_index[0] - train_index[-1] == train_index.step)
+            continuious = (
+                valid_index[0] - train_index[-1] == train_index.step)
     else:
         raise_log("Unsupport data index format")
 
@@ -317,7 +324,8 @@ def get_tsdataset_max_len(dataset: TSDataset) -> int:
     return len(all_index)
 
 
-def repr_results_to_tsdataset(reprs: np.array, dataset: TSDataset) -> TSDataset:
+def repr_results_to_tsdataset(reprs: np.array,
+                              dataset: TSDataset) -> TSDataset:
     """
     Convert representation model output to a TSDataset 
 
@@ -447,8 +455,9 @@ def build_ts_infer_input(tsdataset: TSDataset,
     #build sample base on DataAdapter
     data_adapter = DataAdapter()
     if json_data['model_type'] == 'forecasting':
-        raise_if_not(tsdataset.get_target() is not None,
-                     "The target of tsdataset can not be None for forecasting!")
+        raise_if_not(
+            tsdataset.get_target() is not None,
+            "The target of tsdataset can not be None for forecasting!")
         size_keys = ['in_chunk_len', 'out_chunk_len', 'skip_chunk_len']
         for key in size_keys:
             raise_if_not(
@@ -471,7 +480,8 @@ def build_ts_infer_input(tsdataset: TSDataset,
             raise_if_not(
                 key in json_data['size'],
                 f"The {key} in json_data['size'] can not be None for anomaly!")
-        dataset = data_adapter.to_sample_dataset(tsdataset, **json_data['size'])
+        dataset = data_adapter.to_sample_dataset(tsdataset,
+                                                 **json_data['size'])
     else:
         raise_log(ValueError(f"Invalid model_type: {json_data['model_type']}"))
 
