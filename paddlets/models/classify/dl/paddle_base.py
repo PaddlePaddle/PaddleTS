@@ -75,18 +75,18 @@ class PaddleBaseClassifier(BaseClassifier):
         _callback_container(CallbackContainer): Container holding a list of callbacks.
     """
 
-    def __init__(
-            self,
-            loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
-            optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
-            optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
-            eval_metrics: List[str]=[],
-            callbacks: List[Callback]=[],
-            batch_size: int=32,
-            max_epochs: int=10,
-            verbose: int=1,
-            patience: int=4,
-            seed: Optional[int]=None, ):
+    def __init__(self,
+                 loss_fn: Callable[..., paddle.Tensor]=F.cross_entropy,
+                 optimizer_fn: Callable[..., Optimizer]=paddle.optimizer.Adam,
+                 optimizer_params: Dict[str, Any]=dict(learning_rate=1e-3),
+                 eval_metrics: List[str]=[],
+                 callbacks: List[Callback]=[],
+                 batch_size: int=32,
+                 max_epochs: int=10,
+                 verbose: int=1,
+                 patience: int=4,
+                 seed: Optional[int]=None,
+                 config: Dict[str, Any]=None):
         super(PaddleBaseClassifier, self).__init__()
         self._loss_fn = loss_fn
         self._optimizer_fn = optimizer_fn
@@ -146,7 +146,8 @@ class PaddleBaseClassifier(BaseClassifier):
         if not self._eval_metrics:
             self._eval_metrics = ["acc"]
 
-    def _check_tsdatasets(self, tsdatasets: List[TSDataset],
+    def _check_tsdatasets(self,
+                          tsdatasets: List[TSDataset],
                           labels: np.ndarray):
         """Ensure the robustness of input data (consistent feature order), at the same time,
             check whether the data types are compatible. If not, the processing logic is as follows.
@@ -214,7 +215,8 @@ class PaddleBaseClassifier(BaseClassifier):
 
         else:
             return self._optimizer_fn(
-                **self._optimizer_params, parameters=self._network.parameters())
+                **self._optimizer_params,
+                parameters=self._network.parameters())
 
     def _init_fit_dataloaders(
             self,
@@ -259,8 +261,8 @@ class PaddleBaseClassifier(BaseClassifier):
                     valid_tsdatasets, valid_labels,
                     self._fit_params['input_lens'])
             else:
-                valid_dataset = data_adapter.to_paddle_dataset(valid_tsdatasets,
-                                                               valid_labels)
+                valid_dataset = data_adapter.to_paddle_dataset(
+                    valid_tsdatasets, valid_labels)
             valid_dataloader = data_adapter.to_paddle_dataloader(
                 valid_dataset, self._batch_size, shuffle=False)
 
@@ -282,8 +284,8 @@ class PaddleBaseClassifier(BaseClassifier):
             tsdatasets = [tsdatasets]
         self._check_tsdatasets(tsdatasets, labels)
         data_adapter = ClassifyDataAdapter()
-        dataset = data_adapter.to_paddle_dataset(tsdatasets, labels,
-                                                 self._fit_params['input_lens'])
+        dataset = data_adapter.to_paddle_dataset(
+            tsdatasets, labels, self._fit_params['input_lens'])
         dataloader = data_adapter.to_paddle_dataloader(
             dataset, self._batch_size, shuffle=False)
         return dataloader
@@ -420,7 +422,8 @@ class PaddleBaseClassifier(BaseClassifier):
         # np.save('probs',probs)
         rng = check_random_state(self._seed)
         return np.array([
-            self._classes_[int(rng.choice(np.flatnonzero(prob == prob.max())))]
+            self._classes_[int(
+                rng.choice(np.flatnonzero(prob == prob.max())))]
             for prob in probs
         ])
 
