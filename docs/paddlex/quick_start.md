@@ -81,7 +81,7 @@ date
 
 ### 📝 Python脚本使用
 
-几行代码即可完成产线的快速推理，以时序分类产线为例：
+使用 [测试文件](https://paddle-model-ecology.bj.bcebos.com/paddlex/ts/demo_ts/ts_cls.csv)，并将 `predict()` 替换为本地路径几行代码即可完成产线的快速推理，以时序分类产线为例：
 ```python
 from paddlex import create_pipeline
 
