@@ -34,7 +34,7 @@ PaddleTS 是一个易用的深度时序建模的Python库，它基于飞桨深�
 
 * 🔥 飞桨低代码开发工具PaddleX，依托于PaddleTS的先进技术，支持时序分析领域的低代码全流程开发能力
   * 🎨 [**模型丰富一键调用**](docs/paddlex/quick_start.md)：将时序预测、时序异常检测和时序分类涉及的**13个模型**整合为3条模型产线，通过极简的**Python API一键调用**，快速体验模型效果。此外，同一套API，也支持图像分类、图像分割、目标检测、文本图像智能分析、通用OCR等共计**200+模型**，形成20+单功能模块，方便开发者进行**模型组合使用**。
-  * 🚀 [**提高效率降低门槛**](docs/paddlex/overview.md)：提供基于**统一命令**和**图形界面**两种方式，实现模型简洁高效的使用、组合与定制。支持**高性能部署、服务化部署和端侧部署**等多种部署方式。此外，对于各种主流硬件如**英伟达GPU、昆仑芯、昇腾、寒武纪和海光**等，进行模型开发时，都可以**无缝切换**。
+  * 🚀 [**提高效率降低门槛**](docs/paddlex/overview.md)：提供基于**统一命令**和**图形界面**两种方式，实现模型简洁高效的使用、组合与定制。支持**高性能推理、服务化部署和端侧部署**等多种部署方式。此外，对于各种主流硬件如**英伟达GPU、昆仑芯、昇腾、寒武纪和海光**等，进行模型开发时，都可以**无缝切换**。
 
 * 🔥 增加7个时序预测前沿算法[**DLinear、NLinear、RLinear、Nonstationary、PatchTST、TiDE、TimesNet**](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/module_usage/tutorials/time_series_modules/time_series_forecasting.md)，5个时序异常检测前沿算法[**AutoEncoder_ad、DLinear_ad、Nonstationary_ad、PatchTST_ad、TimesNet_ad**](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/module_usage/tutorials/time_series_modules/time_series_anomaly_detection.md)和1个时序分类算法[**TimesNet_cls**](https://github.com/PaddlePaddle/PaddleX/blob/release/3.0-beta1/docs/module_usage/tutorials/time_series_modules/time_series_classification.md)。
   
