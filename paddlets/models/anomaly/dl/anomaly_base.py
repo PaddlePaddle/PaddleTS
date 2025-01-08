@@ -949,8 +949,8 @@ class AnomalyBaseModel(abc.ABC):
                     layer = paddle.jit.to_static(
                         self._network, input_spec=input_spec)
                     save_name = internal_filename_map["network_model"]
+                    paddle_version = version.parse(paddle.__version__)
                     if export_with_pir:
-                        paddle_version = version.parse(paddle.__version__)
                         assert (
                             paddle_version >= version.parse('3.0.0b2') or
                             paddle_version == version.parse('0.0.0')
@@ -959,10 +959,17 @@ class AnomalyBaseModel(abc.ABC):
                         paddle.jit.save(layer,
                                         os.path.join(abs_root_path, save_name))
                     else:
-                        layer.forward.rollback()
-                        with paddle.pir_utils.OldIrGuard():
-                            layer = paddle.jit.to_static(
-                                self._network, input_spec=input_spec)
+                        if paddle_version >= version.parse(
+                                '3.0.0b2') or paddle_version == version.parse(
+                                    '0.0.0'):
+                            layer.forward.rollback()
+                            with paddle.pir_utils.OldIrGuard():
+                                layer = paddle.jit.to_static(
+                                    self._network, input_spec=input_spec)
+                                paddle.jit.save(layer,
+                                                os.path.join(abs_root_path,
+                                                             save_name))
+                        else:
                             paddle.jit.save(layer,
                                             os.path.join(abs_root_path,
                                                          save_name))
