@@ -938,6 +938,32 @@ class AnomalyBaseModel(abc.ABC):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    dynamic_shape = list(model_meta["input_data"][
+                        "observed_cov_numeric"])[-2:]
+                    if dynamic_shape != [-1, -1]:
+                        paddle_shapes = [[1] + dynamic_shape,
+                                         [1] + dynamic_shape,
+                                         [8] + dynamic_shape]
+                        tensorrt_shapes = paddle_shapes
+                    else:
+                        shapes = [[1, 64, 1], [1, 96, 5]]
+                        paddle_shapes = shapes + [[8, 192, 20]]
+                        tensorrt_shapes = shapes + [[8, 96, 20]]
+                    hpi_config = {
+                        'backend_configs': {
+                            'paddle_infer': {
+                                'trt_dynamic_shapes': {
+                                    'observed_cov_numeric': paddle_shapes
+                                }
+                            },
+                            'tensorrt': {
+                                'dynamic_shapes': {
+                                    'observed_cov_numeric': tensorrt_shapes
+                                }
+                            }
+                        }
+                    }
+                    model_meta['Hpi'] = hpi_config
                     model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:

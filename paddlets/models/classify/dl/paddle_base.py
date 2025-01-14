@@ -775,6 +775,46 @@ class PaddleBaseClassifier(BaseClassifier):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    dynamic_shape = list(model_meta["input_data"]["features"])[
+                        -2:]
+                    pad_mask_shape = list(model_meta["input_data"]["pad_mask"])[
+                        -1:]
+                    if dynamic_shape != [-1, -1]:
+                        paddle_shapes = [[1] + dynamic_shape,
+                                         [1] + dynamic_shape,
+                                         [8] + dynamic_shape]
+                        tensorrt_shapes = paddle_shapes
+                    else:
+                        shapes = [[1, 64, 1], [1, 96, 5]]
+                        paddle_shapes = shapes + [[8, 192, 20]]
+                        tensorrt_shapes = shapes + [[8, 96, 20]]
+                    if pad_mask_shape != [-1]:
+                        pad_mask_paddle_shapes = [[1] + pad_mask_shape,
+                                                  [1] + pad_mask_shape,
+                                                  [8] + pad_mask_shape]
+                        pad_mask_tensorrt_shapes = pad_mask_paddle_shapes
+                    else:
+                        pad_mask_shapes = [[1, 64], [1, 96]]
+                        pad_mask_paddle_shapes = pad_mask_shapes + [[8, 192]]
+                        pad_mask_tensorrt_shapes = pad_mask_shapes + [[8, 96]]
+
+                    hpi_config = {
+                        'backend_configs': {
+                            'paddle_infer': {
+                                'trt_dynamic_shapes': {
+                                    'features': paddle_shapes,
+                                    'pad_mask': pad_mask_paddle_shapes
+                                }
+                            },
+                            'tensorrt': {
+                                'dynamic_shapes': {
+                                    'features': tensorrt_shapes,
+                                    'pad_mask': pad_mask_tensorrt_shapes
+                                }
+                            }
+                        }
+                    }
+                    model_meta['Hpi'] = hpi_config
                     model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:

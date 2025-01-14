@@ -186,6 +186,51 @@ class PaddleBaseModel(BaseModel, metaclass=abc.ABCMeta):
                         model_meta.update(data_info)
                     if model_name is not None:
                         model_meta['Global'] = {'model_name': model_name}
+                    dynamic_shape = list(model_meta["input_data"][
+                        "past_target"])[-2:]
+                    if dynamic_shape != [-1, -1]:
+                        paddle_shapes = [[1] + dynamic_shape,
+                                         [1] + dynamic_shape,
+                                         [8] + dynamic_shape]
+                        tensorrt_shapes = paddle_shapes
+                    else:
+                        shapes = [[1, 64, 1], [1, 96, 5]]
+                        paddle_shapes = shapes + [[8, 192, 20]]
+                        tensorrt_shapes = shapes + [[8, 96, 20]]
+
+                    hpi_config = {
+                        'backend_configs': {
+                            'paddle_infer': {
+                                'trt_dynamic_shapes': {
+                                    'past_target': paddle_shapes
+                                }
+                            },
+                            'tensorrt': {
+                                'dynamic_shapes': {
+                                    'past_target': tensorrt_shapes
+                                }
+                            }
+                        }
+                    }
+                    if "known_cov_numeric" in model_meta["input_data"]:
+                        known_cov_numeric_dynamic_shape = list(model_meta[
+                            "input_data"]["known_cov_numeric"])[-2:]
+                        if known_cov_numeric_dynamic_shape != [-1, -1]:
+                            known_cov_numeric_shape = [
+                                [1] + known_cov_numeric_dynamic_shape,
+                                [1] + known_cov_numeric_dynamic_shape,
+                                [8] + known_cov_numeric_dynamic_shape
+                            ]
+                        else:
+                            known_cov_numeric_shape = [[1, 64, 4], [1, 96, 10],
+                                                       [8, 192, 30]]
+                        hpi_config["backend_configs"]["paddle_infer"][
+                            "trt_dynamic_shapes"][
+                                "known_cov_numeric"] = known_cov_numeric_shape
+                        hpi_config["backend_configs"]["tensorrt"][
+                            "dynamic_shapes"][
+                                "known_cov_numeric"] = known_cov_numeric_shape
+                    model_meta['Hpi'] = hpi_config
                     model_meta = convert_and_remove_types(model_meta)
                     yaml.dump(model_meta, f)
             except Exception as e:
