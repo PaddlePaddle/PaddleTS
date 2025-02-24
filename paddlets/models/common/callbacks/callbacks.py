@@ -70,7 +70,7 @@ class Callback(object):
 
         Args:
             batch(int): The index of batch.
-            logs(Dict[str, Any]|None): The logs is a dict or None. 
+            logs(Dict[str, Any]|None): The logs is a dict or None.
                 contains `loss` and `batch_size`.
         """
         pass
@@ -87,7 +87,7 @@ class Callback(object):
         """Called at the end of training.
 
         Args:
-            logs(Dict[str, Any]|None): The logs is a dict or None. 
+            logs(Dict[str, Any]|None): The logs is a dict or None.
         """
         pass
 
@@ -191,7 +191,7 @@ class CallbackContainer(object):
 
 
 class EarlyStopping(Callback):
-    """EarlyStopping callback, allow the trainer to exit the training loop 
+    """EarlyStopping callback, allow the trainer to exit the training loop
     if the given metric stopped improving during evaluation.
 
     Args:
@@ -370,7 +370,7 @@ class History(Callback):
             msg += f", reader_cost: {reader_cost:.6f} sec"
         batch_cost = logs.get('train_run_cost', None)
         if batch_cost is not None:
-            ips = batch_size / batch_cost
+            ips = batch_size / batch_cost if batch_cost != 0 else float("inf")
             msg += f", batch_cost: {batch_cost:.6f} sec, ips: {ips:.6f} sequences/sec"
         max_mem_reserved_str = ""
         max_mem_allocated_str = ""
