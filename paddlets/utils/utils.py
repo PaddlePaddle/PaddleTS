@@ -537,12 +537,12 @@ def update_train_results(save_path, score, model_name="", done_flag=True):
     train_results["models"]["best"]["score"] = score
     for tag in save_model_tag:
         train_results["models"]["best"][
-            tag] = "" if tag != "pdparams" else os.path.join("best_model",
-                                                             "model.pdparams")
+            tag] = "" if tag != "pdparams" else "best_accuracy.pdparams.tar"
     for tag in save_inference_tag:
         train_results["models"]["best"][tag] = os.path.join(
             "inference", f"inference.{tag}"
             if tag != "inference_config" else "inference.yml")
+    train_results["models"]["best"]["pdiparams"] = "best_accuracy.pdparams.tar"
 
     train_results = convert_and_remove_types(train_results)
     with open(train_results_path, "w") as fp:
