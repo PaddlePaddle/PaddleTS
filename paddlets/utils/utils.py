@@ -6,7 +6,9 @@ from numbers import Integral
 import uuid
 import hashlib
 import json
+import paddle
 from typing import Dict
+from packaging import version
 
 from inspect import isclass
 import pandas as pd
@@ -22,7 +24,9 @@ from paddlets.models.data_adapter import DataAdapter
 # just to determine the inference model file format
 def get_FLAGS_json_format_model():
     # json format by default
-    return os.environ.get("FLAGS_json_format_model", "1").lower() in ("1", "true", "t")
+    return os.environ.get("FLAGS_json_format_model", "1").lower() in (
+        "1", "true", "t")
+
 
 FLAGS_json_format_model = get_FLAGS_json_format_model()
 
@@ -530,7 +534,8 @@ def update_train_results(save_path, score, model_name="", done_flag=True):
 
     train_results_path = os.path.join(save_path, "train_result.json")
     save_model_tag = ["pdparams", "pdopt", "pdstates", "pdema"]
-    if FLAGS_json_format_model:
+    paddle_version = version.parse(paddle.__version__)
+    if FLAGS_json_format_model or paddle_version >= version.parse("3.0.0"):
         save_inference_files = {
             "inference_config": "inference.yml",
             "pdmodel": "inference.json",
