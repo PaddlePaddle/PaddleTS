@@ -70,7 +70,7 @@ class TimeSeries(object):
         self._data = data
         self._freq = freq
         if isinstance(self.freq, str):
-            self._data = self._data.asfreq(self._freq, method='bfill')
+            self._data = self._data.asfreq(self._freq).bfill()
             self._freq = self._data.index.freqstr  # ValueError: cannot reindex from a duplicate axis
 
     @classmethod
