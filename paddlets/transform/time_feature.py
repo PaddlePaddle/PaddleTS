@@ -139,7 +139,7 @@ def _cal_weekofyear(x: np.datetime64, ):
     Returns
         int: week of year
     """
-    return x.weekofyear / 51.0 - 0.5
+    return x.isocalendar().week / 51.0 - 0.5
 
 
 def _cal_holiday(x: np.datetime64, ):
@@ -337,7 +337,7 @@ class TimeFeatureGenerator(BaseTransform):
                 start=tf_kcov[time_col][-1],
                 freq=freq,
                 periods=self.extend_points + 1,
-                closed='right',
+                inclusive='right',
                 name=time_col).to_frame()
             tf_kcov = pd.concat([tf_kcov, extend_time])
         #Generate time index feature content
