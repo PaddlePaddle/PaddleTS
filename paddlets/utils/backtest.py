@@ -4,7 +4,10 @@
 from typing import List, Dict, Any, Callable, Optional, Tuple, Union
 import math
 from collections import defaultdict
-from collections.abc import Iterable
+try:
+    from collections import Iterable
+except ImportError:
+    from collections.abc import Iterable
 
 import pandas as pd
 import numpy as np
@@ -58,7 +61,7 @@ def backtest(data: TSDataset,
     """
     from paddlets.pipeline import Pipeline
     if isinstance(model, Pipeline):
-        #如果是None, 后续的check会报错，这里就不做重复处理了
+        # If None,the checking will be error,it will not handle again.
         if model._model_exist:
             model_in_chunk_len = model._model._in_chunk_len
             model_skip_chunk_len = model._model._skip_chunk_len
